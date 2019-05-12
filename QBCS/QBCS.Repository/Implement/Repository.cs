@@ -1,0 +1,47 @@
+﻿using QBCS.Repository.Interface;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace QBCS.Repository.Implement
+{
+    public class Repository<T> : IRepository<T> where T : class
+    {
+
+        private DbContext context;
+        private DbSet<T> dbSet;
+
+        public Repository(DbContext _context)
+        {
+            context = _context;
+        }
+
+        public void Delete(T entity)
+        {
+            context.Entry(entity).State = EntityState.Deleted;
+        }
+
+        public IQueryable<T> GetAll()
+        {
+            return dbSet;
+        }
+
+        public T GetById(object id)
+        {
+            return dbSet.Find(id);
+        }
+
+        public void Insert(T entity)
+        {
+            dbSet.Add(entity);
+        }
+
+        public void Update(T entity)
+        {
+            context.Entry(entity).State = EntityState.Deleted;
+        }
+    }
+}
