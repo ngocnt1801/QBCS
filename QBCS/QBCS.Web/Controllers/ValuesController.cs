@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace QBCS.Web.Controllers
 {
@@ -15,10 +12,16 @@ namespace QBCS.Web.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        // GET api/values/test
+        [HttpGet]
+        [ActionName("test")]
+        public IHttpActionResult TestFunction()
         {
-            return "value";
+            //return NotFound();
+            return Ok(new {
+                name = "ngoc",
+                subject = "capstone"
+            });
         }
 
         // POST api/values
