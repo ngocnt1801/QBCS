@@ -1,4 +1,5 @@
-﻿using QBCS.Repository.Interface;
+﻿using QBCS.Entity;
+using QBCS.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,7 +15,7 @@ namespace QBCS.Repository.Implement
 
         public UnitOfWork()
         {
-
+            context = new QBCSContext();
         }
 
         public IRepository<T> Repository<T>() where T : class

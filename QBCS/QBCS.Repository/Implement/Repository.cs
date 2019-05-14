@@ -17,6 +17,7 @@ namespace QBCS.Repository.Implement
         public Repository(DbContext _context)
         {
             context = _context;
+            dbSet = _context.Set<T>();
         }
 
         public void Delete(T entity)

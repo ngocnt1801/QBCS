@@ -1,4 +1,5 @@
-﻿using QBCS.Repository.Implement;
+﻿using QBCS.Entity;
+using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
 {
-    class TestService
+    public class TestService
     {
         private IUnitOfWork u;
         public TestService()
@@ -16,5 +17,9 @@ namespace QBCS.Service.Implement
             u = new UnitOfWork();
         }
 
+        public int TestFunc()
+        {
+            return u.Repository<Question>().GetAll().Count();
+        }
     }
 }

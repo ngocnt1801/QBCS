@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using QBCS.Service.Implement;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
 
@@ -6,10 +7,17 @@ namespace QBCS.Web.Controllers
 {
     public class ValuesController : ApiController
     {
+        private TestService testService;
+
+        public ValuesController()
+        {
+            testService = new TestService();
+        }
+
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { testService.TestFunc() + "", "value2" };
         }
 
         // GET api/values/test
