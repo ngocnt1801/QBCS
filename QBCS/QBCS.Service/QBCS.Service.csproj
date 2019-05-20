@@ -51,7 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implement\CourseService.cs" />
     <Compile Include="Implement\TestService.cs" />
+    <Compile Include="Interface\ICourse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
   </ItemGroup>
@@ -66,7 +68,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interface\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>

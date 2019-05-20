@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Course Page</h2>
+<ul>
+    @for (int i = 0; i < ViewBag.Courses; i++)
+    {
+        <li>@ViewBag.Courses</li>
+    }
+</ul>
+
