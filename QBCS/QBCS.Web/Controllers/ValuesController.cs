@@ -5,6 +5,7 @@ using System.Web.Http.Results;
 
 namespace QBCS.Web.Controllers
 {
+
     public class ValuesController : ApiController
     {
         private TestService testService;
@@ -15,9 +16,10 @@ namespace QBCS.Web.Controllers
         }
 
         // GET api/values
-        public IEnumerable<string> Get()
+        public double Get()
         {
-            return new string[] { testService.TestFunc() + "", "value2" };
+            var result = testService.CheckSimilarity();
+            return result;
         }
 
         // GET api/values/test
