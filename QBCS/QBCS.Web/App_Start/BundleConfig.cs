@@ -9,7 +9,9 @@ namespace QBCS.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/vendor/jquery-{version}.js",
+                        "~/Scripts/vendor/jquery-easing/jquery.easing.min.js",
+                        "~/Scripts/vendor/jquery/jquery.min.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -17,11 +19,15 @@ namespace QBCS.Web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+                      "~/Scripts/vendor/bootstrap/js/bootstrap.js",
+                      "~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js",
+                     
+                      "~/Scripts/vendor/bootstrap/scss/bootstrap.scss"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/vendor/bootstrap/scss/bootstrap.scss",
+                      "~/Content/sb-admin-2.min.css",
+                      "~/Scripts/vendor/fontawesome-free/css/all.min.css"));
         }
     }
 }
