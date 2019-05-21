@@ -13,5 +13,6 @@ namespace QBCS.Service.ViewModel
         public string Fullname { get; set; }
         public string Code { get; set; }
         public RoleEnum Role { get; set; }
+        public string Email { get; set; }
     }
 }

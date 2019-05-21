@@ -39,6 +39,7 @@ namespace QBCS.Service.Implement
                 };
 
                 unitOfWork.Repository<Question>().Insert(entity);
+                unitOfWork.SaveChanges();
                 result = true;
             }
 
