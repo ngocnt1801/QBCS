@@ -21,8 +21,20 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult Details(int id)
         {
-            var user = service.GetUserById(id);
-            return View(user);
+            var item = service.GetUserById(id);
+            if (item.Role == "3")
+            {
+                item.Role = "Staff";
+            }
+            if (item.Role == "2")
+            {
+                item.Role = "Lecturer";
+            }
+            else
+            {
+                item.Role = "Admin";
+            }
+            return View(item);
         }
     }
 }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>User list</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -39,10 +39,10 @@
             @Html.DisplayFor(modelItem => item.Role)
         </td>
         <td>
-            
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            <a href="@Url.Action("Details", "Details",new { item.Id})" class="btn btn-primary float-right">Details</a>
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Details", "Details", new { item.Id }) |
-            @Html.ActionLink("Disable", "Disable", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Disable", "Disable", new { /* id=item.PrimaryKey */ })*@
         </td>
     </tr>
 }

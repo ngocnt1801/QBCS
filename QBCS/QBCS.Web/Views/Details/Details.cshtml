@@ -5,62 +5,70 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>UserViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserCode)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserCode)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Fullname)
-        </dt>
+<div class="col-md-9 personal-info">
+    @*<div class="alert alert-info alert-dismissable">
+        <a class="panel-close close" data-dismiss="alert">×</a>
+        <i class="fa fa-coffee"></i>
+        This is an <strong>.alert</strong>. Use this to show important messages to the user.
+    </div>*@
+    <h3>Personal info</h3>
 
-        <dd>
-            @Html.DisplayFor(model => model.Fullname)
-        </dd>
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="col-lg-3 control-label">@Html.DisplayNameFor(model => model.UserCode): 
+               </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" value="@Html.DisplayFor(model => model.UserCode)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">@Html.DisplayNameFor(model => model.Fullname):
+                </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" value="@Html.DisplayFor(model => model.Fullname)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">@Html.DisplayNameFor(model => model.Role):</label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" value="@Html.DisplayFor(model => model.Role)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">@Html.DisplayNameFor(model => model.Email):
+               </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" value="@Html.DisplayFor(model => model.Email)">
+            </div>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+        <div class="form-group">
+            <label class="col-md-3 control-label">@Html.DisplayNameFor(model => model.Username):</label>
+            <div class="col-md-8">
+                <input class="form-control" type="text" value="@Html.DisplayFor(model => model.Username)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label">@Html.DisplayNameFor(model => model.Password):</label>
+            <div class="col-md-8">
+                <input class="form-control" type="password" value="@Html.DisplayFor(model => model.Password)">
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Role)
-        </dd>
-
-    </dl>
+        <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+                <input type="button" class="btn btn-primary" value="Save Changes">
+                <span></span>
+                <input type="reset" class="btn btn-default" value="Cancel">
+            </div>
+        </div>
+    </form>
 </div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     @Html.ActionLink("Back to List", "Index")
