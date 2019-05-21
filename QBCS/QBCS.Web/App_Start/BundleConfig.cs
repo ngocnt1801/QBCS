@@ -27,7 +27,8 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/vendor/bootstrap/scss/bootstrap.scss",
                       "~/Content/sb-admin-2.css",
-                      "~/Scripts/vendor/fontawesome-free/css/all.min.css"));
+                      "~/Scripts/vendor/fontawesome-free/css/all.min.css",
+                      "~/Content/switch-button-style.css"));
         }
     }
 }

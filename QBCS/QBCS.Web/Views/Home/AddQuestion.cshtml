@@ -1,0 +1,27 @@
+﻿@model QBCS.Service.ViewModel.QuestionViewModel
+@{
+    ViewBag.Title = "AddQuestion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Question</h2>
+@using (Html.BeginForm("Add", "Question", FormMethod.Post, new { @class = "form-group" }))
+{
+    <div class="col-lg-8">
+        <div class="form-group">
+            <label>Question</label>
+            <textarea class="form-control" rows="8" name="QuestionContent"></textarea>
+        </div>
+        @for (int i = 0; i < 4; i++)
+        {
+        <div class="form-group">
+            @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
+        </div>
+        }
+
+        <input type="submit" name="Save" class="btn btn-primary float-right" />
+    </div>
+
+
+}
+

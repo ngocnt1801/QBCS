@@ -50,12 +50,18 @@ namespace QBCS.Web.Controllers
             { 
                 Session["user"] = user;
                 ViewBag.Name = user.Fullname;
-                return View("Index");
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("LoginFail", "Your username or password is correct");
 
             return View();
             
+        }
+
+        public ActionResult AddQuestion(QuestionViewModel model)
+        {
+
+            return View();
         }
     }
 }
