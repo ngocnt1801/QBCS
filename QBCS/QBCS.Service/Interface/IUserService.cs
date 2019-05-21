@@ -10,5 +10,6 @@ namespace QBCS.Service.Interface
     public interface IUserService
     {
         List<UserViewModel> GetAllUser();
+        UserViewModel GetUserById(int id);
     }
 }

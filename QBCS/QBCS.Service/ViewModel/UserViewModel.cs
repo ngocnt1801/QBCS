@@ -8,6 +8,7 @@ namespace QBCS.Service.ViewModel
 {
     public class UserViewModel
     {
+        public int Id { get; set; }
         public string UserCode { get; set; }
         public string Fullname { get; set; }
         public string Email { get; set; }
