@@ -26,7 +26,8 @@ namespace QBCS.Service.Implement
 
             var user = unitOfWork.Repository<User>().GetAll()
                                                     .Where(u => u.Username.ToLower().Equals(username.ToLower())
-                                                                        && u.Password.ToLower().Equals(password.ToLower()))
+                                                                        && u.Password.ToLower().Equals(password.ToLower())
+                                                                        && !u.IsDisable.Value)
                                                     .FirstOrDefault();
             if (user != null)
             {
@@ -108,6 +109,38 @@ namespace QBCS.Service.Implement
             }
 
             return false;
+        }
+
+        public List<UserViewModel> GetAllUser()
+        {
+            var list = unitOfWork.Repository<User>().GetAll().Select(c => new UserViewModel
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Fullname = c.Fullname,
+                Username = c.Username,
+                Password = c.Password,
+                Role = (RoleEnum)c.RoleId,
+                Email = c.Email,
+                IsDisable = c.IsDisable.Value
+            });
+
+            return list.ToList();
+        }
+        public UserViewModel GetUserById(int id)
+        {
+            var user = unitOfWork.Repository<User>().GetById(id);
+            var userViewModel = new UserViewModel
+            {
+                Id = user.Id,
+                Code = user.Code,
+                Fullname = user.Fullname,
+                Username = user.Username,
+                Password = user.Password,
+                Role = (RoleEnum) user.RoleId,
+                Email = user.Email
+            };
+            return userViewModel;
         }
     }
 }

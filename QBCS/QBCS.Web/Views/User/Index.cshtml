@@ -1,0 +1,54 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.UserViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User list</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Role)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            
+            @Html.PasswordFor(modelItem => item.Password)   
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Role)
+        </td>
+        <td>
+            <a href="@Url.Action("Details", "Details",new { item.Id})" class="btn btn-primary float-right">Details</a>
+            @if (!item.IsDisable)
+            {
+                <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger float-right mr-1">Block</a>
+            }
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Details", "Details", new { item.Id }) |
+        @Html.ActionLink("Disable", "Disable", new { /* id=item.PrimaryKey */ })*@
+        </td>
+    </tr>
+}
+
+</table>

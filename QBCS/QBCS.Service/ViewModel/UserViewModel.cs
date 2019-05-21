@@ -14,5 +14,9 @@ namespace QBCS.Service.ViewModel
         public string Code { get; set; }
         public RoleEnum Role { get; set; }
         public string Email { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool IsDisable { get; set; }
+
     }
 }

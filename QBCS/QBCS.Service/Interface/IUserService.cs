@@ -16,5 +16,7 @@ namespace QBCS.Service.Interface
         bool DisableUser(int userId);
         bool AddUserCourse(int courseId, int userId);
         bool RemoveUserCourse(int courseId, int userId);
+        List<UserViewModel> GetAllUser();
+        UserViewModel GetUserById(int id);
     }
 }

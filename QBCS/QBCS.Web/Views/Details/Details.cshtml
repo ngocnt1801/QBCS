@@ -1,0 +1,59 @@
+﻿@model QBCS.Service.ViewModel.UserViewModel
+
+@using QBCS.Service.Enum
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-9 personal-info">
+    <h3>Personal info</h3>
+
+    @using (Html.BeginForm("Update", "User", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-group">
+            <label class="col-lg-3 control-label">
+                @Html.DisplayNameFor(model => model.Code):
+            </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" name="Code" value="@Html.DisplayFor(model => model.Code)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">
+                @Html.DisplayNameFor(model => model.Fullname):
+            </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" name="Fullname" value="@Html.DisplayFor(model => model.Fullname)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">@Html.DisplayNameFor(model => model.Role):</label>
+            <div class="col-lg-8">
+                @Html.DropDownListFor(model => model.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
+           {
+               Text = v.ToString(),
+               Value = ((int)v).ToString()
+           }).ToList(), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">
+                @Html.DisplayNameFor(model => model.Email):
+            </label>
+            <div class="col-lg-8">
+                <input class="form-control" type="text" name="Email" value="@Html.DisplayFor(model => model.Email)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+                <input type="submit" class="btn btn-primary" value="Save Changes">
+                <span></span>
+                <a class="btn btn-default" value="Cancel" href="@Url.Action("Index", "User")">
+            </div>
+        </div>
+    }
+</div>
