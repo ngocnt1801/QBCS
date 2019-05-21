@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "ListQuestion";
+    int counter = 0;
 }
 
 <h2>ListQuestion</h2>
@@ -10,6 +11,7 @@
     <div class="row">
     <table class="table">
         <tr>
+                <th>No.</th>
             
                 <th class="col-md-8">Question</th>
             
@@ -22,7 +24,10 @@
         @foreach (var item in Model)
         {
             <tr>
-                
+                    @{ 
+                        counter++;
+                    }
+                    <td>@counter</td>
                     <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
                 
                 
@@ -37,7 +42,7 @@
                             }
                             else
                             {
-                                <div class="row bg-danger text-white container-fluid">
+                                <div class="container-fluid">
                                     @Html.DisplayFor(optionItem => option.OptionContent)
                                 </div>
                             }
