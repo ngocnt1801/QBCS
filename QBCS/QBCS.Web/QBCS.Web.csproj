@@ -165,10 +165,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1946,10 +1948,10 @@
     <Content Include="Scripts\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
+    <Content Include="Views\Question\ListQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -1981,6 +1983,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
+      <Project>{56492C99-5CAC-43BE-A406-0E630C255935}</Project>
+      <Name>QBCS.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QBCS.Service\QBCS.Service.csproj">
       <Project>{65a84f5a-f4d3-4c75-b03b-148d3e307a5e}</Project>
       <Name>QBCS.Service</Name>

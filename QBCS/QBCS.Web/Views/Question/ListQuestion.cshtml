@@ -1,0 +1,55 @@
+﻿@model IEnumerable<QBCS.Web.Models.QuestionViewModel>
+
+@{
+    ViewBag.Title = "ListQuestion";
+}
+
+<h2>ListQuestion</h2>
+
+<div class="container">
+    <div class="row">
+    <table class="table">
+        <tr>
+            
+                <th class="col-md-8">Question</th>
+            
+            
+                <th class="col-md-4">Option</th>
+            
+            
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                
+                    <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
+                
+                
+                    <td class="col-md-4">
+                        @foreach (var option in item.Options)
+                        {
+                            if (option.IsCorrect == true)
+                            {
+                                <div class="row bg-success text-white container-fluid text-center">
+                                    @Html.DisplayFor(optionItem => option.OptionContent)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row bg-danger text-white container-fluid">
+                                    @Html.DisplayFor(optionItem => option.OptionContent)
+                                </div>
+                            }
+
+                            <br />
+                        }
+                    </td>
+                
+
+                    </tr>
+                    }
+
+                </table>
+            </div>
+            </div>
