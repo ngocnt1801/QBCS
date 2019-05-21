@@ -53,10 +53,13 @@
   <ItemGroup>
     <Compile Include="Implement\CourseService.cs" />
     <Compile Include="Implement\TestService.cs" />
+    <Compile Include="Implement\UserService.cs" />
     <Compile Include="Interface\ICourseService.cs" />
+    <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
