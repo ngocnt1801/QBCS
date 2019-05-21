@@ -29,7 +29,7 @@ namespace QBCS.Web.Controllers
         {
             questionService.Add(model);
 
-            return RedirectToAction("AddQuestion", "Home");
+            return RedirectToAction("AddQuestion", new { courseId = model.CourseId});
         }
 
         // GET: Question
@@ -51,11 +51,11 @@ namespace QBCS.Web.Controllers
             return View("ListQuestion", ListQuestion);
         }
 
-        [Route("course/{courseCode}/question/new")]
-        public ActionResult AddQuestion(QuestionViewModel model, string courseCode)
+        public ActionResult AddQuestion(int courseId)
         {
-
-            return View();
+            var question = new QBCS.Service.ViewModel.QuestionViewModel();
+            question.CourseId = courseId;
+            return View(question);
         }
     }
 }

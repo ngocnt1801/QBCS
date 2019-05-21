@@ -47,7 +47,7 @@ namespace QBCS.Service.Implement
 
         private bool IsDuplicateQuestion(QuestionViewModel question)
         {
-            bool result = true;
+            bool result = false;
             //***
             //code check duplicate here
             //***

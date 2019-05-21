@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <a href="@Url.Action("AddQuestion", "Home")" class="btn btn-primary float-right">Add Question</a>
+            <a href="@Url.Action("AddQuestion", "question", new { courseId = Model.First().Question.CourseId})" class="btn btn-primary float-right">Add Question</a>
         </div>
     </div>
     <div class="row">
