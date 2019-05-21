@@ -8,24 +8,29 @@
 
 <div class="container">
     <div class="row">
-    <table class="table">
-        <tr>
-            
-                <th class="col-md-8">Question</th>
-            
-            
-                <th class="col-md-4">Option</th>
-            
-            
-        </tr>
-
-        @foreach (var item in Model)
-        {
+        <div class="col-lg-12">
+            <a href="@Url.Action("AddQuestion", "Home")" class="btn btn-primary float-right">Add Question</a>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
             <tr>
-                
+
+                <th class="col-md-8">Question</th>
+
+
+                <th class="col-md-4">Option</th>
+
+
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
                     <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
-                
-                
+
+
                     <td class="col-md-4">
                         @foreach (var option in item.Options)
                         {
@@ -45,11 +50,11 @@
                             <br />
                         }
                     </td>
-                
 
-                    </tr>
-                    }
 
-                </table>
-            </div>
-            </div>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

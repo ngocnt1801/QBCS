@@ -1,22 +1,20 @@
 ﻿using QBCS.Service.Interface;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using QBCS.Entity;
 using QBCS.Repository.Interface;
 using QBCS.Repository.Implement;
+using QBCS.Service.ViewModel;
 
 namespace QBCS.Service.Implement
 {
     public class QuestionService : IQuestionService
     {
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
 
         public QuestionService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
 
         public bool Add(QuestionViewModel question)
@@ -59,7 +57,7 @@ namespace QBCS.Service.Implement
 
         public List<Question> GetQuestionsByCourse(int CourseId)
         {
-            List<Question> Questions = u.Repository<Question>().GetAll().ToList();
+            List<Question> Questions = unitOfWork.Repository<Question>().GetAll().ToList();
             List<Question> QuestionsByCourse = (from q in Questions
                                                where q.CourseId == CourseId
                                                select q).ToList();

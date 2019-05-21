@@ -2,23 +2,20 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Web.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
     public class QuestionController : Controller
     {
-        private IQuestionService q;
-        private IOptionService o;
+        private IQuestionService questionService;
+        private IOptionService optionService;
 
         public QuestionController()
         {
-            q = new QuestionService();
-            o = new OptionService();
+            questionService = new QuestionService();
+            optionService = new OptionService();
         }
 
         // GET: Question
@@ -28,7 +25,7 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(QuestionViewModel model)
+        public ActionResult Add(QBCS.Service.ViewModel.QuestionViewModel model)
         {
             questionService.Add(model);
 
@@ -40,10 +37,10 @@ namespace QBCS.Web.Controllers
         {
             List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
 
-            List<Question> Questions = q.GetQuestionsByCourse(id);
+            List<Question> Questions = questionService.GetQuestionsByCourse(id);
             foreach (Question ques in Questions )
             {
-                List<Option> op = o.GetOptionsByQuestion(ques.Id);
+                List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
                 QuestionViewModel qvm = new QuestionViewModel
                 {
                     Question = ques,
@@ -52,6 +49,13 @@ namespace QBCS.Web.Controllers
                 ListQuestion.Add(qvm);
             }
             return View("ListQuestion", ListQuestion);
+        }
+
+        [Route("course/{courseCode}/question/new")]
+        public ActionResult AddQuestion(QuestionViewModel model, string courseCode)
+        {
+
+            return View();
         }
     }
 }

@@ -1953,13 +1953,12 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Home\Staff.cshtml" />
-    <Content Include="Views\Home\AddQuestion.cshtml" />
+    <Content Include="Views\Question\AddQuestion.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\OptionViewModel.cshtml" />
+    <Content Include="Views\Question\ListQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\Question\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
