@@ -18,14 +18,11 @@ namespace QBCS.Web.Controllers
         // GET: Course
         public ActionResult Index()
         {
-            ViewBag.Courses = courseService.GetAllCourses();
-            return View();
-        }
-        public ArrayList GetCourse()
-        {
-            
             var list = courseService.GetAllCourses();
-            return list;
+            
+            return View(list);
+            
         }
+        
     }
 }

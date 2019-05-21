@@ -1,14 +1,31 @@
-﻿
+﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Course Page</h2>
-<ul>
-    @for (int i = 0; i < ViewBag.Courses; i++)
-    {
-        <li>@ViewBag.Courses</li>
-    }
-</ul>
+<h2>Index</h2>
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>Course Name</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.Name
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -2,8 +2,7 @@
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Interface;
-using System;
-using System.Collections;
+using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,19 +10,23 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
 { 
-    public class CourseService : ICourse
+    public class CourseService : ICourseService
     {
         private IUnitOfWork unitOfWork;
         public CourseService()
         {
             unitOfWork = new UnitOfWork();
         }
-        public ArrayList GetAllCourses()
+        public List<CourseViewModel> GetAllCourses()
         {
-            ArrayList listCourse = new ArrayList();
-            var list = unitOfWork.Repository<Course>().GetAll().ToList();
-            listCourse.Add(list);
-            return listCourse;
+            
+            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel {
+                Id = c.Id,
+                Name = c.Name
+            });
+            
+           
+            return course.ToList();
         }
     }
 }

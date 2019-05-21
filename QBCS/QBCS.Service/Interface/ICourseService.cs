@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QBCS.Service.ViewModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Interface
 {
-    public interface ICourse
+    public interface ICourseService
     {
-        ArrayList GetAllCourses();
+        List<CourseViewModel> GetAllCourses();
     }
 }
