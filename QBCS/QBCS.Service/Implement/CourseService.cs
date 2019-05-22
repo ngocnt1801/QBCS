@@ -21,7 +21,7 @@ namespace QBCS.Service.Implement
         {
             
             var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel {
-                Id = c.Id,
+                Code = c.Code,
                 Name = c.Name
             });
             
@@ -42,6 +42,22 @@ namespace QBCS.Service.Implement
                                                                 }).ToList();
 
             return listAvailable;
+        }
+        public List<CourseViewModel> GetAllCoursesByUserId(int id)
+        {
+            var courseId = 0;
+            var user = unitOfWork.Repository<User>().GetById(id);
+            var courses = user.CourseOfUsers.Select(c => new CourseViewModel
+            {
+                Id = c.Id,
+                CodeId = (int)c.CourseId,
+                Name = c.Course.Name,
+                Code = c.Course.Code
+            });
+           
+           
+           
+            return courses.ToList();
         }
     }
 }
