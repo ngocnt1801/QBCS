@@ -12,5 +12,7 @@ namespace QBCS.Service.Interface
     {
         bool Add(QuestionViewModel question);
         List<Question> GetQuestionsByCourse(int CourseId);
+
+        List<Question> GetQuestionsByContent(string questionContent);
     }
 }

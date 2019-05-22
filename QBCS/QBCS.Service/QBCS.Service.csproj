@@ -52,18 +52,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\RoleEnum.cs" />
+    <Compile Include="Implement\CourseService.cs" />
     <Compile Include="Implement\QuestionService.cs" />
     <Compile Include="Implement\TestService.cs" />
-	<Compile Include="Implement\OptionService.cs" />
+    <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
+    <Compile Include="Interface\ICourseService.cs" />
     <Compile Include="Interface\IQuestionService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
+    <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
-	<Compile Include="Interface\IOptionService.cs" />
+    <Compile Include="Interface\IOptionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
@@ -75,9 +78,7 @@
       <Name>QBCS.Repository</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
