@@ -1,0 +1,116 @@
+﻿@model QBCS.Service.ViewModel.UserDetailViewModel
+
+@using QBCS.Service.Enum
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-9 personal-info">
+    <h3>Personal info</h3>
+
+    @using (Html.BeginForm("Update", "User", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">
+                    @Html.DisplayNameFor(model => model.User.Code):
+                </label>
+                <input class="form-control" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">
+                    @Html.DisplayNameFor(model => model.User.Fullname):
+                </label>
+                <input class="form-control" type="text" name="Fullname" value="@Html.DisplayFor(model => model.User.Fullname)">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">@Html.DisplayNameFor(model => model.User.Role):</label>
+                @Html.DropDownListFor(model => model.User.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
+           {
+               Text = v.ToString(),
+               Value = ((int)v).ToString()
+           }).ToList(), new { @class = "form-control", Name ="Role" })
+            </div>
+
+            <div class="form-group col-md-6">
+                <label class="col-lg-3 control-label">
+                    @Html.DisplayNameFor(model => model.User.Email):
+                </label>
+                <input class="form-control" type="text" name="Email" value="@Html.DisplayFor(model => model.User.Email)">
+            </div>
+        </div>
+
+        <div class="form-row">
+            @Html.Hidden("Id", Model.User.Id)
+            <div class="form-group col-md-12">
+                <input type="submit" class="btn btn-primary float-right" value="Save Changes">
+                <a class="btn btn-default float-right" href="@Url.Action("Index", "User")">Cancel</a>
+            </div>
+        </div>
+    }
+</div>
+<hr class="mt-5 mb-5"/>
+<div class="col-12">
+    <h3 class="mt-2">List Course</h3>
+</div>
+@if (Model.AvailableToAddCourses.Count == 0)
+{
+    <div class="col-lg-12 row mb-2">
+        <div class="col-6">
+            <select class="form-control">
+                <option selected>[None course available]</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <input type="button" disabled class="btn btn-info" value="Add Course" />
+        </div>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("AddCourse", "User", FormMethod.Post))
+    {
+        <div class="col-lg-12 row mb-2">
+            <div class="col-6">
+                @Html.Hidden("userId", Model.User.Id)
+                @Html.DropDownList("courseId", Model.AvailableToAddCourses.Select(c => new SelectListItem
+                     {
+                         Value = c.Id + "",
+                         Text = c.Code + " - " + c.Name,
+                     }), new { @class = "form-control" })
+            </div>
+            <div class="col-2">
+                <input type="submit" class="btn btn-info" value="Add Course" />
+            </div>
+        </div>
+    }
+}
+
+
+<table class="table">
+    <tr>
+        <th>Course Code</th>
+        <th>Course Name</th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model.User.Courses)
+    {
+        <tr>
+            <td>
+                @item.Code
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <a href="@Url.Action("DeleteCourse", "User", new { userId = Model.User.Id, courseId = item.Id})" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

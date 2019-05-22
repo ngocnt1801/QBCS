@@ -2,10 +2,7 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Web.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -27,6 +24,19 @@ namespace QBCS.Web.Controllers
             lo = new LearningOutcomeService();
         }
 
+        // GET: Question
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Add(QBCS.Service.ViewModel.QuestionViewModel model)
+        {
+            questionService.Add(model);
+
+            return RedirectToAction("AddQuestion", new { courseId = model.CourseId});
+        }
 
         // GET: Question
         public ActionResult GetListQuestion(int id)
@@ -45,6 +55,13 @@ namespace QBCS.Web.Controllers
                 ListQuestion.Add(qvm);
             }
             return View("ListQuestion", ListQuestion);
+        }
+
+        public ActionResult AddQuestion(int courseId)
+        {
+            var question = new QBCS.Service.ViewModel.QuestionViewModel();
+            question.CourseId = courseId;
+            return View(question);
         }
 
         public ActionResult GetQuestionDetail (int id)
