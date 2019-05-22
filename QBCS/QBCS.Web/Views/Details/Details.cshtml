@@ -56,4 +56,30 @@
             </div>
         </div>
     }
+
+
 </div>
+<h3>List Course</h3>
+<table class="table">
+    <tr>
+        <th>Course Code</th>
+        <th>Course Name</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Courses)
+    {
+        <tr>
+            <td>
+                @item.Code
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <a href="@Url.Action("DeleteCourse", "User", new { userId = Model.Id, courseId = item.Id})" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>

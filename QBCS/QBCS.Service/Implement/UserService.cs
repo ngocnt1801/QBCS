@@ -137,8 +137,14 @@ namespace QBCS.Service.Implement
                 Fullname = user.Fullname,
                 Username = user.Username,
                 Password = user.Password,
-                Role = (RoleEnum) user.RoleId,
-                Email = user.Email
+                Role = (RoleEnum)user.RoleId,
+                Email = user.Email,
+                Courses = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == id).Select(uc => new CourseViewModel
+                {
+                    Id = uc.Course.Id,
+                    Name = uc.Course.Name,
+                    Code = uc.Course.Code
+                }).ToList()
             };
             return userViewModel;
         }

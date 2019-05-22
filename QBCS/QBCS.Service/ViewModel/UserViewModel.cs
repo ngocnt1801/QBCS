@@ -17,6 +17,7 @@ namespace QBCS.Service.ViewModel
         public string Username { get; set; }
         public string Password { get; set; }
         public bool IsDisable { get; set; }
+        public List<CourseViewModel> Courses { get; set; }
 
     }
 }
