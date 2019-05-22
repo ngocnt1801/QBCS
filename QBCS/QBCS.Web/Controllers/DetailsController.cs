@@ -9,10 +9,10 @@ namespace QBCS.Web.Controllers
 {
     public class DetailsController : Controller
     {
-        private UserService service;
+        private UserService userService;
         public DetailsController()
         {
-            service = new UserService();
+            userService = new UserService();
         }
         // GET: Details
         public ActionResult Index()
@@ -21,7 +21,7 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult Details(int id)
         {
-            var item = service.GetUserById(id);
+            var item = userService.GetUserById(id);
             if (item.Role == "3")
             {
                 item.Role = "Staff";

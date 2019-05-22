@@ -16,9 +16,9 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
         }
         // GET: Course
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            var list = courseService.GetAllCourses();
+            var list = courseService.GetAllCoursesByUserId(id);
             
             return View(list);
             
