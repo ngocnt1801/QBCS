@@ -42,7 +42,7 @@ namespace QBCS.Repository.Implement
 
         public void Update(T entity)
         {
-            context.Entry(entity).State = EntityState.Deleted;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

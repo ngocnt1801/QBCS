@@ -10,5 +10,9 @@ namespace QBCS.Service.Interface
     public interface IQuestionService
     {
         List<Question> GetQuestionsByCourse(int CourseId);
+
+        Question GetQuestionById(int id);
+
+        bool UpdateQuestion(Question question);
     }
 }

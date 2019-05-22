@@ -26,5 +26,24 @@ namespace QBCS.Service.Implement
                                                select q).ToList();
             return QuestionsByCourse;
         }
+
+        public Question GetQuestionById (int id )
+        {
+            Question QuestionById = u.Repository<Question>().GetById(id);
+            return QuestionById;
+        }
+
+        public bool UpdateQuestion(Question question)
+        {
+            Question ques = u.Repository<Question>().GetById(question.Id);
+            ques.QuestionContent = question.QuestionContent;
+            ques.LevelId = question.LevelId;
+            ques.LearningOutcomeId = question.LearningOutcomeId;
+            ques.TopicId = question.TopicId;
+
+            u.Repository<Question>().Update(ques);
+            u.SaveChanges();
+            return true;
+        }
     }
 }

@@ -12,13 +12,19 @@ namespace QBCS.Web.Controllers
 {
     public class QuestionController : Controller
     {
-        private IQuestionService q;
-        private IOptionService o;
+        private IQuestionService questionService;
+        private IOptionService optionService;
+        private ITopicService topicService;
+        private ILevelService levelService;
+        private ILearningOutcomeService lo;
 
         public QuestionController()
         {
-            q = new QuestionService();
-            o = new OptionService();
+            questionService = new QuestionService();
+            optionService = new OptionService();
+            topicService = new TopicService();
+            levelService = new LevelService();
+            lo = new LearningOutcomeService();
         }
 
 
@@ -27,10 +33,10 @@ namespace QBCS.Web.Controllers
         {
             List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
 
-            List<Question> Questions = q.GetQuestionsByCourse(id);
+            List<Question> Questions = questionService.GetQuestionsByCourse(id);
             foreach (Question ques in Questions )
             {
-                List<Option> op = o.GetOptionsByQuestion(ques.Id);
+                List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
                 QuestionViewModel qvm = new QuestionViewModel
                 {
                     Question = ques,
@@ -40,5 +46,39 @@ namespace QBCS.Web.Controllers
             }
             return View("ListQuestion", ListQuestion);
         }
+
+        public ActionResult GetQuestionDetail (int id)
+        {
+            Question ques = questionService.GetQuestionById(id);
+            List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
+            QuestionViewModel qvm = new QuestionViewModel
+            {
+                Question = ques,
+                Options = op
+            };
+            List<Topic> topics = topicService.GetTopicByCourseId(ques.CourseId);
+
+            List<Level> levels = levelService.GetLevelByCourse(ques.CourseId);
+
+            List<LearningOutcome> learningOutcomes = lo.GetLearningOutcomeByCourseId(ques.CourseId);
+
+            QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
+            {
+                QuestionViewModel = qvm,
+                Topics = topics,
+                Levels = levels,
+                LearningOutcomes = learningOutcomes
+            };
+
+            return View("EditQuestion", qdvm);
+        }
+
+        public ActionResult UpdateQuestion(Question ques)
+        {
+            bool result = questionService.UpdateQuestion(ques);
+
+            return RedirectToAction("GetQuestionDetail", new {id = ques.Id });
+        }
+
     }
 }

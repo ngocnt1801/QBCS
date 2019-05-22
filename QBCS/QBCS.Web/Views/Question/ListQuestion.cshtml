@@ -28,7 +28,13 @@
                         counter++;
                     }
                     <td>@counter</td>
-                    <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
+                    <td class="col-md-8">
+                        @Html.DisplayFor(modeItem => item.Question.QuestionContent)
+                        <br/>
+                        <div>
+                            <a class="btn btn-primary" href="@Url.Action("GetQuestionDetail", "Question", new { id = @item.Question.Id})" role="button">Edit</a>
+                        </div>
+                    </td>
                 
                 
                     <td class="col-md-4">
