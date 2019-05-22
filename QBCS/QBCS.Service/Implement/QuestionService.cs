@@ -66,20 +66,20 @@ namespace QBCS.Service.Implement
 
         public Question GetQuestionById (int id )
         {
-            Question QuestionById = u.Repository<Question>().GetById(id);
+            Question QuestionById = unitOfWork.Repository<Question>().GetById(id);
             return QuestionById;
         }
 
         public bool UpdateQuestion(Question question)
         {
-            Question ques = u.Repository<Question>().GetById(question.Id);
+            Question ques = unitOfWork.Repository<Question>().GetById(question.Id);
             ques.QuestionContent = question.QuestionContent;
             ques.LevelId = question.LevelId;
             ques.LearningOutcomeId = question.LearningOutcomeId;
             ques.TopicId = question.TopicId;
 
-            u.Repository<Question>().Update(ques);
-            u.SaveChanges();
+            unitOfWork.Repository<Question>().Update(ques);
+            unitOfWork.SaveChanges();
             return true;
         }
     }
