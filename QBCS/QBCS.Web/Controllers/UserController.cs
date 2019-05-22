@@ -42,5 +42,11 @@ namespace QBCS.Web.Controllers
             userService.RemoveUserCourse(courseId, userId);
             return RedirectToAction("Details", "Details", new { id = userId });
         }
+
+        public ActionResult AddCourse(int courseId, int userId)
+        {
+            userService.AddUserCourse(courseId, userId);
+            return RedirectToAction("Details", "Details", new { id = userId });
+        }
     }
 }

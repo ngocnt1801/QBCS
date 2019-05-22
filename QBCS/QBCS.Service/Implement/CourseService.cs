@@ -28,5 +28,20 @@ namespace QBCS.Service.Implement
            
             return course.ToList();
         }
+
+        public List<CourseViewModel> GetAvailableCourse(int userId)
+        {
+            var listCurrentCourse = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userId).Select(uc => uc.CourseId).ToList();
+            var listAvailable = unitOfWork.Repository<Course>().GetAll()
+                                                                .Where(c => !listCurrentCourse.Contains(c.Id))
+                                                                .Select(c => new CourseViewModel
+                                                                {
+                                                                    Id = c.Id,
+                                                                    Code = c.Code,
+                                                                    Name = c.Name
+                                                                }).ToList();
+
+            return listAvailable;
+        }
     }
 }

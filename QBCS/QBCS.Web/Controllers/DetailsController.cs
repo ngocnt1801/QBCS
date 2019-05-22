@@ -1,4 +1,6 @@
 ﻿using QBCS.Service.Implement;
+using QBCS.Service.Interface;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,12 @@ namespace QBCS.Web.Controllers
 {
     public class DetailsController : Controller
     {
-        private UserService service;
+        private IUserService userService;
+        private ICourseService courseService;
         public DetailsController()
         {
-            service = new UserService();
+            userService = new UserService();
+            courseService = new CourseService();
         }
         // GET: Details
         public ActionResult Index()
@@ -21,9 +25,14 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult Details(int id)
         {
-            var item = service.GetUserById(id);
-           
-            return View(item);
+           var item = userService.GetUserById(id);
+           var listAvailable = courseService.GetAvailableCourse(id);
+            var model = new UserDetailViewModel()
+            {
+                User = item,
+                AvailableToAddCourses = listAvailable
+            };
+            return View(model);
         }
     }
 }

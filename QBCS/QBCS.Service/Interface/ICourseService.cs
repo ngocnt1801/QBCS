@@ -11,5 +11,6 @@ namespace QBCS.Service.Interface
     public interface ICourseService
     {
         List<CourseViewModel> GetAllCourses();
+        List<CourseViewModel> GetAvailableCourse(int userId);
     }
 }
