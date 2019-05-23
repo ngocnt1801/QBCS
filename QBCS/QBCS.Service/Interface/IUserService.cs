@@ -11,7 +11,7 @@ namespace QBCS.Service.Interface
     public interface IUserService
     {
         UserViewModel Login(String username, String password);
-
+        bool AddUser(UserViewModel user);
         bool UpdateUserInfo(UserViewModel user);
         bool DisableUser(int userId);
         bool AddUserCourse(int courseId, int userId);

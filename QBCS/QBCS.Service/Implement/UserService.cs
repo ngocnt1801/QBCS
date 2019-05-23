@@ -42,6 +42,36 @@ namespace QBCS.Service.Implement
             return null;
         }
 
+        public bool AddUser(UserViewModel user)
+        {
+            bool result = false;
+            Role insertRole = unitOfWork.Repository<Role>().GetAll().Where(r => r.Name == user.Role.ToString()).ToList().FirstOrDefault();
+
+            var checkUser = unitOfWork.Repository<User>().GetAll()
+                                                    .Where(u => u.Username.ToLower().Equals(user.Username.ToLower()))
+                                                    .FirstOrDefault();
+
+            if (checkUser == null)
+            {
+                var entity = new User()
+                {
+                    Code = user.Code,
+                    Fullname = user.Fullname,
+                    IsDisable = false,
+                    Email = user.Email,
+                    Username = user.Username,
+                    Password = user.Password,
+                    RoleId = insertRole.Id
+                };
+
+                unitOfWork.Repository<User>().Insert(entity);
+                unitOfWork.SaveChanges();
+                result = true;
+            }
+
+            return result;
+        }
+
         public bool UpdateUserInfo(UserViewModel user)
         {
             
@@ -109,5 +139,7 @@ namespace QBCS.Service.Implement
 
             return false;
         }
+
+
     }
 }

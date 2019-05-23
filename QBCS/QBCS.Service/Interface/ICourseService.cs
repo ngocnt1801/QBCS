@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Interface
 {
-    interface ICourseService
+    public interface ICourseService
     {
         List<Course> GetCoursesByName(string name);
     }

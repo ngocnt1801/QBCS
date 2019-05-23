@@ -74,7 +74,7 @@ namespace QBCS.Web.Controllers
                 };
                 result.Add(questionViewModel);
             }
-            return View("SearchQuestion", result);
+            return View("ListQuestion", result);
         }
     }
 }

@@ -9,35 +9,14 @@
 
 <div class="container">
     <div class="row">
-<<<<<<< HEAD
-        <div class="col-lg-12">
-            <a href="@Url.Action("AddQuestion", "Home")" class="btn btn-primary float-right">Add Question</a>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table">
-            <tr>
-
-=======
     <table class="table">
         <tr>
                 <th>No.</th>
             
->>>>>>> origin/LamTT_Sprint2
                 <th class="col-md-8">Question</th>
 
 
                 <th class="col-md-4">Option</th>
-
-<<<<<<< HEAD
-
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-
-=======
         @foreach (var item in Model)
         {
             <tr>
@@ -45,7 +24,6 @@
                         counter++;
                     }
                     <td>@counter</td>
->>>>>>> origin/LamTT_Sprint2
                     <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
 
 

@@ -54,6 +54,7 @@
     <Compile Include="Enum\RoleEnum.cs" />
     <Compile Include="Implement\CourseService.cs" />
     <Compile Include="Implement\QuestionService.cs" />
+    <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\TestService.cs" />
     <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
