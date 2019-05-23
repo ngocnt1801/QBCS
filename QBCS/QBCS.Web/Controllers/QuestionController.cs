@@ -1,7 +1,7 @@
 ﻿using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
-using QBCS.Web.Models;
+using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -33,7 +33,7 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(QBCS.Service.ViewModel.QuestionViewModel model)
+        public ActionResult Add(QuestionViewModel model)
         {
             questionService.Add(model);
 
@@ -43,47 +43,33 @@ namespace QBCS.Web.Controllers
         // GET: Question
         public ActionResult GetListQuestion(int id)
         {
-            List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
+            List<QuestionViewModel> ListQuestion = questionService.GetQuestionsByCourse(id);
 
-            List<Question> Questions = questionService.GetQuestionsByCourse(id);
-            foreach (Question ques in Questions )
-            {
-                List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
-                QuestionViewModel qvm = new QuestionViewModel
-                {
-                    Question = ques,
-                    Options = op
-                };
-                ListQuestion.Add(qvm);
-            }
+
+            
             return View("ListQuestion", ListQuestion);
         }
 
         public ActionResult AddQuestion(int courseId)
         {
-            var question = new QBCS.Service.ViewModel.QuestionViewModel();
+            var question = new QuestionViewModel();
             question.CourseId = courseId;
             return View(question);
         }
 
         public ActionResult GetQuestionDetail (int id)
         {
-            Question ques = questionService.GetQuestionById(id);
-            List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
-            QuestionViewModel qvm = new QuestionViewModel
-            {
-                Question = ques,
-                Options = op
-            };
-            List<Topic> topics = topicService.GetTopicByCourseId(ques.CourseId);
+            QuestionViewModel qvm = questionService.GetQuestionById(id);
 
-            List<Level> levels = levelService.GetLevelByCourse(ques.CourseId);
+            List<TopicViewModel> topics = topicService.GetTopicByCourseId(qvm.CourseId);
 
-            List<LearningOutcome> learningOutcomes = lo.GetLearningOutcomeByCourseId(ques.CourseId);
+            List<LevelViewModel> levels = levelService.GetLevel();
+
+            List<LearningOutcomeViewModel> learningOutcomes = lo.GetLearningOutcomeByCourseId(qvm.CourseId);
 
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
-                QuestionViewModel = qvm,
+                Question = qvm,
                 Topics = topics,
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
@@ -92,9 +78,11 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
-        public ActionResult UpdateQuestion(Question ques)
+        public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             bool result = questionService.UpdateQuestion(ques);
+
+            bool optionResult = optionService.UpdateOptions(ques.Options);
 
             return RedirectToAction("GetQuestionDetail", new {id = ques.Id });
         }

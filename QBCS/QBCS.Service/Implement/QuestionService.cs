@@ -55,22 +55,58 @@ namespace QBCS.Service.Implement
             return result;
         }
 
-        public List<Question> GetQuestionsByCourse(int CourseId)
+        public List<QuestionViewModel> GetQuestionsByCourse(int CourseId)
         {
             List<Question> Questions = unitOfWork.Repository<Question>().GetAll().ToList();
-            List<Question> QuestionsByCourse = (from q in Questions
-                                               where q.CourseId == CourseId
-                                               select q).ToList();
-            return QuestionsByCourse;
+            List<Question> QuestionsByCourse = Questions.Where(q => q.CourseId == CourseId).ToList();
+
+            List<QuestionViewModel> QuestionViewModel = new List<QuestionViewModel>();
+
+            foreach(var ques in QuestionsByCourse)
+            {
+                List<OptionViewModel> ovms = new List<OptionViewModel>();
+                foreach (var option in ques.Options)
+                {
+
+                    OptionViewModel ovm = new OptionViewModel()
+                    {
+                        Id = option.Id,
+                        OptionContent = option.OptionContent,
+                        IsCorrect = (bool)option.IsCorrect
+                    };
+                    ovms.Add(ovm);
+                }
+
+
+                QuestionViewModel qvm = ParseEntityToModel(ques, ovms);
+                QuestionViewModel.Add(qvm);
+            }
+            return QuestionViewModel;
         }
 
-        public Question GetQuestionById (int id )
+        public QuestionViewModel GetQuestionById (int id )
         {
             Question QuestionById = unitOfWork.Repository<Question>().GetById(id);
-            return QuestionById;
+
+            List<OptionViewModel> ovms = new List<OptionViewModel>();
+            foreach (var option in QuestionById.Options)
+            {
+
+                OptionViewModel ovm = new OptionViewModel()
+                {
+                    Id = option.Id,
+                    OptionContent = option.OptionContent,
+                    IsCorrect = (bool)option.IsCorrect
+                };
+                ovms.Add(ovm);
+            }
+
+
+            QuestionViewModel qvm = ParseEntityToModel(QuestionById, ovms);
+            return qvm;
         }
 
-        public bool UpdateQuestion(Question question)
+        public bool UpdateQuestion(QuestionViewModel question)
         {
             Question ques = unitOfWork.Repository<Question>().GetById(question.Id);
             ques.QuestionContent = question.QuestionContent;
@@ -81,6 +117,34 @@ namespace QBCS.Service.Implement
             unitOfWork.Repository<Question>().Update(ques);
             unitOfWork.SaveChanges();
             return true;
+        }
+
+        private QuestionViewModel ParseEntityToModel ( Question question, List<OptionViewModel> options)
+        {
+            QuestionViewModel qvm = new ViewModel.QuestionViewModel()
+            {
+                Id = question.Id,
+                QuestionContent = question.QuestionContent,
+                Options = options
+            };
+            if (question.CourseId != null)
+            {
+                qvm.CourseId = (int)question.CourseId;
+            }
+            if (question.TopicId != null)
+            {
+                qvm.TopicId = (int)question.TopicId;
+            }
+            if (question.LevelId != null)
+            {
+                qvm.LevelId = (int)question.LevelId;
+            }
+            if (question.LearningOutcomeId != null)
+            {
+                qvm.LearningOutcomeId = (int)question.LearningOutcomeId;
+            }
+
+            return qvm;
         }
     }
 }

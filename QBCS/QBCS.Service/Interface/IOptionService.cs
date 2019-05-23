@@ -1,4 +1,5 @@
 ﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace QBCS.Service.Interface
 {
     public interface IOptionService
     {
-        List<Option> GetOptionsByQuestion(int QuestionId);
+        bool UpdateOptions(List<OptionViewModel> OptionViewModels);
     }
 }

@@ -11,10 +11,10 @@ namespace QBCS.Service.Interface
     public interface IQuestionService
     {
         bool Add(QuestionViewModel question);
-        List<Question> GetQuestionsByCourse(int CourseId);
+        List<QuestionViewModel> GetQuestionsByCourse(int CourseId);
 
-        Question GetQuestionById(int id);
+        QuestionViewModel GetQuestionById(int id);
 
-        bool UpdateQuestion(Question question);
+        bool UpdateQuestion(QuestionViewModel question);
     }
 }

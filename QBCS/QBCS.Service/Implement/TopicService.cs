@@ -7,25 +7,42 @@ using System.Threading.Tasks;
 using QBCS.Entity;
 using QBCS.Repository.Interface;
 using QBCS.Repository.Implement;
+using QBCS.Service.ViewModel;
 
 namespace QBCS.Service.Implement
 {
     public class TopicService : ITopicService
     {
 
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
 
         public TopicService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
-        public List<Topic> GetTopicByCourseId(int? CourseId)
+
+        public List<TopicViewModel> GetTopicByCourseId(int? CourseId)
         {
-            List<Topic> Topics = u.Repository<Topic>().GetAll().ToList();
+            List<Topic> Topics = unitOfWork.Repository<Topic>().GetAll().ToList();
 
             List<Topic> TopicByCourse = Topics.Where(t => t.CourseId == CourseId).ToList();
 
-            return TopicByCourse;
+            List<TopicViewModel> TopicViewModels = new List<TopicViewModel>();
+
+            foreach (var topic in TopicByCourse)
+            {
+                TopicViewModel tvm = new TopicViewModel()
+                {
+                    Id = topic.Id,
+                    Name = topic.Name,
+                    Code = topic.Code,
+                    CourseId = (int)topic.CourseId,
+                    IsDisable = (bool)topic.IsDisable
+                };
+                TopicViewModels.Add(tvm);
+            }
+
+            return TopicViewModels;
         }
     }
 }

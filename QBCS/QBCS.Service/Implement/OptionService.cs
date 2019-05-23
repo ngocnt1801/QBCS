@@ -7,25 +7,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QBCS.Service.ViewModel;
 
 namespace QBCS.Service.Implement
 {
     
     public class OptionService : IOptionService
     {
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
         public OptionService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
 
-        public List<Option> GetOptionsByQuestion(int QuestionId)
+        public bool UpdateOptions(List<OptionViewModel> OptionViewModels)
         {
-            List<Option> Options = u.Repository<Option>().GetAll().ToList();
-            List<Option> OptionsByQuestion = (from o in Options
-                                             where o.QuestionId == QuestionId
-                                             select o).ToList();
-            return OptionsByQuestion;
+            foreach(var ovm in OptionViewModels)
+            {
+                Option option = unitOfWork.Repository<Option>().GetById(ovm.Id);
+                option.OptionContent = ovm.OptionContent;
+                option.IsCorrect = ovm.IsCorrect;
+                unitOfWork.Repository<Option>().Update(option);
+                unitOfWork.SaveChanges();
+            }
+
+            return true;
         }
     }
 }

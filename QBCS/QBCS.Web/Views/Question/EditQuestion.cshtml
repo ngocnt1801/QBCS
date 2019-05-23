@@ -1,7 +1,8 @@
-﻿@model QBCS.Web.Models.QuestionDetailViewModel
+﻿@model QBCS.Service.ViewModel.QuestionDetailViewModel
 
 @{
-    ViewBag.Title = "EditQuestion";
+    ViewBag.Title = "Edit Question";
+    var counter = 0;
 }
 
 <h2>Edit Question</h2>
@@ -12,22 +13,22 @@
 <div class="container">
     <div class="col-lg-8">
         <div class="form-group">
-            <input type="hidden" name="QuestionId" value="@Model.QuestionViewModel.Question.Id"/>
+            <input type="hidden" name="Id" value="@Model.Question.Id"/>
         </div>
         <div class="form-group">
             <label>Question</label>
-            <textarea class="form-control" rows="8" name="QuestionContent" >@Html.DisplayFor(model => model.QuestionViewModel.Question.QuestionContent)</textarea>
+            <textarea class="form-control" rows="8" name="QuestionContent" >@Html.DisplayFor(model => model.Question.QuestionContent)</textarea>
         </div>
         <label>Option</label>
-        @foreach (var option in Model.QuestionViewModel.Options)
+        @foreach (var option in Model.Question.Options)
         {
             <div class="row">
                 <div class="form-group">
-                    <input type="hidden" name="OptionId" value="@option.Id" />
+                    <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
                 </div>
                 <div class="col-lg-10">
                     <div class="form-group">
-                        <input class="form-control" name="OptionContent" type="text" value="@option.OptionContent" />
+                        <input class="form-control" name="Options[@counter].OptionContent" type="text" value="@option.OptionContent" />
                     </div>
                 </div>
                 
@@ -36,17 +37,17 @@
                         <label class="el-switch el-switch-green">
                             @if (option.IsCorrect == true)
                             {
-                                <input name="IsCorrect" type="checkbox" checked />
+                                <input name="Options[@counter].IsCorrect" value="true" type="checkbox" checked />
                             }
                             else
                             {
-                                <input name="IsCorrect" type="checkbox" />
+                                <input name="Options[@counter].IsCorrect" value="true" type="checkbox" />
                             }
 
                             <span class="el-switch-style"></span>
                         </label>
                     </div>
-                    
+                    @{ counter++; }
                 </div>
             </div>
             <br/>
@@ -57,7 +58,7 @@
                 <option>---Select an Option---</option>
                 @foreach (var topic in Model.Topics)
             {
-                if (topic.Id == Model.QuestionViewModel.Question.TopicId)
+                if (topic.Id == Model.Question.TopicId)
                 {
                         <option selected value="@topic.Id">@topic.Name</option>
                     }
@@ -75,7 +76,7 @@
                 <option>---Select an Option---</option>
                 @foreach (var lo in Model.LearningOutcomes)
             {
-                if (lo.Id == Model.QuestionViewModel.Question.LearningOutcomeId)
+                if (lo.Id == Model.Question.LearningOutcomeId)
                 {
                         <option selected value="@lo.Id">@lo.Name</option>
                     }
@@ -93,7 +94,7 @@
                 <option>---Select an Option---</option>
                 @foreach (var l in Model.Levels)
             {
-                if (l.Id == Model.QuestionViewModel.Question.LevelId)
+                if (l.Id == Model.Question.LevelId)
                 {
                         <option selected value="@l.Id">@l.Name</option>
                     }

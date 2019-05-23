@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using QBCS.Entity;
 using QBCS.Repository.Interface;
 using QBCS.Repository.Implement;
+using QBCS.Service.ViewModel;
 
 namespace QBCS.Service.Implement
 {
@@ -19,19 +20,22 @@ namespace QBCS.Service.Implement
         {
             u = new UnitOfWork();
         }
-        public List<Level> GetLevelByCourse(int? CourseId)
+        public List<LevelViewModel> GetLevel()
         {
-            List<LevelInCourse> LevelInCourses = u.Repository<LevelInCourse>().GetAll().ToList();
-            List<LevelInCourse> LevelInCourseIds = LevelInCourses.Where(lic => lic.CourseId == CourseId).ToList();
-
+            
             List<Level> Levels = u.Repository<Level>().GetAll().ToList();
-            List<Level> LevelByCourseId = new List<Level>();
-            foreach(LevelInCourse lic in LevelInCourseIds)
+            List<LevelViewModel> LevelViewModels = new List<LevelViewModel>();
+            foreach(Level lv in Levels)
             {
-                Level lv =Levels.Where(lvl => lvl.Id == lic.LevelId).FirstOrDefault();
-                LevelByCourseId.Add(lv);
+                LevelViewModel lvm = new LevelViewModel()
+                {
+                    Id = lv.Id,
+                    Name = lv.Name
+                };
+                LevelViewModels.Add(lvm);
+
             }
-            return LevelByCourseId;
+            return LevelViewModels;
         }
     }
 }

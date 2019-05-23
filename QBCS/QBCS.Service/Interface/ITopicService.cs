@@ -1,4 +1,5 @@
 ﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace QBCS.Service.Interface
 {
     public interface ITopicService
     {
-        List<Topic> GetTopicByCourseId(int? CourseId);
+        List<TopicViewModel> GetTopicByCourseId(int? CourseId);
     }
+
 }
