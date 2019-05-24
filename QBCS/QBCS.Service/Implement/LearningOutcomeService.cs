@@ -22,27 +22,27 @@ namespace QBCS.Service.Implement
         }
         public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int? CourseId)
         {
-            List<LearningOutcome> LearningOutcomes = u.Repository<LearningOutcome>().GetAll().ToList();
+            IQueryable<LearningOutcome> LearningOutcomes = u.Repository<LearningOutcome>().GetAll();
 
             List<LearningOutcome> LearningOutcomeByCourse = LearningOutcomes.Where(lo => lo.CourseId == CourseId).ToList();
 
-            List<LearningOutcomeViewModel> LearningOutcomeViewModels = new List<LearningOutcomeViewModel>();
+            List<LearningOutcomeViewModel> learningOutcomeViewModels = new List<LearningOutcomeViewModel>();
 
-            foreach (var lo in LearningOutcomeByCourse)
+            foreach (var learningOutcome in LearningOutcomeByCourse)
             {
-                LearningOutcomeViewModel lovm = new LearningOutcomeViewModel()
+                LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel()
                 {
-                    Id = lo.Id,
-                    Code = lo.Code,
-                    CourseId = (int) lo.CourseId,
-                    IsDisable = (bool) lo.IsDisable,
-                    Name = lo.Name
+                    Id = learningOutcome.Id,
+                    Code = learningOutcome.Code,
+                    CourseId = (int) learningOutcome.CourseId,
+                    IsDisable = (bool) learningOutcome.IsDisable,
+                    Name = learningOutcome.Name
                 };
 
-                LearningOutcomeViewModels.Add(lovm);
+                learningOutcomeViewModels.Add(learningOutcomeViewModel);
             }
 
-            return LearningOutcomeViewModels;
+            return learningOutcomeViewModels;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace QBCS.Service.Implement
 
         public List<TopicViewModel> GetTopicByCourseId(int? CourseId)
         {
-            List<Topic> Topics = unitOfWork.Repository<Topic>().GetAll().ToList();
+            IQueryable<Topic> Topics = unitOfWork.Repository<Topic>().GetAll();
 
             List<Topic> TopicByCourse = Topics.Where(t => t.CourseId == CourseId).ToList();
 
@@ -31,7 +31,7 @@ namespace QBCS.Service.Implement
 
             foreach (var topic in TopicByCourse)
             {
-                TopicViewModel tvm = new TopicViewModel()
+                TopicViewModel topicViewModel = new TopicViewModel()
                 {
                     Id = topic.Id,
                     Name = topic.Name,
@@ -39,7 +39,7 @@ namespace QBCS.Service.Implement
                     CourseId = (int)topic.CourseId,
                     IsDisable = (bool)topic.IsDisable
                 };
-                TopicViewModels.Add(tvm);
+                TopicViewModels.Add(topicViewModel);
             }
 
             return TopicViewModels;

@@ -22,11 +22,11 @@ namespace QBCS.Service.Implement
 
         public bool UpdateOptions(List<OptionViewModel> OptionViewModels)
         {
-            foreach(var ovm in OptionViewModels)
+            foreach(var optionViewModel in OptionViewModels)
             {
-                Option option = unitOfWork.Repository<Option>().GetById(ovm.Id);
-                option.OptionContent = ovm.OptionContent;
-                option.IsCorrect = ovm.IsCorrect;
+                Option option = unitOfWork.Repository<Option>().GetById(optionViewModel.Id);
+                option.OptionContent = optionViewModel.OptionContent;
+                option.IsCorrect = optionViewModel.IsCorrect;
                 unitOfWork.Repository<Option>().Update(option);
                 unitOfWork.SaveChanges();
             }

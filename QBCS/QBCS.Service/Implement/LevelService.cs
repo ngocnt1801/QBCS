@@ -23,19 +23,19 @@ namespace QBCS.Service.Implement
         public List<LevelViewModel> GetLevel()
         {
             
-            List<Level> Levels = u.Repository<Level>().GetAll().ToList();
-            List<LevelViewModel> LevelViewModels = new List<LevelViewModel>();
-            foreach(Level lv in Levels)
+            IQueryable<Level> Levels = u.Repository<Level>().GetAll();
+            List<LevelViewModel> levelViewModels = new List<LevelViewModel>();
+            foreach(Level leval in Levels)
             {
                 LevelViewModel lvm = new LevelViewModel()
                 {
-                    Id = lv.Id,
-                    Name = lv.Name
+                    Id = leval.Id,
+                    Name = leval.Name
                 };
-                LevelViewModels.Add(lvm);
+                levelViewModels.Add(lvm);
 
             }
-            return LevelViewModels;
+            return levelViewModels;
         }
     }
 }
