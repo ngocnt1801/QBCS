@@ -45,7 +45,6 @@ namespace QBCS.Service.Implement
         }
         public List<CourseViewModel> GetAllCoursesByUserId(int id)
         {
-            var courseId = 0;
             var user = unitOfWork.Repository<User>().GetById(id);
             var courses = user.CourseOfUsers.Select(c => new CourseViewModel
             {
@@ -58,6 +57,12 @@ namespace QBCS.Service.Implement
            
            
             return courses.ToList();
+        }
+        public List<Course> GetCoursesByName(string name)
+        {
+            IQueryable<Course> courses = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name));
+            List<Course> result = courses.ToList();
+            return result;
         }
     }
 }

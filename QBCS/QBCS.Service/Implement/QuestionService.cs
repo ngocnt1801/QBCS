@@ -63,5 +63,22 @@ namespace QBCS.Service.Implement
                                                select q).ToList();
             return QuestionsByCourse;
         }
+
+        public List<Question> GetQuestionsByContent(string questionContent)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q =>  q.QuestionContent.Contains(questionContent));
+            List<Question> result = questions.ToList();
+            return result;
+        }
+
+        public List<Question> GetQuestionSearchBar(string searchInput)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q => 
+                                                                                            q.QuestionContent.Contains(searchInput) || 
+                                                                                            q.Course.Name.Contains(searchInput))
+                                                                                            .Take(5);
+            List<Question> result = questions.ToList();
+            return result;
+        }
     }
 }
