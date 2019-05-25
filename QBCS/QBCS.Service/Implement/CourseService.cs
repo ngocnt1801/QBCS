@@ -31,21 +31,25 @@ namespace QBCS.Service.Implement
 
         public List<CourseViewModel> GetAvailableCourse(int userId)
         {
-            var listCurrentCourse = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userId).Select(uc => uc.CourseId).ToList();
-            var listAvailable = unitOfWork.Repository<Course>().GetAll()
-                                                                .Where(c => !listCurrentCourse.Contains(c.Id))
-                                                                .Select(c => new CourseViewModel
-                                                                {
-                                                                    Id = c.Id,
-                                                                    Code = c.Code,
-                                                                    Name = c.Name
-                                                                }).ToList();
+            var listAvailable = new List<CourseViewModel>();
+            if (userId != 0)
+            {
+               var listCurrentCourse = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userId).Select(uc => uc.CourseId).ToList();
+               listAvailable = unitOfWork.Repository<Course>().GetAll()
+                                                                    .Where(c => !listCurrentCourse.Contains(c.Id))
+                                                                    .Select(c => new CourseViewModel
+                                                                    {
+                                                                        Id = c.Id,
+                                                                        Code = c.Code,
+                                                                        Name = c.Name
+                                                                    }).ToList();
+            }
 
             return listAvailable;
         }
         public List<CourseViewModel> GetAllCoursesByUserId(int id)
         {
-            var courseId = 0;
+            
             var user = unitOfWork.Repository<User>().GetById(id);
             var courses = user.CourseOfUsers.Select(c => new CourseViewModel
             {
@@ -53,10 +57,7 @@ namespace QBCS.Service.Implement
                 CodeId = (int)c.CourseId,
                 Name = c.Course.Name,
                 Code = c.Course.Code
-            });
-           
-           
-           
+            });     
             return courses.ToList();
         }
     }

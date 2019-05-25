@@ -20,15 +20,19 @@ namespace QBCS.Web
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/vendor/bootstrap/js/bootstrap.js",
-                      "~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js",
-                     
-                      "~/Scripts/vendor/bootstrap/scss/bootstrap.scss"));
+                      "~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/vendor/bootstrap/scss/bootstrap.scss",
-                      "~/Content/sb-admin-2.css",
+            bundles.Add(new StyleBundle("~/bundles/content/css").Include(
+                      "~/Content/sb-admin-2.min.css",
                       "~/Scripts/vendor/fontawesome-free/css/all.min.css",
-                      "~/Content/switch-button-style.css"));
+                      "~/Content/swivendortch-button-style.css",
+                      "~/Content/dataTables.bootstrap4.css",
+                      "~/Content/bootstrap.scss"));
+            bundles.Add(new ScriptBundle("~/bundles/js/datatable").Include(
+                      "~/Scripts/js/demo/datatables-demo.js",
+                      "~/Scripts/js/demo/sb-admin-2.js",
+                      "~/Scripts/vendor/datatables/dataTables.bootstrap4.js",
+                      "~/Scripts/vendor/datatables/jquery.dataTables.js"));
         }
     }
 }
