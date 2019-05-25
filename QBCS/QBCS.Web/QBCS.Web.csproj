@@ -1962,6 +1962,9 @@
     <Content Include="Views\Course\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Details\Details.cshtml" />
+    <Content Include="Views\Shared\_LecturerSideBar.cshtml" />
+    <Content Include="Views\Shared\_AdminSideBar.cshtml" />
+    <Content Include="Views\Shared\_StaffSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
