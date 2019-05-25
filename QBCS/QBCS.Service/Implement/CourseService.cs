@@ -54,7 +54,7 @@ namespace QBCS.Service.Implement
             var courses = user.CourseOfUsers.Select(c => new CourseViewModel
             {
                 Id = c.Id,
-                CodeId = (int)c.CourseId,
+                CourseId = (int)c.CourseId,
                 Name = c.Course.Name,
                 Code = c.Course.Code
             });     

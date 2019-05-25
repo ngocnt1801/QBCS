@@ -25,9 +25,9 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundles/content/css").Include(
                       "~/Content/sb-admin-2.min.css",
                       "~/Scripts/vendor/fontawesome-free/css/all.min.css",
-                      "~/Content/swivendortch-button-style.css",
+                      "~/Content/switch-button-style.css",
                       "~/Content/dataTables.bootstrap4.css",
-                      "~/Content/bootstrap.scss"));
+                      "~/Scripts/vendor/bootstrap/scss/bootstrap.scss"));
             bundles.Add(new ScriptBundle("~/bundles/js/datatable").Include(
                       "~/Scripts/js/demo/datatables-demo.js",
                       "~/Scripts/js/demo/sb-admin-2.js",
