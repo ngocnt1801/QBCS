@@ -13,6 +13,8 @@ namespace QBCS.Service.ViewModel
         public int Frequency { get; set; }
         public int Priority { get; set; }
         public int CourseId { get; set; }
+        public string CourseName { get; set; }
+        public string CourseCode { get; set; }
         public List<OptionViewModel> Options { get; set; }
     }
 }

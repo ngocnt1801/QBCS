@@ -20,8 +20,9 @@ namespace QBCS.Web.Controllers
 
         // GET: Question
         public ActionResult Index()
-        {
-            return View();
+        {           
+            var questions = questionService.GetAllQuestions();
+            return View("ListQuestion", questions);
         }
 
         [HttpPost]

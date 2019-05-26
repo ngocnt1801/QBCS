@@ -63,5 +63,20 @@ namespace QBCS.Service.Implement
                                                select q).ToList();
             return QuestionsByCourse;
         }
+        public List<QuestionViewModel> GetAllQuestions()
+        {
+            List<QuestionViewModel> Questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
+                CourseId = (int)c.CourseId, 
+                CourseCode = c.Course.Code,
+                CourseName = c.Course.Name,             
+                QuestionContent = c.QuestionContent,             
+                Options = c.Options.Select(d => new OptionViewModel {
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()
+            }).ToList();
+            return Questions;
+        }
     }
 }
