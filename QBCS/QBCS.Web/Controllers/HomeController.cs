@@ -33,7 +33,7 @@ namespace QBCS.Web.Controllers
                 return View("Admin");
             } else if (user.Role == RoleEnum.Lecturer)
             {
-                return View("Index");
+                return View("Index", user);
             } else
             {
                 return View("Staff");

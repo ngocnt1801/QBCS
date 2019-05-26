@@ -3,6 +3,8 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Web.Models;
 using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -56,6 +58,18 @@ namespace QBCS.Web.Controllers
             var question = new QBCS.Service.ViewModel.QuestionViewModel();
             question.CourseId = courseId;
             return View(question);
+        }
+
+        [HttpPost]
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int? courseId = 0)
+        {
+
+            if (questionFile.ContentLength > 0)
+            {
+                // your code here
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
