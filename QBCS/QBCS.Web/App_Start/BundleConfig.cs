@@ -41,9 +41,9 @@ namespace QBCS.Web
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
+                "~/Scripts/bootstrap.bundle.js",
                 "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js",
-                "~/Scripts/bootstrap.bundle.js"
+                "~/Scripts/vendor/jquery/jquery.js"
                 ));
 
             //data table
