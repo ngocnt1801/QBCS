@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace QBCS.Service.Interface
         List<CourseViewModel> GetAllCourses();
         List<CourseViewModel> GetAvailableCourse(int userId);
         List<CourseViewModel> GetAllCoursesByUserId(int id);
+        List<Course> GetCoursesByName(string name);
     }
 }

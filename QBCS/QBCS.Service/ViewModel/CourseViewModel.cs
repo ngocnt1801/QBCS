@@ -12,7 +12,9 @@ namespace QBCS.Service.ViewModel
         public int CodeId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-
+        public int DepartmentId { get; set; }
+        public int DefaultNumberOfQuestion { get; set; }
+        public bool IsDisable { get; set; }
 
     }
 }

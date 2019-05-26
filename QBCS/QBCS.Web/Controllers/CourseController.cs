@@ -1,5 +1,7 @@
-﻿using QBCS.Service.Implement;
+﻿using QBCS.Entity;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +26,22 @@ namespace QBCS.Web.Controllers
             return View(list);
             
         }
-        
+        public ActionResult GetCoursesByName(string name)
+        {
+            List<CourseViewModel> result = new List<CourseViewModel>();
+
+            List<Course> courses = courseService.GetCoursesByName(name);
+            foreach (Course course in courses)
+            {
+                CourseViewModel courseViewModel = new CourseViewModel
+                {
+                    Name = course.Name,
+                    Code = course.Code,
+                    DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.Value
+                };
+                result.Add(courseViewModel);
+            }
+            return View("ListCourse", result);
+        }
     }
 }
