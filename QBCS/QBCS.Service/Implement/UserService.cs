@@ -36,7 +36,12 @@ namespace QBCS.Service.Implement
                     Id = user.Id,
                     Code = user.Code,
                     Fullname = user.Fullname,
-                    Role = (RoleEnum) user.RoleId
+                    Role = (RoleEnum) user.RoleId,
+                    Courses = user.CourseOfUsers.Select(uc => new CourseViewModel {
+                        CourseId = uc.CourseId.Value,
+                        Code = uc.Course.Code,
+                        Name = uc.Course.Name
+                    }).ToList()
                 };
             }
 
