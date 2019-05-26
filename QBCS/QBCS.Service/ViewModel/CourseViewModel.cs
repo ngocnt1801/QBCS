@@ -9,7 +9,7 @@ namespace QBCS.Service.ViewModel
     public class CourseViewModel
     {
         public int Id { get; set; }
-        public int CodeId { get; set; }
+        public int CourseId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
 

@@ -165,7 +165,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CourseController.cs" />
-    <Compile Include="Controllers\DetailsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
@@ -183,15 +182,34 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datatables\dataTables.bootstrap4.css" />
+    <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\font-awesome\all.css" />
+    <Content Include="Content\font-awesome\all.min.css" />
+    <Content Include="Content\font-awesome\brands.css" />
+    <Content Include="Content\font-awesome\brands.min.css" />
+    <Content Include="Content\font-awesome\fontawesome.css" />
+    <Content Include="Content\font-awesome\fontawesome.min.css" />
+    <Content Include="Content\font-awesome\regular.css" />
+    <Content Include="Content\font-awesome\regular.min.css" />
+    <Content Include="Content\font-awesome\solid.css" />
+    <Content Include="Content\font-awesome\solid.min.css" />
+    <Content Include="Content\font-awesome\svg-with-js.css" />
+    <Content Include="Content\font-awesome\svg-with-js.min.css" />
+    <Content Include="Content\font-awesome\v4-shims.css" />
+    <Content Include="Content\font-awesome\v4-shims.min.css" />
+    <Content Include="Content\font.css" />
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
+    <Content Include="Content\style_dashboard.css" />
     <Content Include="Content\switch-button-style.css" />
+    <Content Include="Content\webfonts\fa-brands-400.svg" />
+    <Content Include="Content\webfonts\fa-regular-400.svg" />
+    <Content Include="Content\webfonts\fa-solid-900.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -211,11 +229,35 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Content\bootstrap.scss" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\webfonts\fa-brands-400.eot" />
+    <Content Include="Content\webfonts\fa-brands-400.ttf" />
+    <Content Include="Content\webfonts\fa-brands-400.woff" />
+    <Content Include="Content\webfonts\fa-brands-400.woff2" />
+    <Content Include="Content\webfonts\fa-regular-400.eot" />
+    <Content Include="Content\webfonts\fa-regular-400.ttf" />
+    <Content Include="Content\webfonts\fa-regular-400.woff" />
+    <Content Include="Content\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\webfonts\fa-solid-900.eot" />
+    <Content Include="Content\webfonts\fa-solid-900.ttf" />
+    <Content Include="Content\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\webfonts\fa-solid-900.woff2" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\datatables\datatables-demo.js" />
+    <Content Include="Scripts\datatables\dataTables.bootstrap4.js" />
+    <Content Include="Scripts\datatables\jquery.dataTables.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\js\demo\chart-area-demo.js" />
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
@@ -223,6 +265,7 @@
     <Content Include="Scripts\js\sb-admin-2.js" />
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.js" />
@@ -1965,6 +2008,8 @@
     <Content Include="Views\Shared\_LecturerSideBar.cshtml" />
     <Content Include="Views\Shared\_AdminSideBar.cshtml" />
     <Content Include="Views\Shared\_StaffSideBar.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1982,21 +2027,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.min.css.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\bootstrap.css.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\bootstrap-theme.css.map" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">

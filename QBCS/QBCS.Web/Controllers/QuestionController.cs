@@ -33,11 +33,11 @@ namespace QBCS.Web.Controllers
         }
 
         // GET: Question
-        public ActionResult GetListQuestion(int id)
+        public ActionResult GetListQuestion(int courseId)
         {
             List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
 
-            List<Question> Questions = questionService.GetQuestionsByCourse(id);
+            List<Question> Questions = questionService.GetQuestionsByCourse(courseId);
             foreach (Question ques in Questions )
             {
                 List<Option> op = optionService.GetOptionsByQuestion(ques.Id);

@@ -17,12 +17,10 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
         }
         // GET: Course
-        public ActionResult Index(int id)
-        {
-            var list = courseService.GetAllCoursesByUserId(id);
-            
-            return View(list);
-            
+        public ActionResult Index(int userId)
+        {           
+            var list = courseService.GetAllCoursesByUserId(userId); 
+            return View(list);         
         }
         
     }

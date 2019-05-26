@@ -27,7 +27,7 @@
 
     @foreach (var item in Model)
     {
-        <tr onClick="document.location.href='@Url.Action("Details", "Details",new { item.Id})'">
+        <tr onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
 
 
             <td>
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                <a href="@Url.Action("Details", "Details",new { item.Id})" class="btn btn-primary float-right">Details</a>
+                <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary float-right">Details</a>
                 @if (!item.IsDisable)
                 {
                     <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger float-right mr-1">Block</a>

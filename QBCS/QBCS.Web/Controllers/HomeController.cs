@@ -40,6 +40,7 @@ namespace QBCS.Web.Controllers
             }
         }
 
+
         public ActionResult Login(string username, string password)
         {
             var user = userService.Login(username, password);

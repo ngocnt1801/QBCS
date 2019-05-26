@@ -1,9 +1,119 @@
 ﻿@model QBCS.Service.ViewModel.UserViewModel
-
+@using QBCS.Service.ViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <a href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    Courses
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Questions</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-question fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Statistic</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Import Question</h6>
+    </div>
+    <div class="card-body">
+        @*<div class="col-xl-3 col-md-6 mb-4">
+            <a href="" class="btn btn-primary float-left">Import Question</a>
+        </div>*@
+        <form method="POST" action="#" enctype="multipart/form-data">
+            <!-- COMPONENT START -->
+            <div class="form-group">
+                <div class="input-group input-file" name="Fichier1">
+                    <input type="text" class="form-control" placeholder='Choose a file...' />
+                    <span class="input-group-btn">
+                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                    </span>
+                </div>
+            </div>
+            <!-- COMPONENT END -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary float-right">Import</button>
+                <button type="reset" class="btn btn-default float-right">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@*<div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">List of Courses</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                ITC
+                            </td>
+                            <td>
+                                Introduction of computing
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>*@
 
