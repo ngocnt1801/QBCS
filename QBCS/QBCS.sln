@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBCS.Repository", "QBCS.Rep
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBCS.Entity", "QBCS.Entity\QBCS.Entity.csproj", "{56492C99-5CAC-43BE-A406-0E630C255935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuplicateQuestion", "DuplicateQuestion\DuplicateQuestion.csproj", "{35AB65C1-3951-4408-BB08-3C26EF926C41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{56492C99-5CAC-43BE-A406-0E630C255935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56492C99-5CAC-43BE-A406-0E630C255935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56492C99-5CAC-43BE-A406-0E630C255935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AB65C1-3951-4408-BB08-3C26EF926C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AB65C1-3951-4408-BB08-3C26EF926C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AB65C1-3951-4408-BB08-3C26EF926C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AB65C1-3951-4408-BB08-3C26EF926C41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
