@@ -12,5 +12,7 @@ namespace QBCS.Service.Interface
     {
         bool Add(QuestionViewModel question);
         List<Question> GetQuestionsByCourse(int CourseId);
+        List<QuestionViewModel> GetAllQuestions();
+        List<QuestionViewModel> CheckDuplicated();
     }
 }

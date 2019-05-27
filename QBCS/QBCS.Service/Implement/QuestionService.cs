@@ -5,6 +5,7 @@ using QBCS.Entity;
 using QBCS.Repository.Interface;
 using QBCS.Repository.Implement;
 using QBCS.Service.ViewModel;
+using System;
 
 namespace QBCS.Service.Implement
 {
@@ -62,6 +63,57 @@ namespace QBCS.Service.Implement
                                                where q.CourseId == CourseId
                                                select q).ToList();
             return QuestionsByCourse;
+        }
+        public List<QuestionViewModel> GetAllQuestions()
+        {
+            List<QuestionViewModel> Questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
+                CourseId = (int)c.CourseId, 
+                CourseCode = c.Course.Code,
+                CourseName = c.Course.Name,             
+                QuestionContent = c.QuestionContent,             
+                Options = c.Options.Select(d => new OptionViewModel {
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()
+            }).ToList();
+            return Questions;
+        }
+
+        public List<QuestionViewModel> CheckDuplicated()
+        {
+            //
+            //check here
+            //
+
+            //this is fake data
+            var result = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel
+            {
+                CourseId = (int)c.CourseId,
+                CourseCode = c.Course.Code,
+                CourseName = c.Course.Name,
+                QuestionContent = c.QuestionContent,
+                Options = c.Options.Select(d => new OptionViewModel
+                {
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()
+            }).ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    result[i].IsDuplicated = true;
+                    result[i].DuplicatedQuestion = result[i];
+                }else
+                {
+                    result[i].IsDuplicated = false;
+                }
+            }
+
+
+            return result;
         }
     }
 }

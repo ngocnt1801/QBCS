@@ -10,6 +10,11 @@ table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
+  cursor: pointer;
+}
+.text-green-success {
+    color: limegreen;
+    font-weight: bold;
 }
 table.dataTable td.dataTables_empty,
 table.dataTable th.dataTables_empty {

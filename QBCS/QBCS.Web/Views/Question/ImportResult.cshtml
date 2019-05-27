@@ -1,0 +1,67 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionViewModel>
+@{
+    ViewBag.Title = "ImportResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>ImportResult</h2>
+<div class="btn-group col-md-6" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")')">
+    All
+    </button>
+    <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})')">Right</button>
+    <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})')">Wrong</button>
+</div>
+<div class="card shadow mb-4" id="question-import">
+    @Html.Partial("_AllQuestion", Model)
+
+    @*<div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of Questions</h6>
+    </div>
+   
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>CourseId</th>
+                        <th>Course Name</th>
+                        <th class="col-md-8">Question</th>
+                        <th>Duplicate Question</th>
+                        <th class="col-md-4">Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+
+                        <td>1</td>
+                        <td>ITC</td>
+                        <td>Introduction Of Computing</td>
+                        <td>
+                            By switching on and off, the __ can be used to represent the 1s and 0s that are foundation of all that goes on in the computer
+                            <div class="container-fluid">
+                                A. capacitor
+                            </div>
+                            <div class="container-fluid">
+                                B. resistor
+                            </div>
+                            <div class="container-fluid text-green-success">
+                                C. transitor
+                            </div>
+                            <div class="container-fluid">
+                                D. inductor
+                            </div>
+                            <div></div>
+                            <br />
+                            
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-primary float-right">Duplicate Ques<utton> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>*@
+</div>

@@ -27,7 +27,12 @@
 
     @foreach (var item in Model)
     {
-        <tr onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
+        string disableClass = "";
+        if (item.IsDisable)
+        {
+            disableClass = "bg-gray-300";
+        }
+        <tr class="@disableClass" onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
 
 
             <td>
@@ -43,11 +48,8 @@
                 <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary float-right">Details</a>
                 @if (!item.IsDisable)
                 {
-                    <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger float-right mr-1">Block</a>
+                    <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger float-right mr-1">Disable</a>
                 }
-                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { item.Id }) |
-                    @Html.ActionLink("Disable", "Disable", new { /* id=item.PrimaryKey */ })*@
             </td>
         </tr>
     }

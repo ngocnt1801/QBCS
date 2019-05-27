@@ -34,7 +34,8 @@
 
     <!-- Nav Item - Question Menu -->
     <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" 
+           href="@Url.Action("Index", "Question")">
             <i class="fas fa-question"></i>
             <span>Questions</span>
         </a>
@@ -46,7 +47,8 @@
     <!-- Heading -->
     <!-- Nav Item - Account -->
     <li class="nav-item">
-        <a class="nav-link" href="@Url.Action("Details", "User",new { userId = ((UserViewModel)Session["user"]).Id })">
+        <a class="nav-link" 
+           href="@Url.Action("Details", "User",new { userId = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-user fa-chart-area"></i>
             <span>Profile</span>
         </a>

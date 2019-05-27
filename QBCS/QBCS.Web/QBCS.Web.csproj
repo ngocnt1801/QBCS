@@ -265,6 +265,7 @@
     <Content Include="Scripts\js\sb-admin-2.js" />
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js" />
@@ -2010,6 +2011,10 @@
     <Content Include="Views\Shared\_StaffSideBar.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\Question\ImportResult.cshtml" />
+    <Content Include="Views\Shared\_AllQuestion.cshtml" />
+    <Content Include="Views\Shared\_WrongQuestion.cshtml" />
+    <Content Include="Views\Shared\_RightQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

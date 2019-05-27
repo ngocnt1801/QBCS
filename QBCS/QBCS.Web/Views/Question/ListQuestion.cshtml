@@ -1,15 +1,16 @@
-﻿@model IEnumerable<QBCS.Web.Models.QuestionViewModel>
+﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionViewModel>
 
 @{
     ViewBag.Title = "ListQuestion";
     int counter = 0;
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
 <h2>ListQuestion</h2>
 
 <div class="row">
     <div class="col-lg-12">
-        <a href="@Url.Action("AddQuestion", "question", new { courseId = Model.First().Question.CourseId})" class="btn btn-primary float-right">Add Question</a>
+        <a href="@Url.Action("AddQuestion", "question", new { courseId = Model.First().CourseId})" class="btn btn-primary float-right">Add Question</a>
     </div>
 </div>
 <div class="card shadow mb-4">
@@ -23,10 +24,10 @@
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>CourseId</th>
+                        <th>Course Name</th>
                         <th class="col-md-8">Question</th>
-
-
-                        <th class="col-md-4">Option</th>
+                        @*<th class="col-md-4">Option</th>*@
                     </tr>
                 </thead>
 
@@ -38,8 +39,28 @@
                                 counter++;
                             }
                             <td>@counter</td>
-                            <td>@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
-                            <td>
+                            <td>@item.CourseCode</td>
+                             <td>@item.CourseName</td>   
+                            <td class="col-2">@Html.DisplayFor(modeItem => item.QuestionContent)
+                                @for (var i = 0; i < item.Options.Count; i++)
+                                {
+                                    if (item.Options[i].IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-green-success">
+                                           @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                           @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                        </div>
+                                    }
+
+                                    <br />
+                                }
+                            </td>
+                            @*<td>
                                 @foreach (var option in item.Options)
                                 {
                                     if (option.IsCorrect == true)
@@ -57,7 +78,7 @@
 
                                     <br />
                                 }
-                            </td>
+                            </td>*@
 
 
                         </tr>

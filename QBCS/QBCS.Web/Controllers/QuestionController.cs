@@ -4,6 +4,7 @@ using QBCS.Service.Interface;
 using QBCS.Web.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,7 +24,8 @@ namespace QBCS.Web.Controllers
         // GET: Question
         public ActionResult Index()
         {
-            return View();
+            var questions = questionService.GetAllQuestions();
+            return View("ListQuestion", questions);
         }
 
         [HttpPost]
@@ -31,7 +33,7 @@ namespace QBCS.Web.Controllers
         {
             questionService.Add(model);
 
-            return RedirectToAction("AddQuestion", new { courseId = model.CourseId});
+            return RedirectToAction("AddQuestion", new { courseId = model.CourseId });
         }
 
         // GET: Question
@@ -40,7 +42,7 @@ namespace QBCS.Web.Controllers
             List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
 
             List<Question> Questions = questionService.GetQuestionsByCourse(courseId);
-            foreach (Question ques in Questions )
+            foreach (Question ques in Questions)
             {
                 List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
                 QuestionViewModel qvm = new QuestionViewModel
@@ -64,12 +66,28 @@ namespace QBCS.Web.Controllers
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int? courseId = 0)
         {
 
-            if (questionFile.ContentLength > 0)
-            {
-                // your code here
-            }
+            //if (questionFile.ContentLength > 0)
+            //{
 
-            return RedirectToAction("Index", "Home");
+            //}
+            var questions = questionService.GetAllQuestions();
+            return View("ImportResult", questions);
+        }
+        public ActionResult GetPartialView(bool? isDuplicate)
+        {
+            var questions = questionService.CheckDuplicated();
+            //All
+            if (!isDuplicate.HasValue)
+            {
+
+            }else if (isDuplicate.Value) // wrong
+            {
+                questions = questions.Where(q => q.IsDuplicated).ToList();
+            } else // right
+            {
+                questions = questions.Where(q => !q.IsDuplicated).ToList();
+            }
+            return PartialView("_AllQuestion", questions);
         }
     }
 }
