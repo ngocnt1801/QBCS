@@ -16,6 +16,7 @@ namespace QBCS.Service.Interface
         bool UpdateQuestion(QuestionViewModel question);
         QuestionViewModel GetQuestionById(int id);
         List<QuestionViewModel> GetQuestionsByCourse(int CourseId);
+        List<QuestionViewModel> GetAllQuestionByCourseId(int courseId); //Change Model
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();
     }
