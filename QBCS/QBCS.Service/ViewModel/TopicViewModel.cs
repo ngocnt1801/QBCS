@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.ViewModel
 {
-    public class CourseViewModel
+    public class TopicViewModel
     {
         public int Id { get; set; }
-        public int CourseId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public int DepartmentId { get; set; }
-        public int DefaultNumberOfQuestion { get; set; }
-        public bool IsDisable { get; set; }
 
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+
+        public int CourseId { get; set; }
+
+        public bool IsDisable { get; set; }
     }
 }

@@ -60,5 +60,11 @@ namespace QBCS.Service.Implement
             });     
             return courses.ToList();
         }
+        public List<Course> GetCoursesByName(string name)
+        {
+            IQueryable<Course> courses = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name));
+            List<Course> result = courses.ToList();
+            return result;
+        }
     }
 }

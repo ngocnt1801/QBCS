@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Interface
 {
-    public interface IOptionService
+    public interface ILevelService
     {
-        bool UpdateOptions(List<OptionViewModel> OptionViewModels);
-        List<Option> GetOptionsByQuestion(int id);
+        List<LevelViewModel> GetLevel();
     }
 }

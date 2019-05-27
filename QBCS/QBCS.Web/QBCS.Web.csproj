@@ -166,13 +166,12 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2003,6 +2002,7 @@
     <Content Include="Views\Question\AddQuestion.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\OptionViewModel.cshtml" />
     <Content Include="Views\Question\ListQuestion.cshtml" />
+    <Content Include="Views\Question\EditQuestion.cshtml" />
     <Content Include="Views\Course\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Details\Details.cshtml" />
@@ -2015,6 +2015,11 @@
     <Content Include="Views\Shared\_AllQuestion.cshtml" />
     <Content Include="Views\Shared\_WrongQuestion.cshtml" />
     <Content Include="Views\Shared\_RightQuestion.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
+    <Content Include="Views\Course\ListCourse.cshtml" />
+    <Content Include="Views\Question\DemoUpdate.cshtml" />
+    <Content Include="Views\Question\GenerateExam.cshtml" />
+    <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2049,6 +2054,9 @@
       <Project>{65a84f5a-f4d3-4c75-b03b-148d3e307a5e}</Project>
       <Name>QBCS.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
