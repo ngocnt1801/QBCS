@@ -57,24 +57,24 @@ namespace QBCS.Web.Controllers
             return View(question);
         }
 
-        // GET: Question
-        //public ActionResult GetQuestionsByContent(string content)
-        //{
-        //    List<QuestionViewModel> result = new List<QuestionViewModel>();
+        //GET: Question
+        public ActionResult GetQuestionsByContent(string content)
+        {
+            List<QuestionViewModel> result = new List<QuestionViewModel>();
 
-        //    List<Question> questions = questionService.GetQuestionsByContent(content);
-        //    foreach (Question question in questions)
-        //    {
-        //        List<Option> op = optionService.GetOptionsByQuestion(question.Id);
-        //        QuestionViewModel questionViewModel = new QuestionViewModel
-        //        {
-        //            Question = question,
-        //            Options = op
-        //        };
-        //        result.Add(questionViewModel);
-        //    }
-        //    return View("ListQuestion", result);
-        //}
+            List<Question> questions = questionService.GetQuestionsByContent(content);
+            foreach (Question question in questions)
+            {
+                List<Option> op = optionService.GetOptionsByQuestion(question.Id);
+                QuestionViewModel questionViewModel = new QuestionViewModel
+                {
+                    Question = question,
+                    Options = op
+                };
+                result.Add(questionViewModel);
+            }
+            return View("ListQuestion", result);
+        }
 
         public ActionResult GetQuestionDetail (int id)
         {
