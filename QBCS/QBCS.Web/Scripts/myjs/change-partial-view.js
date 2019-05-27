@@ -10,6 +10,7 @@
   
         $.get(url, {}, function (response) {
             $("#question-import").html(response);
+            $('#dataTable').DataTable();
         });
     
 }

@@ -1,7 +1,7 @@
 ﻿using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
-using QBCS.Web.Models;
+using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,20 +39,21 @@ namespace QBCS.Web.Controllers
         // GET: Question
         public ActionResult GetListQuestion(int courseId)
         {
-            List<QuestionViewModel> ListQuestion = new List<QuestionViewModel>();
-
-            List<Question> Questions = questionService.GetQuestionsByCourse(courseId);
-            foreach (Question ques in Questions)
-            {
-                List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
-                QuestionViewModel qvm = new QuestionViewModel
-                {
-                    Question = ques,
-                    Options = op
-                };
-                ListQuestion.Add(qvm);
-            }
-            return View("ListQuestion", ListQuestion);
+            List<QuestionViewModel> listQuestion = new List<QuestionViewModel>();
+            listQuestion = questionService.GetAllQuestionByCourseId(courseId);
+            
+            //List<Question> Questions = questionService.GetQuestionsByCourse(courseId);
+            //foreach (Question ques in Questions)
+            //{
+            //    List<Option> op = optionService.GetOptionsByQuestion(ques.Id);
+            //    QuestionViewModel qvm = new QuestionViewModel
+            //    {
+            //        Question = ques,
+            //        Options = op
+            //    };
+            //    ListQuestion.Add(qvm);
+            //}
+            return View("ListQuestion", listQuestion);
         }
 
         public ActionResult AddQuestion(int courseId)

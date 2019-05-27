@@ -64,9 +64,26 @@ namespace QBCS.Service.Implement
                                                select q).ToList();
             return QuestionsByCourse;
         }
+        public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId) {
+            var course = unitOfWork.Repository<Course>().GetById(courseId);
+            List<QuestionViewModel> questions = course.Questions.Select(c => new QuestionViewModel
+            {
+                CourseId = (int)c.CourseId,
+                CourseCode = c.Course.Code,
+                CourseName = c.Course.Name,
+                QuestionContent = c.QuestionContent,
+                Options = c.Options.Select(d => new OptionViewModel
+                {
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()
+            }).ToList();
+            return questions;
+        }
         public List<QuestionViewModel> GetAllQuestions()
         {
-            List<QuestionViewModel> Questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
+            List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
                 CourseId = (int)c.CourseId, 
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,             
@@ -77,7 +94,7 @@ namespace QBCS.Service.Implement
                     IsCorrect = (bool)d.IsCorrect
                 }).ToList()
             }).ToList();
-            return Questions;
+            return questions;
         }
 
         public List<QuestionViewModel> CheckDuplicated()

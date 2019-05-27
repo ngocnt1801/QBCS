@@ -15,8 +15,8 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th class="col-md-5">Question</th>
-                        <th class="col-md-5">Duplicated question</th>
+                        <th>Question</th>
+                        <th>Duplicated question</th>
                         @*<th class="col-md-4">Option</th>*@
                     </tr>
                 </thead>
@@ -38,7 +38,7 @@
                                 counter++;
                             }
                             <td class="@borderLeft">@counter</td>
-                            <td class="col-md-5">
+                            <td>
                                 @Html.DisplayFor(modeItem => item.QuestionContent)
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {
@@ -58,7 +58,7 @@
                                     <br />
                                 }
                             </td>
-                            <td class="col-md-5">
+                            <td>
                                 @if (item.IsDuplicated)
                                 {
                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
