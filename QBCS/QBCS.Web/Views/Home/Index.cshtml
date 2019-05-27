@@ -60,12 +60,10 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <a href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        Courses
-                                    </div>
-                                </a>
-
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    Courses
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-500"> @(((UserViewModel)Session["user"]).Courses.Count)</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-book fa-2x text-gray-300"></i>
@@ -80,6 +78,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">Questions</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-500">201</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-question fa-2x text-gray-300"></i>
