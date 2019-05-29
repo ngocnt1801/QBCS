@@ -2,6 +2,7 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace QBCS.Web.Controllers
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
 
-            List<Question> questions = questionService.GetQuestionsByContent(content);
+            //List<Question> questions = questionService.GetQuestionsByContent(content);
             //foreach (Question question in questions)
             //{
             //    List<Option> op = optionService.GetOptionsByQuestion(question.Id);
@@ -118,7 +119,29 @@ namespace QBCS.Web.Controllers
 
         public ActionResult ViewGeneratedExamination()
         {
-            return View();
+            List<ExaminationViewModel> examinationViewModels = new List<ExaminationViewModel>();
+            List<QuestionViewModel> questions = questionService.GetAllQuestions();
+            TopicViewModel topic = new TopicViewModel()
+            {
+                Id = 1,
+                Name = "Learning Outcome"
+            };
+            LevelViewModel level = new LevelViewModel()
+            {
+                Id = 1,
+                Name = "Hard"
+            };
+            for (int i = 0; i < 10; i++)
+            {
+                ExaminationViewModel examination = new ExaminationViewModel
+                {
+                    Question = questions[i],
+                    Level = level,
+                    Topic = topic
+                };
+                examinationViewModels.Add(examination);
+            }
+            return View(examinationViewModels);
         }
 
         [HttpPost]

@@ -164,9 +164,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\TopicAPIController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -181,6 +183,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\checkbox.min.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
     <Content Include="Content\font-awesome\all.css" />
@@ -201,6 +204,7 @@
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
+    <Content Include="Content\smart_wizard_theme_arrows.min.css" />
     <Content Include="Content\style_dashboard.css" />
     <Content Include="Content\switch-button-style.css" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
@@ -261,11 +265,13 @@
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
     <Content Include="Scripts\js\demo\datatables-demo.js" />
+    <Content Include="Scripts\myjs\generate-question.js" />
     <Content Include="Scripts\js\sb-admin-2.js" />
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\import-file.js" />
+    <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.js" />
