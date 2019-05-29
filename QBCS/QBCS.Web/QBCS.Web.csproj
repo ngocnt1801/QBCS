@@ -2020,6 +2020,7 @@
     <Content Include="Views\Question\DemoUpdate.cshtml" />
     <Content Include="Views\Question\GenerateExam.cshtml" />
     <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />
+    <Content Include="Views\Question\ReviewQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

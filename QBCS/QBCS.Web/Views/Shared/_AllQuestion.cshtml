@@ -5,9 +5,7 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-
 <div class="card shadow mb-4">
-
 
     <div class="card-body">
         <div class="table-responsive">
@@ -33,7 +31,8 @@
                             borderLeft = "border-left-success";
                         }
 
-                        <tr>
+                        <tr onClick="document.location.href='@Url.Action("GetQuestionByQuestionId",
+                      "Question",new { questionId  = item.Id})'">
                             @{
                                 counter++;
                             }
@@ -80,7 +79,7 @@
                                         <br />
                                     }
                                 }
-                                
+
                             </td>
                             @*<td>
                                     @foreach (var option in item.Options)
@@ -101,7 +100,6 @@
                                         <br />
                                     }
                                 </td>*@
-
                         </tr>
                                 }
                 </tbody>
@@ -164,5 +162,4 @@
             </table>
         </div>
     </div>*@
-
 
