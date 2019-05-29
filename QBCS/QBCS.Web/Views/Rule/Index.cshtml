@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Rules</h2>
+<button class="btn btn-primary">Edit Rule</button>
+<div class="card shadow mb-4">
+    <a href="#collapseQuestion" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary">Question Rule</h6>
+    </a>
+    <div class="card-body collapse show" id="collapseQuestion" style="padding-left:30px">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="datatableQuestion" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th class="col-md-6">Value</th>
+                        <th>Create Date</th>
+                        <th>Activate Date</th>
+                        <th>Group</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Test</td>
+                        <td>TestName</td>
+                        <td>TestValue</td>
+                        <td>TestCDate</td>
+                        <td>TestADate</td>
+                        <td>TestGroup</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <a href="#collapseOption" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary">Option Rule</h6>
+    </a>
+    <div class="card-body collapse show" id="collapseOption" style="padding-left:30px">
+
+        <div class="table-responsive">
+            <table class="table table-bordered" id="datatableOption" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th class="col-md-6">Value</th>
+                        <th>Create Date</th>
+                        <th>Activate Date</th>
+                        <th>Group</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Test</td>
+                        <td>TestName</td>
+                        <td>TestValue</td>
+                        <td>TestCDate</td>
+                        <td>TestADate</td>
+                        <td>TestGroup</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
