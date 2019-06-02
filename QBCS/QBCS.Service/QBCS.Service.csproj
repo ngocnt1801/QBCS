@@ -88,6 +88,10 @@
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DuplicateQuestion\DuplicateQuestion.csproj">
+      <Project>{35AB65C1-3951-4408-BB08-3C26EF926C41}</Project>
+      <Name>DuplicateQuestion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
       <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
       <Name>QBCS.Entity</Name>

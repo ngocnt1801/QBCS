@@ -36,6 +36,12 @@ namespace QBCS.Entity
 
         public bool? IsDisable { get; set; }
 
+        [StringLength(50)]
+        public string QuestionCode { get; set; }
+
+        [StringLength(255)]
+        public string Image { get; set; }
+
         public virtual Course Course { get; set; }
 
         public virtual Level Level { get; set; }
