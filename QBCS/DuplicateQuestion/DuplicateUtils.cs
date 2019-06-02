@@ -12,6 +12,8 @@ namespace DuplicateQuestion
 {
     public class DuplicateUtils
     {
+        private static readonly bool NOT_SEEN = false;
+
         [SqlProcedure]
         public static void CheckDuplidate(SqlInt32 importId, SqlInt32 courseId)
         {
@@ -142,12 +144,13 @@ namespace DuplicateQuestion
 
                 SqlCommand command = new SqlCommand(
                     "UPDATE Import " +
-                    "SET Status=@status " +
+                    "SET Status=@status, Seen=@seen " +
                     "WHERE Id=@importId",
                     connection
                     );
 
                 command.Parameters.AddWithValue("@status", (int)StatusEnum.Done);
+                command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", importId.Value);
                 command.ExecuteNonQuery();
             }
