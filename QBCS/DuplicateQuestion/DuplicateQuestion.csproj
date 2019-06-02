@@ -41,11 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuplicateUtilities.cs" />
-    <Compile Include="Entity\OptionModel.cs" />
+    <Compile Include="DuplicateUtils.cs" />
     <Compile Include="Entity\QuestionModel.cs" />
+    <Compile Include="Entity\StatusEnum.cs" />
     <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

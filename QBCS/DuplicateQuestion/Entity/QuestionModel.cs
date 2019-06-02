@@ -8,10 +8,13 @@ namespace DuplicateQuestion.Entity
 {
     public class QuestionModel
     {
+        public int Id { get; set; }
         public string QuestionContent { get; set; }
         public int Hashcode { get; set; }
-        public bool IsDuplicate { get; set; }
-        public List<OptionModel> Options { get; set; }
-        public QuestionModel DuplicateQuestion { get; set; }
+        public int DuplicatedQuestionId { get; set; }
+        public List<String> RightOptions { get; set; }
+        public List<String> WrongOptions { get; set; }
+        public int Status { get; set; }
+
     }
 }
