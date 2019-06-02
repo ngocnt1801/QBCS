@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace QBCS.Service.Interface
 {
@@ -20,5 +21,6 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestionByCourseId(int courseId); //Change Model
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();
+        bool InsertQuestion(HttpPostedFileBase questionFile);
     }
 }

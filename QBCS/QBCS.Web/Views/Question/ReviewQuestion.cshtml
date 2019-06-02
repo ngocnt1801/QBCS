@@ -7,63 +7,72 @@
     int counter = 0;
 }
 
+<div class="row">
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Edit Question</h6>
-    </div>
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Question</h6>
+            </div>
 
-    <div class="card-body">
-        <div class="container">
-            @Html.TextAreaFor(modeItem => Model.QuestionContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
-            @for (var i = 0; i < Model.Options.Count; i++)
+            <div class="card-body">
+                <div class="container">
+                    @Html.TextAreaFor(modeItem => Model.QuestionContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
+                    @for (var i = 0; i < Model.Options.Count; i++)
             {
                 if (Model.Options[i].IsCorrect == true)
                 {
-                    <div class="text-green-success">
-                        @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
-                    </div>
-                }
-                else
-                {
-                    <div class="">
-                        @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
-                    </div>
-                }
+                            <div class="text-green-success">
+                                @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="">
+                                @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
+                            </div>
+                        }
 
-                <br />
-            }
-            <input type="submit" name="Save" class="btn btn-primary float-right" />
-            <a class="btn btn-default float-right" href="@Url.Action("GetQuestionByQuestionId",
+                        <br />
+                    }
+                    <input type="submit" name="Save" class="btn btn-primary float-right" value="Save" />
+                    <a class="btn btn-default float-right" href="@Url.Action("GetQuestionByQuestionId",
                       "Question",new { questionId  = Model.Id})">Cancel</a>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Duplicated Question</h6>
+    
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Question Bank</h6>
+            </div>
+
+            <div class="card-body">
+
+                @Html.DisplayFor(modeItem => Model.QuestionContent)
+                @for (var i = 0; i < Model.Options.Count; i++)
+                {
+                    if (Model.Options[i].IsCorrect == true)
+                    {
+                        <div class="container-fluid text-green-success">
+                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container-fluid">
+                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                        </div>
+                    }
+
+                    <br />
+                }
+
+            </div>
+        </div>
     </div>
-
-    <div class="card-body">
-
-        @Html.DisplayFor(modeItem => Model.QuestionContent)
-        @for (var i = 0; i < Model.Options.Count; i++)
-        {
-            if (Model.Options[i].IsCorrect == true)
-            {
-                <div class="container-fluid text-green-success">
-                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
-                </div>
-            }
-            else
-            {
-                <div class="container-fluid">
-                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
-                </div>
-            }
-
-            <br />
-        }
-
-    </div>
+    
 </div>

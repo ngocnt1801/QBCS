@@ -6,6 +6,10 @@ using QBCS.Repository.Interface;
 using QBCS.Repository.Implement;
 using QBCS.Service.ViewModel;
 using System;
+using System.Web;
+using System.Xml.Serialization;
+using System.IO;
+using QBCS.Service.Utilities;
 
 namespace QBCS.Service.Implement
 {
@@ -63,7 +67,7 @@ namespace QBCS.Service.Implement
 
             List<QuestionViewModel> questionViewModels = new List<QuestionViewModel>();
 
-            foreach(var ques in QuestionsByCourse)
+            foreach (var ques in QuestionsByCourse)
             {
                 List<OptionViewModel> optionViewModels = new List<OptionViewModel>();
                 foreach (var option in ques.Options)
@@ -85,7 +89,7 @@ namespace QBCS.Service.Implement
             return questionViewModels;
         }
 
-        public QuestionViewModel GetQuestionById (int id)
+        public QuestionViewModel GetQuestionById(int id)
         {
             Question QuestionById = unitOfWork.Repository<Question>().GetById(id);
 
@@ -109,16 +113,17 @@ namespace QBCS.Service.Implement
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
-           
+
             var questions = question.Options.Select(c => new QuestionViewModel
             {
                 Id = (int)c.QuestionId,
                 QuestionContent = c.Question.QuestionContent,
-                Options = c.Question.Options.Select( d => new OptionViewModel{
+                Options = c.Question.Options.Select(d => new OptionViewModel
+                {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
                     IsCorrect = (bool)d.IsCorrect
-                }).ToList()   
+                }).ToList()
             }).ToList();
 
             return questions;
@@ -137,7 +142,7 @@ namespace QBCS.Service.Implement
             return true;
         }
 
-        private QuestionViewModel ParseEntityToModel ( Question question, List<OptionViewModel> options)
+        private QuestionViewModel ParseEntityToModel(Question question, List<OptionViewModel> options)
         {
             QuestionViewModel questionViewModel = new ViewModel.QuestionViewModel()
             {
@@ -167,21 +172,22 @@ namespace QBCS.Service.Implement
 
         public List<Question> GetQuestionsByContent(string questionContent)
         {
-            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q =>  q.QuestionContent.Contains(questionContent));
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.QuestionContent.Contains(questionContent));
             List<Question> result = questions.ToList();
             return result;
         }
 
         public List<Question> GetQuestionSearchBar(string searchInput)
         {
-            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q => 
-                                                                                            q.QuestionContent.Contains(searchInput) || 
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q =>
+                                                                                            q.QuestionContent.Contains(searchInput) ||
                                                                                             q.Course.Name.Contains(searchInput))
                                                                                             .Take(5);
             List<Question> result = questions.ToList();
             return result;
         }
-        public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId) {
+        public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId)
+        {
             var course = unitOfWork.Repository<Course>().GetById(courseId);
             List<QuestionViewModel> questions = course.Questions.Select(c => new QuestionViewModel
             {
@@ -200,12 +206,14 @@ namespace QBCS.Service.Implement
         }
         public List<QuestionViewModel> GetAllQuestions()
         {
-            List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
-                CourseId = (int)c.CourseId, 
+            List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel
+            {
+                CourseId = (int)c.CourseId,
                 CourseCode = c.Course.Code,
-                CourseName = c.Course.Name,             
-                QuestionContent = c.QuestionContent,             
-                Options = c.Options.Select(d => new OptionViewModel {
+                CourseName = c.Course.Name,
+                QuestionContent = c.QuestionContent,
+                Options = c.Options.Select(d => new OptionViewModel
+                {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
                     IsCorrect = (bool)d.IsCorrect
@@ -241,7 +249,8 @@ namespace QBCS.Service.Implement
                 {
                     result[i].IsDuplicated = true;
                     result[i].DuplicatedQuestion = result[i];
-                }else
+                }
+                else
                 {
                     result[i].IsDuplicated = false;
                 }
@@ -250,5 +259,44 @@ namespace QBCS.Service.Implement
 
             return result;
         }
+        public bool InsertQuestion(HttpPostedFileBase questionFile)
+        {
+            bool check = false;
+            StreamReader reader;
+            try
+            {
+
+                string extensionFile = Path.GetExtension(questionFile.FileName);
+                if (extensionFile.Equals(".xml"))
+                {
+                    XmlSerializer xmlSer = new XmlSerializer(typeof(quiz));
+                    reader = new StreamReader(questionFile.InputStream);
+                    quiz question = (quiz)xmlSer.Deserialize(reader);
+                    check = true;
+                    reader.Close();
+                }
+                if (extensionFile.Equals(".gift"))
+                {
+                    GIFTUtilities ulti = new GIFTUtilities();
+                    reader = new StreamReader(questionFile.InputStream);
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        ulti.StripTagsCharArray(line);
+                    }
+                    reader.Close();
+
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return check;
+        }
     }
+
 }

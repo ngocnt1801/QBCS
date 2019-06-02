@@ -123,11 +123,13 @@ namespace QBCS.Web.Controllers
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int? courseId = 0)
         {
-
-            //if (questionFile.ContentLength > 0)
-            //{
-
-            //}
+            bool check = true;
+            if (questionFile.ContentLength > 0)
+            {
+                
+                check = questionService.InsertQuestion(questionFile); 
+               
+            }
             var questions = questionService.GetAllQuestions();
             return View("ImportResult", questions);
         }
