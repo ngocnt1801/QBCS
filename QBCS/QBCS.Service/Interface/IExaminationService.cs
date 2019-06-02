@@ -1,5 +1,4 @@
-﻿using QBCS.Entity;
-using QBCS.Service.ViewModel;
+﻿using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Interface
 {
-    public interface ITopicService
+    public interface IExaminationService
     {
-        List<TopicViewModel> GetTopicByCourseId(int CourseId);
+        GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam);
     }
-
 }

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
+
+@{
+
+    ViewBag.Title = "List Course";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var counter = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Staff_ListCourse</title>
+</head>
+<body>
+    <div class="row">
+        <div style="height:25px;" class="row">
+
+        </div>
+        
+        <div class="example form-input-group" style="margin:auto;max-width:300px">
+@using (Html.BeginForm("GetCourseByNameOrId", "Course", new { @class = "form-input-group" }))
+{
+            <input id="searchCourseValue" class="form-input-group" type="text" placeholder="Search Course" name="searchValue">
+
+            <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+}
+        </div>
+        
+    </div>
+    <div class="list-course">
+        <table class="table table-striped">
+            <tr>
+                <th>No.</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @{counter++; }
+                    <td>
+                        @counter
+                    </td>
+                    <td>
+                        @Html.DisplayFor(course => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(course => item.Name)
+                    </td>
+                    <td></td>
+                </tr>
+                        }
+        </table>
+    </div>
+</body>
+</html>

@@ -20,7 +20,7 @@ namespace QBCS.Service.Implement
         {
             u = new UnitOfWork();
         }
-        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int? CourseId)
+        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId)
         {
             IQueryable<LearningOutcome> LearningOutcomes = u.Repository<LearningOutcome>().GetAll();
 
@@ -38,7 +38,7 @@ namespace QBCS.Service.Implement
                     IsDisable = (bool) learningOutcome.IsDisable,
                     Name = learningOutcome.Name
                 };
-
+                learningOutcomeViewModel.UpdateIdValue();
                 learningOutcomeViewModels.Add(learningOutcomeViewModel);
             }
 

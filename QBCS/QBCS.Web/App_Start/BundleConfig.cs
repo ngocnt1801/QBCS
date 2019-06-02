@@ -77,7 +77,8 @@ namespace QBCS.Web
                 ));
             //Checkbox 
             bundles.Add(new StyleBundle("~/bundle/content/checkbox").Include(
-                "~/Content/checkbox.min.css"
+                "~/Content/checkbox.min.css",
+                "~/Content/generate-exam.css"
                 ));
         }
     }

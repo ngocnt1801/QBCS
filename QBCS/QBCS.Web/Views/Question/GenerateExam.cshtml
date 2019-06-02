@@ -1,54 +1,115 @@
-﻿
+﻿@model QBCS.Service.ViewModel.ListTopicLearningOutcomeViewModel
 @{
     ViewBag.Title = "GenerateExam";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Generate Exam</h2>
+@using (Html.BeginForm("GenerateExaminaton", "Question", new { @class = "form-group" }))
+{
+    <div id="smartwizard">
+        <ul>
+            <li><a href="#step-1">Step 1<br /><small>Select amount question</small></a></li>
+            <li><a href="#step-2">Step 2<br /><small>Select Topic/Learing Outcome</small></a></li>
+            <li><a href="#step-3">Step 3<br /><small>Select percent of level</small></a></li>
+        </ul>
 
-<div id="smartwizard">
-    <ul>
-        <li><a href="#step-1">Step 1<br /><small>Select Course</small></a></li>
-        <li><a href="#step-2">Step 2<br /><small>Select Topic/Learing Outcome</small></a></li>
-        <li><a href="#step-3">Step 3<br /><small>Select number of question</small></a></li>
-    </ul>
-
-    <div>
-        <div id="step-1" class="">
-            <div class="col-lg-5">
-                <div class="row">
-                    <form class="form-inline" id="searchCourse">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                        <input id="searchCourseValue" class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search Course" aria-label="Search Course" />
-                    </form>
+        <div>
+            <div id="step-1" class="">
+                <div class="form-inline" style="margin-top:15px;">
+                    <div class="form-group">
+                        <label for="total" class="control-label col-xs-10">Total question :</label>
+                        <div class="col-xs-2">
+                            <input class="form-control" id="total" type="number" name="TotalQuestion">
+                        </div>
+                    </div>
                 </div>
+            </div>
                 
-                <div class="row">
-                    <table class="table">
-                        <tbody id="listCourse">                          
-                                
+            <div id="step-2" class="">
+                <div id="check-all-div" style="margin:18px;">
+                    <table>
+                        <tbody>
+                            <tr class="d-flex">
+                                <td class="col-lg-1">
+                                    <div class="el-checkbox el-checkbox-green text-center">
+                                        <span class="margin-r"></span>
+                                        <input type="checkbox" name="check" id="check-all">
+                                        <label class="el-checkbox-style" for="check-all"></label>
+                                    </div>
+
+                                </td>
+                                <td class="col-lg-11">
+                                    <h5 style="padding-left:20px;">Select All</h5>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div id="listTopic" class="form-group">
+                    <table class="table table-striped">
+                        <tbody>
+                            @foreach (var topic in Model.Topics)
+                            {
+                                <tr class="d-flex">
+                                    <td class="col-1">
+                                        <div class="el-checkbox el-checkbox-green text-center form-group">
+                                            <span class="margin-l"></span>
+                                            <input value="@topic.IdValue" type="checkbox" class="checkbox" name="Topic" id="@topic.IdValue" />
+                                            <label class="el-checkbox-style" for="@topic.IdValue"></label>
+                                        </div>
+                                    </td>
+                                    <td class="col-11">
+                                        <h5 style="word-wrap:break-word;">@topic.Name</h5>
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var lo in Model.LearningOutcomes)
+                            {
+                                <tr class="d-flex">
+                                    <td class="col-1">
+                                        <div class="el-checkbox el-checkbox-green text-center form-group">
+                                            <span class="margin-l"></span>
+                                            <input value="@lo.IdValue" type="checkbox" class="checkbox" name="Topic" id="@lo.IdValue" />
+                                            <label class="el-checkbox-style" for="@lo.IdValue"></label>
+                                        </div>
+                                    </td>
+                                    <td class="col-11">
+                                        <h5 style="word-wrap:break-word;">@lo.Name</h5>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
-        <div id="step-2" class=""></div>
-        <div id="step-3" class="">
-            <div class="container">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="easyQ">Easy question number:</label>
-                        <input type="number" class="form-control" id="easyQ">
+            <div id="step-3" class="">
+                <div class="form-inline" style="margin-top:15px;">
+                        <div class="form-group">
+                            <label for="easy" class="control-label col-xs-10">Percent of easy question : </label>
+                            <input class="form-control" id="easy" type="number" style="margin-left:1em;" name="EasyPercent">
+                        </div>
+                </div>
+                <div class="form-inline" style="margin-top:15px;">
+                        <div class="form-group">
+                            <label for="normal" class="control-label col-xs-10">Percent of normal question :</label>
+                            <div class="col-xs-2">
+                                <input class="form-control" id="normal" type="number" name="NormalPercent">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="normalQ">Normal question number:</label>
-                        <input type="number" class="form-control" id="normalQ">
-                    </div>
-                    <div class="form-group">
-                        <label for="hardQ">Hard question number:</label>
-                        <input type="number" class="form-control" id="hardQ">
-                    </div>
+                <div class="form-inline" style="margin-top:15px;">
+                        <div class="form-group">
+                            <label for="hard" class="control-label col-xs-10">Percent of hard question : </label>
+                            <div class="col-xs-2">
+                                <input class="form-control" id="hard" style="margin-left:1em;" name="HardPercent">
+                            </div>
+                        </div>
+                    
                 </div>
             </div>
-    </div>
-</div>
+        </div>
+        </div>
+        
+}

@@ -19,7 +19,8 @@ namespace QBCS.Web.Controllers
         private IOptionService optionService;
         private ITopicService topicService;
         private ILevelService levelService;
-        private ILearningOutcomeService lo;
+        private ILearningOutcomeService learningOutcomeService;
+        private IExaminationService examinationService;
 
         public QuestionController()
         {
@@ -27,7 +28,8 @@ namespace QBCS.Web.Controllers
             optionService = new OptionService();
             topicService = new TopicService();
             levelService = new LevelService();
-            lo = new LearningOutcomeService();
+            learningOutcomeService = new LearningOutcomeService();
+            examinationService =  new ExaminationService();
         }
 
         // GET: Question
@@ -89,7 +91,7 @@ namespace QBCS.Web.Controllers
 
             List<LevelViewModel> levels = levelService.GetLevel();
 
-            List<LearningOutcomeViewModel> learningOutcomes = lo.GetLearningOutcomeByCourseId(qvm.CourseId);
+            List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
 
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
@@ -111,10 +113,22 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GetQuestionDetail", new {id = ques.Id });
         }
 
-        public ActionResult GenerateExam()
+        public ActionResult GenerateExam(int courseId)
         {
+            List<TopicViewModel> topicViewModels = topicService.GetTopicByCourseId(courseId);
+            List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
+            ListTopicLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListTopicLearningOutcomeViewModel()
+            {
+                Topics = topicViewModels,
+                LearningOutcomes = learningOutcomeViewModels
+            };
+            return View(listTopicLearningOutcomeViewModel);
+        }
 
-            return View();
+        public ActionResult GenerateExaminaton (GenerateExamViewModel exam)
+        {
+            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
+            return View(examination);
         }
 
         public ActionResult ViewGeneratedExamination()

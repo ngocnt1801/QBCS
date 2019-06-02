@@ -41,5 +41,16 @@ namespace QBCS.Web.Controllers
             }
             return View("ListCourse", result);
         }
+
+        public ActionResult GetAllCourse()
+        {
+            List<CourseViewModel> courses = courseService.GetAllCourses();
+            return View("Staff_ListCourse", courses);
+        }
+        public ActionResult GetCourseByNameOrId(string searchValue)
+        {
+            List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);
+            return View("Staff_ListCourse", courses);
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+div.example input[type=text] {
+  padding: 10px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+  box-sizing: border-box;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+div.example {
+    margin: auto;
+}
+.list-course th{
+    color: white !important;
+    background : #8690EB !important;
+}
+
+div.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;  
+  color: white;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom:20px;
+}
+
+div.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
