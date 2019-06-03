@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
+    <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Enum\RoleEnum.cs" />
     <Compile Include="Implement\CourseService.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Implement\TopicService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
+    <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
     <Compile Include="Interface\ICourseService.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
+    <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\QuestionDetailViewModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />

@@ -10,6 +10,7 @@ namespace QBCS.Repository.Interface
     public interface IUnitOfWork
     {
         IRepository<T> Repository<T>() where T : class;
+        IImportRepository ImportRepository();
         int SaveChanges();
         DbContext GetContext();
     }
