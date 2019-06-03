@@ -13,6 +13,7 @@ namespace QBCS.Entity
         public User()
         {
             CourseOfUsers = new HashSet<CourseOfUser>();
+            Imports = new HashSet<Import>();
         }
 
         public int Id { get; set; }
@@ -38,6 +39,9 @@ namespace QBCS.Entity
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseOfUser> CourseOfUsers { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Import> Imports { get; set; }
 
         public virtual Role Role { get; set; }
     }

@@ -17,6 +17,9 @@ namespace QBCS.Entity
 
         public bool? IsCorrect { get; set; }
 
+        [StringLength(255)]
+        public string Image { get; set; }
+
         public virtual Question Question { get; set; }
     }
 }

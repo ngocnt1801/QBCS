@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace DuplicateQuestion.Entity
 {
-    public class OptionModel
+    public enum StatusEnum
     {
-        public string OptionContent { get; set; }
-        public bool IsCorrect { get; set; }
+        NotCheck = 1,
+        Success = 2,
+        Editable = 3,
+        Delete = 4,
+        Done = 5
     }
 }

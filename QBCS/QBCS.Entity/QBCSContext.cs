@@ -16,6 +16,7 @@ namespace QBCS.Entity
         public virtual DbSet<CourseDepartment> CourseDepartments { get; set; }
         public virtual DbSet<CourseOfUser> CourseOfUsers { get; set; }
         public virtual DbSet<Examination> Examinations { get; set; }
+        public virtual DbSet<Import> Imports { get; set; }
         public virtual DbSet<LearningOutcome> LearningOutcomes { get; set; }
         public virtual DbSet<Level> Levels { get; set; }
         public virtual DbSet<LevelInCourse> LevelInCourses { get; set; }
@@ -24,8 +25,12 @@ namespace QBCS.Entity
         public virtual DbSet<PartOfExamination> PartOfExaminations { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionInExam> QuestionInExams { get; set; }
+        public virtual DbSet<QuestionTemp> QuestionTemps { get; set; }
         public virtual DbSet<QuestionType> QuestionTypes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Rule> Rules { get; set; }
+        public virtual DbSet<RuleKey> RuleKeys { get; set; }
+        public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -65,8 +70,16 @@ namespace QBCS.Entity
                 .Property(e => e.OptionContent)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<Option>()
+                .Property(e => e.Image)
+                .IsUnicode(false);
+
             modelBuilder.Entity<OptionInExam>()
                 .Property(e => e.OptionContent)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<OptionInExam>()
+                .Property(e => e.Image)
                 .IsUnicode(false);
 
             modelBuilder.Entity<PartOfExamination>()
@@ -79,9 +92,21 @@ namespace QBCS.Entity
                 .IsUnicode(false);
 
             modelBuilder.Entity<Question>()
+                .Property(e => e.QuestionCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Question>()
+                .Property(e => e.Image)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Question>()
                 .HasMany(e => e.QuestionInExams)
                 .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.QuestionReference);
+
+            modelBuilder.Entity<QuestionInExam>()
+                .Property(e => e.Image)
+                .IsUnicode(false);
 
             modelBuilder.Entity<QuestionInExam>()
                 .HasMany(e => e.OptionInExams)
@@ -100,6 +125,28 @@ namespace QBCS.Entity
             modelBuilder.Entity<Role>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<RuleKey>()
+                .Property(e => e.Code)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<RuleKey>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<RuleKey>()
+                .HasMany(e => e.Rules)
+                .WithOptional(e => e.RuleKey)
+                .HasForeignKey(e => e.KeyId);
+
+            modelBuilder.Entity<Semester>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Semester>()
+                .HasMany(e => e.Examinations)
+                .WithOptional(e => e.Semester1)
+                .HasForeignKey(e => e.Semester);
 
             modelBuilder.Entity<Topic>()
                 .Property(e => e.Name)

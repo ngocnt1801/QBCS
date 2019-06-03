@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
+    <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Enum\RoleEnum.cs" />
     <Compile Include="Implement\CourseService.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Implement\TopicService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
+    <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
     <Compile Include="Interface\ICourseService.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="ViewModel\GIFTModel.cs" />
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
+    <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\QuestionDetailViewModel.cs" />
     <Compile Include="ViewModel\QuestionModel.cs" />
@@ -84,6 +87,10 @@
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DuplicateQuestion\DuplicateQuestion.csproj">
+      <Project>{35AB65C1-3951-4408-BB08-3C26EF926C41}</Project>
+      <Name>DuplicateQuestion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
       <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
       <Name>QBCS.Entity</Name>
