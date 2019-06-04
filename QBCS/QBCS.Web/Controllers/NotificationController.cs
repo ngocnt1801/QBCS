@@ -26,13 +26,13 @@ namespace QBCS.Web.Controllers
 
         public JsonResult GetNotification()
         {
-            int count = 0;
+            List<NotificationViewModel> notificationList = null;
             var user = (UserViewModel)Session["user"];
             if (user != null)
             {
-                count = notificationService.GetNotifyImportResult(user.Id, ImportResultHub.ImportStatus_OnChange);
+                notificationList = notificationService.GetNotifyImportResult(user.Id);
             }
-            return Json(count, JsonRequestBehavior.AllowGet);
+            return Json(notificationList, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace QBCS.Service.Interface
 
     public interface INotificationService
     {
-        int GetNotifyImportResult(int userId, OnChangeEventHandler eventHandler);
+        List<NotificationViewModel> GetNotifyImportResult(int userId);
         void RegisterNotification(OnChangeEventHandler eventHandler);
     }
 }

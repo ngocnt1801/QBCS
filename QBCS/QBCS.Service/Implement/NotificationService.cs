@@ -2,6 +2,8 @@
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Interface;
+using QBCS.Service.ViewModel;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -15,11 +17,15 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
-        public int GetNotifyImportResult(int userId, OnChangeEventHandler eventHandler)
+        public List<NotificationViewModel> GetNotifyImportResult(int userId)
         {
-            int count = 0;
-            count = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value).Count();
-            return count;
+            var notificationList = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value)
+                                                                            .Select(im => new NotificationViewModel {
+                                                                                ImportId = im.Id,
+                                                                                Message = "Your import questions have already checked, click to see result!"
+                                                                            })
+                                                                            .ToList();
+            return notificationList;
         }
 
         public void RegisterNotification(OnChangeEventHandler eventHandler)
