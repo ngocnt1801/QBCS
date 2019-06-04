@@ -90,6 +90,7 @@
                 url: '/QBCS.Web/Notification/GetNotification',
                 type: 'GET',
                 success: function (response) {
+                    notificationModel.listNotification = [];
                     response.forEach(element => {
                         notificationModel.listNotification.push(element);
                     });
