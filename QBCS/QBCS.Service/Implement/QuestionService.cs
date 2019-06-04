@@ -85,7 +85,7 @@ namespace QBCS.Service.Implement
             return questionViewModels;
         }
 
-        public QuestionViewModel GetQuestionById (int id )
+        public QuestionViewModel GetQuestionById (int id)
         {
             Question QuestionById = unitOfWork.Repository<Question>().GetById(id);
 
@@ -105,6 +105,23 @@ namespace QBCS.Service.Implement
 
             QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
             return questionViewModel;
+        }
+        public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
+        {
+            var question = unitOfWork.Repository<Question>().GetById(questionId);
+           
+            var questions = question.Options.Select(c => new QuestionViewModel
+            {
+                Id = (int)c.QuestionId,
+                QuestionContent = c.Question.QuestionContent,
+                Options = c.Question.Options.Select( d => new OptionViewModel{
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()   
+            }).ToList();
+
+            return questions;
         }
 
         public bool UpdateQuestion(QuestionViewModel question)
@@ -209,6 +226,7 @@ namespace QBCS.Service.Implement
                 CourseId = (int)c.CourseId,
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,
+                Id = c.Id,
                 QuestionContent = c.QuestionContent,
                 Options = c.Options.Select(d => new OptionViewModel
                 {

@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using Newtonsoft.Json;
+using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 
@@ -48,9 +50,6 @@ namespace QBCS.Web.Controllers
         public ActionResult GetListQuestion(int courseId)
         {
             List<QuestionViewModel> ListQuestion = questionService.GetQuestionsByCourse(courseId);
-
-
-            
             return View("ListQuestion", ListQuestion);
         }
 
@@ -80,7 +79,7 @@ namespace QBCS.Web.Controllers
             return View("ListQuestion", result);
         }
 
-        public ActionResult GetQuestionDetail (int id)
+        public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
 
@@ -107,7 +106,7 @@ namespace QBCS.Web.Controllers
 
             bool optionResult = optionService.UpdateOptions(ques.Options);
 
-            return RedirectToAction("GetQuestionDetail", new {id = ques.Id });
+            return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
         }
 
         public ActionResult GenerateExam()
@@ -139,14 +138,25 @@ namespace QBCS.Web.Controllers
             if (!isDuplicate.HasValue)
             {
 
-            }else if (isDuplicate.Value) // wrong
+            }
+            else if (isDuplicate.Value) // wrong
             {
                 questions = questions.Where(q => q.IsDuplicated).ToList();
-            } else // right
+            }
+            else // right
             {
                 questions = questions.Where(q => !q.IsDuplicated).ToList();
             }
             return PartialView("_AllQuestion", questions);
         }
+        public ActionResult GetQuestionByQuestionId(int? questionId)
+        {
+            //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
+            //var questions = questionService.GetQuestionByQuestionId(questionId.HasValue ? questionId.Value : 0);
+            var question = questionService.GetQuestionById(questionId.Value);
+            question.DuplicatedQuestion = question;
+            return View("ReviewQuestion", question);
+        }
     }
+
 }
