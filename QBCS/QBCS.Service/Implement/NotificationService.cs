@@ -2,12 +2,8 @@
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Interface;
-using QBCS.Service.ViewModel;
-using System;
-using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
 {
@@ -19,11 +15,16 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
-        public int GetNotifyImportResult(int userId)
+        public int GetNotifyImportResult(int userId, OnChangeEventHandler eventHandler)
         {
             int count = 0;
-            count = unitOfWork.ImportRepository().GetNotifyImportResult(userId);
+            count = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value).Count();
             return count;
+        }
+
+        public void RegisterNotification(OnChangeEventHandler eventHandler)
+        {
+            unitOfWork.ImportRepository().RegisterNotificationImportResult(eventHandler);
         }
     }
 }

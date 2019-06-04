@@ -66,6 +66,16 @@ namespace QBCS.Web
                 "~/Scripts/myjs/import-file.js",
                 "~/Scripts/myjs/change-partial-view.js"
                 ));
+
+            //signalR
+            bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(
+                "~/Scripts/jquery.signalR-2.4.1.js"
+                ));
+
+            //notification
+            bundles.Add(new ScriptBundle("~/bundle/scripts/notification").Include(
+                "~/Scripts/myjs/notification.js"
+                ));
         }
     }
 }

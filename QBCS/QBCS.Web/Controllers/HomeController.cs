@@ -2,6 +2,7 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.SignalRHub;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -21,23 +22,25 @@ namespace QBCS.Web.Controllers
             ViewBag.Title = "Home Page";
 
             var user = (UserViewModel)Session["user"];
-
+            string viewName = "Login";
             if (user == null)
             {
-                return View("Login");
+                return View(viewName);
             }
             ViewBag.Name = user.Fullname;
             
             if (user.Role == RoleEnum.Admin)
             {
-                return View("Admin");
+                viewName = "Admin";
             } else if (user.Role == RoleEnum.Lecturer)
             {
-                return View("Index", user);
+                viewName = "Index";
             } else
             {
-                return View("Staff");
+                viewName = "Staff";
             }
+
+            return View(viewName, user);
         }
 
 
