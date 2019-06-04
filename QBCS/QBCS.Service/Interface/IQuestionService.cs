@@ -21,6 +21,6 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestionByCourseId(int courseId); //Change Model
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();
-        bool InsertQuestion(HttpPostedFileBase questionFile);
+        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId);
     }
 }

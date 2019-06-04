@@ -81,6 +81,7 @@
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\QuestionDetailViewModel.cs" />
     <Compile Include="ViewModel\QuestionModel.cs" />
+    <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\TopicViewModel.cs" />
     <Compile Include="ViewModel\UserDetailViewModel.cs" />

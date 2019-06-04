@@ -21,22 +21,23 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        var borderLeft = "";
-                        if (item.IsDuplicated)
-                        {
-                            borderLeft = "border-left-danger";
-                        }
-                        else
-                        {
-                            borderLeft = "border-left-success";
-                        }
+                        //var borderLeft = "";
+                        //if (item.IsDuplicated)
+                        //{
+                        //    borderLeft = "border-left-danger";
+                        //}
+                        //else
+                        //{
+                        //    borderLeft = "border-left-success";
+                        //}
 
                         <tr onClick="document.location.href='@Url.Action("GetQuestionByQuestionId",
                       "Question",new { questionId  = item.Id})'">
                             @{
                                 counter++;
                             }
-                            <td class="@borderLeft">@counter</td>
+                            @*<td class="@borderLeft">@counter</td>*@
+                            <td>@counter</td>
                             <td>
                                 @Html.DisplayFor(modeItem => item.QuestionContent)
                                 @for (var i = 0; i < item.Options.Count; i++)

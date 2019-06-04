@@ -1,17 +1,35 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace QBCS.Service.Utilities
 {
     public class GIFTUtilities
     {
-        //State Machine for GIFT file
-        public void StripTagsCharArray(string source)
+        QuestionTmpModel quesModel = new QuestionTmpModel();
+        public List<QuestionTmpModel> test (StreamReader reader, List<QuestionTmpModel> listQuestion)
         {
+            string line;
+          
+            while ((line = reader.ReadLine()) != null)
+            {
+                quesModel = StripTagsCharArray(line, listQuestion);
+
+            }
+            listQuestion.Add(quesModel);
+            return listQuestion;
+        }
+        //State Machine for GIFT file
+        public QuestionTmpModel StripTagsCharArray(string source, List<QuestionTmpModel> listQuestion)
+        {
+
+            //List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             char[] arrayCode = new char[source.Length];
             char[] arrayQuesContent = new char[source.Length];
             char[] arrayRight = new char[source.Length];
@@ -111,17 +129,19 @@ namespace QBCS.Service.Utilities
 
                 }
             }
+            //QuestionTmpModel quesModel = new QuestionTmpModel();
             string code = new string(arrayCode, 0, arrayIndexCode);
             string question = new string(arrayQuesContent, 0, arrayIndexQuestion);
             string questionRight = new string(arrayRight, 0, arrayIndexRight);
             string questionWrong = new string(arrayWrong, 0, arrayIndexWrong);
-
-            if (code != "")
-            {
-                //Console.WriteLine("Code: {0}", code.Trim());
-            }
+           
+           
+            
+            
             if (question != "")
             {
+                quesModel.QuestionContent = question;
+
                 //Console.WriteLine("Question: {0}", question.Trim());
             }
             if (questionRight != "")
@@ -134,6 +154,8 @@ namespace QBCS.Service.Utilities
 
                     if (!arrListStrTmp[i].Contains('\0'))
                     {
+                        quesModel.OptionsContent += arrListStrTmp[i] + " ";
+                        //string json = JsonConvert.SerializeObject(quesModel);
                         //Console.WriteLine("Right: {0}", arrListStrTmp[i]);
                     }
 
@@ -141,20 +163,24 @@ namespace QBCS.Service.Utilities
             }
             if (questionWrong != "")
             {
-                
-                string[] arrListStr = questionWrong.Split(new char[] { ',' });
+
+                string[] arrListStr = questionWrong.Split(new char[] {','});
                 RemoveNull(arrListStr);
                 for (int i = 0; i < arrListStr.Length; i++)
                 {
                     if (!arrListStr[i].Contains('\0'))
                     {
+                        //DE sau khi co them cot cau hoi sai
+                        //quesModel.OptionsContent += arrListStr[i] + " ";
                         //Console.WriteLine("Wrong: {0}", arrListStr[i].Trim());
                     }
 
                 }
-                
+
 
             }
+            //listQuestion.Add(quesModel);
+            return quesModel;
         }
         //Remove null 
         public void RemoveNull(string[] array)

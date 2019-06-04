@@ -259,10 +259,12 @@ namespace QBCS.Service.Implement
 
             return result;
         }
-        public bool InsertQuestion(HttpPostedFileBase questionFile)
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId)
         {
             bool check = false;
             StreamReader reader;
+            List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
+           
             try
             {
 
@@ -278,21 +280,47 @@ namespace QBCS.Service.Implement
                 if (extensionFile.Equals(".gift"))
                 {
                     GIFTUtilities ulti = new GIFTUtilities();
+                    QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        ulti.StripTagsCharArray(line);
-                    }
+                    
+                   listQuestion = ulti.test(reader, listQuestion);
+                    //while ((line = reader.ReadToEnd()) != null)
+                    //{
+                    //    listQuestion = ulti.StripTagsCharArray(line, listQuestion);
+                        
+                    //}
                     reader.Close();
+                    foreach (var item in listQuestion)
+                    {
+                        var import = new Import()
+                        {
+                            UserId = userId,
+                            QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                            {
+                               QuestionContent = item.QuestionContent,
+                               OptionsContent = item.OptionsContent  
+                            }).ToList(),
+                           
 
+                        };
+                        unitOfWork.Repository<Import>().Insert(import);
+                        unitOfWork.SaveChanges();
+                        check = true;
+                    }
+                    
+                    
+                   
+                }
+                else
+                {
+                    // return user have to import file
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                Console.WriteLine(ex.Message);
             }
 
             return check;

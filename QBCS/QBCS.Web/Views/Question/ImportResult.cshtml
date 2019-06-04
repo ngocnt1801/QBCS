@@ -8,8 +8,8 @@
     <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
     All
     </button>
-    <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
-    <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
+    <button type="button" class="btn btn-outline-primary" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
+    <button type="button" class="btn btn-outline-primary" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
 </div>
 <div class="card shadow mb-4" id="question-import">
     @Html.Partial("_AllQuestion", Model)
