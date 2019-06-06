@@ -44,12 +44,12 @@
             var listNotification = notificationOctopus.getListNotification();
             this.notificationContainter.empty();
             listNotification.forEach(element => {
-                this.notificationContainter.append(notificationView.renderNotification(element.Message));
+                this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message));
             });
         },
-        renderNotification: function(message){
+        renderNotification: function(importId, message){
             var template = notificationView.getTemplateNotification();
-            template = template.replace("{{noti.link}}", "#")
+            template = template.replace("{{noti.link}}", "/QBCS.Web/Question/GetResult?importId="+importId)
                                 .replace("{{noti.icon}}", "fa-file-alt")
                                 .replace("{{noti.date}}", "Today")
                                 .replace("{{noti.message}}", message);

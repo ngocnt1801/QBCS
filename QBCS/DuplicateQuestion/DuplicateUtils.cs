@@ -157,7 +157,7 @@ namespace DuplicateQuestion
                     connection
                     );
 
-                command.Parameters.AddWithValue("@status", (int)StatusEnum.Done);
+                command.Parameters.AddWithValue("@status", (int)StatusEnum.Checked);
                 command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", importId.Value);
                 command.ExecuteNonQuery();

@@ -21,6 +21,8 @@ namespace QBCS.Web.Controllers
         private ITopicService topicService;
         private ILevelService levelService;
         private ILearningOutcomeService lo;
+        private IImportService importService;
+
 
         public QuestionController()
         {
@@ -29,6 +31,7 @@ namespace QBCS.Web.Controllers
             topicService = new TopicService();
             levelService = new LevelService();
             lo = new LearningOutcomeService();
+            importService = new ImportService();
         }
 
         // GET: Question
@@ -156,6 +159,12 @@ namespace QBCS.Web.Controllers
             var question = questionService.GetQuestionById(questionId.Value);
             question.DuplicatedQuestion = question;
             return View("ReviewQuestion", question);
+        }
+
+        public ActionResult GetResult(int importId)
+        {
+            var result = importService.GetImportResult(importId);
+            return View("ImportResult", result);
         }
     }
 

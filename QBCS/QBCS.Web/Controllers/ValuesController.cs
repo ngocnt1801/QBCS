@@ -31,7 +31,7 @@ namespace QBCS.Web.Controllers
         [HttpGet]
         public double TestTF(string s1, string s2)
         {
-            return TFAlgorithm.ParseToVectorUseTF(s1, s2);
+            return TFAlgorithm.CaculateSimilar(s1, s2);
         }
 
         // GET api/values/test

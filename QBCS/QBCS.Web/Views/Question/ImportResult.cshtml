@@ -1,16 +1,16 @@
-﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionViewModel>
+﻿@model QBCS.Service.ViewModel.ImportResultViewModel
 @{
     ViewBag.Title = "ImportResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>ImportResult</h2>
-<div class="btn-group col-md-6 mb-2">
-    <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
-    All
-    </button>
-    <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
-    <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
-</div>
-<div class="card shadow mb-4" id="question-import">
-    @Html.Partial("_AllQuestion", Model)
+@*<div class="btn-group col-md-6 mb-2">
+        <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
+        All
+        </button>
+        <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
+        <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
+    </div>*@
+<div id="question-import">
+    @Html.Partial("_AllQuestion", Model.Questions)
 </div>
