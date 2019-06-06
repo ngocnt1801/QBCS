@@ -1,12 +1,8 @@
 ﻿using DuplicateQuestion.Entity;
 using Microsoft.SqlServer.Server;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuplicateQuestion
 {
@@ -104,6 +100,18 @@ namespace DuplicateQuestion
                             item.Status = (int)StatusEnum.Editable;
                             item.DuplicatedQuestionId = question.Id;
                             isUpdate = true;
+                        }
+                        else // check with TF + Consine similarity
+                        {
+                            target = item.QuestionContent + item.RightOptions;
+                            source = question.QuestionContent + question.RightOptions;
+                            result = TFAlgorithm.CaculateSimilar(source, target);
+                            if (result > 70)
+                            {
+                                item.Status = (int)StatusEnum.Editable;
+                                item.DuplicatedQuestionId = question.Id;
+                                isUpdate = true;
+                            }
                         }
 
                         if (isUpdate)
