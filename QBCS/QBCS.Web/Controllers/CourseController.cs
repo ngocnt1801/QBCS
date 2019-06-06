@@ -20,9 +20,25 @@ namespace QBCS.Web.Controllers
         }
         // GET: Course
         public ActionResult Index(int userId)
-        {           
-            var list = courseService.GetAllCoursesByUserId(userId); 
-            return View(list);         
+        {
+            var list = courseService.GetAllCoursesByUserId(userId);
+            return View(list);
+        }
+        public ActionResult Add()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Add(CourseViewModel model)
+        {
+            courseService.AddNewCourse(model);
+            int userId = ((UserViewModel)Session["user"]).Id;
+            return RedirectToAction("Index",new { userId = userId });
+        }
+        public ActionResult Edit(int itemId)
+        {
+            var result = courseService.GetCourseById(itemId);
+            return View(result);
         }
         public ActionResult GetCoursesByName(string name)
         {
@@ -40,6 +56,25 @@ namespace QBCS.Web.Controllers
                 result.Add(courseViewModel);
             }
             return View("ListCourse", result);
+        }
+        [HttpPost]
+        public ActionResult UpdateDisable(int itemId)
+        {
+            //int itemId = 0;
+            //int userId = 0;
+            //try
+            //{
+            //    string[] split = itemAndUserId.Split('_');
+            //    itemId = int.Parse(split[0]);
+            //    userId = int.Parse(split[1]);
+            //}
+            //catch (NotFiniteNumberException)
+            //{
+
+            //}
+            var update = courseService.UpdateDisable(itemId);
+            int userId = ((UserViewModel)Session["user"]).Id;
+            return RedirectToAction("Index", new { userId = userId });
         }
     }
 }

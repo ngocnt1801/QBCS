@@ -1,12 +1,22 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
+@using QBCS.Service.ViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
+<div class="row">
+    <div class="col">
+        <h2>Courses</h2>
+    </div>
+    @*@if (role == 3)
+    {*@
+        <div class="col mb-2">
+            <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
+        </div>
+    @*}*@
 
-
-
-
+</div>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">List of Courses</h6>
@@ -22,21 +32,38 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
+                        @*@if (role == 3)
+                        {*@
+                            <th>
+                                Action
+                            </th>
+                        @*}*@
                     </tr>
                 </thead>
-                
+
                 <tbody>
 
                     @foreach (var item in Model)
                     {
-                        <tr onClick="document.location.href='@Url.Action("GetListQuestion", "Question",new { courseId = item.CourseId})'">
+                        <tr onClick="document.location.href='@Url.Action("GetListQuestion", "Question", new { courseId = item.CourseId })'">
+                            <td hidden >
+
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            
+                            @*@if (role == 3)
+                            {*@
+                                <td width="20%">
+                                    <a href="@Url.Action("Edit", "Course", new { itemId = item.Id })" class="btn btn-primary">Edit</a>
+                                    <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.Id })" class="btn btn-primary float-right ">
+                                        Delete
+                                    </a>
+                                </td>
+                                @*}*@
                         </tr>
                     }
                 </tbody>
@@ -45,4 +72,3 @@
     </div>
 </div>
 
-  

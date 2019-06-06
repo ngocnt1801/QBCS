@@ -11,9 +11,12 @@ namespace QBCS.Service.Interface
 {
     public interface ICourseService
     {
+        CourseViewModel GetCourseById(int id);
+        bool AddNewCourse(CourseViewModel model);
         List<CourseViewModel> GetAllCourses();
         List<CourseViewModel> GetAvailableCourse(int userId);
         List<CourseViewModel> GetAllCoursesByUserId(int id);
         List<Course> GetCoursesByName(string name);
+        bool UpdateDisable(int id);
     }
 }

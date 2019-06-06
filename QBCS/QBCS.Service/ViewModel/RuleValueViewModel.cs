@@ -9,10 +9,10 @@ namespace QBCS.Service.ViewModel
     public class RuleValueViewModel
     {
         public int Id { get; set; }
-        public int RuleKeyId { get; set; }
+        public int KeyId { get; set; }
         public string Value { get; set; }
         public DateTime ActivateDate { get; set; }
         public DateTime CreateDate { get; set; }
-        public int ValueGroup { get; set; }
+        public int? ValueGroup { get; set; }
     }
 }

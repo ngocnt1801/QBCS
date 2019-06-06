@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
     <Compile Include="Implement\OptionService.cs" />

@@ -17,6 +17,17 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
+        public CourseViewModel GetCourseById(int id)
+        {
+            var course = unitOfWork.Repository<Course>().GetById(id);
+            var result = new CourseViewModel()
+            {
+                Name = course.Name,
+                Code = course.Code,
+                DefaultNumberOfQuestion = (int) course.DefaultNumberOfQuestion
+            };
+            return result;
+        }
         public List<CourseViewModel> GetAllCourses()
         {
             
@@ -56,15 +67,45 @@ namespace QBCS.Service.Implement
                 Id = c.Id,
                 CourseId = (int)c.CourseId,
                 Name = c.Course.Name,
-                Code = c.Course.Code
-            });     
-            return courses.ToList();
+                Code = c.Course.Code,
+                IsDisable = (bool)c.Course.IsDisable
+            }).Where(c => c.IsDisable == false).ToList();
+            return courses;
         }
         public List<Course> GetCoursesByName(string name)
         {
             IQueryable<Course> courses = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name));
             List<Course> result = courses.ToList();
             return result;
+        }
+
+        public bool UpdateDisable(int id)
+        {
+            try
+            {
+                var course = unitOfWork.Repository<Course>().GetById(id);
+                course.IsDisable = true;
+                unitOfWork.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+        public bool AddNewCourse(CourseViewModel model)
+        {
+            var course = new Course()
+            {
+                Name = model.Name,
+                Code = model.Code,
+                DefaultNumberOfQuestion = model.DefaultNumberOfQuestion,
+                IsDisable = false
+            };
+            unitOfWork.Repository<Course>().Insert(course);
+            unitOfWork.SaveChanges();
+            return true;
         }
     }
 }

@@ -11,8 +11,9 @@ namespace QBCS.Service.Interface
     public interface IQuestionService
     {
         bool Add(QuestionViewModel question);
-        List<Question> GetQuestionsByContent(string questionContent);
-        List<Question> GetQuestionSearchBar(string searchInput);
+        //List<Question> GetQuestionsByContent(string questionContent);
+        List<QuestionViewModel> GetQuestionPaging(string searchInput, int take, int skip);
+        //List<Question> GetQuestionSearchBar(string searchInput, int take, int skip);
         bool UpdateQuestion(QuestionViewModel question);
         QuestionViewModel GetQuestionById(int id);
         List<QuestionViewModel> GetQuestionsByCourse(int CourseId);

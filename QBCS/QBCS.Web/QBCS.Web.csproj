@@ -2023,6 +2023,8 @@
     <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />
     <Content Include="Views\Rule\Index.cshtml" />
     <Content Include="Views\Rule\Edit.cshtml" />
+    <Content Include="Views\Course\Add.cshtml" />
+    <Content Include="Views\Course\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2049,8 +2051,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
-      <Project>{56492C99-5CAC-43BE-A406-0E630C255935}</Project>
+    <ProjectReference Include="..\..\..\..\source\repos\QBCS\QBCS\QBCS.Entity\QBCS.Entity.csproj">
+      <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
       <Name>QBCS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\QBCS.Service\QBCS.Service.csproj">
