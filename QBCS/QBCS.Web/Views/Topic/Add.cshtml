@@ -1,0 +1,104 @@
+﻿@model QBCS.Service.ViewModel.TopicViewModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>TopicViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" id="Name" name="Name" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" id="Code" name="Code" />
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CourseId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="Course"></select>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button id="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script>
+    $(document).ready(function () {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        url: "@Url.Action("LoadCourse","Topic")",
+        dataType: "json",
+        success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    $("#Course").append("<option id=" + result[i].Id + ">" +
+                    result[i].Name + "</option>");
+                }
+
+        },
+        error: function (result) {
+            alert("Error");
+        }
+    });
+        $('#submit').on('click', function () {
+            var topic = new Object();
+            topic.Code = $('#Code').val();
+            topic.Name = $('#Name').val();
+            topic.CourseId = $('#Course').children(":selected").attr("id");
+            if (topic != null) {
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("Add","Topic")',
+                data: JSON.stringify(topic),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(response) {
+                    if (response != null) {
+                        window.location.replace('@Url.Action("Index","Topic")');
+                    }
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+            }
+        });
+    });
+
+</script>
