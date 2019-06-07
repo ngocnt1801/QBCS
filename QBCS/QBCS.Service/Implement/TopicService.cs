@@ -55,7 +55,8 @@ namespace QBCS.Service.Implement
                     Id = topic.Id,
                     Code = topic.Code,
                     Name = topic.Name,
-                    CourseId = (int)topic.CourseId
+                    CourseId = (int)topic.CourseId,
+                    CourseName = topic.Course.Name
                 };
                 result.Add(model);
             }
@@ -121,7 +122,8 @@ namespace QBCS.Service.Implement
                 Id = topic.Id,
                 Code = topic.Code,
                 Name = topic.Name,
-                CourseId = (int)topic.CourseId
+                CourseId = (int)topic.CourseId,
+                CourseName = topic.Course.Name
             };
             return result;
         }
