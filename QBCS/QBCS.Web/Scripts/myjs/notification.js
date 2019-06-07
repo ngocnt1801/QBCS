@@ -49,7 +49,7 @@
         },
         renderNotification: function(importId, message){
             var template = notificationView.getTemplateNotification();
-            template = template.replace("{{noti.link}}", "/QBCS.Web/Question/GetResult?importId="+importId)
+            template = template.replace("{{noti.link}}", "/QBCS.Web/Import/GetResult?importId="+importId)
                                 .replace("{{noti.icon}}", "fa-file-alt")
                                 .replace("{{noti.date}}", "Today")
                                 .replace("{{noti.message}}", message);

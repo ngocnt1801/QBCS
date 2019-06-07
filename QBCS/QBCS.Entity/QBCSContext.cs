@@ -104,6 +104,11 @@ namespace QBCS.Entity
                 .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.QuestionReference);
 
+            modelBuilder.Entity<Question>()
+                .HasMany(e => e.QuestionTemps)
+                .WithOptional(e => e.Question)
+                .HasForeignKey(e => e.DuplicatedId);
+
             modelBuilder.Entity<QuestionInExam>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
@@ -112,6 +117,10 @@ namespace QBCS.Entity
                 .HasMany(e => e.OptionInExams)
                 .WithOptional(e => e.QuestionInExam)
                 .HasForeignKey(e => e.QuestionId);
+
+            modelBuilder.Entity<QuestionTemp>()
+                .Property(e => e.Code)
+                .IsUnicode(false);
 
             modelBuilder.Entity<QuestionType>()
                 .Property(e => e.Name)

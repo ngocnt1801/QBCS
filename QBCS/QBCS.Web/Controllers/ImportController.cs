@@ -1,5 +1,6 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,19 @@ namespace QBCS.Web.Controllers
             var result = importService.GetImportResult(importId);
             return View(result);
         }
+
+        public ActionResult EditQuestion(QuestionTempViewModel model)
+        {
+            importService.UpdateQuestionTemp(model);
+            return RedirectToAction("GetResult", new { importId = model.ImportId });
+        }
+
+        public ActionResult GetQuestionTemp(int tempId)
+        {
+            var questiontemp = importService.GetQuestionTemp(tempId);
+            return View(questiontemp);
+        }
+
+
     }
 }

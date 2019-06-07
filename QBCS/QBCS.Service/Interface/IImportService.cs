@@ -10,5 +10,7 @@ namespace QBCS.Service.Interface
     public interface IImportService
     {
         ImportResultViewModel GetImportResult(int importId);
+        void UpdateQuestionTemp(QuestionTempViewModel question);
+        QuestionTempViewModel GetQuestionTemp(int questionTempId);
     }
 }

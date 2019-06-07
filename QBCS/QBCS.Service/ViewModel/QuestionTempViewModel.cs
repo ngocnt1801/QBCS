@@ -13,5 +13,6 @@ namespace QBCS.Service.ViewModel
         public QuestionViewModel DuplicatedQuestion { get; set; }
         public string QuesitonContent { get; set; }
         public StatusEnum Status { get; set; }
+        public int ImportId { get; set; }
     }
 }

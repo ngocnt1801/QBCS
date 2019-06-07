@@ -25,11 +25,12 @@ namespace DuplicateQuestion
                 SqlCommand command = new SqlCommand(
                     "SELECT Id, QuestionContent " +
                     "FROM QuestionTemp " +
-                    "WHERE ImportId = @importId",
+                    "WHERE ImportId = @importId AND Status = @status",
                     connection
                     );
 
                 command.Parameters.AddWithValue("@importId", importId.Value);
+                command.Parameters.AddWithValue("@status", StatusEnum.NotCheck);
                 SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())

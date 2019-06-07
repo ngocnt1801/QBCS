@@ -23,7 +23,6 @@ namespace QBCS.Service.Implement
 
         public ImportResultViewModel GetImportResult(int importId)
         {
-            var bankQuery = unitOfWork.Repository<Question>().GetAll();
             var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId && i.Status == (int)StatusEnum.Checked).FirstOrDefault();
             if (import != null)
             {
@@ -34,12 +33,67 @@ namespace QBCS.Service.Implement
                     {
                         Id = q.Id,
                         QuesitonContent = q.QuestionContent,
-                        Status = (StatusEnum)q.Status
-                    }).ToList()
+                        Status = (StatusEnum)q.Status,
+                        ImportId = importId,
+                        DuplicatedQuestion = new QuestionViewModel
+                        {
+                            Id = q.Question.Id,
+                            CourseName = q.Question.Course.Name,
+                            Code = q.Question.QuestionCode,
+                            QuestionContent = q.Question.QuestionContent,
+                            Options = q.Question.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList()
+                        }
+                    }).OrderBy(q => q.Status).ToList()
                 };
             }
 
             return null;
+        }
+
+        public QuestionTempViewModel GetQuestionTemp(int questionTempId)
+        {
+            var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
+            if (questionTemp != null)
+            {
+                return new QuestionTempViewModel
+                {
+                    Id = questionTemp.Id,
+                    QuesitonContent = questionTemp.QuestionContent,
+                    Status = (StatusEnum)questionTemp.Status,
+                    ImportId = questionTemp.ImportId.Value,
+                    DuplicatedQuestion = new QuestionViewModel
+                    {
+                        Id = questionTemp.Question.Id,
+                        CourseName = questionTemp.Question.Course.Name,
+                        Code = questionTemp.Question.QuestionCode,
+                        QuestionContent = questionTemp.Question.QuestionContent,
+                        Options = questionTemp.Question.Options.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        }).ToList()
+                    }
+                };
+            }
+
+            return null;
+        }
+
+        public void UpdateQuestionTemp(QuestionTempViewModel question)
+        {
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
+            if (entity != null && entity.Status == (int)StatusEnum.Editable)
+            {
+                entity.QuestionContent = question.QuesitonContent;
+                entity.Status = (int)StatusEnum.NotCheck;
+
+                unitOfWork.Repository<QuestionTemp>().Update(entity);
+                unitOfWork.SaveChanges();
+            }
         }
     }
 }

@@ -9,10 +9,11 @@ namespace DuplicateQuestion.Entity
     public enum StatusEnum
     {
         NotCheck = 1,
-        Success = 2,
-        Editable = 3,
-        Delete = 4,
+        Editable = 2,
+        Delete = 3,
+        Success = 4,
         Checked = 5,
-        Done = 6
+        Fixing = 6,
+        Done = 7
     }
 }

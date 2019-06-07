@@ -160,12 +160,6 @@ namespace QBCS.Web.Controllers
             question.DuplicatedQuestion = question;
             return View("ReviewQuestion", question);
         }
-
-        public ActionResult GetResult(int importId)
-        {
-            var result = importService.GetImportResult(importId);
-            return View("ImportResult", result);
-        }
     }
 
 }

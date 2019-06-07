@@ -21,6 +21,11 @@ namespace QBCS.Entity
 
         public int? DuplicatedId { get; set; }
 
+        [StringLength(50)]
+        public string Code { get; set; }
+
         public virtual Import Import { get; set; }
+
+        public virtual Question Question { get; set; }
     }
 }
