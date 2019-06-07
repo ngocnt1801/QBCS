@@ -16,7 +16,7 @@ namespace QBCS.Service.ViewModel
         public string Code { get; set; }
 
         public int CourseId { get; set; }
-
+        public string CourseName { get; set; }
         public bool IsDisable { get; set; }
     }
 }

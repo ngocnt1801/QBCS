@@ -31,7 +31,8 @@ namespace QBCS.Service.Implement
         public List<CourseViewModel> GetAllCourses()
         {
             
-            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel {
+            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.IsDisable == false).Select(c => new CourseViewModel {
+                Id = c.Id,
                 Code = c.Code,
                 Name = c.Name
             });
