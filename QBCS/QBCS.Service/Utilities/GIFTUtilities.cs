@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using Newtonsoft.Json;
+using QBCS.Entity;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -12,183 +13,410 @@ namespace QBCS.Service.Utilities
 {
     public class GIFTUtilities
     {
-        QuestionTmpModel quesModel = new QuestionTmpModel();
-        public List<QuestionTmpModel> test (StreamReader reader, List<QuestionTmpModel> listQuestion)
+        static QuestionTmpModel quesModel = new QuestionTmpModel();
+        //public List<QuestionTmpModel> test (StreamReader reader, List<QuestionTmpModel> listQuestion)
+        //{
+        //    string line;
+        //    quesModel = StripTagsCharArray(reader, listQuestion);
+        //    //while ((line = reader.ReadLine()) != null)
+        //    //{
+        //    //    quesModel = StripTagsCharArray(line, listQuestion);
+        //    //    if (quesModel.QuestionContent != null && quesModel.OptionsContent != null)
+        //    //    {
+        //    //        listQuestion.Add(quesModel);
+        //    //    }
+
+        //    //}
+
+        //    return listQuestion;
+        //}
+
+        public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader)
         {
-            string line;
-          
+            string line = null;
+            List<QuestionTmpModel> list = new List<QuestionTmpModel>();
             while ((line = reader.ReadLine()) != null)
             {
-                quesModel = StripTagsCharArray(line, listQuestion);
+                string id = null;
+                string name = null;
+                string right = null;
+                string wrong = null;
+                bool isStart = false;
+                bool isEnd = false;
+                int countCode = 0;
+                int countRight = 0;
+                int countWrong = 0;
+                for (int i = 0; i < line.Length; i++)
+                {
+                    char let = line[i];
 
-            }
-            listQuestion.Add(quesModel);
-            return listQuestion;
-        }
-        //State Machine for GIFT file
-        public QuestionTmpModel StripTagsCharArray(string source, List<QuestionTmpModel> listQuestion)
-        {
-
-            //List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
-            char[] arrayCode = new char[source.Length];
-            char[] arrayQuesContent = new char[source.Length];
-            char[] arrayRight = new char[source.Length];
-            char[] arrayWrong = new char[source.Length];
-            int arrayIndexCode = 0;
-            int arrayIndexQuestion = 0;
-            int arrayIndexRight = 0;
-            int arrayIndexWrong = 0;
-            bool isStart = false;
-            bool isEnd = false;
-            int countCode = 0;
-            int countRight = 0;
-            int countWrong = 0;
-            char temp = ';';
-            for (int i = 0; i < source.Length; i++)
-            {
-                char let = source[i];
-                //start code and question
-                if (let == ':')
-                {
-                    countCode++;
-                    isStart = true;
-                    continue;
-                }
-                //Right answer
-                if (let == '=')
-                {
-                    countRight++;
-                    countWrong = 0;
-                    temp = ',';
-                    continue;
-                }
-                //Wrong answer
-                if (let == '~')
-                {
-                    countWrong++;
-                    countRight = 0;
-                    temp = ',';
-                    continue;
-                }
-                //end gift
-                if (let == '}')
-                {
-                    isEnd = true;
-                    continue;
-                }
-                //get code question
-                if (countCode < 3 && isStart)
-                {
-                    arrayCode[arrayIndexCode] = let;
-                    arrayIndexCode++;
-                    continue;
-                }
-                //get question content
-                if (countCode >= 4)
-                {
-                    if (let != '\0')
+                    if (let == ':')
                     {
-                        arrayQuesContent[arrayIndexQuestion] = let;
-                        arrayIndexQuestion++;
+                        countCode++;
+                        isStart = true;
+                        continue;
+                    }
+                    if (let == '=')
+                    {
+                        countRight++;
+                        countWrong = 0;
+
+                        continue;
+                    }
+                    if (let == '~')
+                    {
+                        countWrong++;
+                        countRight = 0;
+                        
+                        continue;
+                    }
+                    if (let == '}')
+                    {
+                        isEnd = true;
+                        continue;
+                    }
+                    if (let == '{')
+                    {
+                        countCode = 0;
+                        continue;
+                    }
+
+                    if (countCode < 3 && isStart)
+                    {
+
+                        id += let;
+                        continue;
+                    }
+                    if (countCode >= 4)
+                    {
+                        name += let;
                         isStart = false;
                         continue;
-                    }
-                }
-                //get right answer by char
-                if (countRight >= 1 && !isEnd)
-                {
-                    if (let != '\0')
-                    {
 
-                        if (temp != ';')
-                        {
-                            arrayRight[arrayIndexRight + 1] = temp;
-                            arrayWrong[arrayIndexWrong] = temp;// insert ',' into array
-                        }
-                        arrayRight[arrayIndexRight] = let;
-                        arrayIndexRight++;
-                        temp = ';';
+                    }
+                    if (countRight >= 1 && !isEnd)
+                    {
+                        right += let;
+                        continue;
+
+                    }
+                    if (countWrong >= 1 && !isEnd)
+                    {
+                        wrong += let;
                         continue;
                     }
                 }
-                //get wrong answer by char
-                if (countWrong >= 1 && !isEnd)
+                // Console.WriteLine(name);
+               
+                if (name != null)
                 {
-                    if (let != '\0')
-                    {
-                        if (temp != ';')
-                        {
-                            arrayRight[arrayIndexRight] = temp;
-                            arrayWrong[arrayIndexWrong] = temp; // insert ',' into array 
-                        }
-                        arrayWrong[arrayIndexWrong + 1] = let; //get a character
-                        arrayIndexWrong++;
-                        temp = ';';
-                        continue;
-                    }
+                    string jsonQuestion = null;
+                    List<string> tempJson = new List<string>();
+                    tempJson.Add(name);
+                    jsonQuestion = JsonConvert.SerializeObject(tempJson);                  
+                    quesModel.QuestionContent = jsonQuestion;
+                   
+                }
+                if (right != null)
+                {
+                    string jsonQuestion = null;
+                    List<string> tempJson = new List<string>();
+                    tempJson.Add(right);         
+                    jsonQuestion = JsonConvert.SerializeObject(tempJson);
+                    quesModel.OptionsContent = jsonQuestion;
+
 
                 }
+                if (quesModel.QuestionContent != null && quesModel.OptionsContent != null)
+                {
+                    list.Add(quesModel);
+                    quesModel = new QuestionTmpModel();
+                }
             }
-            //QuestionTmpModel quesModel = new QuestionTmpModel();
-            string code = new string(arrayCode, 0, arrayIndexCode);
-            string question = new string(arrayQuesContent, 0, arrayIndexQuestion);
-            string questionRight = new string(arrayRight, 0, arrayIndexRight);
-            string questionWrong = new string(arrayWrong, 0, arrayIndexWrong);
            
-           
-            
-            
-            if (question != "")
-            {
-                quesModel.QuestionContent = question;
-
-                //Console.WriteLine("Question: {0}", question.Trim());
-            }
-            if (questionRight != "")
-            {
-
-                string[] arrListStrTmp = questionRight.Split(new char[] { ',' });
-
-                for (int i = 0; i < arrListStrTmp.Length; i++)
-                {
-
-                    if (!arrListStrTmp[i].Contains('\0'))
-                    {
-                        quesModel.OptionsContent += arrListStrTmp[i] + " ";
-                        //string json = JsonConvert.SerializeObject(quesModel);
-                        //Console.WriteLine("Right: {0}", arrListStrTmp[i]);
-                    }
-
-                }
-            }
-            if (questionWrong != "")
-            {
-
-                string[] arrListStr = questionWrong.Split(new char[] {','});
-                RemoveNull(arrListStr);
-                for (int i = 0; i < arrListStr.Length; i++)
-                {
-                    if (!arrListStr[i].Contains('\0'))
-                    {
-                        //DE sau khi co them cot cau hoi sai
-                        //quesModel.OptionsContent += arrListStr[i] + " ";
-                        //Console.WriteLine("Wrong: {0}", arrListStr[i].Trim());
-                    }
-
-                }
-
-
-            }
-            //listQuestion.Add(quesModel);
-            return quesModel;
+            return list;
         }
+
+        //foreach (var item in list)
+        //{
+        //    if (item.QuestionContent != null && item.OptionsContent != null)
+        //    {
+        //        Console.WriteLine("Name {0}", item.QuestionContent);
+        //        Console.WriteLine("Right {0}", item.OptionsContent);
+
+        //    }
+
+        //}
+        //Console.WriteLine("Ques {0}" , id);
+        //Console.WriteLine("Name {0}", name);
+        //Console.WriteLine("Right {0}", right);
+        //Console.WriteLine("Wrong {0}", wrong);
+        //string code = new string(array1, 0, arrayIndexCode);
+        //string ques = new string(array2, 0, arrayIndexQuestion);
+        //string code3 = new string(array3, 0, arrayIndexRight);
+        //string code4 = new string(array4, 0, arrayIndexWrong);
+
+        //if (code != "")
+        //{
+        //    //Console.WriteLine("Code: {0}", code.Trim());
+        //}
+        //if (ques != "")
+        //{
+        //    //Console.WriteLine("Question: {0}", ques.Trim());
+        //}
+        //if (code3 != "")
+        //{
+
+        //    string[] arrListStr2 = code3.Split(new char[] { ',' });
+
+        //    for (int i = 0; i < arrListStr2.Length; i++)
+        //    {
+
+        //        if (!arrListStr2[i].Contains('\0'))
+        //        {
+        //           // Console.WriteLine("Right: {0}", arrListStr2[i]);
+        //        }
+
+        //    }
+        //}
+        //if (code4 != "")
+        //{
+        //    //code4 = code4.Substring(0, code4.IndexOf(','));
+        //    string[] arrListStr = code4.Split(new char[] { ',' });
+        //    RemoveNull(arrListStr);
+        //    for (int i = 0; i < arrListStr.Length; i++)
+        //    {
+        //        if (!arrListStr[i].Contains('\0'))
+        //        {
+        //            //Console.WriteLine("Wrong: {0}", arrListStr[i].Trim());
+        //        }
+
+        //    }
+        //    //Console.WriteLine("Right: {0}", code4.Trim());
+
+        //}
+
+
+        //return new string(array1, 0, arrayIndex);
+
+
+        //State Machine for GIFT file
+        //public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader)
+        //{
+        //    List<QuestionTmpModel> questions = new List<QuestionTmpModel>();
+        //    string line;
+        //    int arrayIndexCode = 0;
+        //    int arrayIndexQuestion = 0;
+        //    int arrayIndexRight = 0;
+        //    int arrayIndexWrong = 0;
+        //    //char[] arrayCode;
+        //    //char[] arrayQuesContent;
+        //    //char[] arrayRight;
+        //    //char[] arrayWrong;
+        //    string code = null;
+        //    string question = null;
+        //    string questionRight = null;
+        //    string questionWrong = null;
+        //    while ((line = reader.ReadLine()) != null)
+        //    {
+        //        bool isStart = false;
+        //        bool isEnd = false;
+        //        int countCode = 0;
+        //        int countRight = 0;
+        //        int countWrong = 0;
+        //        char temp = ';';
+        //        char[] arrayCode = new char[10000];
+        //        char[] arrayQuesContent = new char[10000];
+        //        char[] arrayRight = new char[10000];
+        //        char[] arrayWrong = new char[10000];
+        //        for (int i = 0; i < line.Length; i++)
+        //        {
+        //            char let = line[i];
+        //            //start code and question
+        //            if (let == ':')
+        //            {
+        //                countCode++;
+        //                isStart = true;
+        //                continue;
+        //            }
+        //            //Right answer
+        //            if (let == '=')
+        //            {
+        //                countRight++;
+        //                countWrong = 0;
+        //                temp = ',';
+        //                continue;
+        //            }
+        //            //Wrong answer
+        //            if (let == '~')
+        //            {
+        //                countWrong++;
+        //                countRight = 0;
+        //                temp = ',';
+        //                continue;
+        //            }
+        //            //end gift
+        //            if (let == '}')
+        //            {
+        //                isEnd = true;
+        //                continue;
+        //            }
+        //            //get code question
+        //            if (countCode < 3 && isStart)
+        //            {
+        //                arrayCode[arrayIndexCode] = let;
+        //                arrayIndexCode++;
+        //                continue;
+        //            }
+        //            //get question content
+        //            if (countCode >= 4 && !let.Equals('\0'))
+        //            {
+        //                if ((int)let != 0)
+        //                {
+        //                    if (isStart)
+        //                    {
+        //                        arrayQuesContent[arrayIndexQuestion] = temp;
+        //                    }
+        //                    arrayQuesContent[arrayIndexQuestion + 1] = let;
+        //                    arrayIndexQuestion++;
+        //                    isStart = false;
+        //                    continue;
+        //                }
+        //            }
+        //            //get right answer by char
+        //            if (countRight >= 1 && !isEnd)
+        //            {
+        //                if ((int)let != 0)
+        //                {
+
+        //                    if (temp != ';')
+        //                    {
+        //                        arrayQuesContent[arrayIndexQuestion + 1] = temp;
+        //                        arrayRight[arrayIndexRight + 1] = temp;
+        //                        arrayWrong[arrayIndexWrong] = temp;// insert ',' into array
+
+        //                    }
+        //                    arrayRight[arrayIndexRight] = let;
+        //                    arrayIndexRight++;
+        //                    temp = ';';
+        //                    continue;
+        //                }
+        //            }
+        //            //get wrong answer by char
+        //            if (countWrong >= 1 && !isEnd)
+        //            {
+        //                if ((int)let != 0)
+        //                {
+        //                    if (temp != ';')
+        //                    {
+        //                        arrayQuesContent[arrayIndexQuestion + 1] = temp;
+        //                        arrayRight[arrayIndexRight] = temp;
+        //                        arrayWrong[arrayIndexWrong] = temp; // insert ',' into array 
+        //                    }
+        //                    arrayWrong[arrayIndexWrong + 1] = let; //get a character
+        //                    arrayIndexWrong++;
+        //                    temp = ';';
+        //                    continue;
+        //                }
+
+        //            }
+        //        }
+
+        //        code = new string(arrayCode, 0, arrayIndexCode);
+        //        question = new string(arrayQuesContent, 0, arrayIndexQuestion);
+        //        questionRight = new string(arrayRight, 0, arrayIndexRight);
+        //        questionWrong = new string(arrayWrong, 0, arrayIndexWrong);
+
+        //        List<string> listTemp = new List<string>();
+
+
+
+        //        if (question != null)
+        //        {
+
+        //            string[] arrListStrTmp = question.Split(new char[] { ',' });
+        //            RemoveNull(arrListStrTmp);
+
+        //            listTemp = new List<string>();
+        //            for (int i = 0; i < arrListStrTmp.Length; i++)
+        //            {
+
+        //                if (arrListStrTmp[i] != "\0")
+        //                {
+        //                    listTemp.Add(arrListStrTmp[i]);
+        //                    //Console.WriteLine("Right: {0}", arrListStrTmp[i]);
+        //                    string json = JsonConvert.SerializeObject(listTemp);
+        //                    quesModel.QuestionContent = json;
+        //                }
+
+        //            }
+
+
+
+        //            //Console.WriteLine("Question: {0}", question.Trim());
+        //        }
+        //        if (questionRight != "")
+        //        {
+
+        //            string[] arrListStrTmp = questionRight.Split(new char[] { ',' });
+        //            RemoveNull(arrListStrTmp);
+        //            listTemp = new List<string>();
+        //            for (int i = 0; i < arrListStrTmp.Length; i++)
+        //            {
+
+        //                if (arrListStrTmp[i] != "\0")
+        //                {
+        //                    listTemp.Add(arrListStrTmp[i]);
+        //                    //Console.WriteLine("Right: {0}", arrListStrTmp[i]);
+        //                }
+        //                string json = JsonConvert.SerializeObject(listTemp);
+        //                quesModel.OptionsContent = json;
+        //            }
+
+        //        }
+        //        if (questionWrong != "")
+        //        {
+
+        //            string[] arrListStr = questionWrong.Split(new char[] { ',' });
+        //            RemoveNull(arrListStr);
+        //            listTemp = new List<string>();
+        //            for (int i = 0; i < arrListStr.Length; i++)
+        //            {
+        //                if (arrListStr[i] != "\0")
+        //                {
+        //                    //DE sau khi co them cot cau hoi sai
+        //                    //quesModel.OptionsContent += arrListStr[i] + " ";
+        //                    //Console.WriteLine("Wrong: {0}", arrListStr[i].Trim());
+        //                }
+
+        //            }
+
+
+        //        }
+        //        if (quesModel.QuestionContent != "[]" && quesModel.OptionsContent != "[]")
+        //        {
+        //            questions.Add(quesModel);
+        //            quesModel = new QuestionTmpModel();
+        //        }
+
+        //    }
+
+        //    //List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
+
+        //    //QuestionTmpModel quesModel = new QuestionTmpModel();
+
+
+        //    //listQuestion.Add(quesModel);
+
+        //    return questions;
+        //}
         //Remove null 
         public void RemoveNull(string[] array)
         {
             List<string> list = new List<string>(array);
             for (int index = 0; index < list.Count; index++)
             {
-                bool nullOrEmpty = list[index].Contains('\0');
+                bool nullOrEmpty = list[index].Contains("\0");
                 if (nullOrEmpty)
                 {
                     list.RemoveAt(index);

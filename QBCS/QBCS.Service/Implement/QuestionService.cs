@@ -10,6 +10,8 @@ using System.Web;
 using System.Xml.Serialization;
 using System.IO;
 using QBCS.Service.Utilities;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace QBCS.Service.Implement
 {
@@ -259,57 +261,96 @@ namespace QBCS.Service.Implement
 
             return result;
         }
+
         public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId)
         {
             bool check = false;
-            StreamReader reader;
+            StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
-           
+
             try
             {
 
                 string extensionFile = Path.GetExtension(questionFile.FileName);
+                string rightAnswer = null;
+
+
                 if (extensionFile.Equals(".xml"))
                 {
+                    List<QuestionTmpModel> listQuestionXml = new List<QuestionTmpModel>();
                     XmlSerializer xmlSer = new XmlSerializer(typeof(quiz));
-                    reader = new StreamReader(questionFile.InputStream);
-                    quiz question = (quiz)xmlSer.Deserialize(reader);
-                    check = true;
-                    reader.Close();
-                }
-                if (extensionFile.Equals(".gift"))
-                {
-                    GIFTUtilities ulti = new GIFTUtilities();
-                    QuestionTemp quesTmp = new QuestionTemp();
-                    reader = new StreamReader(questionFile.InputStream);
-                    
-                   listQuestion = ulti.test(reader, listQuestion);
-                    //while ((line = reader.ReadToEnd()) != null)
-                    //{
-                    //    listQuestion = ulti.StripTagsCharArray(line, listQuestion);
-                        
-                    //}
-                    reader.Close();
-                    foreach (var item in listQuestion)
+
+                    reader = new StreamReader(questionFile.InputStream);                 
+                    quiz questionXml = (quiz)xmlSer.Deserialize(reader);
+                    List<string> tempQues = new List<string>();
+                    List<string> tempAns = new List<string>();
+                    for (int i = 0; i < questionXml.question.Count(); i++)
                     {
+                        QuestionTmpModel question = new QuestionTmpModel();
+                        string jsonAnswer = null;
+                        string questionContent = null;
+                        string jsonQuestion = null;
+                        questionContent = questionXml.question[i].questiontext.text;
+
+                        tempQues.Add(questionContent);
+                        jsonQuestion = JsonConvert.SerializeObject(tempQues);
+                        if (questionXml.question[i].answer[i].fraction.ToString().Equals("100"))
+                        {
+                            rightAnswer = questionXml.question[i].answer[i].text;
+                            tempAns.Add(rightAnswer);
+                            jsonAnswer = JsonConvert.SerializeObject(tempAns);
+                        }
+                        question.QuestionContent = jsonQuestion;
+                        question.OptionsContent = jsonAnswer;
+                        listQuestionXml.Add(question);
+
+                    }
+
+
+                    if (listQuestionXml.Count() > 0)
+                    {
+                        DateTime importTime = DateTime.Now;
                         var import = new Import()
                         {
                             UserId = userId,
-                            QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                            QuestionTemps = listQuestionXml.Select(q => new QuestionTemp()
                             {
-                               QuestionContent = item.QuestionContent,
-                               OptionsContent = item.OptionsContent  
+                                QuestionContent = q.QuestionContent,
+                                OptionsContent = q.OptionsContent
                             }).ToList(),
-                           
-
+                            ImportedDate = importTime
                         };
                         unitOfWork.Repository<Import>().Insert(import);
                         unitOfWork.SaveChanges();
                         check = true;
                     }
-                    
-                    
-                   
+
+
+                    //reader.Close();
+                }
+                if (extensionFile.Equals(".gift"))
+                {
+                    GIFTUtilities ulti = new GIFTUtilities();
+                    QuestionTemp quesTmp = new QuestionTemp();
+                    reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
+
+                    listQuestion = ulti.StripTagsCharArray(reader);
+                    DateTime importTime = DateTime.Now;
+                    var import = new Import()
+                    {
+
+                        UserId = userId,
+                        QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                        {
+                            QuestionContent = q.QuestionContent,
+                            OptionsContent = q.OptionsContent
+                        }).ToList(),
+                        ImportedDate = importTime
+
+                    };
+                    unitOfWork.Repository<Import>().Insert(import);
+                    unitOfWork.SaveChanges();
+                    check = true;
                 }
                 else
                 {
@@ -321,6 +362,10 @@ namespace QBCS.Service.Implement
             {
 
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                reader.Close();
             }
 
             return check;

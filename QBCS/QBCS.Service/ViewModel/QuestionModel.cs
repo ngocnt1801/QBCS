@@ -1,460 +1,460 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using System.Xml;
+//using System.Xml.Serialization;
 
-namespace QBCS.Service.ViewModel
-{
-    
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class quiz
-    {
+//namespace QBCS.Service.ViewModel
+//{
 
-        private quizQuestion questionField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+//    public partial class quiz
+//    {
 
-        /// <remarks/>
-        public quizQuestion question
-        {
-            get
-            {
-                return this.questionField;
-            }
-            set
-            {
-                this.questionField = value;
-            }
-        }
-    }
+//        private quizQuestion questionField;
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestion
-    {
+//        /// <remarks/>
+//        public quizQuestion question
+//        {
+//            get
+//            {
+//                return this.questionField;
+//            }
+//            set
+//            {
+//                this.questionField = value;
+//            }
+//        }
+//    }
 
-        private quizQuestionName nameField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestion
+//    {
 
-        private quizQuestionQuestiontext questiontextField;
+//        private quizQuestionName nameField;
 
-        private quizQuestionAnswer[] answerField;
+//        private quizQuestionQuestiontext questiontextField;
 
-        private string typeField;
+//        private quizQuestionAnswer[] answerField;
 
-        /// <remarks/>
-        public quizQuestionName name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
+//        private string typeField;
 
-        /// <remarks/>
-        public quizQuestionQuestiontext questiontext
-        {
-            get
-            {
-                return this.questiontextField;
-            }
-            set
-            {
-                this.questiontextField = value;
-            }
-        }
+//        /// <remarks/>
+//        public quizQuestionName name
+//        {
+//            get
+//            {
+//                return this.nameField;
+//            }
+//            set
+//            {
+//                this.nameField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("answer")]
-        public quizQuestionAnswer[] answer
-        {
-            get
-            {
-                return this.answerField;
-            }
-            set
-            {
-                this.answerField = value;
-            }
-        }
+//        /// <remarks/>
+//        public quizQuestionQuestiontext questiontext
+//        {
+//            get
+//            {
+//                return this.questiontextField;
+//            }
+//            set
+//            {
+//                this.questiontextField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-    }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlElementAttribute("answer")]
+//        public quizQuestionAnswer[] answer
+//        {
+//            get
+//            {
+//                return this.answerField;
+//            }
+//            set
+//            {
+//                this.answerField = value;
+//            }
+//        }
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionName
-    {
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string type
+//        {
+//            get
+//            {
+//                return this.typeField;
+//            }
+//            set
+//            {
+//                this.typeField = value;
+//            }
+//        }
+//    }
 
-        private string textField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionName
+//    {
 
-        /// <remarks/>
-        public string text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
-    }
+//        private string textField;
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionQuestiontext
-    {
+//        /// <remarks/>
+//        public string text
+//        {
+//            get
+//            {
+//                return this.textField;
+//            }
+//            set
+//            {
+//                this.textField = value;
+//            }
+//        }
+//    }
 
-        private string textField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionQuestiontext
+//    {
 
-        private quizQuestionQuestiontextFile fileField;
+//        private string textField;
 
-        private string formatField;
+//        private quizQuestionQuestiontextFile fileField;
 
-        /// <remarks/>
-        [XmlIgnore]
-        public string text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
-        private static XmlDocument _dummyDoc;
-        [XmlElement("text")]
-        public XmlCDataSection textValueData
-        {
-            get { return _dummyDoc.CreateCDataSection(text); }
-            set { text = (value != null) ? value.Data : null; }
-        }
-        /// <remarks/>
+//        private string formatField;
 
-        public quizQuestionQuestiontextFile file
-        {
-            get
-            {
-                return this.fileField;
-            }
-            set
-            {
-                this.fileField = value;
-            }
-        }
+//        /// <remarks/>
+//        [XmlIgnore]
+//        public string text
+//        {
+//            get
+//            {
+//                return this.textField;
+//            }
+//            set
+//            {
+//                this.textField = value;
+//            }
+//        }
+//        private static XmlDocument _dummyDoc;
+//        [XmlElement("text")]
+//        public XmlCDataSection textValueData
+//        {
+//            get { return _dummyDoc.CreateCDataSection(text); }
+//            set { text = (value != null) ? value.Data : null; }
+//        }
+//        /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string format
-        {
-            get
-            {
-                return this.formatField;
-            }
-            set
-            {
-                this.formatField = value;
-            }
-        }
-    }
+//        public quizQuestionQuestiontextFile file
+//        {
+//            get
+//            {
+//                return this.fileField;
+//            }
+//            set
+//            {
+//                this.fileField = value;
+//            }
+//        }
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionQuestiontextFile
-    {
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string format
+//        {
+//            get
+//            {
+//                return this.formatField;
+//            }
+//            set
+//            {
+//                this.formatField = value;
+//            }
+//        }
+//    }
 
-        private string nameField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionQuestiontextFile
+//    {
 
-        private string pathField;
+//        private string nameField;
 
-        private string encodingField;
+//        private string pathField;
 
-        private string valueField;
+//        private string encodingField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
+//        private string valueField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string path
-        {
-            get
-            {
-                return this.pathField;
-            }
-            set
-            {
-                this.pathField = value;
-            }
-        }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string name
+//        {
+//            get
+//            {
+//                return this.nameField;
+//            }
+//            set
+//            {
+//                this.nameField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string encoding
-        {
-            get
-            {
-                return this.encodingField;
-            }
-            set
-            {
-                this.encodingField = value;
-            }
-        }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string path
+//        {
+//            get
+//            {
+//                return this.pathField;
+//            }
+//            set
+//            {
+//                this.pathField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value
-        {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
-        }
-    }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string encoding
+//        {
+//            get
+//            {
+//                return this.encodingField;
+//            }
+//            set
+//            {
+//                this.encodingField = value;
+//            }
+//        }
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionAnswer
-    {
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlTextAttribute()]
+//        public string Value
+//        {
+//            get
+//            {
+//                return this.valueField;
+//            }
+//            set
+//            {
+//                this.valueField = value;
+//            }
+//        }
+//    }
 
-        private string textField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionAnswer
+//    {
 
-        private quizQuestionAnswerFile fileField;
+//        private string textField;
 
-        private quizQuestionAnswerFeedback feedbackField;
+//        private quizQuestionAnswerFile fileField;
 
-        private byte fractionField;
+//        private quizQuestionAnswerFeedback feedbackField;
 
-        private string formatField;
+//        private byte fractionField;
 
-        /// <remarks/>
-        public string text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
+//        private string formatField;
 
-        /// <remarks/>
-        public quizQuestionAnswerFile file
-        {
-            get
-            {
-                return this.fileField;
-            }
-            set
-            {
-                this.fileField = value;
-            }
-        }
+//        /// <remarks/>
+//        public string text
+//        {
+//            get
+//            {
+//                return this.textField;
+//            }
+//            set
+//            {
+//                this.textField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        public quizQuestionAnswerFeedback feedback
-        {
-            get
-            {
-                return this.feedbackField;
-            }
-            set
-            {
-                this.feedbackField = value;
-            }
-        }
+//        /// <remarks/>
+//        public quizQuestionAnswerFile file
+//        {
+//            get
+//            {
+//                return this.fileField;
+//            }
+//            set
+//            {
+//                this.fileField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte fraction
-        {
-            get
-            {
-                return this.fractionField;
-            }
-            set
-            {
-                this.fractionField = value;
-            }
-        }
+//        /// <remarks/>
+//        public quizQuestionAnswerFeedback feedback
+//        {
+//            get
+//            {
+//                return this.feedbackField;
+//            }
+//            set
+//            {
+//                this.feedbackField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string format
-        {
-            get
-            {
-                return this.formatField;
-            }
-            set
-            {
-                this.formatField = value;
-            }
-        }
-    }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public byte fraction
+//        {
+//            get
+//            {
+//                return this.fractionField;
+//            }
+//            set
+//            {
+//                this.fractionField = value;
+//            }
+//        }
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionAnswerFile
-    {
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string format
+//        {
+//            get
+//            {
+//                return this.formatField;
+//            }
+//            set
+//            {
+//                this.formatField = value;
+//            }
+//        }
+//    }
 
-        private string nameField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionAnswerFile
+//    {
 
-        private string pathField;
+//        private string nameField;
 
-        private string encodingField;
+//        private string pathField;
 
-        private string valueField;
+//        private string encodingField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
+//        private string valueField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string path
-        {
-            get
-            {
-                return this.pathField;
-            }
-            set
-            {
-                this.pathField = value;
-            }
-        }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string name
+//        {
+//            get
+//            {
+//                return this.nameField;
+//            }
+//            set
+//            {
+//                this.nameField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string encoding
-        {
-            get
-            {
-                return this.encodingField;
-            }
-            set
-            {
-                this.encodingField = value;
-            }
-        }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string path
+//        {
+//            get
+//            {
+//                return this.pathField;
+//            }
+//            set
+//            {
+//                this.pathField = value;
+//            }
+//        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value
-        {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
-        }
-    }
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string encoding
+//        {
+//            get
+//            {
+//                return this.encodingField;
+//            }
+//            set
+//            {
+//                this.encodingField = value;
+//            }
+//        }
 
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class quizQuestionAnswerFeedback
-    {
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlTextAttribute()]
+//        public string Value
+//        {
+//            get
+//            {
+//                return this.valueField;
+//            }
+//            set
+//            {
+//                this.valueField = value;
+//            }
+//        }
+//    }
 
-        private object textField;
+//    /// <remarks/>
+//    [System.SerializableAttribute()]
+//    [System.ComponentModel.DesignerCategoryAttribute("code")]
+//    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//    public partial class quizQuestionAnswerFeedback
+//    {
 
-        private string formatField;
+//        private object textField;
 
-        /// <remarks/>
-        public object text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
+//        private string formatField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string format
-        {
-            get
-            {
-                return this.formatField;
-            }
-            set
-            {
-                this.formatField = value;
-            }
-        }
-    }
+//        /// <remarks/>
+//        public object text
+//        {
+//            get
+//            {
+//                return this.textField;
+//            }
+//            set
+//            {
+//                this.textField = value;
+//            }
+//        }
+
+//        /// <remarks/>
+//        [System.Xml.Serialization.XmlAttributeAttribute()]
+//        public string format
+//        {
+//            get
+//            {
+//                return this.formatField;
+//            }
+//            set
+//            {
+//                this.formatField = value;
+//            }
+//        }
+//    }
 
 
-}
+//}
