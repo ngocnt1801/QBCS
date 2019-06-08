@@ -1,6 +1,7 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using QBCS.Web.SignalRHub;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class NotificationController : Controller
     {
         private INotificationService notificationService;

@@ -2,12 +2,12 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using QBCS.Web.SignalRHub;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
-    [RoutePrefix("home")]
     public class HomeController : Controller
     {
         private IUserService userService;

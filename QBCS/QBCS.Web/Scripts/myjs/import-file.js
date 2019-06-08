@@ -1,19 +1,29 @@
 ﻿$(function () {
-    QuestionTempView = {
+    questionTempView = {
         init: function () {
             this.editable = $(".editableTemp");
             $.each(this.editable, function(index, element){
                 element.onclick = function(){
-                    ImportFileOctopus.redirectToDetail(element.attributes["data-id"].value);
+                    importFileOctopus.redirectToDetail(element.attributes["data-id"].value);
                 }
             })
         },
         
     };
 
-    ImportFileOctopus = {
+    resultView = {
         init: function () {
-            QuestionTempView.init();
+            this.importBtn = $("#import-btn");
+            this.importBtn.on('click', function () {
+                importFileOctopus.importQuestionToBank(this.attributes["data-id"].value);
+            });
+        }
+    };
+
+    importFileOctopus = {
+        init: function () {
+            questionTempView.init();
+            resultView.init();
             this.bs_input_file();
 
         },
@@ -47,9 +57,20 @@
 
         redirectToDetail: function(id){
             document.location.href= '/QBCS.Web/Import/GetQuestionTemp?tempId='+id;
+        },
+        importQuestionToBank: function (importId) {
+            console.log("import to bank");
+            $.ajax({
+                url: '/QBCS.Web/Import/AddToBank',
+                type: 'GET',
+                data: {importId : importId},
+                success: function (response) {
+                    document.location.href = "/QBCS.Web/";
+                }
+            });
         }
     }
 
-    ImportFileOctopus.init();
+    importFileOctopus.init();
 });
 

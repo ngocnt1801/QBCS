@@ -59,10 +59,10 @@
 
     };
 
-
     notificationOctopus = {
         init: function () {
             notificationView.init();
+            resultView.init();
             this.connectHub();
         },
         getCount: function () {

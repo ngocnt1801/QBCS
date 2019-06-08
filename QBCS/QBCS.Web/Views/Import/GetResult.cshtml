@@ -3,7 +3,7 @@
     ViewBag.Title = "GetResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>ImportResult</h2>
+<h2>Result</h2>
 @*<div class="btn-group col-md-6 mb-2">
         <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
         All
@@ -14,3 +14,4 @@
 <div id="question-import">
     @Html.Partial("_AllQuestion", Model.Questions)
 </div>
+<button class="btn btn-primary float-right col-md-1" id="import-btn" data-id="@Model.Id">Import</button>
