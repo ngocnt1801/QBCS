@@ -13,15 +13,11 @@ namespace DuplicateQuestion
         [SqlProcedure]
         public static void CheckDuplidate(SqlInt32 importId)
         {
-            //init list question
-            List<QuestionModel> bank = null;
-            List<QuestionModel> import = null;
-
             var importModel = GetImport(importId.Value);
             if (importModel != null)
             {
-                bank = GetBank(importModel.CourseId);
-                import = GetImportedQuestion(importModel.ImportId);
+                var bank = GetBank(importModel.CourseId);
+                var import = GetImportedQuestion(importModel.ImportId, (int)StatusEnum.NotCheck);
 
                 #region check duplicate and update database
                 using (SqlConnection connection = new SqlConnection("context connection=true"))
@@ -49,7 +45,6 @@ namespace DuplicateQuestion
                             else if (result >= 70)
                             {
                                 //check option content
-
                                 item.Status = (int)StatusEnum.Editable;
                                 item.DuplicatedQuestionId = question.Id;
                                 isUpdate = true;
@@ -98,8 +93,23 @@ namespace DuplicateQuestion
                 }
                 #endregion
 
-                #region update status import
-                importModel.Status = (int)StatusEnum.Checked;
+                #region move temp to bank
+                if (importModel.Status == (int)StatusEnum.Fixing)
+                {
+                    InsertTempToBank(importModel);
+                    RemoveTemp(importModel.ImportId);
+                }
+                #endregion
+
+                #region update import status
+                if (importModel.Status == (int)StatusEnum.NotCheck)
+                {
+                    importModel.Status = (int)StatusEnum.Checked;
+                }
+                else if (importModel.Status == (int)StatusEnum.Fixing)
+                {
+                    importModel.Status = (int)StatusEnum.Done;
+                }
                 UpdateImport(importModel);
                 #endregion
             }
@@ -165,7 +175,7 @@ namespace DuplicateQuestion
             return bank;
         }
 
-        private static List<QuestionModel> GetImportedQuestion(int importId)
+        private static List<QuestionModel> GetImportedQuestion(int importId, int status)
         {
             List<QuestionModel> import = new List<QuestionModel>();
 
@@ -181,7 +191,7 @@ namespace DuplicateQuestion
                     );
 
                 command.Parameters.AddWithValue("@importId", importId);
-                command.Parameters.AddWithValue("@status", StatusEnum.NotCheck);
+                command.Parameters.AddWithValue("@status", status);
                 SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -214,6 +224,50 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", model.ImportId);
                 command.ExecuteNonQuery();
+            }
+        }
+
+        private static void RemoveTemp(int importId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE QuestionTemp " +
+                    "WHERE ImportId=@importId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@importId", importId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void InsertTempToBank(ImportModel import)
+        {
+            var importSuccessList = GetImportedQuestion(import.ImportId, (int)StatusEnum.Success);
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in importSuccessList)
+                {
+                    SqlCommand command = new SqlCommand(
+                        "INSERT Question (QuestionContent,CourseId,QuestionCode) " +
+                        "VALUES ( " +
+                            "@questionContent, " +
+                            "@courseId, " +
+                            "@questionCode " +
+                        ")",
+                        connection
+                        );
+
+                    command.Parameters.AddWithValue("@questionContent", question.QuestionContent);
+                    command.Parameters.AddWithValue("@courseId", import.CourseId);
+                    command.Parameters.AddWithValue("@questionCode", question.QuestionCode);
+                    command.ExecuteNonQuery();
+
+                }
             }
         }
     }
