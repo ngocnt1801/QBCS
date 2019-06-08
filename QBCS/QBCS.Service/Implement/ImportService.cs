@@ -6,6 +6,7 @@ using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,14 @@ namespace QBCS.Service.Implement
 
         public ImportResultViewModel GetImportResult(int importId)
         {
-            var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId && i.Status == (int)StatusEnum.Checked).FirstOrDefault();
+            var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId).FirstOrDefault();
             if (import != null)
             {
+                import.Status = (int)StatusEnum.Fixing;
+                import.Seen = true;
+                unitOfWork.Repository<Import>().Update(import);
+                unitOfWork.SaveChanges();
+
                 return new ImportResultViewModel
                 {
                     Id = import.Id,
@@ -35,7 +41,7 @@ namespace QBCS.Service.Implement
                         QuesitonContent = q.QuestionContent,
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
-                        DuplicatedQuestion = new QuestionViewModel
+                        DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.Question.Id,
                             CourseName = q.Question.Course.Name,
@@ -46,8 +52,8 @@ namespace QBCS.Service.Implement
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
-                        }
-                    }).OrderBy(q => q.Status).ToList()
+                        } : null
+                    }).OrderBy(q => q.Status).ToList() 
                 };
             }
 
@@ -81,6 +87,15 @@ namespace QBCS.Service.Implement
             }
 
             return null;
+        }
+
+        public async Task ImportToBank(int importId)
+        {
+            using (var context = new QBCSContext())
+            {
+                string command = "EXEC CheckDuplicateImport @importId= @id";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", importId));
+            }
         }
 
         public void UpdateQuestionTemp(QuestionTempViewModel question)

@@ -12,5 +12,6 @@ namespace QBCS.Service.Interface
         ImportResultViewModel GetImportResult(int importId);
         void UpdateQuestionTemp(QuestionTempViewModel question);
         QuestionTempViewModel GetQuestionTemp(int questionTempId);
+        Task ImportToBank(int importId);
     }
 }

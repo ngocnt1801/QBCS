@@ -5,6 +5,7 @@ using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -46,7 +47,9 @@ namespace QBCS.Web.Controllers
 
         public ActionResult AddToBank(int importId)
         {
-
+            Task.Factory.StartNew(() => {
+                importService.ImportToBank(importId);
+            });
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
     }
