@@ -13,7 +13,7 @@ namespace QBCS.Web.Attributes
             var user = HttpContext.Current.Session["user"];
             if (user == null)
             {
-                filterContext.Result = new RedirectResult("/QBCS.Web/Home");
+                filterContext.Result = new RedirectResult("/QBCS.Web/");
             }
         }
     }
