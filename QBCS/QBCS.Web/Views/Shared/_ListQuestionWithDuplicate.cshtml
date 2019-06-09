@@ -64,7 +64,7 @@
                             <td>
                                 @if (item.DuplicatedQuestion != null)
                                 {
-                                <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                    <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
                                     for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
                                     {
@@ -93,4 +93,5 @@
         </div>
     </div>
 </div>
+
 

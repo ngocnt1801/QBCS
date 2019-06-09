@@ -13,8 +13,7 @@ namespace DuplicateQuestion.Entity
         public string QuestionCode { get; set; }
         public int Hashcode { get; set; }
         public int? DuplicatedQuestionId { get; set; }
-        public List<String> RightOptions { get; set; }
-        public List<String> WrongOptions { get; set; }
+        public List<OptionModel> Options { get; set; }
         public int Status { get; set; }
 
     }

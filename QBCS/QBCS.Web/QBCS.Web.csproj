@@ -2053,6 +2053,7 @@
     <Content Include="Views\Question\ReviewQuestion.cshtml" />
     <Content Include="Views\Import\GetResult.cshtml" />
     <Content Include="Views\Import\GetQuestionTemp.cshtml" />
+    <Content Include="Views\Shared\_ListQuestionWithDuplicate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

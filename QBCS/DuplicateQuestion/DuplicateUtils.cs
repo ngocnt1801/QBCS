@@ -57,33 +57,106 @@ namespace DuplicateQuestion
                     {
                         string source = StringUtils.NormalizeString(question.QuestionContent);
                         //Check question content
-                        var result = LevenshteinDistance.CalculateSimilarity(source, target) * 100;
-                        if (result <= 100 && result >= 90)
-                        {
-                            //check option content
+                        var result = LevenshteinDistance.CalculateSimilarity(source, target);
 
-                            item.Status = (int)StatusEnum.Delete;
-                            item.DuplicatedQuestionId = question.Id;
-                            isUpdate = true;
+                        if (result >= 70)
+                        {
+                            //check option
+                            int countDuplicate = 0;
+                            int targetRightCount = 0;
 
-                        }
-                        else if (result >= 70)
-                        {
-                            //check option content
-                            item.Status = (int)StatusEnum.Editable;
-                            item.DuplicatedQuestionId = question.Id;
-                            isUpdate = true;
-                        }
-                        else // check with TF + Consine similarity
-                        {
-                            target = item.QuestionContent + item.RightOptions;
-                            source = question.QuestionContent + question.RightOptions;
-                            result = TFAlgorithm.CaculateSimilar(source, target);
-                            if (result > 70)
+                            #region get duplicate %
+                            foreach (var iOption in item.Options)
+                            {
+                                if (iOption.IsCorrect)
+                                {
+                                    targetRightCount = targetRightCount + 1;
+                                    string iOptionTarget = StringUtils.NormalizeString(iOption.OptionContent);
+                                    foreach (var bOption in question.Options)
+                                    {
+                                        string bOptionSource = StringUtils.NormalizeString(bOption.OptionContent);
+                                        if (LevenshteinDistance.CalculateSimilarity(bOptionSource, iOptionTarget) >= 70)
+                                        {
+                                            countDuplicate = countDuplicate + 1;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            float optionCheckResult = ((float)countDuplicate) / targetRightCount;
+                            #endregion
+
+                            if (optionCheckResult > 0.5)
+                            {
+                                item.Status = (int)StatusEnum.Delete;
+                                item.DuplicatedQuestionId = question.Id;
+                                isUpdate = true;
+                            }
+                            else
                             {
                                 item.Status = (int)StatusEnum.Editable;
                                 item.DuplicatedQuestionId = question.Id;
                                 isUpdate = true;
+                            }
+
+                        }
+                        else // check with TF + Consine similarity
+                        {
+                            target = item.QuestionContent;
+                            source = question.QuestionContent;
+
+                            #region get right option string
+                            string rightOptionTaget = "";
+                            string rightOptionSource = "";
+                            foreach (var option in item.Options)
+                            {
+                                if (option.IsCorrect)
+                                {
+                                    rightOptionTaget += option.OptionContent;
+                                }
+                            }
+
+                            foreach (var option in question.Options)
+                            {
+                                if (option.IsCorrect)
+                                {
+                                    rightOptionSource += option.OptionContent;
+                                }
+                            }
+                            #endregion
+
+                            result = TFAlgorithm.CaculateSimilar(source, target);
+                            if (result >= 70)
+                            {
+                                double optionResult = TFAlgorithm.CaculateSimilar(rightOptionSource, rightOptionTaget);
+
+                                if (optionResult >= 70)
+                                {
+                                    item.Status = (int)StatusEnum.Delete;
+                                    item.DuplicatedQuestionId = question.Id;
+                                    isUpdate = true;
+                                }
+                                else
+                                {
+                                    item.Status = (int)StatusEnum.Editable;
+                                    item.DuplicatedQuestionId = question.Id;
+                                    isUpdate = true;
+                                }
+
+                            }
+                            else // check quesiton + option
+                            {
+                                source = source + " " + rightOptionSource;
+                                target = target + " " + rightOptionTaget;
+
+                                double resultQwithO = TFAlgorithm.CaculateSimilar(source, target);
+                                if (resultQwithO >= 70)
+                                {
+                                    item.Status = (int)StatusEnum.Delete;
+                                    item.DuplicatedQuestionId = question.Id;
+                                    isUpdate = true;
+                                }
                             }
                         }
 
@@ -156,22 +229,41 @@ namespace DuplicateQuestion
                 connection.Open();
 
                 SqlCommand command = new SqlCommand(
-                    "SELECT Id, QuestionContent " +
-                    "FROM Question " +
-                    "WHERE CourseId = @courseId",
+                    "SELECT q.Id, q.QuestionContent, o.OptionContent " +
+                    "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
+                    "WHERE q.CourseId = @courseId AND o.IsCorrect = 1",
                     connection
                     );
 
                 command.Parameters.AddWithValue("@courseId", courseId);
                 SqlDataReader reader = command.ExecuteReader();
 
+                int prev = 0;
+                QuestionModel question = null;
                 while (reader.Read())
                 {
-                    QuestionModel question = new QuestionModel();
-                    question.QuestionContent = (string)reader["QuestionContent"];
-                    question.Id = (int)reader["Id"];
+                    if (prev != (int)reader["Id"])
+                    {
+                        question = new QuestionModel();
+                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.Id = (int)reader["Id"];
+                        question.Options = new List<OptionModel>();
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"]
+                        });
+                        bank.Add(question);
 
-                    bank.Add(question);
+                        prev = question.Id;
+                    }
+                    else
+                    {
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"]
+                        });
+                    }
+
                 }
 
             }
@@ -185,11 +277,10 @@ namespace DuplicateQuestion
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
-
                 SqlCommand command = new SqlCommand(
-                    "SELECT Id, QuestionContent " +
-                    "FROM QuestionTemp " +
-                    "WHERE ImportId = @importId AND Status = @status",
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status " +
+                    "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
+                    "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
                     );
 
@@ -197,13 +288,36 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@status", status);
                 SqlDataReader reader = command.ExecuteReader();
 
+                int prev = 0;
+                QuestionModel question = null;
                 while (reader.Read())
                 {
-                    QuestionModel question = new QuestionModel();
-                    question.QuestionContent = (string)reader["QuestionContent"];
-                    question.Id = (int)reader["Id"];
-                    question.Status = (int)StatusEnum.Success;
-                    import.Add(question);
+                    if (prev != (int)reader["Id"])
+                    {
+                        question = new QuestionModel();
+                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.QuestionCode = (string)reader["Code"];
+                        question.Status = (int)StatusEnum.Success;
+                        question.Id = (int)reader["Id"];
+                        question.Options = new List<OptionModel>();
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                        import.Add(question);
+
+                        prev = question.Id;
+                    }
+                    else
+                    {
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                    }
+
                 }
 
             }
@@ -255,8 +369,10 @@ namespace DuplicateQuestion
                 connection.Open();
                 foreach (var question in importSuccessList)
                 {
+                    #region insert question
                     SqlCommand command = new SqlCommand(
                         "INSERT Question (QuestionContent,CourseId,QuestionCode) " +
+                        "OUTPUT INSERTED.Id AS 'Id' " +
                         "VALUES ( " +
                             "@questionContent, " +
                             "@courseId, " +
@@ -268,8 +384,41 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@questionContent", question.QuestionContent);
                     command.Parameters.AddWithValue("@courseId", import.CourseId);
                     command.Parameters.AddWithValue("@questionCode", question.QuestionCode);
-                    command.ExecuteNonQuery();
+                    var reader = command.ExecuteReader();
+                    #endregion
+                    int id = 0;
+                    if (reader.Read())
+                    {
+                        id = (int)reader["Id"];
+                    }
+                    foreach (var option in question.Options)
+                    {
+                        option.QuestionId = id;
+                    }
+                }
+            }
 
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in importSuccessList)
+                {
+                    foreach (var option in question.Options)
+                    {
+                        SqlCommand optionCommand = new SqlCommand(
+                                                    "INSERT [Option](QuestionId, OptionContent, IsCorrect)" +
+                                                    "VALUES ( " +
+                                                        "@questionId, " +
+                                                        "@content, " +
+                                                        "@isCorrect " +
+                                                    ")", connection);
+
+                        optionCommand.Parameters.AddWithValue("@questionId", option.QuestionId);
+                        optionCommand.Parameters.AddWithValue("@content", option.OptionContent);
+                        optionCommand.Parameters.AddWithValue("@isCorrect", option.IsCorrect);
+                        optionCommand.ExecuteNonQuery();
+                    }
+                    
                 }
             }
         }

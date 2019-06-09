@@ -52,7 +52,12 @@ namespace QBCS.Service.Implement
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
-                        } : null
+                        } : null,
+                        Options = q.OptionTemps.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        }).ToList()
                     }).OrderBy(q => q.Status).ToList() 
                 };
             }

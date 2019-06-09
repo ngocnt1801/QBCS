@@ -11,7 +11,7 @@ namespace DuplicateQuestion
             if (source == target) return 1.0;
 
             int stepsToSame = ComputeLevenshteinDistance(source, target);
-            return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length)));
+            return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length))) * 100;
         }
 
         public static int ComputeLevenshteinDistance(string source, string target)
