@@ -21,13 +21,15 @@ namespace QBCS.Entity
 
         public int? QuestionReference { get; set; }
 
-        public int? QuestionContent { get; set; }
+        public string QuestionContent { get; set; }
 
         public int? LevelId { get; set; }
 
         public int? TypeId { get; set; }
 
         public int? Priority { get; set; }
+
+        public int? Frequency { get; set; }
 
         [StringLength(255)]
         public string Image { get; set; }

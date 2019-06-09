@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.ViewModel
 {
-    class PartOfExamViewModel
+    public class PartOfExamViewModel
     {
+        public int ExaminationId { get; set; }
         public List<QuestionViewModel> Question { get; set; }
         public int NumberOfQuestion { get; set; }
+        public TopicViewModel Topic { get; set; }
+        public LearningOutcomeViewModel LearningOutcome { get; set; }
     }
 }

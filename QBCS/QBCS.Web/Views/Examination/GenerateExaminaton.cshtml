@@ -17,12 +17,12 @@
     <tr>
         <td>
             <p>Easy Question : @Model.EasyPercent</p>
-            <p>Normal Question : @Model.NormalPercent</p>
+            <p>Medium Question : @Model.MediumPercent</p>
             <p>Hard Question : @Model.HardPercent</p>
         </td>
         <td>
             <p>Easy Question : @Model.EasyQuestion</p>
-            <p>Normal Question : @Model.NormalQuestion</p>
+            <p>Medium Question : @Model.MediumQuestion</p>
             <p>Hard Question : @Model.HardQuestion</p>
             <b>Total Question : @Model.TotalQuestion</b>
         </td>
@@ -30,7 +30,7 @@
             102
         </td>
         <td>
-            <a href="#" class="btn btn-primary" role="button" >Review Examination</a>
+            <a href="@Url.Action("ViewGeneratedExamination", "Examination", new { examinationId = Model.ExamId})" class="btn btn-primary" role="button" >Review Examination</a>
         </td>
     </tr>
 </table>

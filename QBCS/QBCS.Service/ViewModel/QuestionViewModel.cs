@@ -21,5 +21,6 @@ namespace QBCS.Service.ViewModel
         public bool IsDuplicated { get; set; }
         public QuestionViewModel DuplicatedQuestion { get; set; }
         public List<OptionViewModel> Options { get; set; }
+        public LevelViewModel Level { get; set; }
     }
 }

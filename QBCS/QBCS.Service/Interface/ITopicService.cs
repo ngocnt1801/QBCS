@@ -11,6 +11,8 @@ namespace QBCS.Service.Interface
     public interface ITopicService
     {
         List<TopicViewModel> GetTopicByCourseId(int CourseId);
+        int GetCourseIdByTopicId(int topicId);
+        TopicViewModel GetTopicById(int topicId);
     }
 
 }

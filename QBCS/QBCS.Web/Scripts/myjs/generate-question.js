@@ -22,7 +22,7 @@
                                      //    });
                                      //});
     var btnCancel = $('<button></button>').text('Cancel')
-                                     .addClass('btn btn-danger')
+                                     .addClass('btn btn-info')
                                      .on('click', function () { $('#smartwizard').smartWizard("reset"); });
 
     // Smart Wizard
@@ -71,28 +71,28 @@
         //}
     });
 
-    $("#btnSearch").click(function (event) {
-        event.preventDefault();
-        var searchCourseValue = $("#searchCourseValue").val();
-        var appendValue = "<tbody id='listCourse'>";
-        $.ajax({
-            type: "GET",
-            url: "http://localhost/QBCS.Web/api/CourseAPI/searchCourse",
-            data: {
-                courseCode : searchCourseValue
-            },
-            dataType: "xml",
-            success: function (xml) {
-                $(xml).find('CourseViewModel').each(function () {
-                    var id = $(this).find("Id").text();
-                    var code = $(this).find("Code").text();
-                    appendValue = appendValue + "<tr><td><div class='el-radio'><span class='margin-r'></span><input type='radio' name='course' id='1_" + id + "' value='" + id + "'><label class='el-radio-style' for='1_" + id + "'></label></div></td><td><h5>" + code + "</h5></td></tr>";
-                });
-                appendValue = appendValue + "</tbody>";
-                $("#listCourse").replaceWith(appendValue);
-            }
-        });
-    });
+    //$("#btnSearch").click(function (event) {
+    //    event.preventDefault();
+    //    var searchCourseValue = $("#searchCourseValue").val();
+    //    var appendValue = "<tbody id='listCourse'>";
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "http://localhost/QBCS.Web/api/CourseAPI/searchCourse",
+    //        data: {
+    //            courseCode : searchCourseValue
+    //        },
+    //        dataType: "xml",
+    //        success: function (xml) {
+    //            $(xml).find('CourseViewModel').each(function () {
+    //                var id = $(this).find("Id").text();
+    //                var code = $(this).find("Code").text();
+    //                appendValue = appendValue + "<tr><td><div class='el-radio'><span class='margin-r'></span><input type='radio' name='course' id='1_" + id + "' value='" + id + "'><label class='el-radio-style' for='1_" + id + "'></label></div></td><td><h5>" + code + "</h5></td></tr>";
+    //            });
+    //            appendValue = appendValue + "</tbody>";
+    //            $("#listCourse").replaceWith(appendValue);
+    //        }
+    //    });
+    //});
 
     $('#check-all').on('change', function (event) {
         event.preventDefault();

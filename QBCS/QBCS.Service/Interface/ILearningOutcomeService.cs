@@ -11,5 +11,7 @@ namespace QBCS.Service.Interface
     public interface ILearningOutcomeService
     {
         List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId);
+        int GetCourseIdByLearningOutcomeId(int learningOutcomeId);
+        LearningOutcomeViewModel GetLearingOutcomeById(int learningOutcomeId);
     }
 }

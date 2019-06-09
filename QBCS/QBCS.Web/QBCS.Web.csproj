@@ -166,6 +166,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\ExaminationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\TopicAPIController.cs" />
@@ -2024,10 +2025,10 @@
     <Content Include="Views\Shared\_RightQuestion.cshtml" />
     <Content Include="Views\User\AddUser.cshtml" />
     <Content Include="Views\Course\ListCourse.cshtml" />
-    <Content Include="Views\Question\GenerateExam.cshtml" />
-    <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />
+    <Content Include="Views\Examination\GenerateExam.cshtml" />
+    <Content Include="Views\Examination\ViewGeneratedExamination.cshtml" />
     <Content Include="Views\Course\Staff_ListCourse.cshtml" />
-    <Content Include="Views\Question\GenerateExaminaton.cshtml" />
+    <Content Include="Views\Examination\GenerateExaminaton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

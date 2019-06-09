@@ -51,7 +51,9 @@
                     <td>
                         @Html.DisplayFor(course => item.Name)
                     </td>
-                    <td></td>
+                    <td>
+                        <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">Create Exam Test</a>
+                    </td>
                 </tr>
                         }
         </table>

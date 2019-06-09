@@ -113,50 +113,6 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GetQuestionDetail", new {id = ques.Id });
         }
 
-        public ActionResult GenerateExam(int courseId)
-        {
-            List<TopicViewModel> topicViewModels = topicService.GetTopicByCourseId(courseId);
-            List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
-            ListTopicLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListTopicLearningOutcomeViewModel()
-            {
-                Topics = topicViewModels,
-                LearningOutcomes = learningOutcomeViewModels
-            };
-            return View(listTopicLearningOutcomeViewModel);
-        }
-
-        public ActionResult GenerateExaminaton (GenerateExamViewModel exam)
-        {
-            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
-            return View(examination);
-        }
-
-        public ActionResult ViewGeneratedExamination()
-        {
-            List<ExaminationViewModel> examinationViewModels = new List<ExaminationViewModel>();
-            List<QuestionViewModel> questions = questionService.GetAllQuestions();
-            TopicViewModel topic = new TopicViewModel()
-            {
-                Id = 1,
-                Name = "Learning Outcome"
-            };
-            LevelViewModel level = new LevelViewModel()
-            {
-                Id = 1,
-                Name = "Hard"
-            };
-            for (int i = 0; i < 10; i++)
-            {
-                ExaminationViewModel examination = new ExaminationViewModel
-                {
-                    Question = questions[i],
-                    Level = level,
-                    Topic = topic
-                };
-                examinationViewModels.Add(examination);
-            }
-            return View(examinationViewModels);
-        }
 
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int? courseId = 0)
