@@ -14,6 +14,7 @@ namespace QBCS.Service.Utilities
     public class GIFTUtilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
+        static OptionTemp optionModel = new OptionTemp();
         //public List<QuestionTmpModel> test (StreamReader reader, List<QuestionTmpModel> listQuestion)
         //{
         //    string line;
@@ -35,105 +36,175 @@ namespace QBCS.Service.Utilities
         {
             string line = null;
             List<QuestionTmpModel> list = new List<QuestionTmpModel>();
+            List<OptionTemp> options = new List<OptionTemp>();
+            bool isStartQuestion = false;
             while ((line = reader.ReadLine()) != null)
             {
+
                 string id = null;
-                string name = null;
+                string question = null;
                 string right = null;
-                string wrong = null;
+                string wrong1 = null;
+                string wrong2 = null;
+                string wrong3 = null;
                 bool isStart = false;
                 bool isEnd = false;
                 int countCode = 0;
                 int countRight = 0;
                 int countWrong = 0;
-                for (int i = 0; i < line.Length; i++)
+                if (!line.Contains("//") && !line.Contains("$CATEGORY"))
                 {
-                    char let = line[i];
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        char let = line[i];
 
-                    if (let == ':')
-                    {
-                        countCode++;
-                        isStart = true;
-                        continue;
-                    }
-                    if (let == '=')
-                    {
-                        countRight++;
-                        countWrong = 0;
+                        if (let == ':')
+                        {
+                            countCode++;
+                            isStart = true;
+                            continue;
+                        }
+                        if (let == '=' && isStartQuestion)
+                        {
+                            countRight++;
+                            //countWrong = 0;
+                            continue;
+                        }
+                        if (let == '~' && isStartQuestion)
+                        {
+                            countWrong++;
+                            countRight = 0;
+                            continue;
+                        }
+                        if (let == '}')
+                        {
+                            isEnd = true;
+                            continue;
+                        }
+                        if (let == '{')
+                        {
+                            countCode = 0;
+                            isStartQuestion = true;
+                            continue;
+                        }
 
-                        continue;
-                    }
-                    if (let == '~')
-                    {
-                        countWrong++;
-                        countRight = 0;
-                        
-                        continue;
-                    }
-                    if (let == '}')
-                    {
-                        isEnd = true;
-                        continue;
-                    }
-                    if (let == '{')
-                    {
-                        countCode = 0;
-                        continue;
-                    }
+                        if (countCode < 3 && isStart)
+                        {
 
-                    if (countCode < 3 && isStart)
-                    {
+                            id += let;
+                            continue;
+                        }
+                        if (countCode >= 4)
+                        {
+                            question += let;
+                            isStart = false;
+                            continue;
 
-                        id += let;
-                        continue;
-                    }
-                    if (countCode >= 4)
-                    {
-                        name += let;
-                        isStart = false;
-                        continue;
+                        }
+                        if (countRight >= 1 && !isEnd)
+                        {
 
-                    }
-                    if (countRight >= 1 && !isEnd)
-                    {
-                        right += let;
-                        continue;
+                            right += let;
+                            continue;
 
-                    }
-                    if (countWrong >= 1 && !isEnd)
-                    {
-                        wrong += let;
-                        continue;
+                        }
+                        if (countWrong >= 1 && !isEnd)
+                        {
+
+                            wrong1 += let;
+                            continue;
+                        }
+                        //if (countWrong == 2 && !isEnd)
+                        //{
+
+                        //    wrong2 += let;
+                        //    continue;
+                        //}
+                        //if (countWrong == 3 && !isEnd)
+                        //{
+
+                        //    wrong3 += let;
+                        //    continue;
+                        //}
                     }
                 }
                 // Console.WriteLine(name);
-               
-                if (name != null)
+                //if (id != null)
+                //{
+                //    quesModel.Code = id;
+                //}
+                if (question != null)
                 {
-                    string jsonQuestion = null;
-                    List<string> tempJson = new List<string>();
-                    tempJson.Add(name);
-                    jsonQuestion = JsonConvert.SerializeObject(tempJson);                  
-                    quesModel.QuestionContent = jsonQuestion;
+                    //string jsonQuestion = null;
+                    //List<string> tempJson = new List<string>();
+                    //tempJson.Add(question);
+                    //jsonQuestion = JsonConvert.SerializeObject(tempJson);                  
+                    quesModel.Code = id;
+                    quesModel.QuestionContent = question;
                    
+
                 }
                 if (right != null)
                 {
-                    string jsonQuestion = null;
-                    List<string> tempJson = new List<string>();
-                    tempJson.Add(right);         
-                    jsonQuestion = JsonConvert.SerializeObject(tempJson);
-                    quesModel.OptionsContent = jsonQuestion;
+                    optionModel = new OptionTemp();
+                    // string jsonQuestion = null;
+                    //List<string> tempJson = new List<string>();
+                    //tempJson.Add(right);         
+                    //jsonQuestion = JsonConvert.SerializeObject(tempJson);
+                    optionModel.OptionContent = right;
+                    optionModel.IsCorrect = true;
+                    options.Add(optionModel);
+                    //quesModel.OptionsContent = option;
 
 
                 }
-                if (quesModel.QuestionContent != null && quesModel.OptionsContent != null)
+                if (wrong1 != null)
                 {
+                    optionModel = new OptionTemp();
+                    // string jsonQuestion = null;
+                    //List<string> tempJson = new List<string>();
+                    //tempJson.Add(right);         
+                    //jsonQuestion = JsonConvert.SerializeObject(tempJson);
+                    optionModel.OptionContent = wrong1;
+                    optionModel.IsCorrect = false;
+                    options.Add(optionModel);
+                    //quesModel.OptionsContent = option;
+                }
+                //if (wrong2 != null)
+                //{
+                //    optionModel = new OptionTemp();
+                //    // string jsonQuestion = null;
+                //    //List<string> tempJson = new List<string>();
+                //    //tempJson.Add(right);         
+                //    //jsonQuestion = JsonConvert.SerializeObject(tempJson);
+                //    optionModel.OptionContent = wrong2;
+                //    optionModel.IsCorrect = false;
+
+                //    options.Add(optionModel);
+                //    //quesModel.OptionsContent = option;
+                //}
+                //if (wrong3 != null)
+                //{
+                //    optionModel = new OptionTemp();
+                //    // string jsonQuestion = null;
+                //    //List<string> tempJson = new List<string>();
+                //    //tempJson.Add(right);         
+                //    //jsonQuestion = JsonConvert.SerializeObject(tempJson);
+                //    optionModel.OptionContent = wrong3;
+                //    optionModel.IsCorrect = false;
+
+                //    options.Add(optionModel);
+                //    //quesModel.OptionsContent = option;
+                //}
+                if (quesModel.QuestionContent != null && options.Count() == 4 && quesModel.Code != null)
+                {
+                    quesModel.Options = options;
                     list.Add(quesModel);
                     quesModel = new QuestionTmpModel();
+                    options = new List<OptionTemp>();
                 }
             }
-           
+
             return list;
         }
 

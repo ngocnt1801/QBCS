@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QBCS.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace QBCS.Service.ViewModel
     {
         public string Code { get; set; }
         public string QuestionContent { get; set; }
-        public string OptionsContent { get; set; }
+        public List<OptionTemp> Options { get; set; }
         public int Status { get; set; }
         public int DuplicatedId { get; set; }
     }

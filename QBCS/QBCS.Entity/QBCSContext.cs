@@ -22,6 +22,7 @@ namespace QBCS.Entity
         public virtual DbSet<LevelInCourse> LevelInCourses { get; set; }
         public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<OptionInExam> OptionInExams { get; set; }
+        public virtual DbSet<OptionTemp> OptionTemps { get; set; }
         public virtual DbSet<PartOfExamination> PartOfExaminations { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionInExam> QuestionInExams { get; set; }
@@ -31,7 +32,6 @@ namespace QBCS.Entity
         public virtual DbSet<Rule> Rules { get; set; }
         public virtual DbSet<RuleKey> RuleKeys { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -104,6 +104,11 @@ namespace QBCS.Entity
                 .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.QuestionReference);
 
+            modelBuilder.Entity<Question>()
+                .HasMany(e => e.QuestionTemps)
+                .WithOptional(e => e.Question)
+                .HasForeignKey(e => e.DuplicatedId);
+
             modelBuilder.Entity<QuestionInExam>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
@@ -112,6 +117,15 @@ namespace QBCS.Entity
                 .HasMany(e => e.OptionInExams)
                 .WithOptional(e => e.QuestionInExam)
                 .HasForeignKey(e => e.QuestionId);
+
+            modelBuilder.Entity<QuestionTemp>()
+                .Property(e => e.Code)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<QuestionTemp>()
+                .HasMany(e => e.OptionTemps)
+                .WithOptional(e => e.QuestionTemp)
+                .HasForeignKey(e => e.TempId);
 
             modelBuilder.Entity<QuestionType>()
                 .Property(e => e.Name)

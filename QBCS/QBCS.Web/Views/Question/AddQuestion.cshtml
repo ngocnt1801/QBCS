@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>New Question</h2>
+<h2 class="text-custom">Add Question</h2>
 @using (Html.BeginForm("Add", "Question", FormMethod.Post, new { @class = "form-group" }))
 {
-    <div class="col-lg-8">
+    <div class="col-lg-8 text-custom">
         <div class="form-group">
             <label>Question</label>
             <textarea class="form-control" rows="8" name="QuestionContent"></textarea>
