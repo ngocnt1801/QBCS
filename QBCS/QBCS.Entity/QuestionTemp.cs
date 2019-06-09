@@ -9,6 +9,12 @@ namespace QBCS.Entity
     [Table("QuestionTemp")]
     public partial class QuestionTemp
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public QuestionTemp()
+        {
+            OptionTemps = new HashSet<OptionTemp>();
+        }
+
         public int Id { get; set; }
 
         public int? ImportId { get; set; }
@@ -25,6 +31,9 @@ namespace QBCS.Entity
         public string Code { get; set; }
 
         public virtual Import Import { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OptionTemp> OptionTemps { get; set; }
 
         public virtual Question Question { get; set; }
     }

@@ -60,6 +60,7 @@
     <Compile Include="LevelInCourse.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionInExam.cs" />
+    <Compile Include="OptionTemp.cs" />
     <Compile Include="PartOfExamination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QBCSContext.cs" />

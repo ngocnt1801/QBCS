@@ -19,79 +19,7 @@ namespace DuplicateQuestion
                 var bank = GetBank(importModel.CourseId);
                 var import = GetImportedQuestion(importModel.ImportId, (int)StatusEnum.NotCheck);
 
-                #region check duplicate and update database
-                using (SqlConnection connection = new SqlConnection("context connection=true"))
-                {
-                    connection.Open();
-                    bool isUpdate = false;
-                    foreach (var item in import)
-                    {
-                        string target = StringUtils.NormalizeString(item.QuestionContent);
-                        isUpdate = false;
-                        foreach (var question in bank)
-                        {
-                            string source = StringUtils.NormalizeString(question.QuestionContent);
-                            //Check question content
-                            var result = LevenshteinDistance.CalculateSimilarity(source, target) * 100;
-                            if (result <= 100 && result >= 90)
-                            {
-                                //check option content
-
-                                item.Status = (int)StatusEnum.Delete;
-                                item.DuplicatedQuestionId = question.Id;
-                                isUpdate = true;
-
-                            }
-                            else if (result >= 70)
-                            {
-                                //check option content
-                                item.Status = (int)StatusEnum.Editable;
-                                item.DuplicatedQuestionId = question.Id;
-                                isUpdate = true;
-                            }
-                            else // check with TF + Consine similarity
-                            {
-                                target = item.QuestionContent + item.RightOptions;
-                                source = question.QuestionContent + question.RightOptions;
-                                result = TFAlgorithm.CaculateSimilar(source, target);
-                                if (result > 70)
-                                {
-                                    item.Status = (int)StatusEnum.Editable;
-                                    item.DuplicatedQuestionId = question.Id;
-                                    isUpdate = true;
-                                }
-                            }
-
-                            if (isUpdate)
-                            {
-                                break;
-                            }
-
-                        }
-
-                        //update database
-                        SqlCommand command = new SqlCommand(
-                           "UPDATE QuestionTemp " +
-                           "SET Status=@status, DuplicatedId=@duplicatedId " +
-                           "WHERE Id=@id",
-                           connection
-                           );
-                        command.Parameters.AddWithValue("@status", item.Status);
-                        command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
-                        command.Parameters.AddWithValue("@id", item.Id);
-
-                        command.ExecuteNonQuery();
-
-                        //add not duplicate question to check
-                        if (!isUpdate)
-                        {
-                            bank.Add(item);
-                        }
-
-                    }
-
-                }
-                #endregion
+                CheckDuplicateAndUpdateDb(bank, import);
 
                 #region move temp to bank
                 if (importModel.Status == (int)StatusEnum.Fixing)
@@ -112,6 +40,81 @@ namespace DuplicateQuestion
                 }
                 UpdateImport(importModel);
                 #endregion
+            }
+        }
+
+        private static void CheckDuplicateAndUpdateDb(List<QuestionModel> bank, List<QuestionModel> import)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                bool isUpdate = false;
+                foreach (var item in import)
+                {
+                    string target = StringUtils.NormalizeString(item.QuestionContent);
+                    isUpdate = false;
+                    foreach (var question in bank)
+                    {
+                        string source = StringUtils.NormalizeString(question.QuestionContent);
+                        //Check question content
+                        var result = LevenshteinDistance.CalculateSimilarity(source, target) * 100;
+                        if (result <= 100 && result >= 90)
+                        {
+                            //check option content
+
+                            item.Status = (int)StatusEnum.Delete;
+                            item.DuplicatedQuestionId = question.Id;
+                            isUpdate = true;
+
+                        }
+                        else if (result >= 70)
+                        {
+                            //check option content
+                            item.Status = (int)StatusEnum.Editable;
+                            item.DuplicatedQuestionId = question.Id;
+                            isUpdate = true;
+                        }
+                        else // check with TF + Consine similarity
+                        {
+                            target = item.QuestionContent + item.RightOptions;
+                            source = question.QuestionContent + question.RightOptions;
+                            result = TFAlgorithm.CaculateSimilar(source, target);
+                            if (result > 70)
+                            {
+                                item.Status = (int)StatusEnum.Editable;
+                                item.DuplicatedQuestionId = question.Id;
+                                isUpdate = true;
+                            }
+                        }
+
+                        if (isUpdate)
+                        {
+                            break;
+                        }
+
+                    }
+
+                    //update database
+                    SqlCommand command = new SqlCommand(
+                       "UPDATE QuestionTemp " +
+                       "SET Status=@status, DuplicatedId=@duplicatedId " +
+                       "WHERE Id=@id",
+                       connection
+                       );
+                    command.Parameters.AddWithValue("@status", item.Status);
+                    command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
+                    command.Parameters.AddWithValue("@id", item.Id);
+
+                    command.ExecuteNonQuery();
+
+                    //add not duplicate question to check
+                    if (!isUpdate)
+                    {
+                        bank.Add(item);
+                    }
+
+                }
+
             }
         }
 
