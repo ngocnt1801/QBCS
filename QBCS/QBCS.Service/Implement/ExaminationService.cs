@@ -166,10 +166,10 @@ namespace QBCS.Service.Implement
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
-            int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel);
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
+                int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel);
                 List<Question> questionsByLevelAndTopic = questions.Where(q => q.LevelId == idOfLevel && q.TopicId == topicId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndTopic.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
@@ -252,10 +252,10 @@ namespace QBCS.Service.Implement
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
-            int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
+                int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
                 List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndLearningOutcome.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
