@@ -1,0 +1,131 @@
+﻿@model QBCS.Service.ViewModel.CourseViewModel
+@using QBCS.Service.ViewModel
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="text-align:right">
+    <a href="@Url.Action("Index", "Course", new { userId = ((UserViewModel)Session["user"]).Id})" 
+       class="btn btn-default" style="border-bottom:2px solid gray;border-right:2px solid gray; background-color:#fff">
+        Return to Index
+    </a>
+</div>
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-primary">Detail Course</h3>
+        </div>
+
+        <div class="card-body" style="padding-left:30px">
+            <div>
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-5">
+                                @Html.DisplayFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-5">
+                                @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-5">
+                                @Html.DisplayFor(model => model.Code)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                Default Number Of Question
+                            </div>
+                            <div class="col-md-5">
+                                @Html.DisplayFor(model => model.DefaultNumberOfQuestion)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="text-align:right">
+                                <a href="@Url.Action("Edit", "Course", new { id = Model.Id })" class="btn btn-primary">
+                                    Edit
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-primary">Topic in this course</h3>
+        </div>
+
+        <div class="card-body" style="padding-left:30px">
+            <div>
+                @foreach (var topic in Model.Topic)
+                {
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-5">
+                            @topic.Name
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5">
+                            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-5">
+                            @topic.Code
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="@Url.Action("Edit","Topic", new { id = topic.Id})" class="btn btn-primary">
+                            Edit
+                        </a>
+                    </div>
+                </div>
+                 }
+                </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-primary">Learning outcome in this course</h3>
+        </div>
+
+        <div class="card-body" style="padding-left:30px">
+            <div>
+                @foreach (var learningOutcome in Model.LearningOutcome)
+                {
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-5">
+                                @learningOutcome.Name
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-5">
+                                @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-5">
+                                @learningOutcome.Code
+                            </div>
+                        </div>
+                        <div class="row">
+                        <a href="@Url.Action("Edit","LearningOutcome", new { id = learningOutcome.Id})" class="btn btn-primary">
+                            Edit
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>

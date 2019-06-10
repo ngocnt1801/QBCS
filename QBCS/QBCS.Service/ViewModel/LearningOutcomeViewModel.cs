@@ -12,6 +12,7 @@ namespace QBCS.Service.ViewModel
         public string Name { get; set; }
         public string Code { get; set; }
         public int CourseId { get; set; }
+        public string CourseName { get; set; }
         public bool IsDisable { get; set; }
         public string IdValue { get; set; }
         public void UpdateIdValue()
