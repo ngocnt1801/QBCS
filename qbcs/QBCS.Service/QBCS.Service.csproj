@@ -64,6 +64,7 @@
     <Compile Include="Implement\PartOfExamService.cs" />
     <Compile Include="Implement\QuestionService.cs" />
     <Compile Include="Implement\RoleService.cs" />
+    <Compile Include="Implement\RuleService.cs" />
     <Compile Include="Implement\TestService.cs" />
     <Compile Include="Implement\TopicService.cs" />
     <Compile Include="Interface\IExaminationService.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
+    <Compile Include="Interface\IRuleService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
     <Compile Include="Interface\ICourseService.cs" />
@@ -98,6 +100,8 @@
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\TopicInExamination.cs" />
     <Compile Include="ViewModel\Temp.cs" />
+    <Compile Include="ViewModel\RuleValueViewModel.cs" />
+    <Compile Include="ViewModel\RuleViewModel.cs" />
     <Compile Include="ViewModel\TopicViewModel.cs" />
     <Compile Include="ViewModel\UserDetailViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />

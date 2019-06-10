@@ -14,6 +14,8 @@ namespace QBCS.Service.ViewModel
         public string Code { get; set; }
         public int DepartmentId { get; set; }
         public int DefaultNumberOfQuestion { get; set; }
+        public List<TopicViewModel> Topic { get; set; }
+        public List<LearningOutcomeViewModel> LearningOutcome { get; set; }
         public bool IsDisable { get; set; }
 
     }
