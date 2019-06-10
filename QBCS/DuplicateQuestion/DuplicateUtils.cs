@@ -58,7 +58,7 @@ namespace DuplicateQuestion
                         string source = StringUtils.NormalizeString(question.QuestionContent);
                         //Check question content
                         var result = LevenshteinDistance.CalculateSimilarity(source, target);
-
+                        item.Test = result.ToString();
                         if (result >= 70)
                         {
                             //check option
@@ -144,7 +144,6 @@ namespace DuplicateQuestion
                             if (result >= 70)
                             {
                                 double optionResult = TFAlgorithm.CaculateSimilar(rightOptionSource, rightOptionTaget);
-
                                 if (optionResult >= 70)
                                 {
                                     item.Status = (int)StatusEnum.Delete;
@@ -205,13 +204,14 @@ namespace DuplicateQuestion
                     //update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
-                       "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport " +
+                       "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport, OptionsContent=@test " +
                        "WHERE Id=@id",
                        connection
                        );
                     command.Parameters.AddWithValue("@status", item.Status);
                     command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
                     command.Parameters.AddWithValue("@duplicatedWithImport", item.DuplicatedWithImportId);
+                    command.Parameters.AddWithValue("@test", item.Test);
                     command.Parameters.AddWithValue("@id", item.Id);
 
                     command.ExecuteNonQuery();
@@ -457,7 +457,7 @@ namespace DuplicateQuestion
                         optionCommand.Parameters.AddWithValue("@isCorrect", option.IsCorrect);
                         optionCommand.ExecuteNonQuery();
                     }
-                    
+
                 }
             }
         }
