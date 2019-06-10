@@ -13,6 +13,7 @@ namespace QBCS.Entity
         public QuestionTemp()
         {
             OptionTemps = new HashSet<OptionTemp>();
+            QuestionTemp1 = new HashSet<QuestionTemp>();
         }
 
         public int Id { get; set; }
@@ -30,11 +31,18 @@ namespace QBCS.Entity
         [StringLength(50)]
         public string Code { get; set; }
 
+        public int? DuplicateInImportId { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OptionTemp> OptionTemps { get; set; }
 
-        public virtual Question Question { get; set; }
+        public virtual Question DuplicatedWithBank { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QuestionTemp> QuestionTemp1 { get; set; }
+
+        public virtual QuestionTemp DuplicatedWithImport { get; set; }
     }
 }

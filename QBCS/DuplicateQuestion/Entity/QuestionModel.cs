@@ -13,8 +13,9 @@ namespace DuplicateQuestion.Entity
         public string QuestionCode { get; set; }
         public int Hashcode { get; set; }
         public int? DuplicatedQuestionId { get; set; }
+        public int? DuplicatedWithImportId { get; set; }
         public List<OptionModel> Options { get; set; }
         public int Status { get; set; }
-
+        public bool IsBank { get; set; }
     }
 }

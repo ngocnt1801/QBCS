@@ -12,6 +12,6 @@
         <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
     </div>*@
 <div id="question-import">
-    @Html.Partial("_AllQuestion", Model.Questions)
+    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions)
 </div>
 <button class="btn btn-primary float-right col-md-1" id="import-btn" data-id="@Model.Id">Import</button>

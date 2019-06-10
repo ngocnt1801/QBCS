@@ -1,7 +1,7 @@
-﻿using DuplicateQuestion.Entity;
-using QBCS.Entity;
+﻿using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
+using QBCS.Service.Enum;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
@@ -43,16 +43,25 @@ namespace QBCS.Service.Implement
                         ImportId = importId,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
-                            Id = q.Question.Id,
-                            CourseName = q.Question.Course.Name,
-                            Code = q.Question.QuestionCode,
-                            QuestionContent = q.Question.QuestionContent,
-                            Options = q.Question.Options.Select(o => new OptionViewModel
+                            Id = q.DuplicatedWithBank.Id,
+                            CourseName = "Bank: " + q.DuplicatedWithBank.Course.Name,
+                            Code = q.DuplicatedWithBank.QuestionCode,
+                            QuestionContent = q.DuplicatedWithBank.QuestionContent,
+                            Options = q.DuplicatedWithBank.Options.Select(o => new OptionViewModel
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
-                        } : null,
+                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel {
+                            Id = q.DuplicatedWithImport.Id,
+                            Code = q.DuplicatedWithImport.Code,
+                            CourseName = "Import File",
+                            QuestionContent = q.DuplicatedWithImport.QuestionContent,
+                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList()
+                        } : null),
                         Options = q.OptionTemps.Select(o => new OptionViewModel
                         {
                             OptionContent = o.OptionContent,
@@ -76,18 +85,35 @@ namespace QBCS.Service.Implement
                     QuesitonContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
-                    DuplicatedQuestion = new QuestionViewModel
+                    DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
                     {
-                        Id = questionTemp.Question.Id,
-                        CourseName = questionTemp.Question.Course.Name,
-                        Code = questionTemp.Question.QuestionCode,
-                        QuestionContent = questionTemp.Question.QuestionContent,
-                        Options = questionTemp.Question.Options.Select(o => new OptionViewModel
+                        Id = questionTemp.DuplicatedWithBank.Id,
+                        CourseName = questionTemp.DuplicatedWithBank.Course.Name,
+                        Code = questionTemp.DuplicatedWithBank.QuestionCode,
+                        QuestionContent = questionTemp.DuplicatedWithBank.QuestionContent,
+                        Options = questionTemp.DuplicatedWithBank.Options.Select(o => new OptionViewModel
                         {
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }
+                    }) : (new QuestionViewModel
+                    {
+                        Id = questionTemp.DuplicatedWithImport.Id,
+                        CourseName = "Import file",
+                        Code = questionTemp.DuplicatedWithImport.Code,
+                        QuestionContent = questionTemp.DuplicatedWithImport.QuestionContent,
+                        Options = questionTemp.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        }).ToList()
+                    }),
+                    Options = questionTemp.OptionTemps.Select(o => new OptionViewModel
+                    {
+                        Id = o.Id,
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
                 };
             }
 
@@ -110,6 +136,15 @@ namespace QBCS.Service.Implement
             {
                 entity.QuestionContent = question.QuesitonContent;
                 entity.Status = (int)StatusEnum.NotCheck;
+                foreach (var option in entity.OptionTemps)
+                {
+                    var updatedOption = question.Options.Where(o => o.Id == option.Id).FirstOrDefault();
+                    if (updatedOption != null)
+                    {
+                        option.IsCorrect = updatedOption.IsCorrect;
+                        option.OptionContent = updatedOption.OptionContent;
+                    }
+                }
 
                 unitOfWork.Repository<QuestionTemp>().Update(entity);
                 unitOfWork.SaveChanges();

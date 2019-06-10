@@ -1,4 +1,4 @@
-﻿using DuplicateQuestion.Entity;
+﻿using QBCS.Service.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

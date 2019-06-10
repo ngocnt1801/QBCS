@@ -17,24 +17,14 @@
         <div class="container">
             @using (Html.BeginForm("EditQuestion", "Import", FormMethod.Post, new { @class = "form-group" }))
             {
-                @Html.TextAreaFor(model => model.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
-                @*@for (var i = 0; i < Model.Options.Count; i++)
-            {
-                if (Model.Options[i].IsCorrect == true)
-                {
-                    <div class="text-green-success">
-                        @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
-                    </div>
-                }
-                else
+                @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
+                for (var i = 0; i < Model.Options.Count; i++)
                 {
                     <div class="">
-                        @Html.EditorFor(optionItem => Model.Options[i], new { index = i + 1 })
+                        @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
                     </div>
+                    <br />
                 }
-
-                <br />
-            }*@
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)
                 <input type="submit" name="Save" class="btn btn-primary float-right" />

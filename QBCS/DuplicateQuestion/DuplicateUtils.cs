@@ -90,13 +90,27 @@ namespace DuplicateQuestion
                             if (optionCheckResult > 0.5)
                             {
                                 item.Status = (int)StatusEnum.Delete;
-                                item.DuplicatedQuestionId = question.Id;
+                                if (question.IsBank)
+                                {
+                                    item.DuplicatedQuestionId = question.Id;
+                                }
+                                else
+                                {
+                                    item.DuplicatedWithImportId = question.Id;
+                                }
                                 isUpdate = true;
                             }
                             else
                             {
                                 item.Status = (int)StatusEnum.Editable;
-                                item.DuplicatedQuestionId = question.Id;
+                                if (question.IsBank)
+                                {
+                                    item.DuplicatedQuestionId = question.Id;
+                                }
+                                else
+                                {
+                                    item.DuplicatedWithImportId = question.Id;
+                                }
                                 isUpdate = true;
                             }
 
@@ -134,13 +148,27 @@ namespace DuplicateQuestion
                                 if (optionResult >= 70)
                                 {
                                     item.Status = (int)StatusEnum.Delete;
-                                    item.DuplicatedQuestionId = question.Id;
+                                    if (question.IsBank)
+                                    {
+                                        item.DuplicatedQuestionId = question.Id;
+                                    }
+                                    else
+                                    {
+                                        item.DuplicatedWithImportId = question.Id;
+                                    }
                                     isUpdate = true;
                                 }
                                 else
                                 {
                                     item.Status = (int)StatusEnum.Editable;
-                                    item.DuplicatedQuestionId = question.Id;
+                                    if (question.IsBank)
+                                    {
+                                        item.DuplicatedQuestionId = question.Id;
+                                    }
+                                    else
+                                    {
+                                        item.DuplicatedWithImportId = question.Id;
+                                    }
                                     isUpdate = true;
                                 }
 
@@ -154,7 +182,14 @@ namespace DuplicateQuestion
                                 if (resultQwithO >= 70)
                                 {
                                     item.Status = (int)StatusEnum.Delete;
-                                    item.DuplicatedQuestionId = question.Id;
+                                    if (question.IsBank)
+                                    {
+                                        item.DuplicatedQuestionId = question.Id;
+                                    }
+                                    else
+                                    {
+                                        item.DuplicatedWithImportId = question.Id;
+                                    }
                                     isUpdate = true;
                                 }
                             }
@@ -170,12 +205,13 @@ namespace DuplicateQuestion
                     //update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
-                       "SET Status=@status, DuplicatedId=@duplicatedId " +
+                       "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport " +
                        "WHERE Id=@id",
                        connection
                        );
                     command.Parameters.AddWithValue("@status", item.Status);
                     command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
+                    command.Parameters.AddWithValue("@duplicatedWithImport", item.DuplicatedWithImportId);
                     command.Parameters.AddWithValue("@id", item.Id);
 
                     command.ExecuteNonQuery();
@@ -247,6 +283,7 @@ namespace DuplicateQuestion
                         question = new QuestionModel();
                         question.QuestionContent = (string)reader["QuestionContent"];
                         question.Id = (int)reader["Id"];
+                        question.IsBank = true;
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
@@ -299,6 +336,7 @@ namespace DuplicateQuestion
                         question.QuestionCode = (string)reader["Code"];
                         question.Status = (int)StatusEnum.Success;
                         question.Id = (int)reader["Id"];
+                        question.IsBank = false;
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
@@ -391,6 +429,7 @@ namespace DuplicateQuestion
                     {
                         id = (int)reader["Id"];
                     }
+                    reader.Close();
                     foreach (var option in question.Options)
                     {
                         option.QuestionId = id;
