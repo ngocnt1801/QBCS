@@ -5,7 +5,6 @@
     var courseClass = "";
     var questionClass = "";
     var userClass = "";
-    var statisticClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     switch (controller)
     {
@@ -20,9 +19,6 @@
             break;
         case "User":
             userClass = "active";
-            break;
-        case "Statistic":
-            statisticClass = "active";
             break;
     }
     }
@@ -84,14 +80,7 @@
             <span>Profile</span>
         </a>
     </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-    <li class="nav-item @statisticClass">
-        <a class="nav-link" href="@Url.Action("Index", "Statistic",new { id = ((UserViewModel)Session["user"]).Id })">
-            <i class="fas fa-fw fa-chart-line"></i>
-            <span>Statistic</span>
-        </a>
-    </li>
+
 
 
 
@@ -99,8 +88,8 @@
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
-    @*<div class="text-center d-none d-md-inline">
+    <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>*@
+    </div>
 
 </ul>

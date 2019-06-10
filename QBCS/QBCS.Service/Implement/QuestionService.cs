@@ -1,17 +1,16 @@
-﻿using QBCS.Service.Interface;
-using System.Collections.Generic;
-using System.Linq;
-using QBCS.Entity;
-using QBCS.Repository.Interface;
+﻿using QBCS.Entity;
 using QBCS.Repository.Implement;
+using QBCS.Repository.Interface;
+using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Web;
 using System.Xml.Serialization;
-using System.IO;
-using QBCS.Service.Utilities;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace QBCS.Service.Implement
 {

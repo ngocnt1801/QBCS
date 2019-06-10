@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QBCS.Service.ViewModel
+namespace DuplicateQuestion.Entity
 {
-    public class NotificationViewModel
+    public class ImportModel
     {
         public int ImportId { get; set; }
-        public string Message { get; set; }
         public int Status { get; set; }
+        public int CourseId { get; set; }
     }
 }

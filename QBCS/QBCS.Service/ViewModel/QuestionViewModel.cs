@@ -10,6 +10,7 @@ namespace QBCS.Service.ViewModel
     {
         public int Id { get; set; }
         public string QuestionContent { get; set; }
+        public string Code { get; set; }
         public int Frequency { get; set; }
         public int Priority { get; set; }
         public int CourseId { get; set; }

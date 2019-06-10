@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DuplicateQuestion;
+using Newtonsoft.Json;
 using QBCS.Service.Implement;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -25,6 +26,12 @@ namespace QBCS.Web.Controllers
             options.Add("Option 2");
             options.Add("Option 3");
             return JsonConvert.SerializeObject(options, Formatting.Indented);
+        }
+
+        [HttpGet]
+        public double TestTF(string s1, string s2)
+        {
+            return TFAlgorithm.CaculateSimilar(s1, s2);
         }
 
         // GET api/values/test

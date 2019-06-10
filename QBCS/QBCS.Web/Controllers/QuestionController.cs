@@ -3,6 +3,7 @@ using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class QuestionController : Controller
     {
         private IQuestionService questionService;
@@ -21,6 +23,7 @@ namespace QBCS.Web.Controllers
         private ITopicService topicService;
         private ILevelService levelService;
         private ILearningOutcomeService lo;
+        private IImportService importService;
 
         public QuestionController()
         {
@@ -29,6 +32,7 @@ namespace QBCS.Web.Controllers
             topicService = new TopicService();
             levelService = new LevelService();
             lo = new LearningOutcomeService();
+            importService = new ImportService();
         }
 
         // GET: Question

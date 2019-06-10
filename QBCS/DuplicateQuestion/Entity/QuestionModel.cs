@@ -10,11 +10,12 @@ namespace DuplicateQuestion.Entity
     {
         public int Id { get; set; }
         public string QuestionContent { get; set; }
+        public string QuestionCode { get; set; }
         public int Hashcode { get; set; }
-        public int DuplicatedQuestionId { get; set; }
-        public List<String> RightOptions { get; set; }
-        public List<String> WrongOptions { get; set; }
+        public int? DuplicatedQuestionId { get; set; }
+        public int? DuplicatedWithImportId { get; set; }
+        public List<OptionModel> Options { get; set; }
         public int Status { get; set; }
-
+        public bool IsBank { get; set; }
     }
 }

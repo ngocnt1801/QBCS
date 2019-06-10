@@ -39,7 +39,6 @@ namespace QBCS.Web
                 "~/Content/sb-admin-2.css",
                 "~/Content/font-awesome/all.css",
                 "~/Content/switch-button-style.css",
-                "~/Content/font-awesome/all.css",
                 "~/Content/custom-css.css"
                
                 ));
@@ -69,6 +68,16 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/importfile").Include(
                 "~/Scripts/myjs/import-file.js",
                 "~/Scripts/myjs/change-partial-view.js"
+                ));
+
+            //signalR
+            bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(
+                "~/Scripts/jquery.signalR-2.4.1.js"
+                ));
+
+            //notification
+            bundles.Add(new ScriptBundle("~/bundle/scripts/notification").Include(
+                "~/Scripts/myjs/notification.js"
                 ));
         }
     }

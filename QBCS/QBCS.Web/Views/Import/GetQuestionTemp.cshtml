@@ -1,0 +1,63 @@
+﻿@model QBCS.Service.ViewModel.QuestionTempViewModel
+
+@{
+    ViewBag.Title = "Edit Question";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+    int counter = 0;
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Question</h6>
+    </div>
+
+    <div class="card-body">
+        <div class="container">
+            @using (Html.BeginForm("EditQuestion", "Import", FormMethod.Post, new { @class = "form-group" }))
+            {
+                @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
+                for (var i = 0; i < Model.Options.Count; i++)
+                {
+                    <div class="">
+                        @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
+                    </div>
+                    <br />
+                }
+                @Html.HiddenFor(model => model.ImportId)
+                @Html.HiddenFor(model => model.Id)
+                <input type="submit" name="Save" class="btn btn-primary float-right" />
+                <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
+            }
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Duplicated Question</h6>
+    </div>
+
+    <div class="card-body">
+
+        @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
+        @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
+        {
+            if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)
+            {
+                <div class="container-fluid text-green-success">
+                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
+                </div>
+            }
+            else
+            {
+                <div class="container-fluid">
+                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
+                </div>
+            }
+
+            <br />
+        }
+
+    </div>
+</div>

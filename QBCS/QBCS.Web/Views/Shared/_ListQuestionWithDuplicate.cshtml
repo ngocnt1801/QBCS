@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionTempViewModel>
+@using QBCS.Service.Enum
+
 @{
     ViewBag.Title = "ListQuestion";
     int counter = 0;
@@ -8,8 +10,8 @@
 <div class="card shadow mb-4">
 
     <div class="card-body">
-        <div class="table-responsive text-custom">
-            <table class="table table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -22,16 +24,16 @@
                     {
                         var borderLeft = "";
                         var action = "";
-                        if (item.Status == DuplicateQuestion.Entity.StatusEnum.Delete)
+                        if (item.Status == StatusEnum.Delete)
                         {
                             borderLeft = "border-left-danger";
                         }
-                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Editable)
+                        else if (item.Status == StatusEnum.Editable)
                         {
                             borderLeft = "border-left-warning";
                             action = "editableTemp";
                         }
-                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Success)
+                        else if (item.Status == StatusEnum.Success)
                         {
                             borderLeft = "border-left-success";
                         }
@@ -41,13 +43,13 @@
                             }
                             <td class="@borderLeft">@counter</td>
                             <td>
-                                <p>@item.Code</p>
+                                <p>Question Code: @item.Code</p>
                                 @item.QuesitonContent
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {
                                     if (item.Options[i].IsCorrect == true)
                                     {
-                                        <div class="container-fluid text-right-answer">
+                                        <div class="container-fluid text-green-success">
                                             @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                         </div>
                                     }
@@ -62,15 +64,15 @@
                                 }
                             </td>
                             <td>
-                                @if (item.DuplicatedQuestion != null)
+                                @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
                                 {
-                                <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                    <p>@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
                                     for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
                                     {
                                         if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
                                         {
-                                            <div class="container-fluid text-right-answer">
+                                            <div class="container-fluid text-green-success">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
                                             </div>
                                         }
@@ -93,4 +95,5 @@
         </div>
     </div>
 </div>
+
 

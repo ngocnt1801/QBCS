@@ -1,13 +1,12 @@
 ﻿using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
+using QBCS.Service.Enum;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
-using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
 {
@@ -19,11 +18,21 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
-        public int GetNotifyImportResult(int userId)
+        public List<NotificationViewModel> GetNotifyImportResult(int userId)
         {
-            int count = 0;
-            count = unitOfWork.ImportRepository().GetNotifyImportResult(userId);
-            return count;
+            var notificationList = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value)
+                                                                            .Select(im => new NotificationViewModel {
+                                                                                ImportId = im.Id,
+                                                                                Message = im.Status == (int)StatusEnum.Checked ? "Your import questions have already checked, click to see result!" : "Your question added to bank",
+                                                                                Status = im.Status.Value
+                                                                            })
+                                                                            .ToList();
+            return notificationList;
+        }
+
+        public void RegisterNotification(OnChangeEventHandler eventHandler)
+        {
+            unitOfWork.ImportRepository().RegisterNotificationImportResult(eventHandler);
         }
     }
 }
