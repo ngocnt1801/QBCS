@@ -38,11 +38,11 @@ namespace QBCS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OptionTemp> OptionTemps { get; set; }
 
-        public virtual Question DuplicatedWithBank { get; set; }
+        public virtual Question Question { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionTemp> QuestionTemp1 { get; set; }
 
-        public virtual QuestionTemp DuplicatedWithImport { get; set; }
+        public virtual QuestionTemp QuestionTemp2 { get; set; }
     }
 }
