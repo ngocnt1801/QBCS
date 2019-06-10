@@ -69,6 +69,19 @@ namespace QBCS.Web
                 "~/Scripts/myjs/import-file.js",
                 "~/Scripts/myjs/change-partial-view.js"
                 ));
+            //smartwizard
+            bundles.Add(new ScriptBundle("~/bundle/scripts/smartwizard").Include(
+                "~/Scripts/myjs/jquery.smartWizard.min.js",
+                "~/Scripts/myjs/generate-question.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/smartwizard").Include(
+                "~/Content/smart_wizard_theme_arrows.min.css"
+                ));
+            //Checkbox 
+            bundles.Add(new StyleBundle("~/bundle/content/checkbox").Include(
+                "~/Content/checkbox.min.css"
+                ));
 
             //signalR
             bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(

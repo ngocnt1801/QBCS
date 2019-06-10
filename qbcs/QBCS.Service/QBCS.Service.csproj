@@ -79,6 +79,7 @@
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
+    <Compile Include="ViewModel\ExaminationViewModel.cs" />
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\NotificationViewModel.cs" />

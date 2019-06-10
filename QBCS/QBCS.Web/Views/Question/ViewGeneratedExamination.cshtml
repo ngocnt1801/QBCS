@@ -1,124 +1,151 @@
-﻿@{
+﻿@model List<QBCS.Service.ViewModel.ExaminationViewModel>
+@{
     ViewBag.Title = "Generate Exam";
-    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+    var counter = 0;
 }
-<h2>Examination</h2>
-<div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Examination</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+        </div>
+        <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th>Question</th>
-                    <th>Level</th>
-                    <th>Mark</th>
+                    <th>Level</th>  
+                    <th>Topic/Learning Outcome</th>                
                 </tr>
             </thead>
             <tbody>
-                <tr>
+
+                @foreach (var exam in Model)
+                {
+                    <tr>
+                        @{
+                            counter++;
+                        }
+                        <td>@counter</td>
+                        <td>
+                            <div>
+                                <p>@exam.Question.QuestionContent</p>
+                                @foreach (var option in exam.Question.Options)
+                                {
+                                    if (option.IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-green-success">
+                                            @option.OptionContent
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                            @option.OptionContent
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            @exam.Level.Name
+                        </td>
+                        <td>
+                            @if(exam.LearningOutcome == null)
+                            {
+                                @Html.DisplayFor(topic => exam.Topic.Name)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(lo => exam.LearningOutcome.Name)
+                            }
+                        </td>
+                    </tr>
+                }
+                @*<tr>
                     <td>1</td>
                     <td>
                         <div class="row">
                             <p>By switching on and off, the __ can be used to represent the 1s and 0s that are foundation of all that goes on in the computers ?</p>
-                            <br />
                             <div class="container-fluid text-green-success">
-                                A. capacitor
+                                capacitor
                             </div>
                             <div class="container-fluid">
-                                B. resistor
+                                resistor
                             </div>
                             <div class="container-fluid">
-                                C. transitor
+                                transitor
                             </div>
                             <div class="container-fluid">
-                                D. inductor
+                                inductor
                             </div>
                         </div>
                     </td>
                     <td>
                         Easy
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <input type="text" class="form-control" />
-                        </div>
-                    </td>
+                    </td>                   
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>
                         <div class="row">
                             <p>By switching on and off, the __ can be used to represent the 1s and 0s that are foundation of all that goes on in the computers ?</p>
-                            <br />
                             <div class="container-fluid text-green-success">
-                                A. capacitor
+                                capacitor
                             </div>
                             <div class="container-fluid">
-                                B. resistor
+                                resistor
                             </div>
                             <div class="container-fluid">
-                                C. transitor
+                                transitor
                             </div>
                             <div class="container-fluid">
-                                D. inductor
+                                inductor
                             </div>
                         </div>
                     </td>
                     <td>
                         Normal
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <input type="text" class="form-control" />
-                        </div>
-                    </td>
+                    </td>                    
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>
                         <div class="row">
                             <p>By switching on and off, the __ can be used to represent the 1s and 0s that are foundation of all that goes on in the computers ?</p>
-                            <br />
                             <div class="container-fluid text-green-success">
-                                A. capacitor
+                                capacitor
                             </div>
                             <div class="container-fluid">
-                                B. resistor
+                                resistor
                             </div>
                             <div class="container-fluid">
-                                C. transitor
+                                transitor
                             </div>
                             <div class="container-fluid">
-                                D. inductor
+                                inductor
                             </div>
                         </div>
                     </td>
                     <td>
                         Hard
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <input type="text" class="form-control" />
-                        </div>
-                    </td>
-                </tr>
+                    </td>                    
+                </tr>*@
             </tbody>
         </table>
+        </div>
     </div>
-</div>
-@*<table class="table table-striped">
+        <div class="row">
+            <div>
+                <h5>File extension :</h5>
+            </div>
+            <div class="col-lg-2">
+                <select class="form-control">
+                    <option>GIFT</option>
+                    <option>XML</option>
+                </select>
+            </div>
 
-    </table>*@
-<div class="row">
-    <div>
-        <h5>File extension :</h5>
-    </div>
-    <div class="col-lg-2">
-        <select class="form-control">
-            <option>GIFT</option>
-            <option>XML</option>
-        </select>
-    </div>
-
-    <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
-</div>
+            <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
+        </div>
