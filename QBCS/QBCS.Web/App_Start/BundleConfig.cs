@@ -38,7 +38,9 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundles/content/template").Include(
                 "~/Content/sb-admin-2.css",
                 "~/Content/font-awesome/all.css",
-                "~/Content/switch-button-style.css"
+                "~/Content/switch-button-style.css",
+                "~/Content/custom-css.css"
+               
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(

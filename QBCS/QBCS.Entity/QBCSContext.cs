@@ -32,7 +32,6 @@ namespace QBCS.Entity
         public virtual DbSet<Rule> Rules { get; set; }
         public virtual DbSet<RuleKey> RuleKeys { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<User> Users { get; set; }
 

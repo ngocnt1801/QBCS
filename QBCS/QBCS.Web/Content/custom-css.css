@@ -1,0 +1,8 @@
+﻿.text-custom {
+  color: #000 !important;
+   font-weight: 500;
+}
+.text-right-answer {
+    color: #0c2f94 !important;
+    font-weight: bold;
+}
