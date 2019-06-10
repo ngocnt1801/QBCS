@@ -16,9 +16,9 @@
 
 @if (Model.Status == (int)StatusEnum.Done)
 {
-    <p>You have:</p>
-    <p>- @Model.NumberOfSuccess questions were inserted into bank</p>
-    <p>- @Model.NumberOfFail questions were not inserted</p>
+    <p class="text-custom">You have:</p>
+    <p class="text-custom">- @Model.NumberOfSuccess questions were inserted into bank</p>
+    <p class="text-custom">- @Model.NumberOfFail questions were not inserted</p>
 }
 else
 {

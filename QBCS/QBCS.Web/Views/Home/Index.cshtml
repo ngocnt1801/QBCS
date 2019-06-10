@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid">
+<div class="container-fluid ml-5">
     <div class="row">
 
-        <div class="col-md-9">
+        <div class="col-md-10">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Import Question</h6>
@@ -38,9 +38,9 @@
                             }
                         </div>
                         <!-- COMPONENT END -->
-                        <div class="form-group">
+                        <div class="form-group text-custom">
                             <i class="text-dark text-custom">Choose a file:</i>
-                            <div class="input-group input-file" name="questionFile">                      
+                            <div class="input-group input-file text-custom" name="questionFile">                      
                                 <input type="text" class="form-control"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-import-file btn-choose" type="button">Choose</button>
@@ -57,7 +57,7 @@
             </div>
 
         </div>
-        <div class="col-md-3">
+        @*<div class="col-md-3">
             <div class="col-xl-12 col-md-12 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 
 
