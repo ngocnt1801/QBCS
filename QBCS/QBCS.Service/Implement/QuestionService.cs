@@ -237,6 +237,7 @@ namespace QBCS.Service.Implement
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+
             return (int)question.Frequency;
         }
         public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
