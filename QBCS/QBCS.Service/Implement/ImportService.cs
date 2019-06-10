@@ -27,7 +27,10 @@ namespace QBCS.Service.Implement
             var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId).FirstOrDefault();
             if (import != null)
             {
-                import.Status = (int)StatusEnum.Fixing;
+                if (import.Status != (int)StatusEnum.Done)
+                {
+                    import.Status = (int)StatusEnum.Fixing;
+                }
                 import.Seen = true;
                 unitOfWork.Repository<Import>().Update(import);
                 unitOfWork.SaveChanges();
@@ -35,6 +38,9 @@ namespace QBCS.Service.Implement
                 return new ImportResultViewModel
                 {
                     Id = import.Id,
+                    Status = import.Status.Value,
+                    NumberOfSuccess = 5, //fix here
+                    NumberOfFail= 1, //fix here
                     Questions = import.QuestionTemps.Select(q => new QuestionTempViewModel
                     {
                         Id = q.Id,

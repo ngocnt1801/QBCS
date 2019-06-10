@@ -1,4 +1,6 @@
 ﻿@model QBCS.Service.ViewModel.ImportResultViewModel
+@using QBCS.Service.Enum
+
 @{
     ViewBag.Title = "GetResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,7 +13,18 @@
         <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
         <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
     </div>*@
-<div id="question-import">
-    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions)
-</div>
-<button class="btn btn-primary float-right col-md-1" id="import-btn" data-id="@Model.Id">Import</button>
+
+@if (Model.Status == (int)StatusEnum.Done)
+{
+    <p>You have:</p>
+    <p>- @Model.NumberOfSuccess questions were inserted into bank</p>
+    <p>- @Model.NumberOfFail questions were not inserted</p>
+}
+else
+{
+    <div id="question-import">
+        @Html.Partial("_ListQuestionWithDuplicate", Model.Questions)
+    </div>
+    <button class="btn btn-primary float-right col-md-1" id="import-btn" data-id="@Model.Id">Import</button>
+}
+
