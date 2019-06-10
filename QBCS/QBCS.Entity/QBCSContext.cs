@@ -12,6 +12,7 @@ namespace QBCS.Entity
         {
         }
 
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseDepartment> CourseDepartments { get; set; }
         public virtual DbSet<CourseOfUser> CourseOfUsers { get; set; }

@@ -6,26 +6,25 @@ namespace QBCS.Entity
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RuleKey")]
-    public partial class RuleKey
+    [Table("Category")]
+    public partial class Category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public RuleKey()
+        public Category()
         {
-            Rules = new HashSet<Rule>();
+            Questions = new HashSet<Question>();
         }
 
         public int Id { get; set; }
 
-        [StringLength(50)]
-        public string Code { get; set; }
-
-        [StringLength(255)]
+        [StringLength(200)]
         public string Name { get; set; }
 
-        public int? GroupType { get; set; }
+        public int? CourseId { get; set; }
+
+        public virtual Course Course { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rule> Rules { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

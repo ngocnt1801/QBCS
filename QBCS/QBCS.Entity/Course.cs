@@ -12,6 +12,7 @@ namespace QBCS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Course()
         {
+            Categories = new HashSet<Category>();
             CourseOfUsers = new HashSet<CourseOfUser>();
             Examinations = new HashSet<Examination>();
             LearningOutcomes = new HashSet<LearningOutcome>();
@@ -33,6 +34,9 @@ namespace QBCS.Entity
         public int? DefaultNumberOfQuestion { get; set; }
 
         public bool? IsDisable { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category> Categories { get; set; }
 
         public virtual CourseDepartment CourseDepartment { get; set; }
 
