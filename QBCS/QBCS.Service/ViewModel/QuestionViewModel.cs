@@ -23,5 +23,6 @@ namespace QBCS.Service.ViewModel
         public QuestionViewModel DuplicatedQuestion { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public LevelViewModel Level { get; set; }
+        public string QuestionCode { get; set; }
     }
 }

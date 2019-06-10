@@ -397,7 +397,6 @@ namespace QBCS.Service.Implement
                     //    unitOfWork.SaveChanges();
                     //    check = true;
                     //}
-
                     //reader.Close();
                 }
                 if (extensionFile.Equals(".txt"))
@@ -417,7 +416,7 @@ namespace QBCS.Service.Implement
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
-                            OptionTemps = q.Options.Select (o => new OptionTemp()
+                            OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect
@@ -426,7 +425,7 @@ namespace QBCS.Service.Implement
                         ImportedDate = importTime
 
                     };
-                   
+
                 }
                 if (import.QuestionTemps.Count() > 0)
                 {
@@ -458,6 +457,19 @@ namespace QBCS.Service.Implement
 
             return check;
         }
-    }
+    
+    public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
 
+            return (int)question.Frequency;
+        }
+        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            return (int)question.Frequency;
+        }
+    }
 }
