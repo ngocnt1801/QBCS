@@ -108,5 +108,40 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
             return true;
         }
+        public CourseViewModel GetDetailCourseById(int id)
+        {
+            var course = unitOfWork.Repository<Course>().GetById(id);
+            var listTopic = new List<TopicViewModel>();
+            var listLearningOutcome = new List<LearningOutcomeViewModel>();
+            foreach(Topic topic in course.Topics)
+            {
+                var topicVM = new TopicViewModel()
+                {
+                    Id = topic.Id,
+                    Code = topic.Code,
+                    Name = topic.Name
+                };
+                listTopic.Add(topicVM);
+            }
+            foreach(LearningOutcome learningOutcome in course.LearningOutcomes)
+            {
+                var learningOutcomeVM = new LearningOutcomeViewModel()
+                {
+                    Id = learningOutcome.Id,
+                    Code = learningOutcome.Code,
+                    Name = learningOutcome.Name
+                };
+                listLearningOutcome.Add(learningOutcomeVM);
+            }
+            var courseVM = new CourseViewModel()
+            {
+                Code = course.Code,
+                Name = course.Name,
+                DefaultNumberOfQuestion = (int)course.DefaultNumberOfQuestion,
+                Topic = listTopic,
+                LearningOutcome = listLearningOutcome
+            };
+            return courseVM;
+        }
     }
 }

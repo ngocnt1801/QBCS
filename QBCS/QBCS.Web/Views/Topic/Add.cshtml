@@ -11,6 +11,7 @@
     </div>
     
     <div class="card-body" style="padding-left:30px">
+        <div id="error" style="color:red"></div>
         <div>
             @using (Html.BeginForm())
             {
@@ -48,8 +49,8 @@
                     </div>
                     <div class="">
                         <div style="text-align:right">
-                            <button id="submit" class="btn-lg btn-primary">Add</button>
-                            <a href="@Url.Action("Index", "Topic")" class="btn-lg btn-default" style="border-bottom:2px solid gray;border-right:2px solid gray">Cancel</a>
+                            <button id="add" class="btn-lg btn-primary">Add</button>
+                            <a href="@Url.Action("Index", "Topic")" class="btn-lg btn-default" style="border-bottom:2px solid gray;border-right:2px solid gray">Return to Index</a>
                         </div>
                     </div>
                 </div>
@@ -58,8 +59,8 @@
     </div>
 </div>
 
-
 <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script>
     $(document).ready(function () {
     $.ajax({
@@ -78,12 +79,15 @@
             alert("Error");
         }
     });
-        $('#submit').on('click', function () {
+        $('#add').on('click', function (event) {
+            event.preventDefault();
             var topic = new Object();
             topic.Code = $('#Code').val();
             topic.Name = $('#Name').val();
             topic.CourseId = $('#Course').children(":selected").attr("id");
-            if (topic != null) {
+            if (topic.Code == "" || topic.Name == "") {
+                $('#error').text("*Code and Name must be filled");
+            }else if (topic != null) {
                 $.ajax({
                 type: "POST",
                 url: '@Url.Action("Add","Topic")',

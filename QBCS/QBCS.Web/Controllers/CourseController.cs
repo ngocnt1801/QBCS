@@ -57,6 +57,11 @@ namespace QBCS.Web.Controllers
             }
             return View("ListCourse", result);
         }
+        public ActionResult Detail(int itemId)
+        {
+            var result = courseService.GetDetailCourseById(itemId);
+            return View(result);
+        }
         [HttpPost]
         public ActionResult UpdateDisable(int itemId)
         {

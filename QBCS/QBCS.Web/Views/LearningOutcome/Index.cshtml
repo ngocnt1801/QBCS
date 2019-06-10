@@ -62,9 +62,9 @@
                             @*@if (role == 3)
                                 {*@
                             <td width="20%">
-                                <a href="@Url.Action("Edit", "Topic", new { id = item.Id })" class="btn btn-primary">Edit</a>
+                                <a href="@Url.Action("Edit", "LearningOutcome", new { id = item.Id })" class="btn btn-primary">Edit</a>
                                 <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = item.Id })" class="btn btn-primary float-right ">
-                                    Delete
+                                    Disable
                                 </a>
                             </td>
                             @*}*@
