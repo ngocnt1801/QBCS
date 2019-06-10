@@ -11,6 +11,7 @@ namespace QBCS.Repository.Interface
         IQueryable<T> GetAll();
         T GetById(object id);
         void Insert(T entity);
+        T InsertAndReturn(T entity);
         void Update(T entity);
         void Delete(T entity);
     }

@@ -125,17 +125,16 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int userId, int courseId)
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId)
         {
+            var user = (UserViewModel)Session["user"];
+
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                
-                check = questionService.InsertQuestion(questionFile, userId, courseId); 
-               
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId); 
             }
-            var questions = questionService.GetAllQuestions();
-            return View("ImportResult", questions);
+            return RedirectToAction("Index", "Home");
         }
         public ActionResult GetPartialView(bool? isDuplicate)
         {

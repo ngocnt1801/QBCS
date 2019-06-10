@@ -1,6 +1,7 @@
 ﻿using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
+using QBCS.Service.Enum;
 using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
 
@@ -17,10 +19,12 @@ namespace QBCS.Service.Implement
     public class QuestionService : IQuestionService
     {
         private IUnitOfWork unitOfWork;
+        private IImportService importService;
 
         public QuestionService()
         {
             unitOfWork = new UnitOfWork();
+            importService = new ImportService();
         }
 
         public bool Add(QuestionViewModel question)
@@ -269,10 +273,7 @@ namespace QBCS.Service.Implement
             var import = new Import();
             try
             {
-                 
                 string extensionFile = Path.GetExtension(questionFile.FileName);
-                
-
                 if (extensionFile.Equals(".xml"))
                 {
                     List<QuestionTmpModel> listQuestionXml = new List<QuestionTmpModel>();
@@ -351,7 +352,7 @@ namespace QBCS.Service.Implement
                                 import.QuestionTemps.Add(new QuestionTemp()
                                 {
                                     QuestionContent = question.QuestionContent,
-                                    Status = 1,
+                                    Status = (int)StatusEnum.NotCheck,
                                     Code = question.Code,
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
@@ -415,6 +416,7 @@ namespace QBCS.Service.Implement
                         {
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
+                            Status = (int)StatusEnum.NotCheck,
                             OptionTemps = q.Options.Select (o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -428,8 +430,14 @@ namespace QBCS.Service.Implement
                 }
                 if (import.QuestionTemps.Count() > 0)
                 {
-                    unitOfWork.Repository<Import>().Insert(import);
+                    import.Status = (int)StatusEnum.NotCheck;
+                    import.CourseId = courseId;
+                    var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     unitOfWork.SaveChanges();
+                    //call store check duplicate
+                    Task.Factory.StartNew(() => {
+                        importService.ImportToBank(entity.Id);
+                    });
                     check = true;
                 }
                 else

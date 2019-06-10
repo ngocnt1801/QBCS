@@ -47,6 +47,7 @@ namespace QBCS.Service.Implement
                         QuesitonContent = q.QuestionContent,
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
+                        Code = q.Code,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.DuplicatedWithBank.Id,

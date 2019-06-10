@@ -40,6 +40,11 @@ namespace QBCS.Repository.Implement
             dbSet.Add(entity);
         }
 
+        public T InsertAndReturn(T entity)
+        {
+            return dbSet.Add(entity);
+        }
+
         public void Update(T entity)
         {
             context.Entry(entity).State = EntityState.Modified;
