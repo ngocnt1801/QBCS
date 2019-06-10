@@ -7,41 +7,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="col-md-9 personal-info">
+<div class="col-md-9 personal-info text-custom">
     <h3>Profile</h3>
 
     @using (Html.BeginForm("Update", "User", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        <div class="form-row">
-            <div class="form-group col-md-6">
+        <div class="form-row text-custom">
+            <div class="form-group col-md-6 text-custom">
                 <label class="control-label">
                     @Html.DisplayNameFor(model => model.User.Code):
                 </label>
-                <input class="form-control" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
+                <input class="form-control text-custom" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
             </div>
             <div class="form-group col-md-6">
                 <label class="control-label">
                     @Html.DisplayNameFor(model => model.User.Fullname):
                 </label>
-                <input class="form-control" type="text" name="Fullname" value="@Html.DisplayFor(model => model.User.Fullname)">
+                <input class="form-control text-custom" type="text" name="Fullname" value="@Html.DisplayFor(model => model.User.Fullname)">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label class="control-label">@Html.DisplayNameFor(model => model.User.Role):</label>
+                <label class="control-label text-custom">@Html.DisplayNameFor(model => model.User.Role):</label>
                 @Html.DropDownListFor(model => model.User.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
            {
                Text = v.ToString(),
                Value = ((int)v).ToString()
-           }).ToList(), new { @class = "form-control", Name = "Role" })
+           }).ToList(), new { @class = "form-control text-custom", Name = "Role" })
             </div>
 
             <div class="form-group col-md-6">
                 <label class="col-lg-3 control-label">
                     @Html.DisplayNameFor(model => model.User.Email):
                 </label>
-                <input class="form-control" type="text" name="Email" value="@Html.DisplayFor(model => model.User.Email)">
+                <input class="form-control text-custom" type="text" name="Email" value="@Html.DisplayFor(model => model.User.Email)">
             </div>
         </div>
 
@@ -49,7 +49,7 @@
             @Html.Hidden("Id", Model.User.Id)
             <div class="form-group col-md-12">
                 <input type="submit" class="btn btn-primary float-right" value="Save Changes">
-                <a class="btn btn-default float-right" href="@Url.Action("Index", "User")">Cancel</a>
+                <a class="btn btn-default float-right btn-light border-dark mr-2" href="@Url.Action("Index", "User")">Cancel</a>
             </div>
         </div>
     }

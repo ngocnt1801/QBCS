@@ -37,13 +37,17 @@ namespace QBCS.Web
             //basic template
             bundles.Add(new StyleBundle("~/bundles/content/template").Include(
                 "~/Content/sb-admin-2.css",
-                "~/Content/font-awesome/all.css"
+                "~/Content/font-awesome/all.css",
+                "~/Content/switch-button-style.css",
+                "~/Content/font-awesome/all.css",
+                "~/Content/custom-css.css"
+               
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
                 "~/Scripts/bootstrap.bundle.js",
                 "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js"
+                "~/Scripts/vendor/jquery/jquery.js"           
                 ));
 
             //data table

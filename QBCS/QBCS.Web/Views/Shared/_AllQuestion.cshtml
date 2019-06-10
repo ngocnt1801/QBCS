@@ -5,13 +5,11 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-
 <div class="card shadow mb-4">
 
-
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive text-custom">
+            <table class="table table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -23,28 +21,30 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        var borderLeft = "";
-                        if (item.IsDuplicated)
-                        {
-                            borderLeft = "border-left-danger";
-                        }
-                        else
-                        {
-                            borderLeft = "border-left-success";
-                        }
+                        //var borderLeft = "";
+                        //if (item.IsDuplicated)
+                        //{
+                        //    borderLeft = "border-left-danger";
+                        //}
+                        //else
+                        //{
+                        //    borderLeft = "border-left-success";
+                        //}
 
-                        <tr>
+                        <tr onClick="document.location.href='@Url.Action("GetQuestionByQuestionId",
+                      "Question",new { questionId  = item.Id})'">
                             @{
                                 counter++;
                             }
-                            <td class="@borderLeft">@counter</td>
+                            @*<td class="@borderLeft">@counter</td>*@
+                            <td>@counter</td>
                             <td>
                                 @Html.DisplayFor(modeItem => item.QuestionContent)
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {
                                     if (item.Options[i].IsCorrect == true)
                                     {
-                                        <div class="container-fluid text-green-success">
+                                        <div class="container-fluid text-right-answer">
                                             @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                         </div>
                                     }
@@ -66,7 +66,7 @@
                                     {
                                         if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
                                         {
-                                            <div class="container-fluid text-green-success">
+                                            <div class="container-fluid text-right-answer">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
                                             </div>
                                         }
@@ -80,7 +80,7 @@
                                         <br />
                                     }
                                 }
-                                
+
                             </td>
                             @*<td>
                                     @foreach (var option in item.Options)
@@ -101,7 +101,6 @@
                                         <br />
                                     }
                                 </td>*@
-
                         </tr>
                                 }
                 </tbody>
@@ -164,5 +163,4 @@
             </table>
         </div>
     </div>*@
-
 

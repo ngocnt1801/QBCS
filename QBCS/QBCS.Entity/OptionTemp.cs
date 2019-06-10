@@ -6,20 +6,17 @@ namespace QBCS.Entity
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Option")]
-    public partial class Option
+    [Table("OptionTemp")]
+    public partial class OptionTemp
     {
         public int Id { get; set; }
 
-        public string OptionContent { get; set; }
+        public int? TempId { get; set; }
 
-        public int? QuestionId { get; set; }
+        public string OptionContent { get; set; }
 
         public bool? IsCorrect { get; set; }
 
-        [StringLength(255)]
-        public string Image { get; set; }
-
-        public virtual Question Question { get; set; }
+        public virtual QuestionTemp QuestionTemp { get; set; }
     }
 }

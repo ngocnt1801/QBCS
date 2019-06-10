@@ -11,8 +11,8 @@ namespace QBCS.Repository.Implement
     public class Repository<T> : IRepository<T> where T : class
     {
 
-        private DbContext context;
-        private DbSet<T> dbSet;
+        protected DbContext context;
+        protected DbSet<T> dbSet;
 
         public Repository(DbContext _context)
         {

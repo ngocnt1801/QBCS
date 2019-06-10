@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using DuplicateQuestion;
+using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Utilities;
@@ -53,6 +54,43 @@ namespace QBCS.Service.Implement
                                                 "what can be used to represent the on and off that are foundation of all that goes on in the computer?");
             return result;
 
+        }
+
+        public int CountDistinctWord()
+        {
+            var list = u.Repository<Question>().GetAll().ToList();
+            IDictionary<string, int> map = new Dictionary<string, int>();
+            foreach (var item in list)
+            {
+                string[] words = item.QuestionContent.Trim().Split(' ');
+                foreach (string word in words)
+                {
+                    if (map.ContainsKey(word.Trim().ToLower()))
+                    {
+                        //map[word] = map[word] + 1;
+
+                    }else
+                    {
+                        map.Add(word.Trim().ToLower(), 0);
+                    }
+                }
+            }
+
+            return map.Count;
+        }
+
+        public string CheckDuplidate()
+        {
+            //test
+            string s1 = "By switching on and off, the __ can be used to represent the 1s and 0s that are foundation of all that goes on in the computer";
+            string s2 = "what can be used to represent the 1s and 0s that are foundation of all that goes on in the computer?";
+            s1 = StringUtils.NormalizeString(s1);
+            s2 = StringUtils.NormalizeString(s2);
+
+            double result12 = LevenshteinDistance.CalculateSimilarity(s1, s2);
+            double result21 = LevenshteinDistance.CalculateSimilarity(s2, s1);
+
+            return "S1-S2: " + result12 + " - S2-S1: " + result21;
         }
     }
 }

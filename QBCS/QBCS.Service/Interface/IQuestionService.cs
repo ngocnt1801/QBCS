@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace QBCS.Service.Interface
 {
@@ -14,10 +15,12 @@ namespace QBCS.Service.Interface
         List<Question> GetQuestionsByContent(string questionContent);
         List<Question> GetQuestionSearchBar(string searchInput);
         bool UpdateQuestion(QuestionViewModel question);
-        QuestionViewModel GetQuestionById(int id);
+        QuestionViewModel GetQuestionById(int id);//Return the QuestionViewModel
+        List<QuestionViewModel> GetQuestionByQuestionId(int questionId); //Return the list of QuestionViewModel
         List<QuestionViewModel> GetQuestionsByCourse(int CourseId);
         List<QuestionViewModel> GetAllQuestionByCourseId(int courseId); //Change Model
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();
+        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId);
     }
 }

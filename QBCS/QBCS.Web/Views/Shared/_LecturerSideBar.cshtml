@@ -1,19 +1,50 @@
 ﻿@using QBCS.Service.ViewModel
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+@{ 
+    var homeClass = "";
+    var courseClass = "";
+    var questionClass = "";
+    var userClass = "";
+    var statisticClass = "";
+    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    switch (controller)
+    {
+        case "Home":
+            homeClass = "active";
+            break;
+        case "Course":
+            courseClass = "active";
+            break;
+        case "Question":
+            questionClass = "active";
+            break;
+        case "User":
+            userClass = "active";
+            break;
+        case "Statistic":
+            statisticClass = "active";
+            break;
+    }
+    }
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+    onclick="nav_bar_active()">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        @*<div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>*@
-        <div class="sidebar-brand-text mx-3">Lecturer</div>
+    <a class="sidebar-brand d-flex align-items-center" href="index.html">
+      
+        <div class="col-xs-6 col-sm-4">
+            <h2 class="text-primary text-light font-italic font-weight-bolder">QBCS</h2>
+        </div>
+            @*<img src="~/Content/logo_transparent.png" width="134" height="134"/>*@
+       
+        <div class="sidebar-brand-text mx-3"></div>
     </a>
     
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item @homeClass">
         <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
@@ -25,7 +56,7 @@
 
     <!-- Heading -->
     <!-- Nav Item - Courses Menu -->
-    <li class="nav-item">
+    <li class="nav-item @courseClass">
         <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-book"></i>
             <span>Courses</span>
@@ -33,7 +64,7 @@
     </li>
 
     <!-- Nav Item - Question Menu -->
-    <li class="nav-item">
+    <li class="nav-item @questionClass">
         <a class="nav-link" 
            href="@Url.Action("Index", "Question")">
             <i class="fas fa-question"></i>
@@ -46,14 +77,21 @@
 
     <!-- Heading -->
     <!-- Nav Item - Account -->
-    <li class="nav-item">
+    <li class="nav-item @userClass">
         <a class="nav-link" 
            href="@Url.Action("Details", "User",new { userId = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-user fa-chart-area"></i>
             <span>Profile</span>
         </a>
     </li>
-
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item @statisticClass">
+        <a class="nav-link" href="@Url.Action("Index", "Statistic",new { id = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-fw fa-chart-line"></i>
+            <span>Statistic</span>
+        </a>
+    </li>
 
 
 
@@ -61,8 +99,8 @@
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    @*<div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div>*@
 
 </ul>

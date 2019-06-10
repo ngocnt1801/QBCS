@@ -37,12 +37,17 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SimMetrics.Net, Version=1.0.5.0, Culture=neutral, PublicKeyToken=c58dc06d59f3391b, processorArchitecture=MSIL">
       <HintPath>..\packages\SimMetrics.Net.1.0.5\lib\net45\SimMetrics.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
+    <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Enum\RoleEnum.cs" />
     <Compile Include="Implement\CourseService.cs" />
@@ -61,6 +67,7 @@
     <Compile Include="Implement\TopicService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
+    <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
     <Compile Include="Interface\ICourseService.cs" />
@@ -68,18 +75,29 @@
     <Compile Include="Interface\ITopicService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
+    <Compile Include="ViewModel\CDATA.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
+    <Compile Include="ViewModel\GIFTModel.cs" />
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
+    <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\QuestionDetailViewModel.cs" />
+    <Compile Include="ViewModel\QuestionModel.cs" />
+    <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\TopicViewModel.cs" />
     <Compile Include="ViewModel\UserDetailViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DuplicateQuestion\DuplicateQuestion.csproj">
+      <Project>{35AB65C1-3951-4408-BB08-3C26EF926C41}</Project>
+      <Name>DuplicateQuestion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
       <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
       <Name>QBCS.Entity</Name>

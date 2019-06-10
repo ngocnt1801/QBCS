@@ -54,19 +54,24 @@
     <Compile Include="CourseDepartment.cs" />
     <Compile Include="CourseOfUser.cs" />
     <Compile Include="Examination.cs" />
+    <Compile Include="Import.cs" />
     <Compile Include="LearningOutcome.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LevelInCourse.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionInExam.cs" />
+    <Compile Include="OptionTemp.cs" />
     <Compile Include="PartOfExamination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QBCSContext.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionInExam.cs" />
+    <Compile Include="QuestionTemp.cs" />
     <Compile Include="QuestionType.cs" />
     <Compile Include="Role.cs" />
-    <Compile Include="sysdiagram.cs" />
+    <Compile Include="Rule.cs" />
+    <Compile Include="RuleKey.cs" />
+    <Compile Include="Semester.cs" />
     <Compile Include="Topic.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

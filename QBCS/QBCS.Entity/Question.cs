@@ -14,6 +14,7 @@ namespace QBCS.Entity
         {
             Options = new HashSet<Option>();
             QuestionInExams = new HashSet<QuestionInExam>();
+            QuestionTemps = new HashSet<QuestionTemp>();
         }
 
         public int Id { get; set; }
@@ -36,6 +37,12 @@ namespace QBCS.Entity
 
         public bool? IsDisable { get; set; }
 
+        [StringLength(50)]
+        public string QuestionCode { get; set; }
+
+        [StringLength(255)]
+        public string Image { get; set; }
+
         public virtual Course Course { get; set; }
 
         public virtual Level Level { get; set; }
@@ -47,5 +54,8 @@ namespace QBCS.Entity
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionInExam> QuestionInExams { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QuestionTemp> QuestionTemps { get; set; }
     }
 }
