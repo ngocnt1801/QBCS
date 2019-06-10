@@ -107,7 +107,7 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<Question>()
                 .HasMany(e => e.QuestionTemps)
-                .WithOptional(e => e.DuplicatedWithBank)
+                .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.DuplicatedId);
 
             modelBuilder.Entity<QuestionInExam>()
@@ -131,7 +131,7 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<QuestionTemp>()
                 .HasMany(e => e.QuestionTemp1)
-                .WithOptional(e => e.DuplicatedWithImport)
+                .WithOptional(e => e.QuestionTemp2)
                 .HasForeignKey(e => e.DuplicateInImportId);
 
             modelBuilder.Entity<QuestionType>()
