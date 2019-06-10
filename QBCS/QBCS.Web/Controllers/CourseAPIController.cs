@@ -1,4 +1,6 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Service.Implement;
+using QBCS.Service.Interface;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +13,18 @@ namespace QBCS.Web.Controllers
     public class CourseAPIController : ApiController
     {
 
+        private ICourseService courseService;
+
+        public CourseAPIController()
+        {
+            courseService = new CourseService();
+        }
+
         [HttpGet]
         [ActionName("searchCourse")]
         public List<CourseViewModel> searchCourse(string courseCode)
         {
-            string[] courseName = {"PRX301","PRJ321","PRF291" };
-            List<CourseViewModel> courseViewModels = new List<CourseViewModel>();
-            for (int i = 0; i < 3; i++)
-            {
-                CourseViewModel courseViewModel = new CourseViewModel()
-                {
-                    Id = i,
-                    Code = courseName[i],
-                };
-                courseViewModels.Add(courseViewModel);
-            }
+            List<CourseViewModel> courseViewModels = courseService.SearchCourseByNameOrCode(courseCode);
             return courseViewModels;
         }
     }

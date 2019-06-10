@@ -23,7 +23,8 @@ namespace QBCS.Web.Controllers
         private IOptionService optionService;
         private ITopicService topicService;
         private ILevelService levelService;
-        private ILearningOutcomeService lo;
+        private ILearningOutcomeService learningOutcomeService;
+        private IExaminationService examinationService;
         private IImportService importService;
 
         public QuestionController()
@@ -32,7 +33,8 @@ namespace QBCS.Web.Controllers
             optionService = new OptionService();
             topicService = new TopicService();
             levelService = new LevelService();
-            lo = new LearningOutcomeService();
+            learningOutcomeService = new LearningOutcomeService();
+            examinationService =  new ExaminationService();
             importService = new ImportService();
         }
 
@@ -92,7 +94,7 @@ namespace QBCS.Web.Controllers
 
             List<LevelViewModel> levels = levelService.GetLevel();
 
-            List<LearningOutcomeViewModel> learningOutcomes = lo.GetLearningOutcomeByCourseId(qvm.CourseId);
+            List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
 
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
@@ -114,38 +116,6 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
         }
 
-        public ActionResult GenerateExam()
-        {
-
-            return View();
-        }
-
-        public ActionResult ViewGeneratedExamination()
-        {
-            List<ExaminationViewModel> examinationViewModels = new List<ExaminationViewModel>();
-            List<QuestionViewModel> questions = questionService.GetAllQuestions();
-            TopicViewModel topic = new TopicViewModel()
-            {
-                Id = 1,
-                Name = "Learning Outcome"
-            };
-            LevelViewModel level = new LevelViewModel()
-            {
-                Id = 1,
-                Name = "Hard"
-            };
-            for (int i = 0; i < 10; i++)
-            {
-                ExaminationViewModel examination = new ExaminationViewModel
-                {
-                    Question = questions[i],
-                    Level = level,
-                    Topic = topic
-                };
-                examinationViewModels.Add(examination);
-            }
-            return View(examinationViewModels);
-        }
 
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId)

@@ -21,7 +21,13 @@ namespace QBCS.Service.Implement
             unitOfWork = new UnitOfWork();
         }
 
-        public List<TopicViewModel> GetTopicByCourseId(int? CourseId)
+        public int GetCourseIdByTopicId(int topicId)
+        {
+            Topic topic = unitOfWork.Repository<Topic>().GetById(topicId);
+            return (int)topic.CourseId;
+        }
+
+        public List<TopicViewModel> GetTopicByCourseId(int CourseId)
         {
             IQueryable<Topic> Topics = unitOfWork.Repository<Topic>().GetAll();
 
@@ -39,10 +45,25 @@ namespace QBCS.Service.Implement
                     CourseId = (int)topic.CourseId,
                     IsDisable = (bool)topic.IsDisable
                 };
+                topicViewModel.UpdateIdValue();
                 TopicViewModels.Add(topicViewModel);
             }
 
             return TopicViewModels;
+        }
+
+        public TopicViewModel GetTopicById(int topicId)
+        {
+            Topic topicById = unitOfWork.Repository<Topic>().GetById(topicId);
+            TopicViewModel topicViewModel = new TopicViewModel()
+            {
+                Id = topicById.Id,
+                Name = topicById.Name,
+                Code = topicById.Code,
+                CourseId = (int)topicById.CourseId,
+                IsDisable = (bool)topicById.IsDisable
+            };
+            return topicViewModel;
         }
     }
 }

@@ -21,6 +21,8 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestionByCourseId(int courseId); //Change Model
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();
+        int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId);
+        int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
         bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId);
     }
 }

@@ -189,6 +189,7 @@
     <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Attributes\CheckSessionAttribute.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\ExaminationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -229,6 +230,7 @@
     <Content Include="Content\font-awesome\v4-shims.css" />
     <Content Include="Content\font-awesome\v4-shims.min.css" />
     <Content Include="Content\font.css" />
+    <Content Include="Content\generate-exam.css" />
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
@@ -2054,6 +2056,10 @@
     <Content Include="Views\Shared\_RightQuestion.cshtml" />
     <Content Include="Views\User\AddUser.cshtml" />
     <Content Include="Views\Course\ListCourse.cshtml" />
+    <Content Include="Views\Examination\GenerateExam.cshtml" />
+    <Content Include="Views\Examination\ViewGeneratedExamination.cshtml" />
+    <Content Include="Views\Course\Staff_ListCourse.cshtml" />
+    <Content Include="Views\Examination\GenerateExaminaton.cshtml" />
     <Content Include="Views\Question\DemoUpdate.cshtml" />
     <Content Include="Views\Question\GenerateExam.cshtml" />
     <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />

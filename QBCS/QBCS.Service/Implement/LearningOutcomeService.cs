@@ -14,15 +14,36 @@ namespace QBCS.Service.Implement
     public class LearningOutcomeService : ILearningOutcomeService
     {
 
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
 
         public LearningOutcomeService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
-        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int? CourseId)
+
+        public int GetCourseIdByLearningOutcomeId(int learningOutcomeId)
         {
-            IQueryable<LearningOutcome> LearningOutcomes = u.Repository<LearningOutcome>().GetAll();
+            LearningOutcome learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(learningOutcomeId);
+            return (int)learningOutcome.CourseId;
+        }
+
+        public LearningOutcomeViewModel GetLearingOutcomeById(int learningOutcomeId)
+        {
+            LearningOutcome learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(learningOutcomeId);
+            LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel()
+            {
+                Id = learningOutcome.Id,
+                Code = learningOutcome.Code,
+                CourseId = (int)learningOutcome.CourseId,
+                IsDisable = (bool)learningOutcome.IsDisable,
+                Name = learningOutcome.Name
+            };
+            return learningOutcomeViewModel;
+        }
+
+        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId)
+        {
+            IQueryable<LearningOutcome> LearningOutcomes = unitOfWork.Repository<LearningOutcome>().GetAll();
 
             List<LearningOutcome> LearningOutcomeByCourse = LearningOutcomes.Where(lo => lo.CourseId == CourseId).ToList();
 
@@ -38,7 +59,7 @@ namespace QBCS.Service.Implement
                     IsDisable = (bool) learningOutcome.IsDisable,
                     Name = learningOutcome.Name
                 };
-
+                learningOutcomeViewModel.UpdateIdValue();
                 learningOutcomeViewModels.Add(learningOutcomeViewModel);
             }
 

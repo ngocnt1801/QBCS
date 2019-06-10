@@ -1,0 +1,37 @@
+﻿@model QBCS.Service.ViewModel.GenerateExamViewModel
+
+@{
+    ViewBag.Title = "Examinaton Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Examinaton Report</h2>
+
+<table class="table">
+    <tr>
+        <th>Percent of level question</th>
+        <th>Number of question by level</th>
+        <th>Score</th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>
+            <p>Easy Question : @Model.EasyPercent</p>
+            <p>Medium Question : @Model.MediumPercent</p>
+            <p>Hard Question : @Model.HardPercent</p>
+        </td>
+        <td>
+            <p>Easy Question : @Model.EasyQuestion</p>
+            <p>Medium Question : @Model.MediumQuestion</p>
+            <p>Hard Question : @Model.HardQuestion</p>
+            <b>Total Question : @Model.TotalQuestion</b>
+        </td>
+        <td>
+            102
+        </td>
+        <td>
+            <a href="@Url.Action("ViewGeneratedExamination", "Examination", new { examinationId = Model.ExamId})" class="btn btn-primary" role="button" >Review Examination</a>
+        </td>
+    </tr>
+</table>
+

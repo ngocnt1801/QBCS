@@ -1,0 +1,88 @@
+﻿@model List<QBCS.Service.ViewModel.PartOfExamViewModel>
+@{
+    ViewBag.Title = "Generate Exam";
+    var counter = 0;
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Examination</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+        </div>
+        <table class="table table-striped" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Code</th>
+                    <th>Question</th>
+                    <th>Level</th>
+                    <th>Topic/Learning Outcome</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var part in Model)
+                {
+                    foreach (var question in part.Question)
+                    {
+                        <tr>
+                            @{
+                                counter++;
+                            }
+                            <td>@counter</td>
+                            <td>Code</td>
+                            <td>
+                                <div>
+                                    <p>@question.QuestionContent</p>
+                                    @foreach (var option in question.Options)
+                                    {
+                                        if (option.IsCorrect == true)
+                                        {
+                                            <div class="container-fluid text-green-success">
+                                                @option.OptionContent
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                @option.OptionContent
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                 @question.Level.Name
+                            </td>
+                            <td>
+                                @if (part.LearningOutcome == null)
+                                {
+                                    @Html.DisplayFor(topic => part.Topic.Name)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(lo => part.LearningOutcome.Name)
+                                }
+                            </td>
+                        </tr>
+                                }
+                                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>File extension :</h5>
+    </div>
+    <div class="col-lg-2">
+        <select class="form-control">
+            <option>GIFT</option>
+            <option>XML</option>
+        </select>
+    </div>
+
+    <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
+</div>
