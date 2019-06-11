@@ -14,5 +14,8 @@ namespace QBCS.Service.ViewModel
         public List<OptionTemp> Options { get; set; }
         public int Status { get; set; }
         public int DuplicatedId { get; set; }
+        public string Category { get; set; }
+        public string Topic { get; set; }
+        public string Level { get; set; }
     }
 }
