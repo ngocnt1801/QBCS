@@ -17,6 +17,11 @@
             this.importBtn.on('click', function () {
                 importFileOctopus.importQuestionToBank(this.attributes["data-id"].value);
             });
+
+            this.cancelImportBtn = $("#cancel-import-btn");
+            this.cancelImportBtn.on('click', function(){
+                importFileOctopus.cancelImport(this.attributes["data-id"].value);
+            })
         }
     };
 
@@ -62,6 +67,17 @@
             console.log("import to bank");
             $.ajax({
                 url: '/QBCS.Web/Import/AddToBank',
+                type: 'GET',
+                data: {importId : importId},
+                success: function (response) {
+                    document.location.href = "/QBCS.Web/";
+                }
+            });
+        },
+        cancelImport: function (importId) {
+            console.log("import to bank");
+            $.ajax({
+                url: '/QBCS.Web/Import/Cancel',
                 type: 'GET',
                 data: {importId : importId},
                 success: function (response) {

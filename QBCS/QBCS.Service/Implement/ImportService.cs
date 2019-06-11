@@ -22,6 +22,23 @@ namespace QBCS.Service.Implement
             unitOfWork = new UnitOfWork();
         }
 
+        public void Cancel(int importId)
+        {
+            var import = unitOfWork.Repository<Import>().GetById(importId);
+            var listQuestion = import.QuestionTemps.ToList();
+            if (import != null)
+            {
+                foreach (var question in listQuestion)
+                {
+                    unitOfWork.Repository<QuestionTemp>().Delete(question);
+                }
+
+                import.Status = (int)StatusEnum.Canceled;
+                unitOfWork.Repository<Import>().Update(import);
+                unitOfWork.SaveChanges();
+            }
+        }
+
         public ImportResultViewModel GetImportResult(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId).FirstOrDefault();
