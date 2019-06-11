@@ -58,9 +58,10 @@ namespace DuplicateQuestion
                         string source = StringUtils.NormalizeString(question.QuestionContent);
                         //Check question content
                         var result = LevenshteinDistance.CalculateSimilarity(source, target);
-                        item.Test = result.ToString();
+                        //item.Test = result.ToString() + " - " + source + " - " + target; //remove
                         if (result >= 70)
                         {
+                            item.Test = "Levenshtein";
                             //check option
                             int countDuplicate = 0;
                             int targetRightCount = 0;
@@ -117,8 +118,9 @@ namespace DuplicateQuestion
                         }
                         else // check with TF + Consine similarity
                         {
-                            target = item.QuestionContent;
-                            source = question.QuestionContent;
+                            item.Test = "TF+Consine";
+                            string targetTF = item.QuestionContent;
+                            string sourceTF = question.QuestionContent;
 
                             #region get right option string
                             string rightOptionTaget = "";
@@ -140,7 +142,7 @@ namespace DuplicateQuestion
                             }
                             #endregion
 
-                            result = TFAlgorithm.CaculateSimilar(source, target);
+                            result = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
                             if (result >= 70)
                             {
                                 double optionResult = TFAlgorithm.CaculateSimilar(rightOptionSource, rightOptionTaget);
@@ -174,10 +176,10 @@ namespace DuplicateQuestion
                             }
                             else // check quesiton + option
                             {
-                                source = source + " " + rightOptionSource;
-                                target = target + " " + rightOptionTaget;
+                                sourceTF = sourceTF + " " + rightOptionSource;
+                                targetTF = targetTF + " " + rightOptionTaget;
 
-                                double resultQwithO = TFAlgorithm.CaculateSimilar(source, target);
+                                double resultQwithO = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
                                 if (resultQwithO >= 70)
                                 {
                                     item.Status = (int)StatusEnum.Delete;
