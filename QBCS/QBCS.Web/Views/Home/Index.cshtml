@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="container-fluid ml-5">
     <div class="row">
 
@@ -40,14 +41,14 @@
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom">
                             <i class="text-dark text-custom">Choose a file:</i>
-                            <div class="input-group input-file text-custom" name="questionFile">                      
-                                <input type="text" class="form-control"/>
+                            <div class="input-group input-file text-custom" name="questionFile">
+                                <input type="text" class="form-control" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-import-file btn-choose" type="button">Choose</button>
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary float-right">Import</button>
                             <button type="reset" class="btn btn-default float-right">Cancel</button>
@@ -58,53 +59,53 @@
 
         </div>
         @*<div class="col-md-3">
-            <div class="col-xl-12 col-md-12 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    Courses
+                <div class="col-xl-12 col-md-12 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        Courses
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-500"> @(((UserViewModel)Session["user"]).Courses.Count)</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-500"> @(((UserViewModel)Session["user"]).Courses.Count)</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-book fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-12 col-md-12 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Questions</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-500">201</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-question fa-2x text-gray-300"></i>
+                                <div class="col-auto">
+                                    <i class="fas fa-book fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-12 col-md-12 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Statistic</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
+                <div class="col-xl-12 col-md-12 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Questions</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-500">201</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-question fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+                <div class="col-xl-12 col-md-12 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Statistic</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
     </div>
 
 

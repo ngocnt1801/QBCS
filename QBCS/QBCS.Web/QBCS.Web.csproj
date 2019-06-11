@@ -240,6 +240,8 @@
     <Content Include="Content\smart_wizard_theme_arrows.min.css" />
     <Content Include="Content\style_dashboard.css" />
     <Content Include="Content\switch-button-style.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
@@ -281,6 +283,8 @@
     <Content Include="Content\webfonts\fa-solid-900.ttf" />
     <Content Include="Content\webfonts\fa-solid-900.woff" />
     <Content Include="Content\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\datatables\datatables-demo.js" />
     <Content Include="Scripts\datatables\dataTables.bootstrap4.js" />
@@ -308,6 +312,8 @@
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.js" />

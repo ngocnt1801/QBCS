@@ -89,9 +89,17 @@ namespace QBCS.Web
                 "~/Scripts/jquery.signalR-2.4.1.js"
                 ));
 
-            //notification
             bundles.Add(new ScriptBundle("~/bundle/scripts/notification").Include(
                 "~/Scripts/myjs/notification.js"
+                ));
+
+            //Toastr 
+            bundles.Add(new ScriptBundle("~/bundle/scripts/toastr").Include(
+                "~/Scripts/toastr.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/toastr").Include(
+                "~/Content/toastr.css"
                 ));
         }
     }
