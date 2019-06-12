@@ -24,11 +24,37 @@
 }
 else
 {
+
+    int total = Model.Questions.Count;
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
+    int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
+    int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
+
     <div id="question-import">
-        @*@Html.Partial("_ListQuestionWithDuplicate", Model.Questions)*@
+        <div class="tabs tabs-style-topline">
+            <nav>
+                <ul>
+                    <li><a href="#section-topline-1"><span>Editable (@editable/@total)</span></a></li>
+                    <li><a href="#section-topline-2"><span>Delete (@delete/@total)</span></a></li>
+                    <li><a href="#section-topline-3"><span>Sucess (@success/@total)</span></a></li>
+                </ul>
+            </nav>
+            <div class="content-wrap">
+                <section id="section-topline-1">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Editable).ToList())
+                </section>
+                <section id="section-topline-2">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList())
+                </section>
+                <section id="section-topline-3">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Success).ToList())
+                </section>
+            </div><!-- /content -->
+        </div><!-- /tabs -->
+
     </div>
-    <button class="btn btn-primary float-right col-md-1 ml-1" data-toggle="modal" data-target="#import-modal">Save</button>
-    <button class="btn btn-danger float-right col-md-1" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>
+    <button class="btn btn-primary float-right col-md-1 ml-1 mb-4" data-toggle="modal" data-target="#import-modal">Save</button>
+    <button class="btn btn-danger float-right col-md-1 mb-4" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>
 
 
     <div class="modal fade" tabindex="-1" role="dialog" id="import-modal">
@@ -70,4 +96,3 @@ else
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 }
-

@@ -103,11 +103,15 @@ namespace QBCS.Web
 
             //tab
             bundles.Add(new ScriptBundle("~/bundle/scripts/tab").Include(
-                "~/Scripts/myjs/tab.js"
+                "~/Scripts/tab/cbpFWTabs.js",
+                "~/Scripts/tab/modernizr.custom.js"
                 ));
 
             bundles.Add(new StyleBundle("~/bundle/content/tab").Include(
-                "~/Content/tab-style.css"
+                "~/Content/tab/demo.css",
+                "~/Content/tab/normalize.css",
+                "~/Content/tab/tabs.css",
+                "~/Content/tab/tabstyles.css"
                 ));
         }
     }

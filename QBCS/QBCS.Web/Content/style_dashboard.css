@@ -4,3 +4,6 @@
     border-color: #b7b9cc !important;
     color: #3a3b45 !important;
 }
+.editableTemp{
+    cursor:pointer;
+}
