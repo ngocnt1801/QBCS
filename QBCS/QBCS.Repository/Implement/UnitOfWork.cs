@@ -18,6 +18,16 @@ namespace QBCS.Repository.Implement
             context = new QBCSContext();
         }
 
+        public DbContext GetContext()
+        {
+            return this.context;
+        }
+
+        public IImportRepository ImportRepository()
+        {
+            return new ImportRepository(context);
+        }
+
         public IRepository<T> Repository<T>() where T : class
         {
             return new Repository<T>(context);

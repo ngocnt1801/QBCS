@@ -1,21 +1,30 @@
-﻿using QBCS.Service.Interface;
-using System.Collections.Generic;
-using System.Linq;
-using QBCS.Entity;
-using QBCS.Repository.Interface;
+﻿using QBCS.Entity;
 using QBCS.Repository.Implement;
+using QBCS.Repository.Interface;
+using QBCS.Service.Enum;
+using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Xml.Serialization;
 
 namespace QBCS.Service.Implement
 {
     public class QuestionService : IQuestionService
     {
         private IUnitOfWork unitOfWork;
+        private IImportService importService;
 
         public QuestionService()
         {
             unitOfWork = new UnitOfWork();
+            importService = new ImportService();
         }
 
         public bool Add(QuestionViewModel question)
@@ -63,7 +72,7 @@ namespace QBCS.Service.Implement
 
             List<QuestionViewModel> questionViewModels = new List<QuestionViewModel>();
 
-            foreach(var ques in QuestionsByCourse)
+            foreach (var ques in QuestionsByCourse)
             {
                 List<OptionViewModel> optionViewModels = new List<OptionViewModel>();
                 foreach (var option in ques.Options)
@@ -85,7 +94,7 @@ namespace QBCS.Service.Implement
             return questionViewModels;
         }
 
-        public QuestionViewModel GetQuestionById (int id )
+        public QuestionViewModel GetQuestionById(int id)
         {
             Question QuestionById = unitOfWork.Repository<Question>().GetById(id);
 
@@ -106,6 +115,24 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
             return questionViewModel;
         }
+        public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
+        {
+            var question = unitOfWork.Repository<Question>().GetById(questionId);
+
+            var questions = question.Options.Select(c => new QuestionViewModel
+            {
+                Id = (int)c.QuestionId,
+                QuestionContent = c.Question.QuestionContent,
+                Options = c.Question.Options.Select(d => new OptionViewModel
+                {
+                    Id = d.Id,
+                    OptionContent = d.OptionContent,
+                    IsCorrect = (bool)d.IsCorrect
+                }).ToList()
+            }).ToList();
+
+            return questions;
+        }
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
@@ -120,7 +147,7 @@ namespace QBCS.Service.Implement
             return true;
         }
 
-        private QuestionViewModel ParseEntityToModel ( Question question, List<OptionViewModel> options)
+        private QuestionViewModel ParseEntityToModel(Question question, List<OptionViewModel> options)
         {
             QuestionViewModel questionViewModel = new ViewModel.QuestionViewModel()
             {
@@ -150,21 +177,22 @@ namespace QBCS.Service.Implement
 
         public List<Question> GetQuestionsByContent(string questionContent)
         {
-            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q =>  q.QuestionContent.Contains(questionContent));
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.QuestionContent.Contains(questionContent));
             List<Question> result = questions.ToList();
             return result;
         }
 
         public List<Question> GetQuestionSearchBar(string searchInput)
         {
-            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q => 
-                                                                                            q.QuestionContent.Contains(searchInput) || 
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll().Where(q =>
+                                                                                            q.QuestionContent.Contains(searchInput) ||
                                                                                             q.Course.Name.Contains(searchInput))
                                                                                             .Take(5);
             List<Question> result = questions.ToList();
             return result;
         }
-        public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId) {
+        public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId)
+        {
             var course = unitOfWork.Repository<Course>().GetById(courseId);
             List<QuestionViewModel> questions = course.Questions.Select(c => new QuestionViewModel
             {
@@ -183,12 +211,14 @@ namespace QBCS.Service.Implement
         }
         public List<QuestionViewModel> GetAllQuestions()
         {
-            List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel {
-                CourseId = (int)c.CourseId, 
+            List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel
+            {
+                CourseId = (int)c.CourseId,
                 CourseCode = c.Course.Code,
-                CourseName = c.Course.Name,             
-                QuestionContent = c.QuestionContent,             
-                Options = c.Options.Select(d => new OptionViewModel {
+                CourseName = c.Course.Name,
+                QuestionContent = c.QuestionContent,
+                Options = c.Options.Select(d => new OptionViewModel
+                {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
                     IsCorrect = (bool)d.IsCorrect
@@ -209,6 +239,7 @@ namespace QBCS.Service.Implement
                 CourseId = (int)c.CourseId,
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,
+                Id = c.Id,
                 QuestionContent = c.QuestionContent,
                 Options = c.Options.Select(d => new OptionViewModel
                 {
@@ -223,7 +254,8 @@ namespace QBCS.Service.Implement
                 {
                     result[i].IsDuplicated = true;
                     result[i].DuplicatedQuestion = result[i];
-                }else
+                }
+                else
                 {
                     result[i].IsDuplicated = false;
                 }
@@ -231,6 +263,210 @@ namespace QBCS.Service.Implement
 
 
             return result;
+        }
+        static string category = null;
+        static string level = null;
+        static string topic = null;
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId)
+        {
+            
+            bool check = false;
+            StreamReader reader = null;
+            List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
+            var import = new Import();
+            try
+            {
+                string extensionFile = Path.GetExtension(questionFile.FileName);
+                #region process xml
+                if (extensionFile.Equals(".xml"))
+                {
+                    List<QuestionTmpModel> listQuestionXml = new List<QuestionTmpModel>();
+                    XmlSerializer xmlSer = new XmlSerializer(typeof(quiz));
+
+                    reader = new StreamReader(questionFile.InputStream);
+                    quiz questionXml = (quiz)xmlSer.Deserialize(reader);
+                    List<OptionTemp> tempAns = new List<OptionTemp>();
+                    QuestionTmpModel question = new QuestionTmpModel();
+                    OptionTemp option = new OptionTemp();
+
+                    for (int i = 0; i < questionXml.question.Count(); i++)
+                    {
+                        string questionContent = null;
+                        string rightAnswer = null;
+                        string wrongAnswer = null;
+                        string temp = null;
+
+                        #region get category
+                        if (questionXml.question[i].category != null)
+                        {
+                            temp = questionXml.question[i].category.text.ToString();
+                            string[] arrListStr = temp.Split('/');                          
+                            for (int z = 0; z < arrListStr.Length; z++)
+                            {
+                                if (z == 1)
+                                {
+                                    category = "";
+                                    category = arrListStr[z];
+                                }
+                                if (z == 2)
+                                {
+                                    topic = "";
+                                    topic = arrListStr[z];
+                                }
+                                if (z == 3)
+                                {
+                                    level = "";
+                                    level = arrListStr[z];
+                                }
+                            }
+                        }
+                        #endregion
+                        if (questionXml.question[i].questiontext != null)
+                        {
+                            questionContent = questionXml.question[i].questiontext.text;
+                            question.QuestionContent = questionContent;
+                            question.Code = questionXml.question[i].name.text.ToString();
+                            question.Category = category.Trim();
+                            question.Level = level.Trim();
+                            question.Topic = topic.Trim();
+
+                            #region get question, option
+                            if (questionXml.question[i].answer != null)
+                            {
+                                for (int j = 0; j < questionXml.question[i].answer.Count(); j++)
+                                {
+                                    if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
+                                    {
+                                        rightAnswer = questionXml.question[i].answer[j].text;
+                                        option = new OptionTemp();
+                                        option.OptionContent = rightAnswer;
+                                        option.IsCorrect = true;
+                                        tempAns.Add(option);
+                                    }
+                                    else
+                                    if (questionXml.question[i].answer[j].fraction.ToString().Equals("0"))
+                                    {
+                                        wrongAnswer = questionXml.question[i].answer[j].text;
+                                        option = new OptionTemp();
+                                        option.OptionContent = wrongAnswer;
+                                        option.IsCorrect = false;
+                                        tempAns.Add(option);
+                                    }
+
+                                }
+                            }
+                            #endregion
+                        }
+
+                        if (question.QuestionContent != null)
+                        {
+                            listQuestionXml.Add(question);
+                            if (listQuestionXml.Count() > 0 && tempAns.Count() > 0)
+                            {
+                                DateTime importTime = DateTime.Now;
+                                import.QuestionTemps.Add(new QuestionTemp()
+                                {
+                                    QuestionContent = question.QuestionContent,
+                                    Status = (int)StatusEnum.NotCheck,
+                                    Code = question.Code,
+                                    Category = question.Category,
+                                    Topic = question.Topic,
+                                    LevelName = question.Level,
+                                    OptionTemps = tempAns.Select(o => new OptionTemp()
+                                    {
+                                        OptionContent = o.OptionContent,
+                                        IsCorrect = o.IsCorrect
+                                    }).ToList()
+                                   
+                                });
+                                import.ImportedDate = DateTime.Now;
+                                import.UserId = userId;
+                               
+                            }
+                            listQuestionXml = new List<QuestionTmpModel>();
+                            question = new QuestionTmpModel();
+                            tempAns = new List<OptionTemp>();
+                        }                       
+                    }
+
+                }
+                #endregion
+
+                #region process gift
+                if (extensionFile.Equals(".txt"))
+                {
+                    GIFTUtilities ulti = new GIFTUtilities();
+                    QuestionTemp quesTmp = new QuestionTemp();
+                    reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
+                    listQuestion = ulti.StripTagsCharArray(reader);
+                    DateTime importTime = DateTime.Now;
+                    import = new Import()
+                    {
+                        CourseId = courseId,
+                        UserId = userId,
+                        
+                        QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                        {
+                            QuestionContent = q.QuestionContent,
+                            Code = q.Code,
+                            Status = (int)StatusEnum.NotCheck,
+                            Category = q.Category,    
+                            Topic = q.Topic,
+                            LevelName = q.Level,                        
+                            OptionTemps = q.Options.Select(o => new OptionTemp()
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect
+                            }).ToList(),
+                        }).ToList(),
+                        ImportedDate = importTime
+                    };
+
+                }
+                #endregion
+                if (import.QuestionTemps.Count() > 0)
+                {
+                    import.Status = (int)StatusEnum.NotCheck;
+                    import.CourseId = courseId;
+                    var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
+                    unitOfWork.SaveChanges();
+                    //call store check duplicate
+                    Task.Factory.StartNew(() => {
+                        importService.ImportToBank(entity.Id);
+                    });
+                    check = true;
+                }
+                else
+                {
+                    // return user have to import file
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+            return check;
+        }
+    
+    public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+
+            return (int)question.Frequency;
+        }
+        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            return (int)question.Frequency;
         }
     }
 }

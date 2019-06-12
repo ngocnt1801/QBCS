@@ -1,50 +1,53 @@
-﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionViewModel>
+﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionTempViewModel>
 @{
     ViewBag.Title = "ListQuestion";
     int counter = 0;
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-
 <div class="card shadow mb-4">
 
-
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive text-custom">
+            <table class="table table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No.</th>
                         <th>Question</th>
-                        <th>Duplicated question</th>
-                        @*<th class="col-md-4">Option</th>*@
+                        <th>Duplicated With</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         var borderLeft = "";
-                        if (item.IsDuplicated)
+                        var action = "";
+                        if (item.Status == DuplicateQuestion.Entity.StatusEnum.Delete)
                         {
                             borderLeft = "border-left-danger";
                         }
-                        else
+                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Editable)
+                        {
+                            borderLeft = "border-left-warning";
+                            action = "editableTemp";
+                        }
+                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Success)
                         {
                             borderLeft = "border-left-success";
                         }
-
-                        <tr>
+                        <tr class="@action" data-id="@item.Id">
                             @{
                                 counter++;
                             }
                             <td class="@borderLeft">@counter</td>
                             <td>
-                                @Html.DisplayFor(modeItem => item.QuestionContent)
+                                <p>@item.Code</p>
+                                @item.QuesitonContent
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {
                                     if (item.Options[i].IsCorrect == true)
                                     {
-                                        <div class="container-fluid text-green-success">
+                                        <div class="container-fluid text-right-answer">
                                             @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                         </div>
                                     }
@@ -59,14 +62,15 @@
                                 }
                             </td>
                             <td>
-                                @if (item.IsDuplicated)
+                                @if (item.DuplicatedQuestion != null)
                                 {
+                                <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
                                     for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
                                     {
                                         if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
                                         {
-                                            <div class="container-fluid text-green-success">
+                                            <div class="container-fluid text-right-answer">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
                                             </div>
                                         }
@@ -80,89 +84,13 @@
                                         <br />
                                     }
                                 }
-                                
                             </td>
-                            @*<td>
-                                    @foreach (var option in item.Options)
-                                    {
-                                        if (option.IsCorrect == true)
-                                        {
-                                            <div class="row bg-success text-white container-fluid text-center">
-                                                @Html.DisplayFor(optionItem => option.OptionContent)
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @Html.DisplayFor(optionItem => option.OptionContent)
-                                            </div>
-                                        }
-
-                                        <br />
-                                    }
-                                </td>*@
 
                         </tr>
-                                }
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@*<div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <a href="@Url.Action("AddQuestion", "question", new { courseId = Model.First().Question.CourseId})" class="btn btn-primary float-right">Add Question</a>
-            </div>
-        </div>
-        <div class="row">
-            <table class="table">
-                <tr>
-                    <th>No.</th>
-                    <th class="col-md-8">Question</th>
-
-
-                    <th class="col-md-4">Option</th>
-
-
-                </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                        @{
-                            counter++;
-                        }
-                        <td>@counter</td>
-                        <td class="col-md-8">@Html.DisplayFor(modeItem => item.Question.QuestionContent)</td>
-
-
-                        <td class="col-md-4">
-                            @foreach (var option in item.Options)
-                            {
-                                if (option.IsCorrect == true)
-                                {
-                                    <div class="row bg-success text-white container-fluid text-center">
-                                        @Html.DisplayFor(optionItem => option.OptionContent)
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="container-fluid">
-                                        @Html.DisplayFor(optionItem => option.OptionContent)
-                                    </div>
-                                }
-
-                                <br />
-                            }
-                        </td>
-
-
-                    </tr>
-                }
-
-            </table>
-        </div>
-    </div>*@
-
 

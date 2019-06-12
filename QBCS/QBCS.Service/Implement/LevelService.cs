@@ -14,28 +14,53 @@ namespace QBCS.Service.Implement
     public class LevelService : ILevelService
     {
 
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
 
         public LevelService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
+
+        public int GetIdByName(string levelName)
+        {
+            IQueryable<Level> levels = unitOfWork.Repository<Level>().GetAll();
+            Level level =levels.Where(l => (l.Name.ToLower()).Equals(levelName.ToLower())).FirstOrDefault();
+            if (level == null)
+            {
+                return 0;
+            } else
+            {
+                return (int)level.Id;
+            }
+        }
+
         public List<LevelViewModel> GetLevel()
         {
             
-            IQueryable<Level> Levels = u.Repository<Level>().GetAll();
+            IQueryable<Level> levels = unitOfWork.Repository<Level>().GetAll();
             List<LevelViewModel> levelViewModels = new List<LevelViewModel>();
-            foreach(Level leval in Levels)
+            foreach(Level leval in levels)
             {
-                LevelViewModel lvm = new LevelViewModel()
+                LevelViewModel levelViewModel = new LevelViewModel()
                 {
                     Id = leval.Id,
                     Name = leval.Name
                 };
-                levelViewModels.Add(lvm);
+                levelViewModels.Add(levelViewModel);
 
             }
             return levelViewModels;
+        }
+
+        public LevelViewModel GetLevelById(int levelId)
+        {
+            Level levelById = unitOfWork.Repository<Level>().GetById(levelId);
+            LevelViewModel levelViewModel = new LevelViewModel()
+            {
+                Id = levelById.Id,
+                Name = levelById.Name
+            };
+            return levelViewModel;
         }
     }
 }

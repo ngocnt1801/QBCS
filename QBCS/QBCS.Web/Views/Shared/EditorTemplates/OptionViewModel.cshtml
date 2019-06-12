@@ -1,11 +1,24 @@
 ﻿@model QBCS.Service.ViewModel.OptionViewModel
 
-<h6>Option @ViewData["index"]</h6>
+@{
+    var isCorrect = "false";
+    var content = "";
+    if (Model != null)
+    {
+        if (Model.IsCorrect)
+        {
+            isCorrect = "true";
+        }
+        content = Model.OptionContent;
+    }
+
+ }
 <div class="form-inline">
-    <input type="text" class="form-control col-lg-11" name="Options[@((int)ViewData["index"] - 1)].OptionContent" value="">
+    @Html.HiddenFor(m => m.Id)
+    <input type="text" class="form-control col-lg-11" value="@content" name="Options[@((int)ViewData["index"] - 1)].OptionContent">
     <div class="col-lg-1">
         <label class="switch float-right">
-            <input type="checkbox" class="success" name="Options[@((int)ViewData["index"] - 1)].IsCorrect" value="true">
+            <input type="checkbox" class="success" name="Options[@((int)ViewData["index"] - 1)].IsCorrect" value="true" @(isCorrect.ToLower().Equals("true") ? "checked" : "")>
             <span class="slider round"></span>
         </label>
     </div>

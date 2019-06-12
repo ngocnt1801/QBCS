@@ -1,4 +1,6 @@
-﻿using QBCS.Service.Implement;
+﻿using DuplicateQuestion;
+using Newtonsoft.Json;
+using QBCS.Service.Implement;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -16,10 +18,20 @@ namespace QBCS.Web.Controllers
         }
 
         // GET api/values
-        public double Get()
+        public string Get()
         {
-            var result = testService.CheckSimilarity();
-            return result;
+            //var result = testService.CheckDuplidate();
+            List<string> options = new List<string>();
+            options.Add("Option 1");
+            options.Add("Option 2");
+            options.Add("Option 3");
+            return JsonConvert.SerializeObject(options, Formatting.Indented);
+        }
+
+        [HttpGet]
+        public double TestTF(string s1, string s2)
+        {
+            return TFAlgorithm.CaculateSimilar(s1, s2);
         }
 
         // GET api/values/test

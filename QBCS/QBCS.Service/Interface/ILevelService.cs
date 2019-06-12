@@ -11,5 +11,7 @@ namespace QBCS.Service.Interface
     public interface ILevelService
     {
         List<LevelViewModel> GetLevel();
+        int GetIdByName(string levelName);
+        LevelViewModel GetLevelById(int levelId);
     }
 }

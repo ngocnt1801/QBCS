@@ -10,5 +10,6 @@ namespace DuplicateQuestion.Entity
     {
         public string OptionContent { get; set; }
         public bool IsCorrect { get; set; }
+        public int QuestionId { get; set; }
     }
 }

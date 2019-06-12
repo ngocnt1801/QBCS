@@ -2,6 +2,7 @@
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class CourseController : Controller
     {
         private ICourseService courseService;
@@ -80,6 +82,17 @@ namespace QBCS.Web.Controllers
             var update = courseService.UpdateDisable(itemId);
             int userId = ((UserViewModel)Session["user"]).Id;
             return RedirectToAction("Index", new { userId = userId });
+        }
+
+        public ActionResult GetAllCourse()
+        {
+            List<CourseViewModel> courses = courseService.GetAllCourses();
+            return View("Staff_ListCourse", courses);
+        }
+        public ActionResult GetCourseByNameOrId(string searchValue)
+        {
+            List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);
+            return View("Staff_ListCourse", courses);
         }
     }
 }

@@ -30,14 +30,12 @@ namespace QBCS.Service.Implement
         }
         public List<CourseViewModel> GetAllCourses()
         {
-            
-            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.IsDisable == false).Select(c => new CourseViewModel {
+            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel {
                 Id = c.Id,
                 Code = c.Code,
                 Name = c.Name
             });
             
-           
             return course.ToList();
         }
 
@@ -142,6 +140,23 @@ namespace QBCS.Service.Implement
                 LearningOutcome = listLearningOutcome
             };
             return courseVM;
+        }
+
+        public List<CourseViewModel> SearchCourseByNameOrCode(string searchContent)
+        {
+            List<Course> courses = unitOfWork.Repository<Course>().GetAll().Where(c => (c.Name.ToLower()).Contains(searchContent.ToLower()) || (c.Code.ToLower()).Contains(searchContent.ToLower())).ToList();
+            List<CourseViewModel> courseViewModels = new List<CourseViewModel>();
+            foreach (var course in courses)
+            {
+                CourseViewModel courseViewModel = new CourseViewModel()
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    Code = course.Code
+                };
+                courseViewModels.Add(courseViewModel);
+            }
+            return courseViewModels;
         }
     }
 }

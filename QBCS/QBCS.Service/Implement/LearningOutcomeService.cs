@@ -14,15 +14,36 @@ namespace QBCS.Service.Implement
     public class LearningOutcomeService : ILearningOutcomeService
     {
 
-        private IUnitOfWork u;
+        private IUnitOfWork unitOfWork;
 
         public LearningOutcomeService()
         {
-            u = new UnitOfWork();
+            unitOfWork = new UnitOfWork();
         }
-        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int? CourseId)
+
+        public int GetCourseIdByLearningOutcomeId(int learningOutcomeId)
         {
-            IQueryable<LearningOutcome> LearningOutcomes = u.Repository<LearningOutcome>().GetAll();
+            LearningOutcome learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(learningOutcomeId);
+            return (int)learningOutcome.CourseId;
+        }
+
+        public LearningOutcomeViewModel GetLearingOutcomeById(int learningOutcomeId)
+        {
+            LearningOutcome learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(learningOutcomeId);
+            LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel()
+            {
+                Id = learningOutcome.Id,
+                Code = learningOutcome.Code,
+                CourseId = (int)learningOutcome.CourseId,
+                IsDisable = (bool)learningOutcome.IsDisable,
+                Name = learningOutcome.Name
+            };
+            return learningOutcomeViewModel;
+        }
+
+        public List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId)
+        {
+            IQueryable<LearningOutcome> LearningOutcomes = unitOfWork.Repository<LearningOutcome>().GetAll();
 
             List<LearningOutcome> LearningOutcomeByCourse = LearningOutcomes.Where(lo => lo.CourseId == CourseId).ToList();
 
@@ -38,7 +59,7 @@ namespace QBCS.Service.Implement
                     IsDisable = (bool) learningOutcome.IsDisable,
                     Name = learningOutcome.Name
                 };
-
+                learningOutcomeViewModel.UpdateIdValue();
                 learningOutcomeViewModels.Add(learningOutcomeViewModel);
             }
 
@@ -46,7 +67,7 @@ namespace QBCS.Service.Implement
         }
         public List<LearningOutcomeViewModel> GetAllLearningOutcome()
         {
-            List<LearningOutcome> learningOutcomes = u.Repository<LearningOutcome>().GetAll().Where(lo => lo.IsDisable == false).ToList();
+            List<LearningOutcome> learningOutcomes = unitOfWork.Repository<LearningOutcome>().GetAll().Where(lo => lo.IsDisable == false).ToList();
             List<LearningOutcomeViewModel> result = new List<LearningOutcomeViewModel>();
             foreach(var learningOutcome in learningOutcomes)
             {
@@ -65,9 +86,9 @@ namespace QBCS.Service.Implement
         {
             try
             {
-                var learningOutcome = u.Repository<LearningOutcome>().GetById(id);
+                var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(id);
                 learningOutcome.IsDisable = true;
-                u.SaveChanges();
+                unitOfWork.SaveChanges();
                 return true;
             }
             catch
@@ -86,8 +107,8 @@ namespace QBCS.Service.Implement
                     CourseId = model.CourseId,
                     IsDisable = false
                 };
-                u.Repository<LearningOutcome>().Insert(learningOutcome);
-                u.SaveChanges();
+                unitOfWork.Repository<LearningOutcome>().Insert(learningOutcome);
+                unitOfWork.SaveChanges();
                 return true;
             }
             catch
@@ -99,12 +120,12 @@ namespace QBCS.Service.Implement
         {
             try
             {
-                var learningOutcome = u.Repository<LearningOutcome>().GetById(model.Id);
+                var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(model.Id);
                 learningOutcome.Code = model.Code;
                 learningOutcome.Name = model.Name;
                 learningOutcome.CourseId = model.CourseId;
-                u.Repository<LearningOutcome>().Update(learningOutcome);
-                u.SaveChanges();
+                unitOfWork.Repository<LearningOutcome>().Update(learningOutcome);
+                unitOfWork.SaveChanges();
                 return true;
             } catch
             {
@@ -114,7 +135,7 @@ namespace QBCS.Service.Implement
         }
         public LearningOutcomeViewModel GetLearningOutcomeById(int id)
         {
-            var learningOutcome = u.Repository<LearningOutcome>().GetById(id);
+            var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(id);
             var result = new LearningOutcomeViewModel()
             {
                 Id = learningOutcome.Id,

@@ -41,11 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuplicateUtilities.cs" />
+    <Compile Include="DuplicateUtils.cs" />
+    <Compile Include="Entity\ImportModel.cs" />
+    <Compile Include="Entity\LevelEnum.cs" />
     <Compile Include="Entity\OptionModel.cs" />
     <Compile Include="Entity\QuestionModel.cs" />
+    <Compile Include="Entity\StatusEnum.cs" />
     <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringUtils.cs" />
+    <Compile Include="TFAlgorithm.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
