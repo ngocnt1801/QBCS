@@ -233,11 +233,8 @@
     <Content Include="Content\font-awesome\v4-shims.css" />
     <Content Include="Content\font-awesome\v4-shims.min.css" />
     <Content Include="Content\font.css" />
-<<<<<<< HEAD
     <Content Include="Content\generate-exam.css" />
-=======
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
->>>>>>> TruongNB_Sprint3
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
@@ -2163,14 +2160,11 @@
     <Content Include="Views\Rule\Index.cshtml" />
     <Content Include="Views\Topic\Add.cshtml" />
     <Content Include="Views\Topic\Edit.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Topic\Index.cshtml" />
-=======
     <Content Include="Views\LearningOutcome\Index.cshtml" />
     <Content Include="Views\LearningOutcome\Add.cshtml" />
     <Content Include="Views\LearningOutcome\Edit.cshtml" />
     <Content Include="Views\Course\Detail.cshtml" />
->>>>>>> TruongNB_Sprint3
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
