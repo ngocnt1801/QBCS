@@ -14,5 +14,6 @@ namespace QBCS.Service.Interface
         QuestionTempViewModel GetQuestionTemp(int questionTempId);
         Task ImportToBank(int importId);
         void Cancel(int importId);
+        List<QuestionTempViewModel> CheckRule(List<QuestionTempViewModel> tempQuestions);
     }
 }

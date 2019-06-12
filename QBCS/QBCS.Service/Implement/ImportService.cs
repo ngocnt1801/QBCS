@@ -174,5 +174,78 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
             }
         }
+
+        public List<QuestionTempViewModel> CheckRule(List<QuestionTempViewModel> tempQuestions)
+        {
+            var rules = unitOfWork.Repository<Rule>().GetAll();
+            foreach(var tempQuestion in tempQuestions)
+            {
+                foreach (var rule in rules)
+                {
+                    switch (rule.KeyId)
+                    {
+                        case 1: if (tempQuestion.QuesitonContent.Length < int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                        case 2:
+                            if (tempQuestion.QuesitonContent.Length > int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                        case 3:
+                            if (tempQuestion.QuesitonContent.Contains(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                        case 4:
+                            if(tempQuestion.Options.Count < int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                        case 5:
+                            if (tempQuestion.Options.Count > int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                        case 6:
+                            foreach(var option in tempQuestion.Options)
+                            {
+                                if(option.OptionContent.Length < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                        case 7:
+                            foreach (var option in tempQuestion.Options)
+                            {
+                                if (option.OptionContent.Length > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                        case 8: break;
+                        case 9:
+                            foreach (var option in tempQuestion.Options)
+                            {
+                                if (option.OptionContent.Contains(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            
+                return tempQuestions;
+        }
     }
 }
