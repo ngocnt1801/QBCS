@@ -184,35 +184,41 @@ namespace QBCS.Service.Implement
                 {
                     switch (rule.KeyId)
                     {
+                        //check min question length
                         case 1: if (tempQuestion.QuesitonContent.Length < int.Parse(rule.Value))
                             {
                                 tempQuestion.Status = StatusEnum.Invalid;
                             }
                             break;
+                            //check max question length
                         case 2:
                             if (tempQuestion.QuesitonContent.Length > int.Parse(rule.Value))
                             {
                                 tempQuestion.Status = StatusEnum.Invalid;
                             }
                             break;
+                            //check banned words in question
                         case 3:
                             if (tempQuestion.QuesitonContent.Contains(rule.Value))
                             {
                                 tempQuestion.Status = StatusEnum.Invalid;
                             }
                             break;
+                            //check min options count in question
                         case 4:
                             if(tempQuestion.Options.Count < int.Parse(rule.Value))
                             {
                                 tempQuestion.Status = StatusEnum.Invalid;
                             }
                             break;
+                            //check max option count in question
                         case 5:
                             if (tempQuestion.Options.Count > int.Parse(rule.Value))
                             {
                                 tempQuestion.Status = StatusEnum.Invalid;
                             }
                             break;
+                            //check min option length
                         case 6:
                             foreach(var option in tempQuestion.Options)
                             {
@@ -222,6 +228,7 @@ namespace QBCS.Service.Implement
                                 }
                             }
                             break;
+                            //check max option length
                         case 7:
                             foreach (var option in tempQuestion.Options)
                             {
@@ -231,7 +238,9 @@ namespace QBCS.Service.Implement
                                 }
                             }
                             break;
+                            //check option length difference
                         case 8: break;
+                            //check banned words in option
                         case 9:
                             foreach (var option in tempQuestion.Options)
                             {
