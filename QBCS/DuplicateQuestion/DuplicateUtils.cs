@@ -1,5 +1,6 @@
 ﻿using DuplicateQuestion.Entity;
 using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
@@ -317,7 +318,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.Topic, q.LevelName " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -338,6 +339,18 @@ namespace DuplicateQuestion
                         question.QuestionCode = (string)reader["Code"];
                         question.Status = (int)StatusEnum.Success;
                         question.Id = (int)reader["Id"];
+                        if (reader["Category"] != DBNull.Value)
+                        {
+                            question.Category = (string)reader["Category"];
+                        }
+                        if (reader["Topic"] != DBNull.Value)
+                        {
+                            question.LearningOutcome = (string)reader["Topic"];
+                        }
+                        if (reader["LevelName"] != DBNull.Value)
+                        {
+                            question.Level = (string)reader["LevelName"];
+                        }
                         question.IsBank = false;
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
@@ -404,6 +417,16 @@ namespace DuplicateQuestion
         private static void InsertTempToBank(ImportModel import)
         {
             var importSuccessList = GetImportedQuestion(import.ImportId, (int)StatusEnum.Success);
+
+            //assign category id, learning outcome id, level id
+            foreach (QuestionModel question in importSuccessList)
+            {
+                question.CategoryId = GetCategory(question.Category, import.CourseId);
+                question.LearningOutcomeId = GetLearningOutcome(question.LearningOutcome, import.CourseId);
+                question.LevelId = GetLevel(question.Level);
+            }
+
+            //add question
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -411,12 +434,15 @@ namespace DuplicateQuestion
                 {
                     #region insert question
                     SqlCommand command = new SqlCommand(
-                        "INSERT Question (QuestionContent,CourseId,QuestionCode) " +
+                        "INSERT Question (QuestionContent,CourseId,QuestionCode, CategoryId, LearningOutcomeId, LevelId) " +
                         "OUTPUT INSERTED.Id AS 'Id' " +
                         "VALUES ( " +
                             "@questionContent, " +
                             "@courseId, " +
-                            "@questionCode " +
+                            "@questionCode, " +
+                            "@category, " +
+                            "@learningOutcome, " +
+                            "@level" +
                         ")",
                         connection
                         );
@@ -424,6 +450,9 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@questionContent", question.QuestionContent);
                     command.Parameters.AddWithValue("@courseId", import.CourseId);
                     command.Parameters.AddWithValue("@questionCode", question.QuestionCode);
+                    command.Parameters.AddWithValue("@category", question.CategoryId);
+                    command.Parameters.AddWithValue("@learningOutcome", question.LearningOutcomeId);
+                    command.Parameters.AddWithValue("@level", question.LevelId);
                     var reader = command.ExecuteReader();
                     #endregion
                     int id = 0;
@@ -439,6 +468,7 @@ namespace DuplicateQuestion
                 }
             }
 
+            //add option
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -461,6 +491,152 @@ namespace DuplicateQuestion
                     }
 
                 }
+            }
+        }
+
+        private static int? GetLevel(string name)
+        {
+            if (name != null)
+            {
+                if (name.Trim().ToLower().Equals(LevelEnum.Easy.ToString().ToLower()))
+                {
+                    return (int)LevelEnum.Easy;
+                }
+
+                if (name.Trim().ToLower().Equals(LevelEnum.Medium.ToString().ToLower()))
+                {
+                    return (int)LevelEnum.Medium;
+                }
+
+                if (name.Trim().ToLower().Equals(LevelEnum.Hard.ToString().ToLower()))
+                {
+                    return (int)LevelEnum.Hard;
+                }
+            }
+
+            return null;
+        }
+
+        private static int? GetCategory(string name, int courseId)
+        {
+            if (name != null && !String.IsNullOrEmpty(name.Trim()))
+            {
+                int id = 0;
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(
+                        "SELECT Id " +
+                        "FROM Category " +
+                        "WHERE Name = @name AND CourseId=@courseId",
+                        connection
+                        );
+
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@courseId", courseId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        id = (int)reader["id"];
+                    }
+                }
+
+                if (id == 0)
+                {
+                    id = AddCategory(name, courseId);
+                }
+                if (id != 0)
+                {
+                    return id;
+                }
+            }
+            return null;
+        }
+
+        private static int? GetLearningOutcome(string name, int courseId)
+        {
+            int? id = 0;
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT Id " +
+                    "FROM LearningOutcome " +
+                    "WHERE Name = @name AND CourseId=@courseId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@courseId", courseId);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    id = (int)reader["id"];
+                }
+            }
+
+            if (id == 0)
+            {
+                //id = AddCategory(name, courseId);
+                id = null;
+            }
+
+            return id;
+        }
+
+        private static int AddCategory(string name, int courseId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                                            "INSERT Category (Name, CourseId)" +
+                                            "OUTPUT INSERTED.Id AS 'Id' " +
+                                            "VALUES ( " +
+                                                "@name, " +
+                                                "@courseId " +
+                                            ")", connection);
+
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@courseId", courseId);
+                var reader = command.ExecuteReader();
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = (int)reader["Id"];
+                }
+                reader.Close();
+                return id;
+            }
+        }
+
+        private static int AddLearningOutcome(string name, int courseId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                                            "INSERT LearningOutcome (Name, CourseId)" +
+                                            "OUTPUT INSERTED.Id AS 'Id' " +
+                                            "VALUES ( " +
+                                                "@name, " +
+                                                "@courseId " +
+                                            ")", connection);
+
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@courseId", courseId);
+                var reader = command.ExecuteReader();
+                int id = 0;
+                if (reader.Read())
+                {
+                    id = (int)reader["Id"];
+                }
+                reader.Close();
+                return id;
             }
         }
     }

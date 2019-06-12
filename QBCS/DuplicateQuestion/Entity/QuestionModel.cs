@@ -18,5 +18,11 @@ namespace DuplicateQuestion.Entity
         public List<OptionModel> Options { get; set; }
         public int Status { get; set; }
         public bool IsBank { get; set; }
+        public string Category { get; set; }
+        public string LearningOutcome { get; set; }
+        public string Level { get; set; }
+        public int? CategoryId { get; set; }
+        public int? LearningOutcomeId { get; set; }
+        public int? LevelId { get; set; }
     }
 }
