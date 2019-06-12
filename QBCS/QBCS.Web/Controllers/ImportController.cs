@@ -51,7 +51,9 @@ namespace QBCS.Web.Controllers
             Task.Factory.StartNew(() => {
                 importService.ImportToBank(importId);
             });
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            TempData["Message"] = "Your questions are processing";
+            TempData["Status"] = ToastrEnum.Info;
+            return RedirectToAction("Index", "Home");
         }
     
         public ActionResult Cancel(int importId)
