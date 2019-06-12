@@ -33,10 +33,11 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
             return View(result);
         }
-        public JsonResult UpdateAllRule(List<RuleViewModel> rules)
+        [HttpPost]
+        public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
-
-            return Json(JsonRequestBehavior.AllowGet);
+            var result = ruleService.UpdateRule(rules);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

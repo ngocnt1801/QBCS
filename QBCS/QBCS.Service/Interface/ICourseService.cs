@@ -17,6 +17,7 @@ namespace QBCS.Service.Interface
         List<CourseViewModel> GetAvailableCourse(int userId);
         List<CourseViewModel> GetAllCoursesByUserId(int id);
         List<Course> GetCoursesByName(string name);
+        CourseViewModel GetDetailCourseById(int id);
         bool UpdateDisable(int id);
     }
 }
