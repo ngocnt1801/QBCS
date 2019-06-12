@@ -1,11 +1,21 @@
 ﻿@model List<List<QBCS.Service.ViewModel.RuleViewModel>>
+@using QBCS.Service.ViewModel
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
+    <head>
+        <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
+        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+        <script src="~/Scripts/bootstrap-tagsinput.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    </head>
 
 <h2>Rules</h2>
+<div>
+    Default Activation Date: <input type="date" id="default_datetime" />
+</div>
 @foreach (List<QBCS.Service.ViewModel.RuleViewModel> rvm in Model)
 {
     <div class="card shadow mb-4">
@@ -13,7 +23,7 @@
             <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
-            <button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>
+            @*<button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>*@
             <div class="table-responsive">
                 <table class="table table-bordered" @*id="dataTable"*@ id="table_@rvm.FirstOrDefault().GroupTypeEnum" cellspacing="0">
                     <thead>
@@ -29,18 +39,45 @@
                     <tbody>
                         @foreach (var rule in rvm)
                         {
-                            foreach (var value in rule.Value)
+                            if (rule.Value.FirstOrDefault().KeyId == 3 || rule.Value.FirstOrDefault().KeyId == 9)
                             {
                                 <tr>
-                                    <td hidden>@value.KeyId</td>
+                                    <td hidden id="id">@rule.Value.FirstOrDefault().KeyId</td>
                                     <td>@rule.Code</td>
                                     <td>@rule.Name</td>
-                                    <td><input type="text" name="@value.Value" value="@value.Value" placeholder="@value.Value" /></td>
-                                    <td><input type="datetime-local" /></td>
-                                    @*<td>@value.ValueGroup</td>*@
+                                    <td>
+                                        <div id="">
+                                            @* Any changes make to this line must also change at
+                                                bootstrap-tagsinput.js line 142*@
+                                            <select multiple id="select_@rule.Value.FirstOrDefault().KeyId" data-role="tagsinput">
+                                                @foreach (var value in rule.Value)
+                                                {
+                                                    <option selected="selected" value="@value.Value">@value.Value</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="date" id="date">
+                                    </td>
                                 </tr>
                             }
-
+                            else
+                            {
+                                foreach (var value in rule.Value)
+                                {
+                                    <tr>
+                                        <td hidden id="id">@value.KeyId</td>
+                                        <td>@rule.Code</td>
+                                        <td>@rule.Name</td>
+                                        <td><input type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" /></td>
+                                        <td>
+                                            <input type="date" id="date">
+                                        </td>
+                                        @*<td>@value.ValueGroup</td>*@
+                                    </tr>
+                                }
+                            }
                         }
 
                     </tbody>
@@ -50,61 +87,93 @@
     </div>
 }
 
-
-@*<div class="card shadow mb-4">
-    <a href="#collapseOption" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Option Rule</h6>
-    </a>
-    <div class="card-body collapse show" id="collapseOption" style="padding-left:30px">
-        <button class="btn btn-primary">Add Option Rule</button>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="datatableOption" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th class="col-md-6">Value</th>
-                        <th>Create Date</th>
-                        <th>Activate Date</th>
-                        <th>Group</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>Test</td>
-                        <td>TestName</td>
-                        <td><input type="text" style="width:100%" /></td>
-                        <td><input type="date" style="width:150px" /></td>
-                        <td><input type="date" style="width:150px" /></td>
-                        <td><input type="text" style="width:50px" /></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>*@
-<div style="text-align:center"><button class="btn-lg btn-primary">Save Rule</button></div>
+<div style="text-align:right"><button id="save" class="btn-lg btn-primary">Save Rule</button></div>
 <script>
-    function addField(event,tableId) {
-        event.preventDefault();
-        var table = document.getElementById(tableId);
-        if (tableId.includes('Question')) {
-            var row = table.insertRow(0);
-            var cell0 = row.insertCell(0);
-            var cell1 = row.insertCell(1);
-            var cell2 = row.insertCell(2);
-            var cell3 = row.insertCell(3);
-            var cell4 = row.insertCell(4);
-            cell0.appendChild(document.createElement("input"));
-        }
-        table.append('<tr>' +
-            '<td><input type="text" />' +
-            '<td><input type="text" />' +
-            '<td><input type="text" />' +
-            '<td><input type="text" />' +
-            '<td><input type="text" />' +
-            '</tr>');
-    }
-</script>
+    $(document).ready(function () {
+        $('#save').on('click', function () {
 
+            var testList = []; 
+            var defaultActivateDate = $("#default_datetime").val();
+            if (defaultActivateDate != "") {
+                $('#table_Question tbody tr').each(function () {
+                    var Obj = {};
+                    Obj['KeyId'] = $(this).find('#id').text();
+                    if (Obj['KeyId'] == 3) {
+                        var select3 = $('#select_3').val();
+                        for (var i = 0; i < select3.length; i++) {
+                            var Obj2 = {};
+                            Obj2['KeyId'] = Obj['KeyId'];
+                            Obj2['Value'] = select3[i];
+                            Obj2['ActivateDate'] = $(this).find('#date').val();
+                            if (Obj2['ActivateDate'] == "") {
+                                Obj2['ActivateDate'] = defaultActivateDate;
+                            }
+                            testList.push(Obj2);
+                        }
+
+                    } else {
+                        if (Number.isInteger($(this).find('#value').val())) {
+                            Obj['Value'] = $(this).find('#value').val();
+                            Obj['ActivateDate'] = $(this).find('#date').val();
+                            if (Obj['ActivateDate'] == "") {
+                                Obj['ActivateDate'] = defaultActivateDate;
+                            }
+                            testList.push(Obj);
+                        } else {
+                            swal('Min max must be integer!!!');
+                        }
+                        
+                    }
+                });
+
+                $('#table_Option tbody tr').each(function () {
+                    var Obj = {};
+                    Obj['KeyId'] = $(this).find('#id').text();
+                    if (Obj['KeyId'] == 9) {
+                        var select3 = $('#select_9').val();
+                        for (var i = 0; i < select3.length; i++) {
+                            var Obj2 = {};
+                            Obj2['KeyId'] = Obj['KeyId'];
+                            Obj2['Value'] = select3[i];
+                            Obj2['ActivateDate'] = $(this).find('#date').val();
+                            if (Obj2['ActivateDate'] == "") {
+                                Obj2['ActivateDate'] = defaultActivateDate;
+                            }
+                            testList.push(Obj2);
+                        }
+
+                    } else {
+                        if (Number.isInteger($(this).find('#value').val())) {
+                            Obj['Value'] = $(this).find('#value').val();
+                            Obj['ActivateDate'] = $(this).find('#date').val();
+                            if (Obj['ActivateDate'] == "") {
+                                Obj['ActivateDate'] = defaultActivateDate;
+                            }
+                            testList.push(Obj);
+                        } else {
+                            swal('Min max must be integer!!!');
+                        }
+                    }
+                });
+                    $.ajax({
+                    type: "POST",
+                        url: '@Url.Action("UpdateAllRule","Rule")',
+                        data: JSON.stringify(testList),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response != null) {
+                            window.location.replace('@Url.Action("Index","Rule")');
+                        }
+                    },
+                    failure: function(response) {
+                        alert(response.responseText);
+                    },
+                    error: function(response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>

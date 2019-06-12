@@ -58,9 +58,8 @@ namespace QBCS.Service.Implement
 
             return result;
         }
-        public bool UpdateRule(RuleViewModel rules)
+        public bool UpdateRule(List<RuleAjaxHandleViewModel> rules)
         {
-            var ruleKeyId = rules.Value.FirstOrDefault().KeyId;
             List<Rule> disableValues = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false).ToList();
             foreach(var disableValue in disableValues)
             {
@@ -68,15 +67,14 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<Rule>().Update(disableValue);
             }
             unitOfWork.SaveChanges();
-            foreach (var rule in rules.Value)
+            foreach (var rule in rules)
             {
                 var entity = new Rule()
                 {
-                    KeyId = ruleKeyId,
+                    KeyId = rule.KeyId,
                     Value = rule.Value,
                     ActivateDate = rule.ActivateDate,
                     CreateDate = DateTime.Now,
-                    ValueGroup = rule.ValueGroup,
                     IsDisable = false
                 };
                 unitOfWork.Repository<Rule>().Insert(entity);

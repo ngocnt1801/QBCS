@@ -10,6 +10,6 @@ namespace QBCS.Service.Interface
     public interface IRuleService
     {
         List<RuleViewModel> getAllRule();
-        bool UpdateRule(RuleViewModel rule);
+        bool UpdateRule(List<RuleAjaxHandleViewModel> rule);
     }
 }
