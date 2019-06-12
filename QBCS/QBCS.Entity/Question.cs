@@ -43,8 +43,7 @@ namespace QBCS.Entity
         [StringLength(255)]
         public string Image { get; set; }
 
-        [StringLength(200)]
-        public string CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
 

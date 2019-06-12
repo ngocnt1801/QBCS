@@ -40,7 +40,6 @@ namespace QBCS.Web
                 "~/Content/font-awesome/all.css",
                 "~/Content/switch-button-style.css",
                 "~/Content/custom-css.css"
-               
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
@@ -100,6 +99,15 @@ namespace QBCS.Web
 
             bundles.Add(new StyleBundle("~/bundle/content/toastr").Include(
                 "~/Content/toastr.css"
+                ));
+
+            //tab
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tab").Include(
+                "~/Scripts/myjs/tab.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/tab").Include(
+                "~/Content/tab-style.css"
                 ));
         }
     }
