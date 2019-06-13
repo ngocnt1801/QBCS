@@ -199,7 +199,7 @@ namespace QBCS.Service.Utilities
                     options.Add(optionModel);
                 }
 
-                if (quesModel.QuestionContent != null && options.Count() == 4 && quesModel.Code != null)
+                if (quesModel.QuestionContent != null && isEnd && quesModel.Code != null)
                 {
                     quesModel.Options = options;
                     list.Add(quesModel);
