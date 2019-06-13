@@ -68,5 +68,17 @@ namespace QBCS.Web.Controllers
             TempData["Status"] = ToastrEnum.Success;
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Delete(int questionId, int importId)
+        {
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
+            return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public ActionResult Skip(int questionId, int importId)
+        {
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);
+            return RedirectToAction("GetResult", new { importId = importId });
+        }
     }
 }

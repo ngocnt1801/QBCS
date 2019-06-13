@@ -7,36 +7,43 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-<div class="card shadow mb-4">
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="card shadow mb-4">
 
-    <div class="card-body text-custom">
-        <div class="table-responsive text-custom">
-            <table class="table table-bordered text-custom" width="100%" cellspacing="0">    @*  id="datatable"  *@
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Question</th>
-                        <th>Duplicated With</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        var borderLeft = "";
-                        var action = "";
-                        if (item.Status == StatusEnum.Delete)
+        <div class="card-body text-custom">
+            <div class="table-responsive text-custom">
+                <table class="table table-bordered text-custom" width="100%" cellspacing="0">
+                    @*  id="datatable"  *@
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Question</th>
+                            <th>Duplicated With</th>
+                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip)
+                            {
+                                <th>Action</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
-                            //borderLeft = "border-left-danger";
-                        }
-                        else if (item.Status == StatusEnum.Editable)
-                        {
-                            //borderLeft = "border-left-warning";
-                            action = "editableTemp";
-                        }
-                        else if (item.Status == StatusEnum.Success)
-                        {
-                            //borderLeft = "border-left-success";
-                        }
+                            var borderLeft = "";
+                            var action = "";
+                            if (item.Status == StatusEnum.Delete)
+                            {
+                                //borderLeft = "border-left-danger";
+                            }
+                            else if (item.Status == StatusEnum.Editable)
+                            {
+                                //borderLeft = "border-left-warning";
+                                action = "editableTemp";
+                            }
+                            else if (item.Status == StatusEnum.Success)
+                            {
+                                //borderLeft = "border-left-success";
+                            }
                         <tr class="@action" data-id="@item.Id">
                             @{
                                 counter++;
@@ -87,13 +94,25 @@
                                     }
                                 }
                             </td>
-
+                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip)
+                            {
+                                <td>
+                                    <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-primary mb-2 col-md-12">Skip</a>
+                                    <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                </td>
+                            }
                         </tr>
-                    }
-                </tbody>
-            </table>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+
+}
+else
+{
+    <h4>No record found here!</h4>
+}
 
 

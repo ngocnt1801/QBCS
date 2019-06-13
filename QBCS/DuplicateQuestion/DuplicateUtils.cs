@@ -183,7 +183,7 @@ namespace DuplicateQuestion
                                 double resultQwithO = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
                                 if (resultQwithO >= 70)
                                 {
-                                    item.Status = (int)StatusEnum.Delete;
+                                    item.Status = (int)StatusEnum.DeleteOrSkip;
                                     if (question.IsBank)
                                     {
                                         item.DuplicatedQuestionId = question.Id;
