@@ -22,6 +22,23 @@ namespace QBCS.Service.Implement
             unitOfWork = new UnitOfWork();
         }
 
+        public void Cancel(int importId)
+        {
+            var import = unitOfWork.Repository<Import>().GetById(importId);
+            var listQuestion = import.QuestionTemps.ToList();
+            if (import != null)
+            {
+                foreach (var question in listQuestion)
+                {
+                    unitOfWork.Repository<QuestionTemp>().Delete(question);
+                }
+
+                import.Status = (int)StatusEnum.Canceled;
+                unitOfWork.Repository<Import>().Update(import);
+                unitOfWork.SaveChanges();
+            }
+        }
+
         public ImportResultViewModel GetImportResult(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId).FirstOrDefault();
@@ -39,8 +56,8 @@ namespace QBCS.Service.Implement
                 {
                     Id = import.Id,
                     Status = import.Status.Value,
-                    NumberOfSuccess = 5, //fix here
-                    NumberOfFail= 1, //fix here
+                    CourseId = import.CourseId.Value,
+                    NumberOfSuccess = import.TotalSuccess.HasValue ? import.TotalSuccess.Value : 0, //fix here
                     Questions = import.QuestionTemps.Select(q => new QuestionTempViewModel
                     {
                         Id = q.Id,
@@ -154,6 +171,17 @@ namespace QBCS.Service.Implement
                 }
 
                 unitOfWork.Repository<QuestionTemp>().Update(entity);
+                unitOfWork.SaveChanges();
+            }
+        }
+
+        public void UpdateQuestionTempStatus(int questionTempId, int status)
+        {
+            var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
+            if (questionTemp != null && questionTemp.Status == (int)StatusEnum.DeleteOrSkip)
+            {
+                questionTemp.Status = status;
+                unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
                 unitOfWork.SaveChanges();
             }
         }

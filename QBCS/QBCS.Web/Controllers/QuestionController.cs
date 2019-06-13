@@ -11,8 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
-
-
+using QBCS.Service.Enum;
 
 namespace QBCS.Web.Controllers
 {
@@ -127,6 +126,11 @@ namespace QBCS.Web.Controllers
             {
                 check = questionService.InsertQuestion(questionFile, user.Id, courseId); 
             }
+
+            //notify 
+            TempData["Message"] = "You import successfully";
+            TempData["Status"] = ToastrEnum.Success;
+
             return RedirectToAction("Index", "Home");
         }
         public ActionResult GetPartialView(bool? isDuplicate)

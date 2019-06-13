@@ -12,6 +12,7 @@ namespace QBCS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Import()
         {
+            Questions = new HashSet<Question>();
             QuestionTemps = new HashSet<QuestionTemp>();
         }
 
@@ -29,7 +30,14 @@ namespace QBCS.Entity
 
         public int? CourseId { get; set; }
 
+        public DateTime? InsertedToBankDate { get; set; }
+
+        public int? TotalSuccess { get; set; }
+
         public virtual User User { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Question> Questions { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionTemp> QuestionTemps { get; set; }

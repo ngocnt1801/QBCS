@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using QBCS.Service.Enum;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
@@ -30,7 +31,12 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
-            return View(result);
+            if (result.Status != (int)StatusEnum.Done)
+            {
+                return View(result);
+            }
+            TempData["NewestCount"] = result.NumberOfSuccess;
+            return RedirectToAction("GetListQuestion", "Question", new { courseId = result.CourseId});
         }
 
         public ActionResult EditQuestion(QuestionTempViewModel model)
@@ -50,7 +56,29 @@ namespace QBCS.Web.Controllers
             Task.Factory.StartNew(() => {
                 importService.ImportToBank(importId);
             });
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            TempData["Message"] = "Your questions are processing";
+            TempData["Status"] = ToastrEnum.Info;
+            return RedirectToAction("Index", "Home");
+        }
+    
+        public ActionResult Cancel(int importId)
+        {
+            importService.Cancel(importId);
+            TempData["Message"] = "Your import is canceled";
+            TempData["Status"] = ToastrEnum.Success;
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Delete(int questionId, int importId)
+        {
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
+            return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public ActionResult Skip(int questionId, int importId)
+        {
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);
+            return RedirectToAction("GetResult", new { importId = importId });
         }
     }
 }

@@ -10,8 +10,9 @@
     <div id="smartwizard">
         <ul>
             <li><a href="#step-1">Step 1<br /><small>Select amount question</small></a></li>
-            <li><a href="#step-2">Step 2<br /><small>Select Topic/Learing Outcome</small></a></li>
-            <li><a href="#step-3">Step 3<br /><small>Select percent of level</small></a></li>
+            <li><a href="#step-2">Step 2<br /><small>Select Category</small></a></li>
+            <li><a href="#step-3">Step 3<br /><small>Select Topic/Learing Outcome</small></a></li>
+            <li><a href="#step-4">Step 4<br /><small>Select percent of level</small></a></li>
         </ul>
 
         <div>
@@ -25,14 +26,34 @@
                     </div>
                 </div>
             </div>
-                
             <div id="step-2" class="">
+                <table class="table table-striped">
+                    <tbody>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <tr class="d-flex">
+                                <td class="col-1">
+                                    <div class="el-radio text-center form-group">
+                                        <span class="margin-r"></span>
+                                        <input type="radio" name="CategoryId" id="@category.Id" value="@category.Id">
+                                        <label class="el-radio-style" for="@category.Id"></label>
+                                    </div>
+                                </td>
+                                <td class="col-lg-11">
+                                    <h5 style="padding-left:20px;">@category.Name</h5>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="step-3" class="">
                 <div id="check-all-div" style="margin:18px;">
                     <table>
                         <tbody>
                             <tr class="d-flex">
                                 <td class="col-lg-1">
-                                    <div class="el-checkbox el-checkbox-green text-center">
+                                    <div class="el-checkbox text-center">
                                         <span class="margin-r"></span>
                                         <input type="checkbox" name="check" id="check-all">
                                         <label class="el-checkbox-style" for="check-all"></label>
@@ -43,7 +64,7 @@
                                     <h5 style="padding-left:20px;">Select All</h5>
                                 </td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -54,7 +75,7 @@
                             {
                                 <tr class="d-flex">
                                     <td class="col-1">
-                                        <div class="el-checkbox el-checkbox-green text-center form-group">
+                                        <div class="el-checkbox text-center form-group">
                                             <span class="margin-l"></span>
                                             <input value="@topic.IdValue" type="checkbox" class="checkbox" name="Topic" id="@topic.IdValue" />
                                             <label class="el-checkbox-style" for="@topic.IdValue"></label>
@@ -69,7 +90,7 @@
                             {
                                 <tr class="d-flex">
                                     <td class="col-1">
-                                        <div class="el-checkbox el-checkbox-green text-center form-group">
+                                        <div class="el-checkbox  text-center form-group">
                                             <span class="margin-l"></span>
                                             <input value="@lo.IdValue" type="checkbox" class="checkbox" name="Topic" id="@lo.IdValue" />
                                             <label class="el-checkbox-style" for="@lo.IdValue"></label>
@@ -84,32 +105,32 @@
                     </table>
                 </div>
             </div>
-            <div id="step-3" class="">
+            <div id="step-4" class="">
                 <div class="form-inline" style="margin-top:15px;">
-                        <div class="form-group">
-                            <label for="easy" class="control-label col-xs-10">Percent of easy question : </label>
-                            <input class="form-control" id="easy" type="number" style="margin-left:1em;" name="EasyPercent">
-                        </div>
+                    <div class="form-group">
+                        <label for="easy" class="control-label col-xs-10">Percent of easy question : </label>
+                        <input class="form-control" id="easy" type="number" style="margin-left:1em;" name="EasyPercent">
+                    </div>
                 </div>
                 <div class="form-inline" style="margin-top:15px;">
-                        <div class="form-group">
-                            <label for="normal" class="control-label col-xs-10">Percent of medium question :</label>
-                            <div class="col-xs-2">
-                                <input class="form-control" id="normal" type="number" name="MediumPercent">
-                            </div>
+                    <div class="form-group">
+                        <label for="normal" class="control-label col-xs-10">Percent of medium question :</label>
+                        <div class="col-xs-2">
+                            <input class="form-control" id="normal" type="number" name="MediumPercent">
                         </div>
                     </div>
+                </div>
                 <div class="form-inline" style="margin-top:15px;">
-                        <div class="form-group">
-                            <label for="hard" class="control-label col-xs-10">Percent of hard question : </label>
-                            <div class="col-xs-2">
-                                <input class="form-control" id="hard" style="margin-left:1em;" name="HardPercent">
-                            </div>
+                    <div class="form-group">
+                        <label for="hard" class="control-label col-xs-10">Percent of hard question : </label>
+                        <div class="col-xs-2">
+                            <input class="form-control" id="hard" style="margin-left:1em;" name="HardPercent">
                         </div>
-                    
+                    </div>
+
                 </div>
             </div>
         </div>
-        </div>
-        
+    </div>
+
 }

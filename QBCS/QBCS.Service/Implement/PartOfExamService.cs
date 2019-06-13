@@ -33,6 +33,7 @@ namespace QBCS.Service.Implement
                     Id = (int)c.Id,
                     QuestionContent = c.QuestionContent,
                     Level = levelService.GetLevelById((int)c.LevelId),
+                    LevelId = (int)c.LevelId,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {
                         Id = d.Id,

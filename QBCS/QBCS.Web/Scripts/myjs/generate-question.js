@@ -7,20 +7,20 @@
                                      .attr('type', 'submit')
                                      .attr('id', 'btnFinish')
                                      .hide();
-                                     //.on('click', function () {
+    //.on('click', function () {
 
-                                     //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
-                                     //    $.ajax({
-                                     //        type: "GET",
-                                     //        url: link,
-                                     //        success: function (data) {
-                                     //            window.location.href = data.redirecturl;
-                                     //        },
-                                     //        error: function (httpRequest, textStatus, errorThrown) {
-                                     //            alert("Error: " + textStatus + " " + errorThrown + " " + httpRequest);
-                                     //        }
-                                     //    });
-                                     //});
+    //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
+    //    $.ajax({
+    //        type: "GET",
+    //        url: link,
+    //        success: function (data) {
+    //            window.location.href = data.redirecturl;
+    //        },
+    //        error: function (httpRequest, textStatus, errorThrown) {
+    //            alert("Error: " + textStatus + " " + errorThrown + " " + httpRequest);
+    //        }
+    //    });
+    //});
     var btnCancel = $('<button></button>').text('Cancel')
                                      .addClass('btn btn-info')
                                      .on('click', function () { $('#smartwizard').smartWizard("reset"); });
@@ -36,7 +36,7 @@
         }
     });
     $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
-        if (stepNumber === 1) {
+        if (stepNumber === 2) {
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
@@ -102,25 +102,41 @@
             });
         } else {
             $('.checkbox').each(function () {
-               this.checked = false;
+                this.checked = false;
             });
         }
     });
 
     $('.checkbox').on('change', function () {
-        if ($('.checkbox:checked').length == $('.checkbox').length) {
+        if ($('.checkbox:checked').length === $('.checkbox').length) {
             $('#check-all').prop('checked', true);
         } else {
             $('#check-all').prop('checked', false);
         }
     });
-    $("#easy").focusout(function() {
+    $("#easy").focusout(function () {
         var easyPercent = $("#easy").val();
         var hardAndNormal = 100 - easyPercent;
         var normalPercent = (60 * hardAndNormal) / 100;
         var hardPercent = 100 - easyPercent - normalPercent;
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
+    });
+    $("#exportExamination").submit(function (event) {
+        event.preventDefault();
+        var examinationId = $("input[name='examinationId']").val();
+        var fileExtension = $('#fileExtension').find(":selected").text();
+        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",
+    //        data: {
+    //            examinationId: examinationId,
+    //            fileExtension: fileExtension
+    //        },
+    //        success: function () {
+    //        }
+    //    });
     });
 });
 
