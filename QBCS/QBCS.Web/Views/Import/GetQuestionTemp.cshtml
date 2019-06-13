@@ -20,10 +20,8 @@
                 @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
                 for (var i = 0; i < Model.Options.Count; i++)
                 {
-                    <div class="">
-                        @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
-                    </div>
-                    <br />
+                    @*@Html.CheckBoxFor(m => m.Options[i].IsCorrect)*@
+                    @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
                 }
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)

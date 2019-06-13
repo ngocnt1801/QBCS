@@ -476,5 +476,11 @@ namespace QBCS.Service.Implement
             Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return (int)question.Frequency;
         }
+
+        public int GetNewestQuestionCount(int courseId)
+        {
+
+            return 5;
+        }
     }
 }

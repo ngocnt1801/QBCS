@@ -25,5 +25,6 @@ namespace QBCS.Service.Interface
         int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId);
         int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
         bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId);
+        int GetNewestQuestionCount(int courseId);
     }
 }

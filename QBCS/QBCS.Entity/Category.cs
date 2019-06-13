@@ -15,8 +15,7 @@ namespace QBCS.Entity
             Questions = new HashSet<Question>();
         }
 
-        [StringLength(200)]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(200)]
         public string Name { get; set; }

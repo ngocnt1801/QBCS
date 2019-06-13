@@ -2,29 +2,82 @@
 @using QBCS.Service.Enum
 
 @{
+    /**/
+
     ViewBag.Title = "GetResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>Result</h2>
-@*<div class="btn-group col-md-6 mb-2">
-        <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
-        All
-        </button>
-        <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
-        <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
-    </div>*@
+@{
 
-@if (Model.Status == (int)StatusEnum.Done)
-{
-    <p class="text-custom">You have:</p>
-    <p class="text-custom">- @Model.NumberOfSuccess questions were inserted into bank</p>
-    <p class="text-custom">- @Model.NumberOfFail questions were not inserted</p>
-}
-else
-{
+    int total = Model.Questions.Count;
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
+    int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
+    int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
+
     <div id="question-import">
-        @Html.Partial("_ListQuestionWithDuplicate", Model.Questions)
-    </div>
-    <button class="btn btn-primary float-right col-md-1" id="import-btn" data-id="@Model.Id">Import</button>
-}
+        <div class="tabs tabs-style-topline">
+            <nav>
+                <ul>
+                    <li><a href="#section-topline-1"><span>Editable (@editable/@total)</span></a></li>
+                    <li><a href="#section-topline-2"><span>Delete (@delete/@total)</span></a></li>
+                    <li><a href="#section-topline-3"><span>Sucess (@success/@total)</span></a></li>
+                </ul>
+            </nav>
+            <div class="content-wrap">
+                <section id="section-topline-1">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Editable).ToList())
+                </section>
+                <section id="section-topline-2">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList())
+                </section>
+                <section id="section-topline-3">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Success).ToList())
+                </section>
+            </div><!-- /content -->
+        </div><!-- /tabs -->
 
+    </div>
+    <button class="btn btn-primary float-right col-md-1 ml-1 mb-4" data-toggle="modal" data-target="#import-modal">Save</button>
+    <button class="btn btn-danger float-right col-md-1 mb-4" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="import-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are your sure want to save these questions?</p>
+                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete).Count()/@Model.Questions.Count</b> will not insert to bank</p>
+                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.NotCheck).Count()/@Model.Questions.Count</b> will be checked again</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="import-btn" data-id="@Model.Id">OK</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="cancel-import-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are your sure want cancel this?</p>
+                    <p>All your question in this import will be removed</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="cancel-import-btn" data-id="@Model.Id">OK</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}
