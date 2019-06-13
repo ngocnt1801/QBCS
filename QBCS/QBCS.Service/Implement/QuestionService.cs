@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -323,12 +324,15 @@ namespace QBCS.Service.Implement
                         #endregion
                         if (questionXml.question[i].questiontext != null)
                         {
-                            questionContent = questionXml.question[i].questiontext.text;
+                            string tempParser = "";
+                            tempParser = questionXml.question[i].questiontext.text;
+                            questionContent = WebUtility.HtmlDecode(tempParser);
                             question.QuestionContent = questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();
                             question.Category = category.Trim();
                             question.Level = level.Trim();
                             question.Topic = topic.Trim();
+                            tempParser = "";
 
                             #region get question, option
                             if (questionXml.question[i].answer != null)
@@ -337,20 +341,24 @@ namespace QBCS.Service.Implement
                                 {
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
                                     {
-                                        rightAnswer = questionXml.question[i].answer[j].text;
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        rightAnswer = WebUtility.HtmlDecode(tempParser);
                                         option = new OptionTemp();
                                         option.OptionContent = rightAnswer;
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
+                                        tempParser = "";
                                     }
                                     else
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("0"))
                                     {
-                                        wrongAnswer = questionXml.question[i].answer[j].text;
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        wrongAnswer = WebUtility.HtmlDecode(tempParser);
                                         option = new OptionTemp();
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
+                                        tempParser = "";
                                     }
 
                                 }

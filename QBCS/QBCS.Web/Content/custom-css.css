@@ -6,3 +6,9 @@
     color: #0c2f94 !important;
     font-weight: bold;
 }
+
+/*Table hover*/
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+ background-color: #000 !important;
+ background-color: #f8f9fc !important;
+}
