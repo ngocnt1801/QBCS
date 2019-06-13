@@ -1,9 +1,11 @@
-﻿using QBCS.Entity;
+﻿using HtmlAgilityPack;
+using QBCS.Entity;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,15 +38,20 @@ namespace QBCS.Service.Utilities
                 int countWrong = 0;
                 int countCate = 0;
                 int countStartCate = 0;
+                bool isBlock = false;
                 bool isStartCate = false;
-                if (!line.Contains("//"))
+                string result = "";
+                if (!line.StartsWith("//"))
                 {
-                    for (int i = 0; i < line.Length; i++)
+                    HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(line);
+                    string resultTmp = htmlDoc.DocumentNode.InnerText;
+                    result = WebUtility.HtmlDecode(resultTmp);
+                    for (int i = 0; i < result.Length; i++)
                     {
-                        char let = line[i];
-
+                        char let = result[i];
                         #region start count to track the position
-                        if (let == '$')
+                        if (let == '$' && !isStartQuestion)
                         {
                             category = null;
                             level = null;
@@ -52,33 +59,37 @@ namespace QBCS.Service.Utilities
                             countStartCate++;
                             continue;
                         }
-                        if (let == '/')
+                        if (let == '/' && !isStartQuestion)
                         {
 
                             isStartCate = true;
                             countCate++;
                             continue;
                         }
-                        if (let == ':')
+                        if (let == ':' && !isStartQuestion)
                         {
                             countCode++;
                             isStart = true;
                             continue;
                         }
-                        if (let == '=' && isStartQuestion)
+                        if (let == '=' && !isBlock && isStartQuestion)
                         {
                             countRight++;
+                            countWrong = 0;
+                            isBlock = true;
                             continue;
                         }
-                        if (let == '~' && isStartQuestion)
+                        if (let == '~' && !isBlock && isStartQuestion )
                         {
                             countWrong++;
                             countRight = 0;
+                            isBlock = true;
                             continue;
                         }
                         if (let == '}')
                         {
                             isEnd = true;
+                            isStartQuestion = false;
                             continue;
                         }
                         if (let == '{')
@@ -87,6 +98,7 @@ namespace QBCS.Service.Utilities
                             isStartQuestion = true;
                             continue;
                         }
+                        
 
                         #endregion
 
@@ -148,15 +160,27 @@ namespace QBCS.Service.Utilities
 
                 }
                 if (question != null)
-                {                 
+                {
+                    string destination = "[html]";
+                    question = StringProcess.RemoveTag(question, destination,"");
+                    question = StringProcess.RemoveTag(question, "\\=", "=");
+                    question = StringProcess.RemoveTag(question, "\\{", "{");
+                    question = StringProcess.RemoveTag(question, "\\}", "}");
+                    question = StringProcess.RemoveTag(question, "\\#", "#");
+                    question = StringProcess.RemoveTag(question, "\\~", "~");
                     quesModel.Code = id;
                     quesModel.QuestionContent = question;
-                   
+
 
                 }
                 if (right != null)
                 {
                     optionModel = new OptionTemp();
+                    right = StringProcess.RemoveTag(right, "\\=", "=");
+                    right = StringProcess.RemoveTag(right, "\\{", "{");
+                    right = StringProcess.RemoveTag(right, "\\}", "}");
+                    right = StringProcess.RemoveTag(right, "\\#", "#");
+                    right = StringProcess.RemoveTag(right, "\\~", "~");
                     optionModel.OptionContent = right;
                     optionModel.IsCorrect = true;
                     options.Add(optionModel);
@@ -164,11 +188,17 @@ namespace QBCS.Service.Utilities
                 if (wrong != null)
                 {
                     optionModel = new OptionTemp();
+                    wrong = StringProcess.RemoveTag(wrong, "\\=", "=");
+                    wrong = StringProcess.RemoveTag(wrong, "\\{", "{");
+                    wrong = StringProcess.RemoveTag(wrong, "\\}", "}");
+                    wrong = StringProcess.RemoveTag(wrong, "\\#", "#");
+                    wrong = StringProcess.RemoveTag(wrong, "\\~", "~");
+                    wrong = StringProcess.RemoveTag(wrong, "\\<", "<");
                     optionModel.OptionContent = wrong;
                     optionModel.IsCorrect = false;
                     options.Add(optionModel);
                 }
-                
+
                 if (quesModel.QuestionContent != null && options.Count() == 4 && quesModel.Code != null)
                 {
                     quesModel.Options = options;
@@ -181,7 +211,7 @@ namespace QBCS.Service.Utilities
             return list;
         }
 
-      
+
         public void RemoveNull(string[] array)
         {
             List<string> list = new List<string>(array);
