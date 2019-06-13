@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\ExaminationService.cs" />
     <Compile Include="Enum\StatusEnum.cs" />
     <Compile Include="Implement\ImportService.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Implement\RuleService.cs" />
     <Compile Include="Implement\TestService.cs" />
     <Compile Include="Implement\TopicService.cs" />
+    <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\IExaminationService.cs" />
     <Compile Include="Interface\IImportService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Utilities\ListUtilities.cs" />
     <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
+    <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />

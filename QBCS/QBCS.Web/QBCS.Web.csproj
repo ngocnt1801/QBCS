@@ -189,6 +189,7 @@
     <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Attributes\CheckSessionAttribute.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\ExaminationAPIController.cs" />
     <Compile Include="Controllers\ExaminationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />

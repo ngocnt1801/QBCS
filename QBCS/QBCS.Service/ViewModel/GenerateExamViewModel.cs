@@ -17,5 +17,6 @@ namespace QBCS.Service.ViewModel
         public int EasyQuestion { get; set; }
         public int MediumQuestion { get; set; }
         public int HardQuestion { get; set; }
+        public int CategoryId { get; set; }
     }
 }
