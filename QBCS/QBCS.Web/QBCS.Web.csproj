@@ -2161,9 +2161,6 @@
     <Content Include="Views\Topic\Add.cshtml" />
     <Content Include="Views\Topic\Edit.cshtml" />
     <Content Include="Views\Topic\Index.cshtml" />
-    <Content Include="Views\LearningOutcome\Index.cshtml" />
-    <Content Include="Views\LearningOutcome\Add.cshtml" />
-    <Content Include="Views\LearningOutcome\Edit.cshtml" />
     <Content Include="Views\Course\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>

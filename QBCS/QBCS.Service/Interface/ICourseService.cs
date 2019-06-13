@@ -17,12 +17,11 @@ namespace QBCS.Service.Interface
         List<CourseViewModel> GetAvailableCourse(int userId);
         List<CourseViewModel> GetAllCoursesByUserId(int id);
         List<Course> GetCoursesByName(string name);
-<<<<<<< HEAD
+
         List<CourseViewModel> SearchCourseByNameOrCode(string searchContent);
-=======
+
         CourseViewModel GetDetailCourseById(int id);
->>>>>>> TruongNB_Sprint3
+
         bool UpdateDisable(int id);
-        CourseViewModel GetDetailCourseById(int id);
     }
 }
