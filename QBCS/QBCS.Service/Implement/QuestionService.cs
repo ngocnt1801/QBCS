@@ -275,6 +275,7 @@ namespace QBCS.Service.Implement
             StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
+            StringBuilder sb = new StringBuilder();
             try
             {
                 string extensionFile = Path.GetExtension(questionFile.FileName);
@@ -289,7 +290,7 @@ namespace QBCS.Service.Implement
                     List<OptionTemp> tempAns = new List<OptionTemp>();
                     QuestionTmpModel question = new QuestionTmpModel();
                     OptionTemp option = new OptionTemp();
-
+                    
                     for (int i = 0; i < questionXml.question.Count(); i++)
                     {
                         string questionContent = null;
@@ -324,14 +325,24 @@ namespace QBCS.Service.Implement
                         #endregion
                         if (questionXml.question[i].questiontext != null)
                         {
-                            string tempParser = "";
+                            string tempParser = "";                           
                             tempParser = questionXml.question[i].questiontext.text;
+                           // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             question.QuestionContent = questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();
-                            question.Category = category.Trim();
-                            question.Level = level.Trim();
-                            question.Topic = topic.Trim();
+                            //sb.Append("Code  " + questionXml.question[i].name.text.ToString() + "\n");
+                            //Exception ex = new Exception();
+                            //ex.Data.Add("Question {0}", questionXml.question[i].name.text.ToString());
+                            //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                          // File.AppendAllText(@"E:\capstone\log" + "log.txt", sb.ToString());
+                            sb.Clear();
+                            if (category != null)
+                            {
+                                question.Category = category.Trim();
+                                question.Level = level.Trim();
+                                question.Topic = topic.Trim();
+                            }                         
                             tempParser = "";
 
                             #region get question, option
@@ -391,6 +402,21 @@ namespace QBCS.Service.Implement
                                 import.UserId = userId;
                                
                             }
+                            int z = 0;
+                            foreach (var item in listQuestionXml)
+                            {
+                                //Exception ex = new Exception();
+                                //ex.Data.Add("Question {0}", item.QuestionContent);
+                                //ex.Data.Add("Code {0}", item.Code);
+                                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                                z++;
+                                sb.AppendLine(z + "");
+                                sb.AppendLine("Question " + item.QuestionContent);
+                                sb.AppendLine("Code " + item.Code + "\n");
+                                sb.AppendLine();
+                                File.AppendAllText(@"E:\capstone\log\" + "logXML.txt", sb.ToString());
+                                sb.Clear();
+                            }
                             listQuestionXml = new List<QuestionTmpModel>();
                             question = new QuestionTmpModel();
                             tempAns = new List<OptionTemp>();
@@ -429,7 +455,21 @@ namespace QBCS.Service.Implement
                         }).ToList(),
                         ImportedDate = importTime
                     };
-
+                    int g = 0;
+                    foreach (var item in listQuestion)
+                    {
+                        //Exception ex = new Exception();
+                        //ex.Data.Add("Question {0}", item.QuestionContent);
+                        //ex.Data.Add("Code {0}", item.Code);
+                        //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                        g++;
+                        sb.AppendLine(g + "");
+                        sb.AppendLine("Question: " + item.QuestionContent);
+                        sb.AppendLine("Code: " + item.Code + "\n");
+                        sb.AppendLine();
+                        File.AppendAllText(@"E:\capstone\log\" + "logGIFT.txt", sb.ToString());
+                        sb.Clear();
+                    }
                 }
                 #endregion
                 if (import.QuestionTemps.Count() > 0)
@@ -452,8 +492,8 @@ namespace QBCS.Service.Implement
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine(ex.Message);
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                //Console.WriteLine(ex.Message);
             }
             finally
             {

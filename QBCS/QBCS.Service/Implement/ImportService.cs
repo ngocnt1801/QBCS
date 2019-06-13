@@ -174,5 +174,16 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
             }
         }
+
+        public void UpdateQuestionTempStatus(int questionTempId, int status)
+        {
+            var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
+            if (questionTemp != null && questionTemp.Status == (int)StatusEnum.DeleteOrSkip)
+            {
+                questionTemp.Status = status;
+                unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
+                unitOfWork.SaveChanges();
+            }
+        }
     }
 }

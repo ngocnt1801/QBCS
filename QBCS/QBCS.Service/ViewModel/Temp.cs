@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace QBCS.Service.ViewModel
 {
 
-
+    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
     /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -49,9 +49,9 @@ namespace QBCS.Service.ViewModel
 
         private quizQuestionGeneralfeedback generalfeedbackField;
 
-        private decimal defaultgradeField;
+        private string defaultgradeField;
 
-        private bool defaultgradeFieldSpecified;
+        //private bool defaultgradeFieldSpecified ;
 
         private decimal penaltyField;
 
@@ -127,27 +127,34 @@ namespace QBCS.Service.ViewModel
         {
             get
             {
-                return this.defaultgradeField;
+                return Decimal.Parse(this.defaultgradeField);
             }
             set
             {
-                this.defaultgradeField = value;
+                if (value.Equals(""))
+                {
+                    this.defaultgradeField = 0 + "";
+                }
+                else
+                {
+                    this.defaultgradeField = value + "";
+                }
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool defaultgradeSpecified
-        {
-            get
-            {
-                return this.defaultgradeFieldSpecified;
-            }
-            set
-            {
-                this.defaultgradeFieldSpecified = value;
-            }
-        }
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool defaultgradeSpecified
+        //{
+        //    get
+        //    {
+        //        return this.defaultgradeFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.defaultgradeFieldSpecified = value;
+        //    }
+        //}
 
         /// <remarks/>
         public decimal penalty
@@ -360,6 +367,8 @@ namespace QBCS.Service.ViewModel
 
         private string textField;
 
+        private quizQuestionNameFile fileField;
+
         /// <remarks/>
         public string text
         {
@@ -372,6 +381,91 @@ namespace QBCS.Service.ViewModel
                 this.textField = value;
             }
         }
+
+        /// <remarks/>
+        public quizQuestionNameFile file
+        {
+            get
+            {
+                return this.fileField;
+            }
+            set
+            {
+                this.fileField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class quizQuestionNameFile
+    {
+
+        private string nameField;
+
+        private string pathField;
+
+        private string encodingField;
+
+        private string valueField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string path
+        {
+            get
+            {
+                return this.pathField;
+            }
+            set
+            {
+                this.pathField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string encoding
+        {
+            get
+            {
+                return this.encodingField;
+            }
+            set
+            {
+                this.encodingField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
+                this.valueField = value;
+            }
+        }
     }
 
     /// <remarks/>
@@ -382,6 +476,8 @@ namespace QBCS.Service.ViewModel
     {
 
         private string textField;
+
+        private quizQuestionQuestiontextFile fileField;
 
         private string formatField;
 
@@ -399,6 +495,19 @@ namespace QBCS.Service.ViewModel
         }
 
         /// <remarks/>
+        public quizQuestionQuestiontextFile file
+        {
+            get
+            {
+                return this.fileField;
+            }
+            set
+            {
+                this.fileField = value;
+            }
+        }
+
+        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string format
         {
@@ -409,6 +518,78 @@ namespace QBCS.Service.ViewModel
             set
             {
                 this.formatField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class quizQuestionQuestiontextFile
+    {
+
+        private string nameField;
+
+        private string pathField;
+
+        private string encodingField;
+
+        private string valueField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string path
+        {
+            get
+            {
+                return this.pathField;
+            }
+            set
+            {
+                this.pathField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string encoding
+        {
+            get
+            {
+                return this.encodingField;
+            }
+            set
+            {
+                this.encodingField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
+                this.valueField = value;
             }
         }
     }
@@ -620,7 +801,14 @@ namespace QBCS.Service.ViewModel
             }
             set
             {
-                this.fractionField = value;
+                if (value.Equals(""))
+                {
+                    this.fractionField = 0;
+                }
+                else
+                {
+                    this.fractionField = value;
+                }
             }
         }
 
@@ -687,6 +875,8 @@ namespace QBCS.Service.ViewModel
 
         private string textField;
 
+        private quizQuestionCategoryFile fileField;
+
         /// <remarks/>
         public string text
         {
@@ -699,8 +889,92 @@ namespace QBCS.Service.ViewModel
                 this.textField = value;
             }
         }
+
+        /// <remarks/>
+        public quizQuestionCategoryFile file
+        {
+            get
+            {
+                return this.fileField;
+            }
+            set
+            {
+                this.fileField = value;
+            }
+        }
     }
 
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class quizQuestionCategoryFile
+    {
+
+        private string nameField;
+
+        private string pathField;
+
+        private string encodingField;
+
+        private string valueField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string path
+        {
+            get
+            {
+                return this.pathField;
+            }
+            set
+            {
+                this.pathField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string encoding
+        {
+            get
+            {
+                return this.encodingField;
+            }
+            set
+            {
+                this.encodingField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
+                this.valueField = value;
+            }
+        }
+    }
 
 
 }

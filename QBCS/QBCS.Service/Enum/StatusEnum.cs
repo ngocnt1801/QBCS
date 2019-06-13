@@ -15,6 +15,7 @@ namespace QBCS.Service.Enum
         Checked = 5,
         Fixing = 6,
         Done = 7,
-        Canceled = 8
+        Canceled = 8,
+        DeleteOrSkip = 9
     }
 }

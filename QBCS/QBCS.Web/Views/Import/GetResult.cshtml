@@ -6,12 +6,13 @@
 
     ViewBag.Title = "GetResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["importId"] = Model.Id;
 }
 <h2>Result</h2>
 @{
 
     int total = Model.Questions.Count;
-    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip).Count();
     int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
     int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
 
@@ -26,7 +27,7 @@
             </nav>
             <div class="content-wrap">
                 <section id="section-topline-1">
-                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Editable).ToList())
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip).ToList())
                 </section>
                 <section id="section-topline-2">
                     @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList())

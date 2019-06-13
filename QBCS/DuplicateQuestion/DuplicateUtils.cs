@@ -126,11 +126,17 @@ namespace DuplicateQuestion
                             #region get right option string
                             string rightOptionTaget = "";
                             string rightOptionSource = "";
+                            string wrongOptionTarget = "";
+                            string wrongOptionSource = "";
                             foreach (var option in item.Options)
                             {
                                 if (option.IsCorrect)
                                 {
                                     rightOptionTaget += option.OptionContent;
+                                }
+                                else
+                                {
+                                    wrongOptionTarget += option.OptionContent;
                                 }
                             }
 
@@ -139,6 +145,10 @@ namespace DuplicateQuestion
                                 if (option.IsCorrect)
                                 {
                                     rightOptionSource += option.OptionContent;
+                                }
+                                else
+                                {
+                                    wrongOptionSource += option.OptionContent;
                                 }
                             }
                             #endregion
@@ -183,7 +193,16 @@ namespace DuplicateQuestion
                                 double resultQwithO = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
                                 if (resultQwithO >= 70)
                                 {
-                                    item.Status = (int)StatusEnum.Delete;
+
+                                    double resultOfWrongOption = TFAlgorithm.CaculateSimilar(wrongOptionSource, wrongOptionTarget);
+                                    if (resultOfWrongOption >= 70)
+                                    {
+                                        item.Status = (int)StatusEnum.Delete;
+                                    }
+                                    else
+                                    {
+                                        item.Status = (int)StatusEnum.DeleteOrSkip;
+                                    }
                                     if (question.IsBank)
                                     {
                                         item.DuplicatedQuestionId = question.Id;
@@ -268,9 +287,9 @@ namespace DuplicateQuestion
                 connection.Open();
 
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.QuestionContent, o.OptionContent " +
+                    "SELECT q.Id, q.QuestionContent, o.IsCorrect, o.OptionContent " +
                     "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
-                    "WHERE q.CourseId = @courseId AND o.IsCorrect = 1",
+                    "WHERE q.CourseId = @courseId",
                     connection
                     );
 
@@ -290,7 +309,8 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
-                            OptionContent = (string)reader["OptionContent"]
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
                         });
                         bank.Add(question);
 
@@ -300,7 +320,8 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
-                            OptionContent = (string)reader["OptionContent"]
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
                         });
                     }
 

@@ -10,5 +10,6 @@ namespace QBCS.Service.ViewModel
     {
         public List<TopicViewModel> Topics { get; set; }
         public List<LearningOutcomeViewModel> LearningOutcomes { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
     }
 }
