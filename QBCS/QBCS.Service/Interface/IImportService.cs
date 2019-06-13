@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace QBCS.Service.Interface
         QuestionTempViewModel GetQuestionTemp(int questionTempId);
         Task ImportToBank(int importId);
         void Cancel(int importId);
-        List<QuestionTempViewModel> CheckRule(List<QuestionTempViewModel> tempQuestions);
+        List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions);
     }
 }

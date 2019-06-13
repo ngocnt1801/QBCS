@@ -49,8 +49,8 @@ namespace QBCS.Service.Implement
                     Code = rule.Code,
                     Name = rule.Name,
                     Value = rvvm,
-                    //GroupType = (int) rule.GroupType,
-                    //GroupTypeEnum = (RuleEnum) rule.GroupType
+                    GroupType = (int) rule.GroupType,
+                    GroupTypeEnum = (RuleEnum) rule.GroupType
                 };
                 result.Add(addResult);
                 rvvm = new List<RuleValueViewModel>();

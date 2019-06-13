@@ -13,6 +13,6 @@ namespace QBCS.Service.ViewModel
         public string Name { get; set; }
         public List<RuleValueViewModel> Value { get; set; }
         public int GroupType { get; set; }
-        //public RuleEnum GroupTypeEnum { get; set; }
+        public RuleEnum GroupTypeEnum { get; set; }
 }
 }
