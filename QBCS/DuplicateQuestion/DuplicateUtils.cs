@@ -383,16 +383,26 @@ namespace DuplicateQuestion
             {
                 connection.Open();
 
-                SqlCommand command = new SqlCommand(
-                    "UPDATE Import " +
-                    "SET Status=@status, Seen=@seen " +
-                    "WHERE Id=@importId",
-                    connection
-                    );
+                string query = "UPDATE Import " +
+                                "SET Status=@status, Seen=@seen " +
+                                "WHERE Id=@importId";
+                if (model.Status == (int)StatusEnum.Done)
+                {
+                    query = "UPDATE Import " +
+                            "SET Status=@status, Seen=@seen, InsertedToBankDate=@date " +
+                            "WHERE Id=@importId";
+                }
+
+
+                SqlCommand command = new SqlCommand(query, connection);
 
                 command.Parameters.AddWithValue("@status", model.Status);
                 command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", model.ImportId);
+                if (model.Status == (int)StatusEnum.Done)
+                {
+                    command.Parameters.AddWithValue("@date", DateTime.Now);
+                }
                 command.ExecuteNonQuery();
             }
         }
@@ -434,7 +444,7 @@ namespace DuplicateQuestion
                 {
                     #region insert question
                     SqlCommand command = new SqlCommand(
-                        "INSERT Question (QuestionContent,CourseId,QuestionCode, CategoryId, LearningOutcomeId, LevelId) " +
+                        "INSERT Question (QuestionContent,CourseId,QuestionCode, CategoryId, LearningOutcomeId, ImportId, LevelId) " +
                         "OUTPUT INSERTED.Id AS 'Id' " +
                         "VALUES ( " +
                             "@questionContent, " +
@@ -442,6 +452,7 @@ namespace DuplicateQuestion
                             "@questionCode, " +
                             "@category, " +
                             "@learningOutcome, " +
+                            "@importId, " +
                             "@level" +
                         ")",
                         connection
@@ -452,6 +463,7 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@questionCode", question.QuestionCode);
                     command.Parameters.AddWithValue("@category", question.CategoryId);
                     command.Parameters.AddWithValue("@learningOutcome", question.LearningOutcomeId);
+                    command.Parameters.AddWithValue("@importId", import.ImportId);
                     command.Parameters.AddWithValue("@level", question.LevelId);
                     var reader = command.ExecuteReader();
                     #endregion
