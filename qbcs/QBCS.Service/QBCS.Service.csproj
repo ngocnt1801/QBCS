@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Implement\ExaminationService.cs" />
     <Compile Include="Enum\StatusEnum.cs" />
     <Compile Include="Implement\ImportService.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="ViewModel\QuestionTempViewModel.cs" />
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\TopicInExamination.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
