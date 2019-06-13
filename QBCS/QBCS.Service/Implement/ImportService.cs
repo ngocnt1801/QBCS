@@ -22,6 +22,23 @@ namespace QBCS.Service.Implement
             unitOfWork = new UnitOfWork();
         }
 
+        public void Cancel(int importId)
+        {
+            var import = unitOfWork.Repository<Import>().GetById(importId);
+            var listQuestion = import.QuestionTemps.ToList();
+            if (import != null)
+            {
+                foreach (var question in listQuestion)
+                {
+                    unitOfWork.Repository<QuestionTemp>().Delete(question);
+                }
+
+                import.Status = (int)StatusEnum.Canceled;
+                unitOfWork.Repository<Import>().Update(import);
+                unitOfWork.SaveChanges();
+            }
+        }
+
         public ImportResultViewModel GetImportResult(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetAll().Where(i => i.Id == importId).FirstOrDefault();
@@ -156,6 +173,88 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<QuestionTemp>().Update(entity);
                 unitOfWork.SaveChanges();
             }
+        }
+
+        public List<QuestionTempViewModel> CheckRule(List<QuestionTempViewModel> tempQuestions)
+        {
+            var rules = unitOfWork.Repository<Rule>().GetAll();
+            foreach(var tempQuestion in tempQuestions)
+            {
+                foreach (var rule in rules)
+                {
+                    switch (rule.KeyId)
+                    {
+                        //check min question length
+                        case 1: if (tempQuestion.QuesitonContent.Length < int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                            //check max question length
+                        case 2:
+                            if (tempQuestion.QuesitonContent.Length > int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                            //check banned words in question
+                        case 3:
+                            if (tempQuestion.QuesitonContent.Contains(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                            //check min options count in question
+                        case 4:
+                            if(tempQuestion.Options.Count < int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                            //check max option count in question
+                        case 5:
+                            if (tempQuestion.Options.Count > int.Parse(rule.Value))
+                            {
+                                tempQuestion.Status = StatusEnum.Invalid;
+                            }
+                            break;
+                            //check min option length
+                        case 6:
+                            foreach(var option in tempQuestion.Options)
+                            {
+                                if(option.OptionContent.Length < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                            //check max option length
+                        case 7:
+                            foreach (var option in tempQuestion.Options)
+                            {
+                                if (option.OptionContent.Length > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                            //check option length difference
+                        case 8: break;
+                            //check banned words in option
+                        case 9:
+                            foreach (var option in tempQuestion.Options)
+                            {
+                                if (option.OptionContent.Contains(rule.Value))
+                                {
+                                    tempQuestion.Status = StatusEnum.Invalid;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            
+                return tempQuestions;
         }
     }
 }

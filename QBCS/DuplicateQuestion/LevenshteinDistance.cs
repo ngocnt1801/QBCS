@@ -8,7 +8,7 @@ namespace DuplicateQuestion
         {
             if ((source == null) || (target == null)) return 0.0;
             if ((source.Length == 0) || (target.Length == 0)) return 0.0;
-            if (source == target) return 1.0;
+            if (source == target) return 100;
 
             int stepsToSame = ComputeLevenshteinDistance(source, target);
             return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length))) * 100;

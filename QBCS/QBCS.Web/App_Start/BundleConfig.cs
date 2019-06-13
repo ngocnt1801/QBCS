@@ -40,7 +40,6 @@ namespace QBCS.Web
                 "~/Content/font-awesome/all.css",
                 "~/Content/switch-button-style.css",
                 "~/Content/custom-css.css"
-               
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
@@ -89,9 +88,30 @@ namespace QBCS.Web
                 "~/Scripts/jquery.signalR-2.4.1.js"
                 ));
 
-            //notification
             bundles.Add(new ScriptBundle("~/bundle/scripts/notification").Include(
                 "~/Scripts/myjs/notification.js"
+                ));
+
+            //Toastr 
+            bundles.Add(new ScriptBundle("~/bundle/scripts/toastr").Include(
+                "~/Scripts/toastr.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/toastr").Include(
+                "~/Content/toastr.css"
+                ));
+
+            //tab
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tab").Include(
+                "~/Scripts/tab/cbpFWTabs.js",
+                "~/Scripts/tab/modernizr.custom.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/tab").Include(
+                "~/Content/tab/demo.css",
+                "~/Content/tab/normalize.css",
+                "~/Content/tab/tabs.css",
+                "~/Content/tab/tabstyles.css"
                 ));
         }
     }

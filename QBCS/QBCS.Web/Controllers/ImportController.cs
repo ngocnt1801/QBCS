@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using QBCS.Service.Enum;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
@@ -50,7 +51,17 @@ namespace QBCS.Web.Controllers
             Task.Factory.StartNew(() => {
                 importService.ImportToBank(importId);
             });
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            TempData["Message"] = "Your questions are processing";
+            TempData["Status"] = ToastrEnum.Info;
+            return RedirectToAction("Index", "Home");
+        }
+    
+        public ActionResult Cancel(int importId)
+        {
+            importService.Cancel(importId);
+            TempData["Message"] = "Your import is canceled";
+            TempData["Status"] = ToastrEnum.Success;
+            return RedirectToAction("Index", "Home");
         }
     }
 }

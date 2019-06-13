@@ -33,6 +33,15 @@ namespace QBCS.Entity
 
         public int? DuplicateInImportId { get; set; }
 
+        [StringLength(200)]
+        public string Category { get; set; }
+
+        [StringLength(200)]
+        public string Topic { get; set; }
+
+        [StringLength(200)]
+        public string LevelName { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
