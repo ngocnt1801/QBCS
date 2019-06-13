@@ -1,0 +1,252 @@
+// question: 0  name: Switch category to $course$/XML/Topic1/Easy
+$CATEGORY: $course$/XML/Topic1/Easy
+
+
+// question: 71  name: 
+::::[html]Normal telephone voice-grade lines use what is called _____-division multiplexing to divide up the bandwidth among the subscribers.{
+=frequency
+~phase 
+~wave
+~wave
+}
+
+// question: 72  name: 
+::::[html]____ is the process of providing more class functionality by creating more specific classes based on generic classes.{
+=Inheritance
+~Variable initialization
+~Encapsulation
+~Polymorphism
+}
+
+// question: 73  name: 
+::::[html]The PCI system bus consists of _____ wires.{
+=98
+~10
+~20
+~198
+}
+
+// question: 74  name: 
+::::[html]The acronym HTTP stands for _____{
+~Heuristic Transport Type Protocol
+=Hypertext Transfer Protocol
+~Hexadecimal Task Test Protocol
+~Hypertext Transition Protocol
+}
+
+// question: 75  name: 
+::::[html]A(n) ____ is a template or mold used for defining new object types along with their properties and behavior.{
+=class
+~compiler
+~method
+~event
+}
+
+// question: 76  name: 
+::::[html]The set of possible values for each column is called the _____ of that column.{
+=domain
+~image
+~range
+~codomain
+}
+
+// question: 77  name: 
+::::[html]____ is the process of creating an object based upon a class.{
+=Instantiation
+~Inheritance
+~Concatenation
+~Variable initialization
+}
+
+// question: 78  name: 
+::::[html]Herman Hollerith introduced electromechanical counting equipment using ____ as input.{
+~voice patterns
+~magnetic tape
+=punch cards
+~keyboard entry
+}
+
+// question: 79  name: 
+::::[html]Fiberoptics and wireless technologies have given rise to which of the following terms?{
+~WAN
+=WLAN
+~Internet
+~LAN
+}
+
+// question: 80  name: 
+::::[html]_____ measures the speed a transmission medium is able to handle in bits per second.{
+=Bandwidth
+~Bit capacity
+~Byte capacity
+~Broadwidth
+}
+
+// question: 0  name: Switch category to $course$/XML/Topic2/Easy
+$CATEGORY: $course$/XML/Topic2/Easy
+
+
+// question: 81  name: 
+::::[html]____ are characters that are used to match any character at the end of a file name to a particular file extension.{
+=Wildcards
+~Deuces
+~Aces
+~Jokers
+}
+
+// question: 82  name: 
+::::[html]In DOS, you can enter ____ <command> to get more details concerning a particular command.{
+=HELP
+~ASSIST
+~AID
+~SUPPORT
+}
+
+// question: 83  name: 
+::::[html]Wildcard specifications are case sensitive in ____.{
+=UNIX
+~Windows XP
+~DOS
+~MAC OS
+}
+
+// question: 84  name: 
+::::[html]Time-____ is a method that allows multiple processes to share the CPU.{
+~switching
+~solving
+~sourcing
+=slicing
+}
+
+// question: 85  name: 
+::::[html]A _____ is a device designed to protect an internal network or node from intentional or unintentional damage from an external network.{
+=firewall
+~ gate
+~barricade
+~fence
+}
+
+// question: 86  name: 
+::::[html]Which of the following is a primary function of an operating system?{
+=managing resources
+~generating flowcharts
+~generating documents
+~solving differential equations
+}
+
+// question: 87  name: 
+::::[html]Which of the following terms refers to computing with more than one CPU?{
+~multitasking
+~multileveraging
+~multilayering
+=multiprocessing
+}
+
+// question: 88  name: 
+::::[html]Effort is ongoing to make ____ available on cell phones.{
+~HDTV
+~VCRs
+=streaming video
+~streaming audio
+}
+
+// question: 89  name: 
+::::[html]A(n) ____ is generally a cracker motivated by greed and/or politics.{
+=directed hacker
+~undirected hacker
+~Trojan horse
+~script kiddies
+}
+
+// question: 90  name: 
+::::[html]It is thought that each neuron in the brain may have as many as connections to adjacent neurons.{
+~10
+=10,000
+~100
+~1,000,000
+}
+
+// question: 0  name: Switch category to $course$/XML/Topic3/Easy
+$CATEGORY: $course$/XML/Topic3/Easy
+
+
+// question: 91  name: 
+::::[html]Various ____ techniques have been designed to allow the same image information to be stored in a smaller file.{
+~consolidation 
+=compression 
+~scanning
+~resolution
+}
+
+// question: 92  name: 
+::::[html]____ patterns contain information about the color and brightness of a pixel.{
+=Binary 
+~Octal 
+~Decimal
+~Hexadecimal
+}
+
+// question: 93  name: 
+::::[html]To find the ____ of a given bit, flip it to the opposite state.{
+~root 
+~complement 
+~position
+=sign
+}
+
+// question: 94  name: 
+::::[html]____ determines whether the project is worth doing, and specifying the advantages and disadvantages of this application.{
+~Software specification
+~Project collaboration
+~Scope creep
+=Project feasibility
+}
+
+// question: 95  name: 
+::::[html]A sound consists of a waveform that has amplitude (volume) and a ____ (pitch).{
+=frequency 
+~phase shift
+~phase angle
+~period
+}
+
+// question: 96  name: 
+::::[html]In the ____ model of software development, the fundamental processes involved in creating the program are represented as phases. The output from each phase is used as the input to the next phase.{
+~build and fix
+=waterfall 
+~rapid prototyping
+~spiral
+}
+
+// question: 97  name: 
+::::[html]A ____ is the smallest unit that can be displayed on a computer monitor.{
+~micron 
+~picon 
+~twip
+=pixel
+}
+
+// question: 98  name: 
+::::[html]Which of the following is an example of a video compression format?{
+~BMP 
+~GIF 
+=MPEG
+~TIF
+}
+
+// question: 99  name: 
+::::[html]The ____ describes the life of the application, including all of the stages involved in the development, testing, installation, and maintenance of a program.{
+=SDLC 
+~UML 
+~SLC
+~DBA
+}
+
+// question: 100  name: 
+::::[html]Modifying or changing the software to meet changing customer needs is called ____.{
+=software evolution
+~software modification 
+~rapid prototyping
+~incremental development
+}
+

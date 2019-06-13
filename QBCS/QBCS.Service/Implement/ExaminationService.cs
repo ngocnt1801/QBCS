@@ -110,7 +110,7 @@ namespace QBCS.Service.Implement
                 PartOfExamination partOfExam;
                 if (topic.IsLearingOutcome)
                 {
-                    questionInPartOfExam = GeneratePartOfExamByLearningOutcome(topic);
+                    questionInPartOfExam = GeneratePartOfExamByLearningOutcome(topic, exam.CategoryId);
                     partOfExam = new PartOfExamination()
                     {
                         LearningOutcomeId = topic.Id,
@@ -120,7 +120,7 @@ namespace QBCS.Service.Implement
                 }
                 else
                 {
-                    questionInPartOfExam = GeneratePartOfExamByTopic(topic);
+                    questionInPartOfExam = GeneratePartOfExamByTopic(topic, exam.CategoryId);
                     partOfExam = new PartOfExamination()
                     {
                         TopicId = topic.Id,
@@ -153,16 +153,16 @@ namespace QBCS.Service.Implement
             exam.ExamId = examination.Id;
             return exam;
         }
-        private List<QuestionViewModel> GeneratePartOfExamByTopic(TopicInExamination topicInExam)
+        private List<QuestionViewModel> GeneratePartOfExamByTopic(TopicInExamination topicInExam, int categoryId)
         {
-            List<QuestionViewModel> questionEasy = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, topicInExam.EasyQuestion, EASY);
-            List<QuestionViewModel> questionMedium = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, topicInExam.MediumQuestion, MEDIUM);
-            List<QuestionViewModel> questionHard = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, topicInExam.HardQuestion, HARD);
+            List<QuestionViewModel> questionEasy = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, categoryId, topicInExam.EasyQuestion, EASY);
+            List<QuestionViewModel> questionMedium = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, categoryId, topicInExam.MediumQuestion, MEDIUM);
+            List<QuestionViewModel> questionHard = GeneratePartOfExamByTopicAndLevel(topicInExam.Id, categoryId, topicInExam.HardQuestion, HARD);
             List<QuestionViewModel> result = questionEasy.Concat(questionMedium).Concat(questionHard).ToList();
             return result;
         }
 
-        private List<QuestionViewModel> GeneratePartOfExamByTopicAndLevel(int topicId, int numberOfQuestion, string nameOfLevel)
+        private List<QuestionViewModel> GeneratePartOfExamByTopicAndLevel(int topicId, int categoryId, int numberOfQuestion, string nameOfLevel)
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
@@ -170,7 +170,7 @@ namespace QBCS.Service.Implement
             for (int j = 0; j < 2; j++)
             {
                 int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel);
-                List<Question> questionsByLevelAndTopic = questions.Where(q => q.LevelId == idOfLevel && q.TopicId == topicId).ToList();
+                List<Question> questionsByLevelAndTopic = questions.Where(q => q.LevelId == idOfLevel && q.TopicId == topicId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndTopic.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
                     Frequency = (int)c.Frequency,
@@ -240,15 +240,15 @@ namespace QBCS.Service.Implement
             return result;
         }
 
-        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcome(TopicInExamination learingOutcomeInExam)
+        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcome(TopicInExamination learingOutcomeInExam, int categoryId)
         {
-            List<QuestionViewModel> questionEasy = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.EasyQuestion, EASY);
-            List<QuestionViewModel> questionMedium = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.MediumQuestion, MEDIUM);
-            List<QuestionViewModel> questionHard = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.HardQuestion, HARD);
+            List<QuestionViewModel> questionEasy = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, categoryId, learingOutcomeInExam.EasyQuestion, EASY);
+            List<QuestionViewModel> questionMedium = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, categoryId, learingOutcomeInExam.MediumQuestion, MEDIUM);
+            List<QuestionViewModel> questionHard = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, categoryId, learingOutcomeInExam.HardQuestion, HARD);
             List<QuestionViewModel> result = questionEasy.Concat(questionMedium).Concat(questionHard).ToList();
             return result;
         }
-        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcomeAndLevel(int learningOutcomeId, int numberOfQuestion, string nameOfLevel)
+        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcomeAndLevel(int learningOutcomeId, int categoryId, int numberOfQuestion, string nameOfLevel)
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
@@ -256,7 +256,7 @@ namespace QBCS.Service.Implement
             for (int j = 0; j < 2; j++)
             {
                 int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
-                List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId).ToList();
+                List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndLearningOutcome.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
                     Frequency = (int)c.Frequency,
