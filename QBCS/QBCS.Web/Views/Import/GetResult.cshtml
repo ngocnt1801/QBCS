@@ -8,22 +8,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>Result</h2>
-@*<div class="btn-group col-md-6 mb-2">
-        <button type="button" class="btn btn-outline-primary active" id="btn-all" onclick="bt_change_partial('@Url.Action("GetPartialView","Question")', this)">
-        All
-        </button>
-        <button type="button" class="btn btn-outline-success" id="btn-right" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = false})', this)">Right</button>
-        <button type="button" class="btn btn-outline-danger" id="btn-wrong" onclick="bt_change_partial('@Url.Action("GetPartialView","Question", new { isDuplicate = true})', this)">Wrong</button>
-    </div>*@
-
-@if (Model.Status == (int)StatusEnum.Done)
-{
-    <p class="text-custom">You have:</p>
-    <p class="text-custom">- @Model.NumberOfSuccess questions were inserted into bank</p>
-    <p class="text-custom">- @Model.NumberOfFail questions were not inserted</p>
-}
-else
-{
+@{
 
     int total = Model.Questions.Count;
     int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();

@@ -25,7 +25,7 @@ namespace DuplicateQuestion
                 #region move temp to bank
                 if (importModel.Status == (int)StatusEnum.Fixing)
                 {
-                    InsertTempToBank(importModel);
+                    importModel.TotalSuccess = InsertTempToBank(importModel);
                     RemoveTemp(importModel.ImportId);
                 }
                 #endregion
@@ -389,7 +389,7 @@ namespace DuplicateQuestion
                 if (model.Status == (int)StatusEnum.Done)
                 {
                     query = "UPDATE Import " +
-                            "SET Status=@status, Seen=@seen, InsertedToBankDate=@date " +
+                            "SET Status=@status, Seen=@seen, InsertedToBankDate=@date, TotalSuccess=@success " +
                             "WHERE Id=@importId";
                 }
 
@@ -402,6 +402,7 @@ namespace DuplicateQuestion
                 if (model.Status == (int)StatusEnum.Done)
                 {
                     command.Parameters.AddWithValue("@date", DateTime.Now);
+                    command.Parameters.AddWithValue("@success", model.TotalSuccess);
                 }
                 command.ExecuteNonQuery();
             }
@@ -424,10 +425,10 @@ namespace DuplicateQuestion
             }
         }
 
-        private static void InsertTempToBank(ImportModel import)
+        private static int InsertTempToBank(ImportModel import)
         {
             var importSuccessList = GetImportedQuestion(import.ImportId, (int)StatusEnum.Success);
-
+            int totalSuccess = importSuccessList.Count;
             //assign category id, learning outcome id, level id
             foreach (QuestionModel question in importSuccessList)
             {
@@ -504,6 +505,8 @@ namespace DuplicateQuestion
 
                 }
             }
+
+            return totalSuccess;
         }
 
         private static int? GetLevel(string name)

@@ -56,8 +56,8 @@ namespace QBCS.Service.Implement
                 {
                     Id = import.Id,
                     Status = import.Status.Value,
-                    NumberOfSuccess = 5, //fix here
-                    NumberOfFail= 1, //fix here
+                    CourseId = import.CourseId.Value,
+                    NumberOfSuccess = import.TotalSuccess.HasValue ? import.TotalSuccess.Value : 0, //fix here
                     Questions = import.QuestionTemps.Select(q => new QuestionTempViewModel
                     {
                         Id = q.Id,

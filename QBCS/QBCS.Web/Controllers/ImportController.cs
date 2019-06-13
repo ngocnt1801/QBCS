@@ -31,7 +31,12 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
-            return View(result);
+            if (result.Status != (int)StatusEnum.Done)
+            {
+                return View(result);
+            }
+            TempData["NewestCount"] = result.NumberOfSuccess;
+            return RedirectToAction("GetListQuestion", "Question", new { courseId = result.CourseId});
         }
 
         public ActionResult EditQuestion(QuestionTempViewModel model)
