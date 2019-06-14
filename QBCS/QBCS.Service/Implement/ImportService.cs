@@ -182,82 +182,85 @@ namespace QBCS.Service.Implement
             {
                 foreach (var rule in rules)
                 {
-                    switch (rule.KeyId)
+                    if(DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
                     {
-                        //check min question length
-                        case 1: if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
-                            {
-                                tempQuestion.Status = (int)StatusEnum.Invalid;
-                            }
-                            break;
+                        switch (rule.KeyId)
+                        {
+                            //check min question length
+                            case 1:
+                                if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
                             //check max question length
-                        case 2:
-                            if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
-                            {
-                                tempQuestion.Status = (int)StatusEnum.Invalid;
-                            }
-                            break;
+                            case 2:
+                                if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
                             //check banned words in question
-                        case 3:
-                            if (tempQuestion.QuestionContent.Contains(rule.Value))
-                            {
-                                tempQuestion.Status = (int)StatusEnum.Invalid;
-                            }
-                            break;
+                            case 3:
+                                if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
                             //check min options count in question
-                        case 4:
-                            if(tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
-                            {
-                                tempQuestion.Status = (int)StatusEnum.Invalid;
-                            }
-                            break;
+                            case 4:
+                                if (tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
                             //check max option count in question
-                        case 5:
-                            if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
-                            {
-                                tempQuestion.Status = (int)StatusEnum.Invalid;
-                            }
-                            break;
+                            case 5:
+                                if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
                             //check min option length
-                        case 6:
-                            foreach(var option in tempQuestion.OptionTemps)
-                            {
-                                if(option.OptionContent.Length < int.Parse(rule.Value))
+                            case 6:
+                                foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    if (option.OptionContent.Length < int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
                                 }
-                            }
-                            break;
+                                break;
                             //check max option length
-                        case 7:
-                            foreach (var option in tempQuestion.OptionTemps)
-                            {
-                                if (option.OptionContent.Length > int.Parse(rule.Value))
+                            case 7:
+                                foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    if (option.OptionContent.Length > int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
                                 }
-                            }
-                            break;
+                                break;
                             //check option length difference
-                        case 8: break;
+                            case 8: break;
                             //check banned words in option
-                        case 9:
-                            foreach (var option in tempQuestion.OptionTemps)
-                            {
-                                if (option.OptionContent.Contains(rule.Value))
+                            case 9:
+                                foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    if (option.OptionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
                                 }
-                            }
+                                break;
+                        }
+                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
+                        {
                             break;
-                    }
-                    if(tempQuestion.Status == (int)StatusEnum.Invalid)
-                    {
-                        break;
-                    }
+                        }
+                    }   
                 }
             }
-            
                 return tempQuestions;
         }
     }
