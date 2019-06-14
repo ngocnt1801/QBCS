@@ -122,6 +122,12 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/category").Include(
                 "~/Content/category-style.css"
                 ));
+
+            //error page
+            bundles.Add(new StyleBundle("~/bundle/content/error").Include(
+                "~/Content/error/font-awesome.min.css",
+                "~/Content/error/style.css"
+                ));
         }
     }
 }

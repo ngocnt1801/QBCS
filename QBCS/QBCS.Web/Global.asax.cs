@@ -29,5 +29,16 @@ namespace QBCS.Web
         {
             SqlDependency.Stop(connectionString);
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception exception = Server.GetLastError();
+            if (exception != null)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
+                HttpContext.Current.ClearError();
+                Response.Redirect("/QBCS.Web/Error", false);
+            }
+        }
     }
 }
