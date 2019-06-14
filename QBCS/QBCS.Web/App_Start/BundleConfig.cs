@@ -113,6 +113,15 @@ namespace QBCS.Web
                 "~/Content/tab/tabs.css",
                 "~/Content/tab/tabstyles.css"
                 ));
+
+            //categories tree
+            bundles.Add(new ScriptBundle("~/bundle/scripts/category").Include(
+                "~/Scripts/myjs/colapse-category.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/bundle/content/category").Include(
+                "~/Content/category-style.css"
+                ));
         }
     }
 }

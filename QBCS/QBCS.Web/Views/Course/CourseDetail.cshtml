@@ -1,0 +1,76 @@
+﻿@model  QBCS.Service.ViewModel.CourseViewModel
+@{
+    ViewBag.Title = "CourseDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+<div class="row">
+    <div class="col-lg-12 mb-2">
+        <a href="@Url.Action("AddQuestion", "question")" class="btn btn-primary float-right">Add Question</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="list-group list-group-root well col-md-3 text-custom">
+
+        @foreach (var category in Model.Categories)
+        {
+
+            if (category.LearningOutcomes != null && category.LearningOutcomes.Count > 0)
+            {
+                <a href="#c-@category.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id})" aria-expanded="true">
+                    <i class="fa fa-plus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
+                </a>
+                <div class="list-group collapse" id="c-@category.Id">
+                    @foreach (var lo in category.LearningOutcomes)
+                    {
+                        if (lo.Id != 0)
+                        {
+                            if (lo.Levels != null && lo.Levels.Count > 0)
+                            {
+                                <a href="#lo-@lo.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, learningoutcomeId = lo.IsLearningOutcome ? lo.Id : 0, topicId = lo.IsLearningOutcome ? 0 : lo.Id })">
+                                    <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                </a>
+                                <div class="list-group collapse" id="lo-@lo.Id">
+                                    @foreach (var level in lo.Levels)
+                                    {
+                                        if (level.Id != 0)
+                                        {
+                                            <a href="#lv-@level.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, learningoutcomeId = lo.IsLearningOutcome ? lo.Id : 0, topicId = lo.IsLearningOutcome ? 0 : lo.Id, levelId = level.Id })">
+                                                @level.Name <span class="float-right">(@level.QuestionCount)</span>
+                                            </a>
+                                        }
+                                    }
+
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="#lo-@lo.Id" class="list-group-item">
+                                    @lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                </a>
+                            }
+                        }
+                    }
+
+                </div>
+            }
+            else
+            {
+                <a href="#c-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id})">
+                    @category.Name <span class="float-right">(@category.QuestionCount)</span>
+                </a>
+            }
+        }
+
+    </div>
+    <div id="list-question" class="col-md-9" data-id="@Model.Id">
+        @* Render list question here *@
+    </div>
+</div>
+
+
+

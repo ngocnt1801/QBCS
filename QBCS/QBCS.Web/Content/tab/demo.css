@@ -30,7 +30,7 @@ a {
 }
 
 a:hover, a:focus {
-	color: #74777b;
+    text-decoration: none;
 }
 
 .support {

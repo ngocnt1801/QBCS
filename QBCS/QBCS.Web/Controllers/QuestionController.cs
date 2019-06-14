@@ -25,6 +25,7 @@ namespace QBCS.Web.Controllers
         private ILearningOutcomeService learningOutcomeService;
         private IExaminationService examinationService;
         private IImportService importService;
+        
 
         public QuestionController()
         {
@@ -35,6 +36,7 @@ namespace QBCS.Web.Controllers
             learningOutcomeService = new LearningOutcomeService();
             examinationService =  new ExaminationService();
             importService = new ImportService();
+        
         }
 
         // GET: Question
@@ -133,6 +135,7 @@ namespace QBCS.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -151,6 +154,7 @@ namespace QBCS.Web.Controllers
             }
             return PartialView("_AllQuestion", questions);
         }
+
         public ActionResult GetQuestionByQuestionId(int? questionId)
         {
             //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
@@ -158,6 +162,12 @@ namespace QBCS.Web.Controllers
             var question = questionService.GetQuestionById(questionId.Value);
             question.DuplicatedQuestion = question;
             return View("ReviewQuestion", question);
+        }
+
+        public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
+        {
+            var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
+            return PartialView("ListQuestion", result);
         }
     }
 

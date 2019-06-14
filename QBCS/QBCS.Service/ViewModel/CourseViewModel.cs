@@ -16,6 +16,7 @@ namespace QBCS.Service.ViewModel
         public int DefaultNumberOfQuestion { get; set; }
         public List<TopicViewModel> Topic { get; set; }
         public List<LearningOutcomeViewModel> LearningOutcome { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
         public bool IsDisable { get; set; }
 
     }

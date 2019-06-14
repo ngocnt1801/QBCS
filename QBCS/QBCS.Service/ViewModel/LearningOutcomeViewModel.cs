@@ -15,9 +15,13 @@ namespace QBCS.Service.ViewModel
         public string CourseName { get; set; }
         public bool IsDisable { get; set; }
         public string IdValue { get; set; }
+        public bool IsLearningOutcome { get; set; }
+        public int QuestionCount { get; set; }
+
         public void UpdateIdValue()
         {
             IdValue = "LO_" + Id;
         }
+        public List<LevelViewModel> Levels { get; set; }
     }
 }

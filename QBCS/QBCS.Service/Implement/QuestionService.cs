@@ -270,7 +270,7 @@ namespace QBCS.Service.Implement
         static string topic = null;
         public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId)
         {
-            
+
             bool check = false;
             StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
@@ -290,7 +290,7 @@ namespace QBCS.Service.Implement
                     List<OptionTemp> tempAns = new List<OptionTemp>();
                     QuestionTmpModel question = new QuestionTmpModel();
                     OptionTemp option = new OptionTemp();
-                    
+
                     for (int i = 0; i < questionXml.question.Count(); i++)
                     {
                         string questionContent = null;
@@ -302,7 +302,7 @@ namespace QBCS.Service.Implement
                         if (questionXml.question[i].category != null)
                         {
                             temp = questionXml.question[i].category.text.ToString();
-                            string[] arrListStr = temp.Split('/');                          
+                            string[] arrListStr = temp.Split('/');
                             for (int z = 0; z < arrListStr.Length; z++)
                             {
                                 if (z == 1)
@@ -325,9 +325,9 @@ namespace QBCS.Service.Implement
                         #endregion
                         if (questionXml.question[i].questiontext != null)
                         {
-                            string tempParser = "";                           
+                            string tempParser = "";
                             tempParser = questionXml.question[i].questiontext.text;
-                           // sb.Append("Question " + questionXml.question[i].questiontext.text);
+                            // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             question.QuestionContent = questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();
@@ -335,14 +335,14 @@ namespace QBCS.Service.Implement
                             //Exception ex = new Exception();
                             //ex.Data.Add("Question {0}", questionXml.question[i].name.text.ToString());
                             //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                          // File.AppendAllText(@"E:\capstone\log" + "log.txt", sb.ToString());
+                            // File.AppendAllText(@"E:\capstone\log" + "log.txt", sb.ToString());
                             sb.Clear();
                             if (category != null)
                             {
                                 question.Category = category.Trim();
                                 question.Level = level.Trim();
                                 question.Topic = topic.Trim();
-                            }                         
+                            }
                             tempParser = "";
 
                             #region get question, option
@@ -396,11 +396,11 @@ namespace QBCS.Service.Implement
                                         OptionContent = o.OptionContent,
                                         IsCorrect = o.IsCorrect
                                     }).ToList()
-                                   
+
                                 });
                                 import.ImportedDate = DateTime.Now;
                                 import.UserId = userId;
-                               
+
                             }
                             int z = 0;
                             foreach (var item in listQuestionXml)
@@ -420,7 +420,7 @@ namespace QBCS.Service.Implement
                             listQuestionXml = new List<QuestionTmpModel>();
                             question = new QuestionTmpModel();
                             tempAns = new List<OptionTemp>();
-                        }                       
+                        }
                     }
 
                 }
@@ -438,15 +438,15 @@ namespace QBCS.Service.Implement
                     {
                         CourseId = courseId,
                         UserId = userId,
-                        
+
                         QuestionTemps = listQuestion.Select(q => new QuestionTemp()
                         {
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
-                            Category = q.Category,    
+                            Category = q.Category,
                             Topic = q.Topic,
-                            LevelName = q.Level,                        
+                            LevelName = q.Level,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -479,7 +479,8 @@ namespace QBCS.Service.Implement
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     unitOfWork.SaveChanges();
                     //call store check duplicate
-                    Task.Factory.StartNew(() => {
+                    Task.Factory.StartNew(() =>
+                    {
                         importService.ImportToBank(entity.Id);
                     });
                     check = true;
@@ -502,8 +503,8 @@ namespace QBCS.Service.Implement
 
             return check;
         }
-    
-    public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
+
+        public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
@@ -516,11 +517,47 @@ namespace QBCS.Service.Implement
             Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return (int)question.Frequency;
         }
-
-        public int GetNewestQuestionCount(int courseId)
+        public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
+            var result = unitOfWork.Repository<Question>().GetAll();
+            
+            if (courseId != null && courseId != 0)
+            {
+                result = result.Where(q => q.CourseId == courseId);
+            }
 
-            return 5;
+            if (categoryId != null && categoryId != 0)
+            {
+                result = result.Where(q => q.CategoryId == categoryId);
+            }
+
+            if (learningoutcomeId != null && learningoutcomeId != 0)
+            {
+                result = result.Where(q => q.LearningOutcomeId == learningoutcomeId);
+            }
+
+            if (topicId != null && topicId != 0)
+            {
+                result = result.Where(q => q.TopicId == topicId);
+            }
+
+            if (levelId != null && levelId != 0)
+            {
+                result = result.Where(q => q.LevelId == levelId);
+            }
+
+            return result.Select(q => new QuestionViewModel
+            {
+                Id = q.Id,
+                Code = q.QuestionCode,
+                QuestionContent = q.QuestionContent,
+                Options = q.Options.Select(o => new OptionViewModel
+                {
+                    Id = o.Id,
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList()
+            }).ToList();
         }
     }
 }

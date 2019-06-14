@@ -215,6 +215,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\category-style.css" />
     <Content Include="Content\custom-css.css" />
     <Content Include="Content\checkbox.min.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.css" />
@@ -309,6 +310,7 @@
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
     <Content Include="Scripts\js\demo\datatables-demo.js" />
+    <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
     <Content Include="Scripts\js\sb-admin-2.js" />
     <Content Include="Scripts\js\sb-admin-2.min.js" />
@@ -2093,6 +2095,7 @@
     <Content Include="Views\Topic\Add.cshtml" />
     <Content Include="Views\Topic\Edit.cshtml" />
     <Content Include="Views\Topic\Index.cshtml" />
+    <Content Include="Views\Course\CourseDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

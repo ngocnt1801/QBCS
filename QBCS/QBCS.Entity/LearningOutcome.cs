@@ -13,6 +13,7 @@ namespace QBCS.Entity
         public LearningOutcome()
         {
             PartOfExaminations = new HashSet<PartOfExamination>();
+            Questions = new HashSet<Question>();
         }
 
         public int Id { get; set; }
@@ -31,5 +32,8 @@ namespace QBCS.Entity
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartOfExamination> PartOfExaminations { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

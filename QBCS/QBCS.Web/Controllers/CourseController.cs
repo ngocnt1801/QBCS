@@ -16,9 +16,11 @@ namespace QBCS.Web.Controllers
     public class CourseController : Controller
     {
         private ICourseService courseService;
+        private ICategoryService categoryService;
         public CourseController()
         {
             courseService = new CourseService();
+            categoryService = new CategoryService();
         }
         // GET: Course
         public ActionResult Index(int userId)
@@ -93,6 +95,17 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);
             return View("Staff_ListCourse", courses);
+        }
+
+        public ActionResult CourseDetail(int courseId)
+        {
+            List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
+            var model = new CourseViewModel
+            {
+                Id = courseId,
+                Categories = categories
+            };
+            return View(model);
         }
     }
 }
