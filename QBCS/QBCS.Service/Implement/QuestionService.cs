@@ -284,7 +284,6 @@ namespace QBCS.Service.Implement
                 {
                     List<QuestionTmpModel> listQuestionXml = new List<QuestionTmpModel>();
                     XmlSerializer xmlSer = new XmlSerializer(typeof(quiz));
-
                     reader = new StreamReader(questionFile.InputStream);
                     quiz questionXml = (quiz)xmlSer.Deserialize(reader);
                     List<OptionTemp> tempAns = new List<OptionTemp>();
@@ -327,16 +326,9 @@ namespace QBCS.Service.Implement
                         {
                             string tempParser = "";                           
                             tempParser = questionXml.question[i].questiontext.text;
-                           // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             question.QuestionContent = questionContent;
-                            question.Code = questionXml.question[i].name.text.ToString();
-                            //sb.Append("Code  " + questionXml.question[i].name.text.ToString() + "\n");
-                            //Exception ex = new Exception();
-                            //ex.Data.Add("Question {0}", questionXml.question[i].name.text.ToString());
-                            //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                          // File.AppendAllText(@"E:\capstone\log" + "log.txt", sb.ToString());
-                            sb.Clear();
+                            question.Code = questionXml.question[i].name.text.ToString();                          
                             if (category != null)
                             {
                                 question.Category = category.Trim();
@@ -405,16 +397,12 @@ namespace QBCS.Service.Implement
                             int z = 0;
                             foreach (var item in listQuestionXml)
                             {
-                                //Exception ex = new Exception();
-                                //ex.Data.Add("Question {0}", item.QuestionContent);
-                                //ex.Data.Add("Code {0}", item.Code);
-                                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                                 z++;
                                 sb.AppendLine(z + "");
                                 sb.AppendLine("Question " + item.QuestionContent);
                                 sb.AppendLine("Code " + item.Code + "\n");
                                 sb.AppendLine();
-                                File.AppendAllText(@"E:\capstone\log\" + "logXML.txt", sb.ToString());
+                                File.AppendAllText(@"E:\Capstone\log\" + "logXML.txt", sb.ToString());
                                 sb.Clear();
                             }
                             listQuestionXml = new List<QuestionTmpModel>();
@@ -458,16 +446,12 @@ namespace QBCS.Service.Implement
                     int g = 0;
                     foreach (var item in listQuestion)
                     {
-                        //Exception ex = new Exception();
-                        //ex.Data.Add("Question {0}", item.QuestionContent);
-                        //ex.Data.Add("Code {0}", item.Code);
-                        //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                         g++;
                         sb.AppendLine(g + "");
                         sb.AppendLine("Question: " + item.QuestionContent);
                         sb.AppendLine("Code: " + item.Code + "\n");
                         sb.AppendLine();
-                        File.AppendAllText(@"E:\capstone\log\" + "logGIFT.txt", sb.ToString());
+                        File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
                         sb.Clear();
                     }
                 }

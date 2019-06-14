@@ -53,21 +53,21 @@ namespace QBCS.Service.ViewModel
 
         //private bool defaultgradeFieldSpecified ;
 
-        private decimal penaltyField;
+        private string penaltyField;
 
-        private bool penaltyFieldSpecified;
+        //private bool penaltyFieldSpecified;
 
-        private byte hiddenField;
+        private string hiddenField;
 
-        private bool hiddenFieldSpecified;
+        //private bool hiddenFieldSpecified;
 
-        private bool singleField;
+        private string singleField;
 
-        private bool singleFieldSpecified;
+       // private bool singleFieldSpecified;
 
-        private bool shuffleanswersField;
+        private string shuffleanswersField;
 
-        private bool shuffleanswersFieldSpecified;
+        //private bool shuffleanswersFieldSpecified;
 
         private string answernumberingField;
 
@@ -123,23 +123,35 @@ namespace QBCS.Service.ViewModel
         }
 
         /// <remarks/>
-        public decimal defaultgrade
+        public string defaultgrade
         {
             get
             {
-                return Decimal.Parse(this.defaultgradeField);
+                //return Decimal.Parse(this.defaultgradeField);
+                return this.defaultgradeField.ToString();
             }
             set
             {
-                if (value.Equals(""))
+                if (string.IsNullOrEmpty(value))
                 {
                     this.defaultgradeField = 0 + "";
                 }
                 else
                 {
-                    this.defaultgradeField = value + "";
+                    this.defaultgradeField = value.ToString();
                 }
             }
+            //set
+            //{
+            //    if (value.Equals(""))
+            //    {
+            //        this.defaultgradeField = 0 + "";
+            //    }
+            //    else
+            //    {
+            //        this.defaultgradeField = value + "";
+            //    }
+            //}
         }
 
         /// <remarks/>
@@ -157,112 +169,157 @@ namespace QBCS.Service.ViewModel
         //}
 
         /// <remarks/>
-        public decimal penalty
+        public string penalty
         {
             get
             {
-                return this.penaltyField;
+            
+                return this.penaltyField.ToString();
             }
             set
             {
-                this.penaltyField = value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.penaltyField = 0 + "";
+                }
+                else
+                {
+                    this.penaltyField = value.ToString();
+                }
+            }
+            //get
+            //{
+            //    return Decimal.Parse(this.penaltyField);
+            //}
+            //set
+            //{
+            //    if (value.Equals(""))
+            //    {
+            //        this.penaltyField = 0 + "";
+            //    }
+            //    else
+            //    {
+            //        this.penaltyField = value + "";
+            //    }
+            //}
+
+        }
+
+        /// <remarks/>
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool penaltySpecified
+        //{
+        //    get
+        //    {
+        //        return this.penaltyFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.penaltyFieldSpecified = value;
+        //    }
+        //}
+
+        /// <remarks/>
+        public string hidden
+        {
+            get
+            {
+                return this.hiddenField.ToString();
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.hiddenField = 0 + "";
+                }
+                else
+                {
+                    this.hiddenField = value.ToString();
+                }
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool penaltySpecified
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool hiddenSpecified
+        //{
+        //    get
+        //    {
+        //        return this.hiddenFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.hiddenFieldSpecified = value;
+        //    }
+        //}
+
+        /// <remarks/>
+        public string single
         {
             get
             {
-                return this.penaltyFieldSpecified;
+                return this.singleField.ToString();
             }
             set
             {
-                this.penaltyFieldSpecified = value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.singleField = "true" + "";
+                }
+                else
+                {
+                    this.singleField = value.ToString();
+                }
             }
         }
 
         /// <remarks/>
-        public byte hidden
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool singleSpecified
+        //{
+        //    get
+        //    {
+        //        return this.singleFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.singleFieldSpecified = value;
+        //    }
+        //}
+
+        /// <remarks/>
+        public string shuffleanswers
         {
             get
             {
-                return this.hiddenField;
+                return this.shuffleanswersField.ToString();
             }
             set
             {
-                this.hiddenField = value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    this.shuffleanswersField = "true" + "";
+                }
+                else
+                {
+                    this.shuffleanswersField = value.ToString();
+                }
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool hiddenSpecified
-        {
-            get
-            {
-                return this.hiddenFieldSpecified;
-            }
-            set
-            {
-                this.hiddenFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        public bool single
-        {
-            get
-            {
-                return this.singleField;
-            }
-            set
-            {
-                this.singleField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool singleSpecified
-        {
-            get
-            {
-                return this.singleFieldSpecified;
-            }
-            set
-            {
-                this.singleFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        public bool shuffleanswers
-        {
-            get
-            {
-                return this.shuffleanswersField;
-            }
-            set
-            {
-                this.shuffleanswersField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool shuffleanswersSpecified
-        {
-            get
-            {
-                return this.shuffleanswersFieldSpecified;
-            }
-            set
-            {
-                this.shuffleanswersFieldSpecified = value;
-            }
-        }
+        //[System.Xml.Serialization.XmlIgnoreAttribute()]
+        //public bool shuffleanswersSpecified
+        //{
+        //    get
+        //    {
+        //        return this.shuffleanswersFieldSpecified;
+        //    }
+        //    set
+        //    {
+        //        this.shuffleanswersFieldSpecified = value;
+        //    }
+        //}
 
         /// <remarks/>
         public string answernumbering
@@ -761,7 +818,7 @@ namespace QBCS.Service.ViewModel
 
         private quizQuestionAnswerFeedback feedbackField;
 
-        private byte fractionField;
+        private string fractionField;
 
         private string formatField;
 
@@ -793,21 +850,22 @@ namespace QBCS.Service.ViewModel
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte fraction
+        public string fraction
         {
             get
             {
-                return this.fractionField;
+                return this.fractionField.ToString();
+               // return Byte.Parse(this.fractionField);
             }
             set
             {
                 if (value.Equals(""))
                 {
-                    this.fractionField = 0;
+                    this.fractionField = 0 + "";
                 }
                 else
                 {
-                    this.fractionField = value;
+                    this.fractionField = value.ToString();
                 }
             }
         }
