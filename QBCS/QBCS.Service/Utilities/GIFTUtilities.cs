@@ -16,18 +16,17 @@ namespace QBCS.Service.Utilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
         static OptionTemp optionModel = new OptionTemp();
-        static string category = null;
-        static string topic = null;
-        static string level = null;
+        static string category = "";
+        static string topic = "";
+        static string level = "";
         public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader)
         {
             List<QuestionTmpModel> list = new List<QuestionTmpModel>();
-            try
-            {
+          
                 string line = null;               
                 List<OptionTemp> options = new List<OptionTemp>();
                 bool isStartQuestion = false;
-                string destination = "[html]";
+                //string destination = "[html]";
                 while ((line = reader.ReadLine()) != null)
                 {
                     string id = null;
@@ -43,22 +42,23 @@ namespace QBCS.Service.Utilities
                     int countStartCate = 0;
                     bool isBlock = false;
                     bool isStartCate = false;
-                    string result = "";
+                    string result = null;
                     if (!line.StartsWith("//"))
                     {
                         HtmlDocument htmlDoc = new HtmlDocument();
                         htmlDoc.LoadHtml(line);
                         string resultTmp = htmlDoc.DocumentNode.InnerHtml;
-                        result = WebUtility.HtmlDecode(resultTmp);
-                        result = StringProcess.RemoveTag(result, destination, "");
+                        result = WebUtility.HtmlDecode(resultTmp);    
+                        //result = StringProcess.RemoveTag(result, destination, "");
                         result = StringProcess.RemoveTag(result, @"\=", @"=");
                         result = StringProcess.RemoveTag(result, @"\{", @"{");
                         result = StringProcess.RemoveTag(result, @"\}", @"}");
                         result = StringProcess.RemoveTag(result, @"\#", @"#");
                         result = StringProcess.RemoveTag(result, @"\~", @"~");
                         result = StringProcess.RemoveTag(result, @"\:", @":");
-                        result = StringProcess.RemoveTag(result, @"\n", @"<br>");
+                        result = StringProcess.RemoveTag(result, @"\n", @"<cbr>"); //<crb> replace for \n
                         result = StringProcess.RemoveTag(result, @"\:", @":");
+                        result = StringProcess.RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                         for (int i = 0; i < result.Length; i++)
                         {
                             char let = result[i];
@@ -173,6 +173,7 @@ namespace QBCS.Service.Utilities
                     }
                     if (question != null)
                     {
+                        
                         //string destination = "[html]";
                         //question = StringProcess.RemoveTag(question, destination, "");
                         //question = StringProcess.RemoveTag(question, @"\=", @"=");
@@ -183,13 +184,15 @@ namespace QBCS.Service.Utilities
                         //question = StringProcess.RemoveTag(question, @"\:", @":");
                         //question = question.Replace(@"\:", @":");
                         quesModel.Code = id;
+                       // question = StringProcess.RemoveTag(question, @"<br/>", Environment.NewLine);
                         quesModel.QuestionContent = question;
-
-
+                        //question = null;
+                       
                     }
                     if (right != null)
                     {
                         optionModel = new OptionTemp();
+                       // right = StringProcess.RemoveTag(right, @"<br/>", Environment.NewLine);
                         //right = StringProcess.RemoveTag(right, @"\=", @"=");
                         //right = StringProcess.RemoveTag(right, @"\{", @"{");
                         //right = StringProcess.RemoveTag(right, @"\}", @"}");
@@ -203,6 +206,7 @@ namespace QBCS.Service.Utilities
                     if (wrong != null)
                     {
                         optionModel = new OptionTemp();
+                       // wrong = StringProcess.RemoveTag(wrong, @"<br/>", Environment.NewLine);
                         //wrong = StringProcess.RemoveTag(wrong, @"\=", @"=");
                         //wrong = StringProcess.RemoveTag(wrong, @"\{", @"{");
                         //wrong = StringProcess.RemoveTag(wrong, @"\}", @"}");
@@ -223,14 +227,6 @@ namespace QBCS.Service.Utilities
                         options = new List<OptionTemp>();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-
-                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-            }
-            
-
             return list;
         }
 

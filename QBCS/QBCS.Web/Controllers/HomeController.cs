@@ -58,7 +58,15 @@ namespace QBCS.Web.Controllers
             return View();
             
         }
+        public ActionResult Logout(string username)
+        {
 
-        
+            Session.Clear();
+
+            return RedirectToAction("Login");
+
+        }
+
+
     }
 }

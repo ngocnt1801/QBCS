@@ -48,6 +48,8 @@ namespace QBCS.Service.Implement
             return null;
         }
 
+        
+
         public bool AddUser(UserViewModel user)
         {
             bool result = false;

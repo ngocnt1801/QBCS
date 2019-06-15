@@ -276,6 +276,7 @@ namespace QBCS.Service.Implement
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
             StringBuilder sb = new StringBuilder();
+            
             try
             {
                 string extensionFile = Path.GetExtension(questionFile.FileName);
@@ -324,9 +325,11 @@ namespace QBCS.Service.Implement
                         #endregion
                         if (questionXml.question[i].questiontext != null)
                         {
+                            
                             string tempParser = "";                           
                             tempParser = questionXml.question[i].questiontext.text;
                             questionContent = WebUtility.HtmlDecode(tempParser);
+                            questionContent = StringProcess.RemoveHtmlTag(questionContent);
                             question.QuestionContent = questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();                          
                             if (category != null)
@@ -346,6 +349,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
+                                        rightAnswer = StringProcess.RemoveHtmlTag(rightAnswer);
                                         option = new OptionTemp();
                                         option.OptionContent = rightAnswer;
                                         option.IsCorrect = true;
@@ -357,6 +361,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
+                                        wrongAnswer = StringProcess.RemoveHtmlTag(wrongAnswer);
                                         option = new OptionTemp();
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
@@ -474,11 +479,11 @@ namespace QBCS.Service.Implement
                 }
 
             }
-            catch (Exception ex)
-            {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                //Console.WriteLine(ex.Message);
-            }
+            //catch (Exception ex)
+            //{
+            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+            //    //Console.WriteLine(ex.Message);
+            //}
             finally
             {
                 reader.Close();

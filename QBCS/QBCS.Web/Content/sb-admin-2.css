@@ -11644,6 +11644,7 @@ a:focus {
     background: url("instagram_profile_image.png");
     background-position: center;
     background-size: cover;
+    background-color: #4e73df;
 }
 
 .bg-register-image {
