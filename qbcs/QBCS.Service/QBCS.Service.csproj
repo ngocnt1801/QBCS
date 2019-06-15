@@ -66,6 +66,7 @@
     <Compile Include="Implement\ImportService.cs" />
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
+    <Compile Include="Implement\LogService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OptionService.cs" />
     <Compile Include="Enum\RoleEnum.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Interface\IImportService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
+    <Compile Include="Interface\ILogService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IRuleService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\ListTopicLearningOutcomeViewModel.cs" />
+    <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\PartOfExamViewModel.cs" />
