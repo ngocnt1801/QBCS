@@ -283,6 +283,7 @@ namespace QBCS.Service.Implement
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
             StringBuilder sb = new StringBuilder();
+            
             try
             {
                 string extensionFile = Path.GetExtension(questionFile.FileName);
@@ -291,7 +292,6 @@ namespace QBCS.Service.Implement
                 {
                     List<QuestionTmpModel> listQuestionXml = new List<QuestionTmpModel>();
                     XmlSerializer xmlSer = new XmlSerializer(typeof(quiz));
-
                     reader = new StreamReader(questionFile.InputStream);
                     quiz questionXml = (quiz)xmlSer.Deserialize(reader);
                     List<OptionTemp> tempAns = new List<OptionTemp>();
@@ -336,6 +336,7 @@ namespace QBCS.Service.Implement
                             tempParser = questionXml.question[i].questiontext.text;
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
+                            questionContent = StringProcess.RemoveHtmlTag(questionContent);
                             question.QuestionContent = questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();
                             //sb.Append("Code  " + questionXml.question[i].name.text.ToString() + "\n");
@@ -361,6 +362,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
+                                        rightAnswer = StringProcess.RemoveHtmlTag(rightAnswer);
                                         option = new OptionTemp();
                                         option.OptionContent = rightAnswer;
                                         option.IsCorrect = true;
@@ -372,6 +374,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
+                                        wrongAnswer = StringProcess.RemoveHtmlTag(wrongAnswer);
                                         option = new OptionTemp();
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
@@ -412,16 +415,12 @@ namespace QBCS.Service.Implement
                             int z = 0;
                             foreach (var item in listQuestionXml)
                             {
-                                //Exception ex = new Exception();
-                                //ex.Data.Add("Question {0}", item.QuestionContent);
-                                //ex.Data.Add("Code {0}", item.Code);
-                                //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                                 z++;
                                 sb.AppendLine(z + "");
                                 sb.AppendLine("Question " + item.QuestionContent);
                                 sb.AppendLine("Code " + item.Code + "\n");
                                 sb.AppendLine();
-                                File.AppendAllText(@"E:\capstone\log\" + "logXML.txt", sb.ToString());
+                                File.AppendAllText(@"E:\Capstone\log\" + "logXML.txt", sb.ToString());
                                 sb.Clear();
                             }
                             listQuestionXml = new List<QuestionTmpModel>();
@@ -465,16 +464,12 @@ namespace QBCS.Service.Implement
                     int g = 0;
                     foreach (var item in listQuestion)
                     {
-                        //Exception ex = new Exception();
-                        //ex.Data.Add("Question {0}", item.QuestionContent);
-                        //ex.Data.Add("Code {0}", item.Code);
-                        //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                         g++;
                         sb.AppendLine(g + "");
                         sb.AppendLine("Question: " + item.QuestionContent);
                         sb.AppendLine("Code: " + item.Code + "\n");
                         sb.AppendLine();
-                        File.AppendAllText(@"E:\capstone\log\" + "logGIFT.txt", sb.ToString());
+                        File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
                         sb.Clear();
                     }
                 }
@@ -498,11 +493,11 @@ namespace QBCS.Service.Implement
                 }
 
             }
-            catch (Exception ex)
-            {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                //Console.WriteLine(ex.Message);
-            }
+            //catch (Exception ex)
+            //{
+            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+            //    //Console.WriteLine(ex.Message);
+            //}
             finally
             {
                 reader.Close();
