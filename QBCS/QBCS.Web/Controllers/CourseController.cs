@@ -94,5 +94,16 @@ namespace QBCS.Web.Controllers
             List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);
             return View("Staff_ListCourse", courses);
         }
+        public ActionResult CourseStat()
+        {
+            int userId = ((UserViewModel)Session["user"]).Id;
+            var result = courseService.GetCourseStatByUserId(userId);
+            return View(result);
+        }
+        public JsonResult GetCourseDetailStat(int courseId)
+        {
+            var result = courseService.GetCourseStatDetailByCourseId(courseId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

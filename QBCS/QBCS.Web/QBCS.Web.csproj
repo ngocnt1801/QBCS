@@ -2175,6 +2175,7 @@
     <Content Include="Views\Topic\Edit.cshtml" />
     <Content Include="Views\Topic\Index.cshtml" />
     <Content Include="Views\Course\Detail.cshtml" />
+    <Content Include="Views\Course\CourseStat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
