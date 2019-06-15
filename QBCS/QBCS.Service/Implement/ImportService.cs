@@ -98,6 +98,22 @@ namespace QBCS.Service.Implement
             return null;
         }
 
+        public List<ImportViewModel> GetListImport(int userId)
+        {
+            return unitOfWork.Repository<Import>().GetAll()
+                .Where(im => im.UserId == userId)
+                .Select(im => new ImportViewModel
+                {
+                    Id = im.Id,
+                    Date = im.ImportedDate.Value,
+                    Status = (StatusEnum)im.Status.Value,
+                    TotalQuestion = im.TotalQuestion.HasValue ? im.TotalQuestion.Value : 0,
+                    TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0
+                })
+                .OrderByDescending(im => im.Date)
+                .ToList();
+        }
+
         public QuestionTempViewModel GetQuestionTemp(int questionTempId)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);

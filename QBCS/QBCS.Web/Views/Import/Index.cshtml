@@ -1,0 +1,69 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.ImportViewModel>
+@using QBCS.Service.Enum
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int count = 0;
+}
+
+<h2>Import history</h2>
+<div class="card shadow mb-4">
+
+    <div class="card-body text-custom">
+        <div class="table-responsive text-custom">
+            <table class="table table-bordered text-custom">
+                <tr>
+                    <th>
+                        No.
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        Success
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    count++;
+                    <tr>
+                        <td>
+                            @count
+                        </td>
+                        <td>
+                            @item.Date
+                        </td>
+                        <td>
+                            @item.TotalQuestion
+                        </td>
+                        <td>
+                            @item.TotalSuccess
+                        </td>
+                        <td>
+                            @item.Status.ToString()
+                        </td>
+                        <td>
+                            @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Fixing)
+                            {
+                                <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id})">View Result</a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+

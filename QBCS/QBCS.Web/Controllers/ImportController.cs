@@ -25,7 +25,9 @@ namespace QBCS.Web.Controllers
         // GET: Import
         public ActionResult Index()
         {
-            return View();
+            int userId = ((UserViewModel)Session["user"]).Id;
+            var model = importService.GetListImport(userId);
+            return View(model);
         }
 
         public ActionResult GetResult(int importId)
