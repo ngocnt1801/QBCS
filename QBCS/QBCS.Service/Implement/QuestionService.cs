@@ -526,7 +526,7 @@ namespace QBCS.Service.Implement
         }
         public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
-            var result = unitOfWork.Repository<Question>().GetAll();
+            var result = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);
             
             if (courseId != null && courseId != 0)
             {
@@ -563,8 +563,22 @@ namespace QBCS.Service.Implement
                     Id = o.Id,
                     OptionContent = o.OptionContent,
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                }).ToList()
-            }).ToList();
+                }).ToList(),
+                IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
+            })
+            .OrderByDescending(q => !q.IsDisable)
+            .ToList();
+        }
+
+        public void ToggleDisable(int id)
+        {
+            var entity = unitOfWork.Repository<Question>().GetById(id);
+            if (entity != null)
+            {
+                entity.IsDisable = entity.IsDisable.HasValue ? !entity.IsDisable : true;
+            }
+            unitOfWork.Repository<Question>().Update(entity);
+            unitOfWork.SaveChanges();
         }
     }
 }

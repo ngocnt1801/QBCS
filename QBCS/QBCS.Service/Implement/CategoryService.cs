@@ -41,7 +41,7 @@ namespace QBCS.Service.Implement
 
             foreach (var category in categories)
             {
-                var categoryQuestions = unitOfWork.Repository<Question>().GetAll().Where(q => q.CategoryId == category.Id);
+                var categoryQuestions = unitOfWork.Repository<Question>().GetAll().Where(q => q.CategoryId == category.Id && !(q.IsDisable.HasValue && q.IsDisable.Value));
 
                 category.QuestionCount = categoryQuestions.Count();
 
@@ -66,7 +66,9 @@ namespace QBCS.Service.Implement
 
                 foreach (var lo in category.LearningOutcomes)
                 {
-                    var loQuestion = unitOfWork.Repository<Question>().GetAll().Where(q => lo.IsLearningOutcome ? q.LearningOutcomeId == lo.Id : q.TopicId == lo.Id);
+                    var loQuestion = unitOfWork.Repository<Question>().GetAll().Where(q => q.CategoryId == category.Id 
+                                                                                            && (lo.IsLearningOutcome ? q.LearningOutcomeId == lo.Id : q.TopicId == lo.Id) 
+                                                                                            && !(q.IsDisable.HasValue && q.IsDisable.Value));
 
                     lo.QuestionCount = loQuestion.Count();
                     lo.Levels = loQuestion.Select(q => new LevelViewModel
@@ -80,7 +82,11 @@ namespace QBCS.Service.Implement
 
                     foreach (var lv in lo.Levels)
                     {
-                        lv.QuestionCount = unitOfWork.Repository<Question>().GetAll().Where(q => (lo.IsLearningOutcome ? q.LearningOutcomeId == lo.Id : q.TopicId == lo.Id) && q.LevelId == lv.Id).Count();
+                        lv.QuestionCount = unitOfWork.Repository<Question>().GetAll().Where(q => q.CategoryId == category.Id 
+                                                                                                && (lo.IsLearningOutcome ? q.LearningOutcomeId == lo.Id : q.TopicId == lo.Id) 
+                                                                                                && q.LevelId == lv.Id 
+                                                                                                && !(q.IsDisable.HasValue && q.IsDisable.Value))
+                                                                                    .Count();
                     }
                     
                 }

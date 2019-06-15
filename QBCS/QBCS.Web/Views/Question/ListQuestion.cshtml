@@ -29,24 +29,20 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            @*<th>CourseId</th>*@
-                            @*<th>Course Name</th>*@
-                            <th class="col-md-8">Question</th>
-                            @*<th class="col-md-4">Option</th>*@
+                            <th>Question</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
+                            <tr id="@item.Id">
                                 @{
                                     counter++;
                                 }
                                 <td>@counter</td>
-                                @*<td>@item.CourseCode</td>*@
-                                @*<td>@item.CourseName</td>*@
-                                <td class="col-2">
+                                <td>
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
@@ -66,7 +62,10 @@
                                         <br />
                                     }
                                 </td>
-
+                                <td>
+                                    <a href="@Url.Action("GetQuestionDetail", "Question", new { id = item.Id})" class="btn btn-primary mr-1 btn-sm"><i class="fa fa-pencil-alt"></i></a>
+                                    <button data-id="@item.Id" data-url="@Url.Action("ToggleDisable", "Question", new { id = item.Id})" class="btn btn-danger btn-sm toggleDisable"><i class="fa fa-trash"></i></button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -79,4 +78,3 @@ else
 {
     <h5>There is no question in this course</h5>
 }
-

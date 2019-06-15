@@ -166,6 +166,13 @@ namespace QBCS.Web.Controllers
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
             return PartialView("ListQuestion", result);
         }
+
+        public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
+        {
+            questionService.ToggleDisable(id);
+
+            return Json("OK", JsonRequestBehavior.AllowGet);
+        }
     }
 
 }

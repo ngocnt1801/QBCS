@@ -20,6 +20,7 @@ namespace QBCS.Service.ViewModel
         public string CourseName { get; set; }
         public string CourseCode { get; set; }
         public bool IsDuplicated { get; set; }
+        public bool IsDisable { get; set; }
         public QuestionViewModel DuplicatedQuestion { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public LevelViewModel Level { get; set; }
