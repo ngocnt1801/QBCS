@@ -21,6 +21,7 @@ namespace QBCS.Entity
         public virtual DbSet<LearningOutcome> LearningOutcomes { get; set; }
         public virtual DbSet<Level> Levels { get; set; }
         public virtual DbSet<LevelInCourse> LevelInCourses { get; set; }
+        public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<OptionInExam> OptionInExams { get; set; }
         public virtual DbSet<OptionTemp> OptionTemps { get; set; }
@@ -66,6 +67,18 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<Level>()
                 .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Log>()
+                .Property(e => e.TargetName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Log>()
+                .Property(e => e.Controller)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Log>()
+                .Property(e => e.Method)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Option>()

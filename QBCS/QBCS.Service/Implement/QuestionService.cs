@@ -140,8 +140,15 @@ namespace QBCS.Service.Implement
             Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
             questionById.QuestionContent = question.QuestionContent;
             questionById.LevelId = question.LevelId;
-            questionById.LearningOutcomeId = question.LearningOutcomeId;
-            questionById.TopicId = question.TopicId;
+            if (question.LearningOutcomeId != 0)
+            {
+                questionById.LearningOutcomeId = question.LearningOutcomeId;
+            }
+
+            if (question.TopicId != 0)
+            {
+                questionById.TopicId = question.TopicId;
+            }
 
             unitOfWork.Repository<Question>().Update(questionById);
             unitOfWork.SaveChanges();

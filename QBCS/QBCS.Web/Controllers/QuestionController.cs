@@ -1,17 +1,12 @@
-﻿using Newtonsoft.Json;
-using QBCS.Entity;
+﻿using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
-using System.Collections;
 using QBCS.Web.Attributes;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
-using QBCS.Service.Enum;
 
 namespace QBCS.Web.Controllers
 {
@@ -25,7 +20,7 @@ namespace QBCS.Web.Controllers
         private ILearningOutcomeService learningOutcomeService;
         private IExaminationService examinationService;
         private IImportService importService;
-        
+
 
         public QuestionController()
         {
@@ -34,9 +29,9 @@ namespace QBCS.Web.Controllers
             topicService = new TopicService();
             levelService = new LevelService();
             learningOutcomeService = new LearningOutcomeService();
-            examinationService =  new ExaminationService();
+            examinationService = new ExaminationService();
             importService = new ImportService();
-        
+
         }
 
         // GET: Question
@@ -47,6 +42,7 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
+        [Log(Action = "Create", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult Add(QuestionViewModel model)
         {
             questionService.Add(model);
@@ -108,6 +104,7 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             bool result = questionService.UpdateQuestion(ques);
@@ -117,8 +114,8 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
         }
 
-
         [HttpPost]
+        [Log(Action = "Import", TargetName = "Question")]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId)
         {
             var user = (UserViewModel)Session["user"];
@@ -126,7 +123,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId); 
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId);
             }
 
             //notify 
