@@ -218,6 +218,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\category-style.css" />
+    <Content Include="Content\checkbox-style.css" />
     <Content Include="Content\custom-css.css" />
     <Content Include="Content\checkbox.min.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.css" />

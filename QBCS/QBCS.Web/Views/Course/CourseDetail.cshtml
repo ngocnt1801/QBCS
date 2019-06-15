@@ -6,14 +6,32 @@
 }
 
 
+@if (TempData["NewestCount"] != null)
+{
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>@TempData["NewestCount"] new questions</strong> are inserted
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
-<div class="row">
-    <div class="col-lg-12 mb-2">
-        <a href="@Url.Action("AddQuestion", "question")" class="btn btn-primary float-right">Add Question</a>
+@*<div class="row">
+        <div class="col-lg-12 mb-2">
+            <a href="@Url.Action("AddQuestion", "question")" class="btn btn-primary float-right">Add Question</a>
+        </div>
+    </div>*@
+<div class="row" id="move-btn-group">
+    <div class="col mb-2">
+        <button class="btn btn-info float-right" id="move-btn">Move Questions</button>
     </div>
 </div>
 
+
 <div class="row">
+    <div id="list-question" class="col-md-9" data-id="@Model.Id">
+        @* Render list question here *@
+    </div>
     <div class="list-group list-group-root well col-md-3 text-custom">
 
         @foreach (var category in Model.Categories)
@@ -66,9 +84,6 @@
             }
         }
 
-    </div>
-    <div id="list-question" class="col-md-9" data-id="@Model.Id">
-        @* Render list question here *@
     </div>
 </div>
 

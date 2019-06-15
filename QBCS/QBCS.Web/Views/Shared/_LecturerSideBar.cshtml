@@ -3,7 +3,7 @@
 @{ 
     var homeClass = "";
     var courseClass = "";
-    var questionClass = "";
+    var importClass = "";
     var userClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     switch (controller)
@@ -14,8 +14,8 @@
         case "Course":
             courseClass = "active";
             break;
-        case "Question":
-            questionClass = "active";
+        case "Import":
+            importClass = "active";
             break;
         case "User":
             userClass = "active";
@@ -60,7 +60,7 @@
     </li>
 
     <!-- Nav Item - Question Menu -->
-    <li class="nav-item @questionClass">
+    <li class="nav-item @importClass">
         <a class="nav-link" 
            href="@Url.Action("Index", "Import")">
             <i class="fas fa-question"></i>
