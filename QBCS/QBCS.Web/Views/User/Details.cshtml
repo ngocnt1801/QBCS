@@ -48,8 +48,8 @@
         <div class="form-row">
             @Html.Hidden("Id", Model.User.Id)
             <div class="form-group col-md-12">
-                <input type="submit" class="btn btn-primary float-right" value="Save Changes">
-                <a class="btn btn-default float-right" href="@Url.Action("Index", "User")">Cancel</a>
+                <input type="submit" class="btn btn-primary float-right" value="Save">
+                <a class="btn btn-outline-light float-right border-dark text-custom mr-2 float-right" href="@Url.Action("Index", "User")">Cancel</a>
             </div>
         </div>
     }
