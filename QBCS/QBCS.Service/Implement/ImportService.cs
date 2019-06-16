@@ -46,7 +46,7 @@ namespace QBCS.Service.Implement
             {
                 if (import.Status != (int)StatusEnum.Done)
                 {
-                    import.Status = (int)StatusEnum.Fixing;
+                    import.Status = (int)StatusEnum.Editing;
                 }
                 import.Seen = true;
                 unitOfWork.Repository<Import>().Update(import);

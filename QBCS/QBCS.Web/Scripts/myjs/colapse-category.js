@@ -63,7 +63,7 @@
         addMoveButtonGroup: function(){
             this.moveBtnGroup.empty();
             this.moveBtnGroup.append('<div class="col mb-2">'
-            + '<button class="btn btn-success float-right" id="move-btn">Move</button> '
+            + '<button class="btn btn-primary float-right" id="move-btn">Move</button> '
             + '<button class="btn btn-danger float-right mr-1" id="cancel-move">Cancel</button>' 
             + '</div>')
 
@@ -84,7 +84,7 @@
             this.moveBtnGroup.empty();
             this.listCheckbox = $(".checkbox");
             this.listCheckbox.addClass('hidden');
-            this.moveBtnGroup.append('<div class="col mb-2"> <button class="btn btn-info float-right" id="move-btn">Move Questions</button> </div>');
+            this.moveBtnGroup.append('<div class="col mb-2"> <button class="btn btn-primary float-right" id="move-btn">Move Questions</button> </div>');
             this.moveBtn = $("#move-btn");
             this.moveBtn.on('click', function () {
                 categoryView.addCheckbox();

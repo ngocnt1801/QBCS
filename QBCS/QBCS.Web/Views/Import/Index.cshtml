@@ -53,7 +53,7 @@
                             @item.Status.ToString()
                         </td>
                         <td>
-                            @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Fixing)
+                            @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Editing)
                             {
                                 <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id})">View Result</a>
                             }

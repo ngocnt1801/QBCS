@@ -23,7 +23,7 @@ namespace DuplicateQuestion
                 CheckDuplicateAndUpdateDb(bank, import);
 
                 #region move temp to bank
-                if (importModel.Status == (int)StatusEnum.Fixing)
+                if (importModel.Status == (int)StatusEnum.Editing)
                 {
                     importModel.TotalSuccess = InsertTempToBank(importModel);
                     RemoveTemp(importModel.ImportId);
@@ -35,7 +35,7 @@ namespace DuplicateQuestion
                 {
                     importModel.Status = (int)StatusEnum.Checked;
                 }
-                else if (importModel.Status == (int)StatusEnum.Fixing)
+                else if (importModel.Status == (int)StatusEnum.Editing)
                 {
                     importModel.Status = (int)StatusEnum.Done;
                 }

@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using QBCS.Service.Enum;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
@@ -39,7 +40,16 @@ namespace QBCS.Web.Controllers
         {
             userService.UpdateUserInfo(model);
 
-            return RedirectToAction("Index");
+            var role = ((UserViewModel)Session["user"]).Role;
+            if (role == RoleEnum.Admin)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
         public ActionResult DeleteCourse(int userId, int courseId)

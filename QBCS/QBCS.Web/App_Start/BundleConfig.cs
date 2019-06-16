@@ -102,6 +102,14 @@ namespace QBCS.Web
                 "~/Content/error/font-awesome.min.css",
                 "~/Content/error/style.css"
                 ));
+
+            //Spinner
+            bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
+                "~/Scripts/myjs/spinner.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/spinner").Include(
+               "~/Content/spinner/spinner.css"
+               ));
         }
     }
 }

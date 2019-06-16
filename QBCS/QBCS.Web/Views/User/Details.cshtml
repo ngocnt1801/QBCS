@@ -50,7 +50,7 @@
         <div class="form-row">
             @Html.Hidden("Id", Model.User.Id)
             <div class="form-group col-md-12">
-                <input type="submit" class="btn btn-primary float-right" value="Save Changes">
+               
                 @{ 
                     string actionCancel = "";
                     if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
@@ -62,7 +62,9 @@
                         actionCancel = Url.Action("Index", "Home");
                     }
                 }
-                <a class="btn btn-default float-right" href="@actionCancel">Cancel</a>
+               
+                <input type="submit" class="btn btn-primary float-right" value="Save">
+                <a class="btn btn-outline-light float-right border-dark text-custom mr-2 float-right" href="@actionCancel">Cancel</a>
             </div>
         </div>
     }
