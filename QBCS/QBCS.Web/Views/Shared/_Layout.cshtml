@@ -333,24 +333,25 @@
 
     @{
         var message = TempData["Message"];
-        var status = TempData["Status"];
-        if (message != null && status != null)
+        //var status = TempData["Status"];
+        if (message != null)
         {
-            switch ((ToastrEnum)status)
-            {
-                case ToastrEnum.Success:
-                    <script>toastr.success("@message")</script>
-                    break;
-                case ToastrEnum.Warning:
-                    <script>toastr.warning("@message")</script>
-                    break;
-                case ToastrEnum.Error:
-                    <script>toastr.error("@message")</script>
-                    break;
-                case ToastrEnum.Info:
-                    <script>toastr.info("@message")</script>
-                    break;
-            }
+            <script>toastr.success("@message")</script>
+            @*switch ((ToastrEnum)status)
+                {
+                    case ToastrEnum.Success:
+                        <script>toastr.success("@message")</script>
+                        break;
+                    case ToastrEnum.Warning:
+                        <script>toastr.warning("@message")</script>
+                        break;
+                    case ToastrEnum.Error:
+                        <script>toastr.error("@message")</script>
+                        break;
+                    case ToastrEnum.Info:
+                        <script>toastr.info("@message")</script>
+                        break;
+                }*@
         }
     }
 </body>
