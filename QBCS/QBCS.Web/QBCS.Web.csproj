@@ -246,6 +246,7 @@
     <Content Include="Content\logo-colored%402x.png" />
     <Content Include="Content\logo-colored.png" />
     <Content Include="Content\logo.png" />
+    <Content Include="Content\logo_text_blue.png" />
     <Content Include="Content\logo_transparent.png" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
