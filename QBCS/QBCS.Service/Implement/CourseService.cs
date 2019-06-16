@@ -25,7 +25,7 @@ namespace QBCS.Service.Implement
             {
                 Name = course.Name,
                 Code = course.Code,
-                DefaultNumberOfQuestion = (int) course.DefaultNumberOfQuestion
+                DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0
             };
             return result;
         }
@@ -134,11 +134,12 @@ namespace QBCS.Service.Implement
             }
             var courseVM = new CourseViewModel()
             {
+                CourseId = id,
                 Code = course.Code,
                 Name = course.Name,
-                DefaultNumberOfQuestion = (int)course.DefaultNumberOfQuestion,
+                DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0,
                 Topic = listTopic,
-                LearningOutcome = listLearningOutcome
+                LearningOutcome = listLearningOutcome,
             };
             return courseVM;
         }

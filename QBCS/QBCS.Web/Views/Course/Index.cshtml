@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="text-custom">
 
                     @foreach (var item in Model)
                     {
@@ -58,10 +58,10 @@
                             @*@if (role == 3)
                             {*@
                                 <td width="18%">
-                                    <a href="@Url.Action("Detail", "Course", new { itemId = item.Id })" class="btn btn-primary">
+                                    <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
                                         Detail
                                     </a>
-                                    <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.Id })" class="btn btn-primary">
+                                    <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
                                         Disable
                                     </a>
                                 </td>

@@ -7,12 +7,12 @@
 
 <div class="row">
     <div class="col">
-        <h2>Topics</h2>
+        <h2>Learning Outcome</h2>
     </div>
     @*@if (role == 3)
         {*@
     <div class="col mb-2">
-        <a href="@Url.Action("Add", "LearningOutcome")" class="btn btn-primary float-right">Add new Topic</a>
+        <a href="@Url.Action("Add", "LearningOutcome")" class="btn btn-primary float-right">Add new Learning Outcome</a>
     </div>
     @*}*@
 
@@ -22,9 +22,9 @@
         <h6 class="m-0 font-weight-bold text-primary">List of Topics</h6>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
+        <div class="table-responsive text-custom">
             <table class="table table-bordered" @*id="dataTable"*@ width="100%" cellspacing="0">
-                <thead>
+                <thead class="text-custom">
                     <tr>
                         <th>
                             @Html.DisplayNameFor(model => model.Code)

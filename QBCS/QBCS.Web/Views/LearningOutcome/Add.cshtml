@@ -16,7 +16,7 @@
             {
                 @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
+                <div class="form-horizontal text-custom">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -49,7 +49,7 @@
                     <div class="">
                         <div style="text-align:right">
                             <button id="submit" class="btn-lg btn-primary">Add</button>
-                            <a href="@Url.Action("Index", "LearningOutcome")" class="btn-lg btn-default" style="border-bottom:2px solid gray;border-right:2px solid gray">Return to Index</a>
+                            <a href="@Url.Action("Index", "LearningOutcome")"  class="btn-lg btn-default text-custom" style="background-color:lightgray;border-bottom:2px solid black;border-right:2px solid black">Cancel</a>
                         </div>
                     </div>
                 </div>

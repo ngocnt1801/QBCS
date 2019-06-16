@@ -86,8 +86,8 @@
     <Compile Include="Utilities\ListUtilities.cs" />
     <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
-    <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseStatViewModel.cs" />
+    <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />

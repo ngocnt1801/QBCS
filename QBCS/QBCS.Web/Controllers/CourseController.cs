@@ -64,7 +64,6 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetDetailCourseById(itemId);
             return View(result);
         }
-        [HttpPost]
         public ActionResult UpdateDisable(int itemId)
         {
             //int itemId = 0;
@@ -94,7 +93,7 @@ namespace QBCS.Web.Controllers
             List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);
             return View("Staff_ListCourse", courses);
         }
-        public ActionResult CourseStat()
+        public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
             var result = courseService.GetCourseStatByUserId(userId);
