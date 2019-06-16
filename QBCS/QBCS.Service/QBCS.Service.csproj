@@ -52,7 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\LevelEnum.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
+    <Compile Include="Enum\ToastrEnum.cs" />
     <Compile Include="Implement\ExaminationService.cs" />
     <Compile Include="Enum\StatusEnum.cs" />
     <Compile Include="Implement\ImportService.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="Utilities\ListUtilities.cs" />
     <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
+    <Compile Include="ViewModel\CourseStatViewModel.cs" />
+    <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
