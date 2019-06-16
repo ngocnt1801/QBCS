@@ -18,5 +18,6 @@ namespace QBCS.Service.ViewModel
         public string Method { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
+        public string Fullname { get; set; }
     }
 }

@@ -7,57 +7,61 @@
 
 <h2>User list</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
+@*<p>
+    <a href="@Html.Action("Create", "User")" class="btn btn-primary"></a> 
+    
+</p>*@
 
-        <th>
-            @Html.DisplayNameFor(model => model.Username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Fullname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Role)
-        </th>
-        <th></th>
-    </tr>
+<div class="card shadow mb-4">
 
-    @foreach (var item in Model)
-    {
-        string disableClass = "";
-        if (item.IsDisable)
-        {
-            disableClass = "bg-gray-300";
-        }
-        <tr class="@disableClass" onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
+    <div class="card-body">
+        <div class="table-responsive text-custom">
+            <table class="table">
+                <tr>
 
+                    <th>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fullname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Role)
+                    </th>
+                    <th class="text-center">Action</th>
+                </tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fullname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role)
-            </td>
-            <td>
-                <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary float-right">Details</a>
-                @if (!item.IsDisable)
+                @foreach (var item in Model)
                 {
-                    <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger float-right mr-1">Disable</a>
-                }
-            </td>
-        </tr>
-    }
+                    string disableClass = "";
+                    if (item.IsDisable)
+                    {
 
-</table>
-<style>
-    tr:hover td {
-        background-color: #fefefe;
-        cursor: pointer;
-    }
-</style>
+                        disableClass = "bg-gray-300";
+                    }
+                    <tr class="@disableClass" onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                            @if (!item.IsDisable)
+                            {
+                                <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
