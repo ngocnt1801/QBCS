@@ -113,6 +113,14 @@ namespace QBCS.Web
                 "~/Content/tab/tabs.css",
                 "~/Content/tab/tabstyles.css"
                 ));
+
+            //Spinner
+            bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
+                "~/Scripts/myjs/spinner.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/spinner").Include(
+               "~/Content/spinner/spinner.css"
+               ));
         }
     }
 }
