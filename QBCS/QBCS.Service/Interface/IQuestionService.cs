@@ -27,5 +27,6 @@ namespace QBCS.Service.Interface
         bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId);
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
         void ToggleDisable(int id);
+        void UpdateCategory(int[] questionIds, int? categoyrId, int? learningOutcomeId, int? levelId);
     }
 }

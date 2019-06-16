@@ -29,10 +29,7 @@
 
 
 <div class="row">
-    <div id="list-question" class="col-md-9" data-id="@Model.Id">
-        @* Render list question here *@
-    </div>
-    <div class="list-group list-group-root well col-md-3 text-custom">
+    <div class="list-group list-group-root well col-md-3 text-custom show-category">
 
         @foreach (var category in Model.Categories)
         {
@@ -40,9 +37,9 @@
             if (category.LearningOutcomes != null && category.LearningOutcomes.Count > 0)
             {
                 <a href="#c-@category.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id})" aria-expanded="true">
-                    <i class="fa fa-plus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
+                    <i class="fa fa-minus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
                 </a>
-                <div class="list-group collapse" id="c-@category.Id">
+                <div class="list-group collapse show" id="c-@category.Id">
                     @foreach (var lo in category.LearningOutcomes)
                     {
                         if (lo.Id != 0)
@@ -85,7 +82,91 @@
         }
 
     </div>
+    <div id="list-question" class="col-md-9" data-id="@Model.Id">
+        @* Render list question here *@
+    </div>
 </div>
 
 
 
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Choose category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <h6><strong id="selected-count">questions</strong> are selected</h6>
+                <table class="text-center">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Code</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody id="selected-questions"></tbody>
+                </table>
+
+                <h5>Choose catgory to move:</h5>
+                <div class="list-group list-group-root well text-custom modal-category">
+                    @foreach (var category in Model.Categories)
+                    {
+
+                        if (category.LearningOutcomes != null && category.LearningOutcomes.Count > 0)
+                        {
+                            <a href="#mc-@category.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-topic="0" data-level="0">
+                                <i class="fa fa-minus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
+                            </a>
+                            <div class="list-group collapse show" id="mc-@category.Id">
+                                @foreach (var lo in category.LearningOutcomes)
+                                {
+                                    if (lo.Id != 0)
+                                    {
+                                        if (lo.Levels != null && lo.Levels.Count > 0)
+                                        {
+                                            <a href="#mlo-@lo.Id" class="list-group-item" data-toggle="collapse"  data-category="@category.Id" data-topic="@lo.Id" data-level="0">
+                                                <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                            </a>
+                                            <div class="list-group collapse" id="mlo-@lo.Id">
+                                                @foreach (var level in lo.Levels)
+                                                {
+                                                    if (level.Id != 0)
+                                                    {
+                                                        <a href="#mlv-@level.Id" class="list-group-item"  data-category="@category.Id" data-topic="@lo.Id" data-level="@level.Id">
+                                                            @level.Name <span class="float-right">(@level.QuestionCount)</span>
+                                                        </a>
+                                                    }
+                                                }
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a href="#lo-@lo.Id" class="list-group-item" data-category="@category.Id" data-topic="@lo.Id" data-level="0">
+                                                @lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                            </a>
+                                        }
+                                    }
+                                }
+
+                            </div>
+                        }
+                        else
+                        {
+                            <a href="#mc-@category.Id" class="list-group-item" data-id="@category.Id" data-category="@category.Id" data-topic="0" data-level="0">
+                                @category.Name <span class="float-right">(@category.QuestionCount)</span>
+                            </a>
+                        }
+                    }
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="move-question-btn">OK</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

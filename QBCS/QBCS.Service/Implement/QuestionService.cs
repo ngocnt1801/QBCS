@@ -283,7 +283,7 @@ namespace QBCS.Service.Implement
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
             StringBuilder sb = new StringBuilder();
-            
+
             try
             {
                 string extensionFile = Path.GetExtension(questionFile.FileName);
@@ -522,7 +522,7 @@ namespace QBCS.Service.Implement
         public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);
-            
+
             if (courseId != null && courseId != 0)
             {
                 result = result.Where(q => q.CourseId == courseId);
@@ -574,6 +574,48 @@ namespace QBCS.Service.Implement
             }
             unitOfWork.Repository<Question>().Update(entity);
             unitOfWork.SaveChanges();
+        }
+
+        public void UpdateCategory(int[] questionIds, int? categoryId, int? learningOutcomeId, int? levelId)
+        {
+            if (questionIds != null)
+            {
+                var entityList = unitOfWork.Repository<Question>().GetAll().Where(q => questionIds.Contains(q.Id)).ToList();
+
+                foreach (var entity in entityList)
+                {
+                    if (categoryId != null && categoryId != 0)
+                    {
+                        entity.CategoryId = categoryId;
+                    }
+                    else
+                    {
+                        entity.CategoryId = null;
+                    }
+
+                    if (learningOutcomeId != null && learningOutcomeId != 0)
+                    {
+                        entity.TopicId = learningOutcomeId; // fix here
+                    }
+                    else
+                    {
+                        entity.TopicId = null;
+                    }
+
+                    if (levelId != null && levelId != 0)
+                    {
+                        entity.LevelId = levelId;
+                    }
+                    else
+                    {
+                        entity.LevelId = null;
+                    }
+                    unitOfWork.Repository<Question>().Update(entity);
+                }
+
+                unitOfWork.SaveChanges();
+            }
+
         }
     }
 }

@@ -173,6 +173,12 @@ namespace QBCS.Web.Controllers
 
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult UpdateCategory(int[] ids, int? categoryId, int? topicId, int? levelId)
+        {
+            questionService.UpdateCategory(ids, categoryId, topicId, levelId);
+            return Json("OK", JsonRequestBehavior.AllowGet);
+        }
     }
 
 }
