@@ -10,5 +10,6 @@ namespace QBCS.Service.Interface
     public interface ILogService
     {
         void Log(LogViewModel model);
+        IEnumerable<LogViewModel> GetAllActivities();
     }
 }

@@ -187,6 +187,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Attributes\LogAttribute.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Attributes\CheckSessionAttribute.cs" />
     <Compile Include="Controllers\CourseController.cs" />
@@ -2108,6 +2109,7 @@
     <Content Include="Views\Course\CourseDetail.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
+    <Content Include="Views\Activity\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

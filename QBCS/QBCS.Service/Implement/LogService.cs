@@ -20,6 +20,19 @@ namespace QBCS.Service.Implement
             unitOfWork = new UnitOfWork();
         }
 
+        public IEnumerable<LogViewModel> GetAllActivities()
+        {
+            var listLog = unitOfWork.Repository<Log>().GetAll().OrderByDescending(l => l.Date).ToList();
+
+            return listLog.Select(l => new LogViewModel()
+            {
+                Fullname = unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname,
+                Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
+                LogDate = l.Date.Value
+                
+            });
+        }
+
         public void Log(LogViewModel model)
         {
             Log entity = new Log
