@@ -332,19 +332,23 @@ namespace QBCS.Service.Implement
                         #endregion
                         if (questionXml.question[i].questiontext != null)
                         {
+                            
                             string tempParser = "";
+                            string checkHTML = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = StringProcess.RemoveHtmlTag(questionContent);
-                            question.QuestionContent = questionContent;
-                            question.Code = questionXml.question[i].name.text.ToString();
-                            //sb.Append("Code  " + questionXml.question[i].name.text.ToString() + "\n");
-                            //Exception ex = new Exception();
-                            //ex.Data.Add("Question {0}", questionXml.question[i].name.text.ToString());
-                            //Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                            // File.AppendAllText(@"E:\capstone\log" + "log.txt", sb.ToString());
-                            sb.Clear();
+                            //questionContent = StringProcess.RemoveTag(questionContent, @"\n", @"<cbr>");
+                            if (checkHTML.Equals("html"))
+                            {
+                                question.QuestionContent = "[html]"+ questionContent;
+                            }
+                            else
+                            {
+                                question.QuestionContent = questionContent;
+                            }
+                            question.Code = questionXml.question[i].name.text.ToString();                          
                             if (category != null)
                             {
                                 question.Category = category.Trim();
@@ -363,6 +367,7 @@ namespace QBCS.Service.Implement
                                         tempParser = questionXml.question[i].answer[j].text;
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
                                         rightAnswer = StringProcess.RemoveHtmlTag(rightAnswer);
+                                        //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
                                         option.OptionContent = rightAnswer;
                                         option.IsCorrect = true;
@@ -375,6 +380,7 @@ namespace QBCS.Service.Implement
                                         tempParser = questionXml.question[i].answer[j].text;
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
                                         wrongAnswer = StringProcess.RemoveHtmlTag(wrongAnswer);
+                                        //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
@@ -400,7 +406,7 @@ namespace QBCS.Service.Implement
                                     Code = question.Code,
                                     Category = question.Category,
                                     Topic = question.Topic,
-                                    LevelName = question.Level,
+                                    LevelName = question.Level,  
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
@@ -410,7 +416,8 @@ namespace QBCS.Service.Implement
                                 });
                                 import.ImportedDate = DateTime.Now;
                                 import.UserId = userId;
-
+                                
+                               
                             }
                             int z = 0;
                             foreach (var item in listQuestionXml)
@@ -444,7 +451,7 @@ namespace QBCS.Service.Implement
                     {
                         CourseId = courseId,
                         UserId = userId,
-
+                        TotalQuestion = listQuestion.Count(),
                         QuestionTemps = listQuestion.Select(q => new QuestionTemp()
                         {
                             QuestionContent = q.QuestionContent,
@@ -479,6 +486,7 @@ namespace QBCS.Service.Implement
                     import.Status = (int)StatusEnum.NotCheck;
                     import.CourseId = courseId;
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
+                    import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
