@@ -38,7 +38,7 @@ namespace QBCS.Web.Controllers
                 return View(result);
             }
             TempData["NewestCount"] = result.NumberOfSuccess;
-            return RedirectToAction("GetListQuestion", "Question", new { courseId = result.CourseId});
+            return RedirectToAction("CourseDetail", "Course", new { courseId = result.CourseId});
         }
 
         public ActionResult EditQuestion(QuestionTempViewModel model)
