@@ -51,7 +51,18 @@
             @Html.Hidden("Id", Model.User.Id)
             <div class="form-group col-md-12">
                 <input type="submit" class="btn btn-primary float-right" value="Save Changes">
-                <a class="btn btn-default float-right" href="@Url.Action("Index", "User")">Cancel</a>
+                @{ 
+                    string actionCancel = "";
+                    if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
+                    {
+                        actionCancel = Url.Action("Index", "User");
+                    }
+                    else
+                    {
+                        actionCancel = Url.Action("Index", "Home");
+                    }
+                }
+                <a class="btn btn-default float-right" href="@actionCancel">Cancel</a>
             </div>
         </div>
     }
