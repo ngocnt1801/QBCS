@@ -126,7 +126,7 @@
                                     {
                                         if (lo.Levels != null && lo.Levels.Count > 0)
                                         {
-                                            <a href="#mlo-@lo.Id" class="list-group-item" data-toggle="collapse"  data-category="@category.Id" data-topic="@lo.Id" data-level="0">
+                                            <a href="#mlo-@lo.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-topic="@lo.Id" data-level="0">
                                                 <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
                                             </a>
                                             <div class="list-group collapse" id="mlo-@lo.Id">
@@ -134,7 +134,7 @@
                                                 {
                                                     if (level.Id != 0)
                                                     {
-                                                        <a href="#mlv-@level.Id" class="list-group-item"  data-category="@category.Id" data-topic="@lo.Id" data-level="@level.Id">
+                                                        <a href="#mlv-@level.Id" class="list-group-item" data-category="@category.Id" data-topic="@lo.Id" data-level="@level.Id">
                                                             @level.Name <span class="float-right">(@level.QuestionCount)</span>
                                                         </a>
                                                     }
@@ -167,6 +167,10 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="move-question-btn">OK</button>
             </div>
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="spinner-grow" role="status" id="spinner" style="display:none;">
+    <span class="sr-only">Loading...</span>
+</div>

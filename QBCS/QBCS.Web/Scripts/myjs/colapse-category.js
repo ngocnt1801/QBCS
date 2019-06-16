@@ -9,7 +9,7 @@
     }
 
     categoryView = {
-        init: function () {
+        init: function () {        
             this.categoryItem = $('.show-category .list-group-item');
             this.categoryItem.on('click', function () {
                 $('.show-category .fa', this)
@@ -18,8 +18,10 @@
 
                 $('.show-category .list-group-item').removeClass('active');
                 this.className += ' active';
+                $("spinner").show();
                 categoryOctopus.loadQuestion(this.attributes["data-link"].value);
                 categoryView.removeButtonGroup();
+                
             });
 
             this.modelCategoryItem= $('.modal-category .list-group-item');
@@ -129,6 +131,9 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
+           
+                
+           
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -144,6 +149,7 @@
                         ]
                     });
                     categoryView.setOnClickDisableBtn();
+                    $("spinner").removeAttr("style").hide();
                 }
             });
         },
