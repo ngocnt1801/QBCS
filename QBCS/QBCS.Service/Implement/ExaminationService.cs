@@ -14,6 +14,16 @@ namespace QBCS.Service.Implement
 {
     public class ExaminationService : IExaminationService
     {
+        private const double ORDINARY_STUDENT_EASY_PERCENT = 0.8;
+        private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.5;
+        private const double ORDINARY_STUDENT_HARD_PERCENT = 0.1;
+        private const double GOOD_STUDENT_EASY_PERCENT = 0.9;
+        private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.6;
+        private const double GOOD_STUDENT_HARD_PERCENT = 0.3;
+        private const double EXCELLENT_STUDENT_EASY_PERCENT = 0.9;
+        private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 0.8;
+        private const double EXCELLENT_STUDENT_HARD_PERCENT = 0.6;
+
         private const string EASY = "Easy";
         private const string MEDIUM = "Medium";
         private const string HARD = "Hard";
@@ -33,7 +43,28 @@ namespace QBCS.Service.Implement
         }
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
         {
-
+            if (exam.FlagPercent.Equals("grade"))
+            {
+                double minError = 0;                
+                for (int i = 0; i <= 100; i++)
+                {
+                    for (int j = 0; j <= (100 - i); j++)
+                    {
+                        int hardQuestionPercentTmp = 100 - i - j;
+                        double ordinaryStudentGradeTmp = ORDINARY_STUDENT_EASY_PERCENT * i + ORDINARY_STUDENT_MEDIUM_PERCENT * j + ORDINARY_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+                        double goodStudentGradeTmp = GOOD_STUDENT_EASY_PERCENT * i + GOOD_STUDENT_MEDIUM_PERCENT * j + GOOD_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+                        double excellentStudentGradeTmp = EXCELLENT_STUDENT_EASY_PERCENT * i + EXCELLENT_STUDENT_MEDIUM_PERCENT * j + EXCELLENT_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+                        double minErrorTmp = Math.Abs(exam.OrdinaryGrade - ordinaryStudentGradeTmp) + Math.Abs(exam.GoodGrade - goodStudentGradeTmp) + Math.Abs(exam.ExcellentGrade - excellentStudentGradeTmp);
+                        if ((minErrorTmp < minError) || (i == 0 && j == 0))
+                        {
+                            exam.EasyPercent = i;
+                            exam.MediumPercent = j;
+                            exam.HardPercent = hardQuestionPercentTmp;
+                            minError = minErrorTmp;
+                        }
+                    }
+                }
+            }
             int questionEasy = (exam.TotalQuestion * exam.EasyPercent) / 100;
             int questionMedium = (exam.TotalQuestion * exam.MediumPercent) / 100;
             int questionHard = exam.TotalQuestion - questionEasy - questionMedium;
@@ -139,6 +170,7 @@ namespace QBCS.Service.Implement
                         QuestionReference = ques.Id,
                         Priority = ques.Priority,
                         Frequency = ques.Frequency,
+                        QuestionCode = ques.QuestionCode,
                         LevelId = ques.LevelId,
                         OptionInExams = ques.Options.Select(o => new OptionInExam()
                         {
@@ -179,6 +211,7 @@ namespace QBCS.Service.Implement
                     TopicId = (int)c.TopicId,
                     Priority = (int)c.Priority,
                     QuestionContent = c.QuestionContent,
+                    QuestionCode = c.QuestionCode,
                     Options = c.Options.Select(d => new OptionViewModel
                     {
                         Id = d.Id,
@@ -265,6 +298,7 @@ namespace QBCS.Service.Implement
                     LearningOutcomeId = (int)c.LearningOutcomeId,
                     Priority = (int)c.Priority,
                     QuestionContent = c.QuestionContent,
+                    QuestionCode = c.QuestionCode,
                     Options = c.Options.Select(d => new OptionViewModel
                     {
                         Id = d.Id,

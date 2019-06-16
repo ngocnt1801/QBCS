@@ -26,6 +26,10 @@ $CATEGORY: $course$/XML/Topic1/Easy
 ~198
 }
 
+// question: 0  name: Switch category to $course$/XML/Topic1/Medium
+$CATEGORY: $course$/XML/Topic1/Medium
+
+
 // question: 74  name: 
 ::::[html]The acronym HTTP stands for _____{
 ~Heuristic Transport Type Protocol
@@ -57,6 +61,10 @@ $CATEGORY: $course$/XML/Topic1/Easy
 ~Concatenation
 ~Variable initialization
 }
+
+// question: 0  name: Switch category to $course$/XML/Topic1/Hard
+$CATEGORY: $course$/XML/Topic1/Hard
+
 
 // question: 78  name: 
 ::::[html]Herman Hollerith introduced electromechanical counting equipment using ____ as input.{
@@ -110,6 +118,10 @@ $CATEGORY: $course$/XML/Topic2/Easy
 ~MAC OS
 }
 
+// question: 0  name: Switch category to $course$/XML/Topic2/Medium
+$CATEGORY: $course$/XML/Topic2/Medium
+
+
 // question: 84  name: 
 ::::[html]Time-____ is a method that allows multiple processes to share the CPU.{
 ~switching
@@ -141,6 +153,10 @@ $CATEGORY: $course$/XML/Topic2/Easy
 ~multilayering
 =multiprocessing
 }
+
+// question: 0  name: Switch category to $course$/XML/Topic2/Hard
+$CATEGORY: $course$/XML/Topic2/Hard
+
 
 // question: 88  name: 
 ::::[html]Effort is ongoing to make ____ available on cell phones.{
@@ -194,6 +210,10 @@ $CATEGORY: $course$/XML/Topic3/Easy
 =sign
 }
 
+// question: 0  name: Switch category to $course$/XML/Topic3/Medium
+$CATEGORY: $course$/XML/Topic3/Medium
+
+
 // question: 94  name: 
 ::::[html]____ determines whether the project is worth doing, and specifying the advantages and disadvantages of this application.{
 ~Software specification
@@ -225,6 +245,10 @@ $CATEGORY: $course$/XML/Topic3/Easy
 ~twip
 =pixel
 }
+
+// question: 0  name: Switch category to $course$/XML/Topic3/Hard
+$CATEGORY: $course$/XML/Topic3/Hard
+
 
 // question: 98  name: 
 ::::[html]Which of the following is an example of a video compression format?{
