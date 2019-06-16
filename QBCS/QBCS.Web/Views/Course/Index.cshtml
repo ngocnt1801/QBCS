@@ -3,18 +3,18 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    var role = (int)((UserViewModel)Session["user"]).Role;
 }
 <div class="row">
     <div class="col">
         <h2>Courses</h2>
     </div>
-    @*@if (role == 3)
-    {*@
+    @if (role == 3)
+    {
         <div class="col mb-2">
             <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
         </div>
-    @*}*@
+    }
 
 </div>
 <div class="card shadow mb-4">
@@ -32,12 +32,12 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        @*@if (role == 3)
-                        {*@
+                        @if (role == 3)
+                        {
                             <th>
                                 Action
                             </th>
-                        @*}*@
+                        }
                     </tr>
                 </thead>
 
@@ -46,17 +46,15 @@
                     @foreach (var item in Model)
                     {
                         <tr onClick="document.location.href='@Url.Action("GetListQuestion", "Question", new { courseId = item.CourseId })'">
-                            <td hidden >
-
-                            </td>
+                            <td hidden></td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            @*@if (role == 3)
-                            {*@
+                            @if (role == 3)
+                            {
                                 <td width="18%">
                                     <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
                                         Detail
@@ -65,7 +63,7 @@
                                         Disable
                                     </a>
                                 </td>
-                                @*}*@
+                            }
                         </tr>
                     }
                 </tbody>
