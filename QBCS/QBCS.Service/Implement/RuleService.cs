@@ -46,6 +46,7 @@ namespace QBCS.Service.Implement
                 }
                 var addResult = new RuleViewModel()
                 {
+                    Id = rule.Id,
                     Code = rule.Code,
                     Name = rule.Name,
                     Value = rvvm,

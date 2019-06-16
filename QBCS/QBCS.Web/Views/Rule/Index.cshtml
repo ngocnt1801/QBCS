@@ -4,11 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <head>
-        <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
-    </head>
+<head>
+    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+</head>
 
 <div class="row">
     <div class="col">
@@ -34,33 +34,47 @@
                             <th class="col-sm">Value</th>
                             <th class="col-sm">Create Date</th>
                             <th class="col-sm">Activate Date</th>
-                            <th>Group</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach (var rule in rvm)
                         {
-                            if (rule.Value.FirstOrDefault().KeyId == 3 || rule.Value.FirstOrDefault().KeyId == 9)
+                            if (rule.Id == 3 || rule.Id == 9)
                             {
                                 <tr>
                                     <td>@rule.Code</td>
                                     <td>@rule.Name</td>
                                     <td>
-                                        <div class="bs-example">
-                                            <div data-role="tagsinput">@foreach (var value in rule.Value) { @value.Value <br/>}</div>
-                                            @*<input type="text" data-role="tagsinput" id="input_@rule.Value.FirstOrDefault().KeyId" placeholder="Add text" value="" />*@
-                                            @*<select multiple data-role="tagsinput">
+                                        @if (rule.Value.Count != 0)
+                                        {
+                                            <div class="bs-example">
+                                                <div data-role="tagsinput">
                                                     @foreach (var value in rule.Value)
-                                                    {
-                                                        <option value="@value.Value">@value.Value</option>
-                                                    }
-                                                </select>*@
-                                        </div>
+                                                    {@value.Value <br />}
+                                                </div>
+                                                @*<input type="text" data-role="tagsinput" id="input_@rule.Value.FirstOrDefault().KeyId" placeholder="Add text" value="" />*@
+                                                @*<select multiple data-role="tagsinput">
+                                                        @foreach (var value in rule.Value)
+                                                        {
+                                                            <option value="@value.Value">@value.Value</option>
+                                                        }
+                                                    </select>*@
+                                            </div>
+                                        }
                                     </td>
-                                    <td>@rule.Value.FirstOrDefault().CreateDate</td>
-                                    <td>@rule.Value.FirstOrDefault().ActivateDate</td>
-                                    <td>@rule.Value.FirstOrDefault().ValueGroup</td>
+                                    <td>
+                                        @if (rule.Value.Count != 0)
+                                        { 
+                                            @rule.Value.FirstOrDefault().CreateDate
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (rule.Value.Count != 0)
+                                        {
+                                            @rule.Value.FirstOrDefault().CreateDate
+                                        }
+                                    </td>
                                 </tr>
                             }
                             else
@@ -86,8 +100,8 @@
     </div>
 }
 @*<script type="text/javascript" src="~/Scripts/bootstrap-tagsinput.js"></script>
-<link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css">
-<script type="text/javascript" src="~/Scripts/bootstrap-tagsinput.min.js"></script>*@
+    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css">
+    <script type="text/javascript" src="~/Scripts/bootstrap-tagsinput.min.js"></script>*@
 @*<script>
         $('#input_3').tagsinput({
             itemValue: 'value',

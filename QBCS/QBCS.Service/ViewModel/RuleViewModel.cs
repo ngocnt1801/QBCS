@@ -9,6 +9,7 @@ namespace QBCS.Service.ViewModel
 {
     public class RuleViewModel
     {
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public List<RuleValueViewModel> Value { get; set; }

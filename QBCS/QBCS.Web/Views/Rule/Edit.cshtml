@@ -39,20 +39,23 @@
                     <tbody>
                         @foreach (var rule in rvm)
                         {
-                            if (rule.Value.FirstOrDefault().KeyId == 3 || rule.Value.FirstOrDefault().KeyId == 9)
+                            if (rule.Id == 3 || rule.Id == 9)
                             {
                                 <tr>
-                                    <td hidden id="id">@rule.Value.FirstOrDefault().KeyId</td>
+                                    <td hidden id="id">@rule.Id</td>
                                     <td>@rule.Code</td>
                                     <td>@rule.Name</td>
                                     <td>
                                         <div id="">
                                             @* Any changes make to this line must also change at
                                                 bootstrap-tagsinput.js line 142*@
-                                            <select multiple id="select_@rule.Value.FirstOrDefault().KeyId" data-role="tagsinput">
-                                                @foreach (var value in rule.Value)
+                                            <select multiple id="select_@rule.Id" data-role="tagsinput">
+                                                @if (rule.Value.Count != 0)
                                                 {
-                                                    <option selected="selected" value="@value.Value">@value.Value</option>
+                                                    foreach (var value in rule.Value)
+                                                    {
+                                                        <option selected="selected" value="@value.Value">@value.Value</option>
+                                                    }
                                                 }
                                             </select>
                                         </div>
