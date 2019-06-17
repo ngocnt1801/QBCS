@@ -17,19 +17,19 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    <div class="form-horizontal">
+                    <div class="form-horizontal text-custom">
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group">
                             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" id="Name" name="Name" />
+                            <div class="col-md-12">
+                                <input class="form-control" type="text" id="Name" name="Name" value="@Model.Name" />
                             </div>
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" id="Code" name="Code" />
+                            <div class="col-md-12">
+                                <input class="form-control" type="text" id="Code" name="Code" value="@Model.Code" />
                             </div>
                         </div>
 
@@ -42,15 +42,15 @@
                     </div>*@
                         <div class="form-group">
                             @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="col-md-12">
                                 <select class="form-control" id="Course"></select>
 
                             </div>
                         </div>
                         <div class="">
                             <div style="text-align:right">
-                                <button id="submit" class="btn-lg btn-primary">Add</button>
-                                <a href="@Url.Action("Index", "Topic")" class="btn-lg btn-default" style="border-bottom:2px solid gray;border-right:2px solid gray">Return to Index</a>
+                                <a href="@Url.Action("Index", "Topic")"  class="btn-lg btn-default text-custom" style="background-color:lightgray;border-bottom:2px solid black;border-right:2px solid black">Cancel</a>
+                                <button id="submit" class="btn-lg btn-primary">Edit</button>
                             </div>
                         </div>
                     </div>

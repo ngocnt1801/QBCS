@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace QBCS.Service.Interface
         void Cancel(int importId);
         void UpdateQuestionTempStatus(int questionTempId, int status);
         List<ImportViewModel> GetListImport(int userId);
+        List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions);
     }
 }

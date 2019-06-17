@@ -15,7 +15,7 @@
             <h3 class="m-0 font-weight-bold text-primary">Detail Course</h3>
         </div>
 
-        <div class="card-body" style="padding-left:30px">
+        <div class="card-body text-custom" style="padding-left:30px">
             <div>
                     <div class="form-horizontal">
                         <div class="row">
@@ -45,7 +45,7 @@
                         </div>
                         <div class="row">
                             <div style="text-align:right">
-                                <a href="@Url.Action("Edit", "Course", new { id = Model.Id })" class="btn btn-primary">
+                                <a href="@Url.Action("Edit", "Course", new { itemId = Model.CourseId })" class="btn btn-primary">
                                     Edit
                                 </a>
                                 
@@ -60,36 +60,43 @@
             <h3 class="m-0 font-weight-bold text-primary">Topic in this course</h3>
         </div>
 
-        <div class="card-body" style="padding-left:30px">
+        <div class="card-body text-custom" style="padding-left:30px">
             <div>
-                @foreach (var topic in Model.Topic)
+                @if (Model.Topic.Count == 0)
                 {
-                <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                        </div>
-                        <div class="col-md-5">
-                            @topic.Name
-                        </div>
-                    </div>
+                    <div>No Topic</div>
+                }
+                else
+                {
+                    foreach (var topic in Model.Topic)
+                    {
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                </div>
+                                <div class="col-md-5">
+                                    @topic.Name
+                                </div>
+                            </div>
 
-                    <div class="row">
-                        <div class="col-sm-5">
-                            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                </div>
+                                <div class="col-md-5">
+                                    @topic.Code
+                                </div>
+                            </div>
+                            <div class="row">
+                                <a href="@Url.Action("Edit","Topic", new { id = topic.Id})" class="btn btn-primary">
+                                    Edit
+                                </a>
+                            </div>
                         </div>
-                        <div class="col-md-5">
-                            @topic.Code
-                        </div>
-                    </div>
-                    <div class="row">
-                        <a href="@Url.Action("Edit","Topic", new { id = topic.Id})" class="btn btn-primary">
-                            Edit
-                        </a>
-                    </div>
-                </div>
-                 }
-                </div>
+                    }
+                }
+            </div>
         </div>
     </div>
     <div class="card shadow mb-4">
@@ -97,34 +104,41 @@
             <h3 class="m-0 font-weight-bold text-primary">Learning outcome in this course</h3>
         </div>
 
-        <div class="card-body" style="padding-left:30px">
+        <div class="card-body text-custom" style="padding-left:30px">
             <div>
-                @foreach (var learningOutcome in Model.LearningOutcome)
+                @if (Model.LearningOutcome.Count == 0)
                 {
-                    <div class="form-horizontal">
-                        <div class="row">
-                            <div class="col-sm-5">
-                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>No learning outcome</div>
+                }
+                else
+                {
+                    foreach (var learningOutcome in Model.LearningOutcome)
+                    {
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                </div>
+                                <div class="col-md-5">
+                                    @learningOutcome.Name
+                                </div>
                             </div>
-                            <div class="col-md-5">
-                                @learningOutcome.Name
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-sm-5">
-                                @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                                </div>
+                                <div class="col-md-5">
+                                    @learningOutcome.Code
+                                </div>
                             </div>
-                            <div class="col-md-5">
-                                @learningOutcome.Code
+                            <div class="row">
+                                <a href="@Url.Action("Edit","LearningOutcome", new { id = learningOutcome.Id})" class="btn btn-primary">
+                                    Edit
+                                </a>
                             </div>
                         </div>
-                        <div class="row">
-                        <a href="@Url.Action("Edit","LearningOutcome", new { id = learningOutcome.Id})" class="btn btn-primary">
-                            Edit
-                            </a>
-                        </div>
-                    </div>
+                    }
                 }
             </div>
         </div>

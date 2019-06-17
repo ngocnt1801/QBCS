@@ -191,6 +191,95 @@ namespace QBCS.Service.Implement
             }
         }
 
+        public List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions)
+        {
+            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false);
+            foreach(var tempQuestion in tempQuestions)
+            {
+                foreach (var rule in rules)
+                {
+                    if(DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
+                    {
+                        switch (rule.KeyId)
+                        {
+                            //check min question length
+                            case 1:
+                                if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
+                            //check max question length
+                            case 2:
+                                if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
+                            //check banned words in question
+                            case 3:
+                                if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
+                            //check min options count in question
+                            case 4:
+                                if (tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
+                            //check max option count in question
+                            case 5:
+                                if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
+                                {
+                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                }
+                                break;
+                            //check min option length
+                            case 6:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if (option.OptionContent.Length < int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+                                break;
+                            //check max option length
+                            case 7:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if (option.OptionContent.Length > int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+                                break;
+                            //check option length difference
+                            case 8: break;
+                            //check banned words in option
+                            case 9:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if (option.OptionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+                                break;
+                        }
+                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
+                        {
+                            break;
+                        }
+                    }   
+                }
+            }
+                return tempQuestions;
+        }
+
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);

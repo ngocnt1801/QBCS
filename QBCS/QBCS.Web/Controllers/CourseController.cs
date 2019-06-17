@@ -66,7 +66,6 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetDetailCourseById(itemId);
             return View(result);
         }
-        [HttpPost]
         public ActionResult UpdateDisable(int itemId)
         {
             //int itemId = 0;
@@ -106,6 +105,17 @@ namespace QBCS.Web.Controllers
                 Categories = categories
             };
             return View(model);
+        }
+        public ActionResult CourseStatistic()
+        {
+            int userId = ((UserViewModel)Session["user"]).Id;
+            var result = courseService.GetCourseStatByUserId(userId);
+            return View(result);
+        }
+        public JsonResult GetCourseDetailStat(int courseId)
+        {
+            var result = courseService.GetCourseStatDetailByCourseId(courseId);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

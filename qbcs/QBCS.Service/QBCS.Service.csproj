@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\LevelEnum.cs" />
+    <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\ExaminationService.cs" />
@@ -99,6 +101,8 @@
     <Compile Include="Utilities\StringProcess.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\CourseStatViewModel.cs" />
+    <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
@@ -115,6 +119,7 @@
     <Compile Include="ViewModel\QuestionTempViewModel.cs" />
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\TopicInExamination.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
