@@ -2065,8 +2065,6 @@
     <Content Include="Views\Course\Staff_ListCourse.cshtml" />
     <Content Include="Views\Examination\GenerateExaminaton.cshtml" />
     <Content Include="Views\Question\DemoUpdate.cshtml" />
-    <Content Include="Views\Question\GenerateExam.cshtml" />
-    <Content Include="Views\Question\ViewGeneratedExamination.cshtml" />
     <Content Include="Views\Question\ReviewQuestion.cshtml" />
     <Content Include="Views\Import\GetResult.cshtml" />
     <Content Include="Views\Import\GetQuestionTemp.cshtml" />

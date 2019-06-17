@@ -183,6 +183,7 @@ namespace QBCS.Service.Implement
                 }
             }
             exam.ExamId = examination.Id;
+            exam.calculateGrade();
             return exam;
         }
         private List<QuestionViewModel> GeneratePartOfExamByTopic(TopicInExamination topicInExam, int categoryId)
