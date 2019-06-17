@@ -47,7 +47,7 @@
         }
 
         .sw-theme-arrows > ul.step-anchor > li > a, .sw-theme-arrows > ul.step-anchor > li > a:hover {
-            color: #828282;
+            color: #000;
             text-decoration: none;
             padding: 10px 0 10px 45px;
             position: relative;
