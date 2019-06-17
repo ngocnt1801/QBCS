@@ -542,6 +542,9 @@ namespace QBCS.Service.Implement
             if (categoryId != null && categoryId != 0)
             {
                 result = result.Where(q => q.CategoryId == categoryId);
+            } else if (categoryId == 0)
+            {
+                result = result.Where(q => q.CategoryId == null);
             }
 
             if (learningoutcomeId != null && learningoutcomeId != 0)

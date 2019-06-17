@@ -77,7 +77,7 @@
                 }
                 else
                 {
-                    <a href="#c-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id})">
+                    <a href="#c-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, courseId = Model.Id})">
                         @category.Name <span class="float-right">(@category.QuestionCount)</span>
                     </a>
                 }
