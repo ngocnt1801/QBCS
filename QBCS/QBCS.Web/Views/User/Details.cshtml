@@ -15,12 +15,16 @@
     @using (Html.BeginForm("Update", "User", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         <div class="form-row text-custom">
-            <div class="form-group col-md-6 text-custom">
-                <label class="control-label">
-                    @Html.DisplayNameFor(model => model.User.Code):
-                </label>
-                <input class="form-control text-custom" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
-            </div>
+            @if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
+            {
+                <div class="form-group col-md-6 text-custom">
+                    <label class="control-label">
+                        @Html.DisplayNameFor(model => model.User.Code):
+                    </label>
+                    <input class="form-control text-custom" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
+                </div>
+            }
+
             <div class="form-group col-md-6">
                 <label class="control-label">
                     @Html.DisplayNameFor(model => model.User.Fullname):
@@ -30,14 +34,17 @@
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <label class="control-label text-custom">@Html.DisplayNameFor(model => model.User.Role):</label>
-                @Html.DropDownListFor(model => model.User.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
-           {
-               Text = v.ToString(),
-               Value = ((int)v).ToString()
-           }).ToList(), new { @class = "form-control text-custom", Name = "Role" })
-            </div>
+            @if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
+            {
+                <div class="form-group col-md-6">
+                    <label class="control-label text-custom">@Html.DisplayNameFor(model => model.User.Role):</label>
+                    @Html.DropDownListFor(model => model.User.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
+               {
+                   Text = v.ToString(),
+                   Value = ((int)v).ToString()
+               }).ToList(), new { @class = "form-control text-custom", Name = "Role" })
+                </div>
+            }
 
             <div class="form-group col-md-6">
                 <label class="col-lg-3 control-label">
@@ -50,8 +57,8 @@
         <div class="form-row">
             @Html.Hidden("Id", Model.User.Id)
             <div class="form-group col-md-12">
-               
-                @{ 
+
+                @{
                     string actionCancel = "";
                     if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
                     {
@@ -62,7 +69,7 @@
                         actionCancel = Url.Action("Index", "Home");
                     }
                 }
-               
+
                 <input type="submit" class="btn btn-primary float-right" value="Save">
                 <a class="btn btn-outline-light float-right border-dark text-custom mr-2 float-right" href="@actionCancel">Cancel</a>
             </div>

@@ -485,10 +485,12 @@ namespace QBCS.Service.Implement
                 {
                     import.Status = (int)StatusEnum.NotCheck;
                     import.CourseId = courseId;
-                    ///import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
+                    //check formats
+                    import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
+
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
                     {
