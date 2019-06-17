@@ -127,16 +127,33 @@
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $('#fileExtension').find(":selected").text();
         window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",
-    //        data: {
-    //            examinationId: examinationId,
-    //            fileExtension: fileExtension
-    //        },
-    //        success: function () {
-    //        }
-    //    });
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",
+        //        data: {
+        //            examinationId: examinationId,
+        //            fileExtension: fileExtension
+        //        },
+        //        success: function () {
+        //        }
+        //    });
     });
+    $(".tab-slider--body").hide();
+    $(".tab-slider--body:first").show();
 });
+$(".tab-slider--nav li").click(function () {
+    $(".tab-slider--body").hide();
+    var activeTab = $(this).attr("rel");
+    $("#" + activeTab).fadeIn();
+    if ($(this).attr("rel") == "tab2") {
+        $('.tab-slider--tabs').addClass('slide');
+        $('#flagPercent').attr('value', 'grade');
+    } else {
+        $('.tab-slider--tabs').removeClass('slide');
+        $('#flagPercent').attr('value', 'percent');
+    }
+    $(".tab-slider--nav li").removeClass("active");
+    $(this).addClass("active");
+});
+
 

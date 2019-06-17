@@ -58,6 +58,13 @@ namespace QBCS.Web.Controllers
         private const int XML_CORRECT_FRACTION_ATTR_VALUE = 100;
         private const int XML_INCORRECT_FRACTION_ATTR_VALUE = 0;
         private const string XML_FEEDBACK_TAG = "feedback";
+        private const string XML_FILE_TAG = "file";
+        private const string XML_NAME_ATTR_NAME = "name";
+        private const string XML_PATH_ATTR_NAME = "path";
+        private const string XML_ENCODING_ATTR_NAME = "encoding";
+        private const string XML_ENCODING_ATTR_VALUE = "base64";
+        private const string XML_PATH_ATTR_VALUE = "/";
+        private const string XML_NAME_ATTR_VALUE = "Image00613.bmp";
         private IPartOfExamService partOfExamService;
         public ExaminationAPIController()
         {
@@ -115,6 +122,7 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteEndElement();
                             //questiontext tag
                             xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
+                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
                             xmlWriter.WriteStartElement(XML_TEXT_TAG);
                             if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                             {
@@ -125,6 +133,25 @@ namespace QBCS.Web.Controllers
                                 xmlWriter.WriteString(question.QuestionContent);
                             }
                             xmlWriter.WriteEndElement();
+                            if (question.Image == null)
+                            {
+                                xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
+                                xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                xmlWriter.WriteString("bca");
+                                xmlWriter.WriteEndElement();
+                            }
+                            else
+                            {
+                                xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
+                                xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                xmlWriter.WriteString("css");
+                                xmlWriter.WriteEndElement();
+                            }
+                            
                             xmlWriter.WriteEndElement();
                             //generalfeedback tag
                             xmlWriter.WriteStartElement(XML_GENRALFEEDBACK_TAG);
@@ -134,7 +161,7 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteEndElement();
                             //defaultgrade tag
                             xmlWriter.WriteStartElement(XML_DEFAULTGRADE_TAG);
-                            xmlWriter.WriteString(DEFAULTGRADE_VALUE.ToString());
+                            xmlWriter.WriteString(String.Format("{0:0.0000000}", DEFAULTGRADE_VALUE.ToString()));
                             xmlWriter.WriteEndElement();
                             //penalty tag
                             xmlWriter.WriteStartElement(XML_PENALTY_TAG);
@@ -177,7 +204,7 @@ namespace QBCS.Web.Controllers
                             // answer tag
                             foreach (var option in question.Options)
                             {
-                                if(option.IsCorrect)
+                                if (option.IsCorrect)
                                 {
                                     xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                                     xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
@@ -201,7 +228,8 @@ namespace QBCS.Web.Controllers
                                     xmlWriter.WriteEndElement();
 
                                     xmlWriter.WriteEndElement();
-                                } else
+                                }
+                                else
                                 {
                                     xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                                     xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_INCORRECT_FRACTION_ATTR_VALUE.ToString());

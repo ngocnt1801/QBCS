@@ -18,5 +18,9 @@ namespace QBCS.Service.ViewModel
         public int MediumQuestion { get; set; }
         public int HardQuestion { get; set; }
         public int CategoryId { get; set; }
+        public int OrdinaryGrade { get; set; }
+        public int GoodGrade { get; set; }
+        public int ExcellentGrade { get; set; }
+        public string FlagPercent { get; set; }
     }
 }
