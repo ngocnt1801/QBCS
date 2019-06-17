@@ -56,7 +56,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Are your sure want to save these questions?</p>
-                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete).Count()/@Model.Questions.Count</b> will not insert to bank</p>
+                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete || q.Status == StatusEnum.Invalid).Count()/@Model.Questions.Count</b> will not insert to bank</p>
                     <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.NotCheck).Count()/@Model.Questions.Count</b> will be checked again</p>
                 </div>
                 <div class="modal-footer">

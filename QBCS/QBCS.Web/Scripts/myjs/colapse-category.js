@@ -146,6 +146,27 @@
                             { "targets": 1, "width": "75%"},
                             { "targets": 2, "width": "15%", 'className': 'text-center'},
                             { "targets": 3, "width": "5%", 'className': 'text-center'},
+                        ],
+                        columns: [
+                            null,
+                            {
+                                "render": function (data, type, row) {
+                                    if (data.indexOf("[html]") >= 0) {
+                                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                                        data = data.split("&lt;br&gt;").join("<br/>");
+                                        data = data.split("&lt;br&gt;").join("<br/>");
+                                        data = data.split("&lt;p&gt;").join("");
+                                        data = data.split("&lt;/p&gt;").join("");
+                                        data = data.split("&lt;span&gt;").join("");
+                                        data = data.split("&lt;/span&gt;").join("");
+                                        data = data.split("[html]").join("");
+                                    }
+
+                                    return data
+                                }
+                            },
+                            null,
+                            null
                         ]
                     });
                     categoryView.setOnClickDisableBtn();
