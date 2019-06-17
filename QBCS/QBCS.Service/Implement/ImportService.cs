@@ -244,6 +244,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
                                     }
                                 }
                                 break;
@@ -254,6 +255,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
                                     }
                                 }
                                 break;
@@ -266,6 +268,73 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Contains(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                                //check min length in correct option
+                            case 10:
+                                foreach(var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                            //check min length in correct option
+                            case 11:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((bool)option.IsCorrect && option.OptionContent.Length > int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                            //check banned words in correct option
+                            case 12:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((bool)option.IsCorrect && option.OptionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                            //check min length in incorrect option
+                            case 13:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((!(bool)option.IsCorrect) && option.OptionContent.Length < int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                            //check min length in incorrect option
+                            case 14:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((!(bool)option.IsCorrect) && option.OptionContent.Length > int.Parse(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
+                                    }
+                                }
+                                break;
+                            //check banned words in incorrect option
+                            case 15:
+                                foreach (var option in tempQuestion.OptionTemps)
+                                {
+                                    if ((!(bool)option.IsCorrect) && option.OptionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        break;
                                     }
                                 }
                                 break;
