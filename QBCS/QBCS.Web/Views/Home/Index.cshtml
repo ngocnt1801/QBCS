@@ -25,7 +25,7 @@
                         <div class="form-group pb-2">
                             @if (Model.Courses == null || Model.Courses.Count == 0)
                             {
-                                <select class="form-control text-custom">
+                                <select class="form-control text-custom border-dark">
                                     <option selected>[None course available]</option>
                                 </select>
                             }
@@ -35,14 +35,14 @@
                            {
                                Value = c.CourseId + "",
                                Text = c.Code + " - " + c.Name,
-                           }), new { @class = "form-control text-custom" })
+                           }), new { @class = "form-control text-custom border-dark" })
                             }
                         </div>
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom">
                             <i class="text-dark text-custom">Choose a file:</i>
                             <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control border-dark"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-import-file btn-choose" type="button">Choose</button>
                                 </span>

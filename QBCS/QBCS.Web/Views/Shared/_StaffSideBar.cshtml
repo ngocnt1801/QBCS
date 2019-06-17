@@ -1,79 +1,80 @@
 ﻿@using QBCS.Service.ViewModel
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon pt-4" style="width:50%">
-                <img src="~/Content/logo_transparent.png" style="object-fit: contain;" width="120" height="140" />
-            </div>
-            <div class="sidebar-brand-text mr-5"><h4 class="font-weight-bolder">QBCS</h4></div>
-        </a>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        <div class="sidebar-brand-icon pt-4" style="width:50%">
+            <img src="~/Content/logo_transparent.png" style="object-fit: contain;" width="120" height="140" />
+        </div>
+        <div class="sidebar-brand-text mr-5"><h4 class="font-weight-bolder">QBCS</h4></div>
+    </a>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
     <li class="nav-item">
         <a class="nav-link" href='@Url.Action("GetAllCourse", "Course")'>
-            <i class="fas fa-book"></i>
-            <span>Course</span>
+            <i class="fas fa-file"></i>
+            <span>Examination</span>
         </a>
     </li>
+    <hr class="sidebar-divider my-0">
 
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
+    <!-- Nav Item - Charts -->
+    @*<li class="nav-item">
             <a class="nav-link" href="#">
                 <i class="fas fa-question fa-chart-area"></i>
                 <span>Question format</span>
             </a>
-        </li>
+        </li>*@
 
 
-        <!-- Nav Item - Courses Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
-                <i class="fas fa-book"></i>
-                <span>Courses</span>
-            </a>
-        </li>
+    <!-- Nav Item - Courses Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-book"></i>
+            <span>Courses</span>
+        </a>
+    </li>
 
-        <!-- Nav Item - Topics Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Index", "Topic")">
-                <i class="fas fa-comment"></i>
-                <span>Topics</span>
-            </a>
-        </li>
+    <!-- Nav Item - Topics Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Topic")">
+            <i class="fas fa-comment"></i>
+            <span>Topics</span>
+        </a>
+    </li>
 
-        <!-- Nav Item - Learning Outcomes Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Index", "LearningOutcome")">
-                <i class="fas fa-comment-alt"></i>
-                <span>Learning Outcomes</span>
-            </a>
-        </li>
+    <!-- Nav Item - Learning Outcomes Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "LearningOutcome")">
+            <i class="fas fa-comment-alt"></i>
+            <span>Learning Outcomes</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Course Statistics Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
-                <i class="fas fa-chart-pie"></i>
-                <span>Course Statistics</span>
-            </a>
-        </li>
+    <!-- Nav Item - Course Statistics Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
+            <i class="fas fa-chart-pie"></i>
+            <span>Course Statistics</span>
+        </a>
+    </li>
 
-        <!-- Nav Item - Rules Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Index", "Rule")">
-                <i class="fas fa-bookmark"></i>
-                <span>Rules</span>
-            </a>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+    <!-- Nav Item - Rules Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Rule")">
+            <i class="fas fa-bookmark"></i>
+            <span>Rules</span>
+        </a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
-    </ul>
+</ul>
