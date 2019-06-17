@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using HtmlAgilityPack;
+using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
@@ -276,7 +277,8 @@ namespace QBCS.Service.Implement
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
             StringBuilder sb = new StringBuilder();
-            
+            string checkHTML = "";
+            HtmlDocument htmlDoc = new HtmlDocument();
             try
             {
                 string extensionFile = Path.GetExtension(questionFile.FileName);
@@ -327,7 +329,7 @@ namespace QBCS.Service.Implement
                         {
                             
                             string tempParser = "";
-                            string checkHTML = questionXml.question[i].questiontext.format.ToString();
+                           checkHTML = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = StringProcess.RemoveHtmlTag(questionContent);
@@ -354,14 +356,27 @@ namespace QBCS.Service.Implement
                             {
                                 for (int j = 0; j < questionXml.question[i].answer.Count(); j++)
                                 {
+                                    checkHTML = questionXml.question[i].answer[j].format;
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
                                     {
+                                        
                                         tempParser = questionXml.question[i].answer[j].text;
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
                                         rightAnswer = StringProcess.RemoveHtmlTag(rightAnswer);
-                                        //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
+                                        htmlDoc.LoadHtml(rightAnswer);
+                                        rightAnswer = htmlDoc.DocumentNode.InnerText;
                                         option = new OptionTemp();
-                                        option.OptionContent = rightAnswer;
+                                        if (checkHTML.Equals("html"))
+                                        {
+                                            option.OptionContent = "[html]" + rightAnswer;
+                                        }
+                                        else
+                                        {
+                                            option.OptionContent = rightAnswer;
+                                        }
+                                        //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
+                                       
+                                        
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
                                         tempParser = "";
@@ -372,8 +387,18 @@ namespace QBCS.Service.Implement
                                         tempParser = questionXml.question[i].answer[j].text;
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
                                         wrongAnswer = StringProcess.RemoveHtmlTag(wrongAnswer);
+                                        htmlDoc.LoadHtml(wrongAnswer);
+                                        wrongAnswer = htmlDoc.DocumentNode.InnerText;
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
+                                        if (checkHTML.Equals("html"))
+                                        {
+                                            option.OptionContent = "[html]" + wrongAnswer;
+                                        }
+                                        else
+                                        {
+                                            option.OptionContent = wrongAnswer;
+                                        }
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
