@@ -136,7 +136,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }) : (new QuestionViewModel
+                    }) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
                     {
                         Id = questionTemp.DuplicatedWithImport.Id,
                         CourseName = "Import file",
@@ -147,7 +147,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }),
+                    }) : null,
                     Options = questionTemp.OptionTemps.Select(o => new OptionViewModel
                     {
                         Id = o.Id,
@@ -172,18 +172,23 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && entity.Status == (int)StatusEnum.Editable)
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable || entity.Status == (int) StatusEnum.Invalid))
             {
                 entity.QuestionContent = question.QuesitonContent;
                 entity.Status = (int)StatusEnum.NotCheck;
-                foreach (var option in entity.OptionTemps)
+                var listOptionEntity = entity.OptionTemps.ToList();
+                foreach (var option in listOptionEntity)
                 {
-                    var updatedOption = question.Options.Where(o => o.Id == option.Id).FirstOrDefault();
-                    if (updatedOption != null)
-                    {
-                        option.IsCorrect = updatedOption.IsCorrect;
-                        option.OptionContent = updatedOption.OptionContent;
-                    }
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+
+                foreach (var option in question.Options)
+                {
+                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp {
+                        IsCorrect = option.IsCorrect,
+                        OptionContent = option.OptionContent,
+                        TempId = question.Id
+                    });
                 }
 
                 unitOfWork.Repository<QuestionTemp>().Update(entity);
