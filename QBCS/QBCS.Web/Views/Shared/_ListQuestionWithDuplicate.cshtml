@@ -20,7 +20,8 @@
                             <th>No.</th>
                             <th>Question</th>
                             <th>Duplicated With</th>
-                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip)
+                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
+                                || Model.FirstOrDefault().Status == StatusEnum.Editable)
                             {
                                 <th>Action</th>
                             }
@@ -94,11 +95,16 @@
                                     }
                                 }
                             </td>
-                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip)
+                            @if (item.Status == StatusEnum.DeleteOrSkip)
                             {
                                 <td>
                                     <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-primary mb-2 col-md-12">Skip</a>
                                     <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                </td>
+                            } else if (item.Status == StatusEnum.Editable)
+                            {
+                                <td>
+                                    <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary col-md-12">Edit</a>
                                 </td>
                             }
                         </tr>
