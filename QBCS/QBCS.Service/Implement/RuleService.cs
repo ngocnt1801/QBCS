@@ -36,7 +36,8 @@ namespace QBCS.Service.Implement
                         {
                             Id = value.Id,
                             KeyId = (int)value.KeyId,
-                            Value = value.Value,
+                            IsCaseSensitive = value.Value.Contains("·case_sensitive·"),
+                            Value = value.Value.Replace("·case_sensitive·",""),
                             CreateDate = (DateTime)value.CreateDate,
                             ActivateDate = (DateTime)value.ActivateDate,
                             ValueGroup = value.ValueGroup

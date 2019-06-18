@@ -29,10 +29,10 @@
                 <table class="table table-bordered text-custom" @*id="dataTable"*@ cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th style="width:30%">Name</th>
                             <th class="col-sm">Value</th>
-                            <th class="col-sm">Create Date</th>
-                            <th class="col-sm">Activate Date</th>
+                            <th style="width:30%">Create Date</th>
+                            <th style="width:30%">Activate Date</th>
                         </tr>
                     </thead>
 
@@ -63,14 +63,14 @@
                                     </td>
                                     <td>
                                         @if (rule.Value.Count != 0)
-                                        { 
-                                            @rule.Value.FirstOrDefault().CreateDate
+                                        {
+                                            @rule.Value.FirstOrDefault().CreateDate.ToString("dd/MM/yyyy")
                                         }
                                     </td>
                                     <td>
                                         @if (rule.Value.Count != 0)
                                         {
-                                            @rule.Value.FirstOrDefault().ActivateDate
+                                            @rule.Value.FirstOrDefault().ActivateDate.ToString("dd/MM/yyyy")
                                         }
                                     </td>
                                 </tr>
@@ -82,8 +82,8 @@
                                     <tr>
                                         <td>@rule.Name</td>
                                         <td>@value.Value</td>
-                                        <td>@value.CreateDate</td>
-                                        <td>@value.ActivateDate</td>
+                                        <td>@value.CreateDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@value.ActivateDate.ToString("dd/MM/yyyy")</td>
                                     </tr>
                                 }
                             }

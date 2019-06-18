@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-    <head>
-        <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
-        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-        <script src="~/Scripts/bootstrap-tagsinput.js"></script>
-        <script src="~/Scripts/sweetalert.min.js" ></script>
-        <script src="~/Scripts/myjs/staffjs/edit-rule.js"></script>
-    </head>
+<head>
+    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap-tagsinput.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/myjs/staffjs/edit-rule.js"></script>
+</head>
 
 <h2>Rules</h2>
 <div>
@@ -21,7 +21,7 @@
 {
     <div class="card shadow mb-4">
         <a href="#collapse_@rvm.FirstOrDefault().GroupTypeEnum" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_"," ") Rule</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_", " ") Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             @*<button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>*@
@@ -29,11 +29,9 @@
                 <table class="table table-bordered text-custom" @*id="dataTable"*@ id="table_@rvm.FirstOrDefault().GroupTypeEnum" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th class="col-sm">Value</th>
+                            <th style="width:30%">Name</th>
+                            <th class="col-sm-1">Value</th>
                             <th class="col-sm">Activate Date</th>
-                            @*<th>Group</th>*@
                         </tr>
                     </thead>
 
@@ -44,22 +42,32 @@
                             {
                                 <tr>
                                     <td hidden id="id">@rule.Id</td>
-                                    <td>@rule.Code</td>
                                     <td>@rule.Name</td>
                                     <td>
-                                        <div id="">
-                                            @* Any changes make to this line must also change at
+                                        @* Any changes make to this line must also change at
                                                 bootstrap-tagsinput.js line 142*@
-                                            <select multiple id="select_@rule.Id" data-role="tagsinput">
-                                                @if (rule.Value.Count != 0)
+                                        <select multiple id="select_@rule.Id" data-role="tagsinput">
+                                            @if (rule.Value.Count != 0)
+                                            {
+                                                foreach (var value in rule.Value)
                                                 {
-                                                    foreach (var value in rule.Value)
-                                                    {
-                                                        <option selected="selected" value="@value.Value">@value.Value</option>
-                                                    }
+                                                    <option selected="selected" value="@value.Value">@value.Value</option>
                                                 }
-                                            </select>
-                                        </div>
+                                            }
+                                        </select> <br />
+                                        Check case sensitive
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <input type="checkbox" />
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsCaseSensitive)
+                                        {
+                                            <input type="checkbox" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" />
+                                        }
                                     </td>
                                     <td>
                                         <input type="date" id="date">
@@ -72,9 +80,10 @@
                                 {
                                     <tr>
                                         <td hidden id="id">@value.KeyId</td>
-                                        <td>@rule.Code</td>
                                         <td>@rule.Name</td>
-                                        <td><input type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" /></td>
+                                        <td class="col-sm-1">
+                                            <input style="width:inherit !important" type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" />
+                                        </td>
                                         <td>
                                             <input type="date" id="date">
                                         </td>

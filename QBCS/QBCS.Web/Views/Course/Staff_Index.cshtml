@@ -36,7 +36,7 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
+                        <tr>
                             <td hidden></td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Code)
