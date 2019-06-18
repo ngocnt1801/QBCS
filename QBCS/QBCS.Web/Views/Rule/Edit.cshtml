@@ -20,7 +20,7 @@
 {
     <div class="card shadow mb-4">
         <a href="#collapse_@rvm.FirstOrDefault().GroupTypeEnum" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum Rule</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_"," ") Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             @*<button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>*@
@@ -39,7 +39,7 @@
                     <tbody>
                         @foreach (var rule in rvm)
                         {
-                            if (rule.Id == 3 || rule.Id == 9)
+                            if (rule.Id == 3 || rule.Id == 9 || rule.Id == 12 || rule.Id == 15)
                             {
                                 <tr>
                                     <td hidden id="id">@rule.Id</td>
@@ -101,6 +101,10 @@
             var nOpMax = 0;
             var olMin = 0;
             var olMax = 0;
+            var cOlMin = 0;
+            var cOlMax = 0;
+            var iOlMin = 0;
+            var iOlMax = 0;
             var testList = []; 
             var defaultActivateDate = $("#default_datetime").val();
             if (defaultActivateDate != "") {
@@ -320,7 +324,118 @@
                     //    }
                     //}
                 });
-                if (qlMin > qlMax || nOpMin > nOpMax || olMin > olMax) {
+
+                $('#table_Correct_Option tbody tr').each(function () {
+                    var Obj = {};
+                    Obj['KeyId'] = $(this).find('#id').text();
+                    var KeyId = parseInt(Obj['KeyId']);
+                    switch (KeyId) {
+                        case 10:
+                            var value = $(this).find('#value').val();
+                            var parseValue = parseInt(value);
+                            if (Number.isInteger(parseValue)) {
+                                Obj['Value'] = value;
+                                Obj['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj['ActivateDate'] == "") {
+                                    Obj['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj);
+                                cOlMin = value;
+                            } else {
+                                swal('Min max must be integer!!!');
+                                $(this).find('#value').focus();
+                                check = false;
+                            }
+                            break;
+                        case 11:
+                            var value = $(this).find('#value').val();
+                            var parseValue = parseInt(value);
+                            if (Number.isInteger(parseValue)) {
+                                Obj['Value'] = value;
+                                Obj['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj['ActivateDate'] == "") {
+                                    Obj['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj);
+                                cOlMax = value;
+                            } else {
+                                swal('Min max must be integer!!!');
+                                $(this).find('#value').focus();
+                                check = false;
+                            }
+                            break;
+                        case 12:
+                            var select12 = $('#select_12').val();
+                            for (var i = 0; i < select12.length; i++) {
+                                var Obj2 = {};
+                                Obj2['KeyId'] = Obj['KeyId'];
+                                Obj2['Value'] = select12[i];
+                                Obj2['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj2['ActivateDate'] == "") {
+                                    Obj2['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj2);
+                            }
+                            break;
+                    }
+                });
+
+                $('#table_Incorrect_Option tbody tr').each(function () {
+                    var Obj = {};
+                    Obj['KeyId'] = $(this).find('#id').text();
+                    var KeyId = parseInt(Obj['KeyId']);
+                    switch (KeyId) {
+                        case 13:
+                            var value = $(this).find('#value').val();
+                            var parseValue = parseInt(value);
+                            if (Number.isInteger(parseValue)) {
+                                Obj['Value'] = value;
+                                Obj['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj['ActivateDate'] == "") {
+                                    Obj['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj);
+                                iOlMin = value;
+                            } else {
+                                swal('Min max must be integer!!!');
+                                $(this).find('#value').focus();
+                                check = false;
+                            }
+                            break;
+                        case 14:
+                            var value = $(this).find('#value').val();
+                            var parseValue = parseInt(value);
+                            if (Number.isInteger(parseValue)) {
+                                Obj['Value'] = value;
+                                Obj['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj['ActivateDate'] == "") {
+                                    Obj['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj);
+                                iOlMax = value;
+                            } else {
+                                swal('Min max must be integer!!!');
+                                $(this).find('#value').focus();
+                                check = false;
+                            }
+                            break;
+                        case 15:
+                            var select15 = $('#select_15').val();
+                            for (var i = 0; i < select15.length; i++) {
+                                var Obj2 = {};
+                                Obj2['KeyId'] = Obj['KeyId'];
+                                Obj2['Value'] = select15[i];
+                                Obj2['ActivateDate'] = $(this).find('#date').val();
+                                if (Obj2['ActivateDate'] == "") {
+                                    Obj2['ActivateDate'] = defaultActivateDate;
+                                }
+                                testList.push(Obj2);
+                            }
+                            break;
+                    }
+                });
+
+                if (qlMin > qlMax || nOpMin > nOpMax || olMin > olMax || cOlMin > cOlMax || iOlMin > iOlMax) {
                     check = false;
                     swal('Min must be smaller than Max');
                 }

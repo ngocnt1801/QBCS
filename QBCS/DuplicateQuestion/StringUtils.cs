@@ -25,7 +25,7 @@ namespace DuplicateQuestion
         public static string[] SplitWithSpace(string s)
         {
             s = s.ToLower();
-            RemoveSpecialCharacter(ref s);
+            //RemoveSpecialCharacter(ref s);
             return s.Split(' ');
         }
 
