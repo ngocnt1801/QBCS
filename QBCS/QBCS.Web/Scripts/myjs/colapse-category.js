@@ -125,7 +125,9 @@
     categoryOctopus = {
         init: function () {
             categoryView.init();
-            this.loadQuestion("/QBCS.Web/Question/GetQuestions?courseId=" + categoryView.questionListContainter[0].attributes["data-id"].value)
+            if (categoryView.questionListContainter[0] != null) {
+                this.loadQuestion("/QBCS.Web/Question/GetQuestions?courseId=" + categoryView.questionListContainter[0].attributes["data-id"].value)
+            }
         },
         getListQuestionSelected: function(){
             return categoryModel.listQuestionSelected;

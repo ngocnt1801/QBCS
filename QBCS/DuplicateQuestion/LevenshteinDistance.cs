@@ -7,6 +7,9 @@ namespace DuplicateQuestion
         public static double CalculateSimilarity(string source, string target)
         {
             if ((source == null) || (target == null)) return 0.0;
+
+            source = StringUtils.NormalizeString(source);
+            target = StringUtils.NormalizeString(target);
             if ((source.Length == 0) || (target.Length == 0)) return 0.0;
             if (source == target) return 100;
 
