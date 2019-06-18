@@ -143,11 +143,13 @@
             if (self.isSelect && !$('option[value="' + encodeURIComponent(itemValue) + '"]', self.$element)[0]) {
                 var select_3 = $('#select_3').html();
                 var select_9 = $('#select_9').html();
+                var select_12 = $('#select_12').html();
+                var select_15 = $('#select_15').html();
                 var option = '<option selected="selected" value="' + itemValue + '">' + itemValue + '</option>';
                 var $option = $('<option selected>' + htmlEncode(itemText) + '</option>');
                 $option.data('item', item);
                 $option.attr('value', itemValue);
-                if (select_3.includes(option) || select_9.includes(option)) {
+                if (select_3.includes(option) || select_9.includes(option) || select_12.includes(option) || select_15.includes(option)) {
                     return;
                 } else {
                     self.$element.append($option);
