@@ -39,7 +39,18 @@ namespace QBCS.Service.Implement
             
             return course.ToList();
         }
+        public List<CourseViewModel> GetCourseByDisable()
+        {
+            var entity = unitOfWork.Repository<Course>().GetAll().Where(c => c.IsDisable == false);
+            var course = entity.Select(c => new CourseViewModel
+            {
+                CourseId = c.Id,
+                Code = c.Code,
+                Name = c.Name
+            });
 
+            return course.ToList();
+        }
         public List<CourseViewModel> GetAvailableCourse(int userId)
         {
             var listAvailable = new List<CourseViewModel>();

@@ -1,21 +1,15 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
-@using QBCS.Service.ViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Staff_Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var role = (int)((UserViewModel)Session["user"]).Role;
 }
 <div class="row">
     <div class="col">
         <h2>Courses</h2>
     </div>
-    @*@if (role == 3)
-    {
-        <div class="col mb-2">
-            <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
-        </div>
-    }*@
-
+    <div class="col mb-2">
+        <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
+    </div>
 </div>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -32,12 +26,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        @*@if (role == 3)
-                        {
-                            <th>
-                                Action
-                            </th>
-                        }*@
+                        <th class="text-center">
+                            Action
+                        </th>
                     </tr>
                 </thead>
 
@@ -53,17 +44,18 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            @*@if (role == 3)
-                            {
-                                <td width="18%">
-                                    <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
-                                        Detail
-                                    </a>
-                                    <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
-                                        Disable
-                                    </a>
-                                </td>
-                            }*@
+                            <td class="text-center">
+                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                            </td>
+                            @*<td width="18%">
+                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
+                                    Detail
+                                </a>
+                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
+                                    Disable
+                                </a>
+                            </td>*@
                         </tr>
                     }
                 </tbody>

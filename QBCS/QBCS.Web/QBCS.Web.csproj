@@ -418,6 +418,8 @@
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
+    <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
     <Content Include="Scripts\toastr.js" />
@@ -2200,6 +2202,7 @@
     <Content Include="Views\Course\CourseStatistic.cshtml" />
     <Content Include="Views\Course\Add.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Course\Staff_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

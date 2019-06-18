@@ -28,6 +28,11 @@ namespace QBCS.Web.Controllers
             var list = courseService.GetAllCoursesByUserId(userId);
             return View(list);
         }
+        public ActionResult Staff_Index()
+        {
+            var list = courseService.GetCourseByDisable();
+            return View(list);
+        }
         public ActionResult Add()
         {
             return View();
@@ -81,8 +86,7 @@ namespace QBCS.Web.Controllers
 
             //}
             var update = courseService.UpdateDisable(itemId);
-            int userId = ((UserViewModel)Session["user"]).Id;
-            return RedirectToAction("Index", new { userId = userId });
+            return RedirectToAction("Staff_Index");
         }
 
         public ActionResult GetAllCourse()
