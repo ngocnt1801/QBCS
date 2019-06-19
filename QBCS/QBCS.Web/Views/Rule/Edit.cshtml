@@ -96,9 +96,28 @@
                                     <tr>
                                         <td hidden id="id">@value.KeyId</td>
                                         <td>@rule.Name</td>
-                                        <td class="col-sm-1">
-                                            <input style="width:inherit !important" type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" />
-                                        </td>
+                                        @if (rule.Id == 16 || rule.Id == 17)
+                                        {
+                                            <td>
+                                                <div>
+                                                    Yes
+                                                    @if (value.Value.Contains("True"))
+                                                    {
+                                                        <input type="checkbox" id="value" checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" id="value"/>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="col-sm-1">
+                                                <input style="width:inherit !important" type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" />
+                                            </td>
+                                        }
                                         <td>
                                             <input type="date" id="date">
                                         </td>
@@ -111,12 +130,12 @@
                                             {
                                                 <input type="checkbox" id="is_use" />
                                             }
-                                    </td>
-                                    @*<td>@value.ValueGroup</td>*@
-                                </tr>
+                                        </td>
+                                        @*<td>@value.ValueGroup</td>*@
+                                    </tr>
+                                }
                             }
                         }
-                    }
 
                     </tbody>
                 </table>
@@ -125,5 +144,8 @@
     </div>
 }
 
-<div style="text-align:right"><button id="save" class="btn-lg btn-primary">Save Rule</button></div>
+<div style="text-align:right">
+    <a href="@Url.Action("Index", "Rule")" class="btn-lg btn-outline-light border-dark text-custom mr-2">Cancel</a>
+    <button id="save" class="btn-lg btn-primary">Save</button>
+</div>
 

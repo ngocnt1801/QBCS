@@ -93,7 +93,22 @@
                                 {
                                     <tr>
                                         <td>@rule.Name</td>
-                                        <td>@value.Value</td>
+                                        @if (rule.Id == 16 || rule.Id == 17)
+                                        {
+                                            if (value.Value.Contains("True"))
+                                            {
+                                                <td>Yes</td>
+                                            }
+                                            else
+                                            {
+                                                <td>No</td>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <td>@value.Value</td>
+                                        }
                                         <td>@value.CreateDate.ToString("dd/MM/yyyy")</td>
                                         <td>@value.ActivateDate.ToString("dd/MM/yyyy")</td>
                                         @if (value.IsUse)
