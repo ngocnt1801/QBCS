@@ -7,6 +7,7 @@ using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -193,12 +194,12 @@ namespace QBCS.Service.Implement
 
         public List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions)
         {
-            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false);
-            foreach(var tempQuestion in tempQuestions)
+            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
+            foreach (var tempQuestion in tempQuestions)
             {
                 foreach (var rule in rules)
                 {
-                    if(DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
+                    if (DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
                     {
                         switch (rule.KeyId)
                         {
@@ -218,10 +219,23 @@ namespace QBCS.Service.Implement
                                 break;
                             //check banned words in question
                             case 3:
-                                if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                if (rule.Value.Contains("·case_sensitive·"))
                                 {
-                                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                    var culture = CultureInfo.GetCultureInfo("en-GB");
+                                    if (culture.CompareInfo.IndexOf(rule.Value, varRule, CompareOptions.IgnoreCase) >= 0)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
                                 }
+                                else
+                                {
+                                    if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+
                                 break;
                             //check min options count in question
                             case 4:
@@ -265,16 +279,27 @@ namespace QBCS.Service.Implement
                             case 9:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if (option.OptionContent.Contains(rule.Value))
+                                    if (rule.Value.Contains("·case_sensitive·"))
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        break;
+                                        var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                        var culture = CultureInfo.GetCultureInfo("en-GB");
+                                        if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                        {
+                                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (option.OptionContent.Contains(rule.Value))
+                                        {
+                                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        }
                                     }
                                 }
                                 break;
-                                //check min length in correct option
+                            //check min length in correct option
                             case 10:
-                                foreach(var option in tempQuestion.OptionTemps)
+                                foreach (var option in tempQuestion.OptionTemps)
                                 {
                                     if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
@@ -298,10 +323,24 @@ namespace QBCS.Service.Implement
                             case 12:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if ((bool)option.IsCorrect && option.OptionContent.Contains(rule.Value))
+                                    if ((bool)option.IsCorrect)
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        break;
+                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        {
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            var culture = CultureInfo.GetCultureInfo("en-GB");
+                                            if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (option.OptionContent.Contains(rule.Value))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -331,22 +370,59 @@ namespace QBCS.Service.Implement
                             case 15:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if ((!(bool)option.IsCorrect) && option.OptionContent.Contains(rule.Value))
+                                    if (!(bool)option.IsCorrect)
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        break;
+                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        {
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            var culture = CultureInfo.GetCultureInfo("en-GB");
+                                            if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (option.OptionContent.Contains(rule.Value))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            }
+                                        }
                                     }
                                 }
                                 break;
+                            case 16:
+                                if (!rule.Value.Contains("True"))
+                                {
+                                    var testOption = tempQuestion.OptionTemps.OrderByDescending(o => o.OptionContent.Length).ToList();
+                                    var varOption = testOption.First();
+                                    if ((bool)varOption.IsCorrect)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+                                break;
+                            case 17:
+                                if (!rule.Value.Contains("True"))
+                                {
+                                    var testOption = tempQuestion.OptionTemps.OrderBy(o => o.OptionContent.Length).ToList();
+                                    var varOption = testOption.First();
+                                    if ((bool)varOption.IsCorrect)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    }
+                                }
+                                break;
+
                         }
                         if (tempQuestion.Status == (int)StatusEnum.Invalid)
                         {
                             break;
                         }
-                    }   
+                    }
                 }
             }
-                return tempQuestions;
+            return tempQuestions;
         }
 
         public void UpdateQuestionTempStatus(int questionTempId, int status)
