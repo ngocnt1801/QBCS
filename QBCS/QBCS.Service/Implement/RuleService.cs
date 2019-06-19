@@ -40,7 +40,8 @@ namespace QBCS.Service.Implement
                             Value = value.Value.Replace("·case_sensitive·",""),
                             CreateDate = (DateTime)value.CreateDate,
                             ActivateDate = (DateTime)value.ActivateDate,
-                            ValueGroup = value.ValueGroup
+                            ValueGroup = value.ValueGroup,
+                            IsUse = (bool)value.IsUse
                         };
                         rvvm.Add(addValue);
                     }
@@ -77,7 +78,8 @@ namespace QBCS.Service.Implement
                     Value = rule.Value,
                     ActivateDate = rule.ActivateDate,
                     CreateDate = DateTime.Now,
-                    IsDisable = false
+                    IsDisable = false,
+                    IsUse = rule.IsUse
                 };
                 unitOfWork.Repository<Rule>().Insert(entity);
             }

@@ -22,7 +22,7 @@
 {
     <div class="card shadow mb-4">
         <a href="#collapse_@rvm.FirstOrDefault().GroupTypeEnum" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_"," ") Rule</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_", " ") Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             <div class="table-responsive">
@@ -33,6 +33,7 @@
                             <th class="col-sm">Value</th>
                             <th style="width:30%">Create Date</th>
                             <th style="width:30%">Activate Date</th>
+                            <th>In Use</th>
                         </tr>
                     </thead>
 
@@ -84,6 +85,18 @@
                                         <td>@value.Value</td>
                                         <td>@value.CreateDate.ToString("dd/MM/yyyy")</td>
                                         <td>@value.ActivateDate.ToString("dd/MM/yyyy")</td>
+                                        @if (value.IsUse)
+                                        {
+                                            <td>
+                                                <i class="fas fa-fw fa-check"></i>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <i class="fas fa-fw fa-close"></i>
+                                            </td>
+                                        }
                                     </tr>
                                 }
                             }

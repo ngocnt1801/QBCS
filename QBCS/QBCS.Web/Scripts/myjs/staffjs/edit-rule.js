@@ -31,6 +31,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 qlMin = value;
                             } else {
@@ -48,6 +49,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 qlMax = value;
                             } else {
@@ -61,11 +63,12 @@ $(document).ready(function () {
                             for (var i = 0; i < select3.length; i++) {
                                 var Obj2 = {};
                                 Obj2['KeyId'] = Obj['KeyId'];
-                                if ($(this).find('input[type="checkbox"]').is(':checked') == true) {
+                                if ($(this).find('input[type="checkbox"][id="case_sensitive"]').is(':checked') == true) {
                                     Obj2['Value'] = "·case_sensitive·" + select3[i];
                                 } else {
                                     Obj2['Value'] = select3[i];
                                 }
+                                Obj2['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 Obj2['ActivateDate'] = $(this).find('#date').val();
                                 if (Obj2['ActivateDate'] == "") {
                                     Obj2['ActivateDate'] = defaultActivateDate;
@@ -82,6 +85,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 nOpMin = value;
                             } else {
@@ -99,6 +103,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 nOpMax = value;
                             } else {
@@ -153,6 +158,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 olMin = value;
                             } else {
@@ -170,6 +176,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 olMax = value;
                             } else {
@@ -188,6 +195,7 @@ $(document).ready(function () {
                                 } else {
                                     Obj2['Value'] = select9[i];
                                 }
+                                Obj2['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 Obj2['ActivateDate'] = $(this).find('#date').val();
                                 if (Obj2['ActivateDate'] == "") {
                                     Obj2['ActivateDate'] = defaultActivateDate;
@@ -204,6 +212,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                             } else {
                                 swal('Min max must be integer!!!');
@@ -256,6 +265,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 cOlMin = value;
                             } else {
@@ -273,6 +283,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 cOlMax = value;
                             } else {
@@ -291,6 +302,7 @@ $(document).ready(function () {
                                 } else {
                                     Obj2['Value'] = select12[i];
                                 }
+                                Obj2['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 Obj2['ActivateDate'] = $(this).find('#date').val();
                                 if (Obj2['ActivateDate'] == "") {
                                     Obj2['ActivateDate'] = defaultActivateDate;
@@ -315,6 +327,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 iOlMin = value;
                             } else {
@@ -332,6 +345,7 @@ $(document).ready(function () {
                                 if (Obj['ActivateDate'] == "") {
                                     Obj['ActivateDate'] = defaultActivateDate;
                                 }
+                                Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 testList.push(Obj);
                                 iOlMax = value;
                             } else {
@@ -350,6 +364,7 @@ $(document).ready(function () {
                                 } else {
                                     Obj2['Value'] = select15[i];
                                 }
+                                Obj2['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                                 Obj2['ActivateDate'] = $(this).find('#date').val();
                                 if (Obj2['ActivateDate'] == "") {
                                     Obj2['ActivateDate'] = defaultActivateDate;

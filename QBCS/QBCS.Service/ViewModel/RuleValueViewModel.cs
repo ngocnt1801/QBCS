@@ -15,6 +15,6 @@ namespace QBCS.Service.ViewModel
         public DateTime CreateDate { get; set; }
         public int? ValueGroup { get; set; }
         public bool IsCaseSensitive { get; set; }
-        public bool IsSet { get; set; }
+        public bool IsUse { get; set; }
     }
 }

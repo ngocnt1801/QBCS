@@ -32,6 +32,7 @@
                             <th style="width:30%">Name</th>
                             <th class="col-sm-1">Value</th>
                             <th class="col-sm">Activate Date</th>
+                            <th class="text-center">In Use</th>
                         </tr>
                     </thead>
 
@@ -45,7 +46,7 @@
                                     <td>@rule.Name</td>
                                     <td>
                                         @* Any changes make to this line must also change at
-                                                bootstrap-tagsinput.js line 142*@
+                                            bootstrap-tagsinput.js line 142*@
                                         <select multiple id="select_@rule.Id" data-role="tagsinput">
                                             @if (rule.Value.Count != 0)
                                             {
@@ -58,19 +59,33 @@
                                         Check case sensitive
                                         @if (rule.Value.Count == 0)
                                         {
-                                            <input type="checkbox" />
+                                            <input type="checkbox" id="case_sensitive" />
                                         }
                                         else if (rule.Value.FirstOrDefault().IsCaseSensitive)
                                         {
-                                            <input type="checkbox" checked />
+                                            <input type="checkbox" id="case_sensitive" checked />
                                         }
                                         else
                                         {
-                                            <input type="checkbox" />
+                                            <input type="checkbox" id="case_sensitive" />
                                         }
                                     </td>
                                     <td>
                                         <input type="date" id="date">
+                                    </td>
+                                    <td>
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <input type="checkbox" id="is_use" />
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsUse)
+                                        {
+                                            <input type="checkbox" id="is_use" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="is_use" />
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -87,11 +102,21 @@
                                         <td>
                                             <input type="date" id="date">
                                         </td>
-                                        @*<td>@value.ValueGroup</td>*@
-                                    </tr>
-                                }
+                                        <td>
+                                            @if (value.IsUse)
+                                            {
+                                                <input type="checkbox" id="is_use" checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="is_use" />
+                                            }
+                                    </td>
+                                    @*<td>@value.ValueGroup</td>*@
+                                </tr>
                             }
                         }
+                    }
 
                     </tbody>
                 </table>
