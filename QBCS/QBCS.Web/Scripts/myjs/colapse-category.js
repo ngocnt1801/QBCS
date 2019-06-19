@@ -59,6 +59,26 @@
           this.attributes["data-url"].value,
           $("#" + this.attributes["data-id"].value)
         );
+
+        var categorParent = $(".list-group-item.active")
+          .parents()
+          .prev(".list-group-item");
+
+        var selectedSpan = $(".list-group-item.active span")[0];
+        var currentSelectedCount = selectedSpan.attributes["data-count"].value;
+        selectedSpan.attributes["data-count"].value = +currentSelectedCount - 1;
+        $(selectedSpan).html(
+          "(" + selectedSpan.attributes["data-count"].value + ")"
+        );
+
+        $.each(categorParent, function(index, item) {
+          var currentItem =$(item).children('span');
+          var currentSelectedCount = currentItem.attr('data-count');
+          currentItem.attr('data-count', (+currentSelectedCount - 1));
+          currentItem.html(
+            "(" + currentItem.attr('data-count') + ")"
+          );
+        });
       });
     },
     addCheckbox: function() {
@@ -87,9 +107,9 @@
         categoryView.listChecked = $(".checkbox[id!='select-all']:checked");
         categoryOctopus.addListSelectedQuestion();
 
-        categoryView.modal.off('hidden.bs.modal');
-        categoryView.modal.on('hidden.bs.modal', function(){
-            categoryView.resetCheckList();
+        categoryView.modal.off("hidden.bs.modal");
+        categoryView.modal.on("hidden.bs.modal", function() {
+          categoryView.resetCheckList();
         });
       });
     },
@@ -154,8 +174,8 @@
         item.checked = false;
       });
 
-      $.each(listQuestionSelected, function(index, item){
-        $('#'+item.id+' .checkbox')[0].checked = true;
+      $.each(listQuestionSelected, function(index, item) {
+        $("#" + item.id + " .checkbox")[0].checked = true;
       });
     }
   };

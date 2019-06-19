@@ -2201,6 +2201,7 @@
     <Content Include="Views\Course\CourseStatistic.cshtml" />
     <Content Include="Views\Course\Add.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Shared\_ListCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
