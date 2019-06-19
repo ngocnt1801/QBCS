@@ -377,12 +377,12 @@ namespace DuplicateQuestion
                 connection.Open();
 
                 string query = "UPDATE Import " +
-                                "SET Status=@status, Seen=@seen " +
+                                "SET Status=@status, UpdatedDate=@date, Seen=@seen " +
                                 "WHERE Id=@importId";
                 if (model.Status == (int)StatusEnum.Done)
                 {
                     query = "UPDATE Import " +
-                            "SET Status=@status, Seen=@seen, InsertedToBankDate=@date, TotalSuccess=@success " +
+                            "SET Status=@status, Seen=@seen, UpdatedDate=@date, TotalSuccess=@success " +
                             "WHERE Id=@importId";
                 }
 
@@ -392,9 +392,9 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@status", model.Status);
                 command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", model.ImportId);
+                command.Parameters.AddWithValue("@date", DateTime.Now);
                 if (model.Status == (int)StatusEnum.Done)
                 {
-                    command.Parameters.AddWithValue("@date", DateTime.Now);
                     command.Parameters.AddWithValue("@success", model.TotalSuccess);
                 }
                 command.ExecuteNonQuery();

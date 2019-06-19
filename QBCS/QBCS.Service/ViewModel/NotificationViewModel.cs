@@ -11,5 +11,6 @@ namespace QBCS.Service.ViewModel
         public int ImportId { get; set; }
         public string Message { get; set; }
         public int Status { get; set; }
+        public string UpdatedDate { get; set; }
     }
 }

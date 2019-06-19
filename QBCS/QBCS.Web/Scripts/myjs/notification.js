@@ -49,14 +49,14 @@
             var listNotification = notificationOctopus.getListNotification();
             this.notificationContainter.empty();
             listNotification.forEach(element => {
-                this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message));
+                this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message, element.UpdatedDate));
             });
         },
-        renderNotification: function(importId, message){
+        renderNotification: function(importId, message, date){
             var template = notificationView.getTemplateNotification();
             template = template.replace("{{noti.link}}", "/QBCS.Web/Import/GetResult?importId="+importId)
                                 .replace("{{noti.icon}}", "fa-file-alt")
-                                .replace("{{noti.date}}", "Today")
+                                .replace("{{noti.date}}", date)
                                 .replace("{{noti.message}}", message);
 
             return template;

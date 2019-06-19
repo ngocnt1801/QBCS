@@ -23,8 +23,9 @@ namespace QBCS.Service.Implement
             var notificationList = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value)
                                                                             .Select(im => new NotificationViewModel {
                                                                                 ImportId = im.Id,
-                                                                                Message = im.Status == (int)StatusEnum.Checked ? "Your import questions have already checked, click to see result!" : "Your question added to bank",
-                                                                                Status = im.Status.Value
+                                                                                Message = im.Status == (int)StatusEnum.Checked ? "Your import questions have already checked, click to see result!" : im.TotalSuccess + " questions were added to bank successfully.",
+                                                                                Status = im.Status.Value,
+                                                                                UpdatedDate = im.UpdatedDate.HasValue ? im.UpdatedDate.Value.ToString() : ""
                                                                             })
                                                                             .ToList();
             return notificationList;
