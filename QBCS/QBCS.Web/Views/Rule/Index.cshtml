@@ -3,11 +3,8 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <head>
-    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+    <link rel="stylesheet" href="~/Scripts/font-awesome.css">
 </head>
 
 <div class="row">
@@ -72,6 +69,20 @@
                                         @if (rule.Value.Count != 0)
                                         {
                                             @rule.Value.FirstOrDefault().ActivateDate.ToString("dd/MM/yyyy")
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <i class="fas fa-fw fa-close"></i>
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsUse)
+                                        {
+                                            <i class="fas fa-fw fa-check"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-close"></i>
                                         }
                                     </td>
                                 </tr>
