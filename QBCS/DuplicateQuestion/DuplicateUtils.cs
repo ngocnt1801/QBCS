@@ -430,6 +430,9 @@ namespace DuplicateQuestion
                 question.LevelId = GetLevel(question.Level);
             }
 
+            //generate code
+            GenerateCode(importSuccessList);
+
             //add question
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
@@ -645,6 +648,47 @@ namespace DuplicateQuestion
                 }
                 reader.Close();
                 return id;
+            }
+        }
+
+        private static int GetLastCode()
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT TOP 1 QuestionCode FROM Question ORDER BY Id DESC",
+                    connection
+                    );
+
+                SqlDataReader reader = command.ExecuteReader();
+                string code = "";
+                if (reader.Read())
+                {
+                    if (reader["QuestionCode"] != null)
+                    {
+                        code = (string)reader["QuestionCode"];
+                    }
+                }
+
+                int qIndex = code.IndexOf('Q');
+                if (qIndex >= 0)
+                {
+                    return Int32.Parse(code.Split('Q')[1]);
+                }
+            }
+            return 0;
+        }
+
+        private static void GenerateCode(List<QuestionModel> questions)
+        {
+            var no = GetLastCode() + 1;
+            foreach (var q in questions)
+            {
+                string prefix = q.QuestionCode.Split('-')[0];
+                q.QuestionCode = prefix + '-' + 'Q' + no.ToString("D6");
+                no += 1;
             }
         }
     }
