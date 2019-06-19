@@ -275,8 +275,8 @@ namespace QBCS.Service.Implement
         }
         static string category = null;
         static string level = null;
-        static string topic = null;
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId)
+        static string learningOutcome = null;
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate)
         {
 
             bool check = false;
@@ -285,6 +285,7 @@ namespace QBCS.Service.Implement
             var import = new Import();
             StringBuilder sb = new StringBuilder();
             string checkHTML = "";
+           
             HtmlDocument htmlDoc = new HtmlDocument();
             try
             {
@@ -306,9 +307,9 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-
+                        int status = (int)StatusEnum.NotCheck;
                         #region get category
-                        if (questionXml.question[i].category != null)
+                        if (questionXml.question[i].category != null && checkCate == true)
                         {
                             temp = questionXml.question[i].category.text.ToString();
                             string[] arrListStr = temp.Split('/');
@@ -321,8 +322,8 @@ namespace QBCS.Service.Implement
                                 }
                                 if (z == 2)
                                 {
-                                    topic = "";
-                                    topic = arrListStr[z];
+                                    learningOutcome = "";
+                                    learningOutcome = arrListStr[z];
                                 }
                                 if (z == 3)
                                 {
@@ -336,8 +337,16 @@ namespace QBCS.Service.Implement
                         {
                             
                             string tempParser = "";
+                            string file = "";
                            checkHTML = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
+                            if (questionXml.question[i].questiontext.file.Value != null)
+                            {
+                                file = questionXml.question[i].questiontext.file.Value.ToString();
+                                question.Image = file;
+                                status = (int)Enum.StatusEnum.Success;
+                            } 
+                            
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = StringProcess.RemoveHtmlTag(questionContent);
@@ -355,7 +364,7 @@ namespace QBCS.Service.Implement
                             {
                                 question.Category = category.Trim();
                                 question.Level = level.Trim();
-                                question.Topic = topic.Trim();
+                                question.LearningOutcome = learningOutcome.Trim();
                             }
                             tempParser = "";
 
@@ -427,11 +436,12 @@ namespace QBCS.Service.Implement
                                 import.QuestionTemps.Add(new QuestionTemp()
                                 {
                                     QuestionContent = question.QuestionContent,
-                                    Status = (int)StatusEnum.NotCheck,
+                                    Status = status,
                                     Code = question.Code,
                                     Category = question.Category,
-                                    Topic = question.Topic,
-                                    LevelName = question.Level,  
+                                    LearningOutcome = question.LearningOutcome,
+                                    LevelName = question.Level,
+                                    Image = question.Image,
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
@@ -469,8 +479,9 @@ namespace QBCS.Service.Implement
                 {
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
+                    import.Status = (int)Enum.StatusEnum.NotCheck;
                     reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
-                    listQuestion = ulti.StripTagsCharArray(reader);
+                    listQuestion = ulti.StripTagsCharArray(reader, checkCate);
                     DateTime importTime = DateTime.Now;
                     import = new Import()
                     {
@@ -483,7 +494,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            Topic = q.Topic,
+                            LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
@@ -492,6 +503,7 @@ namespace QBCS.Service.Implement
                             }).ToList(),
                         }).ToList(),
                         ImportedDate = importTime
+    
                     };
                     int g = 0;
                     foreach (var item in listQuestion)
@@ -508,7 +520,7 @@ namespace QBCS.Service.Implement
                 #endregion
                 if (import.QuestionTemps.Count() > 0)
                 {
-                    import.Status = (int)StatusEnum.NotCheck;
+                    import.Status = (int)Enum.StatusEnum.NotCheck;
                     import.CourseId = courseId;
                     //check formats
                     import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
@@ -523,6 +535,7 @@ namespace QBCS.Service.Implement
                     });
                     check = true;
                 }
+                
                 else
                 {
                     // return user have to import file

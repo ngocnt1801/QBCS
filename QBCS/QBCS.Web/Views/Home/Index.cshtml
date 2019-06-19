@@ -1,6 +1,8 @@
 ﻿@model QBCS.Service.ViewModel.UserViewModel
 @using QBCS.Service.ViewModel
 @{
+    /**/
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -38,11 +40,15 @@
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                         </div>
+                        <div class="custom-control custom-checkbox text-custom">
+                            <input type="checkbox" name="checkCate" value="true" class="custom-control-input" id="defaultChecked2" checked>
+                            <label class="custom-control-label" for="defaultChecked2">Get Category for your Question</label>
+                        </div>
                         <!-- COMPONENT END -->
-                        <div class="form-group text-custom">
+                        <div class="form-group text-custom mt-3">
                             <i class="text-dark text-custom">Choose a file:</i>
                             <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control border-dark"/>
+                                <input type="text" class="form-control border-dark" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-import-file btn-choose" type="button">Choose</button>
                                 </span>

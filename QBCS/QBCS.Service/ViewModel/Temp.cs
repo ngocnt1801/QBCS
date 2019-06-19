@@ -442,6 +442,7 @@ namespace QBCS.Service.ViewModel
         /// <remarks/>
         public quizQuestionNameFile file
         {
+
             get
             {
                 return this.fileField;
