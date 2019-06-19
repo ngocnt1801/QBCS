@@ -391,6 +391,7 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                                 break;
+                            //check allow longest correct option
                             case 16:
                                 if (!rule.Value.Contains("True"))
                                 {
@@ -402,6 +403,7 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                                 break;
+                            //check allow longest correct option
                             case 17:
                                 if (!rule.Value.Contains("True"))
                                 {
