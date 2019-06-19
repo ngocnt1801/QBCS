@@ -38,46 +38,45 @@
 
                 if (category.LearningOutcomes != null && category.LearningOutcomes.Count > 0)
                 {
-                    <a href="#c-@category.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id})" aria-expanded="true">
-                        <i class="fa fa-minus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
+                    <a href="#c-@category.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id.HasValue ? category.Id.Value : 0, courseId = Model.Id})" aria-expanded="true">
+                        <i class="fa fa-plus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
                     </a>
-                    <div class="list-group collapse show" id="c-@category.Id">
+                    <div class="list-group collapse" id="c-@category.Id">
                         @foreach (var lo in category.LearningOutcomes)
                         {
-                            if (lo.Id != 0)
-                            {
-                                if (lo.Levels != null && lo.Levels.Count > 0)
-                                {
-                                    <a href="#lo-@lo.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, learningoutcomeId = lo.IsLearningOutcome ? lo.Id : 0, topicId = lo.IsLearningOutcome ? 0 : lo.Id })">
-                                        <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
-                                    </a>
-                                    <div class="list-group collapse" id="lo-@lo.Id">
-                                        @foreach (var level in lo.Levels)
-                                        {
-                                            if (level.Id != 0)
-                                            {
-                                                <a href="#lv-@level.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, learningoutcomeId = lo.IsLearningOutcome ? lo.Id : 0, topicId = lo.IsLearningOutcome ? 0 : lo.Id, levelId = level.Id })">
-                                                    @level.Name <span class="float-right">(@level.QuestionCount)</span>
-                                                </a>
-                                            }
-                                        }
 
-                                    </div>
-                                }
-                                else
-                                {
-                                    <a href="#lo-@lo.Id" class="list-group-item">
-                                        @lo.Name <span class="float-right">(@lo.QuestionCount)</span>
-                                    </a>
-                                }
+                            if (lo.Levels != null && lo.Levels.Count > 0)
+                            {
+                                <a href="#lo-@lo.Id-@category.Id" class="list-group-item" data-toggle="collapse" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id.HasValue ? category.Id.Value : 0, learningoutcomeId = lo.Id.HasValue ? lo.Id.Value : 0, courseId = Model.Id })">
+                                    <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                </a>
+                                <div class="list-group collapse" id="lo-@lo.Id-@category.Id">
+                                    @foreach (var level in lo.Levels)
+                                    {
+                                        if (level.Id != 0)
+                                        {
+                                            <a href="#lv-@level.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id.HasValue ? category.Id.Value : 0, learningoutcomeId = lo.Id.HasValue ? lo.Id.Value : 0, levelId = level.Id.HasValue ? level.Id.Value : 0, courseId = Model.Id })">
+                                                @level.Name <span class="float-right">(@level.QuestionCount)</span>
+                                            </a>
+                                        }
+                                    }
+
+                                </div>
                             }
+                            else
+                            {
+                                <a href="#lo-@lo.Id-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id.HasValue ? category.Id.Value : 0, learningoutcomeId = lo.Id.HasValue ? lo.Id.Value : 0, courseId = Model.Id })">
+                                    @lo.Name <span class="float-right">(@lo.QuestionCount)</span>
+                                </a>
+                            }
+
                         }
 
                     </div>
                 }
                 else
                 {
-                    <a href="#c-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id, courseId = Model.Id})">
+                    <a href="#c-@category.Id" class="list-group-item" data-link="@Url.Action("GetQuestions", "Question", new { categoryId = category.Id.HasValue ? category.Id.Value : 0, courseId = Model.Id})">
                         @category.Name <span class="float-right">(@category.QuestionCount)</span>
                     </a>
                 }
@@ -125,25 +124,25 @@
 
                         if (category.LearningOutcomes != null && category.LearningOutcomes.Count > 0)
                         {
-                            <a href="#mc-@category.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-topic="0" data-level="0">
-                                <i class="fa fa-minus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
+                            <a href="#mc-@category.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-lo="0" data-level="0">
+                                <i class="fa fa-plus-circle"></i>@category.Name <span class="float-right">(@category.QuestionCount)</span>
                             </a>
-                            <div class="list-group collapse show" id="mc-@category.Id">
+                            <div class="list-group collapse" id="mc-@category.Id">
                                 @foreach (var lo in category.LearningOutcomes)
                                 {
                                     if (lo.Id != 0)
                                     {
                                         if (lo.Levels != null && lo.Levels.Count > 0)
                                         {
-                                            <a href="#mlo-@lo.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-topic="@lo.Id" data-level="0">
+                                            <a href="#mlo-@lo.Id-@category.Id" class="list-group-item" data-toggle="collapse" data-category="@category.Id" data-lo="@lo.Id" data-level="0">
                                                 <i class="fa fa-plus-circle"></i>@lo.Name <span class="float-right">(@lo.QuestionCount)</span>
                                             </a>
-                                            <div class="list-group collapse" id="mlo-@lo.Id">
+                                            <div class="list-group collapse" id="mlo-@lo.Id-@category.Id">
                                                 @foreach (var level in lo.Levels)
                                                 {
                                                     if (level.Id != 0)
                                                     {
-                                                        <a href="#mlv-@level.Id" class="list-group-item" data-category="@category.Id" data-topic="@lo.Id" data-level="@level.Id">
+                                                        <a href="#mlv-@level.Id" class="list-group-item" data-category="@category.Id" data-lo="@lo.Id" data-level="@level.Id">
                                                             @level.Name <span class="float-right">(@level.QuestionCount)</span>
                                                         </a>
                                                     }
@@ -153,7 +152,7 @@
                                         }
                                         else
                                         {
-                                            <a href="#lo-@lo.Id" class="list-group-item" data-category="@category.Id" data-topic="@lo.Id" data-level="0">
+                                            <a href="#lo-@lo.Id-@category.Id" class="list-group-item" data-category="@category.Id" data-lo="@lo.Id" data-level="0">
                                                 @lo.Name <span class="float-right">(@lo.QuestionCount)</span>
                                             </a>
                                         }
@@ -164,7 +163,7 @@
                         }
                         else
                         {
-                            <a href="#mc-@category.Id" class="list-group-item" data-id="@category.Id" data-category="@category.Id" data-topic="0" data-level="0">
+                            <a href="#mc-@category.Id" class="list-group-item" data-id="@category.Id" data-category="@category.Id" data-lo="0" data-level="0">
                                 @category.Name <span class="float-right">(@category.QuestionCount)</span>
                             </a>
                         }

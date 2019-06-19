@@ -550,16 +550,19 @@ namespace QBCS.Service.Implement
             if (learningoutcomeId != null && learningoutcomeId != 0)
             {
                 result = result.Where(q => q.LearningOutcomeId == learningoutcomeId);
+            } else if (learningoutcomeId == 0)
+            {
+                result = result.Where(q => q.LearningOutcomeId == null);
             }
 
-            if (topicId != null && topicId != 0)
-            {
-                result = result.Where(q => q.TopicId == topicId);
-            }
 
             if (levelId != null && levelId != 0)
             {
                 result = result.Where(q => q.LevelId == levelId);
+            }
+            else if (levelId == 0)
+            {
+                result = result.Where(q => q.LevelId == null);
             }
 
             return result.Select(q => new QuestionViewModel
@@ -609,11 +612,11 @@ namespace QBCS.Service.Implement
 
                     if (learningOutcomeId != null && learningOutcomeId != 0)
                     {
-                        entity.TopicId = learningOutcomeId; // fix here
+                        entity.LearningOutcomeId = learningOutcomeId; // fix here
                     }
                     else
                     {
-                        entity.TopicId = null;
+                        entity.LearningOutcomeId = null;
                     }
 
                     if (levelId != null && levelId != 0)
