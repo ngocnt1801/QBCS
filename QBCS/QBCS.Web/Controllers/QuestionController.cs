@@ -87,8 +87,6 @@ namespace QBCS.Web.Controllers
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
 
-            List<TopicViewModel> topics = topicService.GetTopicByCourseId(qvm.CourseId);
-
             List<LevelViewModel> levels = levelService.GetLevel();
 
             List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
@@ -96,7 +94,6 @@ namespace QBCS.Web.Controllers
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
                 Question = qvm,
-                Topics = topics,
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
@@ -111,7 +108,7 @@ namespace QBCS.Web.Controllers
 
             bool optionResult = optionService.UpdateOptions(ques.Options);
 
-            return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
+            return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
         }
 
         [HttpPost]

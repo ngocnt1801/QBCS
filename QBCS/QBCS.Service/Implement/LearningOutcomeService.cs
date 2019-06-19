@@ -54,9 +54,9 @@ namespace QBCS.Service.Implement
                 LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel()
                 {
                     Id = learningOutcome.Id,
-                    Code = learningOutcome.Code,
-                    CourseId = (int) learningOutcome.CourseId,
-                    IsDisable = (bool) learningOutcome.IsDisable,
+                    Code = learningOutcome.Code != null ? learningOutcome.Code : "", 
+                    CourseId = learningOutcome.CourseId.Value,
+                    IsDisable =  learningOutcome.IsDisable.HasValue && learningOutcome.IsDisable.Value,
                     Name = learningOutcome.Name
                 };
                 learningOutcomeViewModel.UpdateIdValue();
