@@ -87,17 +87,17 @@ namespace QBCS.Service.Implement
                     int idOfLevel = levelService.GetIdByName(EASY);
                     totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
                     idOfLevel = levelService.GetIdByName(MEDIUM);
-                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel);
+                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
                     idOfLevel = levelService.GetIdByName(HARD);
-                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel);
+                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
                 } else
                 {
                     int idOfLevel = levelService.GetIdByName(EASY);
-                    totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel);
+                    totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
                     idOfLevel = levelService.GetIdByName(MEDIUM);
-                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel);
+                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
                     idOfLevel = levelService.GetIdByName(HARD);
-                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel);
+                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
                 }
                 TopicInExamination topicInExam = new TopicInExamination()
                 {
@@ -250,7 +250,7 @@ namespace QBCS.Service.Implement
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
-                int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel);
+                int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel, categoryId);
                 List<Question> questionsByLevelAndTopic = questions.Where(q => q.LevelId == idOfLevel && q.TopicId == topicId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndTopic.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
@@ -338,7 +338,7 @@ namespace QBCS.Service.Implement
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
-                int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
+                int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel, categoryId);
                 List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndLearningOutcome.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
