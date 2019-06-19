@@ -112,7 +112,7 @@
                                 }
                                 @if (item.Status == StatusEnum.Invalid)
                                 {
-                                    <td>Error message here</td>
+                                    <td>@item.Message</td>
                                 }
                                 @if (item.Status == StatusEnum.DeleteOrSkip)
                                 {

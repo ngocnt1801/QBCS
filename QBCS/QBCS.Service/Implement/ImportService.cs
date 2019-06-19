@@ -65,6 +65,7 @@ namespace QBCS.Service.Implement
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
                         Code = q.Code,
+                        Message = q.Message,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.DuplicatedWithBank.Id,
@@ -212,6 +213,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Question length must at least " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check max question length
@@ -219,6 +221,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Question length must not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check banned words in question
@@ -226,6 +229,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Contains(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Question must not contain " + (rule.Value);
                                 }
                                 break;
                             //check min options count in question
@@ -233,6 +237,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Number of options must at least " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check max option count in question
@@ -240,6 +245,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Number of options must not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check min option length
@@ -249,6 +255,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -260,6 +267,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Option length must not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -273,6 +281,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Contains(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Option length must not contain " + (rule.Value);
                                         break;
                                     }
                                 }
@@ -284,6 +293,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -295,6 +305,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct option length must not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -306,6 +317,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Contains(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct option length must not contain " + (rule.Value);
                                         break;
                                     }
                                 }
@@ -317,6 +329,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Incorrect option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -328,6 +341,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Incorrect option length must not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -339,6 +353,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Contains(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Incorrect option length must not contain " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
