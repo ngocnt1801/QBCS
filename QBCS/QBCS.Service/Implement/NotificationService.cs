@@ -30,6 +30,18 @@ namespace QBCS.Service.Implement
             return notificationList;
         }
 
+        public void MarkAllAsRead(int userId)
+        {
+            var notificationList = unitOfWork.Repository<Import>().GetAll().Where(n => !n.Seen.HasValue || !n.Seen.Value).ToList();
+            foreach (var noti in notificationList)
+            {
+                noti.Seen = true;
+                unitOfWork.Repository<Import>().Update(noti);
+            }
+
+            unitOfWork.SaveChanges();
+        }
+
         public void RegisterNotification(OnChangeEventHandler eventHandler)
         {
             unitOfWork.ImportRepository().RegisterNotificationImportResult(eventHandler);

@@ -8,6 +8,11 @@
         init: function () {
             this.notificationSpan = $("#count_notification");
             this.notificationContainter = $("#list_notification");
+
+            this.linkNotRedirect = $('.ajax-no-response');
+            this.linkNotRedirect.on('click', function () {
+                notificationOctopus.sendRequest(this.attributes["data-url"].value);
+            });
         },
 
         render: function () {
@@ -97,6 +102,15 @@
                     
                     notificationModel.count = response.length;
                     notificationView.render();
+                }
+            });
+        },
+        sendRequest: function (url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+
                 }
             });
         }
