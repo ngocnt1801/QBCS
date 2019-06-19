@@ -12,5 +12,6 @@ namespace QBCS.Service.Interface
         List<CategoryViewModel> GetCategoriesByCourseId(int courseId);
 
         List<CategoryViewModel> GetListCategories(int courseId);
+        CategoryViewModel GetCategoryById(int categoryId);
     }
 }

@@ -517,19 +517,42 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
+        public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId, int categoryId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
-            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            if(question == null)
+            {
+                return 0;
+            }
+            return (int)question.Frequency;
+        }
+        
+        public int GetCountOfListQuestionByTopicAndId(int topicId, int levelId, int categoryId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            List<Question> question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId && q.CategoryId == categoryId).ToList();
+            return question.Count;
 
-            return (int)question.Frequency;
         }
-        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
+        public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId, int categoryId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
-            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            List<Question> question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.CategoryId == categoryId).ToList();
+            if (question == null)
+            {
+                return 0;
+            }
+            return question.Count;
+
+        }
+        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId, int categoryId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return (int)question.Frequency;
         }
+
         public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);

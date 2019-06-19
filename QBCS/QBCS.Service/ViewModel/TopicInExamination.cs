@@ -13,6 +13,9 @@ namespace QBCS.Service.ViewModel
         public int MediumQuestion { get; set; }
         public int HardQuestion { get; set; }
         public bool IsLearingOutcome { get; set; }
+        public int TotalEasyQuestionInTopic { get; set; }
+        public int TotalMediumQuestionInTopic { get; set; }
+        public int TotalHardQuestionInTopic { get; set; }
         public TopicInExamination()
         {
             EasyQuestion = 0;
