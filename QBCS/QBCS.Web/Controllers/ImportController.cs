@@ -41,6 +41,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("CourseDetail", "Course", new { courseId = result.CourseId});
         }
 
+        [ValidateInput(false)]
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
             importService.UpdateQuestionTemp(model);

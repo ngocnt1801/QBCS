@@ -7,8 +7,8 @@ using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
@@ -77,12 +77,14 @@ namespace QBCS.Service.Implement
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
-                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel {
+                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel
+                        {
                             Id = q.DuplicatedWithImport.Id,
                             Code = q.DuplicatedWithImport.Code,
                             CourseName = "Import File",
                             QuestionContent = q.DuplicatedWithImport.QuestionContent,
-                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel {
+                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                            {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
@@ -92,7 +94,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }).OrderBy(q => q.Status).ToList() 
+                    }).OrderBy(q => q.Status).ToList()
                 };
             }
 
@@ -173,7 +175,7 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && (entity.Status == (int)StatusEnum.Editable || entity.Status == (int) StatusEnum.Invalid))
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable || entity.Status == (int)StatusEnum.Invalid))
             {
                 entity.QuestionContent = question.QuesitonContent;
                 entity.Status = (int)StatusEnum.NotCheck;
@@ -185,7 +187,8 @@ namespace QBCS.Service.Implement
 
                 foreach (var option in question.Options)
                 {
-                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp {
+                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp
+                    {
                         IsCorrect = option.IsCorrect,
                         OptionContent = option.OptionContent,
                         TempId = question.Id
@@ -199,12 +202,12 @@ namespace QBCS.Service.Implement
 
         public List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions)
         {
-            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false);
-            foreach(var tempQuestion in tempQuestions)
+            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
+            foreach (var tempQuestion in tempQuestions)
             {
                 foreach (var rule in rules)
                 {
-                    if(DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
+                    if (DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
                     {
                         switch (rule.KeyId)
                         {
@@ -221,16 +224,30 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Question length must not exceed " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Question length can not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check banned words in question
                             case 3:
-                                if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                if (rule.Value.Contains("·case_sensitive·"))
                                 {
-                                    tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Question must not contain " + (rule.Value);
+                                    var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                    var culture = CultureInfo.GetCultureInfo("en-GB");
+                                    if (culture.CompareInfo.IndexOf(rule.Value, varRule, CompareOptions.IgnoreCase) >= 0)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Question can not contain '" + (varRule) + "'";
+                                    }
                                 }
+                                else
+                                {
+                                    if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Question can not contain '" + (rule.Value) + "'";
+                                    }
+                                }
+
                                 break;
                             //check min options count in question
                             case 4:
@@ -245,7 +262,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Number of options must not exceed " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Number of options can not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check min option length
@@ -267,7 +284,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Option length must not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -278,17 +295,29 @@ namespace QBCS.Service.Implement
                             case 9:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if (option.OptionContent.Contains(rule.Value))
+                                    if (rule.Value.Contains("·case_sensitive·"))
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Option length must not contain " + (rule.Value);
-                                        break;
+                                        var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                        var culture = CultureInfo.GetCultureInfo("en-GB");
+                                        if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                        {
+                                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            tempQuestion.Message = "Options can not contain '" + (varRule) + "'";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (option.OptionContent.Contains(rule.Value))
+                                        {
+                                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            tempQuestion.Message = "Options can not contain '" + (rule.Value) + "'";
+                                        }
                                     }
                                 }
                                 break;
-                                //check min length in correct option
+                            //check min length in correct option
                             case 10:
-                                foreach(var option in tempQuestion.OptionTemps)
+                                foreach (var option in tempQuestion.OptionTemps)
                                 {
                                     if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
@@ -305,7 +334,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct option length must not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Correct option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -314,11 +343,26 @@ namespace QBCS.Service.Implement
                             case 12:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if ((bool)option.IsCorrect && option.OptionContent.Contains(rule.Value))
+                                    if ((bool)option.IsCorrect)
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct option length must not contain " + (rule.Value);
-                                        break;
+                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        {
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            var culture = CultureInfo.GetCultureInfo("en-GB");
+                                            if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Correct options can not contain '" + (varRule) + "'";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (option.OptionContent.Contains(rule.Value))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Correct options can not contain '" + (rule.Value) + "'";
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -341,7 +385,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Incorrect option length must not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Incorrect option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -350,23 +394,65 @@ namespace QBCS.Service.Implement
                             case 15:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if ((!(bool)option.IsCorrect) && option.OptionContent.Contains(rule.Value))
+                                    if (!(bool)option.IsCorrect)
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Incorrect option length must not contain " + int.Parse(rule.Value);
-                                        break;
+                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        {
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            var culture = CultureInfo.GetCultureInfo("en-GB");
+                                            if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Incorrect options can not contain '" + (varRule) + "'";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (option.OptionContent.Contains(rule.Value))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Incorrect options can not contain '" + (rule.Value) + "'";
+                                            }
+                                        }
                                     }
                                 }
                                 break;
+                            //check allow longest correct option
+                            case 16:
+                                if (!rule.Value.Contains("True"))
+                                {
+                                    var testOption = tempQuestion.OptionTemps.OrderByDescending(o => o.OptionContent.Length).ToList();
+                                    var varOption = testOption.First();
+                                    if ((bool)varOption.IsCorrect)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct Option can not be a longest option";
+                                    }
+                                }
+                                break;
+                            //check allow longest correct option
+                            case 17:
+                                if (!rule.Value.Contains("True"))
+                                {
+                                    var testOption = tempQuestion.OptionTemps.OrderBy(o => o.OptionContent.Length).ToList();
+                                    var varOption = testOption.First();
+                                    if ((bool)varOption.IsCorrect)
+                                    {
+                                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct Option can not be a shortest option";
+                                    }
+                                }
+                                break;
+
                         }
                         if (tempQuestion.Status == (int)StatusEnum.Invalid)
                         {
                             break;
                         }
-                    }   
+                    }
                 }
             }
-                return tempQuestions;
+            return tempQuestions;
         }
 
         public void UpdateQuestionTempStatus(int questionTempId, int status)

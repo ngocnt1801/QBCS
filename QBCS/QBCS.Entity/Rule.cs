@@ -23,6 +23,8 @@ namespace QBCS.Entity
 
         public int? ValueGroup { get; set; }
 
+        public bool? IsUse { get; set; }
+
         public virtual RuleKey RuleKey { get; set; }
     }
 }

@@ -393,6 +393,7 @@
     <Content Include="Scripts\datatables\datatables-demo.js" />
     <Content Include="Scripts\datatables\dataTables.bootstrap4.js" />
     <Content Include="Scripts\datatables\jquery.dataTables.js" />
+    <Content Include="Scripts\font-awesome.css" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -419,6 +420,8 @@
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
+    <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
     <Content Include="Scripts\toastr.js" />
@@ -2201,6 +2204,7 @@
     <Content Include="Views\Course\CourseStatistic.cshtml" />
     <Content Include="Views\Course\Add.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Course\Staff_Index.cshtml" />
     <Content Include="Views\Shared\_ListCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>

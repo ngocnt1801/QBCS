@@ -5,12 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-    <head>
-        <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
-        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-        <script src="~/Scripts/bootstrap-tagsinput.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    </head>
+<head>
+    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap-tagsinput.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/myjs/staffjs/edit-rule.js"></script>
+</head>
 
 <h2>Rules</h2>
 <div>
@@ -20,7 +21,7 @@
 {
     <div class="card shadow mb-4">
         <a href="#collapse_@rvm.FirstOrDefault().GroupTypeEnum" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_"," ") Rule</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_", " ") Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             @*<button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>*@
@@ -28,11 +29,10 @@
                 <table class="table table-bordered text-custom" @*id="dataTable"*@ id="table_@rvm.FirstOrDefault().GroupTypeEnum" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th class="col-sm">Value</th>
+                            <th style="width:30%">Name</th>
+                            <th class="col-sm-1">Value</th>
                             <th class="col-sm">Activate Date</th>
-                            @*<th>Group</th>*@
+                            <th class="text-center">In Use</th>
                         </tr>
                     </thead>
 
@@ -43,25 +43,49 @@
                             {
                                 <tr>
                                     <td hidden id="id">@rule.Id</td>
-                                    <td>@rule.Code</td>
                                     <td>@rule.Name</td>
                                     <td>
-                                        <div id="">
-                                            @* Any changes make to this line must also change at
-                                                bootstrap-tagsinput.js line 142*@
-                                            <select multiple id="select_@rule.Id" data-role="tagsinput">
-                                                @if (rule.Value.Count != 0)
+                                        @* Any changes make to this line must also change at
+                                            bootstrap-tagsinput.js line 142*@
+                                        <select multiple id="select_@rule.Id" data-role="tagsinput">
+                                            @if (rule.Value.Count != 0)
+                                            {
+                                                foreach (var value in rule.Value)
                                                 {
-                                                    foreach (var value in rule.Value)
-                                                    {
-                                                        <option selected="selected" value="@value.Value">@value.Value</option>
-                                                    }
+                                                    <option selected="selected" value="@value.Value">@value.Value</option>
                                                 }
-                                            </select>
-                                        </div>
+                                            }
+                                        </select> <br />
+                                        Check case sensitive
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <input type="checkbox" id="case_sensitive" />
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsCaseSensitive)
+                                        {
+                                            <input type="checkbox" id="case_sensitive" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="case_sensitive" />
+                                        }
                                     </td>
                                     <td>
                                         <input type="date" id="date">
+                                    </td>
+                                    <td>
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <input type="checkbox" id="is_use" />
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsUse)
+                                        {
+                                            <input type="checkbox" id="is_use" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="is_use" />
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -71,11 +95,41 @@
                                 {
                                     <tr>
                                         <td hidden id="id">@value.KeyId</td>
-                                        <td>@rule.Code</td>
                                         <td>@rule.Name</td>
-                                        <td><input type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" /></td>
+                                        @if (rule.Id == 16 || rule.Id == 17)
+                                        {
+                                            <td>
+                                                <div>
+                                                    Yes
+                                                    @if (value.Value.Contains("True"))
+                                                    {
+                                                        <input type="checkbox" id="value" checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" id="value"/>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="col-sm-1">
+                                                <input style="width:inherit !important" type="text" class="form-control" id="value" name="@value.Value" value="@value.Value" placeholder="@value.Value" />
+                                            </td>
+                                        }
                                         <td>
                                             <input type="date" id="date">
+                                        </td>
+                                        <td>
+                                            @if (value.IsUse)
+                                            {
+                                                <input type="checkbox" id="is_use" checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="is_use" />
+                                            }
                                         </td>
                                         @*<td>@value.ValueGroup</td>*@
                                     </tr>
@@ -90,378 +144,8 @@
     </div>
 }
 
-<div style="text-align:right"><button id="save" class="btn-lg btn-primary">Save Rule</button></div>
-<script>
-    $(document).ready(function () {
-        $('#save').on('click', function () {
-            var check = true;
-            var qlMin = 0;
-            var qlMax = 0;
-            var nOpMin = 0;
-            var nOpMax = 0;
-            var olMin = 0;
-            var olMax = 0;
-            var cOlMin = 0;
-            var cOlMax = 0;
-            var iOlMin = 0;
-            var iOlMax = 0;
-            var testList = []; 
-            var defaultActivateDate = $("#default_datetime").val();
-            if (defaultActivateDate != "") {
-                $('#table_Question tbody tr').each(function () {
-                    var Obj = {};
-                    Obj['KeyId'] = $(this).find('#id').text();
-                    var KeyId = parseInt(Obj['KeyId']);
-                    switch (KeyId) {
-                        case 1:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                qlMin = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 2:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                qlMax = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 3:
-                            var select3 = $('#select_3').val();
-                            for (var i = 0; i < select3.length; i++) {
-                                var Obj2 = {};
-                                Obj2['KeyId'] = Obj['KeyId'];
-                                Obj2['Value'] = select3[i];
-                                Obj2['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj2['ActivateDate'] == "") {
-                                    Obj2['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj2);
-                            }
-                            break;
-                        case 4:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                nOpMin = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 5:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                nOpMax = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                    }
-                    //if (Obj['KeyId'] == 3) {
-                    //    var select3 = $('#select_3').val();
-                    //    for (var i = 0; i < select3.length; i++) {
-                    //        var Obj2 = {};
-                    //        Obj2['KeyId'] = Obj['KeyId'];
-                    //        Obj2['Value'] = select3[i];
-                    //        Obj2['ActivateDate'] = $(this).find('#date').val();
-                    //        if (Obj2['ActivateDate'] == "") {
-                    //            Obj2['ActivateDate'] = defaultActivateDate;
-                    //        }
-                    //        testList.push(Obj2);
-                    //    }
+<div style="text-align:right">
+    <a href="@Url.Action("Index", "Rule")" class="btn-lg btn-outline-light border-dark text-custom mr-2">Cancel</a>
+    <button id="save" class="btn-lg btn-primary">Save</button>
+</div>
 
-                    //} else {
-                    //    var value = $(this).find('#value').val();
-                    //    var parseValue = parseInt(value);
-                    //    if (Number.isInteger(parseValue)) {
-                    //        Obj['Value'] = value;
-                    //        Obj['ActivateDate'] = $(this).find('#date').val();
-                    //        if (Obj['ActivateDate'] == "") {
-                    //            Obj['ActivateDate'] = defaultActivateDate;
-                    //        }
-                    //        testList.push(Obj);
-                    //    } else {
-                    //        swal('Min max must be integer!!!');
-                    //        $(this).find('#value').focus();
-                    //        check = false;
-                    //    }
-                    //}
-                });
-
-                $('#table_Option tbody tr').each(function () {
-                    var Obj = {};
-                    Obj['KeyId'] = $(this).find('#id').text();
-                    var KeyId = parseInt(Obj['KeyId']);
-                    switch (KeyId) {
-                        case 6:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                olMin = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 7:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                olMax = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 9:
-                            var select9 = $('#select_9').val();
-                            for (var i = 0; i < select9.length; i++) {
-                                var Obj2 = {};
-                                Obj2['KeyId'] = Obj['KeyId'];
-                                Obj2['Value'] = select9[i];
-                                Obj2['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj2['ActivateDate'] == "") {
-                                    Obj2['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj2);
-                            }
-                            break;
-                        case 8:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                    }
-                    //if (Obj['KeyId'] == 9) {
-                    //    var select3 = $('#select_9').val();
-                    //    for (var i = 0; i < select3.length; i++) {
-                    //        var Obj2 = {};
-                    //        Obj2['KeyId'] = Obj['KeyId'];
-                    //        Obj2['Value'] = select3[i];
-                    //        Obj2['ActivateDate'] = $(this).find('#date').val();
-                    //        if (Obj2['ActivateDate'] == "") {
-                    //            Obj2['ActivateDate'] = defaultActivateDate;
-                    //        }
-                    //        testList.push(Obj2);
-                    //    }
-
-                    //} else {
-                    //    var value = $(this).find('#value').val();
-                    //    var parseValue = parseInt(value);
-                    //    if (Number.isInteger(parseValue)) {
-                    //        Obj['Value'] = value;
-                    //        Obj['ActivateDate'] = $(this).find('#date').val();
-                    //        if (Obj['ActivateDate'] == "") {
-                    //            Obj['ActivateDate'] = defaultActivateDate;
-                    //        }
-                    //        testList.push(Obj);
-                    //    } else {
-                    //        swal('Min max must be integer!!!');
-                    //        check = false;
-                    //    }
-                    //}
-                });
-
-                $('#table_Correct_Option tbody tr').each(function () {
-                    var Obj = {};
-                    Obj['KeyId'] = $(this).find('#id').text();
-                    var KeyId = parseInt(Obj['KeyId']);
-                    switch (KeyId) {
-                        case 10:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                cOlMin = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 11:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                cOlMax = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 12:
-                            var select12 = $('#select_12').val();
-                            for (var i = 0; i < select12.length; i++) {
-                                var Obj2 = {};
-                                Obj2['KeyId'] = Obj['KeyId'];
-                                Obj2['Value'] = select12[i];
-                                Obj2['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj2['ActivateDate'] == "") {
-                                    Obj2['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj2);
-                            }
-                            break;
-                    }
-                });
-
-                $('#table_Incorrect_Option tbody tr').each(function () {
-                    var Obj = {};
-                    Obj['KeyId'] = $(this).find('#id').text();
-                    var KeyId = parseInt(Obj['KeyId']);
-                    switch (KeyId) {
-                        case 13:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                iOlMin = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 14:
-                            var value = $(this).find('#value').val();
-                            var parseValue = parseInt(value);
-                            if (Number.isInteger(parseValue)) {
-                                Obj['Value'] = value;
-                                Obj['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj['ActivateDate'] == "") {
-                                    Obj['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj);
-                                iOlMax = value;
-                            } else {
-                                swal('Min max must be integer!!!');
-                                $(this).find('#value').focus();
-                                check = false;
-                            }
-                            break;
-                        case 15:
-                            var select15 = $('#select_15').val();
-                            for (var i = 0; i < select15.length; i++) {
-                                var Obj2 = {};
-                                Obj2['KeyId'] = Obj['KeyId'];
-                                Obj2['Value'] = select15[i];
-                                Obj2['ActivateDate'] = $(this).find('#date').val();
-                                if (Obj2['ActivateDate'] == "") {
-                                    Obj2['ActivateDate'] = defaultActivateDate;
-                                }
-                                testList.push(Obj2);
-                            }
-                            break;
-                    }
-                });
-
-                if (qlMin > qlMax || nOpMin > nOpMax || olMin > olMax || cOlMin > cOlMax || iOlMin > iOlMax) {
-                    check = false;
-                    swal('Min must be smaller than Max');
-                }
-                if (check) {
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("UpdateAllRule","Rule")',
-                        data: JSON.stringify(testList),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
-                            if (response != null) {
-                                window.location.replace('@Url.Action("Index","Rule")');
-                            }
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                }
-            } else {
-                swal('Default Activation Date must be set !!!');
-            }
-        });
-    });
-</script>
