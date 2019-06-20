@@ -2203,6 +2203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\picture\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\Statistic\" />
   </ItemGroup>

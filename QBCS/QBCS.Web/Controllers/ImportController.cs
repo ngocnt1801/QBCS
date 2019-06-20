@@ -5,6 +5,7 @@ using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -33,6 +34,19 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
+            //foreach (var item in result.Questions)
+            //{
+            //    if (item.Image != null)
+            //    {
+            //        var bytes = Convert.FromBase64String(item.Image);
+            //        using (var imageFile = new FileStream(@"~/Content/picture/" + item.Code + ".jpg", FileMode.Create))
+            //        {
+            //            imageFile.Write(bytes, 0, bytes.Length);
+            //            imageFile.Flush();
+            //        }
+            //    }
+               
+            //}
             if (result.Status != (int)StatusEnum.Done)
             {
                 return View(result);

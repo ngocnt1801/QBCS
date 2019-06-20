@@ -33,6 +33,7 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\n", @"<cbr>");
                 //result = RemoveTag(result, @"<br>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
+                result = RemoveTag(result, @"#", "");
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                 
             }
