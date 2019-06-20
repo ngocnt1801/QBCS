@@ -641,6 +641,7 @@ namespace QBCS.Service.ViewModel
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
         {
+            
             get
             {
                 return this.valueField;

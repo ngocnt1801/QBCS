@@ -273,22 +273,23 @@ namespace QBCS.Service.Implement
 
             return result;
         }
-        static string category = null;
-        static string level = null;
-        static string learningOutcome = null;
+        
         public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate)
         {
-
+             string category = null;
+             string level = null;
+             string learningOutcome = null;
             bool check = false;
             StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
             StringBuilder sb = new StringBuilder();
             string checkHTML = "";
-           
+            int countLog = 0;
             HtmlDocument htmlDoc = new HtmlDocument();
             try
             {
+                StringProcess stringProcess = new StringProcess();
                 string extensionFile = Path.GetExtension(questionFile.FileName);
                 #region process xml
                 if (extensionFile.Equals(".xml"))
@@ -330,7 +331,9 @@ namespace QBCS.Service.Implement
                                     level = "";
                                     level = arrListStr[z];
                                 }
+                                
                             }
+                            continue;
                         }
                         #endregion
                         if (questionXml.question[i].questiontext != null)
@@ -340,17 +343,21 @@ namespace QBCS.Service.Implement
                             string file = "";
                            checkHTML = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
-                            if (questionXml.question[i].questiontext.file.Value != null)
+                            
+                            if (questionXml.question[i].questiontext.file != null)
                             {
-                                file = questionXml.question[i].questiontext.file.Value.ToString();
-                                question.Image = file;
-                                status = (int)Enum.StatusEnum.Success;
+                                if (questionXml.question[i].questiontext.file.Value != null)
+                                {
+                                    file = questionXml.question[i].questiontext.file.Value.ToString();
+                                    question.Image = file;
+                                    status = (int)Enum.StatusEnum.Success;
+                                }
+                                
                             } 
                             
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
-                            questionContent = WebUtility.HtmlDecode(tempParser);
-                            questionContent = StringProcess.RemoveHtmlTag(questionContent);
-                            //questionContent = StringProcess.RemoveTag(questionContent, @"\n", @"<cbr>");
+                            questionContent = WebUtility.HtmlDecode(tempParser);               
+                            questionContent = stringProcess.RemoveHtmlTag(questionContent);     
                             if (checkHTML.Equals("html"))
                             {
                                 question.QuestionContent = "[html]"+ questionContent;
@@ -379,7 +386,7 @@ namespace QBCS.Service.Implement
                                         
                                         tempParser = questionXml.question[i].answer[j].text;
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
-                                        rightAnswer = StringProcess.RemoveHtmlTag(rightAnswer);
+                                        rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
                                         htmlDoc.LoadHtml(rightAnswer);
                                         rightAnswer = htmlDoc.DocumentNode.InnerText;
                                         option = new OptionTemp();
@@ -403,7 +410,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
-                                        wrongAnswer = StringProcess.RemoveHtmlTag(wrongAnswer);
+                                        wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
                                         htmlDoc.LoadHtml(wrongAnswer);
                                         wrongAnswer = htmlDoc.DocumentNode.InnerText;
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
@@ -454,11 +461,11 @@ namespace QBCS.Service.Implement
                                 
                                
                             }
-                            int z = 0;
+                            
                             foreach (var item in listQuestionXml)
                             {
-                                z++;
-                                sb.AppendLine(z + "");
+                                countLog++;
+                                sb.AppendLine(countLog + "");
                                 sb.AppendLine("Question " + item.QuestionContent);
                                 sb.AppendLine("Code " + item.Code + "\n");
                                 sb.AppendLine();

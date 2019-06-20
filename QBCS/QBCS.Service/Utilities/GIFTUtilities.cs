@@ -16,19 +16,19 @@ namespace QBCS.Service.Utilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
         static OptionTemp optionModel = new OptionTemp();
-        static string category = "";
-        static string learningOutcome = "";
-        static string level = "";
+        string category = "";
+        string learningOutcome = "";
+        string level = "";
         public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader, bool checkCate)
         {
             List<QuestionTmpModel> list = new List<QuestionTmpModel>();
-
             string line = null;
             List<OptionTemp> options = new List<OptionTemp>();
             bool isStartQuestion = false;
             //string destination = "[html]";
             int countCode = 0;
             int inLine = 0;
+            StringProcess stringProcess = new StringProcess();
             while ((line = reader.ReadLine()) != null)
             {
                 string id = null;
@@ -46,7 +46,7 @@ namespace QBCS.Service.Utilities
                 bool isInLine = false;
                 bool isStart = false;
                 bool isEnd = false;
-                bool isComma = false;
+                //bool isComma = false;
                 bool isMultipleChoice = false;
                 if (!line.StartsWith("//"))
                 {
@@ -56,22 +56,24 @@ namespace QBCS.Service.Utilities
                     string resultTmp = htmlDoc.DocumentNode.InnerHtml;
                     result = WebUtility.HtmlDecode(resultTmp);
                     //result = StringProcess.RemoveTag(result, destination, "");
-                    result = StringProcess.RemoveTag(result, @"\=", @"=");
-                    result = StringProcess.RemoveTag(result, @"\{", @"{");
-                    result = StringProcess.RemoveTag(result, @"\}", @"}");
-                    result = StringProcess.RemoveTag(result, @"\#", @"#");
-                    result = StringProcess.RemoveTag(result, @"\~", @"~");
-                    result = StringProcess.RemoveTag(result, @"\:", @":");
-                    result = StringProcess.RemoveTag(result, @"\n", @"<cbr>"); //<crb> replace for \n
-                    result = StringProcess.RemoveTag(result, @"\:", @":");
-                    result = StringProcess.RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
-                    result = StringProcess.RemoveTag(result, @"#" + @"<span lang=" + '"' + "EN" + '"' + ">", "");
-                    result = StringProcess.RemoveTag(result, @"#", "");
+
+                    //result = StringProcess.RemoveTag(result, @"\=", @"=");
+                    //result = StringProcess.RemoveTag(result, @"\{", @"{");
+                    //result = StringProcess.RemoveTag(result, @"\}", @"}");
+                    //result = StringProcess.RemoveTag(result, @"\#", @"#");
+                    //result = StringProcess.RemoveTag(result, @"\~", @"~");
+                    //result = StringProcess.RemoveTag(result, @"\:", @":");
+                    //result = StringProcess.RemoveTag(result, @"\n", @"<cbr>"); //<crb> replace for \n
+                    //result = StringProcess.RemoveTag(result, @"\:", @":");
+                    //result = StringProcess.RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                    //result = StringProcess.RemoveTag(result, @"#" + @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                    //result = StringProcess.RemoveTag(result, @"#", "");
+                    result = stringProcess.RemoveHtmlTag(result);
                     for (int i = 0; i < result.Length; i++)
                     {
                         char let = result[i];
                         #region start count to track the position
-                        if (let == '$' && !isStartQuestion && checkCate == true)
+                        if (let == '$' && !isStartQuestion)
                         {
                             category = null;
                             level = null;
@@ -79,7 +81,7 @@ namespace QBCS.Service.Utilities
                             countStartCate++;
                             continue;
                         }
-                        if (let == '/' && !isStartQuestion && checkCate == true)
+                        if (let == '/' && !isStartQuestion)
                         {
 
                             isStartCate = true;
@@ -97,7 +99,7 @@ namespace QBCS.Service.Utilities
                         {
                             char tab = (char)9;
 
-                            if (let == '=' || let == '~' || let == tab || isComma == true)
+                            if (let == '=' || let == '~' || let == tab)
                             {
                                 inLine = 2; //{ is end question
                                 countCode = 0;
@@ -131,11 +133,11 @@ namespace QBCS.Service.Utilities
                             isStartQuestion = false;
                             continue;
                         }
-                        if (let == '?')
-                        {
-                            isComma = true;
+                        //if (let == '?')
+                        //{
+                        //    isComma = true;
 
-                        }
+                        //}
                         if (let == '{' && !isBlock)
                         {
                             //countCode = 0;
@@ -148,7 +150,7 @@ namespace QBCS.Service.Utilities
                         #endregion
 
                         #region add character to variables
-                        if (countStartCate == 3 && isStartCate && checkCate == true)
+                        if (countStartCate == 3 && isStartCate)
                         {
 
                             if (countCate == 1)
@@ -169,7 +171,7 @@ namespace QBCS.Service.Utilities
 
 
                         }
-                        if (countCode < 3 && isStart)
+                        if (countCode <= 3 && countStartCate == 0 && isStart)
                         {
 
                             id += let;
@@ -252,9 +254,23 @@ namespace QBCS.Service.Utilities
                 }
                 if (category != null && learningOutcome != null && level != null && checkCate == true)
                 {
-                    quesModel.Category = category;
-                    quesModel.LearningOutcome = learningOutcome;
-                    quesModel.Level = level;
+                    if (checkCate == false)
+                    {
+                        category = null;
+                        learningOutcome = null;
+                        level = null;
+                        countStartCate = 0;
+                        isStartCate = false;
+                    }
+                    else
+                    {
+                        quesModel.Category = category;
+                        quesModel.LearningOutcome = learningOutcome;
+                        quesModel.Level = level;
+                        countStartCate = 0;
+                        isStartCate = false;
+                    }
+                   
 
                 }
                 if (id != null)
