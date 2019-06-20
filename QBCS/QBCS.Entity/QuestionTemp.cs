@@ -42,6 +42,12 @@ namespace QBCS.Entity
         [StringLength(200)]
         public string LevelName { get; set; }
 
+        [StringLength(200)]
+        public string LearningOutcome { get; set; }
+
+        [StringLength(2147483647)]
+        public string Image { get; set; }
+
         public string Message { get; set; }
 
         public virtual Import Import { get; set; }

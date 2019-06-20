@@ -26,6 +26,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
@@ -41,6 +43,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -60,6 +64,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -73,8 +79,10 @@ function split() {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;p&gt;").join("");  
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -93,9 +101,10 @@ function split() {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -111,6 +120,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -127,9 +138,10 @@ function split() {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");            
                         data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
@@ -145,6 +157,8 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");

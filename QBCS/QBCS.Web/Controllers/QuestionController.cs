@@ -113,14 +113,14 @@ namespace QBCS.Web.Controllers
 
         [HttpPost]
         [Log(Action = "Import", TargetName = "Question")]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId)
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, bool checkCate = false)
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId);
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate);
             }
 
             //notify 

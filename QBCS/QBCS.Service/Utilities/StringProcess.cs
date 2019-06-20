@@ -6,32 +6,35 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.Utilities
 {
-    public static class StringProcess
+    public class StringProcess
     {
-        public static string RemoveTag (string source, string oldString, string newString)
+        public string RemoveTag (string source, string oldString, string newString)
         {
-            string result = "";
-            if (source != "")
+            string result = null;
+            if (source != null)
             {
                 result = source.Replace(oldString, newString);
             }
             return result;
         }
-        public static string RemoveHtmlTag(string source)
+        public string RemoveHtmlTag(string source)
         {
             string result = null;
+           
             if (source != null)
             {
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
-                result = RemoveTag(source, @"\{", @"{");
-                result = RemoveTag(source, @"\}", @"}");
-                result = RemoveTag(source, @"\#", @"#");
-                result = RemoveTag(source, @"\~", @"~");
-                result = RemoveTag(source, @"\:", @":");
-                result = RemoveTag(source, @"\n", @"<cbr>");
-                result = RemoveTag(source, @"\:", @":");
-                result = RemoveTag(source, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                result = RemoveTag(result, @"\{", @"{");
+                result = RemoveTag(result, @"\}", @"}");
+                result = RemoveTag(result, @"\#", @"#");
+                result = RemoveTag(result, @"\~", @"~");
+                result = RemoveTag(result, @"\:", @":");
+                result = RemoveTag(result, @"\n", @"<cbr>");
+                //result = RemoveTag(result, @"<br>", @"<cbr>");
+                result = RemoveTag(result, @"\:", @":");
+                result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                
             }
             
             return result;
