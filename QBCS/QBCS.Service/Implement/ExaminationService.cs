@@ -73,6 +73,9 @@ namespace QBCS.Service.Implement
             exam.EasyQuestion = questionEasy;
             exam.MediumQuestion = questionMedium;
             exam.HardQuestion = questionHard;
+            int totalEasyQuestionInTopicCategory = 0;
+            int totalMediumQuestionInTopicCategory = 0;
+            int totalHardQuestionInTopicCategory = 0;
             List<TopicInExamination> topics = new List<TopicInExamination>();
             foreach (string topic in exam.Topic)
             {
@@ -86,18 +89,28 @@ namespace QBCS.Service.Implement
                     isLearingOutcome = true;
                     int idOfLevel = levelService.GetIdByName(EASY);
                     totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalEasyQuestionInTopicCategory += totalEasyQuestionInTopic;
+
                     idOfLevel = levelService.GetIdByName(MEDIUM);
                     totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalMediumQuestionInTopicCategory += totalMediumQuestionInTopic;
+
                     idOfLevel = levelService.GetIdByName(HARD);
                     totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
                 } else
                 {
                     int idOfLevel = levelService.GetIdByName(EASY);
                     totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalEasyQuestionInTopicCategory += totalEasyQuestionInTopic;
+
                     idOfLevel = levelService.GetIdByName(MEDIUM);
                     totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalMediumQuestionInTopicCategory += totalMediumQuestionInTopic;
+
                     idOfLevel = levelService.GetIdByName(HARD);
                     totalHardQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
                 }
                 TopicInExamination topicInExam = new TopicInExamination()
                 {
@@ -109,6 +122,31 @@ namespace QBCS.Service.Implement
                 };
                 topics.Add(topicInExam);
             }
+            if(questionEasy > totalEasyQuestionInTopicCategory)
+            {
+                questionEasy = totalEasyQuestionInTopicCategory;
+                exam.EasyQuestionGenerrate = totalEasyQuestionInTopicCategory;
+            } else
+            {
+                exam.EasyQuestionGenerrate = questionEasy;
+            }
+            if(questionHard > totalHardQuestionInTopicCategory)
+            {
+                questionHard = totalHardQuestionInTopicCategory;
+                exam.HardQuestionGenerrate = totalHardQuestionInTopicCategory;
+            } else
+            {
+                exam.HardQuestionGenerrate = questionHard;
+            }
+            if(questionMedium > totalMediumQuestionInTopicCategory)
+            {
+                questionMedium = totalMediumQuestionInTopicCategory;
+                exam.MediumQuestionGenerrate = totalMediumQuestionInTopicCategory;
+            }else
+            {
+                exam.MediumQuestionGenerrate = questionMedium;
+            }
+            exam.TotalQuestionGenerrate = questionEasy + questionHard + questionMedium;
             TopicInExamination firstTopic = topics.FirstOrDefault();
 
             if (firstTopic != null)
