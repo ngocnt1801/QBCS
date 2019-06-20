@@ -31,6 +31,7 @@
                             }
                             @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
                                 || Model.FirstOrDefault().Status == StatusEnum.Editable
+                                || Model.FirstOrDefault().Status == StatusEnum.Delete
                                 || Model.FirstOrDefault().Status == StatusEnum.Invalid)
                             {
                                 <th>Action</th>
@@ -121,10 +122,13 @@
                                         <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
                                     </td>
                                 }
-                                else if (item.Status == StatusEnum.Editable || item.Status == StatusEnum.Invalid)
+                                else if (item.Status == StatusEnum.Editable
+                                    || item.Status == StatusEnum.Delete
+                                    || item.Status == StatusEnum.Invalid)
                                 {
                                     <td>
-                                        <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary col-md-12">Edit</a>
+                                        <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2">Edit</a>
+                                        <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-primary mb-2 ">Skip</a>
                                     </td>
                                 }
                             </tr>

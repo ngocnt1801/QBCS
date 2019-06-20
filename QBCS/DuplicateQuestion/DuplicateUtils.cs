@@ -588,15 +588,16 @@ namespace DuplicateQuestion
                     {
                         id = (int)reader["id"];
                     }
+                }
 
-                    if (id == 0)
-                    {
-                        id = AddLearningOutcome(name, courseId);
-                    }
-                    if (id != 0)
-                    {
-                        return id;
-                    }
+
+                if (id == 0)
+                {
+                    id = AddLearningOutcome(name, courseId);
+                }
+                if (id != 0)
+                {
+                    return id;
                 }
             }
             return null;
