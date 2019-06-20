@@ -101,6 +101,7 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+        [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
