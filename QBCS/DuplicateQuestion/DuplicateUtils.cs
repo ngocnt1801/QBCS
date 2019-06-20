@@ -84,7 +84,7 @@ namespace DuplicateQuestion
                                 {
                                     AssignDuplicated(question, item, StatusEnum.Delete);
                                     isUpdate = true;
-                                } 
+                                }
                                 else
                                 {
                                     AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
@@ -93,7 +93,7 @@ namespace DuplicateQuestion
                                 }// end if check wrong option
 
                                 #endregion
-                            } 
+                            }
                             else
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
@@ -567,35 +567,41 @@ namespace DuplicateQuestion
 
         private static int? GetLearningOutcome(string name, int courseId)
         {
-            int? id = 0;
-            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            if (name != null && !String.IsNullOrEmpty(name.Trim()))
             {
-                connection.Open();
-
-                SqlCommand command = new SqlCommand(
-                    "SELECT Id " +
-                    "FROM LearningOutcome " +
-                    "WHERE Name = @name AND CourseId=@courseId",
-                    connection
-                    );
-
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@courseId", courseId);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                int id = 0;
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
                 {
-                    id = (int)reader["id"];
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(
+                        "SELECT Id " +
+                        "FROM LearningOutcome " +
+                        "WHERE Name = @name AND CourseId=@courseId",
+                        connection
+                        );
+
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@courseId", courseId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        id = (int)reader["id"];
+                    }
+
+                    if (id == 0)
+                    {
+                        id = AddLearningOutcome(name, courseId);
+                    }
+                    if (id != 0)
+                    {
+                        return id;
+                    }
                 }
             }
-
-            if (id == 0)
-            {
-                id = AddLearningOutcome(name, courseId);
-                //id = null;
-            }
-
-            return id;
+            return null;
         }
+
 
         private static int AddCategory(string name, int courseId)
         {
@@ -672,10 +678,12 @@ namespace DuplicateQuestion
                     }
                 }
 
-                int qIndex = code.IndexOf('Q');
+                int qIndex = code.LastIndexOf('Q');
                 if (qIndex >= 0)
                 {
-                    return Int32.Parse(code.Split('Q')[1]);
+                    int result = 0;
+                    Int32.TryParse(code.Split('Q')[1], out result);
+                    return result;
                 }
             }
             return 0;
