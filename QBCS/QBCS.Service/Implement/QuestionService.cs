@@ -550,7 +550,7 @@ namespace QBCS.Service.Implement
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
-            return (int)question.Frequency;
+            return question != null ? (int)question.Frequency : 0;
         }
 
         public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)

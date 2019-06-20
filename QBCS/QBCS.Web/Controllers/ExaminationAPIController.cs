@@ -85,178 +85,181 @@ namespace QBCS.Web.Controllers
                     xmlWriter.WriteStartElement("quiz");
                     foreach (var part in partOfExams)
                     {
-                        xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
-                        xmlWriter.WriteStartElement(XML_QUESTION_TAG);
-                        xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
-                        xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                        string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
-                        xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
-                        xmlWriter.WriteEndElement();
-                        xmlWriter.WriteEndElement();
-
-                        for (int i = 0; i < part.Question.Count; i++)
+                        if (part.Question.Count != 0)
                         {
-                            QuestionInExamViewModel question = part.Question[i];
-                            if (i != 0)
-                            {
-                                if (question.LevelId != part.Question[i - 1].LevelId)
-                                {
-                                    xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
-                                    xmlWriter.WriteStartElement(XML_QUESTION_TAG);
-                                    xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
-                                    xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                                    switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, part.Topic.Name, question.Level.Name);
-                                    xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
-                                    xmlWriter.WriteEndElement();
-                                    xmlWriter.WriteEndElement();
-                                }
-                            }
-                            string questionComment = String.Format(XML_COMMENT_QUESTION, question.Id);
-                            xmlWriter.WriteComment(questionComment);
+                            xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
                             xmlWriter.WriteStartElement(XML_QUESTION_TAG);
+                            xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
+                            xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
+                            string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
+                            xmlWriter.WriteEndElement();
+                            xmlWriter.WriteEndElement();
 
-                            xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_MULTICHOICE_ATTR_VALUE);
-                            //name tag
-                            xmlWriter.WriteStartElement(XML_NAME_TAG);
-                            xmlWriter.WriteElementString(XML_TEXT_TAG, question.QuestionCode);
-                            xmlWriter.WriteEndElement();
-                            //questiontext tag
-                            xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
-                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                            for (int i = 0; i < part.Question.Count; i++)
                             {
-                                xmlWriter.WriteCData(question.QuestionContent);
-                            }
-                            else
-                            {
-                                xmlWriter.WriteString(question.QuestionContent);
-                            }
-                            xmlWriter.WriteEndElement();
-                            if (question.Image == null)
-                            {
-                                xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
-                                xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
-                                xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
-                                xmlWriter.WriteString("bca");
-                                xmlWriter.WriteEndElement();
-                            }
-                            else
-                            {
-                                xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
-                                xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
-                                xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
-                                xmlWriter.WriteString("css");
-                                xmlWriter.WriteEndElement();
-                            }
-                            
-                            xmlWriter.WriteEndElement();
-                            //generalfeedback tag
-                            xmlWriter.WriteStartElement(XML_GENRALFEEDBACK_TAG);
-                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                            //defaultgrade tag
-                            xmlWriter.WriteStartElement(XML_DEFAULTGRADE_TAG);
-                            xmlWriter.WriteString(String.Format("{0:0.0000000}", DEFAULTGRADE_VALUE.ToString()));
-                            xmlWriter.WriteEndElement();
-                            //penalty tag
-                            xmlWriter.WriteStartElement(XML_PENALTY_TAG);
-                            xmlWriter.WriteString(PENALTY_VALUE.ToString());
-                            xmlWriter.WriteEndElement();
-                            //hidden tag
-                            xmlWriter.WriteStartElement(XML_HIDDEN_TAG);
-                            xmlWriter.WriteString(HIDDEN_VALUE.ToString());
-                            xmlWriter.WriteEndElement();
-                            //single tag
-                            xmlWriter.WriteStartElement(XML_SINGLE_TAG);
-                            xmlWriter.WriteString(SINGLE_VALUE.ToString());
-                            xmlWriter.WriteEndElement();
-                            //shuffleanswers tag
-                            xmlWriter.WriteStartElement(XML_SHUFFLEANSWERS_TAG);
-                            xmlWriter.WriteString(SHUFFLEANSWERS_VALUE.ToString());
-                            xmlWriter.WriteEndElement();
-                            //answernumbering tag
-                            xmlWriter.WriteStartElement(XML_ANSWERNUMBERING_TAG);
-                            xmlWriter.WriteString(ANSWERNUMBERING_VALUE.ToString());
-                            xmlWriter.WriteEndElement();
-                            //correctfeedback tag
-                            xmlWriter.WriteStartElement(XML_CORRECTFEEDBACK_TAG);
-                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                            //partiallycorrectfeedback tag
-                            xmlWriter.WriteStartElement(XML_PARTIALLYCORRECTFEEDBACK_TAG);
-                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                            //incorrectfeedback tag
-                            xmlWriter.WriteStartElement(XML_INCORRECTFEEDBACK_TAG);
-                            xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                            // answer tag
-                            foreach (var option in question.Options)
-                            {
-                                if (option.IsCorrect)
+                                QuestionInExamViewModel question = part.Question[i];
+                                if (i != 0)
                                 {
-                                    xmlWriter.WriteStartElement(XML_ANSWER_TAG);
-                                    xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
-                                    xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                                    //text atg
-                                    xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                                    if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                    if (question.LevelId != part.Question[i - 1].LevelId)
                                     {
-                                        xmlWriter.WriteCData(option.OptionContent);
+                                        xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
+                                        xmlWriter.WriteStartElement(XML_QUESTION_TAG);
+                                        xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
+                                        xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
+                                        switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, part.Topic.Name, question.Level.Name);
+                                        xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
+                                        xmlWriter.WriteEndElement();
+                                        xmlWriter.WriteEndElement();
                                     }
-                                    else
-                                    {
-                                        xmlWriter.WriteString(option.OptionContent);
-                                    }
-                                    xmlWriter.WriteEndElement();
-                                    //feedback tag
-                                    xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
-                                    xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                                    xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                                    xmlWriter.WriteEndElement();
-                                    xmlWriter.WriteEndElement();
+                                }
+                                string questionComment = String.Format(XML_COMMENT_QUESTION, question.Id);
+                                xmlWriter.WriteComment(questionComment);
+                                xmlWriter.WriteStartElement(XML_QUESTION_TAG);
 
+                                xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_MULTICHOICE_ATTR_VALUE);
+                                //name tag
+                                xmlWriter.WriteStartElement(XML_NAME_TAG);
+                                xmlWriter.WriteElementString(XML_TEXT_TAG, question.QuestionCode);
+                                xmlWriter.WriteEndElement();
+                                //questiontext tag
+                                xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
+                                xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                {
+                                    xmlWriter.WriteCData(question.QuestionContent);
+                                }
+                                else
+                                {
+                                    xmlWriter.WriteString(question.QuestionContent);
+                                }
+                                xmlWriter.WriteEndElement();
+                                if (question.Image == null)
+                                {
+                                    xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
+                                    xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                    xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                    xmlWriter.WriteString("bca");
                                     xmlWriter.WriteEndElement();
                                 }
                                 else
                                 {
-                                    xmlWriter.WriteStartElement(XML_ANSWER_TAG);
-                                    xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_INCORRECT_FRACTION_ATTR_VALUE.ToString());
-                                    xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                                    //text atg
-                                    xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                                    if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                    xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
+                                    xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                    xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                    xmlWriter.WriteString("css");
+                                    xmlWriter.WriteEndElement();
+                                }
+
+                                xmlWriter.WriteEndElement();
+                                //generalfeedback tag
+                                xmlWriter.WriteStartElement(XML_GENRALFEEDBACK_TAG);
+                                xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                                //defaultgrade tag
+                                xmlWriter.WriteStartElement(XML_DEFAULTGRADE_TAG);
+                                xmlWriter.WriteString(String.Format("{0:0.0000000}", DEFAULTGRADE_VALUE.ToString()));
+                                xmlWriter.WriteEndElement();
+                                //penalty tag
+                                xmlWriter.WriteStartElement(XML_PENALTY_TAG);
+                                xmlWriter.WriteString(PENALTY_VALUE.ToString());
+                                xmlWriter.WriteEndElement();
+                                //hidden tag
+                                xmlWriter.WriteStartElement(XML_HIDDEN_TAG);
+                                xmlWriter.WriteString(HIDDEN_VALUE.ToString());
+                                xmlWriter.WriteEndElement();
+                                //single tag
+                                xmlWriter.WriteStartElement(XML_SINGLE_TAG);
+                                xmlWriter.WriteString(SINGLE_VALUE.ToString());
+                                xmlWriter.WriteEndElement();
+                                //shuffleanswers tag
+                                xmlWriter.WriteStartElement(XML_SHUFFLEANSWERS_TAG);
+                                xmlWriter.WriteString(SHUFFLEANSWERS_VALUE.ToString());
+                                xmlWriter.WriteEndElement();
+                                //answernumbering tag
+                                xmlWriter.WriteStartElement(XML_ANSWERNUMBERING_TAG);
+                                xmlWriter.WriteString(ANSWERNUMBERING_VALUE.ToString());
+                                xmlWriter.WriteEndElement();
+                                //correctfeedback tag
+                                xmlWriter.WriteStartElement(XML_CORRECTFEEDBACK_TAG);
+                                xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                                //partiallycorrectfeedback tag
+                                xmlWriter.WriteStartElement(XML_PARTIALLYCORRECTFEEDBACK_TAG);
+                                xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                                //incorrectfeedback tag
+                                xmlWriter.WriteStartElement(XML_INCORRECTFEEDBACK_TAG);
+                                xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                                // answer tag
+                                foreach (var option in question.Options)
+                                {
+                                    if (option.IsCorrect)
                                     {
-                                        xmlWriter.WriteCData(option.OptionContent);
+                                        xmlWriter.WriteStartElement(XML_ANSWER_TAG);
+                                        xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
+                                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        //text atg
+                                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                        if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                        {
+                                            xmlWriter.WriteCData(option.OptionContent);
+                                        }
+                                        else
+                                        {
+                                            xmlWriter.WriteString(option.OptionContent);
+                                        }
+                                        xmlWriter.WriteEndElement();
+                                        //feedback tag
+                                        xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
+                                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                        xmlWriter.WriteEndElement();
+                                        xmlWriter.WriteEndElement();
+
+                                        xmlWriter.WriteEndElement();
                                     }
                                     else
                                     {
-                                        xmlWriter.WriteString(option.OptionContent);
+                                        xmlWriter.WriteStartElement(XML_ANSWER_TAG);
+                                        xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_INCORRECT_FRACTION_ATTR_VALUE.ToString());
+                                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        //text atg
+                                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                        if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                        {
+                                            xmlWriter.WriteCData(option.OptionContent);
+                                        }
+                                        else
+                                        {
+                                            xmlWriter.WriteString(option.OptionContent);
+                                        }
+                                        xmlWriter.WriteEndElement();
+                                        //feedback tag
+                                        xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
+                                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                        xmlWriter.WriteEndElement();
+                                        xmlWriter.WriteEndElement();
+
+                                        xmlWriter.WriteEndElement();
                                     }
-                                    xmlWriter.WriteEndElement();
-                                    //feedback tag
-                                    xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
-                                    xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                                    xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                                    xmlWriter.WriteEndElement();
-                                    xmlWriter.WriteEndElement();
-
-                                    xmlWriter.WriteEndElement();
                                 }
-                            }
 
-                            xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                            }
                         }
                     }
                     xmlWriter.WriteEndElement();
@@ -280,46 +283,49 @@ namespace QBCS.Web.Controllers
                     StreamWriter writer = new StreamWriter(stream);
                     foreach (var part in partOfExams)
                     {
-                        string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
-                        writer.WriteLine(switchCategoryLine);
-                        string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
-                        writer.WriteLine(categoryLine);
-                        writer.WriteLine();
-                        writer.WriteLine();
-                        for (int i = 0; i < part.Question.Count; i++)
+                        if (part.Question.Count != 0)
                         {
-                            QuestionInExamViewModel question = part.Question[i];
-                            if (i != 0)
-                            {
-                                if (question.LevelId != part.Question[i - 1].LevelId)
-                                {
-                                    switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, question.Level.Name);
-                                    writer.WriteLine(switchCategoryLine);
-                                    categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.Topic.Name, question.Level.Name);
-                                    writer.WriteLine(categoryLine);
-                                    writer.WriteLine();
-                                    writer.WriteLine();
-                                }
-                            }
-                            string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
-                            writer.WriteLine(questionComment);
-                            string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, question.QuestionContent) + "{";
-                            writer.WriteLine(HttpUtility.HtmlEncode(questionTitle));
-                            foreach (var option in question.Options)
-                            {
-                                if (option.IsCorrect == true)
-                                {
-                                    string optionString = String.Format(OPTION_TRUE, option.OptionContent);
-                                    writer.WriteLine(HttpUtility.HtmlEncode(optionString));
-                                }
-                                else
-                                {
-                                    string optionString = String.Format(OPTION_FALSE, option.OptionContent);
-                                    writer.WriteLine(HttpUtility.HtmlEncode(optionString));
-                                }
-                            }
-                            writer.WriteLine("}");
+                            string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            writer.WriteLine(switchCategoryLine);
+                            string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            writer.WriteLine(categoryLine);
                             writer.WriteLine();
+                            writer.WriteLine();
+                            for (int i = 0; i < part.Question.Count; i++)
+                            {
+                                QuestionInExamViewModel question = part.Question[i];
+                                if (i != 0)
+                                {
+                                    if (question.LevelId != part.Question[i - 1].LevelId)
+                                    {
+                                        switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, question.Level.Name);
+                                        writer.WriteLine(switchCategoryLine);
+                                        categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.Topic.Name, question.Level.Name);
+                                        writer.WriteLine(categoryLine);
+                                        writer.WriteLine();
+                                        writer.WriteLine();
+                                    }
+                                }
+                                string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
+                                writer.WriteLine(questionComment);
+                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, question.QuestionContent) + "{";
+                                writer.WriteLine(HttpUtility.HtmlEncode(questionTitle));
+                                foreach (var option in question.Options)
+                                {
+                                    if (option.IsCorrect == true)
+                                    {
+                                        string optionString = String.Format(OPTION_TRUE, option.OptionContent);
+                                        writer.WriteLine(HttpUtility.HtmlEncode(optionString));
+                                    }
+                                    else
+                                    {
+                                        string optionString = String.Format(OPTION_FALSE, option.OptionContent);
+                                        writer.WriteLine(HttpUtility.HtmlEncode(optionString));
+                                    }
+                                }
+                                writer.WriteLine("}");
+                                writer.WriteLine();
+                            }
                         }
                     }
                     writer.Flush();
