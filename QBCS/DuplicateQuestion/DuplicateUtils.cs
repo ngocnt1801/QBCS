@@ -311,7 +311,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.Topic, q.LevelName " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -336,9 +336,9 @@ namespace DuplicateQuestion
                         {
                             question.Category = (string)reader["Category"];
                         }
-                        if (reader["Topic"] != DBNull.Value)
+                        if (reader["LearningOutcome"] != DBNull.Value)
                         {
-                            question.LearningOutcome = (string)reader["Topic"];
+                            question.LearningOutcome = (string)reader["LearningOutcome"];
                         }
                         if (reader["LevelName"] != DBNull.Value)
                         {
