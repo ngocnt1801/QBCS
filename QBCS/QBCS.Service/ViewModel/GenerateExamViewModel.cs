@@ -26,6 +26,10 @@ namespace QBCS.Service.ViewModel
         public int EasyQuestion { get; set; }
         public int MediumQuestion { get; set; }
         public int HardQuestion { get; set; }
+        public int EasyQuestionGenerrate { get; set; }
+        public int MediumQuestionGenerrate { get; set; }
+        public int HardQuestionGenerrate { get; set; }
+        public int TotalQuestionGenerrate { get; set; }
         public int CategoryId { get; set; }
         public int OrdinaryGrade { get; set; }
         public int GoodGrade { get; set; }

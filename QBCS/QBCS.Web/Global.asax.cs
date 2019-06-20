@@ -36,8 +36,8 @@ namespace QBCS.Web
             if (exception != null)
             {
                 Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
-                //HttpContext.Current.ClearError();
-                //Response.Redirect("/QBCS.Web/Error", false);
+                HttpContext.Current.ClearError();
+                Response.Redirect("/QBCS.Web/Error", false);
             }
         }
     }

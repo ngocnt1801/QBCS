@@ -89,14 +89,14 @@ namespace QBCS.Web.Controllers
                         xmlWriter.WriteStartElement(XML_QUESTION_TAG);
                         xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
                         xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                        string switchCategory = String.Format(XML_SWITCH_CATEGORY, "XML", part.Topic.Name, part.Question.First().Level.Name);
+                        string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
                         xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
                         xmlWriter.WriteEndElement();
                         xmlWriter.WriteEndElement();
 
                         for (int i = 0; i < part.Question.Count; i++)
                         {
-                            QuestionViewModel question = part.Question[i];
+                            QuestionInExamViewModel question = part.Question[i];
                             if (i != 0)
                             {
                                 if (question.LevelId != part.Question[i - 1].LevelId)
@@ -105,7 +105,7 @@ namespace QBCS.Web.Controllers
                                     xmlWriter.WriteStartElement(XML_QUESTION_TAG);
                                     xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
                                     xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                                    switchCategory = String.Format(XML_SWITCH_CATEGORY, "XML", part.Topic.Name, question.Level.Name);
+                                    switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, part.Topic.Name, question.Level.Name);
                                     xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
                                     xmlWriter.WriteEndElement();
                                     xmlWriter.WriteEndElement();
@@ -280,22 +280,22 @@ namespace QBCS.Web.Controllers
                     StreamWriter writer = new StreamWriter(stream);
                     foreach (var part in partOfExams)
                     {
-                        string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, "XML", part.Topic.Name, part.Question.First().Level.Name);
+                        string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
                         writer.WriteLine(switchCategoryLine);
-                        string categoryLine = String.Format(CATEGORY_LINE, "XML", part.Topic.Name, part.Question.First().Level.Name);
+                        string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
                         writer.WriteLine(categoryLine);
                         writer.WriteLine();
                         writer.WriteLine();
                         for (int i = 0; i < part.Question.Count; i++)
                         {
-                            QuestionViewModel question = part.Question[i];
+                            QuestionInExamViewModel question = part.Question[i];
                             if (i != 0)
                             {
                                 if (question.LevelId != part.Question[i - 1].LevelId)
                                 {
-                                    switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, "XML", part.Topic.Name, question.Level.Name);
+                                    switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, question.Level.Name);
                                     writer.WriteLine(switchCategoryLine);
-                                    categoryLine = String.Format(CATEGORY_LINE, "XML", part.Topic.Name, question.Level.Name);
+                                    categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.Topic.Name, question.Level.Name);
                                     writer.WriteLine(categoryLine);
                                     writer.WriteLine();
                                     writer.WriteLine();
@@ -331,62 +331,6 @@ namespace QBCS.Web.Controllers
                     httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     writer.Close();
                 }
-
-
-                //string data = "";
-                //foreach (var part in partOfExams)
-                //{
-                //    string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, "XML", part.Topic.Name, part.Question.First().Level.Name);
-                //    data += switchCategoryLine + Environment.NewLine;
-                //    string categoryLine = String.Format(CATEGORY_LINE, "XML", part.Topic.Name, part.Question.First().Level.Name);
-                //    data += categoryLine + Environment.NewLine;
-                //    data += Environment.NewLine;
-                //    data += Environment.NewLine;
-                //    for (int i = 0; i < part.Question.Count; i++)
-                //    {
-                //        QuestionViewModel question = part.Question[i];
-                //        if (i != 0)
-                //        {
-                //            if (question.LevelId != part.Question[i - 1].LevelId)
-                //            {
-                //                switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, "XML", part.Topic.Name, question.Level.Name);
-                //                data += switchCategoryLine + Environment.NewLine;
-                //                categoryLine = String.Format(CATEGORY_LINE, "XML", part.Topic.Name, question.Level.Name);
-                //                data += switchCategoryLine + Environment.NewLine;
-                //                data += Environment.NewLine;
-                //                data += Environment.NewLine;
-                //            }
-                //        }
-                //        string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
-                //        data += questionComment + Environment.NewLine;
-                //        string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, question.QuestionContent) + "{";
-                //        data += questionTitle + Environment.NewLine;
-                //        foreach (var option in question.Options)
-                //        {
-                //            if (option.IsCorrect == true)
-                //            {
-                //                string optionString = String.Format(OPTION_TRUE, option.OptionContent);
-                //                data += optionString + Environment.NewLine;
-                //            }
-                //            else
-                //            {
-                //                string optionString = String.Format(OPTION_FALSE, option.OptionContent);
-                //                data += optionString + Environment.NewLine;
-                //            }
-                //        }
-                //        data += "}" + Environment.NewLine;
-                //        data += Environment.NewLine;
-                //    }
-                //}
-                //var byteArray = Encoding.ASCII.GetBytes(data);
-                //var stream = new MemoryStream(byteArray);
-
-                //httpResponseMessage.StatusCode = HttpStatusCode.OK;
-                //httpResponseMessage.Content = new StreamContent(stream);
-                //httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                //httpResponseMessage.Content.Headers.ContentDisposition.FileName = "ExaminationExport.txt";
-                //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-
             }
             return httpResponseMessage;
         }

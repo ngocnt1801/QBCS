@@ -17,9 +17,11 @@ namespace QBCS.Service.Implement
         private const double ORDINARY_STUDENT_EASY_PERCENT = 0.8;
         private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.5;
         private const double ORDINARY_STUDENT_HARD_PERCENT = 0.1;
+
         private const double GOOD_STUDENT_EASY_PERCENT = 0.9;
-        private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.6;
+        private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.7;
         private const double GOOD_STUDENT_HARD_PERCENT = 0.3;
+
         private const double EXCELLENT_STUDENT_EASY_PERCENT = 0.9;
         private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 0.8;
         private const double EXCELLENT_STUDENT_HARD_PERCENT = 0.6;
@@ -71,22 +73,80 @@ namespace QBCS.Service.Implement
             exam.EasyQuestion = questionEasy;
             exam.MediumQuestion = questionMedium;
             exam.HardQuestion = questionHard;
+            int totalEasyQuestionInTopicCategory = 0;
+            int totalMediumQuestionInTopicCategory = 0;
+            int totalHardQuestionInTopicCategory = 0;
             List<TopicInExamination> topics = new List<TopicInExamination>();
             foreach (string topic in exam.Topic)
             {
+                int totalEasyQuestionInTopic = 0;
+                int totalMediumQuestionInTopic = 0;
+                int totalHardQuestionInTopic = 0;
                 int id = int.Parse(topic.Substring(3));
                 bool isLearingOutcome = false;
                 if (topic.Contains("LO_"))
                 {
                     isLearingOutcome = true;
+                    int idOfLevel = levelService.GetIdByName(EASY);
+                    totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalEasyQuestionInTopicCategory += totalEasyQuestionInTopic;
+
+                    idOfLevel = levelService.GetIdByName(MEDIUM);
+                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalMediumQuestionInTopicCategory += totalMediumQuestionInTopic;
+
+                    idOfLevel = levelService.GetIdByName(HARD);
+                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
+                    totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
+                } else
+                {
+                    int idOfLevel = levelService.GetIdByName(EASY);
+                    totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalEasyQuestionInTopicCategory += totalEasyQuestionInTopic;
+
+                    idOfLevel = levelService.GetIdByName(MEDIUM);
+                    totalMediumQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalMediumQuestionInTopicCategory += totalMediumQuestionInTopic;
+
+                    idOfLevel = levelService.GetIdByName(HARD);
+                    totalHardQuestionInTopic = questionService.GetCountOfListQuestionByTopicAndId(id, idOfLevel, exam.CategoryId);
+                    totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
                 }
                 TopicInExamination topicInExam = new TopicInExamination()
                 {
                     Id = id,
-                    IsLearingOutcome = isLearingOutcome
+                    IsLearingOutcome = isLearingOutcome,
+                    TotalEasyQuestionInTopic = totalEasyQuestionInTopic,
+                    TotalMediumQuestionInTopic = totalMediumQuestionInTopic,
+                    TotalHardQuestionInTopic = totalHardQuestionInTopic
                 };
                 topics.Add(topicInExam);
             }
+            if(questionEasy > totalEasyQuestionInTopicCategory)
+            {
+                questionEasy = totalEasyQuestionInTopicCategory;
+                exam.EasyQuestionGenerrate = totalEasyQuestionInTopicCategory;
+            } else
+            {
+                exam.EasyQuestionGenerrate = questionEasy;
+            }
+            if(questionHard > totalHardQuestionInTopicCategory)
+            {
+                questionHard = totalHardQuestionInTopicCategory;
+                exam.HardQuestionGenerrate = totalHardQuestionInTopicCategory;
+            } else
+            {
+                exam.HardQuestionGenerrate = questionHard;
+            }
+            if(questionMedium > totalMediumQuestionInTopicCategory)
+            {
+                questionMedium = totalMediumQuestionInTopicCategory;
+                exam.MediumQuestionGenerrate = totalMediumQuestionInTopicCategory;
+            }else
+            {
+                exam.MediumQuestionGenerrate = questionMedium;
+            }
+            exam.TotalQuestionGenerrate = questionEasy + questionHard + questionMedium;
             TopicInExamination firstTopic = topics.FirstOrDefault();
 
             if (firstTopic != null)
@@ -116,18 +176,39 @@ namespace QBCS.Service.Implement
                 {
                     if (questionEasy != 0)
                     {
-                        topics[i].EasyQuestion = topics[i].EasyQuestion + 1;
-                        questionEasy--;
+                        if (topics[i].EasyQuestion == topics[i].TotalEasyQuestionInTopic)
+                        {
+                            continue;
+                        } else
+                        {
+                            topics[i].EasyQuestion = topics[i].EasyQuestion + 1;
+                            questionEasy--;
+                        }
                     }
                     else if (questionMedium != 0)
                     {
-                        topics[i].MediumQuestion = topics[i].MediumQuestion + 1;
-                        questionMedium--;
+                        if (topics[i].MediumQuestion == topics[i].TotalMediumQuestionInTopic)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            topics[i].MediumQuestion = topics[i].MediumQuestion + 1;
+                            questionMedium--;
+                        }
+                        
                     }
                     else if (questionHard != 0)
                     {
-                        topics[i].HardQuestion = topics[i].HardQuestion + 1;
-                        questionHard--;
+                        if (topics[i].HardQuestion == topics[i].TotalHardQuestionInTopic)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            topics[i].HardQuestion = topics[i].HardQuestion + 1;
+                            questionHard--;
+                        }
                     }
                     else
                     {
@@ -172,6 +253,7 @@ namespace QBCS.Service.Implement
                         Frequency = ques.Frequency,
                         QuestionCode = ques.QuestionCode,
                         LevelId = ques.LevelId,
+                        CategoryId = ques.CategoryId,
                         OptionInExams = ques.Options.Select(o => new OptionInExam()
                         {
                             IsCorrect = o.IsCorrect,
@@ -198,11 +280,15 @@ namespace QBCS.Service.Implement
         private List<QuestionViewModel> GeneratePartOfExamByTopicAndLevel(int topicId, int categoryId, int numberOfQuestion, string nameOfLevel)
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
+            if (result.Count == numberOfQuestion)
+            {
+                return result;
+            }
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
-                int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel);
+                int minFrequency = questionService.GetMinFreQuencyByTopicAndLevel(topicId, idOfLevel, categoryId);
                 List<Question> questionsByLevelAndTopic = questions.Where(q => q.LevelId == idOfLevel && q.TopicId == topicId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndTopic.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
@@ -213,6 +299,7 @@ namespace QBCS.Service.Implement
                     Priority = (int)c.Priority,
                     QuestionContent = c.QuestionContent,
                     QuestionCode = c.QuestionCode,
+                    CategoryId =(int) c.CategoryId,
                     Options = c.Options.Select(d => new OptionViewModel
                     {
                         Id = d.Id,
@@ -289,7 +376,7 @@ namespace QBCS.Service.Implement
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             for (int j = 0; j < 2; j++)
             {
-                int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
+                int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel, categoryId);
                 List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId && q.CategoryId == categoryId).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndLearningOutcome.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {

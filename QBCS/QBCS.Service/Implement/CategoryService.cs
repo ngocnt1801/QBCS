@@ -5,6 +5,7 @@ using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace QBCS.Service.Implement
 {
@@ -23,6 +24,29 @@ namespace QBCS.Service.Implement
                 Name = c.Name
             }).ToList();
             return categoriesByCourseId;
+        }
+
+        public CategoryViewModel GetCategoryById(int categoryId)
+        {
+            Category category = unitOfWork.Repository<Category>().GetById(categoryId);
+            if (category != null)
+            {
+                CategoryViewModel categoryViewModel = new CategoryViewModel()
+                {
+                    Id = category.Id,
+                    Name = category.Name
+                };
+                return categoryViewModel;
+            }
+            else
+            {
+                CategoryViewModel categoryViewModel = new CategoryViewModel()
+                {
+                    Id = 0,
+                    Name = "[No Category]"
+                };
+                return categoryViewModel;
+            }
         }
 
         public List<CategoryViewModel> GetListCategories(int courseId)

@@ -15,25 +15,38 @@ namespace QBCS.Service.Implement
     {
         private IUnitOfWork unitOfWork;
         private ILevelService levelService;
+        ICategoryService categoryService;
         public PartOfExamService()
         {
             unitOfWork = new UnitOfWork();
             levelService = new LevelService();
+            categoryService = new CategoryService();
         }
         public List<PartOfExamViewModel> GetPartOfExamByExamId(int examinationId)
         {
             IQueryable<PartOfExamination> partOfExams = unitOfWork.Repository<PartOfExamination>().GetAll();
             List<PartOfExamination> partOfExamsByExamId = partOfExams.Where(p => p.ExaminationId == examinationId).ToList();
             List<PartOfExamViewModel> result = new List<PartOfExamViewModel>();
+            CategoryViewModel category = null;
+            foreach (var part in partOfExamsByExamId)
+            {
+                if(part.QuestionInExams != null)
+                {
+                    int courseId = (int)part.QuestionInExams.FirstOrDefault().CategoryId;
+                    category = categoryService.GetCategoryById(courseId);
+                    break;
+                }
+            }
             foreach(PartOfExamination part in partOfExamsByExamId)
             {
-                List<QuestionViewModel> questions = part.QuestionInExams.Select(c => new QuestionViewModel
+                List<QuestionInExamViewModel> questions = part.QuestionInExams.Select(c => new QuestionInExamViewModel
                 {
-
                     Id = (int)c.Id,
                     QuestionContent = c.QuestionContent,
                     Level = levelService.GetLevelById((int)c.LevelId),
                     LevelId = (int)c.LevelId,
+                    CategoryId = (int)c.CategoryId,
+                    Category = category,
                     QuestionCode = c.QuestionCode,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {
