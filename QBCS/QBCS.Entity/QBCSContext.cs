@@ -10,6 +10,7 @@ namespace QBCS.Entity
         public QBCSContext()
             : base("name=QBCSContext")
         {
+            Database.CommandTimeout = 9000;
         }
 
         public virtual DbSet<Category> Categories { get; set; }
