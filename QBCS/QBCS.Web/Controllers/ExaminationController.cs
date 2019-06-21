@@ -32,12 +32,10 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult GenerateExam(int courseId)
         {
-            List<TopicViewModel> topicViewModels = topicService.GetTopicByCourseId(courseId);
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
             List<CategoryViewModel> categoryViewModels = categoryService.GetCategoriesByCourseId(courseId);
-            ListTopicLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListTopicLearningOutcomeViewModel()
+            ListLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListLearningOutcomeViewModel()
             {
-                Topics = topicViewModels,
                 LearningOutcomes = learningOutcomeViewModels,
                 Categories = categoryViewModels
             };

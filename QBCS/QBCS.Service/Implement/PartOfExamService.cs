@@ -32,8 +32,8 @@ namespace QBCS.Service.Implement
             {
                 if(part.QuestionInExams != null)
                 {
-                    int courseId = (int)part.QuestionInExams.FirstOrDefault().CategoryId;
-                    category = categoryService.GetCategoryById(courseId);
+                    int categoryId = part.QuestionInExams.FirstOrDefault().CategoryId.HasValue ? (int)part.QuestionInExams.FirstOrDefault().CategoryId : 0;
+                    category = categoryService.GetCategoryById(categoryId);
                     break;
                 }
             }
@@ -43,9 +43,9 @@ namespace QBCS.Service.Implement
                 {
                     Id = (int)c.Id,
                     QuestionContent = c.QuestionContent,
-                    Level = levelService.GetLevelById((int)c.LevelId),
-                    LevelId = (int)c.LevelId,
-                    CategoryId = (int)c.CategoryId,
+                    Level = levelService.GetLevelById(c.LevelId.HasValue ? (int)c.LevelId : 0),
+                    LevelId = c.LevelId.HasValue ? (int)c.LevelId : 0,
+                    CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,
                     Category = category,
                     QuestionCode = c.QuestionCode,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
@@ -58,7 +58,7 @@ namespace QBCS.Service.Implement
                 
                 PartOfExamViewModel partViewModel = new PartOfExamViewModel()
                 {
-                    ExaminationId = (int)part.ExaminationId,
+                    ExaminationId = part.ExaminationId.HasValue ? (int)part.ExaminationId : 0,
                     Question = questions
                 };
                 if (part.LearningOutcome != null)
@@ -68,19 +68,9 @@ namespace QBCS.Service.Implement
 
                         Id = part.LearningOutcome.Id,
                         Code = part.LearningOutcome.Code,
-                        CourseId = (int)part.LearningOutcome.CourseId,
-                        IsDisable = (bool)part.LearningOutcome.IsDisable,
+                        CourseId = part.LearningOutcome.CourseId.HasValue ? (int)part.LearningOutcome.CourseId : 0,
+                        IsDisable = part.LearningOutcome.IsDisable.HasValue ? (bool)part.LearningOutcome.IsDisable : false,
                         Name = part.LearningOutcome.Name
-                    };
-                } else
-                {
-                    partViewModel.Topic = new TopicViewModel()
-                    {
-                        Id = part.Topic.Id,
-                        Name = part.Topic.Name,
-                        Code = part.Topic.Code,
-                        CourseId = (int)part.Topic.CourseId,
-                        IsDisable = (bool)part.Topic.IsDisable
                     };
                 }
                 result.Add(partViewModel);

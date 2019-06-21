@@ -110,7 +110,7 @@
     <Compile Include="ViewModel\ImportViewModel.cs" />
     <Compile Include="ViewModel\LearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
-    <Compile Include="ViewModel\ListTopicLearningOutcomeViewModel.cs" />
+    <Compile Include="ViewModel\ListLearningOutcomeViewModel.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\OptionViewModel.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
-    <Compile Include="ViewModel\TopicInExamination.cs" />
+    <Compile Include="ViewModel\LearingOutcomeInExamination.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
     <Compile Include="ViewModel\RuleViewModel.cs" />

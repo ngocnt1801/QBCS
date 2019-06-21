@@ -91,7 +91,7 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteStartElement(XML_QUESTION_TAG);
                             xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
                             xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                            string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
                             xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
                             xmlWriter.WriteEndElement();
                             xmlWriter.WriteEndElement();
@@ -107,7 +107,7 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_QUESTION_TAG);
                                         xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
                                         xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                                        switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, part.Topic.Name, question.Level.Name);
+                                        switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, part.LearningOutcome.Name, question.Level.Name);
                                         xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
                                         xmlWriter.WriteEndElement();
                                         xmlWriter.WriteEndElement();
@@ -285,9 +285,9 @@ namespace QBCS.Web.Controllers
                     {
                         if (part.Question.Count != 0)
                         {
-                            string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
                             writer.WriteLine(switchCategoryLine);
-                            string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, part.Question.First().Level.Name);
+                            string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
                             writer.WriteLine(categoryLine);
                             writer.WriteLine();
                             writer.WriteLine();
@@ -298,9 +298,9 @@ namespace QBCS.Web.Controllers
                                 {
                                     if (question.LevelId != part.Question[i - 1].LevelId)
                                     {
-                                        switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.Topic.Name, question.Level.Name);
+                                        switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, question.Level.Name);
                                         writer.WriteLine(switchCategoryLine);
-                                        categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.Topic.Name, question.Level.Name);
+                                        categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.LearningOutcome.Name, question.Level.Name);
                                         writer.WriteLine(categoryLine);
                                         writer.WriteLine();
                                         writer.WriteLine();

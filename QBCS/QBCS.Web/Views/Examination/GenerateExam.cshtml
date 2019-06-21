@@ -1,4 +1,4 @@
-﻿@model QBCS.Service.ViewModel.ListTopicLearningOutcomeViewModel
+﻿@model QBCS.Service.ViewModel.ListLearningOutcomeViewModel
 @{
     ViewBag.Title = "GenerateExam";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -71,21 +71,6 @@
                 <div id="listTopic" class="form-group">
                     <table class="table table-striped">
                         <tbody>
-                            @foreach (var topic in Model.Topics)
-                            {
-                                <tr class="d-flex">
-                                    <td class="col-1">
-                                        <div class="el-checkbox text-center form-group">
-                                            <span class="margin-l"></span>
-                                            <input value="@topic.IdValue" type="checkbox" class="checkbox" name="Topic" id="@topic.IdValue" />
-                                            <label class="el-checkbox-style" for="@topic.IdValue"></label>
-                                        </div>
-                                    </td>
-                                    <td class="col-11">
-                                        <h5 style="word-wrap:break-word;">@topic.Name</h5>
-                                    </td>
-                                </tr>
-                            }
                             @foreach (var lo in Model.LearningOutcomes)
                             {
                                 <tr class="d-flex">
