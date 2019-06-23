@@ -20,7 +20,7 @@ namespace QBCS.Entity
 
         public int? UserId { get; set; }
 
-        public DateTime? ImportedDate { get; set; }
+        //public DateTime? ImportedDate { get; set; }
 
         public int? Status { get; set; }
 

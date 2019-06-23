@@ -105,7 +105,7 @@ namespace QBCS.Service.Implement
                 .Select(im => new ImportViewModel
                 {
                     Id = im.Id,
-                    Date = im.ImportedDate.Value,
+                    Date = im.InsertedToBankDate.Value,
                     Status = (StatusEnum)im.Status.Value,
                     TotalQuestion = im.TotalQuestion.HasValue ? im.TotalQuestion.Value : 0,
                     TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0

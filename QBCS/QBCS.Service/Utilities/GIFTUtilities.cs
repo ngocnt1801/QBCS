@@ -40,7 +40,8 @@ namespace QBCS.Service.Utilities
                 int countRight = 0;
                 int countWrong = 0;
                 int countCate = 0;
-                int countStartCate = 0;    
+                int countStartCate = 0;
+                int countElement = 1;
                 bool isBlock = false;
                 bool isStartCate = false;
                 bool isInLine = false;
@@ -237,7 +238,7 @@ namespace QBCS.Service.Utilities
                        
                         if (countWrong >= 1 && !isEnd)
                         {
-                            if (let == '%')
+                            if (let == '%' && countElement == 1)
                             {
                                 isMultipleChoice = true;
                                 continue;
@@ -245,6 +246,7 @@ namespace QBCS.Service.Utilities
                             else
                             {
                                 wrong += let;
+                                countElement++;
                                 continue;
                             }
                            

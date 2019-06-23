@@ -456,7 +456,7 @@ namespace QBCS.Service.Implement
                                     }).ToList()
 
                                 });
-                                import.ImportedDate = DateTime.Now;
+                                import.InsertedToBankDate = DateTime.Now;
                                 import.UserId = userId;
                                 
                                
@@ -509,7 +509,7 @@ namespace QBCS.Service.Implement
                                 IsCorrect = o.IsCorrect
                             }).ToList(),
                         }).ToList(),
-                        ImportedDate = importTime
+                        InsertedToBankDate = importTime
     
                     };
                     int g = 0;
