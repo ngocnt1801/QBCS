@@ -63,7 +63,11 @@
                                 <td class="@borderLeft">@counter</td>
                                 <td>
                                     <p class="text-custom">Question Code: @item.Code</p>
-                                    @item.QuesitonContent
+                                    @item.QuesitonContent <br />
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="data:image/png;base64, @item.Image" />
+                                    }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
                                         if (item.Options[i].IsCorrect == true)

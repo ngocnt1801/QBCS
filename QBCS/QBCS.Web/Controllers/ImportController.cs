@@ -5,6 +5,7 @@ using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -33,6 +34,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
+          
             if (result.Status != (int)StatusEnum.Done)
             {
                 return View(result);

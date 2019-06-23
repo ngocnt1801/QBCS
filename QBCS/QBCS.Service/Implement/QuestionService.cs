@@ -450,7 +450,7 @@ namespace QBCS.Service.Implement
                                     }).ToList()
 
                                 });
-                                import.ImportedDate = DateTime.Now;
+                                import.UpdatedDate = DateTime.Now;
                                 import.UserId = userId;
                                 
                                
@@ -503,7 +503,7 @@ namespace QBCS.Service.Implement
                                 IsCorrect = o.IsCorrect
                             }).ToList(),
                         }).ToList(),
-                        ImportedDate = importTime
+                        UpdatedDate = importTime
     
                     };
                     int g = 0;

@@ -56,7 +56,6 @@ namespace QBCS.Service.Implement
                 {
                     Id = import.Id,
                     Status = import.Status.Value,
-                    CourseId = import.CourseId.Value,
                     NumberOfSuccess = import.TotalSuccess.HasValue ? import.TotalSuccess.Value : 0, //fix here
                     Questions = import.QuestionTemps.Select(q => new QuestionTempViewModel
                     {
@@ -66,6 +65,7 @@ namespace QBCS.Service.Implement
                         ImportId = importId,
                         Code = q.Code,
                         Message = q.Message,
+                        Image = q.Image,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.DuplicatedWithBank.Id,
@@ -108,7 +108,7 @@ namespace QBCS.Service.Implement
                 .Select(im => new ImportViewModel
                 {
                     Id = im.Id,
-                    Date = im.ImportedDate.Value,
+                    Date = im.UpdatedDate.Value,
                     Status = (StatusEnum)im.Status.Value,
                     TotalQuestion = im.TotalQuestion.HasValue ? im.TotalQuestion.Value : 0,
                     TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0
