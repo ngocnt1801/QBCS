@@ -127,6 +127,7 @@ namespace QBCS.Web.Controllers
             //notify 
             TempData["Message"] = "You import successfully";
             TempData["Status"] = ToastrEnum.Success;
+            TempData["CourseId"] = courseId;
 
             return RedirectToAction("Index", "Home");
         }

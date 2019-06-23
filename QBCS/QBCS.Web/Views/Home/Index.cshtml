@@ -5,6 +5,7 @@
 
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
 
 
@@ -37,6 +38,7 @@
                            {
                                Value = c.CourseId + "",
                                Text = c.Code + " - " + c.Name,
+                               Selected = c.CourseId == selectedCourse
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                         </div>
