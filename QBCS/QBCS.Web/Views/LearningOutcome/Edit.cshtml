@@ -42,14 +42,14 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-12">
-                            <select class="form-control" id="Course"></select>
+                            <select class="form-control" id="Course" disabled></select>
 
                         </div>
                     </div>
                     <div class="">
                         <div style="text-align:right">
-                            <a href="@Url.Action("Index", "LearningOutcome")" class="btn-lg btn-default text-custom" style="background-color:lightgray;border-bottom:2px solid black;border-right:2px solid black">Cancel</a>
-                            <button id="submit" class="btn-lg btn-primary">Edit</button>
+                            <a href="@Url.Action("Detail", "Course", new { itemId = Model.CourseId})"  class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</a>
+                            <button id="submit" class="btn btn-primary">Edit</button>
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
             alert("Error");
         }
     });
-        $('#submit').on('click', function () {
+        @*$('#submit').on('click', function () {
             var learningoutcome = new Object();
             learningoutcome.Id = @Model.Id;
             learningoutcome.Code = $('#Code').val();
@@ -89,7 +89,7 @@
             learningoutcome.CourseId = $('#Course').children(":selected").attr("id");
             if (learningoutcome.Code == "" || learningoutcome.Name == "") {
                 $('#error').text("*Code and Name must be filled");
-            }else if (learningoutcome != null) {
+            }else{
                 $.ajax({
                 type: "POST",
                 url: '@Url.Action("Edit","LearningOutcome")',
@@ -98,7 +98,7 @@
                 dataType: "json",
                 success: function(response) {
                     if (response != null) {
-                        window.location.replace('@Url.Action("Index","LearningOutcome")');
+                        window.location.replace('@Url.Action("Detail", "Course", new { itemID = Model.CourseId})');
                     }
                 },
                 failure: function(response) {
@@ -109,7 +109,7 @@
                 }
             });
             }
-        });
+        });*@
     });
 
 </script>

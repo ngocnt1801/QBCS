@@ -12,9 +12,11 @@ namespace QBCS.Web.Controllers
     public class LearningOutcomeController : Controller
     {
         private ILearningOutcomeService learningOutcomeService;
+        private ICourseService courseService;
         public LearningOutcomeController()
         {
             learningOutcomeService = new LearningOutcomeService();
+            courseService = new CourseService();
         }
         // GET: LearningOutcome
         public ActionResult Index()
@@ -22,17 +24,23 @@ namespace QBCS.Web.Controllers
             var list = learningOutcomeService.GetAllLearningOutcome();
             return View(list);
         }
-        public ActionResult Add()
+        public ActionResult Add(int courseId)
         {
-            var learningOutcome = new LearningOutcomeViewModel();
+            var learningOutcome = new LearningOutcomeViewModel()
+            {
+                CourseId = courseId
+            };
             return View(learningOutcome);
         }
         [HttpPost]
-        public JsonResult Add(LearningOutcomeViewModel learningOutcome)
+        public ActionResult Add(LearningOutcomeViewModel learningOutcome)
         {
-            bool result = false;
-            result = learningOutcomeService.AddLearningOutcome(learningOutcome);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var courseId = learningOutcomeService.AddLearningOutcome(learningOutcome);
+            if(courseId == 0)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Detail","Course", new { itemId = courseId });
         }
         public ActionResult Edit(int id)
         {
@@ -40,16 +48,25 @@ namespace QBCS.Web.Controllers
             return View(result);
         }
         [HttpPost]
-        public JsonResult Edit(LearningOutcomeViewModel learningoutcome)
+        public ActionResult Edit(LearningOutcomeViewModel learningoutcome)
         {
-            bool result = false;
-            result = learningOutcomeService.UpdateLearningOutcome(learningoutcome);
+            var courseId = learningOutcomeService.UpdateLearningOutcome(learningoutcome);
+
+            if (courseId == 0)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Detail", "Course", new { itemId = courseId });
+        }
+        public JsonResult LoadCourse()
+        {
+            var result = courseService.GetAllCourses();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)
         {
             var update = learningOutcomeService.UpdateDisable(itemId);
-            return RedirectToAction("Index");
+            return RedirectToAction("Detail","Course", new { itemId = update});
         }
 
     }

@@ -219,7 +219,7 @@ namespace QBCS.Service.Implement
                                 break;
                             //check banned words in question
                             case 3:
-                                if (rule.Value.Contains("·case_sensitive·"))
+                                if (!rule.Value.Contains("·case_sensitive·"))
                                 {
                                     var varRule = rule.Value.Replace("·case_sensitive·", "");
                                     var culture = CultureInfo.GetCultureInfo("en-GB");
@@ -230,7 +230,8 @@ namespace QBCS.Service.Implement
                                 }
                                 else
                                 {
-                                    if (tempQuestion.QuestionContent.Contains(rule.Value))
+                                    var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                    if (tempQuestion.QuestionContent.Contains(varRule))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
                                     }
@@ -279,7 +280,7 @@ namespace QBCS.Service.Implement
                             case 9:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
-                                    if (rule.Value.Contains("·case_sensitive·"))
+                                    if (!rule.Value.Contains("·case_sensitive·"))
                                     {
                                         var varRule = rule.Value.Replace("·case_sensitive·", "");
                                         var culture = CultureInfo.GetCultureInfo("en-GB");
@@ -290,7 +291,8 @@ namespace QBCS.Service.Implement
                                     }
                                     else
                                     {
-                                        if (option.OptionContent.Contains(rule.Value))
+                                        var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                        if (option.OptionContent.Contains(varRule))
                                         {
                                             tempQuestion.Status = (int)StatusEnum.Invalid;
                                         }
@@ -325,7 +327,7 @@ namespace QBCS.Service.Implement
                                 {
                                     if ((bool)option.IsCorrect)
                                     {
-                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        if (!rule.Value.Contains("·case_sensitive·"))
                                         {
                                             var varRule = rule.Value.Replace("·case_sensitive·", "");
                                             var culture = CultureInfo.GetCultureInfo("en-GB");
@@ -336,7 +338,8 @@ namespace QBCS.Service.Implement
                                         }
                                         else
                                         {
-                                            if (option.OptionContent.Contains(rule.Value))
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
                                             }
@@ -372,7 +375,7 @@ namespace QBCS.Service.Implement
                                 {
                                     if (!(bool)option.IsCorrect)
                                     {
-                                        if (rule.Value.Contains("·case_sensitive·"))
+                                        if (!rule.Value.Contains("·case_sensitive·"))
                                         {
                                             var varRule = rule.Value.Replace("·case_sensitive·", "");
                                             var culture = CultureInfo.GetCultureInfo("en-GB");
@@ -383,7 +386,9 @@ namespace QBCS.Service.Implement
                                         }
                                         else
                                         {
-                                            if (option.OptionContent.Contains(rule.Value))
+
+                                            var varRule = rule.Value.Replace("·case_sensitive·", "");
+                                            if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
                                             }

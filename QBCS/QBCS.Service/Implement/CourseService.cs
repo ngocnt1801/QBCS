@@ -123,16 +123,6 @@ namespace QBCS.Service.Implement
             var course = unitOfWork.Repository<Course>().GetById(id);
             var listTopic = new List<TopicViewModel>();
             var listLearningOutcome = new List<LearningOutcomeViewModel>();
-            foreach(Topic topic in course.Topics)
-            {
-                var topicVM = new TopicViewModel()
-                {
-                    Id = topic.Id,
-                    Code = topic.Code,
-                    Name = topic.Name
-                };
-                listTopic.Add(topicVM);
-            }
             foreach(LearningOutcome learningOutcome in course.LearningOutcomes)
             {
                 var learningOutcomeVM = new LearningOutcomeViewModel()
