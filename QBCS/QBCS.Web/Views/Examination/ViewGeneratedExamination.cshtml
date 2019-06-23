@@ -75,12 +75,21 @@
             <h5>File extension :</h5>
         </div>
         <input type="hidden" name="examinationId" value="@Model[0].ExaminationId" />
+        
         <div class="col-lg-2">
             <select id="fileExtension" class="form-control">
                 <option value="gift">GIFT</option>
                 <option value="xml">XML</option>
             </select>
         </div>
+       
         <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
+    </div>
+    <div class="row form-group">
+        <div class="el-checkbox text-center">
+            <span class="margin-r" style="font-size:1.3em;">Get category : </span>
+            <input type="checkbox" name="getCategory" id="getCategory">
+            <label class="el-checkbox-style" for="getCategory"></label>
+        </div>
     </div>
 </form>

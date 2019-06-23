@@ -72,7 +72,7 @@ namespace QBCS.Web.Controllers
         }
         [HttpGet]
         [ActionName("export")]
-        public HttpResponseMessage ExportExamination(int examinationId, string fileExtension)
+        public HttpResponseMessage ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {
             List<PartOfExamViewModel> partOfExams = partOfExamService.GetPartOfExamByExamId(examinationId);
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
@@ -87,21 +87,26 @@ namespace QBCS.Web.Controllers
                     {
                         if (part.Question.Count != 0)
                         {
-                            xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
-                            xmlWriter.WriteStartElement(XML_QUESTION_TAG);
-                            xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
-                            xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
-                            string switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
-                            xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
+                            string switchCategory = "";
+                            if (getCategory)
+                            {
+
+                                xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
+                                xmlWriter.WriteStartElement(XML_QUESTION_TAG);
+                                xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
+                                xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
+                                switchCategory = String.Format(XML_SWITCH_CATEGORY, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
+                                xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                            }
 
                             for (int i = 0; i < part.Question.Count; i++)
                             {
                                 QuestionInExamViewModel question = part.Question[i];
                                 if (i != 0)
                                 {
-                                    if (question.LevelId != part.Question[i - 1].LevelId)
+                                    if ((question.LevelId != part.Question[i - 1].LevelId) && (getCategory))
                                     {
                                         xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
                                         xmlWriter.WriteStartElement(XML_QUESTION_TAG);
@@ -128,11 +133,11 @@ namespace QBCS.Web.Controllers
                                 xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                 if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                 {
-                                    xmlWriter.WriteCData(question.QuestionContent);
+                                    xmlWriter.WriteCData(question.QuestionContent.Replace("<cbr>", " <br/>"));
                                 }
                                 else
                                 {
-                                    xmlWriter.WriteString(question.QuestionContent);
+                                    xmlWriter.WriteString(question.QuestionContent.Replace("<cbr>", " <br/>"));
                                 }
                                 xmlWriter.WriteEndElement();
                                 if (question.Image == null)
@@ -215,11 +220,11 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                         {
-                                            xmlWriter.WriteCData(option.OptionContent);
+                                            xmlWriter.WriteCData(option.OptionContent.Replace("<cbr>", " <br/>"));
                                         }
                                         else
                                         {
-                                            xmlWriter.WriteString(option.OptionContent);
+                                            xmlWriter.WriteString(option.OptionContent.Replace("<cbr>", " <br/>"));
                                         }
                                         xmlWriter.WriteEndElement();
                                         //feedback tag
@@ -285,18 +290,23 @@ namespace QBCS.Web.Controllers
                     {
                         if (part.Question.Count != 0)
                         {
-                            string switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
-                            writer.WriteLine(switchCategoryLine);
-                            string categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
-                            writer.WriteLine(categoryLine);
-                            writer.WriteLine();
-                            writer.WriteLine();
+                            string switchCategoryLine = "";
+                            string categoryLine = "";
+                            if (getCategory)
+                            {
+                                switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
+                                writer.WriteLine(switchCategoryLine);
+                                categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
+                                writer.WriteLine(categoryLine);
+                                writer.WriteLine();
+                                writer.WriteLine();
+                            }
                             for (int i = 0; i < part.Question.Count; i++)
                             {
                                 QuestionInExamViewModel question = part.Question[i];
                                 if (i != 0)
                                 {
-                                    if (question.LevelId != part.Question[i - 1].LevelId)
+                                    if ((question.LevelId != part.Question[i - 1].LevelId) && getCategory)
                                     {
                                         switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, question.Level.Name);
                                         writer.WriteLine(switchCategoryLine);
@@ -308,18 +318,18 @@ namespace QBCS.Web.Controllers
                                 }
                                 string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                                 writer.WriteLine(questionComment);
-                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, question.QuestionContent) + "{";
+                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, question.QuestionContent.Replace("<cbr>", " <br/>")) + "{";
                                 writer.WriteLine(HttpUtility.HtmlEncode(questionTitle));
                                 foreach (var option in question.Options)
                                 {
                                     if (option.IsCorrect == true)
                                     {
-                                        string optionString = String.Format(OPTION_TRUE, option.OptionContent);
+                                        string optionString = String.Format(OPTION_TRUE, option.OptionContent.Replace("<cbr>", " <br/>"));
                                         writer.WriteLine(HttpUtility.HtmlEncode(optionString));
                                     }
                                     else
                                     {
-                                        string optionString = String.Format(OPTION_FALSE, option.OptionContent);
+                                        string optionString = String.Format(OPTION_FALSE, option.OptionContent.Replace("<cbr>", " <br/>"));
                                         writer.WriteLine(HttpUtility.HtmlEncode(optionString));
                                     }
                                 }
