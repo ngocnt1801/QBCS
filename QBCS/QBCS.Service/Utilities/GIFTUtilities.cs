@@ -77,9 +77,9 @@ namespace QBCS.Service.Utilities
                         #region start count to track the position
                         if (let == '$' && !isStartQuestion)
                         {
-                            category = null;
-                            level = null;
-                            learningOutcome = null;
+                            category = "";
+                            level = "";
+                            learningOutcome = "";
                             countStartCate++;
                             continue;
                         }
@@ -255,13 +255,13 @@ namespace QBCS.Service.Utilities
                         #endregion
                     }
                 }
-                if (category != null && learningOutcome != null && level != null && checkCate == true)
+                if (category != null /*&& learningOutcome != null && level != null*/ && checkCate == true)
                 {
                     if (checkCate == false)
                     {
-                        category = null;
-                        learningOutcome = null;
-                        level = null;
+                        category = "";
+                        learningOutcome = "";
+                        level = "";
                         countStartCate = 0;
                         isStartCate = false;
                     }
@@ -283,6 +283,10 @@ namespace QBCS.Service.Utilities
                 }
                 if (question != null)
                 {
+                    if (question.Equals(""))
+                    {
+                        quesModel.Error = "Question content is empty";
+                    }
 
                     if (quesModel.QuestionContent != null)
                     {
@@ -295,6 +299,7 @@ namespace QBCS.Service.Utilities
                     question = null;
 
                 }
+
                 if (right != null)
                 {
                     optionModel = new OptionTemp();
@@ -312,6 +317,10 @@ namespace QBCS.Service.Utilities
 
                 if (quesModel.QuestionContent != null && isEnd && quesModel.Code != null)
                 {
+                    if (options.Count < 4)
+                    {
+                        quesModel.Error = "Number of option " + options.Count.ToString();
+                    }
                     quesModel.Options = options;
                     list.Add(quesModel);
                     quesModel = new QuestionTmpModel();
@@ -325,18 +334,6 @@ namespace QBCS.Service.Utilities
         }
 
 
-        public void RemoveNull(string[] array)
-        {
-            List<string> list = new List<string>(array);
-            for (int index = 0; index < list.Count; index++)
-            {
-                bool nullOrEmpty = list[index].Contains("\0");
-                if (nullOrEmpty)
-                {
-                    list.RemoveAt(index);
-                    --index;
-                }
-            }
-        }
+       
     }
 }
