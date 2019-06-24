@@ -17,12 +17,24 @@ namespace QBCS.Service.Utilities
             }
             return result;
         }
+        public string RemoveHtmlBrTag(string source)
+        {
+            string result = null;
+
+            if (source != null)
+            {
+                result = RemoveTag(source, @"<br>", @"\n");
+            }
+
+            return result;
+        }
         public string RemoveHtmlTag(string source)
         {
             string result = null;
            
             if (source != null)
             {
+                //result = RemoveTag(source, "[html]", "");
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
