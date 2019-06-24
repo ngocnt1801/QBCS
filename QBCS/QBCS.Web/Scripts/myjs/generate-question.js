@@ -126,7 +126,8 @@
         event.preventDefault();
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $('#fileExtension').find(":selected").text();
-        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
+        var getCategory = $('#getCategory').prop('checked');
+        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
         //    $.ajax({
         //        type: "GET",
         //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",

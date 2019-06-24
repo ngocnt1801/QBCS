@@ -11,7 +11,6 @@ namespace QBCS.Service.ViewModel
         public int ExaminationId { get; set; }
         public List<QuestionInExamViewModel> Question { get; set; }
         public int NumberOfQuestion { get; set; }
-        public TopicViewModel Topic { get; set; }
         public LearningOutcomeViewModel LearningOutcome { get; set; }
     }
 }
