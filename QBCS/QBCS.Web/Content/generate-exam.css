@@ -128,3 +128,6 @@ h2 {
 .tab-slider--body {
   margin-bottom: 20px;
 }
+.text-right {
+    text-align:right;
+}
