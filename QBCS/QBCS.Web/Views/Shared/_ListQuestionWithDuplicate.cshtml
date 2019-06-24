@@ -56,86 +56,84 @@
                             {
                                 //borderLeft = "border-left-success";
                             }
-                            <tr class="@action" data-id="@item.Id">
-                                @{
-                                    counter++;
+                        <tr class="@action" data-id="@item.Id">
+                            @{
+                                counter++;
+                            }
+                            <td class="@borderLeft">@counter</td>
+                            <td>
+                                <p class="text-custom">Question Code: @item.Code</p>
+                                @item.QuesitonContent <br />
+                                @if (item.Image != null)
+                                {
+                                    <img src="data:image/png;base64, @item.Image" />
                                 }
-                                <td class="@borderLeft">@counter</td>
-                                <td>
-                                    <p class="text-custom">Question Code: @item.Code</p>
-                                    @item.QuesitonContent <br />
-                                    @if (item.Image != null)
+                                @for (var i = 0; i < item.Options.Count; i++)
+                                {
+                                    if (item.Options[i].IsCorrect == true)
                                     {
-                                        <img src="data:image/png;base64, @item.Image" />
+                                        <div class="container-fluid text-right-answer">
+                                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                        </div>
                                     }
-                                    @for (var i = 0; i < item.Options.Count; i++)
+                                    else
                                     {
-                                        if (item.Options[i].IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-right-answer">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
-                                        }
+                                        <div class="container-fluid">
+                                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                        </div>
+                                    }
 
-                                        <br />
+                                    <br />
+                                }
+                            </td>
+                            @if (item.Status == StatusEnum.Delete
+                                || item.Status == StatusEnum.DeleteOrSkip
+                                || item.Status == StatusEnum.Editable)
+                            {
+                                <td>
+                                    @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
+                                    {
+                                        <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                        @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
+                                        for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
+                                        {
+                                            if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                            {
+                                                <div class="container-fluid text-right-answer">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="container-fluid">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                </div>
+                                            }
+
+                                            <br />
+                                        }
                                     }
                                 </td>
-                                @if (item.Status == StatusEnum.Delete
-                                    || item.Status == StatusEnum.DeleteOrSkip
-                                    || item.Status == StatusEnum.Editable)
-                                {
-                                    <td>
-                                        @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
-                                        {
-                                            <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
-                                            @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
-                                            for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
-                                            {
-                                                if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
-                                                {
-                                                    <div class="container-fluid text-right-answer">
-                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="container-fluid">
-                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                    </div>
-                                                }
-
-                                                <br />
-                                            }
-                                        }
-                                    </td>
-                                }
-                                @if (item.Status == StatusEnum.Invalid)
-                                {
-                                    <td>@item.Message</td>
-                                }
-                                @if (item.Status == StatusEnum.DeleteOrSkip)
-                                {
-                                    <td>
-                                        <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-primary mb-2 col-md-12">Skip</a>
-                                        <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
-                                    </td>
-                                }
-                                else if (item.Status == StatusEnum.Editable
-                                    || item.Status == StatusEnum.Delete
-                                    || item.Status == StatusEnum.Invalid)
-                                {
-                                    <td>
-                                        <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2">Edit</a>
-                                        <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-primary mb-2 ">Skip</a>
-                                    </td>
-                                }
-                            </tr>
+                            }
+                            @if (item.Status == StatusEnum.Invalid)
+                            {
+                                <td>@item.Message</td>
+                                <td>
+                                    <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
+                                    <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                </td>
+                            }
+                            else if (item.Status == StatusEnum.Editable
+                                || item.Status == StatusEnum.Delete
+                                || item.Status == StatusEnum.DeleteOrSkip)
+                            {
+                                <td>
+                                    <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
+                                    <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-success mb-2 col-md-12">Accept</a>
+                                    <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                </td>
+                            }
+                        </tr>
                         }
                     </tbody>
                 </table>
