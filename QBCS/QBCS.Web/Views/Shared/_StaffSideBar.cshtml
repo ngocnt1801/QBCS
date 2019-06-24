@@ -1,4 +1,41 @@
 ﻿@using QBCS.Service.ViewModel
+
+@{
+    var examClass = "";
+    var courseClass = "";
+    var statClass = "";
+    var ruleClass = "";
+    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var action = this.ViewContext.RouteData.Values["action"].ToString();
+    //switch (controller)
+    //{
+    //    case "Course":
+    //        courseClass = "active";
+    //        break;
+    //    case "Import":
+    //        statClass = "active";
+    //        break;
+    //    case "Rule":
+    //        ruleClass = "active";
+    //        break;
+    //}
+    if (controller.Equals("Rule"))
+    {
+        ruleClass = "active";
+    }
+    else if(controller.Equals("Course") && action.Equals("Staff_Index"))
+    {
+        courseClass = "active";
+    }
+    else if(controller.Equals("Course") && action.Equals("GetAllCourse"))
+    {
+        examClass = "active";
+    }
+    else if(controller.Equals("Course") && action.Equals("CourseStatistic"))
+    {
+        courseClass = "active";
+    }
+}
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -12,7 +49,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item">
+    <li class="nav-item @examClass">
         <a class="nav-link" href='@Url.Action("GetAllCourse", "Course")'>
             <i class="fas fa-file"></i>
             <span>Examination</span>
@@ -30,14 +67,14 @@
 
 
     <!-- Nav Item - Courses Menu -->
-    <li class="nav-item">
+    <li class="nav-item @courseClass">
         <a class="nav-link" href="@Url.Action("Staff_Index", "Course")">
             <i class="fas fa-book"></i>
             <span>Courses</span>
         </a>
     </li>
 
-    <!-- Nav Item - Topics Menu -->
+    @*<!-- Nav Item - Topics Menu -->
     <li class="nav-item">
         <a class="nav-link" href="@Url.Action("Index", "Topic")">
             <i class="fas fa-comment"></i>
@@ -51,11 +88,11 @@
             <i class="fas fa-comment-alt"></i>
             <span>Learning Outcomes</span>
         </a>
-    </li>
+    </li>*@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Course Statistics Menu -->
-    <li class="nav-item">
+    <li class="nav-item @statClass">
         <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
             <i class="fas fa-chart-pie"></i>
             <span>Course Statistics</span>
@@ -63,7 +100,7 @@
     </li>
 
     <!-- Nav Item - Rules Menu -->
-    <li class="nav-item">
+    <li class="nav-item @ruleClass">
         <a class="nav-link" href="@Url.Action("Index", "Rule")">
             <i class="fas fa-bookmark"></i>
             <span>Rules</span>

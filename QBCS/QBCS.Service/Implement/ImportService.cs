@@ -197,6 +197,27 @@ namespace QBCS.Service.Implement
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
+                foreach(var option1 in tempQuestion.OptionTemps)
+                {
+                    foreach(var option2 in tempQuestion.OptionTemps)
+                    {
+                        if (option1.Id == option2.Id)
+                        {
+                            break;
+                        }
+                        var trimOption1 = TrimOption(option1.OptionContent);
+                        var trimOption2 = TrimOption(option2.OptionContent);
+                        if (trimOption1.Equals(trimOption2))
+                        {
+                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                            break;
+                        }
+                    }
+                    if(tempQuestion.Status == (int)StatusEnum.Invalid)
+                    {
+                        break;
+                    }
+                }
                 foreach (var rule in rules)
                 {
                     if (DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
@@ -431,7 +452,13 @@ namespace QBCS.Service.Implement
             }
             return tempQuestions;
         }
-
+        private string TrimOption(string option)
+        {
+            string trim = option.Replace(" ", "");
+            trim = trim.Replace(".", "");
+            trim = trim.Replace(",", "");
+            return trim;
+        }
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);

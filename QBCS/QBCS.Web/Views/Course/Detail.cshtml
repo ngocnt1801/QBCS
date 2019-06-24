@@ -6,12 +6,6 @@
     ViewBag.Title = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div style="text-align:right">
-    <a href="@Url.Action("Staff_Index", "Course")"
-       class="btn btn-outline-light border-dark text-custom mr-2">
-        Return to Index
-    </a>
-</div>
 <div class="card shadow mb-4">
     <div class="card-header">
         <h3 class="m-0 font-weight-bold text-primary">Detail Course</h3>
@@ -100,16 +94,16 @@
             </div>
         </div>
     </div>*@
-<div class="card shadow mb-4 col-md-12">
+<div class="card shadow mb-4">
     <div class="card-header">
         <h3 class="m-0 font-weight-bold text-primary">Learning outcome in this course</h3>
     </div>
 
-    <div class="card-body text-custom" style="padding-left:30px">
-        <div class="row float-right">
+    <div class="card-body text-custom">
+        <div class="row float-right" style="margin-bottom: 10px">
             <a href="@Url.Action("Add", "LearningOutcome", new { courseId = Model.CourseId})" class="btn btn-primary float-right">Add new Learning Outcome</a>
         </div>
-        <div class="row table-responsive">
+        <div class="row table-responsive col-md-12">
             <table class="table table-bordered table-hover text-custom  table-striped" cellspacing="0">
                 <thead>
                     <tr>
@@ -139,7 +133,7 @@
                             </td>
                             <td class="text-center">
                                 <a href="@Url.Action("Edit", "LearningOutcome", new { id = learningOutcome.Id })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = learningOutcome.Id })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                                <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = learningOutcome.Id })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
                             </td>
                             @*<td width="18%">
                                     <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
@@ -155,5 +149,11 @@
             </table>
         </div>
     </div>
+</div>
+<div style="text-align:right;margin-bottom:10px">
+    <a href="@Url.Action("Staff_Index", "Course")"
+       class="btn btn-outline-light border-dark text-custom mr-2">
+        Return to Index
+    </a>
 </div>
 

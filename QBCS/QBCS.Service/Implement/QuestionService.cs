@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
 
 namespace QBCS.Service.Implement
 {
@@ -427,7 +429,7 @@ namespace QBCS.Service.Implement
                                 sb.AppendLine("Question " + item.QuestionContent);
                                 sb.AppendLine("Code " + item.Code + "\n");
                                 sb.AppendLine();
-                                File.AppendAllText(@"E:\Capstone\log\" + "logXML.txt", sb.ToString());
+                                //File.AppendAllText(@"E:\Capstone\log\" + "logXML.txt", sb.ToString());
                                 sb.Clear();
                             }
                             listQuestionXml = new List<QuestionTmpModel>();
@@ -476,11 +478,25 @@ namespace QBCS.Service.Implement
                         sb.AppendLine("Question: " + item.QuestionContent);
                         sb.AppendLine("Code: " + item.Code + "\n");
                         sb.AppendLine();
-                        File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
+                        //File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
                         sb.Clear();
                     }
                 }
                 #endregion
+
+                //#region process doc
+
+                //if (extensionFile.Equals(".doc") || extensionFile.Equals(".docx"))
+                //{
+                //    DocUltilities docUltil = new DocUltilities();
+                //    QuestionTemp quesTmp = new QuestionTemp();
+                //    DateTime importTime = DateTime.Now;
+                //    listQuestion = docUltil.ParseDoc(questionFile.InputStream);
+                    
+                //}
+
+                //#endregion
+
                 if (import.QuestionTemps.Count() > 0)
                 {
                     import.Status = (int)StatusEnum.NotCheck;
