@@ -353,10 +353,13 @@ namespace QBCS.Service.Implement
                                     status = (int)Enum.StatusEnum.Success;
                                 }
                                 
-                            } 
-                            
+                            }
+
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
-                            questionContent = WebUtility.HtmlDecode(tempParser);               
+                            tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                            htmlDoc.LoadHtml(tempParser);
+                            questionContent = htmlDoc.DocumentNode.InnerText;
+                            questionContent = WebUtility.HtmlDecode(questionContent);               
                             questionContent = stringProcess.RemoveHtmlTag(questionContent);     
                             if (checkHTML.Equals("html"))
                             {
@@ -364,6 +367,7 @@ namespace QBCS.Service.Implement
                             }
                             else
                             {
+
                                 question.QuestionContent = questionContent;
                             }
                             question.Code = questionXml.question[i].name.text.ToString();                          
@@ -385,10 +389,12 @@ namespace QBCS.Service.Implement
                                     {
                                         
                                         tempParser = questionXml.question[i].answer[j].text;
-                                        rightAnswer = WebUtility.HtmlDecode(tempParser);
-                                        rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
-                                        htmlDoc.LoadHtml(rightAnswer);
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        htmlDoc.LoadHtml(tempParser);
                                         rightAnswer = htmlDoc.DocumentNode.InnerText;
+                                        rightAnswer = WebUtility.HtmlDecode(rightAnswer);
+                                        rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
+                                        
                                         option = new OptionTemp();
                                         if (checkHTML.Equals("html"))
                                         {
@@ -409,10 +415,12 @@ namespace QBCS.Service.Implement
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("0"))
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
-                                        wrongAnswer = WebUtility.HtmlDecode(tempParser);
-                                        wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
-                                        htmlDoc.LoadHtml(wrongAnswer);
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        htmlDoc.LoadHtml(tempParser);
                                         wrongAnswer = htmlDoc.DocumentNode.InnerText;
+                                        wrongAnswer = WebUtility.HtmlDecode(wrongAnswer);
+                                        wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
+                                        
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
                                         if (checkHTML.Equals("html"))
@@ -512,17 +520,17 @@ namespace QBCS.Service.Implement
                         InsertedToBankDate = importTime
     
                     };
-                    int g = 0;
-                    foreach (var item in listQuestion)
-                    {
-                        g++;
-                        sb.AppendLine(g + "");
-                        sb.AppendLine("Question: " + item.QuestionContent);
-                        sb.AppendLine("Code: " + item.Code + "\n");
-                        sb.AppendLine();
-                        File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
-                        sb.Clear();
-                    }
+                    //int g = 0;
+                    //foreach (var item in listQuestion)
+                    //{
+                    //    g++;
+                    //    sb.AppendLine(g + "");
+                    //    sb.AppendLine("Question: " + item.QuestionContent);
+                    //    sb.AppendLine("Code: " + item.Code + "\n");
+                    //    sb.AppendLine();
+                    //    File.AppendAllText(@"E:\Capstone\log\" + "logGIFT.txt", sb.ToString());
+                    //    sb.Clear();
+                    //}
                 }
                 #endregion
                 if (import.QuestionTemps.Count() > 0)

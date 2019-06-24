@@ -51,10 +51,11 @@ namespace QBCS.Service.Utilities
                 bool isMultipleChoice = false;
                 if (!line.StartsWith("//"))
                 {
-                 
+
+                    line = stringProcess.RemoveHtmlBrTag(line);
                     HtmlDocument htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(line);
-                    string resultTmp = htmlDoc.DocumentNode.InnerHtml;
+                    htmlDoc.LoadHtml(line);           
+                    string resultTmp = htmlDoc.DocumentNode.InnerText;
                     result = WebUtility.HtmlDecode(resultTmp);
                     //result = StringProcess.RemoveTag(result, destination, "");
 
@@ -105,7 +106,7 @@ namespace QBCS.Service.Utilities
                                 inLine = 2; //{ is end question
                                 countCode = 0;
                                 isStartQuestion = true;
-                                continue;
+                               // continue;
                             }
                             else
                             {
