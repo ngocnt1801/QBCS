@@ -83,10 +83,8 @@ namespace QBCS.Service.Implement
                 int totalMediumQuestionInTopic = 0;
                 int totalHardQuestionInTopic = 0;
                 int id = int.Parse(topic.Substring(3));
-                bool isLearingOutcome = false;
                 if (topic.Contains("LO_"))
                 {
-                    isLearingOutcome = true;
                     int idOfLevel = levelService.GetIdByName(EASY);
                     totalEasyQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel, exam.CategoryId);
                     totalEasyQuestionInTopicCategory += totalEasyQuestionInTopic;
