@@ -14,7 +14,7 @@ namespace QBCS.Service.Utilities
             if (text == null)
                 return null;
 
-            StringBuilder sb = new StringBuilder(text.Length);
+            StringBuilder stringBuilder = new StringBuilder(text.Length);
 
             int len = text.Length;
             for (int i = 0; i < len; i++)
@@ -22,23 +22,23 @@ namespace QBCS.Service.Utilities
                 switch (text[i])
                 {
                     case '<':
-                        sb.Append("&lt;");
+                        stringBuilder.Append("&lt;");
                         break;
                     case '>':
-                        sb.Append("&gt;");
+                        stringBuilder.Append("&gt;");
                         break;
                     case '"':
-                        sb.Append("&quot;");
+                        stringBuilder.Append("&quot;");
                         break;
                     case '&':
-                        sb.Append("&amp;");
+                        stringBuilder.Append("&amp;");
                         break;
                     default:
-                        sb.Append(text[i]);
+                        stringBuilder.Append(text[i]);
                         break;
                 }
             }
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }
