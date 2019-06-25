@@ -72,6 +72,7 @@ namespace DuplicateQuestion
 
                         item.Test = result.ToString();
 
+                        #region main is question content
                         if (result >= DUPLICATE_STANDARD) //same question content
                         {
                             #region check correct option
@@ -144,6 +145,11 @@ namespace DuplicateQuestion
                         {
                             break;
                         }
+                        #endregion
+
+                        #region main is options
+                        #endregion
+
                     }
 
                     //update database
