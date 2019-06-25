@@ -305,11 +305,10 @@
 
     @{
         var message = TempData["Message"];
-        //var status = TempData["Status"];
+        var status = TempData["Status"];
         if (message != null)
         {
-            <script>toastr.success("@message")</script>
-            @*switch ((ToastrEnum)status)
+            switch ((ToastrEnum)status)
                 {
                     case ToastrEnum.Success:
                         <script>toastr.success("@message")</script>
@@ -322,8 +321,14 @@
                         break;
                     case ToastrEnum.Info:
                         <script>toastr.info("@message")</script>
-                        break;
-                }*@
+                    break;
+            }
+        }
+
+        var modal = TempData["Modal"];
+        if (modal != null)
+        {
+            <script>$("@modal").modal('show')</script>
         }
     }
 </body>
