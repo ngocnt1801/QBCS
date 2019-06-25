@@ -48,6 +48,8 @@ namespace QBCS.Entity
         [StringLength(2147483647)]
         public string Image { get; set; }
 
+        public string Message { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

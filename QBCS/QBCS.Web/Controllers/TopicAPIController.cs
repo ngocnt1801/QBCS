@@ -23,13 +23,11 @@ namespace QBCS.Web.Controllers
 
         [HttpGet]
         [ActionName("topics")]
-        public ListTopicLearningOutcomeViewModel GetListTopic(int CourseId)
-        {
-            List<TopicViewModel> topicViewModels = topicService.GetTopicByCourseId(CourseId);
+        public ListLearningOutcomeViewModel GetListTopic(int CourseId)
+        {            
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(CourseId);
-            ListTopicLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListTopicLearningOutcomeViewModel()
-            {
-                Topics = topicViewModels,
+            ListLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListLearningOutcomeViewModel()
+            {                
                 LearningOutcomes = learningOutcomeViewModels
             };
             return listTopicLearningOutcomeViewModel;

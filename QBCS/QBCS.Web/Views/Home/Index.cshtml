@@ -5,6 +5,7 @@
 
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
 
 
@@ -37,6 +38,7 @@
                            {
                                Value = c.CourseId + "",
                                Text = c.Code + " - " + c.Name,
+                               Selected = c.CourseId == selectedCourse
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                         </div>
@@ -66,57 +68,23 @@
                     }
                 </div>
             </div>
-
         </div>
-        @*<div class="col-md-3">
-                <div class="col-xl-12 col-md-12 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        Courses
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-500"> @(((UserViewModel)Session["user"]).Courses.Count)</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-book fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-12 col-md-12 mb-4">
-                    <div class="card border-left-warning shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Questions</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-500">201</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-question fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-12 col-md-12 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Statistic</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
     </div>
-
-
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" id="success-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Processing</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>Your import questions are<b> processing</b>.</p>
+                <p>We will notifiy you when it has the result</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

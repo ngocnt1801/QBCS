@@ -86,7 +86,14 @@ function split() {
                     }               
                     return data
                 }
-            }
+            },
+            null
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "44%" },
+            { targets: 2, width: "44%"},
+            { targets: 3, width: "10%"}
         ]
     });
     var table2 = $('#tableDelete').DataTable({
@@ -148,22 +155,10 @@ function split() {
                     return data
                 }
             },
-            {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("[html]").join("");
-                    }          
-                    return data
-                }
-            }
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "98%" }
         ]
     });
     var table4 = $('#tableInvalid').DataTable({
@@ -201,7 +196,14 @@ function split() {
                     }
                     return data
                 }
-            }
+            },
+            null
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "68%" },
+            { targets: 2, width: "20%" },
+            { targets: 3, width: "10%" }
         ]
     });
 }

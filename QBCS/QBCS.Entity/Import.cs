@@ -20,7 +20,7 @@ namespace QBCS.Entity
 
         public int? UserId { get; set; }
 
-        //public DateTime? ImportedDate { get; set; }
+        public DateTime? ImportedDate { get; set; }
 
         public int? Status { get; set; }
 
@@ -30,7 +30,7 @@ namespace QBCS.Entity
 
         public int? CourseId { get; set; }
 
-        public DateTime? InsertedToBankDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public int? TotalSuccess { get; set; }
 

@@ -110,6 +110,11 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/spinner").Include(
                "~/Content/spinner/spinner.css"
                ));
+
+            //Edit question
+            bundles.Add(new ScriptBundle("~/bundle/scripts/editquestion").Include(
+                "~/Scripts/myjs/edit-question.js"
+                ));
         }
     }
 }

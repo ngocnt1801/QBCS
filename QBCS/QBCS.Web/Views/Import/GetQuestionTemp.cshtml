@@ -21,11 +21,19 @@
                 @Html.DisplayFor(m => m.QuesitonContent)
             </div>
                // @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
-                for (var i = 0; i < Model.Options.Count; i++)
-                {
-                    @*@Html.CheckBoxFor(m => m.Options[i].IsCorrect)*@
-                    @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
-                }
+                
+                <div id="option-list-container">
+
+
+                    @for (var i = 0; i < Model.Options.Count; i++)
+                    {
+                        @Html.EditorFor(m => m.Options[i], new { index = i + 1 })
+                    }
+                </div>
+                <div class="row mb-4">
+                    <span class="text-primary add-option"><i class="fa fa-plus-circle"></i> Add Option</span>
+                </div>
+
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)
                 <input type="submit" name="Save" class="btn btn-primary float-right" />
@@ -34,10 +42,12 @@
         </div>
     </div>
 </div>
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Duplicated Question</h6>
-    </div>
+@if (Model.Status == QBCS.Service.Enum.StatusEnum.Editable)
+{
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Duplicated Question</h6>
+        </div>
 
     <div class="card-body text-custom" id="customs-display-duplicate">
 
@@ -57,8 +67,10 @@
                 </div>
             }
 
-            <br />
-        }
+                <br />
+            }
 
+        </div>
     </div>
-</div>
+}
+

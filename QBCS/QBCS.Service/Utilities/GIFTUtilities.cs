@@ -230,26 +230,30 @@ namespace QBCS.Service.Utilities
                         }
                         if (mark != null)
                         {
-                            if (int.Parse(mark) < 0)
+                            if (!mark.Equals(""))
                             {
-                                countWrong++;
-                                countRight = 0;
-                                isBlock = true;
-                                isMultipleChoice = false;
-                                mark = null;
-                                continue;
+                                if (int.Parse(mark) < 0)
+                                {
+                                    countWrong++;
+                                    countRight = 0;
+                                    isBlock = true;
+                                    isMultipleChoice = false;
+                                    mark = null;
+                                    continue;
+                                }
+                                if (int.Parse(mark) > 0)
+                                {
+                                    countRight++;
+                                    countWrong = 0;
+                                    isBlock = true;
+                                    isMultipleChoice = false;
+                                    mark = null;
+                                    continue;
+                                }
                             }
-                            if (int.Parse(mark) > 0)
-                            {
-                                countRight++;
-                                countWrong = 0;
-                                isBlock = true;
-                                isMultipleChoice = false;
-                                mark = null;
-                                continue;
-                            }
+
                         }
-                       
+
                         if (countWrong >= 1 && !isEnd)
                         {
                             if (let == '%' && countElement == 1)

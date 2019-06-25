@@ -140,17 +140,15 @@ namespace QBCS.Service.Implement
         {
             Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
             questionById.QuestionContent = question.QuestionContent;
-            questionById.LevelId = question.LevelId;
+            if (question.LevelId != 0)
+            {
+                questionById.LevelId = question.LevelId;
+            }
             if (question.LearningOutcomeId != 0)
             {
                 questionById.LearningOutcomeId = question.LearningOutcomeId;
             }
-
-            if (question.TopicId != 0)
-            {
-                questionById.TopicId = question.TopicId;
-            }
-
+            
             unitOfWork.Repository<Question>().Update(questionById);
             unitOfWork.SaveChanges();
             return true;
@@ -167,10 +165,6 @@ namespace QBCS.Service.Implement
             if (question.CourseId != null)
             {
                 questionViewModel.CourseId = (int)question.CourseId;
-            }
-            if (question.TopicId != null)
-            {
-                questionViewModel.TopicId = (int)question.TopicId;
             }
             if (question.LevelId != null)
             {
@@ -492,7 +486,7 @@ namespace QBCS.Service.Implement
                                     }).ToList()
 
                                 });
-                                import.InsertedToBankDate = DateTime.Now;
+                                import.UpdatedDate = DateTime.Now;
                                 import.UserId = userId;
 
 
@@ -569,8 +563,8 @@ namespace QBCS.Service.Implement
                                 IsCorrect = o.IsCorrect
                             }).ToList(),
                         }).ToList(),
-                        InsertedToBankDate = importTime
-
+                        UpdatedDate = importTime
+    
                     };
                     
                     
@@ -653,19 +647,42 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId)
+        public int GetMinFreQuencyByTopicAndLevel(int topicId, int levelId, int categoryId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
-            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            if(question == null)
+            {
+                return 0;
+            }
+            return (int)question.Frequency;
+        }
+        
+        public int GetCountOfListQuestionByTopicAndId(int topicId, int levelId, int categoryId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            List<Question> question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId && q.CategoryId == categoryId).ToList();
+            return question.Count;
 
-            return (int)question.Frequency;
         }
-        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
+        public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId, int categoryId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
-            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
-            return (int)question.Frequency;
+            List<Question> question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.CategoryId == categoryId).ToList();
+            if (question == null)
+            {
+                return 0;
+            }
+            return question.Count;
+
         }
+        public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId, int categoryId)
+        {
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            return question != null ? (int)question.Frequency : 0;
+        }
+
         public List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);
@@ -687,16 +704,19 @@ namespace QBCS.Service.Implement
             if (learningoutcomeId != null && learningoutcomeId != 0)
             {
                 result = result.Where(q => q.LearningOutcomeId == learningoutcomeId);
+            } else if (learningoutcomeId == 0)
+            {
+                result = result.Where(q => q.LearningOutcomeId == null);
             }
 
-            if (topicId != null && topicId != 0)
-            {
-                result = result.Where(q => q.TopicId == topicId);
-            }
 
             if (levelId != null && levelId != 0)
             {
                 result = result.Where(q => q.LevelId == levelId);
+            }
+            else if (levelId == 0)
+            {
+                result = result.Where(q => q.LevelId == null);
             }
 
             return result.Select(q => new QuestionViewModel
@@ -746,11 +766,11 @@ namespace QBCS.Service.Implement
 
                     if (learningOutcomeId != null && learningOutcomeId != 0)
                     {
-                        entity.TopicId = learningOutcomeId; // fix here
+                        entity.LearningOutcomeId = learningOutcomeId; // fix here
                     }
                     else
                     {
-                        entity.TopicId = null;
+                        entity.LearningOutcomeId = null;
                     }
 
                     if (levelId != null && levelId != 0)

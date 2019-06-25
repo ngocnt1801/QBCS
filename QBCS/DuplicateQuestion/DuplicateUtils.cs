@@ -10,6 +10,10 @@ namespace DuplicateQuestion
     public class DuplicateUtils
     {
         private static readonly bool NOT_SEEN = false;
+        private static readonly double DUPLICATE_STANDARD = 70; //  70%
+        private static readonly double MULTIPLE_CHOICE_DUPLICATE = 0.5;
+        private static readonly bool CORRECT = true;
+        private static readonly bool INCORRECT = false;
 
         [SqlProcedure]
         public static void CheckDuplidate(SqlInt32 importId)
@@ -50,177 +54,179 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 bool isUpdate = false;
+                bool firstIsContent = true;
                 foreach (var item in import)
                 {
-                    string target = StringUtils.NormalizeString(item.QuestionContent);
                     isUpdate = false;
+                    
+                    //define main compare
+                    if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
+                    {
+                        firstIsContent = false;
+                    }
+
                     foreach (var question in bank)
                     {
-                        string source = StringUtils.NormalizeString(question.QuestionContent);
-                        //Check question content
-                        var result = LevenshteinDistance.CalculateSimilarity(source, target);
-                        //item.Test = result.ToString() + " - " + source + " - " + target; //remove
-                        if (result >= 70)
+                        if (firstIsContent)
                         {
-                            item.Test = "Levenshtein";
-                            //check option
-                            int countDuplicate = 0;
-                            int targetRightCount = 0;
+                            #region main is question content
+                            //Check question content
+                            var result = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
 
-                            #region get duplicate %
-                            foreach (var iOption in item.Options)
+                            item.Test = result.ToString();
+                            if (result >= DUPLICATE_STANDARD) //same question content
                             {
-                                if (iOption.IsCorrect)
+                                #region check correct option
+                                double checkOptionRight = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                    GetOptionsByStatus(item.Options, CORRECT));
+
+                                item.Test += " - " + checkOptionRight.ToString();
+
+                                if (checkOptionRight > MULTIPLE_CHOICE_DUPLICATE) //same correct option
                                 {
-                                    targetRightCount = targetRightCount + 1;
-                                    string iOptionTarget = StringUtils.NormalizeString(iOption.OptionContent);
-                                    foreach (var bOption in question.Options)
+                                    #region check wrong options
+                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
+
+                                    item.Test += " - " + checkOptionWrong.ToString();
+
+                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
                                     {
-                                        string bOptionSource = StringUtils.NormalizeString(bOption.OptionContent);
-                                        if (LevenshteinDistance.CalculateSimilarity(bOptionSource, iOptionTarget) >= 70)
-                                        {
-                                            countDuplicate = countDuplicate + 1;
-                                            break;
-                                        }
+                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        isUpdate = true;
                                     }
-                                }
-                            }
+                                    else
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
+                                        isUpdate = true;
 
-                            float optionCheckResult = ((float)countDuplicate) / targetRightCount;
-                            #endregion
+                                    }// end if check wrong option
 
-                            if (optionCheckResult > 0.5)
-                            {
-                                item.Status = (int)StatusEnum.Delete;
-                                if (question.IsBank)
-                                {
-                                    item.DuplicatedQuestionId = question.Id;
+                                    #endregion
                                 }
                                 else
                                 {
-                                    item.DuplicatedWithImportId = question.Id;
-                                }
-                                isUpdate = true;
-                            }
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+                                }// end if check right option
+                                #endregion
+
+                            } // end if check question content
                             else
                             {
-                                item.Status = (int)StatusEnum.Editable;
-                                if (question.IsBank)
+                                double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
+                                                                                        item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
+
+                                item.Test += " - " + questionAndOptionResult.ToString();
+
+                                if (questionAndOptionResult > DUPLICATE_STANDARD)
                                 {
-                                    item.DuplicatedQuestionId = question.Id;
+                                    #region check wrong options
+                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
+
+                                    item.Test += " - " + checkOptionWrong.ToString();
+
+                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        isUpdate = true;
+                                    }
+                                    else
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
+                                        isUpdate = true;
+
+                                    }// end if check wrong option
+                                    #endregion
                                 }
-                                else
-                                {
-                                    item.DuplicatedWithImportId = question.Id;
-                                }
-                                isUpdate = true;
+
                             }
 
+                            #endregion
                         }
-                        else // check with TF + Consine similarity
+                        else
                         {
-                            item.Test = "TF+Consine";
-                            string targetTF = item.QuestionContent;
-                            string sourceTF = question.QuestionContent;
+                            #region main is options
+                            //Check question content
+                            var result = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
 
-                            #region get right option string
-                            string rightOptionTaget = "";
-                            string rightOptionSource = "";
-                            string wrongOptionTarget = "";
-                            string wrongOptionSource = "";
-                            foreach (var option in item.Options)
+                            item.Test = result.ToString();
+                            if (result >= DUPLICATE_STANDARD) //same question content
                             {
-                                if (option.IsCorrect)
+                                #region check correct option
+                                double checkOptionRight = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                    GetOptionsByStatus(item.Options, CORRECT));
+
+                                item.Test += " - " + checkOptionRight.ToString();
+
+                                if (checkOptionRight > MULTIPLE_CHOICE_DUPLICATE) //same correct option
                                 {
-                                    rightOptionTaget += option.OptionContent;
+                                    #region check wrong options
+                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
+
+                                    item.Test += " - " + checkOptionWrong.ToString();
+
+                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        isUpdate = true;
+                                    }
+                                    else
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
+                                        isUpdate = true;
+
+                                    }// end if check wrong option
+
+                                    #endregion
                                 }
                                 else
                                 {
-                                    wrongOptionTarget += option.OptionContent;
-                                }
-                            }
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+                                }// end if check right option
+                                #endregion
 
-                            foreach (var option in question.Options)
+                            } // end if check question content
+                            else
                             {
-                                if (option.IsCorrect)
+                                double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
+                                                                                        item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
+
+                                item.Test += " - " + questionAndOptionResult.ToString();
+
+                                if (questionAndOptionResult > DUPLICATE_STANDARD)
                                 {
-                                    rightOptionSource += option.OptionContent;
+                                    #region check wrong options
+                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
+
+                                    item.Test += " - " + checkOptionWrong.ToString();
+
+                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        isUpdate = true;
+                                    }
+                                    else
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
+                                        isUpdate = true;
+
+                                    }// end if check wrong option
+                                    #endregion
                                 }
-                                else
-                                {
-                                    wrongOptionSource += option.OptionContent;
-                                }
+
                             }
                             #endregion
-
-                            result = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
-                            if (result >= 70)
-                            {
-                                double optionResult = TFAlgorithm.CaculateSimilar(rightOptionSource, rightOptionTaget);
-                                if (optionResult >= 70)
-                                {
-                                    item.Status = (int)StatusEnum.Delete;
-                                    if (question.IsBank)
-                                    {
-                                        item.DuplicatedQuestionId = question.Id;
-                                    }
-                                    else
-                                    {
-                                        item.DuplicatedWithImportId = question.Id;
-                                    }
-                                    isUpdate = true;
-                                }
-                                else
-                                {
-                                    item.Status = (int)StatusEnum.Editable;
-                                    if (question.IsBank)
-                                    {
-                                        item.DuplicatedQuestionId = question.Id;
-                                    }
-                                    else
-                                    {
-                                        item.DuplicatedWithImportId = question.Id;
-                                    }
-                                    isUpdate = true;
-                                }
-
-                            }
-                            else // check quesiton + option
-                            {
-                                sourceTF = sourceTF + " " + rightOptionSource;
-                                targetTF = targetTF + " " + rightOptionTaget;
-
-                                double resultQwithO = TFAlgorithm.CaculateSimilar(sourceTF, targetTF);
-                                if (resultQwithO >= 70)
-                                {
-
-                                    double resultOfWrongOption = TFAlgorithm.CaculateSimilar(wrongOptionSource, wrongOptionTarget);
-                                    if (resultOfWrongOption >= 70)
-                                    {
-                                        item.Status = (int)StatusEnum.Delete;
-                                    }
-                                    else
-                                    {
-                                        item.Status = (int)StatusEnum.DeleteOrSkip;
-                                    }
-                                    if (question.IsBank)
-                                    {
-                                        item.DuplicatedQuestionId = question.Id;
-                                    }
-                                    else
-                                    {
-                                        item.DuplicatedWithImportId = question.Id;
-                                    }
-                                    isUpdate = true;
-                                }
-                            }
                         }
 
                         if (isUpdate)
                         {
                             break;
                         }
-
                     }
 
                     //update database
@@ -247,6 +253,63 @@ namespace DuplicateQuestion
                 }
 
             }
+        }
+
+        private static double CaculateStringSimilar(string source, string target)
+        {
+            double result = LevenshteinDistance.CalculateSimilarity(source, target);
+            if (result < 70)
+            {
+                result = TFAlgorithm.CaculateSimilar(source, target);
+            }
+
+            return result;
+        }
+
+        private static void AssignDuplicated(QuestionModel source, QuestionModel target, StatusEnum status)
+        {
+            target.Status = (int)status;
+            if (source.IsBank)
+            {
+                target.DuplicatedQuestionId = source.Id;
+            }
+            else
+            {
+                target.DuplicatedWithImportId = source.Id;
+            }
+        }
+
+        private static double CaculateListStringSimilar(List<string> source, List<string> target)
+        {
+            int countDuplicate = 0;
+            foreach (var t in target)
+            {
+                foreach (var s in source)
+                {
+                    if (LevenshteinDistance.CalculateSimilarity(s, t) >= 70)
+                    {
+                        countDuplicate = countDuplicate + 1;
+                        break;
+                    }
+                }
+
+            }
+
+            return ((float)countDuplicate) / target.Count;
+        }
+
+        private static List<string> GetOptionsByStatus(List<OptionModel> options, bool isCorrect)
+        {
+            List<string> result = new List<string>();
+            foreach (var o in options)
+            {
+                if (o.IsCorrect == isCorrect)
+                {
+                    result.Add(o.OptionContent);
+                }
+            }
+
+            return result;
         }
 
         private static ImportModel GetImport(int importId)
@@ -339,7 +402,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.Topic, q.LevelName " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -364,9 +427,9 @@ namespace DuplicateQuestion
                         {
                             question.Category = (string)reader["Category"];
                         }
-                        if (reader["Topic"] != DBNull.Value)
+                        if (reader["LearningOutcome"] != DBNull.Value)
                         {
-                            question.LearningOutcome = (string)reader["Topic"];
+                            question.LearningOutcome = (string)reader["LearningOutcome"];
                         }
                         if (reader["LevelName"] != DBNull.Value)
                         {
@@ -405,12 +468,12 @@ namespace DuplicateQuestion
                 connection.Open();
 
                 string query = "UPDATE Import " +
-                                "SET Status=@status, Seen=@seen " +
+                                "SET Status=@status, UpdatedDate=@date, Seen=@seen " +
                                 "WHERE Id=@importId";
                 if (model.Status == (int)StatusEnum.Done)
                 {
                     query = "UPDATE Import " +
-                            "SET Status=@status, Seen=@seen, InsertedToBankDate=@date, TotalSuccess=@success " +
+                            "SET Status=@status, Seen=@seen, UpdatedDate=@date, TotalSuccess=@success " +
                             "WHERE Id=@importId";
                 }
 
@@ -420,9 +483,9 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@status", model.Status);
                 command.Parameters.AddWithValue("@seen", NOT_SEEN);
                 command.Parameters.AddWithValue("@importId", model.ImportId);
+                command.Parameters.AddWithValue("@date", DateTime.Now);
                 if (model.Status == (int)StatusEnum.Done)
                 {
-                    command.Parameters.AddWithValue("@date", DateTime.Now);
                     command.Parameters.AddWithValue("@success", model.TotalSuccess);
                 }
                 command.ExecuteNonQuery();
@@ -457,6 +520,9 @@ namespace DuplicateQuestion
                 question.LearningOutcomeId = GetLearningOutcome(question.LearningOutcome, import.CourseId);
                 question.LevelId = GetLevel(question.Level);
             }
+
+            //generate code
+            GenerateCode(importSuccessList);
 
             //add question
             using (SqlConnection connection = new SqlConnection("context connection=true"))
@@ -592,35 +658,42 @@ namespace DuplicateQuestion
 
         private static int? GetLearningOutcome(string name, int courseId)
         {
-            int? id = 0;
-            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            if (name != null && !String.IsNullOrEmpty(name.Trim()))
             {
-                connection.Open();
-
-                SqlCommand command = new SqlCommand(
-                    "SELECT Id " +
-                    "FROM LearningOutcome " +
-                    "WHERE Name = @name AND CourseId=@courseId",
-                    connection
-                    );
-
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@courseId", courseId);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                int id = 0;
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
                 {
-                    id = (int)reader["id"];
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(
+                        "SELECT Id " +
+                        "FROM LearningOutcome " +
+                        "WHERE Name = @name AND CourseId=@courseId",
+                        connection
+                        );
+
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@courseId", courseId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        id = (int)reader["id"];
+                    }
+                }
+
+
+                if (id == 0)
+                {
+                    id = AddLearningOutcome(name, courseId);
+                }
+                if (id != 0)
+                {
+                    return id;
                 }
             }
-
-            if (id == 0)
-            {
-                //id = AddCategory(name, courseId);
-                id = null;
-            }
-
-            return id;
+            return null;
         }
+
 
         private static int AddCategory(string name, int courseId)
         {
@@ -673,6 +746,49 @@ namespace DuplicateQuestion
                 }
                 reader.Close();
                 return id;
+            }
+        }
+
+        private static int GetLastCode()
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT TOP 1 QuestionCode FROM Question ORDER BY Id DESC",
+                    connection
+                    );
+
+                SqlDataReader reader = command.ExecuteReader();
+                string code = "";
+                if (reader.Read())
+                {
+                    if (reader["QuestionCode"] != null)
+                    {
+                        code = (string)reader["QuestionCode"];
+                    }
+                }
+
+                int qIndex = code.LastIndexOf('Q');
+                if (qIndex >= 0)
+                {
+                    int result = 0;
+                    Int32.TryParse(code.Split('Q')[1], out result);
+                    return result;
+                }
+            }
+            return 0;
+        }
+
+        private static void GenerateCode(List<QuestionModel> questions)
+        {
+            var no = GetLastCode() + 1;
+            foreach (var q in questions)
+            {
+                string prefix = q.QuestionCode.Split('-')[0];
+                q.QuestionCode = prefix + '-' + 'Q' + no.ToString("D6");
+                no += 1;
             }
         }
     }

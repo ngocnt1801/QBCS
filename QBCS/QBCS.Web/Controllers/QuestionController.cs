@@ -88,8 +88,6 @@ namespace QBCS.Web.Controllers
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
 
-            List<TopicViewModel> topics = topicService.GetTopicByCourseId(qvm.CourseId);
-
             List<LevelViewModel> levels = levelService.GetLevel();
 
             List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
@@ -97,7 +95,6 @@ namespace QBCS.Web.Controllers
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
                 Question = qvm,
-                Topics = topics,
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
@@ -105,6 +102,7 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+        [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
@@ -139,8 +137,8 @@ namespace QBCS.Web.Controllers
             }
 
             //notify 
-            TempData["Message"] = "You import successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            TempData["Modal"] = "#success-modal";
+            TempData["CourseId"] = courseId;
 
             return RedirectToAction("Index", "Home");
         }
@@ -186,9 +184,9 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateCategory(int[] ids, int? categoryId, int? topicId, int? levelId)
+        public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
-            questionService.UpdateCategory(ids, categoryId, topicId, levelId);
+            questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
     }

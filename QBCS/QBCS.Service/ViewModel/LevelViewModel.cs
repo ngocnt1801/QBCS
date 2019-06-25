@@ -8,7 +8,7 @@ namespace QBCS.Service.ViewModel
 {
     public class LevelViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public int QuestionCount { get; set; }
 
