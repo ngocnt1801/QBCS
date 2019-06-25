@@ -19,7 +19,7 @@ namespace QBCS.Service.Utilities
         string category = "";
         string learningOutcome = "";
         string level = "";
-        public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader, bool checkCate)
+        public List<QuestionTmpModel> StripTagsCharArray(StreamReader reader, bool checkCate, bool checkHTML)
         {
             List<QuestionTmpModel> list = new List<QuestionTmpModel>();
             string line = null;
@@ -53,10 +53,23 @@ namespace QBCS.Service.Utilities
                 {
 
                     line = stringProcess.RemoveHtmlBrTag(line);
-                    HtmlDocument htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(line);           
-                    string resultTmp = htmlDoc.DocumentNode.InnerText;
-                    result = WebUtility.HtmlDecode(resultTmp);
+                    string resultTmp = "";
+                    if (checkHTML == false)
+                    {
+                        HtmlDocument htmlDoc = new HtmlDocument();
+                        htmlDoc.LoadHtml(line);
+                        resultTmp = htmlDoc.DocumentNode.InnerText;
+                    }
+                      if (!resultTmp.Equals(""))
+                    {
+                        result = WebUtility.HtmlDecode(resultTmp);
+                    }
+                    else
+                    {
+                        result = line;
+                    }
+                      
+                   
                     //result = StringProcess.RemoveTag(result, destination, "");
 
                     //result = StringProcess.RemoveTag(result, @"\=", @"=");

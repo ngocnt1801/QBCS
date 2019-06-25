@@ -18,8 +18,8 @@
                 </div>
                 <div class="card-body">
                     @*<div class="col-xl-3 col-md-6 mb-4">
-                            <a href="" class="btn btn-primary float-left">Import Question</a>
-                        </div>*@
+            <a href="" class="btn btn-primary float-left">Import Question</a>
+        </div>*@
                     @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <!-- COMPONENT START -->
@@ -42,7 +42,11 @@
                         </div>
                         <div class="custom-control custom-checkbox text-custom">
                             <input type="checkbox" name="checkCate" value="true" class="custom-control-input" id="defaultChecked2" checked>
-                            <label class="custom-control-label" for="defaultChecked2">Get Category for your Question</label>
+                            <label class="custom-control-label" for="defaultChecked2">Get Category in File</label>
+                        </div><br/>
+                        <div class="custom-control custom-checkbox text-custom">
+                            <input type="checkbox" name="checkHTML" value="true" class="custom-control-input" id="defaultChecked1">
+                            <label class="custom-control-label" for="defaultChecked1">Get HTML element in File</label>
                         </div>
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom mt-3">
