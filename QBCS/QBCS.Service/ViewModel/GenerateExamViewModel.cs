@@ -8,14 +8,16 @@ namespace QBCS.Service.ViewModel
 {
     public class GenerateExamViewModel
     {
-        private const double ORDINARY_STUDENT_EASY_PERCENT = 0.8;
-        private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.5;
-        private const double ORDINARY_STUDENT_HARD_PERCENT = 0.1;
-        private const double GOOD_STUDENT_EASY_PERCENT = 0.9;
-        private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.6;
+        private const double ORDINARY_STUDENT_EASY_PERCENT = 1;
+        private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.3;
+        private const double ORDINARY_STUDENT_HARD_PERCENT = 0;
+
+        private const double GOOD_STUDENT_EASY_PERCENT = 1;
+        private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.7;
         private const double GOOD_STUDENT_HARD_PERCENT = 0.3;
-        private const double EXCELLENT_STUDENT_EASY_PERCENT = 0.9;
-        private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 0.8;
+
+        private const double EXCELLENT_STUDENT_EASY_PERCENT = 1;
+        private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 1;
         private const double EXCELLENT_STUDENT_HARD_PERCENT = 0.6;
         public int ExamId { get; set; }
         public int TotalQuestion { get; set; }
@@ -40,19 +42,22 @@ namespace QBCS.Service.ViewModel
         public int ExcellentGradeCalculate { get; set; }
         public void calculateGrade()
         {
-            double gradePerQuestion = (1 * 1.0) / TotalQuestion;
-            int easyQuestionByPercent = (int)Math.Round(EasyQuestion * ORDINARY_STUDENT_EASY_PERCENT);
-            int mediumQuestionByPercent = (int)Math.Round(MediumQuestion * ORDINARY_STUDENT_MEDIUM_PERCENT);
-            int hardQuestionByPercent = (int)Math.Round(HardQuestion * ORDINARY_STUDENT_HARD_PERCENT);
-            OrdinaryGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
-            easyQuestionByPercent = (int)Math.Round(EasyQuestion * GOOD_STUDENT_EASY_PERCENT);
-            mediumQuestionByPercent = (int)Math.Round(MediumQuestion * GOOD_STUDENT_MEDIUM_PERCENT);
-            hardQuestionByPercent = (int)Math.Round(HardQuestion * GOOD_STUDENT_HARD_PERCENT);
-            GoodGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
-             easyQuestionByPercent = (int)Math.Round(EasyQuestion * EXCELLENT_STUDENT_EASY_PERCENT);
-            mediumQuestionByPercent = (int)Math.Round(MediumQuestion * EXCELLENT_STUDENT_MEDIUM_PERCENT);
-            hardQuestionByPercent = (int)Math.Round(HardQuestion * EXCELLENT_STUDENT_HARD_PERCENT);
-            ExcellentGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
+            OrdinaryGradeCalculate = (int)Math.Round(((EasyQuestion * 1.0) / TotalQuestion) * 100);
+            GoodGradeCalculate = (int)Math.Round(((MediumQuestion * 1.0) / TotalQuestion) * 100) + OrdinaryGradeCalculate;
+            ExcellentGradeCalculate = (int)Math.Round(((HardQuestion * 0.5) / TotalQuestion) * 100) + GoodGradeCalculate;
+            //double gradePerQuestion = (1 * 1.0) / TotalQuestion;
+            //int easyQuestionByPercent = (int)Math.Round(EasyQuestion * ORDINARY_STUDENT_EASY_PERCENT);
+            //int mediumQuestionByPercent = (int)Math.Round(MediumQuestion * ORDINARY_STUDENT_MEDIUM_PERCENT);
+            //int hardQuestionByPercent = (int)Math.Round(HardQuestion * ORDINARY_STUDENT_HARD_PERCENT);
+            //OrdinaryGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
+            //easyQuestionByPercent = (int)Math.Round(EasyQuestion * GOOD_STUDENT_EASY_PERCENT);
+            //mediumQuestionByPercent = (int)Math.Round(MediumQuestion * GOOD_STUDENT_MEDIUM_PERCENT);
+            //hardQuestionByPercent = (int)Math.Round(HardQuestion * GOOD_STUDENT_HARD_PERCENT);
+            //GoodGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
+            //easyQuestionByPercent = (int)Math.Round(EasyQuestion * EXCELLENT_STUDENT_EASY_PERCENT);
+            //mediumQuestionByPercent = (int)Math.Round(MediumQuestion * EXCELLENT_STUDENT_MEDIUM_PERCENT);
+            //hardQuestionByPercent = (int)Math.Round(HardQuestion * EXCELLENT_STUDENT_HARD_PERCENT);
+            //ExcellentGradeCalculate = (int)Math.Round((easyQuestionByPercent + mediumQuestionByPercent + hardQuestionByPercent) * gradePerQuestion * 100);
 
         }
     }

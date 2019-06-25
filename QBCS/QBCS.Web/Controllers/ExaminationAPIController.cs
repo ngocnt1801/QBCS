@@ -1,6 +1,7 @@
 ﻿
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -80,7 +81,7 @@ namespace QBCS.Web.Controllers
             {
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    XmlTextWriter xmlWriter = new XmlTextWriter(stream, System.Text.Encoding.ASCII);
+                    XmlTextWriter xmlWriter = new XmlTextWriter(stream, System.Text.Encoding.UTF8);
                     xmlWriter.Formatting = Formatting.Indented;
                     xmlWriter.WriteStartDocument();
                     xmlWriter.WriteStartElement("quiz");
@@ -319,18 +320,18 @@ namespace QBCS.Web.Controllers
                                 }
                                 string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                                 writer.WriteLine(questionComment);
-                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, HttpUtility.HtmlEncode( question.QuestionContent.Replace("<cbr>", " <br/>"))) + "{";
+                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.HtmlEncode( question.QuestionContent.Replace("<cbr>", " <br/>"))) + "{";
                                 writer.WriteLine(HttpUtility.HtmlEncode(questionTitle));
                                 foreach (var option in question.Options)
                                 {
                                     if (option.IsCorrect == true)
                                     {
-                                        string optionString = String.Format(OPTION_TRUE, HttpUtility.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
+                                        string optionString = String.Format(OPTION_TRUE, StringUtilities.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
                                         writer.WriteLine(HttpUtility.HtmlEncode(optionString));
                                     }
                                     else
                                     {
-                                        string optionString = String.Format(OPTION_FALSE, HttpUtility.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
+                                        string optionString = String.Format(OPTION_FALSE, StringUtilities.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
                                         writer.WriteLine(HttpUtility.HtmlEncode(optionString));
                                     }
                                 }
