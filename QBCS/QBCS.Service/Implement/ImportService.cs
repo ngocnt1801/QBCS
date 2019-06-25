@@ -194,6 +194,10 @@ namespace QBCS.Service.Implement
 
         public List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions)
         {
+            if(tempQuestions == null)
+            {
+                return null;
+            }
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
@@ -222,6 +226,7 @@ namespace QBCS.Service.Implement
                 else
                 {
                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                    break;
                 }
                 
                 foreach (var rule in rules)
@@ -337,7 +342,7 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                                 break;
-                            //check min length in correct option
+                            //check max length in correct option
                             case 11:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
@@ -385,7 +390,7 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                                 break;
-                            //check min length in incorrect option
+                            //check max length in incorrect option
                             case 14:
                                 foreach (var option in tempQuestion.OptionTemps)
                                 {
@@ -425,7 +430,7 @@ namespace QBCS.Service.Implement
                                 break;
                             //check allow longest correct option
                             case 16:
-                                if (!rule.Value.Contains("True"))
+                                if (!rule.Value.Equals("True"))
                                 {
                                     var testOption = tempQuestion.OptionTemps.OrderByDescending(o => o.OptionContent.Length).ToList();
                                     var varOption = testOption.First();
@@ -435,9 +440,9 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                                 break;
-                            //check allow longest correct option
+                            //check allow shortest correct option
                             case 17:
-                                if (!rule.Value.Contains("True"))
+                                if (!rule.Value.Equals("True"))
                                 {
                                     var testOption = tempQuestion.OptionTemps.OrderBy(o => o.OptionContent.Length).ToList();
                                     var varOption = testOption.First();
@@ -460,10 +465,10 @@ namespace QBCS.Service.Implement
         }
         private string TrimOption(string option)
         {
-            string trim = option.Replace(" ", "");
-            trim = trim.Replace(".", "");
-            trim = trim.Replace(",", "");
-            return trim;
+            option = option.Replace(" ", "");
+            option = option.Replace(".", "");
+            option = option.Replace(",", "");
+            return option;
         }
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
