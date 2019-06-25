@@ -14,41 +14,6 @@ function nav_bar_active() {
         $(this).parent('li').addClass('active');
     });
 }
-function customs_display() {
-    var content;
-    content = $('#customs-display').html();
-    if (content.indexOf("[html]") >= 0) {
-        content = content.split("<cbr>").join("&lt;br&gt;");
-        content = content.split("&lt;cbr&gt;").join("<br/>");
-        content = content.split("&lt;br&gt;").join("&lt;br&gt;");
-        content = content.split("&lt;p&gt;").join("");
-        content = content.split("&lt;/p&gt;").join("");
-        content = content.split("&lt;b&gt;").join("");
-        content = content.split("&lt;/b&gt;").join("");
-        content = content.split("&lt;span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("[html]").join("");
-    }
-    $('#customs-display').html(content);
-}
-function customs_display_duplicate() {
-    var content;
-    content = $('#customs-display-duplicate').html();
-    if (content.indexOf("[html]") >= 0) {
-        content = content.split("&lt;cbr&gt;").join("<br/>");
-        content = content.split("&lt;br&gt;").join("<br/>");
-        content = content.split("&lt;p&gt;").join("");
-        content = content.split("&lt;/p&gt;").join("");
-        content = content.split("&lt;b&gt;").join("");
-        content = content.split("&lt;/b&gt;").join("");
-        content = content.split("&lt;span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("[html]").join("");
-    }
-    $('#customs-display-duplicate').html(content);
-}
 
 function split() {
     var table1 = $('#tableEditable').DataTable({
@@ -211,6 +176,4 @@ function split() {
 $(document).ready(function () {
     nav_bar_active();
     split();
-    customs_display();
-    customs_display_duplicate();
 });

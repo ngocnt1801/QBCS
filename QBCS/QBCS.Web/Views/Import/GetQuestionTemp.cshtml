@@ -49,14 +49,14 @@
             <h6 class="m-0 font-weight-bold text-primary">Duplicated Question</h6>
         </div>
 
-    <div class="card-body text-custom" id="customs-display-duplicate">
+    <div class="card-body">
 
         @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
         @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
         {
             if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)
             {
-                <div class="container-fluid text-right-answer">
+                <div class="container-fluid text-green-success">
                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
                 </div>
             }

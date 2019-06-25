@@ -7,11 +7,3 @@
 .editableTemp{
     cursor:pointer;
 }
-
-#customs-display {
-    width: 92%;
-    height: 70%;
-    border: 1px solid #ccc;
-    padding: 5px;
-}
-
