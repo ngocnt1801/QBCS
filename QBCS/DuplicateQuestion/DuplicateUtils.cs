@@ -10,9 +10,9 @@ namespace DuplicateQuestion
     public class DuplicateUtils
     {
         private static readonly bool NOT_SEEN = false;
-        private static readonly double DUPLICATE_STANDARD = 70; //  70%
-        private static readonly double DUPLICATE_HIGH = 90; //  90%
-        private static readonly double MULTIPLE_CHOICE_DUPLICATE = 0.5;
+        private static readonly double MINIMUM_DUPLICATE = 70; //  70%
+        private static readonly double HIGH_DUPLICATE = 90; //  90%
+        private static readonly double OPTION_DUPLICATE = 0.5;
         private static readonly bool CORRECT = true;
         private static readonly bool INCORRECT = false;
 
@@ -59,7 +59,7 @@ namespace DuplicateQuestion
                 foreach (var item in import)
                 {
                     isUpdate = false;
-                    
+
                     //define main compare
                     if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
                     {
@@ -71,74 +71,64 @@ namespace DuplicateQuestion
                         if (firstIsContent)
                         {
                             #region main is question content
-                            //Check question content
-                            var result = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
 
-                            item.Test = result.ToString();
-                            if (result >= DUPLICATE_STANDARD) //same question content
+                            //Check question content
+                            var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
+
+                            if (questionResult >= HIGH_DUPLICATE) //same question content
                             {
                                 #region check correct option
-                                double checkOptionRight = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                                     GetOptionsByStatus(item.Options, CORRECT));
 
-                                item.Test += " - " + checkOptionRight.ToString();
 
-                                if (checkOptionRight > MULTIPLE_CHOICE_DUPLICATE) //same correct option
+                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
                                 {
-                                    #region check wrong options
-                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
-
-                                    item.Test += " - " + checkOptionWrong.ToString();
-
-                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.Delete);
-                                        isUpdate = true;
-                                    }
-                                    else
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
-                                        isUpdate = true;
-
-                                    }// end if check wrong option
-
-                                    #endregion
-                                }
-                                else
-                                {
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    AssignDuplicated(question, item, StatusEnum.Delete);
                                     isUpdate = true;
-                                }// end if check right option
+                                }
+
                                 #endregion
 
-                            } // end if check question content
+                            } // end if > HIGH_Duplicate
+                            else if (questionResult >= MINIMUM_DUPLICATE)
+                            {
+
+                                #region check correct option
+                                double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                    GetOptionsByStatus(item.Options, CORRECT));
+
+                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                                {
+                                    #region check wrong options
+                                    double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
+
+                                    if (optionWrongResult >= OPTION_DUPLICATE)
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+                                    }
+                                    #endregion
+                                }
+                                #endregion
+                            } // end if > MINIMUM_DUPLICATE
                             else
                             {
                                 double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
                                                                                         item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
 
-                                item.Test += " - " + questionAndOptionResult.ToString();
-
-                                if (questionAndOptionResult > DUPLICATE_STANDARD)
+                                if (questionAndOptionResult > MINIMUM_DUPLICATE)
                                 {
                                     #region check wrong options
                                     double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                                     GetOptionsByStatus(item.Options, INCORRECT));
 
-                                    item.Test += " - " + checkOptionWrong.ToString();
-
-                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    if (checkOptionWrong >= OPTION_DUPLICATE)
                                     {
-                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
                                     }
-                                    else
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
-                                        isUpdate = true;
-
-                                    }// end if check wrong option
                                     #endregion
                                 }
 
@@ -149,79 +139,57 @@ namespace DuplicateQuestion
                         else
                         {
                             #region main is options
-                            //Check question content
-                            var result = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
 
-                            item.Test = result.ToString();
-                            if (result >= DUPLICATE_STANDARD) //same question content
+                            double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                GetOptionsByStatus(item.Options, CORRECT));
+
+                            if (optionRightResult > OPTION_DUPLICATE) //same correct option
                             {
-                                #region check correct option
-                                double checkOptionRight = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                                    GetOptionsByStatus(item.Options, CORRECT));
+                                var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
 
-                                item.Test += " - " + checkOptionRight.ToString();
-
-                                if (checkOptionRight > MULTIPLE_CHOICE_DUPLICATE) //same correct option
+                                if (questionResult >= HIGH_DUPLICATE) //same question content
                                 {
+                                    AssignDuplicated(question, item, StatusEnum.Delete);
+                                    isUpdate = true;
+
+                                } // end if > HIGH_Duplicate
+                                else if (questionResult >= MINIMUM_DUPLICATE)
+                                {
+
                                     #region check wrong options
-                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                    double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                                     GetOptionsByStatus(item.Options, INCORRECT));
 
-                                    item.Test += " - " + checkOptionWrong.ToString();
-
-                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    if (optionWrongResult >= OPTION_DUPLICATE)
                                     {
-                                        AssignDuplicated(question, item, StatusEnum.Delete);
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
                                     }
-                                    else
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
-                                        isUpdate = true;
-
-                                    }// end if check wrong option
-
                                     #endregion
-                                }
+
+                                } // end if > MINIMUM_DUPLICATE
                                 else
                                 {
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-                                }// end if check right option
-                                #endregion
-
-                            } // end if check question content
-                            else
-                            {
-                                double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
+                                    double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
                                                                                         item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
 
-                                item.Test += " - " + questionAndOptionResult.ToString();
-
-                                if (questionAndOptionResult > DUPLICATE_STANDARD)
-                                {
-                                    #region check wrong options
-                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
-
-                                    item.Test += " - " + checkOptionWrong.ToString();
-
-                                    if (checkOptionWrong >= MULTIPLE_CHOICE_DUPLICATE)
+                                    if (questionAndOptionResult > MINIMUM_DUPLICATE)
                                     {
-                                        AssignDuplicated(question, item, StatusEnum.Delete);
-                                        isUpdate = true;
+                                        #region check wrong options
+                                        double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                        GetOptionsByStatus(item.Options, INCORRECT));
+
+                                        if (checkOptionWrong >= OPTION_DUPLICATE)
+                                        {
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+                                        }
+                                        #endregion
                                     }
-                                    else
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.DeleteOrSkip);
-                                        isUpdate = true;
-
-                                    }// end if check wrong option
-                                    #endregion
                                 }
-
                             }
                             #endregion
+
                         }
 
                         if (isUpdate)
