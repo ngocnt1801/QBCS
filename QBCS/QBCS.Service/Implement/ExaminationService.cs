@@ -45,34 +45,34 @@ namespace QBCS.Service.Implement
         }
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
         {
+            if (exam.FlagPercent.Equals("grade"))
+            {
+                exam.EasyPercent = exam.OrdinaryGrade;
+                exam.MediumPercent = exam.GoodGrade - exam.OrdinaryGrade;
+                exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
+            }
             //if (exam.FlagPercent.Equals("grade"))
             //{
-            //    exam.EasyPercent = exam.OrdinaryGrade;
-            //    exam.MediumPercent = exam.GoodGrade - exam.OrdinaryGrade;
-            //    exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
+            //    double minError = 0;
+            //    for (int i = 0; i <= 100; i++)
+            //    {
+            //        for (int j = 0; j <= (100 - i); j++)
+            //        {
+            //            int hardQuestionPercentTmp = 100 - i - j;
+            //            double ordinaryStudentGradeTmp = ORDINARY_STUDENT_EASY_PERCENT * i + ORDINARY_STUDENT_MEDIUM_PERCENT * j + ORDINARY_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+            //            double goodStudentGradeTmp = GOOD_STUDENT_EASY_PERCENT * i + GOOD_STUDENT_MEDIUM_PERCENT * j + GOOD_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+            //            double excellentStudentGradeTmp = EXCELLENT_STUDENT_EASY_PERCENT * i + EXCELLENT_STUDENT_MEDIUM_PERCENT * j + EXCELLENT_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
+            //            double minErrorTmp = Math.Abs(exam.OrdinaryGrade - ordinaryStudentGradeTmp) + Math.Abs(exam.GoodGrade - goodStudentGradeTmp) + Math.Abs(exam.ExcellentGrade - excellentStudentGradeTmp);
+            //            if ((minErrorTmp < minError) || (i == 0 && j == 0))
+            //            {
+            //                exam.EasyPercent = i;
+            //                exam.MediumPercent = j;
+            //                exam.HardPercent = hardQuestionPercentTmp;
+            //                minError = minErrorTmp;
+            //            }
+            //        }
+            //    }
             //}
-                if (exam.FlagPercent.Equals("grade"))
-            {
-                double minError = 0;
-                for (int i = 0; i <= 100; i++)
-                {
-                    for (int j = 0; j <= (100 - i); j++)
-                    {
-                        int hardQuestionPercentTmp = 100 - i - j;
-                        double ordinaryStudentGradeTmp = ORDINARY_STUDENT_EASY_PERCENT * i + ORDINARY_STUDENT_MEDIUM_PERCENT * j + ORDINARY_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
-                        double goodStudentGradeTmp = GOOD_STUDENT_EASY_PERCENT * i + GOOD_STUDENT_MEDIUM_PERCENT * j + GOOD_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
-                        double excellentStudentGradeTmp = EXCELLENT_STUDENT_EASY_PERCENT * i + EXCELLENT_STUDENT_MEDIUM_PERCENT * j + EXCELLENT_STUDENT_HARD_PERCENT * hardQuestionPercentTmp;
-                        double minErrorTmp = Math.Abs(exam.OrdinaryGrade - ordinaryStudentGradeTmp) + Math.Abs(exam.GoodGrade - goodStudentGradeTmp) + Math.Abs(exam.ExcellentGrade - excellentStudentGradeTmp);
-                        if ((minErrorTmp < minError) || (i == 0 && j == 0))
-                        {
-                            exam.EasyPercent = i;
-                            exam.MediumPercent = j;
-                            exam.HardPercent = hardQuestionPercentTmp;
-                            minError = minErrorTmp;
-                        }
-                    }
-                }
-            }
             int questionEasy = (exam.TotalQuestion * exam.EasyPercent) / 100;
             int questionMedium = (exam.TotalQuestion * exam.MediumPercent) / 100;
             int questionHard = exam.TotalQuestion - questionEasy - questionMedium;
