@@ -197,27 +197,33 @@ namespace QBCS.Service.Implement
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
-                foreach(var option1 in tempQuestion.OptionTemps)
+                if(tempQuestion.OptionTemps.Count > 1)
                 {
-                    foreach(var option2 in tempQuestion.OptionTemps)
+                    for (int i = 0; i < tempQuestion.OptionTemps.Count - 1; i++)
                     {
-                        if (option1.Id == option2.Id)
+                        for (int j = 1; j < tempQuestion.OptionTemps.Count; j++)
+                        {
+                            //var option1 = tempQuestion.OptionTemps.ElementAtOrDefault(i);
+                            //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
+                            var trimOption1 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(i).OptionContent);
+                            var trimOption2 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(j).OptionContent);
+                            if (trimOption1.Equals(trimOption2))
+                            {
+                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                break;
+                            }
+                        }
+                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
                         {
                             break;
                         }
-                        var trimOption1 = TrimOption(option1.OptionContent);
-                        var trimOption2 = TrimOption(option2.OptionContent);
-                        if (trimOption1.Equals(trimOption2))
-                        {
-                            tempQuestion.Status = (int)StatusEnum.Invalid;
-                            break;
-                        }
-                    }
-                    if(tempQuestion.Status == (int)StatusEnum.Invalid)
-                    {
-                        break;
                     }
                 }
+                else
+                {
+                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                }
+                
                 foreach (var rule in rules)
                 {
                     if (DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
