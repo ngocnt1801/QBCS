@@ -35,20 +35,24 @@
                             <td>
                                 <div>
                                     <p>@question.QuestionContent</p>
+                                    @{int charater = 0; }
                                     @foreach (var option in question.Options)
                                     {
-                                        if (option.IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-green-success">
-                                                @option.OptionContent
-                                            </div>
+                                        char prefixOption = (char)(charater + 65); 
+                                            if (option.IsCorrect == true)
+                                            {
+
+                                                <div class="container-fluid text-green-success">
+                                                    @prefixOption.ToString(). @option.OptionContent
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="container-fluid">
+                                                    @prefixOption.ToString(). @option.OptionContent
+                                                </div>
                                         }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @option.OptionContent
-                                            </div>
-                                        }
+                                        charater++;
                                     }
                                 </div>
                             </td>
@@ -62,8 +66,8 @@
                                 }
                             </td>
                         </tr>
-                                    }
-                                }
+                                                }
+                                            }
 
             </tbody>
         </table>

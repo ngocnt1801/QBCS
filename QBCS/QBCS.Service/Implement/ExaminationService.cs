@@ -14,16 +14,16 @@ namespace QBCS.Service.Implement
 {
     public class ExaminationService : IExaminationService
     {
-        private const double ORDINARY_STUDENT_EASY_PERCENT = 0.8;
-        private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.5;
-        private const double ORDINARY_STUDENT_HARD_PERCENT = 0.1;
+        private const double ORDINARY_STUDENT_EASY_PERCENT = 1;
+        private const double ORDINARY_STUDENT_MEDIUM_PERCENT = 0.3;
+        private const double ORDINARY_STUDENT_HARD_PERCENT = 0;
 
-        private const double GOOD_STUDENT_EASY_PERCENT = 0.9;
+        private const double GOOD_STUDENT_EASY_PERCENT = 1;
         private const double GOOD_STUDENT_MEDIUM_PERCENT = 0.7;
         private const double GOOD_STUDENT_HARD_PERCENT = 0.3;
 
-        private const double EXCELLENT_STUDENT_EASY_PERCENT = 0.9;
-        private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 0.8;
+        private const double EXCELLENT_STUDENT_EASY_PERCENT = 1;
+        private const double EXCELLENT_STUDENT_MEDIUM_PERCENT = 1;
         private const double EXCELLENT_STUDENT_HARD_PERCENT = 0.6;
 
         private const string EASY = "Easy";
@@ -45,7 +45,13 @@ namespace QBCS.Service.Implement
         }
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
         {
-            if (exam.FlagPercent.Equals("grade"))
+            //if (exam.FlagPercent.Equals("grade"))
+            //{
+            //    exam.EasyPercent = exam.OrdinaryGrade;
+            //    exam.MediumPercent = exam.GoodGrade - exam.OrdinaryGrade;
+            //    exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
+            //}
+                if (exam.FlagPercent.Equals("grade"))
             {
                 double minError = 0;
                 for (int i = 0; i <= 100; i++)
