@@ -133,6 +133,29 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        //[Log(Action = "Import", TargetName = "Question")]
+        public JsonResult ImportTextarea(Textarea textarea)
+        {
+            var user = (UserViewModel)Session["user"];
+            bool check = true;
+            if (textarea.Table != null && !textarea.Table.Equals(""))
+            {
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId);
+            }
+            //if (table != null && !table.Equals(""))
+            //{
+            //    check = questionService.InsertQuestionWithTableString("", user.Id, courseId);
+            //}
+
+
+            //notify 
+            TempData["Message"] = "You import successfully";
+            TempData["Status"] = ToastrEnum.Success;
+
+            return Json(check, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -181,4 +204,9 @@ namespace QBCS.Web.Controllers
         }
     }
 
+    public class Textarea
+    {
+        public string Table { get; set; }
+        public int CourseId { get; set; }
+    }
 }

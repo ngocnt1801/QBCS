@@ -437,6 +437,17 @@
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
     <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\myjs\textWord\example.css" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\css\codemirror.css" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\css\content.css" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\css\textboxio.css" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\flash\textboxpaste.swf" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\html\help_en.js" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\html\textbox-licenses.html" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\i18n\tbio_en.js" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\js\codeview.js" />
+    <Content Include="Scripts\myjs\textWord\textboxio\resources\js\wordimport.js" />
+    <Content Include="Scripts\myjs\textWord\textboxio\textboxio.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
@@ -2221,6 +2232,7 @@
     <Content Include="Views\Course\Add.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
     <Content Include="Views\Course\Staff_Index.cshtml" />
+    <Content Include="Views\Home\ImportWithTextArea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

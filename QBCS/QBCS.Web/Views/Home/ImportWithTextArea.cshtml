@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "ImportWithTextArea";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <head>
+        <script type='text/javascript' src='~/Scripts/myjs/textWord/textboxio/textboxio.js'></script>
+        <link rel="stylesheet" type="text/css" href="~/Scripts/myjs/textWord/example.css" />
+        <script src="~/Scripts/jquery-3.3.1.js"></script>
+        <script>
+    var instantiateTextbox = function () {
+        textboxio.replaceAll('textarea', {
+            paste: {
+                style: 'clean'
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        $('.btn-primary').on('click', function (event) {
+            event.preventDefault();
+            var editors = textboxio.get('#textbox');
+            var editor = "";
+            editor = editors[0].content.get();
+            var objectTable = new Object();
+            objectTable['Table'] = '<body>' + editor + '</body>';
+            objectTable['CourseId'] = 1;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ImportTextarea","Question")',
+                data: JSON.stringify(objectTable),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    window.location.replace('Index');
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+
+        </script>
+    </head>
+
+<body onload="instantiateTextbox();">
+    <div class="col-lg-12" style="height:40em">
+        <textarea id="textbox" style="height:100% !important">
+
+        </textarea>
+        <div>
+            <a href="#" class="btn btn-primary float-right">Import</a>
+        </div>
+    </div>
+
+</body>
+

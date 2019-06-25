@@ -130,8 +130,8 @@ namespace QBCS.Service.Utilities
                     if (!paragraph.Text.Equals(""))
                     {
                         var trim = paragraph.Text.Replace(" ", "").ToLower();
-                        string[] answers = trim.Split();
-                        foreach(var optionCheck in optionCheckList)
+                        char[] answers = trim.ToCharArray();
+                        foreach (var optionCheck in optionCheckList)
                         {
                             for (int i = 0; i < answers.Length; i++)
                             {
@@ -161,6 +161,7 @@ namespace QBCS.Service.Utilities
             listQuestion.Add(quesModel);
             quesModel = new QuestionTmpModel();
             options = new List<OptionTemp>();
+            optionCheckList = new List<DocViewModel>();
         }
     }
 
