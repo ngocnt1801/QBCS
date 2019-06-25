@@ -10,14 +10,17 @@
 {
 
 
-<div class="container">
+<div class="container text-custom">
     <div class="col-lg-8">
         <div class="form-group">
             <input type="hidden" name="Id" value="@Model.Question.Id"/>
         </div>
-        <div class="form-group">
+        <div class="form-group text-custom">
             <label>Question</label>
-            <textarea class="form-control" rows="8" name="QuestionContent" >@Html.DisplayFor(model => model.Question.QuestionContent)</textarea>
+            <div id="customs-display" contenteditable="true">
+                @Html.DisplayFor(model => model.Question.QuestionContent)
+            </div>
+            <input type="hidden" name="QuestionContent" value="" id="hidden-question-content"/>
         </div>
         <label>Option</label>
         @foreach (var option in Model.Question.Options)
@@ -27,7 +30,7 @@
                     <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
                 </div>
                 <div class="col-lg-10">
-                    <div class="form-group">
+                    <div class="form-group" contenteditable="true">
                         <input class="form-control" name="Options[@counter].OptionContent" type="text" value="@option.OptionContent" />
                     </div>
                 </div>
@@ -90,7 +93,7 @@
             <div class="row" style="height:50px;"></div>
             <div class="text-center">
                 <input type="hidden" name="CourseId" value="@Model.Question.CourseId"/>
-                <input type="submit" name="Update" value="Update" class="btn btn-success float-right" />
+                <input type="submit" name="Update" value="Update" class="btn btn-success float-right" id="btnUpdate"/>
             </div>
         </div>
 

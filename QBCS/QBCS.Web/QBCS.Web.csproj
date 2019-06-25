@@ -421,6 +421,7 @@
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
     <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\myjs\text-process.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />

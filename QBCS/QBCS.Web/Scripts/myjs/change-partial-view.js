@@ -20,6 +20,7 @@ function customs_display() {
     if (content.indexOf("[html]") >= 0) {
         content = content.split("<cbr>").join("&lt;br&gt;");
         content = content.split("&lt;cbr&gt;").join("<br/>");
+        content = content.split("<br>").join("<br/>");
         content = content.split("&lt;br&gt;").join("&lt;br&gt;");
         content = content.split("&lt;p&gt;").join("");
         content = content.split("&lt;/p&gt;").join("");

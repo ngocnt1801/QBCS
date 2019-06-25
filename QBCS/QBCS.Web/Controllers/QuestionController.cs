@@ -106,9 +106,7 @@ namespace QBCS.Web.Controllers
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             bool result = questionService.UpdateQuestion(ques);
-
             bool optionResult = optionService.UpdateOptions(ques.Options);
-
             return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
         }
 
