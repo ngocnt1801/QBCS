@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using Newtonsoft.Json;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -111,6 +112,17 @@ namespace QBCS.Web.Controllers
 
             bool optionResult = optionService.UpdateOptions(ques.Options);
 
+            string newValue = "";
+            newValue = JsonConvert.SerializeObject(ques);
+            ILogService logger = new LogService();
+            if (!newValue.Equals(""))
+            {
+                logger.Log(new LogViewModel
+                {
+
+                    NewValue = newValue
+                });
+            }
             return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
         }
 
