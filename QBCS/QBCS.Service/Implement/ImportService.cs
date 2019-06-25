@@ -432,7 +432,9 @@ namespace QBCS.Service.Implement
                             case 16:
                                 if (!rule.Value.Equals("True"))
                                 {
-                                    var testOption = tempQuestion.OptionTemps.OrderByDescending(o => o.OptionContent.Length).ToList();
+                                    var testOption = tempQuestion.OptionTemps.
+                                                                OrderByDescending(o => o.OptionContent.Length).
+                                                                ThenBy(o => o.IsCorrect).ToList();
                                     var varOption = testOption.First();
                                     if ((bool)varOption.IsCorrect)
                                     {
@@ -444,7 +446,9 @@ namespace QBCS.Service.Implement
                             case 17:
                                 if (!rule.Value.Equals("True"))
                                 {
-                                    var testOption = tempQuestion.OptionTemps.OrderBy(o => o.OptionContent.Length).ToList();
+                                    var testOption = tempQuestion.OptionTemps.
+                                                                OrderBy(o => o.OptionContent.Length).
+                                                                ThenBy(o => o.IsCorrect).ToList();
                                     var varOption = testOption.First();
                                     if ((bool)varOption.IsCorrect)
                                     {
