@@ -112,7 +112,8 @@ namespace QBCS.Service.Implement
                     Date = im.UpdatedDate.Value,
                     Status = (StatusEnum)im.Status.Value,
                     TotalQuestion = im.TotalQuestion.HasValue ? im.TotalQuestion.Value : 0,
-                    TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0
+                    TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0,
+                    OwnerName = im.OwnerName
                 })
                 .OrderByDescending(im => im.Date)
                 .ToList();

@@ -11,6 +11,7 @@ namespace DuplicateQuestion
     {
         private static readonly bool NOT_SEEN = false;
         private static readonly double DUPLICATE_STANDARD = 70; //  70%
+        private static readonly double DUPLICATE_HIGH = 90; //  90%
         private static readonly double MULTIPLE_CHOICE_DUPLICATE = 0.5;
         private static readonly bool CORRECT = true;
         private static readonly bool INCORRECT = false;
@@ -229,7 +230,7 @@ namespace DuplicateQuestion
                         }
                     }
 
-                    //update database
+                    #region update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
                        "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport, OptionsContent=@test " +
@@ -243,6 +244,7 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@id", item.Id);
 
                     command.ExecuteNonQuery();
+                    #endregion
 
                     //add not duplicate question to check
                     if (!isUpdate)
@@ -693,7 +695,6 @@ namespace DuplicateQuestion
             }
             return null;
         }
-
 
         private static int AddCategory(string name, int courseId)
         {
