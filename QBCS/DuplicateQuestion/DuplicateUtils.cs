@@ -54,9 +54,17 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 bool isUpdate = false;
+                bool firstIsContent = true;
                 foreach (var item in import)
                 {
                     isUpdate = false;
+                    
+                    //define main compare
+                    if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
+                    {
+                        firstIsContent = false;
+                    }
+
                     foreach (var question in bank)
                     {
                         //Check question content
