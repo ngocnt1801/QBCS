@@ -205,7 +205,7 @@ namespace QBCS.Service.Implement
                 {
                     for (int i = 0; i < tempQuestion.OptionTemps.Count - 1; i++)
                     {
-                        for (int j = 1; j < tempQuestion.OptionTemps.Count; j++)
+                        for (int j = i+1; j < tempQuestion.OptionTemps.Count; j++)
                         {
                             //var option1 = tempQuestion.OptionTemps.ElementAtOrDefault(i);
                             //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
