@@ -107,13 +107,13 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@content", question.QuestionContent);
                 command.Parameters.AddWithValue("@loId", question.LearningOutcomeId);
                 command.Parameters.AddWithValue("@levelId", question.LevelId);
-                command.Parameters.AddWithValue("@id", question.Id);
+                command.Parameters.AddWithValue("@id", question.UpdateQuestionId);
                 command.ExecuteNonQuery();
 
                 foreach (var option in question.Options)
                 {
                     SqlCommand optionCmd = new SqlCommand(
-                          "UPDATE Option " +
+                          "UPDATE [Option] " +
                           "SET OptionContent=@content, IsCorrect=@correct " +
                           "WHERE Id=@id",
                           connection
@@ -190,23 +190,20 @@ namespace DuplicateQuestion
                 SqlCommand command = new SqlCommand(
                     "SELECT " +
                         "q.Id, " +
-                        "q.Code, " +
                         "q.QuestionContent, " +
                         "o.OptionContent, " +
                         "o.IsCorrect, " +
                         "o.UpdateOptionId, " +
-                        "q.Status, " +
                         "q.Category, " +
                         "q.LearningOutcome, " +
                         "q.LevelName, " +
                         "q.UpdateQuestionId " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
-                    "WHERE q.Id = @tempId AND Type=@type",
+                    "WHERE q.Id = @tempId",
                     connection
                     );
 
                 command.Parameters.AddWithValue("@tempId", id);
-                command.Parameters.AddWithValue("@type", TypeEnum.Update);
                 SqlDataReader reader = command.ExecuteReader();
 
                 int prev = 0;
@@ -216,11 +213,26 @@ namespace DuplicateQuestion
                     if (prev != (int)reader["Id"])
                     {
                         question = new QuestionModel();
-                        question.QuestionContent = (string)reader["QuestionContent"];
-                        question.QuestionCode = (string)reader["Code"];
+                        if(reader["QuestionContent"] != null)
+                        {
+                            question.QuestionContent = (string)reader["QuestionContent"];
+                        }
+                        //if (reader["Code"] != null)
+                        //{
+                        //    question.QuestionCode = (string)reader["Code"];
+                        //}
                         question.Status = (int)StatusEnum.Success;
-                        question.UpdateQuestionId = (int)reader["UpdateQuestionId"];
-                        question.Id = (int)reader["Id"];
+
+                        if (reader["UpdateQuestionId"] != null)
+                        {
+                            question.UpdateQuestionId = (int)reader["UpdateQuestionId"];
+                        }
+
+                        if (reader["Id"] != null)
+                        {
+                            question.Id = (int)reader["Id"];
+                        }
+
                         if (reader["Category"] != DBNull.Value)
                         {
                             question.Category = (string)reader["Category"];
@@ -237,9 +249,9 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
-                            Id = (int)reader["UpdateOptionId"],
-                            OptionContent = (string)reader["OptionContent"],
-                            IsCorrect = (bool)reader["IsCorrect"]
+                            Id = reader["UpdateOptionId"] != null ? (int)reader["UpdateOptionId"] : 0,
+                            OptionContent = reader["OptionContent"] != null ? (string)reader["OptionContent"] : "",
+                            IsCorrect = reader["IsCorrect"] != null ? (bool)reader["IsCorrect"] : false
                         });
 
                         prev = question.Id;
@@ -248,11 +260,30 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
-                            OptionContent = (string)reader["OptionContent"],
-                            IsCorrect = (bool)reader["IsCorrect"]
+                            Id = reader["UpdateOptionId"] != null ? (int)reader["UpdateOptionId"] : 0,
+                            OptionContent = reader["OptionContent"] != null ? (string)reader["OptionContent"] : "",
+                            IsCorrect = reader["IsCorrect"] != null ? (bool)reader["IsCorrect"] : false
                         });
                     }
 
+                }
+                reader.Close();
+                SqlCommand quesCommand = new SqlCommand(
+                    "SELECT " +
+                        "CourseId " +
+                    "FROM Question " +
+                    "WHERE Id = @id",
+                    connection
+                    );
+
+                quesCommand.Parameters.AddWithValue("@id", question.UpdateQuestionId);
+                SqlDataReader quesReader = quesCommand.ExecuteReader();
+                if (quesReader.Read())
+                {
+                    if(quesReader["CourseId"] != null)
+                    {
+                        question.CourseId = (int)quesReader["CourseId"];
+                    }
                 }
 
                 return question;

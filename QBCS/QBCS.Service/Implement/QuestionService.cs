@@ -168,19 +168,19 @@ namespace QBCS.Service.Implement
                 UpdateOptionId = o.Id
             }).ToList();
 
-            entity = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(entity);
+            var tmp = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(entity);
             unitOfWork.SaveChanges();
 
             //get log id
             var logEntity = unitOfWork.Repository<Log>().GetAll()
-                                    .Where(l => l.TargetId == entity.Id && l.IsDisable.HasValue && l.IsDisable.Value)
+                                    .Where(l => l.TargetId == entity.UpdateQuestionId)// add check disable here after merge with Nhi
                                     .OrderByDescending(l => l.Date).FirstOrDefault();
             if (logEntity != null)
             {
                 //call store check duplicate
                 Task.Factory.StartNew(() =>
                 {
-                    importService.CheckDuplicateQuestion(entity.Id, logEntity.Id);
+                    importService.CheckDuplicateQuestion(tmp.Id, logEntity.Id);
                 });
             }
 
