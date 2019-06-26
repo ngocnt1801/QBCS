@@ -1,9 +1,11 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using QBCS.Web.SignalRHub;
+using System;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -17,9 +19,16 @@ namespace QBCS.Web.Controllers
             userService = new UserService();
         }
 
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Home page", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(HomeController), nameof(HomeController.Login))]
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
+
+            //stpm: get logged in user code
+            var userCode = User.Identity.Get(a => a.Code);
 
             var user = (UserViewModel)Session["user"];
             string viewName = "Login";
@@ -28,14 +37,16 @@ namespace QBCS.Web.Controllers
                 return View(viewName);
             }
             ViewBag.Name = user.Fullname;
-            
+
             if (user.Role == RoleEnum.Admin)
             {
                 viewName = "Admin";
-            } else if (user.Role == RoleEnum.Lecturer)
+            }
+            else if (user.Role == RoleEnum.Lecturer)
             {
                 viewName = "Index";
-            } else
+            }
+            else
             {
                 viewName = "Staff";
             }
@@ -48,7 +59,7 @@ namespace QBCS.Web.Controllers
         {
             var user = userService.Login(username, password);
             if (user != null)
-            { 
+            {
                 Session["user"] = user;
                 ViewBag.Name = user.Fullname;
                 return RedirectToAction("Index");
@@ -56,7 +67,7 @@ namespace QBCS.Web.Controllers
             ModelState.AddModelError("LoginFail", "Your username or password is correct");
 
             return View();
-            
+
         }
         public ActionResult Logout(string username)
         {
