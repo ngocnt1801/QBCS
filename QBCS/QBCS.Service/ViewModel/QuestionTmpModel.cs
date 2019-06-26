@@ -16,6 +16,7 @@ namespace QBCS.Service.ViewModel
         public int DuplicatedId { get; set; }
         public string Category { get; set; }
         public string Topic { get; set; }
+        public string LearningOutcome { get; set; }
         public string Level { get; set; }
     }
 }

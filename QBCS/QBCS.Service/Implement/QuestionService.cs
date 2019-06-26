@@ -711,10 +711,11 @@ namespace QBCS.Service.Implement
                                         break;
                                 }
                             }
-                        }else if (key.Contains("."))
+                        }
+                        else if (key.Contains("."))
                         {
                             optionCheck.Code = key.Replace(".", "");
-                            if (!value.Equals(";"))
+                            if (!value.Equals(""))
                             {
                                 optionModel.IsCorrect = false;
                                 optionModel.OptionContent = TrimSpace(value);
@@ -727,7 +728,8 @@ namespace QBCS.Service.Implement
                             }
                             optionModel = new OptionTemp();
                             optionCheck = new DocViewModel();
-                        }else if (key.Contains("ANSWER:"))
+                        }
+                        else if (key.Contains("ANSWER:"))
                         {
                             var trim = value.Replace(" ", "").ToLower();
                             char[] answers = trim.ToCharArray();
@@ -748,6 +750,13 @@ namespace QBCS.Service.Implement
                                         break;
                                     }
                                 }
+                            }
+                        }
+                        else if (key.Contains("UNIT:"))
+                        {
+                            if (!value.Equals(""))
+                            {
+                                questionTmp.LearningOutcome = value;
                             }
                         }
                     }
@@ -827,7 +836,7 @@ namespace QBCS.Service.Implement
             table = table.Replace("<st1:place>", "");
             table = table.Replace("</st1:place>", "");
             table = table.Replace("<p>&nbsp</p>", "");
-            table = table.Replace("&nbsp", "");
+            table = table.Replace("&nbsp;", "");
             return table;
         }
     }

@@ -58,16 +58,16 @@ namespace QBCS.Service.Utilities
             List<DocViewModel> optionCheckList = new List<DocViewModel>();
             foreach (WTableRow row in table.Rows)
             {
-                #region get title
+                #region get key
 
                 IEntity titleEntity = row.Cells[0].ChildEntities[0];
-                string title = (titleEntity as WParagraph).Text;
+                string key = (titleEntity as WParagraph).Text;
 
                 #endregion
                 #region question content
-                if (title.Contains("QN="))
+                if (key.Contains("QN="))
                 {
-                    quesModel.Code = title.Replace("QN=", "");
+                    quesModel.Code = key.Replace("QN=", "");
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
@@ -93,10 +93,10 @@ namespace QBCS.Service.Utilities
                     }
                 }
                 #endregion
-                else if (title.Contains("."))
+                else if (key.Contains("."))
                 {
                     var optionCheck = new DocViewModel();
-                    optionCheck.Code = title.Replace(".", "").ToLower();
+                    optionCheck.Code = key.Replace(".", "").ToLower();
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
@@ -123,7 +123,7 @@ namespace QBCS.Service.Utilities
                     }
                     optionModel = new OptionTemp();
                 }
-                else if (title.Contains("ANSWER:"))
+                else if (key.Contains("ANSWER:"))
                 {
                     IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
                     WParagraph paragraph = bodyItemEntity as WParagraph;
@@ -150,6 +150,16 @@ namespace QBCS.Service.Utilities
                             }
                         }
                         
+                    }
+                }
+                else if (key.Contains("UNIT:"))
+                {
+                    IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
+                    WParagraph paragraph = bodyItemEntity as WParagraph;
+                    if (!paragraph.Text.Equals(""))
+                    {
+                        quesModel.LearningOutcome = paragraph.Text;
+
                     }
                 }
                 //foreach (WTableCell cell in row.Cells)
