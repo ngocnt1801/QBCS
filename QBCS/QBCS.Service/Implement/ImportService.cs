@@ -19,7 +19,7 @@ namespace QBCS.Service.Implement
 
         public ImportService()
         {
-            unitOfWork = new UnitOfWork();
+            unitOfWork = new UnitOfWork();//comment here
         }
 
         public void Cancel(int importId)

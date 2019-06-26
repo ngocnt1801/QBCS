@@ -40,7 +40,8 @@ namespace QBCS.Web
 
             bundles.Add(new ScriptBundle("~/bundle/scripts/importfile").Include(
                 "~/Scripts/myjs/import-file.js",
-                "~/Scripts/myjs/change-partial-view.js"
+                "~/Scripts/myjs/change-partial-view.js",
+                "~/Scripts/myjs/text-process.js"
                 ));
             //smartwizard
             bundles.Add(new ScriptBundle("~/bundle/scripts/smartwizard").Include(

@@ -18,6 +18,15 @@
         render: function () {
             this.renderCountNotification();
             this.renderListNotification();
+
+            //code update title
+            var count = notificationOctopus.getCount();
+            if (count > 0 && document.title.indexOf('!') < 0) {
+                var title = document.title;
+                var newTitle = '! ' + title;
+                document.title = newTitle;
+            }
+           
         },
 
         getTemplateNotification: function () {

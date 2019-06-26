@@ -17,6 +17,7 @@
                         <th>No.</th>
                         <th>User</th>
                         <th>Date</th>
+                        <th>Message</th>
                         <th>Action</th>
                        
                     </tr>
@@ -37,7 +38,9 @@
                             @item.LogDate
                         </td>
                         <td>@item.Message</td>
-
+                        <td>
+                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                        </td>
                     </tr>
                     }
                 </tbody>
