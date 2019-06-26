@@ -9,6 +9,7 @@ namespace DuplicateQuestion.Entity
     public class QuestionModel
     {
         public int Id { get; set; }
+        public int CourseId { get; set; }
         public string QuestionContent { get; set; }
         public string QuestionCode { get; set; }
         public int Hashcode { get; set; }

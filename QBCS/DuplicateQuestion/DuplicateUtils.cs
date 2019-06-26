@@ -16,6 +16,294 @@ namespace DuplicateQuestion
         private static readonly bool CORRECT = true;
         private static readonly bool INCORRECT = false;
 
+        #region check duplicate question udpate
+        [SqlProcedure]
+        public static void CheckDuplicateAQuestion(SqlInt32 questionId)
+        {
+            var item = GetQuestion(questionId.Value);
+            var bank = GetBank(item.CourseId, questionId.Value);
+            bool isUpdate = false;
+
+            if (item != null)
+            {
+                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate);
+
+                if (isUpdate)
+                {
+                    using (SqlConnection connection = new SqlConnection("context connection=true"))
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand(
+                               "UPDATE Question " +
+                               "SET Status=@status, TempId=@duplicatedId, IsDisable=@disable " +
+                               "WHERE Id=@id",
+                               connection
+                               );
+                        command.Parameters.AddWithValue("@status", item.Status);
+                        command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
+                        command.Parameters.AddWithValue("@id", item.Id);
+                        command.Parameters.AddWithValue("@disable", true);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+            }
+
+        }
+
+        private static List<QuestionModel> GetBank(int courseId, int questionId)
+        {
+            List<QuestionModel> bank = new List<QuestionModel>();
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT q.Id, q.QuestionContent, o.IsCorrect, o.OptionContent " +
+                    "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
+                    "WHERE q.CourseId = @courseId AND q.Id != @questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@courseId", courseId);
+                command.Parameters.AddWithValue("@questionId", questionId);
+                SqlDataReader reader = command.ExecuteReader();
+
+                int prev = 0;
+                QuestionModel question = null;
+                while (reader.Read())
+                {
+                    if (prev != (int)reader["Id"])
+                    {
+                        question = new QuestionModel();
+                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.Id = (int)reader["Id"];
+                        question.IsBank = true;
+                        question.Options = new List<OptionModel>();
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                        bank.Add(question);
+
+                        prev = question.Id;
+                    }
+                    else
+                    {
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                    }
+
+                }
+
+            }
+            return bank;
+        }
+
+        private static QuestionModel GetQuestion(int id)
+        {
+            QuestionModel model = null;
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT q.Id, q.QuestionContent, o.IsCorrect, o.OptionContent, q.CourseId " +
+                    "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
+                    "WHERE q.Id = @questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@questionId", id);
+                SqlDataReader reader = command.ExecuteReader();
+
+                int prev = 0;
+                while (reader.Read())
+                {
+                    if (prev != (int)reader["Id"])
+                    {
+                        model = new QuestionModel();
+                        model.CourseId = (int)reader["CourseId"];
+                        model.Status = (int)StatusEnum.Success;
+                        model.QuestionContent = (string)reader["QuestionContent"];
+                        model.Id = (int)reader["Id"];
+                        model.IsBank = true;
+                        model.Options = new List<OptionModel>();
+                        model.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+
+
+                        prev = model.Id;
+                    }
+                    else
+                    {
+                        model.Options.Add(new OptionModel
+                        {
+                            OptionContent = (string)reader["OptionContent"],
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                    }
+
+                }
+
+            }
+            return model;
+        }
+
+        private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate)
+        {
+            bool firstIsContent = true;
+
+            //define main compare
+            if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
+            {
+                firstIsContent = false;
+            }
+
+            foreach (var question in bank)
+            {
+                if (firstIsContent)
+                {
+                    #region main is question content
+
+                    //Check question content
+                    var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
+
+                    if (questionResult >= HIGH_DUPLICATE) //same question content
+                    {
+                        #region check correct option
+                        double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                            GetOptionsByStatus(item.Options, CORRECT));
+
+
+                        if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                        {
+                            AssignDuplicated(question, item, StatusEnum.Delete);
+                            isUpdate = true;
+                        }
+
+                        #endregion
+
+                    } // end if > HIGH_Duplicate
+                    else if (questionResult >= MINIMUM_DUPLICATE)
+                    {
+
+                        #region check correct option
+                        double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                            GetOptionsByStatus(item.Options, CORRECT));
+
+                        if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                        {
+                            #region check wrong options
+                            double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                            GetOptionsByStatus(item.Options, INCORRECT));
+
+                            if (optionWrongResult >= OPTION_DUPLICATE)
+                            {
+                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                isUpdate = true;
+                            }
+                            #endregion
+                        }
+                        #endregion
+                    } // end if > MINIMUM_DUPLICATE
+                    else
+                    {
+                        double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
+                                                                                item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
+
+                        if (questionAndOptionResult > MINIMUM_DUPLICATE)
+                        {
+                            #region check wrong options
+                            double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                            GetOptionsByStatus(item.Options, INCORRECT));
+
+                            if (checkOptionWrong >= OPTION_DUPLICATE)
+                            {
+                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                isUpdate = true;
+                            }
+                            #endregion
+                        }
+
+                    }
+
+                    #endregion
+                }
+                else
+                {
+                    #region main is options
+
+                    double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                        GetOptionsByStatus(item.Options, CORRECT));
+
+                    if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                    {
+                        var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
+
+                        if (questionResult >= HIGH_DUPLICATE) //same question content
+                        {
+                            AssignDuplicated(question, item, StatusEnum.Delete);
+                            isUpdate = true;
+
+                        } // end if > HIGH_Duplicate
+                        else if (questionResult >= MINIMUM_DUPLICATE)
+                        {
+
+                            #region check wrong options
+                            double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                            GetOptionsByStatus(item.Options, INCORRECT));
+
+                            if (optionWrongResult >= OPTION_DUPLICATE)
+                            {
+                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                isUpdate = true;
+                            }
+                            #endregion
+
+                        } // end if > MINIMUM_DUPLICATE
+                        else
+                        {
+                            double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
+                                                                                item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
+
+                            if (questionAndOptionResult > MINIMUM_DUPLICATE)
+                            {
+                                #region check wrong options
+                                double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                GetOptionsByStatus(item.Options, INCORRECT));
+
+                                if (checkOptionWrong >= OPTION_DUPLICATE)
+                                {
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+                                }
+                                #endregion
+                            }
+                        }
+                    }
+                    #endregion
+                }
+
+                if (isUpdate)
+                {
+                    break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region check duplicate import
         [SqlProcedure]
         public static void CheckDuplidate(SqlInt32 importId)
         {
@@ -55,150 +343,14 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 bool isUpdate = false;
-                bool firstIsContent = true;
+                //bool firstIsContent = true;
                 foreach (var item in import)
                 {
                     isUpdate = false;
 
-                    //define main compare
-                    if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
-                    {
-                        firstIsContent = false;
-                    }
+                    CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate);
 
-                    foreach (var question in bank)
-                    {
-                        if (firstIsContent)
-                        {
-                            #region main is question content
-
-                            //Check question content
-                            var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
-
-                            if (questionResult >= HIGH_DUPLICATE) //same question content
-                            {
-                                #region check correct option
-                                double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                                    GetOptionsByStatus(item.Options, CORRECT));
-
-
-                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
-                                {
-                                    AssignDuplicated(question, item, StatusEnum.Delete);
-                                    isUpdate = true;
-                                }
-
-                                #endregion
-
-                            } // end if > HIGH_Duplicate
-                            else if (questionResult >= MINIMUM_DUPLICATE)
-                            {
-
-                                #region check correct option
-                                double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                                    GetOptionsByStatus(item.Options, CORRECT));
-
-                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
-                                {
-                                    #region check wrong options
-                                    double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
-
-                                    if (optionWrongResult >= OPTION_DUPLICATE)
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.Editable);
-                                        isUpdate = true;
-                                    }
-                                    #endregion
-                                }
-                                #endregion
-                            } // end if > MINIMUM_DUPLICATE
-                            else
-                            {
-                                double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
-                                                                                        item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
-
-                                if (questionAndOptionResult > MINIMUM_DUPLICATE)
-                                {
-                                    #region check wrong options
-                                    double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
-
-                                    if (checkOptionWrong >= OPTION_DUPLICATE)
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.Editable);
-                                        isUpdate = true;
-                                    }
-                                    #endregion
-                                }
-
-                            }
-
-                            #endregion
-                        }
-                        else
-                        {
-                            #region main is options
-
-                            double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                                GetOptionsByStatus(item.Options, CORRECT));
-
-                            if (optionRightResult > OPTION_DUPLICATE) //same correct option
-                            {
-                                var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
-
-                                if (questionResult >= HIGH_DUPLICATE) //same question content
-                                {
-                                    AssignDuplicated(question, item, StatusEnum.Delete);
-                                    isUpdate = true;
-
-                                } // end if > HIGH_Duplicate
-                                else if (questionResult >= MINIMUM_DUPLICATE)
-                                {
-
-                                    #region check wrong options
-                                    double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                    GetOptionsByStatus(item.Options, INCORRECT));
-
-                                    if (optionWrongResult >= OPTION_DUPLICATE)
-                                    {
-                                        AssignDuplicated(question, item, StatusEnum.Editable);
-                                        isUpdate = true;
-                                    }
-                                    #endregion
-
-                                } // end if > MINIMUM_DUPLICATE
-                                else
-                                {
-                                    double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
-                                                                                        item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
-
-                                    if (questionAndOptionResult > MINIMUM_DUPLICATE)
-                                    {
-                                        #region check wrong options
-                                        double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                                        GetOptionsByStatus(item.Options, INCORRECT));
-
-                                        if (checkOptionWrong >= OPTION_DUPLICATE)
-                                        {
-                                            AssignDuplicated(question, item, StatusEnum.Editable);
-                                            isUpdate = true;
-                                        }
-                                        #endregion
-                                    }
-                                }
-                            }
-                            #endregion
-
-                        }
-
-                        if (isUpdate)
-                        {
-                            break;
-                        }
-                    }
-
-                    #region update database
+                    //update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
                        "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport, OptionsContent=@test " +
@@ -212,7 +364,6 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@id", item.Id);
 
                     command.ExecuteNonQuery();
-                    #endregion
 
                     //add not duplicate question to check
                     if (!isUpdate)
@@ -760,5 +911,6 @@ namespace DuplicateQuestion
                 no += 1;
             }
         }
+        #endregion
     }
 }
