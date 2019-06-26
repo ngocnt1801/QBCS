@@ -44,7 +44,7 @@ namespace QBCS.Service.ViewModel
         {
             OrdinaryGradeCalculate = (int)Math.Round(((EasyQuestion * 1.0) / TotalQuestion) * 100);
             GoodGradeCalculate = (int)Math.Round(((MediumQuestion * 1.0) / TotalQuestion) * 100) + OrdinaryGradeCalculate;
-            ExcellentGradeCalculate = (int)Math.Round(((HardQuestion * 0.5) / TotalQuestion) * 100) + GoodGradeCalculate;
+            ExcellentGradeCalculate = (int)Math.Round(((HardQuestion * 0.4) / TotalQuestion) * 100) + GoodGradeCalculate;
             //double gradePerQuestion = (1 * 1.0) / TotalQuestion;
             //int easyQuestionByPercent = (int)Math.Round(EasyQuestion * ORDINARY_STUDENT_EASY_PERCENT);
             //int mediumQuestionByPercent = (int)Math.Round(MediumQuestion * ORDINARY_STUDENT_MEDIUM_PERCENT);

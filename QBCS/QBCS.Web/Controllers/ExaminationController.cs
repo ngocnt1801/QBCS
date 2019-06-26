@@ -52,5 +52,10 @@ namespace QBCS.Web.Controllers
             List<PartOfExamViewModel> partOfExams = partOfExamService.GetPartOfExamByExamId(examinationId);
             return View(partOfExams);
         }
+        public ActionResult GetAllExamination()
+        {
+            List<ExaminationViewModel> exams = examinationService.GetAllExam();
+            return View(exams);
+        }
     }
 }
