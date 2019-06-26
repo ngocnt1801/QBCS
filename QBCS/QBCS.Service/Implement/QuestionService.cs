@@ -492,6 +492,7 @@ namespace QBCS.Service.Implement
                 {
                     DocUtilities docUltil = new DocUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
+                    reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
                     listQuestion = docUltil.ParseDoc(questionFile.InputStream);
 
@@ -551,6 +552,7 @@ namespace QBCS.Service.Implement
             finally
             {
                 reader.Close();
+                questionFile.InputStream.Flush();
             }
 
             return check;

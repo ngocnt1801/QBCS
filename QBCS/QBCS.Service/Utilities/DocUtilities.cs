@@ -24,7 +24,7 @@ namespace QBCS.Service.Utilities
 
         public List<QuestionTmpModel> ParseDoc(Stream inputStream)
         {
-
+            listQuestion = new List<QuestionTmpModel>();
             WordDocument wordDocument = new WordDocument(inputStream, FormatType.Automatic);
             foreach (WSection section in wordDocument.Sections)
             {
