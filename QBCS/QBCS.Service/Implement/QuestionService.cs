@@ -151,6 +151,13 @@ namespace QBCS.Service.Implement
             
             unitOfWork.Repository<Question>().Update(questionById);
             unitOfWork.SaveChanges();
+
+            //call store check duplicate
+            Task.Factory.StartNew(() =>
+            {
+                importService.ImportToBank(question.Id);
+            });
+
             return true;
         }
 

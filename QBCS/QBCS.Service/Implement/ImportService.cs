@@ -175,6 +175,15 @@ namespace QBCS.Service.Implement
             }
         }
 
+        public async Task CheckDuplicateQuestion(int questionId)
+        {
+            using (var context = new QBCSContext())
+            {
+                string command = "EXEC CheckDuplicateQuestion @questionId=@id";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", questionId));
+            }
+        }
+
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
