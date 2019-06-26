@@ -175,12 +175,13 @@ namespace QBCS.Service.Implement
             }
         }
 
-        public async Task CheckDuplicateQuestion(int questionId)
+        public async Task CheckDuplicateQuestion(int questionId, int logId)
         {
             using (var context = new QBCSContext())
             {
-                string command = "EXEC CheckDuplicateQuestion @questionId=@id";
-                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", questionId));
+                string command = "EXEC CheckDuplicateQuestion @questionId=@qid, @logId=@lid";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@qid", questionId)
+                                                                     , new SqlParameter("@lid", logId));
             }
         }
 

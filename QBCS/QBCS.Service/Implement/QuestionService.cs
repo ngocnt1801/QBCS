@@ -138,25 +138,51 @@ namespace QBCS.Service.Implement
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
-            Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            questionById.QuestionContent = question.QuestionContent;
-            if (question.LevelId != 0)
+            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
+            //questionById.QuestionContent = question.QuestionContent;
+
+            //if (question.LevelId != 0)
+            //{
+            //    questionById.LevelId = question.LevelId;
+            //}
+            //if (question.LearningOutcomeId != 0)
+            //{
+            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
+            //}
+
+            //unitOfWork.Repository<Question>().Update(questionById);
+            //unitOfWork.SaveChanges();
+
+            QuestionTemp entity = new QuestionTemp();
+            entity.UpdateQuestionId = question.Id;
+            entity.QuestionContent = question.QuestionContent;
+            entity.Type = (int) TypeEnum.Update;
+            entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
+            entity.LevelName = question.LevelId != 0 ? question.Level.ToString() : "";
+            entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
+
+            entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                questionById.LevelId = question.LevelId;
-            }
-            if (question.LearningOutcomeId != 0)
-            {
-                questionById.LearningOutcomeId = question.LearningOutcomeId;
-            }
-            
-            unitOfWork.Repository<Question>().Update(questionById);
+                OptionContent = o.OptionContent,
+                IsCorrect = o.IsCorrect,
+                UpdateOptionId = o.Id
+            }).ToList();
+
+            entity = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(entity);
             unitOfWork.SaveChanges();
 
-            //call store check duplicate
-            Task.Factory.StartNew(() =>
+            //get log id
+            var logEntity = unitOfWork.Repository<Log>().GetAll()
+                                    .Where(l => l.TargetId == entity.Id && l.IsDisable.HasValue && l.IsDisable.Value)
+                                    .OrderByDescending(l => l.Date).FirstOrDefault();
+            if (logEntity != null)
             {
-                importService.ImportToBank(question.Id);
-            });
+                //call store check duplicate
+                Task.Factory.StartNew(() =>
+                {
+                    importService.CheckDuplicateQuestion(entity.Id, logEntity.Id);
+                });
+            }
 
             return true;
         }

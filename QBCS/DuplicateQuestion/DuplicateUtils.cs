@@ -18,10 +18,10 @@ namespace DuplicateQuestion
 
         #region check duplicate question udpate
         [SqlProcedure]
-        public static void CheckDuplicateAQuestion(SqlInt32 questionId)
+        public static void CheckDuplicateAQuestion(SqlInt32 questionId, SqlInt32 logId)
         {
             var item = GetQuestion(questionId.Value);
-            var bank = GetBank(item.CourseId, questionId.Value);
+            var bank = GetBank(item.CourseId, item.UpdateQuestionId.Value);
             bool isUpdate = false;
 
             if (item != null)
@@ -34,22 +34,97 @@ namespace DuplicateQuestion
                     {
                         connection.Open();
                         SqlCommand command = new SqlCommand(
-                               "UPDATE Question " +
-                               "SET Status=@status, TempId=@duplicatedId, IsDisable=@disable " +
-                               "WHERE Id=@id",
-                               connection
-                               );
+                          "UPDATE QuestionTemp " +
+                          "SET Status=@status, DuplicatedId=@duplicatedId " +
+                          "WHERE Id=@id",
+                          connection
+                          );
                         command.Parameters.AddWithValue("@status", item.Status);
                         command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
                         command.Parameters.AddWithValue("@id", item.Id);
-                        command.Parameters.AddWithValue("@disable", true);
 
                         command.ExecuteNonQuery();
                     }
                 }
+                else
+                {
+                    UpdateQuestion(item);
+                    EnableLogUpdateQuestion(logId.Value);
+                    RemoveQuestionTemp(item.Id);
+                }
 
             }
 
+        }
+
+        private static void RemoveQuestionTemp(int id)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE QuestionTemp " +
+                    "WHERE Id=@id",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void EnableLogUpdateQuestion(int logId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(
+                  "UPDATE Log " +
+                  "SET IsDisable=@disable " +
+                  "WHERE Id=@id",
+                  connection
+                  );
+                command.Parameters.AddWithValue("@disable", false);
+                command.Parameters.AddWithValue("@id", logId);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void UpdateQuestion(QuestionModel question)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                          "UPDATE Question " +
+                          "SET QuestionContent=@content, LearningOutcomeId=@loId, LevelId=@levelId " +
+                          "WHERE Id=@id",
+                          connection
+                          );
+                command.Parameters.AddWithValue("@content", question.QuestionContent);
+                command.Parameters.AddWithValue("@loId", question.LearningOutcomeId);
+                command.Parameters.AddWithValue("@levelId", question.LevelId);
+                command.Parameters.AddWithValue("@id", question.Id);
+                command.ExecuteNonQuery();
+
+                foreach (var option in question.Options)
+                {
+                    SqlCommand optionCmd = new SqlCommand(
+                          "UPDATE Option " +
+                          "SET OptionContent=@content, IsCorrect=@correct " +
+                          "WHERE Id=@id",
+                          connection
+                          );
+                    optionCmd.Parameters.AddWithValue("@content", option.OptionContent);
+                    optionCmd.Parameters.AddWithValue("@correct", option.IsCorrect);
+                    optionCmd.Parameters.AddWithValue("@id", option.Id);
+                    optionCmd.ExecuteNonQuery();
+                }
+
+            }
         }
 
         private static List<QuestionModel> GetBank(int courseId, int questionId)
@@ -108,45 +183,70 @@ namespace DuplicateQuestion
 
         private static QuestionModel GetQuestion(int id)
         {
-            QuestionModel model = null;
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
 
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.QuestionContent, o.IsCorrect, o.OptionContent, q.CourseId " +
-                    "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
-                    "WHERE q.Id = @questionId",
+                    "SELECT " +
+                        "q.Id, " +
+                        "q.Code, " +
+                        "q.QuestionContent, " +
+                        "o.OptionContent, " +
+                        "o.IsCorrect, " +
+                        "o.UpdateOptionId, " +
+                        "q.Status, " +
+                        "q.Category, " +
+                        "q.LearningOutcome, " +
+                        "q.LevelName, " +
+                        "q.UpdateQuestionId " +
+                    "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
+                    "WHERE q.Id = @tempId AND Type=@type",
                     connection
                     );
 
-                command.Parameters.AddWithValue("@questionId", id);
+                command.Parameters.AddWithValue("@tempId", id);
+                command.Parameters.AddWithValue("@type", TypeEnum.Update);
                 SqlDataReader reader = command.ExecuteReader();
 
                 int prev = 0;
+                QuestionModel question = null;
                 while (reader.Read())
                 {
                     if (prev != (int)reader["Id"])
                     {
-                        model = new QuestionModel();
-                        model.CourseId = (int)reader["CourseId"];
-                        model.Status = (int)StatusEnum.Success;
-                        model.QuestionContent = (string)reader["QuestionContent"];
-                        model.Id = (int)reader["Id"];
-                        model.IsBank = true;
-                        model.Options = new List<OptionModel>();
-                        model.Options.Add(new OptionModel
+                        question = new QuestionModel();
+                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.QuestionCode = (string)reader["Code"];
+                        question.Status = (int)StatusEnum.Success;
+                        question.UpdateQuestionId = (int)reader["UpdateQuestionId"];
+                        question.Id = (int)reader["Id"];
+                        if (reader["Category"] != DBNull.Value)
                         {
+                            question.Category = (string)reader["Category"];
+                        }
+                        if (reader["LearningOutcome"] != DBNull.Value)
+                        {
+                            question.LearningOutcome = (string)reader["LearningOutcome"];
+                        }
+                        if (reader["LevelName"] != DBNull.Value)
+                        {
+                            question.Level = (string)reader["LevelName"];
+                        }
+                        question.IsBank = false;
+                        question.Options = new List<OptionModel>();
+                        question.Options.Add(new OptionModel
+                        {
+                            Id = (int)reader["UpdateOptionId"],
                             OptionContent = (string)reader["OptionContent"],
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
 
-
-                        prev = model.Id;
+                        prev = question.Id;
                     }
                     else
                     {
-                        model.Options.Add(new OptionModel
+                        question.Options.Add(new OptionModel
                         {
                             OptionContent = (string)reader["OptionContent"],
                             IsCorrect = (bool)reader["IsCorrect"]
@@ -155,8 +255,9 @@ namespace DuplicateQuestion
 
                 }
 
+                return question;
+
             }
-            return model;
         }
 
         private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate)
