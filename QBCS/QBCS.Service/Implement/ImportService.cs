@@ -67,6 +67,7 @@ namespace QBCS.Service.Implement
                         Code = q.Code,
                         Message = q.Message,
                         Image = q.Image,
+                        IsInImportFile = q.DuplicateInImportId.HasValue,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.DuplicatedWithBank.Id,

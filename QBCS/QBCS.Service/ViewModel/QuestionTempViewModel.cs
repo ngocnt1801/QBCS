@@ -12,6 +12,7 @@ namespace QBCS.Service.ViewModel
         public int Id { get; set; }
         public string Code { get; set; }
         public QuestionViewModel DuplicatedQuestion { get; set; }
+        public bool IsInImportFile { get; set; }
         public string QuesitonContent { get; set; }
         public StatusEnum Status { get; set; }
         public int ImportId { get; set; }

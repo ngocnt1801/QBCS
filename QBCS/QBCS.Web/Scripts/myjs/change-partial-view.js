@@ -173,7 +173,15 @@ function split() {
     });
 }
 
+function toggleTableDuplicate() {
+    $(".toggle-table").on('click', function () {
+        $(".table-toggle").addClass("hidden");
+        $(this.attributes["data-toggle"].value).removeClass("hidden");
+    });
+}
+
 $(document).ready(function () {
     nav_bar_active();
     split();
+    toggleTableDuplicate();
 });
