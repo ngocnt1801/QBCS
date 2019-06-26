@@ -27,6 +27,7 @@ namespace QBCS.Service.Implement
                                                                                 Status = im.Status.Value,
                                                                                 UpdatedDate = im.UpdatedDate.HasValue ? im.UpdatedDate.Value.ToString() : ""
                                                                             })
+                                                                            .OrderByDescending(im => im.UpdatedDate)
                                                                             .ToList();
             return notificationList;
         }
