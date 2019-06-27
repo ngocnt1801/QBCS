@@ -111,7 +111,6 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        [Log(Action = "Import", TargetName = "Question")]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
             var user = (UserViewModel)Session["user"];

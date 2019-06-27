@@ -26,11 +26,13 @@ namespace QBCS.Service.Implement
     {
         private IUnitOfWork unitOfWork;
         private IImportService importService;
+        private ILogService logService;
 
         public QuestionService()
         {
             unitOfWork = new UnitOfWork();
             importService = new ImportService();
+            logService = new LogService();
         }
 
         public bool Add(QuestionViewModel question)
@@ -693,6 +695,9 @@ namespace QBCS.Service.Implement
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
+
+                    //log import
+                    logService.LogImport(entity.Id, userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
