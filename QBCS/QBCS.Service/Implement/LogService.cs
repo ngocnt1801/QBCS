@@ -54,7 +54,25 @@ namespace QBCS.Service.Implement
             }
             return list;
         }
-    public IEnumerable<LogViewModel> GetActivitiesById(int id)
+        public List<LogViewModel> GetAllActivitiesByUserId(int id)
+        {
+            List<LogViewModel> list = new List<LogViewModel>();
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.UserId == id).ToList(); ;
+            foreach (var item in listLog)
+            {
+                LogViewModel logViewModel = new LogViewModel()
+                {
+                    Id = item.Id,
+                    TargetId = item.TargetId,
+                    Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                    Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
+                    LogDate = item.Date.Value
+                };
+                list.Add(logViewModel);
+            }
+            return list;
+        }
+        public IEnumerable<LogViewModel> GetActivitiesById(int id)
     {
         var logById = unitOfWork.Repository<Log>().GetById(id);
 

@@ -410,7 +410,7 @@ namespace QBCS.Service.Implement
                             }
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = stringProcess.RemoveHtmlTag(questionContent);
-                            if (checkHTMLTemp.Equals("html"))
+                            if (checkHTML.Equals("html"))
                             {
                                 question.QuestionContent = "[html]" + questionContent;
                             }
