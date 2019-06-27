@@ -55,7 +55,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
-            return View(exams);
+            return View("ListExamination",exams);
         }
     }
 }
