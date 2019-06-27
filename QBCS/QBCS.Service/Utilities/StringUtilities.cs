@@ -22,7 +22,7 @@ namespace QBCS.Service.Utilities
             result = StringProcess.RemoveTag(result, @"#", @"\#");
             result = StringProcess.RemoveTag(result, @"~", @"\~");
             result = StringProcess.RemoveTag(result, @":", @"\:");
-            result = StringProcess.RemoveTag(result, @"<cbr>", @"\<br/>");
+            result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
             result = WebUtility.HtmlEncode(result);
             return result;
         }
