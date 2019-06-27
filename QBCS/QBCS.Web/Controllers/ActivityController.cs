@@ -20,13 +20,21 @@ namespace QBCS.Web.Controllers
         }
 
         // GET: Activity
-        public ActionResult Index(int targetId)
+        public ActionResult Index(int id)
+        {
+            List<LogViewModel> logViews = new List<LogViewModel>();
+            var user = (UserViewModel)Session["user"];
+            //var model = logService.GetAllActivities();
+            var model = logService.GetAllActivitiesByUserId(id);
+            return View(model);
+        }
+        public ActionResult GetLogByQuestionID(int targetId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
             var user = (UserViewModel)Session["user"];
             //var model = logService.GetAllActivities();
             var model = logService.GetAllActivitiesByTargetId(targetId);
-            return View(model);
+            return View("Index", model);
         }
         public ActionResult GetListTargetByID(int id)
         {

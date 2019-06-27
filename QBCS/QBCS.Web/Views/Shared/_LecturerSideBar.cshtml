@@ -6,6 +6,7 @@
     var importClass = "";
     var userClass = "";
     var activitiesClass = "";
+    var statisticClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     switch (controller)
     {
@@ -14,6 +15,9 @@
             break;
         case "Course":
             courseClass = "active";
+            break;
+        case "Statistics":
+            statisticClass = "active";
             break;
         case "Import":
             importClass = "active";
@@ -73,13 +77,13 @@
     </li>
 
     <!-- Nav Item - Course Statistics Menu -->
-    <li class="nav-item">
+    <li class="nav-item @statisticClass">
         <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
             <i class="fas fa-chart-pie"></i>
             <span>Statistics</span>
         </a>
     </li>
-
+    <hr class="sidebar-divider">
     <!-- Nav Item - Question Menu -->
     <li class="nav-item @importClass">
         <a class="nav-link"

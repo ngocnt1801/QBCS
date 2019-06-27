@@ -68,21 +68,7 @@ namespace QBCS.Service.Utilities
                     {
                         result = line;
                     }
-                      
-                   
-                    //result = StringProcess.RemoveTag(result, destination, "");
 
-                    //result = StringProcess.RemoveTag(result, @"\=", @"=");
-                    //result = StringProcess.RemoveTag(result, @"\{", @"{");
-                    //result = StringProcess.RemoveTag(result, @"\}", @"}");
-                    //result = StringProcess.RemoveTag(result, @"\#", @"#");
-                    //result = StringProcess.RemoveTag(result, @"\~", @"~");
-                    //result = StringProcess.RemoveTag(result, @"\:", @":");
-                    //result = StringProcess.RemoveTag(result, @"\n", @"<cbr>"); //<crb> replace for \n
-                    //result = StringProcess.RemoveTag(result, @"\:", @":");
-                    //result = StringProcess.RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
-                    //result = StringProcess.RemoveTag(result, @"#" + @"<span lang=" + '"' + "EN" + '"' + ">", "");
-                    //result = StringProcess.RemoveTag(result, @"#", "");
                     result = stringProcess.RemoveHtmlTag(result);
                     for (int i = 0; i < result.Length; i++)
                     {
