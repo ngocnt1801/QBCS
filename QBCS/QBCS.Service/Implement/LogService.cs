@@ -23,6 +23,7 @@ namespace QBCS.Service.Implement
 
         public IEnumerable<LogViewModel> GetAllActivities()
         {
+            //comment
             var listLog = unitOfWork.Repository<Log>().GetAll().OrderByDescending(l => l.Date).ToList();
 
             return listLog.Select(l => new LogViewModel()

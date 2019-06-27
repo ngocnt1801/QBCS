@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "ImportWithTextArea";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script type='text/javascript' src='~/Scripts/myjs/textWord/textboxio/textboxio.js'></script>
+    <link rel="stylesheet" type="text/css" href="~/Scripts/myjs/textWord/example.css" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+    var instantiateTextbox = function () {
+        textboxio.replaceAll('textarea', {
+            paste: {
+                style: 'clean'
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        url: "@Url.Action("LoadCourse","Topic")",
+        dataType: "json",
+        success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                        $("#Course").append("<option id=" + result[i].Id + ">" +
+                            result[i].Name + "</option>");
+                    }
+
+            },
+            error: function (result) {
+                alert("Error");
+            }
+        });
+        $('.btn-primary').on('click', function (event) {
+            event.preventDefault();
+            var editors = textboxio.get('#textbox');
+            var editor = "";
+            editor = editors[0].content.get();
+            var objectTable = new Object();
+            objectTable['Table'] = '<body>' + editor + '</body>';
+            objectTable['CourseId'] = $('#Course').children(":selected").attr("id");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ImportTextarea","Question")',
+                data: JSON.stringify(objectTable),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    window.location.replace('Index');
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+
+    </script>
+</head>
+
+<body onload="instantiateTextbox();">
+    <div class="row">
+        <div class="col-md-12">
+            <a class="text-info btn-link  float-right" href="@Url.Action("Index", "Home")">Switch to import file</a>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+        <div class="col-md-8 float-left" style="padding-top:25px">
+            <p style="color:#4e73df;font-size:2em">Input questions</p>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-1">
+                <h4>Course</h4>
+            </div>
+            <select class="form-control" id="Course"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="height:35em">
+            <textarea id="textbox" style="height:100% !important">
+
+        </textarea>
+            <div style="margin-top:5px">
+                <a href="#" class="btn btn-primary float-right">Import</a>
+            </div>
+        </div>
+    </div>
+</body>
+
