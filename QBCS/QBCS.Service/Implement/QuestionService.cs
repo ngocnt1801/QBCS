@@ -158,7 +158,7 @@ namespace QBCS.Service.Implement
             entity.QuestionContent = question.QuestionContent;
             entity.Type = (int) TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
-            entity.LevelName = question.LevelId != 0 ? question.Level.ToString() : "";
+            entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
             entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
 
             entity.OptionTemps = question.Options.Select(o => new OptionTemp()

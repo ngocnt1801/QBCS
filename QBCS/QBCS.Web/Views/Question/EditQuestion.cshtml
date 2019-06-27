@@ -17,12 +17,12 @@
         </div>
         <div class="form-group text-custom">
             <label>Question</label>
-            <div id="customs-display" contenteditable="true">
+            <div class="customs-display customs-display-area" id="customs-display" contenteditable="true" data-for="hidden-question-content">
                 @Html.DisplayFor(model => model.Question.QuestionContent)
             </div>
             <input type="hidden" name="QuestionContent" value="" id="hidden-question-content"/>
         </div>
-        <label>Option</label>
+        <label>Options</label>
         @foreach (var option in Model.Question.Options)
         {
             <div class="row">
@@ -30,8 +30,11 @@
                     <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
                 </div>
                 <div class="col-lg-10">
-                    <div class="form-group" contenteditable="true">
-                        <input class="form-control" name="Options[@counter].OptionContent" type="text" value="@option.OptionContent" />
+                    <div class="customs-display customs-display-input" contenteditable="true" data-for="#o-@counter">
+                        @Html.DisplayFor(m => option.OptionContent)
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="Options[@counter].OptionContent" type="hidden" value="@option.OptionContent" id="o-@counter"/>
                     </div>
                 </div>
                 

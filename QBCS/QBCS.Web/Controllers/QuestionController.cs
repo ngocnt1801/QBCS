@@ -107,7 +107,7 @@ namespace QBCS.Web.Controllers
         {
             bool result = questionService.UpdateQuestion(ques);
             bool optionResult = optionService.UpdateOptions(ques.Options);
-            return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
+            return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
         }
 
         [HttpPost]

@@ -188,7 +188,10 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && (entity.Status == (int)StatusEnum.Editable || entity.Status == (int)StatusEnum.Invalid))
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable 
+                                    || entity.Status == (int)StatusEnum.Invalid
+                                    || entity.Status == (int)StatusEnum.Delete
+                                    || entity.Status == (int)StatusEnum.DeleteOrSkip))
             {
                 entity.QuestionContent = question.QuesitonContent;
                 entity.Status = (int)StatusEnum.NotCheck;

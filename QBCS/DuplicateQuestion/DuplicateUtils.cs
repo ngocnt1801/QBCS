@@ -239,11 +239,15 @@ namespace DuplicateQuestion
                         }
                         if (reader["LearningOutcome"] != DBNull.Value)
                         {
-                            question.LearningOutcome = (string)reader["LearningOutcome"];
+                            int tmp =0;
+                            Int32.TryParse((string)reader["LearningOutcome"], out tmp);
+                            question.LearningOutcomeId = tmp;
                         }
                         if (reader["LevelName"] != DBNull.Value)
                         {
-                            question.Level = (string)reader["LevelName"];
+                            int tmp = 0;
+                            Int32.TryParse((string)reader["LevelName"], out tmp);
+                            question.LevelId = tmp;
                         }
                         question.IsBank = false;
                         question.Options = new List<OptionModel>();

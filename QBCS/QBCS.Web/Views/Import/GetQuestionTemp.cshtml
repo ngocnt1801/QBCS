@@ -18,13 +18,16 @@
             @using (Html.BeginForm("EditQuestion", "Import", FormMethod.Post, new { @class = "form-group" }))
             {
 
-            <div  id="customs-display" contenteditable="true">
-                @Html.DisplayFor(m => m.QuesitonContent)
-            </div>
-               // @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
-                
-                <div id="option-list-container">
+                <h5>Question</h5>
+                <div class="customs-display customs-display-area mb-2" id="customs-display" contenteditable="true" data-for="#hidden-question-content">
+                    @Html.DisplayFor(m => m.QuesitonContent)
+                </div>
+                // @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
 
+                <input type="hidden" name="QuestionContent" id="hidden-question-content"/>
+
+                <h5>Options</h5>
+                <div id="option-list-container">
 
                     @for (var i = 0; i < Model.Options.Count; i++)
                     {
@@ -36,11 +39,11 @@
                 </div>
 
 
-               
+
 
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)
-                <input type="submit" name="Save" class="btn btn-primary float-right" />
+                <input type="submit" name="Save" class="btn btn-primary float-right" id="btnUpdate"/>
                 <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
             }
         </div>
@@ -55,23 +58,23 @@
             <h6 class="m-0 font-weight-bold text-custom">Duplicated Question</h6>
         </div>
 
-    <div class="card-body text-custom" id="customs-display-duplicate">
+        <div class="card-body text-custom" id="customs-display-duplicate">
 
-        @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
-        @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
-        {
-            if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)
+            @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
+            @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
             {
-                <div class="container-fluid text-right-answer">
-                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
-                </div>
-            }
-            else
-            {
-                <div class="container-fluid">
-                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
-                </div>
-            }
+                if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)
+                {
+                    <div class="container-fluid text-right-answer">
+                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
+                    </div>
+                }
+                else
+                {
+                    <div class="container-fluid">
+                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
+                    </div>
+                }
 
                 <br />
             }

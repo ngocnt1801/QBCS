@@ -8,13 +8,22 @@
     cursor:pointer;
 }
 
-#customs-display {
-    height: 250px;
+.customs-display {
     overflow-y: auto;
     overflow-x: auto;
     border: 1px solid #d1d3e2;
     border-radius: 0.35em;
     padding: 5px;
     background-color: #fff;
+    padding: 0.375rem 0.75rem;
+}
+
+    .customs-display:focus {
+        outline: none;
+        border: 2px solid #d1d3e2;
+    }
+
+.customs-display-area{
+    height: 250px;
 }
 
