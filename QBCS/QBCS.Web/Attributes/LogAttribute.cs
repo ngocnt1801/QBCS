@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -20,16 +22,26 @@ namespace QBCS.Web.Attributes
         {
             var userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
             int? targetId = null;
+            object oldValue = "";
+            string jsonOldValue = "";
+            string jsonNewValue = "";
+            QuestionViewModel newQues = new QuestionViewModel();
+            IQuestionService questionService = new QuestionService();
             if (IdParamName != null && filterContext.ActionParameters.ContainsKey(IdParamName))
             {
                 targetId = filterContext.ActionParameters[IdParamName] as Int32?;
             }
             else if (ObjectParamName != null && filterContext.ActionParameters.ContainsKey(ObjectParamName))
             {
-                var obj = filterContext.ActionParameters[ObjectParamName];
-                targetId = obj.GetType().GetProperty(IdParamName).GetValue(obj, null) as Int32?;
+                newQues = filterContext.ActionParameters[ObjectParamName] as QuestionViewModel;
+                targetId = newQues.GetType().GetProperty(IdParamName).GetValue(newQues, null) as Int32?;
+                oldValue = questionService.GetQuestionById(newQues.Id);
+
             }
 
+            QuestionViewModel questionViewModel = new QuestionViewModel();
+            jsonOldValue = JsonConvert.SerializeObject(oldValue);
+            jsonNewValue = JsonConvert.SerializeObject(newQues);
             ILogService logger = new LogService();
             logger.Log(new LogViewModel
             {
@@ -40,7 +52,9 @@ namespace QBCS.Web.Attributes
                 TargetName = TargetName,
                 Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
                 Method = filterContext.ActionDescriptor.ActionName,
-                TargetId = targetId
+                TargetId = targetId,
+                OldValue = jsonOldValue,
+                NewValue = jsonNewValue
             });
 
         }

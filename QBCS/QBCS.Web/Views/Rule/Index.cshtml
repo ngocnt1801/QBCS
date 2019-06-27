@@ -3,11 +3,8 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <head>
-    <link rel="stylesheet" href="~/Scripts/bootstrap-tagsinput.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
+    <link rel="stylesheet" href="~/Scripts/font-awesome.css">
 </head>
 
 <div class="row">
@@ -22,28 +19,27 @@
 {
     <div class="card shadow mb-4">
         <a href="#collapse_@rvm.FirstOrDefault().GroupTypeEnum" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum Rule</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@rvm.FirstOrDefault().GroupTypeEnum.ToString().Replace("_", " ") Rule</h6>
         </a>
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             <div class="table-responsive">
                 <table class="table table-bordered text-custom" @*id="dataTable"*@ cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Name</th>
+                            <th style="width:30%">Name</th>
                             <th class="col-sm">Value</th>
-                            <th class="col-sm">Create Date</th>
-                            <th class="col-sm">Activate Date</th>
+                            <th style="width:30%">Create Date</th>
+                            <th style="width:30%">Activate Date</th>
+                            <th>In Use</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach (var rule in rvm)
                         {
-                            if (rule.Id == 3 || rule.Id == 9)
+                            if (rule.Id == 3 || rule.Id == 9 || rule.Id == 12 || rule.Id == 15)
                             {
                                 <tr>
-                                    <td>@rule.Code</td>
                                     <td>@rule.Name</td>
                                     <td>
                                         @if (rule.Value.Count != 0)
@@ -65,14 +61,28 @@
                                     </td>
                                     <td>
                                         @if (rule.Value.Count != 0)
-                                        { 
-                                            @rule.Value.FirstOrDefault().CreateDate
+                                        {
+                                            @rule.Value.FirstOrDefault().CreateDate.ToString("dd/MM/yyyy")
                                         }
                                     </td>
                                     <td>
                                         @if (rule.Value.Count != 0)
                                         {
-                                            @rule.Value.FirstOrDefault().CreateDate
+                                            @rule.Value.FirstOrDefault().ActivateDate.ToString("dd/MM/yyyy")
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (rule.Value.Count == 0)
+                                        {
+                                            <i class="fas fa-fw fa-close"></i>
+                                        }
+                                        else if (rule.Value.FirstOrDefault().IsUse)
+                                        {
+                                            <i class="fas fa-fw fa-check"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-close"></i>
                                         }
                                     </td>
                                 </tr>
@@ -82,12 +92,37 @@
                                 foreach (var value in rule.Value)
                                 {
                                     <tr>
-                                        <td>@rule.Code</td>
                                         <td>@rule.Name</td>
-                                        <td>@value.Value</td>
-                                        <td>@value.CreateDate</td>
-                                        <td>@value.ActivateDate</td>
-                                        <td>@value.ValueGroup</td>
+                                        @if (rule.Id == 16 || rule.Id == 17)
+                                        {
+                                            if (value.Value.Contains("True"))
+                                            {
+                                                <td>Yes</td>
+                                            }
+                                            else
+                                            {
+                                                <td>No</td>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <td>@value.Value</td>
+                                        }
+                                        <td>@value.CreateDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@value.ActivateDate.ToString("dd/MM/yyyy")</td>
+                                        @if (value.IsUse)
+                                        {
+                                            <td>
+                                                <i class="fas fa-fw fa-check"></i>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <i class="fas fa-fw fa-close"></i>
+                                            </td>
+                                        }
                                     </tr>
                                 }
                             }

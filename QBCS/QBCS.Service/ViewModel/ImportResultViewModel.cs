@@ -10,5 +10,6 @@ namespace QBCS.Service.ViewModel
         public int NumberOfFail { get; set; }
         public int CourseId { get; set; }
         public List<QuestionTempViewModel> Questions { get; set; }
+       
     }
 }

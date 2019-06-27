@@ -67,6 +67,9 @@ namespace QBCS.Web.Controllers
 
         }
 
-
+        public ActionResult ImportWithTextArea()
+        {
+            return View();
+        }
     }
 }

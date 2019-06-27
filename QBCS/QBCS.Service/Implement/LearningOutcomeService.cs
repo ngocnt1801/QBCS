@@ -54,9 +54,9 @@ namespace QBCS.Service.Implement
                 LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel()
                 {
                     Id = learningOutcome.Id,
-                    Code = learningOutcome.Code,
-                    CourseId = (int) learningOutcome.CourseId,
-                    IsDisable = (bool) learningOutcome.IsDisable,
+                    Code = learningOutcome.Code != null ? learningOutcome.Code : "", 
+                    CourseId = learningOutcome.CourseId.Value,
+                    IsDisable =  learningOutcome.IsDisable.HasValue && learningOutcome.IsDisable.Value,
                     Name = learningOutcome.Name
                 };
                 learningOutcomeViewModel.UpdateIdValue();
@@ -82,21 +82,21 @@ namespace QBCS.Service.Implement
             }
             return result;
         }
-        public bool UpdateDisable(int id)
+        public int UpdateDisable(int id)
         {
             try
             {
                 var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(id);
                 learningOutcome.IsDisable = true;
                 unitOfWork.SaveChanges();
-                return true;
+                return (int)learningOutcome.CourseId;
             }
             catch
             {
-                return false;
+                return 0;
             }
         }
-        public bool AddLearningOutcome(LearningOutcomeViewModel model)
+        public int AddLearningOutcome(LearningOutcomeViewModel model)
         {
             try
             {
@@ -107,29 +107,30 @@ namespace QBCS.Service.Implement
                     CourseId = model.CourseId,
                     IsDisable = false
                 };
-                unitOfWork.Repository<LearningOutcome>().Insert(learningOutcome);
+                var lo = unitOfWork.Repository<LearningOutcome>().InsertAndReturn(learningOutcome);
                 unitOfWork.SaveChanges();
-                return true;
+
+                return (int)lo.CourseId;
             }
             catch
             {
-                return false;
+                return 0;
             }
         }
-        public bool UpdateLearningOutcome(LearningOutcomeViewModel model)
+        public int UpdateLearningOutcome(LearningOutcomeViewModel model)
         {
             try
             {
                 var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(model.Id);
                 learningOutcome.Code = model.Code;
                 learningOutcome.Name = model.Name;
-                learningOutcome.CourseId = model.CourseId;
+                //learningOutcome.CourseId = model.CourseId;
                 unitOfWork.Repository<LearningOutcome>().Update(learningOutcome);
                 unitOfWork.SaveChanges();
-                return true;
+                return model.CourseId;
             } catch
             {
-                return false;
+                return 0;
             }
             
         }

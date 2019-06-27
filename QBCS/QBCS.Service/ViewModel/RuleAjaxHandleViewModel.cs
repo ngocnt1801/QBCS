@@ -11,6 +11,7 @@ namespace QBCS.Service.ViewModel
         public int KeyId { get; set; }
         public string Value { get; set; }
         public DateTime ActivateDate { get; set; }
+        public bool IsUse { get; set; }
 
     }
 }

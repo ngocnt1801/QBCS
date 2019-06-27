@@ -28,6 +28,11 @@ namespace QBCS.Web.Controllers
             var list = courseService.GetAllCoursesByUserId(userId);
             return View(list);
         }
+        public ActionResult Staff_Index()
+        {
+            var list = courseService.GetCourseByDisable();
+            return View(list);
+        }
         public ActionResult Add()
         {
             return View();
@@ -36,13 +41,26 @@ namespace QBCS.Web.Controllers
         public ActionResult Add(CourseViewModel model)
         {
             courseService.AddNewCourse(model);
-            int userId = ((UserViewModel)Session["user"]).Id;
-            return RedirectToAction("Index",new { userId = userId });
+            return RedirectToAction("Staff_Index");
         }
         public ActionResult Edit(int itemId)
         {
             var result = courseService.GetCourseById(itemId);
             return View(result);
+        }
+        [HttpPost]
+        public ActionResult Edit(CourseViewModel model)
+        {
+            var result = courseService.UpdateCourse(model);
+            if (result)
+            {
+                return RedirectToAction("Detail","Course", new { itemId = model.Id});
+            }
+            else
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            
         }
         public ActionResult GetCoursesByName(string name)
         {
@@ -81,8 +99,7 @@ namespace QBCS.Web.Controllers
 
             //}
             var update = courseService.UpdateDisable(itemId);
-            int userId = ((UserViewModel)Session["user"]).Id;
-            return RedirectToAction("Index", new { userId = userId });
+            return RedirectToAction("Staff_Index");
         }
 
         public ActionResult GetAllCourse()
@@ -109,7 +126,7 @@ namespace QBCS.Web.Controllers
         public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
-            var result = courseService.GetCourseStatByUserId(userId);
+            var result = courseService.GetAllCourseStat();
             return View(result);
         }
         public JsonResult GetCourseDetailStat(int courseId)

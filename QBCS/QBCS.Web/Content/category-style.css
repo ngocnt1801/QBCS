@@ -30,11 +30,11 @@
     margin-right: 5px;
 }
 
-.active{
+.show-category .active {
     color: #fffeee !important;
 }
 
-    .active:hover {
+    .show-category .active:hover {
         background-color: #4e73df !important;
     }
 

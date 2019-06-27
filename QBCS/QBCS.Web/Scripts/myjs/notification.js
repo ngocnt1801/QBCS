@@ -8,11 +8,25 @@
         init: function () {
             this.notificationSpan = $("#count_notification");
             this.notificationContainter = $("#list_notification");
+
+            this.linkNotRedirect = $('.ajax-no-response');
+            this.linkNotRedirect.on('click', function () {
+                notificationOctopus.sendRequest(this.attributes["data-url"].value);
+            });
         },
 
         render: function () {
             this.renderCountNotification();
             this.renderListNotification();
+
+            //code update title
+            var count = notificationOctopus.getCount();
+            if (count > 0 && document.title.indexOf('!') < 0) {
+                var title = document.title;
+                var newTitle = '! ' + title;
+                document.title = newTitle;
+            }
+           
         },
 
         getTemplateNotification: function () {
@@ -44,14 +58,14 @@
             var listNotification = notificationOctopus.getListNotification();
             this.notificationContainter.empty();
             listNotification.forEach(element => {
-                this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message));
+                this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message, element.UpdatedDate));
             });
         },
-        renderNotification: function(importId, message){
+        renderNotification: function(importId, message, date){
             var template = notificationView.getTemplateNotification();
             template = template.replace("{{noti.link}}", "/QBCS.Web/Import/GetResult?importId="+importId)
                                 .replace("{{noti.icon}}", "fa-file-alt")
-                                .replace("{{noti.date}}", "Today")
+                                .replace("{{noti.date}}", date)
                                 .replace("{{noti.message}}", message);
 
             return template;
@@ -97,6 +111,15 @@
                     
                     notificationModel.count = response.length;
                     notificationView.render();
+                }
+            });
+        },
+        sendRequest: function (url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+
                 }
             });
         }

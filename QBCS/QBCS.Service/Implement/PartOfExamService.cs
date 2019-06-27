@@ -67,9 +67,9 @@ namespace QBCS.Service.Implement
                     {
 
                         Id = part.LearningOutcome.Id,
-                        Code = part.LearningOutcome.Code,
-                        CourseId = part.LearningOutcome.CourseId.HasValue ? (int)part.LearningOutcome.CourseId : 0,
-                        IsDisable = part.LearningOutcome.IsDisable.HasValue ? (bool)part.LearningOutcome.IsDisable : false,
+                        Code = part.LearningOutcome.Code != null ? part.LearningOutcome.Code : "",
+                        CourseId = part.LearningOutcome.CourseId.HasValue ? part.LearningOutcome.CourseId.Value : 0,
+                        IsDisable = part.LearningOutcome.IsDisable.HasValue && part.LearningOutcome.IsDisable.Value,
                         Name = part.LearningOutcome.Name
                     };
                 }
