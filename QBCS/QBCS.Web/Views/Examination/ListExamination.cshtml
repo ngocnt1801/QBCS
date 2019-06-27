@@ -1,0 +1,35 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.ExaminationViewModel>
+
+@{
+    ViewBag.Title = "ListExamination";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List Examination</h2>
+
+<div class="row">
+    <div class="col mb-2">
+        <a href="@Url.Action("GetAllCourse", "Course")" class="btn btn-primary float-right">Create New Examination</a>
+    </div>
+</div>
+<table class="table" id="dataTable" width="100%" cellspacing="0">
+    <tr>
+        <th class="text-custom">Course</th>
+        <th class="text-custom">Category</th>
+        <th class="text-custom">Generated Date</th>
+        <th class="text-custom">Number of question</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Course.Code</td>
+            <td></td>
+            <td>@item.GeneratedDate.ToString("HH:mm dd/MM/yyyy")</td>
+            <td>
+                <p>Number of easy question : @item.NumberOfEasy</p>
+                <p>Number of medium question : @item.NumberOfMedium</p>
+                <p>Number of hard question : @item.NumberOfHard</p>
+            </td>
+        </tr>
+    }
+</table>

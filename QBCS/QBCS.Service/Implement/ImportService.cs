@@ -238,6 +238,7 @@ namespace QBCS.Service.Implement
                             if (trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                tempQuestion.Message = "All options must different with each others";
                                 break;
                             }
                         }

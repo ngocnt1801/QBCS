@@ -122,6 +122,12 @@
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
     });
+    $("#normal").focusout(function () {
+        var easyPercent = $("#easy").val();
+        var normalPercent = $("#normal").val();
+        var hardPercent = 100 - easyPercent - normalPercent;
+        $("#hard").val(hardPercent);
+    });
     $("#exportExamination").submit(function (event) {
         event.preventDefault();
         var examinationId = $("input[name='examinationId']").val();

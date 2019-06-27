@@ -8,7 +8,7 @@ namespace QBCS.Service.Utilities
 {
     public class StringProcess
     {
-        public string RemoveTag (string source, string oldString, string newString)
+        public static string RemoveTag (string source, string oldString, string newString)
         {
             string result = null;
             if (source != null)
