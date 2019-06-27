@@ -1,6 +1,7 @@
 ﻿.text-custom {
     color: #000 !important;
-    font-weight: 500;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .text-right-answer {
@@ -14,3 +15,6 @@
     background-color: #f8f9fc !important;
 }
 
+.delete-option, .add-option {
+    cursor: pointer;
+}

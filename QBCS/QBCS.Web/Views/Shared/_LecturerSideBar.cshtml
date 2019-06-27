@@ -5,6 +5,8 @@
     var courseClass = "";
     var importClass = "";
     var userClass = "";
+    var activitiesClass = "";
+    var statisticClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     switch (controller)
     {
@@ -14,11 +16,17 @@
         case "Course":
             courseClass = "active";
             break;
+        case "Statistics":
+            statisticClass = "active";
+            break;
         case "Import":
             importClass = "active";
             break;
         case "User":
             userClass = "active";
+            break;
+        case "Activity":
+            activitiesClass = "active";
             break;
     }
     }
@@ -85,8 +93,15 @@
             </a>
         </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+    <li class="nav-item @activitiesClass">
+        <a class="nav-link" href="@Url.Action("Index", "Activity",new { id = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-history"></i>
+            <span>Activities</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
         <!-- Heading -->
         <!-- Nav Item - Account -->

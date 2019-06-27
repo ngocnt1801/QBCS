@@ -122,11 +122,18 @@
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
     });
+    $("#normal").focusout(function () {
+        var easyPercent = $("#easy").val();
+        var normalPercent = $("#normal").val();
+        var hardPercent = 100 - easyPercent - normalPercent;
+        $("#hard").val(hardPercent);
+    });
     $("#exportExamination").submit(function (event) {
         event.preventDefault();
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $('#fileExtension').find(":selected").text();
-        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
+        var getCategory = $('#getCategory').prop('checked');
+        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
         //    $.ajax({
         //        type: "GET",
         //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",
@@ -140,6 +147,34 @@
     });
     $(".tab-slider--body").hide();
     $(".tab-slider--body:first").show();
+
+
+    //set up datatable
+    $('#dataTableExam').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ]
+    });
 });
 $(".tab-slider--nav li").click(function () {
     $(".tab-slider--body").hide();

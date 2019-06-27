@@ -1,0 +1,151 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
+
+@{
+    ViewBag.Title = "GetListActivity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activities Detail</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        @foreach (var item in Model)
+        {
+        <p class="text-custom"> User: @item.Fullname</p>
+        <p class="text-custom"> Action: @item.Message</p>
+        <p class="text-custom"> Date: @item.LogDate</p>
+            
+            <div class="table-responsive text-custom">
+                <table class="table table-bordered table-hover text-custom">
+                    <thead>
+                        <tr>
+                            <th>New</th>
+                            <th>Old</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td>
+                               Question Content: @item.QuestionNew.QuestionContent <br />
+                                Answer: 
+                                @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
+                                {
+                                    if (item.QuestionNew.Options[i].IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-right-answer">
+                                            @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                            @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
+                                        </div>
+                                    }
+
+                                    <br />
+                                }
+                            </td>
+                            <td>
+                                Question Content: @item.QuestionOld.QuestionContent <br />
+                                Answer:
+                                @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
+                                {
+                                    if (item.QuestionOld.Options[i].IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-right-answer">
+                                            @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                            @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
+                                        </div>
+                                    }
+
+                                    <br />
+                                }
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        }
+        @*<div class="table-responsive text-custom">
+            <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Message</th>
+                        <th>New</th>
+                        <th>Old</th>
+
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.Fullname
+                            </td>
+                            <td>
+                                @item.LogDate
+                            </td>
+                            <td>@item.Message</td>
+                            <td>
+                                @item.QuestionNew.QuestionContent <br />
+                                @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
+                                {
+                                    if (item.QuestionNew.Options[i].IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-right-answer">
+                                            @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                            @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
+                                        </div>
+                                    }
+
+                                    <br />
+                                }
+
+                            </td>
+                            <td>
+                                @item.QuestionOld.QuestionContent <br />
+                                @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
+                                {
+                                    if (item.QuestionOld.Options[i].IsCorrect == true)
+                                    {
+                                        <div class="container-fluid text-right-answer">
+                                            @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="container-fluid">
+                                            @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
+                                        </div>
+                                    }
+
+                                    <br />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
+    </div>
+</div>

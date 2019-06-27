@@ -16,6 +16,7 @@ namespace QBCS.Entity
         public string OptionContent { get; set; }
 
         public bool? IsCorrect { get; set; }
+        public int? UpdateOptionId { get; set; }
 
         public virtual QuestionTemp QuestionTemp { get; set; }
     }

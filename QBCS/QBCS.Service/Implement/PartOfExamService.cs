@@ -15,25 +15,38 @@ namespace QBCS.Service.Implement
     {
         private IUnitOfWork unitOfWork;
         private ILevelService levelService;
+        ICategoryService categoryService;
         public PartOfExamService()
         {
             unitOfWork = new UnitOfWork();
             levelService = new LevelService();
+            categoryService = new CategoryService();
         }
         public List<PartOfExamViewModel> GetPartOfExamByExamId(int examinationId)
         {
             IQueryable<PartOfExamination> partOfExams = unitOfWork.Repository<PartOfExamination>().GetAll();
             List<PartOfExamination> partOfExamsByExamId = partOfExams.Where(p => p.ExaminationId == examinationId).ToList();
             List<PartOfExamViewModel> result = new List<PartOfExamViewModel>();
+            CategoryViewModel category = null;
+            foreach (var part in partOfExamsByExamId)
+            {
+                if(part.QuestionInExams != null)
+                {
+                    int categoryId = part.QuestionInExams.FirstOrDefault().CategoryId.HasValue ? (int)part.QuestionInExams.FirstOrDefault().CategoryId : 0;
+                    category = categoryService.GetCategoryById(categoryId);
+                    break;
+                }
+            }
             foreach(PartOfExamination part in partOfExamsByExamId)
             {
-                List<QuestionViewModel> questions = part.QuestionInExams.Select(c => new QuestionViewModel
+                List<QuestionInExamViewModel> questions = part.QuestionInExams.Select(c => new QuestionInExamViewModel
                 {
-
                     Id = (int)c.Id,
                     QuestionContent = c.QuestionContent,
-                    Level = levelService.GetLevelById((int)c.LevelId),
-                    LevelId = (int)c.LevelId,
+                    Level = levelService.GetLevelById(c.LevelId.HasValue ? (int)c.LevelId : 0),
+                    LevelId = c.LevelId.HasValue ? (int)c.LevelId : 0,
+                    CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,
+                    Category = category,
                     QuestionCode = c.QuestionCode,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {
@@ -45,7 +58,7 @@ namespace QBCS.Service.Implement
                 
                 PartOfExamViewModel partViewModel = new PartOfExamViewModel()
                 {
-                    ExaminationId = (int)part.ExaminationId,
+                    ExaminationId = part.ExaminationId.HasValue ? (int)part.ExaminationId : 0,
                     Question = questions
                 };
                 if (part.LearningOutcome != null)
@@ -54,20 +67,10 @@ namespace QBCS.Service.Implement
                     {
 
                         Id = part.LearningOutcome.Id,
-                        Code = part.LearningOutcome.Code,
-                        CourseId = (int)part.LearningOutcome.CourseId,
-                        IsDisable = (bool)part.LearningOutcome.IsDisable,
+                        Code = part.LearningOutcome.Code != null ? part.LearningOutcome.Code : "",
+                        CourseId = part.LearningOutcome.CourseId.HasValue ? part.LearningOutcome.CourseId.Value : 0,
+                        IsDisable = part.LearningOutcome.IsDisable.HasValue && part.LearningOutcome.IsDisable.Value,
                         Name = part.LearningOutcome.Name
-                    };
-                } else
-                {
-                    partViewModel.Topic = new TopicViewModel()
-                    {
-                        Id = part.Topic.Id,
-                        Name = part.Topic.Name,
-                        Code = part.Topic.Code,
-                        CourseId = (int)part.Topic.CourseId,
-                        IsDisable = (bool)part.Topic.IsDisable
                     };
                 }
                 result.Add(partViewModel);

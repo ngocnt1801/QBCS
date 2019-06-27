@@ -10,5 +10,6 @@ namespace QBCS.Service.Interface
     public interface IExaminationService
     {
         GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam);
+        List<ExaminationViewModel> GetAllExam();
     }
 }

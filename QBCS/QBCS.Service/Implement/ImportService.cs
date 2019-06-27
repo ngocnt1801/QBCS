@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
@@ -20,7 +19,7 @@ namespace QBCS.Service.Implement
 
         public ImportService()
         {
-            unitOfWork = new UnitOfWork();
+            unitOfWork = new UnitOfWork();//comment here
         }
 
         public void Cancel(int importId)
@@ -66,6 +65,9 @@ namespace QBCS.Service.Implement
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
                         Code = q.Code,
+                        Message = q.Message,
+                        Image = q.Image,
+                        IsInImportFile = q.DuplicateInImportId.HasValue,
                         DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
                         {
                             Id = q.DuplicatedWithBank.Id,
@@ -77,12 +79,14 @@ namespace QBCS.Service.Implement
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
-                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel {
+                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel
+                        {
                             Id = q.DuplicatedWithImport.Id,
                             Code = q.DuplicatedWithImport.Code,
                             CourseName = "Import File",
                             QuestionContent = q.DuplicatedWithImport.QuestionContent,
-                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel {
+                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                            {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList()
@@ -92,7 +96,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }).OrderBy(q => q.Status).ToList() 
+                    }).OrderBy(q => q.Status).ToList()
                 };
             }
 
@@ -106,10 +110,11 @@ namespace QBCS.Service.Implement
                 .Select(im => new ImportViewModel
                 {
                     Id = im.Id,
-                    Date = im.ImportedDate.Value,
+                    Date = im.UpdatedDate.Value,
                     Status = (StatusEnum)im.Status.Value,
                     TotalQuestion = im.TotalQuestion.HasValue ? im.TotalQuestion.Value : 0,
-                    TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0
+                    TotalSuccess = im.TotalSuccess.HasValue ? im.TotalSuccess.Value : 0,
+                    OwnerName = im.OwnerName
                 })
                 .OrderByDescending(im => im.Date)
                 .ToList();
@@ -137,7 +142,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }) : (new QuestionViewModel
+                    }) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
                     {
                         Id = questionTemp.DuplicatedWithImport.Id,
                         CourseName = "Import file",
@@ -148,7 +153,7 @@ namespace QBCS.Service.Implement
                             OptionContent = o.OptionContent,
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                         }).ToList()
-                    }),
+                    }) : null,
                     Options = questionTemp.OptionTemps.Select(o => new OptionViewModel
                     {
                         Id = o.Id,
@@ -170,21 +175,40 @@ namespace QBCS.Service.Implement
             }
         }
 
+        public async Task CheckDuplicateQuestion(int questionId, int logId)
+        {
+            using (var context = new QBCSContext())
+            {
+                string command = "EXEC CheckDuplicateQuestion @questionId=@qid, @logId=@lid";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@qid", questionId)
+                                                                     , new SqlParameter("@lid", logId));
+            }
+        }
+
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && entity.Status == (int)StatusEnum.Editable)
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable 
+                                    || entity.Status == (int)StatusEnum.Invalid
+                                    || entity.Status == (int)StatusEnum.Delete
+                                    || entity.Status == (int)StatusEnum.DeleteOrSkip))
             {
                 entity.QuestionContent = question.QuesitonContent;
                 entity.Status = (int)StatusEnum.NotCheck;
-                foreach (var option in entity.OptionTemps)
+                var listOptionEntity = entity.OptionTemps.ToList();
+                foreach (var option in listOptionEntity)
                 {
-                    var updatedOption = question.Options.Where(o => o.Id == option.Id).FirstOrDefault();
-                    if (updatedOption != null)
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+
+                foreach (var option in question.Options)
+                {
+                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp
                     {
-                        option.IsCorrect = updatedOption.IsCorrect;
-                        option.OptionContent = updatedOption.OptionContent;
-                    }
+                        IsCorrect = option.IsCorrect,
+                        OptionContent = option.OptionContent,
+                        TempId = question.Id
+                    });
                 }
 
                 unitOfWork.Repository<QuestionTemp>().Update(entity);
@@ -214,6 +238,7 @@ namespace QBCS.Service.Implement
                             if (trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                tempQuestion.Message = "All options must different with each others";
                                 break;
                             }
                         }
@@ -240,6 +265,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Question length must at least " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check max question length
@@ -247,6 +273,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Question length can not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check banned words in question
@@ -258,6 +285,7 @@ namespace QBCS.Service.Implement
                                     if (culture.CompareInfo.IndexOf(rule.Value, varRule, CompareOptions.IgnoreCase) >= 0)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Question can not contain '" + (varRule) + "'";
                                     }
                                 }
                                 else
@@ -266,6 +294,7 @@ namespace QBCS.Service.Implement
                                     if (tempQuestion.QuestionContent.Contains(varRule))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Question can not contain '" + (rule.Value) + "'";
                                     }
                                 }
 
@@ -275,6 +304,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Number of options must at least " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check max option count in question
@@ -282,6 +312,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
+                                    tempQuestion.Message = "Number of options can not exceed " + int.Parse(rule.Value);
                                 }
                                 break;
                             //check min option length
@@ -291,6 +322,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -302,6 +334,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -319,6 +352,7 @@ namespace QBCS.Service.Implement
                                         if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
                                         {
                                             tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            tempQuestion.Message = "Options can not contain '" + (varRule) + "'";
                                         }
                                     }
                                     else
@@ -327,6 +361,7 @@ namespace QBCS.Service.Implement
                                         if (option.OptionContent.Contains(varRule))
                                         {
                                             tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            tempQuestion.Message = "Options can not contain '" + (rule.Value) + "'";
                                         }
                                     }
                                 }
@@ -338,6 +373,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -349,6 +385,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -366,6 +403,7 @@ namespace QBCS.Service.Implement
                                             if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Correct options can not contain '" + (varRule) + "'";
                                             }
                                         }
                                         else
@@ -374,6 +412,7 @@ namespace QBCS.Service.Implement
                                             if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Correct options can not contain '" + (rule.Value) + "'";
                                             }
                                         }
                                     }
@@ -386,6 +425,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Incorrect option length must at least " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -397,6 +437,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Incorrect option length can not exceed " + int.Parse(rule.Value);
                                         break;
                                     }
                                 }
@@ -414,6 +455,7 @@ namespace QBCS.Service.Implement
                                             if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Incorrect options can not contain '" + (varRule) + "'";
                                             }
                                         }
                                         else
@@ -423,6 +465,7 @@ namespace QBCS.Service.Implement
                                             if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Incorrect options can not contain '" + (rule.Value) + "'";
                                             }
                                         }
                                     }
@@ -439,6 +482,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct Option can not be a longest option";
                                     }
                                 }
                                 break;
@@ -453,6 +497,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
+                                        tempQuestion.Message = "Correct Option can not be a shortest option";
                                     }
                                 }
                                 break;
@@ -477,7 +522,9 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
-            if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip || questionTemp.Status == (int)StatusEnum.Delete))
+            if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip 
+                                        || questionTemp.Status == (int)StatusEnum.Delete
+                                        || questionTemp.Status == (int)StatusEnum.Editable))
             {
                 questionTemp.Status = status;
                 unitOfWork.Repository<QuestionTemp>().Update(questionTemp);

@@ -8,9 +8,14 @@ namespace QBCS.Service.ViewModel
 {
     public class ExaminationViewModel
     {
-        public QuestionViewModel Question { get; set; }
-        public TopicViewModel Topic { get; set; }
-        public LearningOutcomeViewModel LearningOutcome { get; set; }
-        public LevelViewModel Level { get; set; }
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public CourseViewModel Course { get; set; }
+        public DateTime GeneratedDate { get; set; }
+        public int NumberOfEasy { get; set; }
+        public int NumberOfMedium { get; set; }
+        public int NumberOfHard { get; set; }
+        public int CategoryId { get; set; }
+        public CategoryViewModel Category { get; set; }
     }
 }

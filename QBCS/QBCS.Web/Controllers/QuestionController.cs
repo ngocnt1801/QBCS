@@ -87,8 +87,6 @@ namespace QBCS.Web.Controllers
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
 
-            List<TopicViewModel> topics = topicService.GetTopicByCourseId(qvm.CourseId);
-
             List<LevelViewModel> levels = levelService.GetLevel();
 
             List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
@@ -96,7 +94,6 @@ namespace QBCS.Web.Controllers
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
                 Question = qvm,
-                Topics = topics,
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
@@ -104,31 +101,30 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+        [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             bool result = questionService.UpdateQuestion(ques);
-
             bool optionResult = optionService.UpdateOptions(ques.Options);
-
-            return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
+            return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
         }
 
         [HttpPost]
         [Log(Action = "Import", TargetName = "Question")]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId)
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId);
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName);
             }
 
             //notify 
-            TempData["Message"] = "You import successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            TempData["Modal"] = "#success-modal";
+            TempData["CourseId"] = courseId;
 
             return RedirectToAction("Index", "Home");
         }
@@ -197,9 +193,9 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateCategory(int[] ids, int? categoryId, int? topicId, int? levelId)
+        public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
-            questionService.UpdateCategory(ids, categoryId, topicId, levelId);
+            questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
     }

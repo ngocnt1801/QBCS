@@ -18,5 +18,8 @@ namespace QBCS.Service.ViewModel
         public string Topic { get; set; }
         public string LearningOutcome { get; set; }
         public string Level { get; set; }
+        public string Image { get; set; }
+        public string Error { get; set; }
+        public string OtherError { get; set; }
     }
 }

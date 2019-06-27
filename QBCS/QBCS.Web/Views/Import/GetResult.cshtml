@@ -11,8 +11,8 @@
 @{
 
     int total = Model.Questions.Count;
-    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip).Count();
-    int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip || q.Status == StatusEnum.Delete).Count();
+    //int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
     int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
     int invalid = Model.Questions.Where(q => q.Status == StatusEnum.Invalid).Count();
 
@@ -21,18 +21,40 @@
             <nav>
                 <ul>
                     <li><a href="#section-topline-1"><span>Editable (@editable/@total)</span></a></li>
-                    <li><a href="#section-topline-2"><span>Delete (@delete/@total)</span></a></li>
+                    @*<li><a href="#section-topline-2"><span>Delete (@delete/@total)</span></a></li>*@
                     <li><a href="#section-topline-3"><span>Sucess (@success/@total)</span></a></li>
                     <li><a href="#section-topline-4"><span>Invalid (@invalid/@total)</span></a></li>
                 </ul>
             </nav>
             <div class="content-wrap">
                 <section id="section-topline-1">
-                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, {"importId", Model.Id } })
+                    @{
+                        var editList = Model.Questions.Where(q => q.Status == StatusEnum.Editable
+                                                            || q.Status == StatusEnum.DeleteOrSkip
+                                                            || q.Status == StatusEnum.Delete);
+                    }
+                    <div class="mb-4">
+                        <span class="text-custom align-middle mr-4">Duplicated with:</span>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-outline-dark active toggle-table" data-toggle="#importfile-duplicate">
+                                <input type="radio" name="options" autocomplete="off" checked> Import file
+                            </label>
+                            <label class="btn btn-outline-dark toggle-table" data-toggle="#bank-duplicate">
+                                <input type="radio" name="options" autocomplete="off"> Bank
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="table-toggle" id="importfile-duplicate">
+                        @Html.Partial("_ListQuestionWithDuplicate", editList.Where(q => q.IsInImportFile).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, { "importId", Model.Id } })
+                    </div>
+                    <div class="hidden table-toggle" id="bank-duplicate">
+                        @Html.Partial("_ListQuestionWithDuplicate", editList.Where(q => !q.IsInImportFile).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, { "importId", Model.Id } })
+                    </div>
                 </section>
-                <section id="section-topline-2">
-                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList(), new ViewDataDictionary { { "tableId", "tableDelete" }, { "importId", Model.Id } })
-                </section>
+                @*<section id="section-topline-2">
+                        @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList(), new ViewDataDictionary { { "tableId", "tableDelete" }, { "importId", Model.Id } })
+                    </section>*@
                 <section id="section-topline-3">
                     @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Success).ToList(), new ViewDataDictionary { { "tableId", "tableSuccess" }, { "importId", Model.Id } })
                 </section>

@@ -14,6 +14,7 @@ namespace QBCS.Service.ViewModel
         public int Frequency { get; set; }
         public int Priority { get; set; }
         public int CourseId { get; set; }
+        public int CategoryId { get; set; }
         public int TopicId { get; set; }
         public int LearningOutcomeId { get; set; }
         public int LevelId { get; set; }

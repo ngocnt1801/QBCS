@@ -21,15 +21,27 @@
             <p>Percent of Hard Question : @Model.HardPercent</p>
         </td>
         <td>
-            <p>Easy Question : @Model.EasyQuestion</p>
-            <p>Medium Question : @Model.MediumQuestion</p>
-            <p>Hard Question : @Model.HardQuestion</p>
-            <b>Total Question : @Model.TotalQuestion</b>
+            <p>Easy Question : @Model.EasyQuestionGenerrate</p>
+            <p>Medium Question : @Model.MediumQuestionGenerrate</p>
+            <p>Hard Question : @Model.HardQuestionGenerrate</p>
+            <b>Total Question : @Model.TotalQuestionGenerrate</b>
+            @if(Model.MediumQuestion != Model.MediumQuestionGenerrate)
+            {
+                <p style="color:red">Insufficient number of medium questions in question bank</p>
+            }
+            @if (Model.EasyQuestion != Model.EasyQuestionGenerrate)
+            {
+                <p style="color:red">Insufficient number of easy questions in question bank</p>
+            }
+            @if (Model.HardQuestion != Model.HardQuestionGenerrate)
+            {
+                <p style="color:red">Insufficient number of hard questions in question bank</p>
+            }
         </td>
         <td>
-            <p>Grade of Ordinary Student : @Model.OrdinaryGradeCalculate / 100</p>
-            <p>Grade of Good Student : @Model.GoodGradeCalculate / 100</p>
-            <p>Grade of Excellent Student : @Model.ExcellentGradeCalculate / 100</p>
+            <p>Minimum grade of Ordinary Student : @Model.OrdinaryGradeCalculate / 100</p>
+            <p>Minimum grade of Good Student : @Model.GoodGradeCalculate / 100</p>
+            <p>Minimum grade of Excellent Student : @Model.ExcellentGradeCalculate / 100</p>
         </td>
         <td>
             <a href="@Url.Action("ViewGeneratedExamination", "Examination", new { examinationId = Model.ExamId})" class="btn btn-primary" role="button">Review Examination</a>
