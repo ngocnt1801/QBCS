@@ -93,11 +93,13 @@
                 }
             </select>
             </div>
-            <div class="row" style="height:50px;"></div>
-            <div class="text-center">
-                <input type="hidden" name="CourseId" value="@Model.Question.CourseId"/>
-                <input type="submit" name="Update" value="Update" class="btn btn-success float-right" id="btnUpdate"/>
+        <div class="row">
+            <input type="hidden" name="CourseId" value="@Model.Question.CourseId" />
+            <div class="float-right col-md-12">
+                <input type="submit" name="Update" value="Update" class="btn btn-primary float-right ml-2" id="btnUpdate" />
+                <a class="btn btn-default border-dark text-custom float-right" href="@Url.Action("CourseDetail", "Course", new { courseId=Model.Question.CourseId })">Cancel</a>
             </div>
+        </div>
         </div>
 
     </div>
