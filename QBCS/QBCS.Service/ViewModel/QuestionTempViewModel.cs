@@ -19,5 +19,6 @@ namespace QBCS.Service.ViewModel
         public string Message { get; set; }
         public string Image { get; set; }
         public List<OptionViewModel> Options { get; set; }
+        public string Category { get; set; }
     }
 }
