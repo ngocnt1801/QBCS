@@ -124,6 +124,7 @@ namespace QBCS.Web.Controllers
             //notify 
             TempData["Modal"] = "#success-modal";
             TempData["CourseId"] = courseId;
+            TempData["OwnereName"] = ownerName;
 
             return RedirectToAction("Index", "Home");
         }
