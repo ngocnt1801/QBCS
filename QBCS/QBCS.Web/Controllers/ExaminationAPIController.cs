@@ -77,6 +77,7 @@ namespace QBCS.Web.Controllers
         {
             List<PartOfExamViewModel> partOfExams = partOfExamService.GetPartOfExamByExamId(examinationId);
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            int count = 0;
             if (fileExtension.ToLower().Equals("xml"))
             {
                 using (MemoryStream stream = new MemoryStream())
@@ -145,19 +146,15 @@ namespace QBCS.Web.Controllers
                                 if (question.Image == null)
                                 {
                                     xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
-                                    xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
-                                    xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
-                                    xmlWriter.WriteString("bca");
                                     xmlWriter.WriteEndElement();
                                 }
                                 else
                                 {
                                     xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, XML_NAME_ATTR_VALUE);
+                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".jpg");
                                     xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                                     xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
-                                    xmlWriter.WriteString("css");
+                                    xmlWriter.WriteString(question.Image);
                                     xmlWriter.WriteEndElement();
                                 }
 

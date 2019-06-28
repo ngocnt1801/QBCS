@@ -24,6 +24,10 @@
                     @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <!-- COMPONENT START -->
+                        <i class="text-dark text-custom">Enter owner name:</i>
+                        <div class="form-group pb-2">
+                          <input name="ownerName" class="form-control text-custom border-dark"/>
+                        </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">
                             @if (Model.Courses == null || Model.Courses.Count == 0)
@@ -45,7 +49,7 @@
                         <div class="custom-control custom-checkbox text-custom">
                             <input type="checkbox" name="checkCate" value="true" class="custom-control-input" id="defaultChecked2" checked>
                             <label class="custom-control-label" for="defaultChecked2">Get Category in File</label>
-                        </div><br/>
+                        </div><br />
                         <div class="custom-control custom-checkbox text-custom">
                             <input type="checkbox" name="checkHTML" value="true" class="custom-control-input" id="defaultChecked1">
                             <label class="custom-control-label" for="defaultChecked1">Get HTML element in File</label>

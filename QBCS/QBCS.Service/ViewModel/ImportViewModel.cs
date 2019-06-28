@@ -10,5 +10,6 @@ namespace QBCS.Service.ViewModel
         public int TotalQuestion { get; set; }
         public StatusEnum Status { get; set; }
         public int TotalSuccess { get; set; }
+        public string OwnerName { get; set; }
     }
 }

@@ -270,7 +270,7 @@ namespace QBCS.Service.Implement
             return result;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML)
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName)
         {
             string category = "";
             string level = "";
@@ -612,6 +612,7 @@ namespace QBCS.Service.Implement
                 {
                     import.Status = (int)Enum.StatusEnum.NotCheck;
                     import.CourseId = courseId;
+                    import.OwnerName = ownerName;
                     //check formats
                     import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
