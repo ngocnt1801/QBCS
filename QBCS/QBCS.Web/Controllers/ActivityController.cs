@@ -50,7 +50,7 @@ namespace QBCS.Web.Controllers
             var model = logService.GetActivitiesById(id);
             return View("GetUpdateActivity", model);
         }
-        public ActionResult GetListTargetByID(int id, int targetId)
+        public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
            // var listTemp = logService.GetActivitiesById(id);
@@ -58,7 +58,7 @@ namespace QBCS.Web.Controllers
 
             if (targetId > 0)
             {
-                List<LogViewModel> tempImport = logService.GetListQuestionImportByTargetId(targetId);
+                List<LogViewModel> tempImport = logService.GetListQuestionImportByTargetId((int)targetId);
                 if (tempImport != null)
                 {
                     list = tempImport;
