@@ -1,4 +1,0 @@
-1
-Question: [html]Given XML:<cbr> <?xml version="1.0" encoding="UTF-8"?><cbr> <?xml-stylesheet type="text/xsl" href="books.xsl"?><cbr> <library><cbr>  <book><cbr>    <booktitle>The Firm</booktitle><cbr>    <author>John Grisham</author><cbr>    <price>99</price><cbr>  </book><cbr>  <book><cbr>    <_booktitle>Coma</_booktitle><cbr>    <2author>Robin Cock</2author><cbr>    <price.one>99.5</price.one><cbr>  </book><cbr>  <book><cbr>    <booktitle>Wild Horse</booktitle><cbr>    <author>Rebecca Moore</author><cbr>    <price>35.5</price><cbr>  </book><cbr></library><cbr>Choose the correct statement<cbr>
-Code: Q001-Q0001
-
