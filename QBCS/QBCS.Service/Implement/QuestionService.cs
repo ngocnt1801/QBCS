@@ -804,6 +804,9 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                 Options = q.Options.Select(o => new OptionViewModel
                 {
                     Id = o.Id,

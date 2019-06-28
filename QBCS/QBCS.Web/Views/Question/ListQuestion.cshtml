@@ -68,7 +68,7 @@
                                 <td>
                                     <a href="@Url.Action("GetQuestionDetail", "Question", new { id = item.Id})" class="btn btn-primary mr-1 col-12 mb-2">Detail</a>
                                     <a href="@Url.Action("GetLogByQuestionID", "Activity", new { targetId = item.Id})" class="btn btn-info mr-1 col-12 mb-2">History</a>
-                                    <button data-id="@item.Id" data-url="@Url.Action("ToggleDisable", "Question", new { id = item.Id})" class="btn btn-danger toggleDisable col-12 mb-2">Disable</button>
+                                    <button data-id="@item.Id" data-url="@Url.Action("ToggleDisable", "Question", new { id = item.Id})" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-@item.CategoryId" data-lo="#count-c-@item.CategoryId-l-@item.LearningOutcomeId" data-lv="#count-c-@item.CategoryId-l-@item.LearningOutcomeId-lv-@item.LevelId">Disable</button>
                                 </td>
                                 <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code"/></td>
 
