@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
@@ -225,6 +226,7 @@ namespace QBCS.Service.Implement
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
+                tempQuestion.QuestionContent = Uppercase(tempQuestion.QuestionContent);
                 if(tempQuestion.OptionTemps.Count > 1)
                 {
                     for (int i = 0; i < tempQuestion.OptionTemps.Count - 1; i++)
@@ -512,13 +514,33 @@ namespace QBCS.Service.Implement
             }
             return tempQuestions;
         }
+
+        #region validate rule stuff
+        private string Uppercase(string content)
+        {
+            string[] uppercase = { "invalid", "incorrect", "not true" };
+            for(int i = 0; i < uppercase.Length; i++)
+            {
+                var culture = CultureInfo.GetCultureInfo("en-GB");
+                if (culture.CompareInfo.IndexOf(content, uppercase[i], CompareOptions.IgnoreCase) >= 0)
+                {
+                    content = Regex.Replace(content,uppercase[i], uppercase[i].ToUpper(),RegexOptions.IgnoreCase);
+                }
+            }
+            return content;
+        }
         private string TrimOption(string option)
         {
-            option = option.Replace(" ", "");
-            option = option.Replace(".", "");
-            option = option.Replace(",", "");
+            option = option.Replace("  ", " ");
+            if (option.Last().ToString().Equals("."))
+            {
+                option.Remove(option.Length - 1);
+            }
+            //option = option.Replace(",", "");
             return option;
         }
+
+        #endregion
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);

@@ -669,8 +669,9 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            Topic = q.Topic,
+                            LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
+                            Image = q.Image,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -726,13 +727,13 @@ namespace QBCS.Service.Implement
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             Question question = questions.Where(q => q.TopicId == topicId && q.LevelId == levelId && q.CategoryId == categoryId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
-            if(question == null)
+            if (question == null)
             {
                 return 0;
             }
             return (int)question.Frequency;
         }
-        
+
         public int GetCountOfListQuestionByTopicAndId(int topicId, int levelId, int categoryId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -779,7 +780,8 @@ namespace QBCS.Service.Implement
             if (learningoutcomeId != null && learningoutcomeId != 0)
             {
                 result = result.Where(q => q.LearningOutcomeId == learningoutcomeId);
-            } else if (learningoutcomeId == 0)
+            }
+            else if (learningoutcomeId == 0)
             {
                 result = result.Where(q => q.LearningOutcomeId == null);
             }
@@ -875,7 +877,7 @@ namespace QBCS.Service.Implement
             var import = new Import();
             table = TrimTags(table);
             XElement parseTable = XElement.Parse(table);
-            foreach(XElement eTable in parseTable.Elements("table"))
+            foreach (XElement eTable in parseTable.Elements("table"))
             {
                 QuestionTmpModel questionTmp = new QuestionTmpModel();
                 foreach (XElement tbody in eTable.Elements("tbody"))
@@ -887,28 +889,62 @@ namespace QBCS.Service.Implement
                         if (key.Contains("QN="))
                         {
                             questionTmp.Code = key.Replace("QN=", "");
-                            var contentP = tr.Elements("td").Elements("p").ToList();
-                            for (int i = 0; i < contentP.Count; i++)
+                            var contentQ = tr.Elements("td").Elements("p").ToList();
+                            for (int i = 1; i < contentQ.Count; i++)
                             {
-                                switch (i)
+                                if (contentQ.ElementAt(i).ToString().Contains("base64,"))
                                 {
-                                    case 1:
-                                        questionTmp.QuestionContent = TrimSpace(contentP.ElementAt(i).Value);
-                                        break;
-                                    case 2:
-                                        break;
-                                    case 3:
-                                        break;
+                                    var getImage1 = contentQ.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
+                                    var getImage2 = getImage1[1].Split('"');
+                                    questionTmp.Image = getImage2[0];
                                 }
+                                else if (questionTmp.QuestionContent == null && 
+                                    !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
+                                {
+                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    questionTmp.QuestionContent = "[html]" + stringToValue.Replace("<br />", "<cbr>");
+                                }
+                                else if(!(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
+                                {
+                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    questionTmp.QuestionContent = questionTmp.QuestionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
+                                }
+                                //switch (i)
+                                //{
+                                //    case 1:
+                                //        questionTmp.QuestionContent = TrimSpace(contentQ.ElementAt(i).Value);
+                                //        break;
+                                //    case 3:
+                                //        if (contentQ.ElementAt(i).ToString().Contains("png;base64,"))
+                                //        {
+                                //            var test = contentQ.ElementAt(i).ToString().Split(new string[] { "png;base64," }, StringSplitOptions.None);
+                                //            var test1 = test[1].Split('"');
+                                //            questionTmp.Image = test1[0];
+                                //        }
+                                //        break;
+                                //}
                             }
                         }
                         else if (key.Contains("."))
                         {
                             optionCheck.Code = key.Replace(".", "");
+                            var contentO = tr.Elements("td").Elements("p").ToList();
                             if (!value.Equals(""))
                             {
                                 optionModel.IsCorrect = false;
-                                optionModel.OptionContent = TrimSpace(value);
+                                for (int i = 1; i < contentO.Count; i++)
+                                {
+                                    if(optionModel.OptionContent == null)
+                                    {
+                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        optionModel.OptionContent = stringToValue.Replace("<br />", "<cbr>");
+                                    }
+                                    else
+                                    {
+                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
+                                    }
+                                }
                             }
                             if (optionModel.OptionContent != null)
                             {
@@ -946,7 +982,28 @@ namespace QBCS.Service.Implement
                         {
                             if (!value.Equals(""))
                             {
-                                questionTmp.LearningOutcome = value;
+                                questionTmp.LearningOutcome = "LearningOutcome" + value;
+                            }
+                        }
+                        else if (key.Contains("MARK:"))
+                        {
+                            if (!value.Equals(""))
+                            {
+                                switch (value)
+                                {
+                                    //default:
+                                    //    quesModel.Level = "Easy";
+                                    //    break;
+                                    case "1":
+                                        questionTmp.Level = "Easy";
+                                        break;
+                                    case "2":
+                                        questionTmp.Level = "Medium";
+                                        break;
+                                    case "3":
+                                        questionTmp.Level = "Hard";
+                                        break;
+                                }
                             }
                         }
                     }
@@ -969,8 +1026,9 @@ namespace QBCS.Service.Implement
                     Code = q.Code,
                     Status = (int)StatusEnum.NotCheck,
                     Category = q.Category,
-                    Topic = q.Topic,
+                    LearningOutcome = q.LearningOutcome,
                     LevelName = q.Level,
+                    Image = q.Image,
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
@@ -1011,7 +1069,6 @@ namespace QBCS.Service.Implement
         }
         private string TrimSpace(string trim)
         {
-            trim = trim.Replace("\n", "");
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("[ ]{2,}", options);
             trim = regex.Replace(trim, " ");
@@ -1019,13 +1076,13 @@ namespace QBCS.Service.Implement
         }
         private string TrimTags(string table)
         {
-            table = table.Replace("<st1:country-region>", "");
-            table = table.Replace("</st1:country-region>", "");
-            table = table.Replace("<st1:city>", "");
-            table = table.Replace("</st1:city>", "");
-            table = table.Replace("<st1:place>", "");
-            table = table.Replace("</st1:place>", "");
-            table = table.Replace("<p>&nbsp</p>", "");
+            table = table.Replace("<st1:country-region>", " ");
+            table = table.Replace("</st1:country-region>", " ");
+            table = table.Replace("<st1:city>", " ");
+            table = table.Replace("</st1:city>", " ");
+            table = table.Replace("<st1:place>", " ");
+            table = table.Replace("</st1:place>", " ");
+            table = table.Replace("<p>&nbsp;</p>", "");
             table = table.Replace("&nbsp;", "");
             return table;
         }
