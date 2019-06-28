@@ -227,6 +227,7 @@
     <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
     <Content Include="Content\error\font-awesome.min.css" />
     <Content Include="Content\error\style.css" />
+    <Content Include="Content\facebook_profile_image.jpg" />
     <Content Include="Content\font-awesome\all.css" />
     <Content Include="Content\font-awesome\all.min.css" />
     <Content Include="Content\font-awesome\brands.css" />
