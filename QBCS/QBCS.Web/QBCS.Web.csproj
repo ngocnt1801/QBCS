@@ -2208,6 +2208,7 @@
     <Content Include="Views\Course\Staff_Index.cshtml" />
     <Content Include="Views\Shared\_ListCategory.cshtml" />
     <Content Include="Views\Activity\GetListActivity.cshtml" />
+    <Content Include="Views\Activity\GetUpdateActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

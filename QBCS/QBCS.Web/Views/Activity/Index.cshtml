@@ -4,6 +4,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int counter = 0;
+
 }
 
 <h2>Activity</h2>
@@ -14,34 +15,40 @@
             <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                      
+
                         <th>User</th>
                         <th>Date</th>
                         <th>Message</th>
                         <th>Action</th>
-                       
+
                     </tr>
                 </thead>
 
                 <tbody>
                     @foreach (var item in Model)
-                    {
-                    <tr>
-                        @*@{
-                            counter++;
-                        }
-                        <td>@counter</td>*@
-                        <td>
-                            @item.Fullname
-                        </td>
-                        <td>
-                            @item.LogDate
-                        </td>
-                        <td>@item.Message</td>
-                        <td>
-                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
-                        </td>
-                    </tr>
+                    {                       
+                            <tr>
+
+                                <td>
+                                    @item.Fullname
+                                </td>
+                                <td>
+                                    @item.LogDate
+                                </td>
+                                <td>@item.Message</td>
+                                <td>
+                                    @if (item.Action.Equals("Import"))
+                                    {
+                                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                    }
+                                    @if (item.Action.Equals("Update"))
+                                    {
+                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                    }
+
+                                </td>
+                            </tr>
+
                     }
                 </tbody>
             </table>

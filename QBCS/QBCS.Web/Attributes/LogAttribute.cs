@@ -38,6 +38,10 @@ namespace QBCS.Web.Attributes
                 oldValue = questionService.GetQuestionById(newQues.Id);
 
             }
+            //else if (Action.Equals("Import"))
+            //{
+            //    targetId = 
+            //}
 
             QuestionViewModel questionViewModel = new QuestionViewModel();
             jsonOldValue = JsonConvert.SerializeObject(oldValue);

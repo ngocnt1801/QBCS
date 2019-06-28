@@ -34,5 +34,6 @@ namespace QBCS.Entity
         public string OldValue { get; set; }
 
         public string NewValue { get; set; }
+
     }
 }

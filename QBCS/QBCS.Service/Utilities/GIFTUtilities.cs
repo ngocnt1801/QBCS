@@ -37,18 +37,40 @@ namespace QBCS.Service.Utilities
                 string wrong = null;
                 string result = null;
                 string mark = null;
+                //string flagCategory = "";
                 int countRight = 0;
                 int countWrong = 0;
                 int countCate = 0;
-                int countStartCate = 0;
+                //int countStartCate = 0;
                 int countElement = 1;
                 bool isBlock = false;
-                bool isStartCate = false;
+                //bool isStartCate = false;
                 bool isInLine = false;
                 bool isStart = false;
                 bool isEnd = false;
+               
                 //bool isComma = false;
                 bool isMultipleChoice = false;
+                if (line.Contains("$CATEGORY"))
+                {
+                    string[] temp = line.Split('/');
+                    for (int i = 0; i < temp.Count(); i++)
+                    {
+                        if (i == 1)
+                        {
+                            category = temp[i];
+                        }
+                        if (i == 2)
+                        {
+                            learningOutcome = temp[i];
+                        }
+                        if (i == 3)
+                        {
+                            level = temp[i];
+                        }
+                    }
+                    
+                }
                 if (!line.StartsWith("//"))
                 {
 
@@ -69,26 +91,41 @@ namespace QBCS.Service.Utilities
                         result = line;
                     }
 
-                    result = stringProcess.RemoveHtmlTag(result);
+                    result = stringProcess.RemoveHtmlTagGIFT(result);
                     for (int i = 0; i < result.Length; i++)
                     {
                         char let = result[i];
                         #region start count to track the position
-                        if (let == '$' && !isStartQuestion)
-                        {
-                            category = "";
-                            level = "";
-                            learningOutcome = "";
-                            countStartCate++;
-                            continue;
-                        }
-                        if (let == '/' && !isStartQuestion)
-                        {
+                        //if (let == '$' && !isStartQuestion)
+                        //{
+                        //    category = "";
+                        //    level = "";
+                        //    learningOutcome = "";
+                        //    countStartCate++;
+                        //    continue;
+                        //}
+                        //if (let == '$')
+                        //{
+                        //    category = "";
+                        //    level = "";
+                        //    learningOutcome = "";
+                        //    flagCategory += let;
+                          
+                           
+                        //}
+                        //if (flagCategory.Equals("$CATEGORY"))
+                        //{
+                        //    countStartCate++;
+                        //    continue;
+                        //}
 
-                            isStartCate = true;
-                            countCate++;
-                            continue;
-                        }
+                        //if (let == '/' && !isStartQuestion)
+                        //{
+
+                        //    isStartCate = true;
+                        //    countCate++;
+                        //    continue;
+                        //}
                         if (let == ':' && !isStartQuestion)
                         {
                             countCode++;
@@ -151,28 +188,29 @@ namespace QBCS.Service.Utilities
                         #endregion
 
                         #region add character to variables
-                        if (countStartCate == 3 && isStartCate)
-                        {
+                        //if (countStartCate == 3 && isStartCate)
+                        //{
 
-                            if (countCate == 1)
-                            {
-                                category += let;
-                                continue;
-                            }
-                            if (countCate == 2)
-                            {
-                                learningOutcome += let;
-                                continue;
-                            }
-                            if (countCate == 3)
-                            {
-                                level += let;
-                                continue;
-                            }
+                        //    if (countCate == 1)
+                        //    {
+                        //        category += let;
+                        //        continue;
+                        //    }
+                        //    if (countCate == 2)
+                        //    {
+                        //        learningOutcome += let;
+                        //        continue;
+                        //    }
+                        //    if (countCate == 3)
+                        //    {
+                        //        level += let;
+                        //        continue;
+                        //    }
 
 
-                        }
-                        if (countCode <= 3 && countStartCate == 0 && isStart)
+                        //}
+                       // if (countCode <= 3 && countStartCate == 0 && isStart)
+                        if (countCode <= 3 && isStart)
                         {
 
                             id += let;
@@ -265,16 +303,16 @@ namespace QBCS.Service.Utilities
                         category = "";
                         learningOutcome = "";
                         level = "";
-                        countStartCate = 0;
-                        isStartCate = false;
+                        //countStartCate = 0;
+                        //isStartCate = false;
                     }
                     else
                     {
                         quesModel.Category = category;
                         quesModel.LearningOutcome = learningOutcome;
                         quesModel.Level = level;
-                        countStartCate = 0;
-                        isStartCate = false;
+                        //countStartCate = 0;
+                        //isStartCate = false;
                     }
                    
 

@@ -25,20 +25,46 @@ namespace QBCS.Web.Controllers
             List<LogViewModel> logViews = new List<LogViewModel>();
             var user = (UserViewModel)Session["user"];
             //var model = logService.GetAllActivities();
-            var model = logService.GetAllActivitiesByUserId(id);
+            var model = logService.GetAllActivitiesByUserId(id, user);
             return View(model);
         }
-        public ActionResult GetLogByQuestionID(int targetId)
+        public ActionResult GetAllActivities()
+        {
+            List<LogViewModel> logViews = new List<LogViewModel>();
+            var user = (UserViewModel)Session["user"];
+            //var model = logService.GetAllActivities();
+            var model = logService.GetAllActivities();
+            return View("Index", model);
+        }
+        public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
             var user = (UserViewModel)Session["user"];
             //var model = logService.GetAllActivities();
             var model = logService.GetAllActivitiesByTargetId(targetId);
+            model = logService.GetListQuestionImportByTargetId(importId);
             return View("Index", model);
         }
-        public ActionResult GetListTargetByID(int id)
+        public ActionResult GetUpdateActivityById (int id)
         {
-            var list = logService.GetActivitiesById(id);
+            var model = logService.GetActivitiesById(id);
+            return View("GetUpdateActivity", model);
+        }
+        public ActionResult GetListTargetByID(int id, int targetId)
+        {
+            List<LogViewModel> list = new List<LogViewModel>();
+           // var listTemp = logService.GetActivitiesById(id);
+           //list.Add(listTemp as LogViewModel);
+
+            if (targetId > 0)
+            {
+                List<LogViewModel> tempImport = logService.GetListQuestionImportByTargetId(targetId);
+                if (tempImport != null)
+                {
+                    list = tempImport;
+                }
+               
+            }
             return View("GetListActivity", list);
         }
     }

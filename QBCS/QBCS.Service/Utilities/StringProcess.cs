@@ -24,11 +24,36 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 result = RemoveTag(source, @"<br>", @"\n");
+                result = RemoveTag(result, @"</p>", @"</p>\n");
             }
 
             return result;
         }
-        public string RemoveHtmlTag(string source)
+        public string RemoveHtmlTagXML(string source)
+        {
+            string result = null;
+
+            if (source != null)
+            {
+                //result = RemoveTag(source, "[html]", "");
+                //result = RemoveTag(source, "[html]", "");
+                result = RemoveTag(source, @"\=", @"=");
+                result = RemoveTag(result, @"\{", @"{");
+                result = RemoveTag(result, @"\}", @"}");
+                result = RemoveTag(result, @"\#", @"#");
+                result = RemoveTag(result, @"\~", @"~");
+                result = RemoveTag(result, @"\:", @":");
+                result = RemoveTag(result, @"\n", @"<cbr>");
+                //result = RemoveTag(result, @"<br>", @"<cbr>");
+                result = RemoveTag(result, @"\:", @":");
+                result = RemoveTag(result, @"#", "");
+                result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+
+            }
+
+            return result;
+        }
+        public string RemoveHtmlTagGIFT(string source)
         {
             string result = null;
            
@@ -45,7 +70,7 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\n", @"<cbr>");
                 //result = RemoveTag(result, @"<br>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
-                result = RemoveTag(result, @"#", "");
+                //result = RemoveTag(result, @"#", "");
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                 
             }

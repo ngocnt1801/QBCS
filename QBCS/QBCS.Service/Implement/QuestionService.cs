@@ -88,7 +88,7 @@ namespace QBCS.Service.Implement
                     };
                     optionViewModels.Add(optionViewModel);
                 }
-
+               
 
                 QuestionViewModel questionViewModel = ParseEntityToModel(ques, optionViewModels);
                 questionViewModels.Add(questionViewModel);
@@ -160,7 +160,8 @@ namespace QBCS.Service.Implement
             {
                 Id = question.Id,
                 QuestionContent = question.QuestionContent,
-                Options = options
+                Options = options,
+                ImportId = (int)question.ImportId
             };
             if (question.CourseId != null)
             {
@@ -220,6 +221,7 @@ namespace QBCS.Service.Implement
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,
                 QuestionContent = c.QuestionContent,
+                ImportId = (int)c.ImportId,
                 Options = c.Options.Select(d => new OptionViewModel
                 {
                     Id = d.Id,
@@ -372,7 +374,7 @@ namespace QBCS.Service.Implement
                                 tempParser = htmlDoc.DocumentNode.InnerText;
                             }
                             questionContent = WebUtility.HtmlDecode(tempParser);
-                            questionContent = stringProcess.RemoveHtmlTag(questionContent);
+                            questionContent = stringProcess.RemoveHtmlTagXML(questionContent);
                             if (checkHTML.Equals("html"))
                             {
                                 question.QuestionContent = "[html]" + questionContent;
@@ -410,7 +412,7 @@ namespace QBCS.Service.Implement
                                         }
                                         
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
-                                        rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
+                                        rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
 
                                         option = new OptionTemp();
                                         if (checkHTMLTemp.Equals("html"))
@@ -441,7 +443,7 @@ namespace QBCS.Service.Implement
                                         }
                                         
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
-                                        wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
+                                        wrongAnswer = stringProcess.RemoveHtmlTagXML(wrongAnswer);
 
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
@@ -592,20 +594,16 @@ namespace QBCS.Service.Implement
                                     {
                                         foreach (var itemOp in item.Options)
                                         {
-                                            tw.WriteLine("Option: " + item.Code + "\n");
+                                            tw.WriteLine("Option: " + item.Options + "\n");
                                         }
                                     }
                                     tw.WriteLine("Error: " + item.Error + "\n");
                                     tw.WriteLine();
                                 }
                                 tw.Close();
-                            }
-                            
+                            }                          
                            
-                        }
-                           
-                       
-                        
+                        }    
                     }
                     
                 }
@@ -691,6 +689,7 @@ namespace QBCS.Service.Implement
             {
                 result = result.Where(q => q.CourseId == courseId);
             }
+           
 
             if (categoryId != null && categoryId != 0)
             {
@@ -724,6 +723,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                ImportId = (int)q.ImportId,
                 Options = q.Options.Select(o => new OptionViewModel
                 {
                     Id = o.Id,
