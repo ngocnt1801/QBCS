@@ -19,7 +19,8 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
                 "~/Scripts/bootstrap.bundle.js",
                 "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js"           
+                "~/Scripts/vendor/jquery/jquery.js"
+               
                 ));
 
             //data table
@@ -103,7 +104,8 @@ namespace QBCS.Web
                 "~/Content/error/font-awesome.min.css",
                 "~/Content/error/style.css"
                 ));
-
+            //for checking diff
+          
             //Spinner
             bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
                 "~/Scripts/myjs/spinner.js"

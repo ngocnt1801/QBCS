@@ -33,10 +33,11 @@
                                 <th>Old Question</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="picadiff">
                             <tr>
                                 <td>
-                                    Question: @item.QuestionNew.QuestionContent <br />
+                                  
+                                    Question:<p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
                                     {
@@ -57,7 +58,7 @@
                                     }
                                 </td>
                                 <td>
-                                    Question: @item.QuestionOld.QuestionContent <br />
+                                    Question:<p id="old">@item.QuestionOld.QuestionContent</p> 
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {

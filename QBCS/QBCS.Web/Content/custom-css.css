@@ -18,3 +18,8 @@
 .delete-option, .add-option {
     cursor: pointer;
 }
+
+/**Highlight diffrent between string*/
+.highlight {
+    background-color: #B4D5FF
+}

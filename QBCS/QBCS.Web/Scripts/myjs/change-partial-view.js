@@ -14,6 +14,7 @@ function nav_bar_active() {
         $(this).parent('li').addClass('active');
     });
 }
+
 function customs_display() {
     var content;
     content = $('#customs-display').html();
@@ -257,4 +258,5 @@ $(document).ready(function () {
     split();
     customs_display();
     customs_display_duplicate();
+    
 });

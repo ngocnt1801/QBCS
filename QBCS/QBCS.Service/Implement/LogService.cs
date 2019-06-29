@@ -41,7 +41,7 @@ namespace QBCS.Service.Implement
         public List<LogViewModel> GetListQuestionImportByTargetId(int targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).ToList();
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList();
             QuestionViewModel questionViewModel = new QuestionViewModel();
             List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
             string ownerName = "";
@@ -83,7 +83,7 @@ namespace QBCS.Service.Implement
         public List<LogViewModel> GetAllActivitiesByTargetId(int targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).ToList(); ;
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList(); ;
             foreach (var item in listLog)
             {
                 LogViewModel logViewModel = new LogViewModel()
@@ -102,7 +102,7 @@ namespace QBCS.Service.Implement
         public List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.UserId == id).ToList(); ;
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.UserId == id).OrderByDescending(t => t.Date).ToList(); ;
             string role = "";
             if (user.Role == RoleEnum.Lecturer)
             {
