@@ -62,5 +62,10 @@ namespace QBCS.Web.Controllers
             ExaminationViewModel exam = examinationService.GetExanById(examId);
             return View(exam);
         }
+        public ActionResult DisableExam(int examId)
+        {
+            examinationService.DisableEaxam(examId);
+            return RedirectToAction("GetAllExamination", "Examination");
+        }
     }
 }

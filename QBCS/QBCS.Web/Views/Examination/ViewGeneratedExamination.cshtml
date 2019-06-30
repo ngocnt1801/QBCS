@@ -93,21 +93,21 @@
             <div>
                 <h5>File extension :</h5>
             </div>
-            <input type="hidden" name="examinationId" value="@exam.Id" />
+            <input type="hidden" name="examinationId-@counter" value="@exam.Id" />
 
             <div class="col-lg-2">
-                <select id="fileExtension" class="form-control">
+                <select id="fileExtension-@counter" class="form-control">
                     <option value="gift">GIFT</option>
                     <option value="xml">XML</option>
                 </select>
             </div>
-            <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
+            <input type="button" name="Export" data-value="@counter" value="Export" class="btn btn-primary float-right btnExport" />
         </div>
         <div class="row form-group">
             <div class="el-checkbox text-center">
                 <span class="margin-r" style="font-size:1.3em;">Get category : </span>
-                <input type="checkbox" name="getCategory" id="getCategory">
-                <label class="el-checkbox-style" for="getCategory"></label>
+                <input type="checkbox" name="getCategory" id="getCategory-@counter">
+                <label class="el-checkbox-style" for="getCategory-@counter"></label>
             </div>
         </div>
     </form>

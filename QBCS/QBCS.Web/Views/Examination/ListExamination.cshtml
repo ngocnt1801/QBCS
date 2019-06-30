@@ -33,6 +33,7 @@
             </td>
             <td>
                 <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary" role="button">Detail</a>
+                <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger" role="button">Disable</a>
             </td>
         </tr>
     }

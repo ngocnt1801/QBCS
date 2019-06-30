@@ -87,7 +87,7 @@ namespace QBCS.Service.Implement
         {
             ExaminationViewModel result = new ExaminationViewModel();
             Examination exam = unitOfWork.Repository<Examination>().GetAll().Where(e => e.Id == examId).FirstOrDefault();
-            if(exam != null)
+            if (exam != null)
             {
                 result = new ExaminationViewModel
                 {
@@ -108,12 +108,13 @@ namespace QBCS.Service.Implement
         public string GetExamCode()
         {
             string result = "";
-            Examination exam = unitOfWork.Repository<Examination>().GetAll().FirstOrDefault();
+            Examination exam = unitOfWork.Repository<Examination>().GetAll().OrderByDescending(e => e.Id).FirstOrDefault();
             if (exam == null || string.IsNullOrEmpty(exam.ExamCode))
             {
                 int count = 1;
                 result = "EX" + count.ToString("D6");
-            } else
+            }
+            else
             {
                 string number = exam.ExamCode.Substring(2);
                 int count = int.Parse(number);
@@ -121,6 +122,13 @@ namespace QBCS.Service.Implement
                 result = "EX" + count.ToString("D6");
             }
             return result;
+        }
+        public void DisableEaxam(int examId)
+        {
+            Examination exam = unitOfWork.Repository<Examination>().GetById(examId);
+            exam.IsDisable = true;
+            unitOfWork.Repository<Examination>().Update(exam);
+            unitOfWork.SaveChanges();
         }
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
         {
@@ -183,7 +191,7 @@ namespace QBCS.Service.Implement
                     idOfLevel = levelService.GetIdByName(HARD);
                     totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel);
                     totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
-                }              
+                }
                 LearingOutcomeInExamination learningOutcomeInExam = new LearingOutcomeInExamination()
                 {
                     Id = id,
@@ -224,7 +232,7 @@ namespace QBCS.Service.Implement
                 exam.MediumQuestionGenerrate = questionMedium;
             }
             exam.TotalQuestionGenerrate = questionEasy + questionHard + questionMedium;
-            if(exam.IsEnough == false)
+            if (exam.IsEnough == false)
             {
                 return exam;
             }
@@ -237,7 +245,7 @@ namespace QBCS.Service.Implement
 
             }
 
-            
+
             while (questionEasy != 0 || questionMedium != 0 || questionHard != 0)
             {
                 for (int i = 0; i < topics.Count; i++)
@@ -285,7 +293,7 @@ namespace QBCS.Service.Implement
                     }
                 }
             }
-            string examGroup = DateTime.Now.ToString("HHmmddMMyyyy");
+            string examGroup = GetExamCode();
             for (int i = 0; i < exam.TotalExam; i++)
             {
 
