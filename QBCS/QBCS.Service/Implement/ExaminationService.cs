@@ -33,8 +33,9 @@ namespace QBCS.Service.Implement
         private ILevelService levelService;
         private IQuestionService questionService;
         private ILearningOutcomeService learningOutcomeService;
+        private ICourseService courseService;
         private ITopicService topicService;
-        private int courseId;
+       
         public ExaminationService()
         {
             unitOfWork = new UnitOfWork();
@@ -42,9 +43,27 @@ namespace QBCS.Service.Implement
             questionService = new QuestionService();
             learningOutcomeService = new LearningOutcomeService();
             topicService = new TopicService();
+            courseService = new CourseService();
+        }
+        public List<ExaminationViewModel> GetAllExam()
+        {
+            List<ExaminationViewModel> result = new List<ExaminationViewModel>();
+            List<Examination> exams = unitOfWork.Repository<Examination>().GetAll().OrderByDescending(e => e.GeneratedDate).ToList();
+            result = exams.Select(e => new ExaminationViewModel
+            {
+                Id = e.Id,
+                CourseId = e.CourseId.HasValue ? (int)e.CourseId : 0,
+                GeneratedDate = (DateTime)e.GeneratedDate,
+                NumberOfEasy = e.NumberOfEasy.HasValue ? (int)e.NumberOfEasy : 0,
+                NumberOfMedium = e.NumberOfMedium.HasValue ? (int)e.NumberOfMedium : 0,
+                NumberOfHard = e.NumberOfHard.HasValue ? (int)e.NumberOfHard : 0,
+                Course = courseService.GetCourseById(e.CourseId.HasValue ? (int)e.CourseId : 0)
+            }).ToList();
+            return result;
         }
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
         {
+             int courseId = 0;
             if (exam.FlagPercent.Equals("grade"))
             {
                 exam.EasyPercent = exam.OrdinaryGrade;

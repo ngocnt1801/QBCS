@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using Newtonsoft.Json;
+using QBCS.Entity;
 using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Interface;
@@ -24,6 +25,7 @@ namespace QBCS.Service.Implement
 
         public IEnumerable<LogViewModel> GetAllActivities()
         {
+            //comment
             var listLog = unitOfWork.Repository<Log>().GetAll().OrderByDescending(l => l.Date).ToList();
           
             return listLog.Select(l => new LogViewModel()
@@ -223,7 +225,19 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
         }
 
-
+        public void LogImport(int importId, int userId)
+        {
+            LogViewModel model = new LogViewModel
+            {
+                TargetId = importId,
+                LogDate = DateTime.Now,
+                TargetName = "Question",
+                Action = "Import",
+                Controller = "Question",
+                Method = "ImportFile"
+            };
+            Log(model);
+        }
     }
 }
 

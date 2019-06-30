@@ -12,11 +12,13 @@ namespace QBCS.Service.ViewModel
         public int Id { get; set; }
         public string Code { get; set; }
         public QuestionViewModel DuplicatedQuestion { get; set; }
+        public bool IsInImportFile { get; set; }
         public string QuesitonContent { get; set; }
         public StatusEnum Status { get; set; }
         public int ImportId { get; set; }
         public string Message { get; set; }
         public string Image { get; set; }
         public List<OptionViewModel> Options { get; set; }
+        public string Category { get; set; }
     }
 }

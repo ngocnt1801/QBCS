@@ -9,6 +9,7 @@ namespace DuplicateQuestion.Entity
     public class QuestionModel
     {
         public int Id { get; set; }
+        public int CourseId { get; set; }
         public string QuestionContent { get; set; }
         public string QuestionCode { get; set; }
         public int Hashcode { get; set; }
@@ -24,5 +25,6 @@ namespace DuplicateQuestion.Entity
         public int? CategoryId { get; set; }
         public int? LearningOutcomeId { get; set; }
         public int? LevelId { get; set; }
+        public int? UpdateQuestionId { get; set; }
     }
 }

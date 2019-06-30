@@ -107,11 +107,10 @@ namespace QBCS.Web.Controllers
         {
             bool result = questionService.UpdateQuestion(ques);
             bool optionResult = optionService.UpdateOptions(ques.Options);
-            return RedirectToAction("GetQuestionDetail", new { id = ques.Id });
+            return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
         }
 
         [HttpPost]
-        [Log(Action = "Import", TargetName = "Question")]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
             var user = (UserViewModel)Session["user"];
@@ -125,8 +124,32 @@ namespace QBCS.Web.Controllers
             //notify 
             TempData["Modal"] = "#success-modal";
             TempData["CourseId"] = courseId;
+            TempData["OwnereName"] = ownerName;
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        //[Log(Action = "Import", TargetName = "Question")]
+        public JsonResult ImportTextarea(Textarea textarea)
+        {
+            var user = (UserViewModel)Session["user"];
+            bool check = true;
+            if (textarea.Table != null && !textarea.Table.Equals(""))
+            {
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId);
+            }
+            //if (table != null && !table.Equals(""))
+            //{
+            //    check = questionService.InsertQuestionWithTableString("", user.Id, courseId);
+            //}
+
+
+            //notify 
+            TempData["Message"] = "You import successfully";
+            TempData["Status"] = ToastrEnum.Success;
+
+            return Json(check, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetPartialView(bool? isDuplicate)
@@ -177,4 +200,9 @@ namespace QBCS.Web.Controllers
         }
     }
 
+    public class Textarea
+    {
+        public string Table { get; set; }
+        public int CourseId { get; set; }
+    }
 }

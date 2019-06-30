@@ -19,7 +19,7 @@ namespace DuplicateQuestion
 
         public static void RemoveSpecialCharacter(ref string s)
         {
-            s = Regex.Replace(s, "[^a-zA-Z0-9\\s]", "");
+            s = Regex.Replace(s, "[.,:;]", "");
         }
 
         public static string[] SplitWithSpace(string s)

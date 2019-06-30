@@ -15,14 +15,17 @@
  }
 <div class="form-inline mb-2">
     @Html.HiddenFor(m => m.Id)
-    <input type="text" class="form-control col-lg-11 text-custom mt-2 option-content" value="@content" name="Options[@((int)ViewData["index"] - 1)].OptionContent">
-    <div class="col-lg-1">
+    <div class="customs-display col-md-10 text-custom customs-display-input" contenteditable="true" data-for="#o-@((int)ViewData["index"]-1)">
+        @Html.DisplayFor(m => m.OptionContent)
+    </div>
+    <input type="hidden" class="form-control col-lg-10 text-custom mt-2 option-content" value="@content" name="Options[@((int)ViewData["index"] - 1)].OptionContent" id="o-@((int)ViewData["index"]-1)">
+    <div class="col-md-1">
         <label class="switch float-left">
             <input type="checkbox" class="success option-correct" name="Options[@((int)ViewData["index"] - 1)].IsCorrect" value="true" @(isCorrect.ToLower().Equals("true") ? "checked" : "")>
             <span class="slider round"></span>
         </label>
     </div>
-    <div class="col-1">
+    <div class="col-md-1">
         <i class="fa fa-times-circle text-danger delete-option"></i>
     </div>
 </div>

@@ -50,6 +50,10 @@ namespace QBCS.Entity
 
         public string Message { get; set; }
 
+        public int? Type { get; set; }
+
+        public int? UpdateQuestionId { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -15,6 +15,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace QBCS.Service.Implement
 {
@@ -22,11 +26,13 @@ namespace QBCS.Service.Implement
     {
         private IUnitOfWork unitOfWork;
         private IImportService importService;
+        private ILogService logService;
 
         public QuestionService()
         {
             unitOfWork = new UnitOfWork();
             importService = new ImportService();
+            logService = new LogService();
         }
 
         public bool Add(QuestionViewModel question)
@@ -138,24 +144,52 @@ namespace QBCS.Service.Implement
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
-            Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            string quesContentTemp = "";
-            if (question.QuestionContent != null)
+            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
+            //questionById.QuestionContent = question.QuestionContent;
+
+            //if (question.LevelId != 0)
+            //{
+            //    questionById.LevelId = question.LevelId;
+            //}
+            //if (question.LearningOutcomeId != 0)
+            //{
+            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
+            //}
+
+            //unitOfWork.Repository<Question>().Update(questionById);
+            //unitOfWork.SaveChanges();
+
+            QuestionTemp entity = new QuestionTemp();
+            entity.UpdateQuestionId = question.Id;
+            entity.QuestionContent = question.QuestionContent;
+            entity.Type = (int) TypeEnum.Update;
+            entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
+            entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
+            entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
+
+            entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                quesContentTemp = WebUtility.HtmlDecode(question.QuestionContent);
-            }
-            questionById.QuestionContent = quesContentTemp;
-            if (question.LevelId != 0)
-            {
-                questionById.LevelId = question.LevelId;
-            }
-            if (question.LearningOutcomeId != 0)
-            {
-                questionById.LearningOutcomeId = question.LearningOutcomeId;
-            }
-            
-            unitOfWork.Repository<Question>().Update(questionById);
+                OptionContent = o.OptionContent,
+                IsCorrect = o.IsCorrect,
+                UpdateOptionId = o.Id
+            }).ToList();
+
+            var tmp = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(entity);
             unitOfWork.SaveChanges();
+
+            //get log id
+            var logEntity = unitOfWork.Repository<Log>().GetAll()
+                                    .Where(l => l.TargetId == entity.UpdateQuestionId)// add check disable here after merge with Nhi
+                                    .OrderByDescending(l => l.Date).FirstOrDefault();
+            if (logEntity != null)
+            {
+                //call store check duplicate
+                Task.Factory.StartNew(() =>
+                {
+                    importService.CheckDuplicateQuestion(tmp.Id, logEntity.Id);
+                });
+            }
+
             return true;
         }
 
@@ -614,6 +648,42 @@ namespace QBCS.Service.Implement
                     
                 }
                 #endregion
+
+                #region process doc
+
+                if (extensionFile.Equals(".doc") || extensionFile.Equals(".docx"))
+                {
+                    DocUtilities docUltil = new DocUtilities();
+                    QuestionTemp quesTmp = new QuestionTemp();
+                    reader = new StreamReader(questionFile.InputStream);
+                    DateTime importTime = DateTime.Now;
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream);
+
+                    import = new Import()
+                    {
+                        CourseId = courseId,
+                        UserId = userId,
+                        TotalQuestion = listQuestion.Count(),
+                        QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                        {
+                            QuestionContent = q.QuestionContent,
+                            Code = q.Code,
+                            Status = (int)StatusEnum.NotCheck,
+                            Category = q.Category,
+                            Topic = q.Topic,
+                            LevelName = q.Level,
+                            OptionTemps = q.Options.Select(o => new OptionTemp()
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect
+                            }).ToList(),
+                        }).ToList(),
+                        ImportedDate = DateTime.Now
+                    };
+                }
+
+                #endregion
+
                 if (import.QuestionTemps.Count() > 0)
                 {
                     import.Status = (int)Enum.StatusEnum.NotCheck;
@@ -624,6 +694,9 @@ namespace QBCS.Service.Implement
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
+
+                    //log import
+                    logService.LogImport(entity.Id, userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
@@ -647,6 +720,7 @@ namespace QBCS.Service.Implement
             finally
             {
                 reader.Close();
+                questionFile.InputStream.Flush();
             }
 
             return check;
@@ -731,6 +805,9 @@ namespace QBCS.Service.Implement
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
                 ImportId = (int)q.ImportId,
+                CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                 Options = q.Options.Select(o => new OptionViewModel
                 {
                     Id = o.Id,
@@ -794,6 +871,172 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
             }
 
+        }
+
+        public bool InsertQuestionWithTableString(string table, int userId, int courseId)
+        {
+            var optionCheck = new DocViewModel();
+            var optionCheckList = new List<DocViewModel>();
+            bool check = false;
+            List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
+            List<OptionTemp> optionList = new List<OptionTemp>();
+            var optionModel = new OptionTemp();
+            var import = new Import();
+            table = TrimTags(table);
+            XElement parseTable = XElement.Parse(table);
+            foreach(XElement eTable in parseTable.Elements("table"))
+            {
+                QuestionTmpModel questionTmp = new QuestionTmpModel();
+                foreach (XElement tbody in eTable.Elements("tbody"))
+                {
+                    foreach (XElement tr in tbody.Elements("tr"))
+                    {
+                        var key = tr.Elements("td").ElementAt(0).Value;
+                        var value = tr.Elements("td").ElementAt(1).Value;
+                        if (key.Contains("QN="))
+                        {
+                            questionTmp.Code = key.Replace("QN=", "");
+                            var contentP = tr.Elements("td").Elements("p").ToList();
+                            for (int i = 0; i < contentP.Count; i++)
+                            {
+                                switch (i)
+                                {
+                                    case 1:
+                                        questionTmp.QuestionContent = TrimSpace(contentP.ElementAt(i).Value);
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3:
+                                        break;
+                                }
+                            }
+                        }
+                        else if (key.Contains("."))
+                        {
+                            optionCheck.Code = key.Replace(".", "");
+                            if (!value.Equals(""))
+                            {
+                                optionModel.IsCorrect = false;
+                                optionModel.OptionContent = TrimSpace(value);
+                            }
+                            if (optionModel.OptionContent != null)
+                            {
+                                optionCheck.Content = optionModel.OptionContent;
+                                optionCheckList.Add(optionCheck);
+                                optionList.Add(optionModel);
+                            }
+                            optionModel = new OptionTemp();
+                            optionCheck = new DocViewModel();
+                        }
+                        else if (key.Contains("ANSWER:"))
+                        {
+                            var trim = value.Replace(" ", "").ToLower();
+                            char[] answers = trim.ToCharArray();
+                            foreach (var optCheck in optionCheckList)
+                            {
+                                for (int i = 0; i < answers.Length; i++)
+                                {
+                                    if (optCheck.Code.Equals(answers[i].ToString()))
+                                    {
+                                        foreach (var option in optionList)
+                                        {
+                                            if (option.OptionContent.Equals(optCheck.Content))
+                                            {
+                                                option.IsCorrect = true;
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (key.Contains("UNIT:"))
+                        {
+                            if (!value.Equals(""))
+                            {
+                                questionTmp.LearningOutcome = value;
+                            }
+                        }
+                    }
+                    questionTmp.Options = optionList;
+                    listQuestion.Add(questionTmp);
+                    questionTmp = new QuestionTmpModel();
+                    optionList = new List<OptionTemp>();
+                    optionCheckList = new List<DocViewModel>();
+                }
+            }
+
+            import = new Import()
+            {
+                CourseId = courseId,
+                UserId = userId,
+                TotalQuestion = listQuestion.Count(),
+                QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                {
+                    QuestionContent = q.QuestionContent,
+                    Code = q.Code,
+                    Status = (int)StatusEnum.NotCheck,
+                    Category = q.Category,
+                    Topic = q.Topic,
+                    LevelName = q.Level,
+                    OptionTemps = q.Options.Select(o => new OptionTemp()
+                    {
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect
+                    }).ToList(),
+                }).ToList(),
+                ImportedDate = DateTime.Now
+            };
+
+            if (import.QuestionTemps.Count() > 0)
+            {
+                import.Status = (int)StatusEnum.NotCheck;
+                import.CourseId = courseId;
+                //check formats
+                import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
+                var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
+                import.TotalQuestion = import.QuestionTemps.Count();
+                unitOfWork.SaveChanges();
+
+                //call store check duplicate
+                Task.Factory.StartNew(() =>
+                {
+                    importService.ImportToBank(entity.Id);
+                });
+                check = true;
+            }
+            else
+            {
+                // return user have to import file
+            }
+            //catch (Exception ex)
+            //{
+            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+            //    //Console.WriteLine(ex.Message);
+            //}
+
+            return check;
+        }
+        private string TrimSpace(string trim)
+        {
+            trim = trim.Replace("\n", "");
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex("[ ]{2,}", options);
+            trim = regex.Replace(trim, " ");
+            return trim;
+        }
+        private string TrimTags(string table)
+        {
+            table = table.Replace("<st1:country-region>", "");
+            table = table.Replace("</st1:country-region>", "");
+            table = table.Replace("<st1:city>", "");
+            table = table.Replace("</st1:city>", "");
+            table = table.Replace("<st1:place>", "");
+            table = table.Replace("</st1:place>", "");
+            table = table.Replace("<p>&nbsp</p>", "");
+            table = table.Replace("&nbsp;", "");
+            return table;
         }
     }
 }

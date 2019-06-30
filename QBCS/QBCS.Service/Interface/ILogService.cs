@@ -17,5 +17,6 @@ namespace QBCS.Service.Interface
         List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user);
         IEnumerable<LogViewModel> GetActivitiesById(int id);
         QuestionViewModel ParseEntityToModel(Question question);
+        void LogImport(int importId, int userId);
     }
 }

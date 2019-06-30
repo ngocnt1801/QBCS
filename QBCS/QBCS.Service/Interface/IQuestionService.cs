@@ -28,6 +28,7 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
         void ToggleDisable(int id);
         void UpdateCategory(int[] questionIds, int? categoyrId, int? learningOutcomeId, int? levelId);
+        bool InsertQuestionWithTableString(string table, int userId, int courseId);
         int GetCountOfListQuestionByTopicAndId(int topicId, int levelId, int categoryId);
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId, int categoryId);
     }

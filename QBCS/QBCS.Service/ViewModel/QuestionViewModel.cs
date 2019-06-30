@@ -28,5 +28,6 @@ namespace QBCS.Service.ViewModel
         public LevelViewModel Level { get; set; }
         public string QuestionCode { get; set; }
         public int ImportId { get; set; }
+        public string Category { get; set; }
     }
 }

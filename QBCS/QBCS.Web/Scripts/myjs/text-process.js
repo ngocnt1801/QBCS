@@ -75,6 +75,11 @@ function highlight(newElem, oldElem) {
 
 
 
+
+        $.each($(".customs-display"), function () {
+            var content = $(this).html();
+            $(this.attributes["data-for"].value).val("[html]" + content);
+        })
     });
     newElem.html(text);
 }

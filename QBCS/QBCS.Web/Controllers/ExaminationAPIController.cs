@@ -317,19 +317,19 @@ namespace QBCS.Web.Controllers
                                 }
                                 string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                                 writer.WriteLine(questionComment);
-                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.HtmlEncode( question.QuestionContent.Replace("<cbr>", " <br/>"))) + "{";
-                                writer.WriteLine(HttpUtility.HtmlEncode(questionTitle));
+                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.HtmlEncode( question.QuestionContent)) + "{";
+                                writer.WriteLine(questionTitle);
                                 foreach (var option in question.Options)
                                 {
                                     if (option.IsCorrect == true)
                                     {
-                                        string optionString = String.Format(OPTION_TRUE, StringUtilities.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
-                                        writer.WriteLine(HttpUtility.HtmlEncode(optionString));
+                                        string optionString = String.Format(OPTION_TRUE, StringUtilities.HtmlEncode(option.OptionContent));
+                                        writer.WriteLine(optionString);
                                     }
                                     else
                                     {
-                                        string optionString = String.Format(OPTION_FALSE, StringUtilities.HtmlEncode(option.OptionContent.Replace("<cbr>", " <br/>")));
-                                        writer.WriteLine(HttpUtility.HtmlEncode(optionString));
+                                        string optionString = String.Format(OPTION_FALSE, StringUtilities.HtmlEncode(option.OptionContent));
+                                        writer.WriteLine(optionString);
                                     }
                                 }
                                 writer.WriteLine("}");

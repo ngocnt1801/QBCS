@@ -23,6 +23,7 @@ namespace QBCS.Service.Implement
             var course = unitOfWork.Repository<Course>().GetById(id);
             var result = new CourseViewModel()
             {
+                Id = course.Id,
                 Name = course.Name,
                 Code = course.Code,
                 DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0
@@ -123,16 +124,6 @@ namespace QBCS.Service.Implement
             var course = unitOfWork.Repository<Course>().GetById(id);
             var listTopic = new List<TopicViewModel>();
             var listLearningOutcome = new List<LearningOutcomeViewModel>();
-            foreach(Topic topic in course.Topics)
-            {
-                var topicVM = new TopicViewModel()
-                {
-                    Id = topic.Id,
-                    Code = topic.Code,
-                    Name = topic.Name
-                };
-                listTopic.Add(topicVM);
-            }
             foreach(LearningOutcome learningOutcome in course.LearningOutcomes)
             {
                 var learningOutcomeVM = new LearningOutcomeViewModel()
@@ -171,16 +162,14 @@ namespace QBCS.Service.Implement
             }
             return courseViewModels;
         }
-        public List<CourseStatViewModel> GetCourseStatByUserId(int id)
+        public List<CourseStatViewModel> GetAllCourseStat()
         {
-
-            var user = unitOfWork.Repository<User>().GetById(id);
-            var courses = user.CourseOfUsers.Select(c => new CourseStatViewModel
+            var courses = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseStatViewModel
             {
-                Id = (int)c.CourseId,
-                Name = c.Course.Name,
-                Code = c.Course.Code,
-                IsDisable = (bool)c.Course.IsDisable
+                Id = (int)c.Id,
+                Name = c.Name,
+                Code = c.Code,
+                IsDisable = (bool)c.IsDisable
             }).Where(c => c.IsDisable == false).ToList();
             foreach(var course in courses)
             {
@@ -196,27 +185,27 @@ namespace QBCS.Service.Implement
             var topics = unitOfWork.Repository<Topic>().GetAll().Where(t => t.CourseId == id).ToList();
             var learningOutcomes = unitOfWork.Repository<LearningOutcome>().GetAll().Where(t => t.CourseId == id).ToList();
             var courseDetails = new List<CourseStatDetailViewModel>();
-            if (topics.Any())
-            {
-                foreach (var topic in topics)
-                {
-                    var questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.TopicId == topic.Id && q.CourseId == id);
-                    var courseDetail = new CourseStatDetailViewModel()
-                    {
-                        Type = "Topic",
-                        Name = topic.Name,
-                        Easy = questions.Where(q => q.LevelId == (int)LevelEnum.Easy).Count(),
-                        Medium = questions.Where(q => q.LevelId == (int)LevelEnum.Medium).Count(),
-                        Hard = questions.Where(q => q.LevelId == (int)LevelEnum.Hard).Count()
-                    };
-                    courseDetails.Add(courseDetail);
-                }
-            }
+            //if (topics.Any())
+            //{
+            //    foreach (var topic in topics)
+            //    {
+            //        var questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.TopicId == topic.Id && q.CourseId == id);
+            //        var courseDetail = new CourseStatDetailViewModel()
+            //        {
+            //            Type = "Topic",
+            //            Name = topic.Name,
+            //            Easy = questions.Where(q => q.LevelId == (int)LevelEnum.Easy).Count(),
+            //            Medium = questions.Where(q => q.LevelId == (int)LevelEnum.Medium).Count(),
+            //            Hard = questions.Where(q => q.LevelId == (int)LevelEnum.Hard).Count()
+            //        };
+            //        courseDetails.Add(courseDetail);
+            //    }
+            //}
             if (learningOutcomes.Any())
             {
                 foreach (var learningOutcome in learningOutcomes)
                 {
-                    var questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.TopicId == learningOutcome.Id && q.CourseId == id);
+                    var questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.LearningOutcomeId == learningOutcome.Id && q.CourseId == id);
                     var courseDetail = new CourseStatDetailViewModel()
                     {
                         Type = "Learning Outcome",
@@ -229,6 +218,22 @@ namespace QBCS.Service.Implement
                 }
             }
             return courseDetails;
+        }
+        public bool UpdateCourse(CourseViewModel course)
+        {
+            try
+            {
+                var entity = unitOfWork.Repository<Course>().GetById(course.Id);
+                entity.Code = course.Code;
+                entity.Name = course.Name;
+                unitOfWork.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
         }
     }
 }
