@@ -41,6 +41,49 @@ namespace QBCS.Service.Implement
 
             });
         }
+        public LogViewModel GetQuestionImportByTargetId(int targetId)
+        {
+            List<LogViewModel> list = new List<LogViewModel>();
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList();
+            QuestionViewModel questionViewModel = new QuestionViewModel();
+            List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
+            LogViewModel logViewModel = new LogViewModel();
+            string ownerName = "";
+            foreach (var item in listLog)
+            {
+                var import = unitOfWork.Repository<Import>().GetById(targetId);
+                if (import.OwnerName != null)
+                {
+                    ownerName = import.OwnerName;
+                }
+
+                foreach (var itemQues in import.Questions)
+                {
+                    questionViewModel = ParseEntityToModel(itemQues);
+                    if (questionViewModel != null)
+                    {
+                        listTmp.Add(questionViewModel);
+                    }
+                }
+                if (listTmp.Count > 0 && item != null)
+                {
+                     logViewModel = new LogViewModel()
+                    {
+                        Id = item.Id,
+                        UserId = (int)item.UserId,
+                        TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
+                        Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                        Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
+                        LogDate = item.Date.Value,
+                        OwnerName = ownerName,
+                        listQuestion = listTmp.ToList()
+                    };
+                    
+                }
+
+            }
+            return logViewModel;
+        }
         public List<LogViewModel> GetListQuestionImportByTargetId(int targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -64,13 +107,13 @@ namespace QBCS.Service.Implement
                         listTmp.Add(questionViewModel);
                     }
                 }
-                if (listTmp.Count > 0)
+                if (listTmp.Count > 0 && item != null)
                 {
                     LogViewModel logViewModel = new LogViewModel()
                     {
                         Id = item.Id,
                         UserId = (int)item.UserId,
-                        TargetId = item.TargetId,
+                        TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
                         Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
@@ -102,6 +145,7 @@ namespace QBCS.Service.Implement
             }
             return list;
         }
+      
         public List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -114,7 +158,13 @@ namespace QBCS.Service.Implement
            
             foreach (var item in listLog)
             {
-                string tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
+                string tempId = "";
+                if (item.NewValue != null)
+                {
+                    tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
+                }
+               
+                
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
@@ -182,7 +232,7 @@ namespace QBCS.Service.Implement
                     OptionViewModel optionViewModel = new OptionViewModel()
                     {
                         Id = option.Id,
-                        OptionContent = option.OptionContent,
+                        OptionContent = WebUtility.HtmlDecode(option.OptionContent),
                         IsCorrect = (bool)option.IsCorrect
                     };
                     optionViewModels.Add(optionViewModel);
@@ -237,6 +287,7 @@ namespace QBCS.Service.Implement
             LogViewModel model = new LogViewModel
             {
                 TargetId = importId,
+                UserId = userId,
                 LogDate = DateTime.Now,
                 TargetName = "Question",
                 Action = "Import",

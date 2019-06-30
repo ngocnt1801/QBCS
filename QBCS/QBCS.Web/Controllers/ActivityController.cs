@@ -39,11 +39,15 @@ namespace QBCS.Web.Controllers
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
+            LogViewModel logModel = new LogViewModel();
             var user = (UserViewModel)Session["user"];
             //var model = logService.GetAllActivities();
-            var model = logService.GetAllActivitiesByTargetId(targetId);
-            model = logService.GetListQuestionImportByTargetId(importId);
-            return View("Index", model);
+           
+            logModel = logService.GetQuestionImportByTargetId(importId);
+            logViews = logService.GetAllActivitiesByTargetId(targetId);
+            logViews.Add(logModel);
+            //logViews = logService.GetAllActivitiesByUserId(user.Id, user);
+            return View("Index", logViews);
         }
         public ActionResult GetUpdateActivityById (int id)
         {

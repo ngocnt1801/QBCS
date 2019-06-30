@@ -109,7 +109,7 @@ function customs_text() {
 
 
 $(document).ready(function () {
-    //highlight($("#new"), $("#old"));
+    highlight($("#new"), $("#old"));
     customs_text();
    // customs_display();
     option_custom();
