@@ -35,8 +35,8 @@
             toolbarExtraButtons: [btnFinish, btnCancel]
         }
     });
-    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
-        if (stepNumber === 2) {
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
+        if (stepNumber === 3) {
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
