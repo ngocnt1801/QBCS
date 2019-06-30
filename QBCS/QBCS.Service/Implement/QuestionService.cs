@@ -159,9 +159,14 @@ namespace QBCS.Service.Implement
             //unitOfWork.Repository<Question>().Update(questionById);
             //unitOfWork.SaveChanges();
 
+            string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
-            entity.QuestionContent = question.QuestionContent;
+            if (question.QuestionContent != null)
+            {
+                quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
+            }
+            entity.QuestionContent = quesTemp;
             entity.Type = (int) TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";

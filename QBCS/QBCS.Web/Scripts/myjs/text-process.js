@@ -1,21 +1,24 @@
-﻿function customs_text() {
-    $('#btnUpdate').click(function (e) {
-        var content;
-        content = $('#customs-display').html();
-        //var input;
-        //input = $('#hidden-question-content').html();
-        $('#hidden-question-content').val("[html]" + content);
+﻿//function customs_text() {
+//    $('#btnUpdate').click(function (e) {
+//        var content;
+//        content = $('#customs-display').html();
+//        //var input;
+//        //input = $('#hidden-question-content').html();
+//        $('#hidden-question-content').val("[html]" + content);
 
-        option_custom();
-    });
-}
+//        option_custom();
+//    });
+//}
 function option_custom() {
     var op;
-    op = $('#option-custom').html();
-    op = op.split("<cbr>").join("");
-    op = op.split("&lt;cbr&gt;").join("<br/>");
-    op = op.split("&lt;cbr&gt;").join("");
-    $('#option-custom').html(op);
+    $.each($(".option-customs"), function () {
+        op = $(this).html();
+        op = op.split("<cbr>").join("");
+        op = op.split("&lt;cbr&gt;").join("<br/>");
+        op = op.split("&lt;br&gt;").join("<br/>");
+        op = op.split("[html]").join("");
+        $(this).html(op);
+    });
 }
 function customs_display() {
     var content;
@@ -73,23 +76,29 @@ function highlight(newElem, oldElem) {
             text += val;
         }
 
+    });
+    newElem.html(text);
+}
 
-
+function customs_text() {
+    $('#btnUpdate').click(function (e) {
+        var content;
+        content = $('#customs-display').html();
+        //var input;
+        //input = $('#hidden-question-content').html();
+        $('#hidden-question-content').val("[html]" + content);
 
         $.each($(".customs-display"), function () {
             var content = $(this).html();
             $(this.attributes["data-for"].value).val("[html]" + content);
         })
     });
-    newElem.html(text);
 }
-
-
 
 
 $(document).ready(function () {
     highlight($("#new"), $("#old"));
     customs_text();
-    customs_display();
+   // customs_display();
     option_custom();
 });
