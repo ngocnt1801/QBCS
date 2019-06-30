@@ -26,17 +26,7 @@ namespace QBCS.Service.Implement
         {
             IQueryable<PartOfExamination> partOfExams = unitOfWork.Repository<PartOfExamination>().GetAll();
             List<PartOfExamination> partOfExamsByExamId = partOfExams.Where(p => p.ExaminationId == examinationId).ToList();
-            List<PartOfExamViewModel> result = new List<PartOfExamViewModel>();
-            CategoryViewModel category = null;
-            foreach (var part in partOfExamsByExamId)
-            {
-                if(part.QuestionInExams != null)
-                {
-                    int categoryId = part.QuestionInExams.FirstOrDefault().CategoryId.HasValue ? (int)part.QuestionInExams.FirstOrDefault().CategoryId : 0;
-                    category = categoryService.GetCategoryById(categoryId);
-                    break;
-                }
-            }
+            List<PartOfExamViewModel> result = new List<PartOfExamViewModel>();            
             foreach(PartOfExamination part in partOfExamsByExamId)
             {
                 List<QuestionInExamViewModel> questions = part.QuestionInExams.Select(c => new QuestionInExamViewModel
@@ -45,14 +35,15 @@ namespace QBCS.Service.Implement
                     QuestionContent = c.QuestionContent,
                     Level = levelService.GetLevelById(c.LevelId.HasValue ? (int)c.LevelId : 0),
                     LevelId = c.LevelId.HasValue ? (int)c.LevelId : 0,
-                    CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,
-                    Category = category,
+                    CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,                   
                     QuestionCode = c.QuestionCode,
+                    Image = c.Image,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {
                         Id = d.Id,
                         OptionContent = d.OptionContent,
-                        IsCorrect = (bool)d.IsCorrect
+                        IsCorrect = (bool)d.IsCorrect,
+                        Image = d.Image
                     }).ToList()
                 }).ToList();
                 

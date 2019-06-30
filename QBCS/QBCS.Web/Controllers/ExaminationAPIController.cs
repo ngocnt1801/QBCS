@@ -151,7 +151,7 @@ namespace QBCS.Web.Controllers
                                 else
                                 {
                                     xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".jpg");
+                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
                                     xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                                     xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
                                     xmlWriter.WriteString(question.Image);
@@ -215,6 +215,21 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                                         xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
                                         xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        //Image tag
+                                        if (option.Image == null)
+                                        {
+                                            xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                            xmlWriter.WriteEndElement();
+                                        }
+                                        else
+                                        {
+                                            xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                            xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
+                                            xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                            xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                            xmlWriter.WriteString(option.Image);
+                                            xmlWriter.WriteEndElement();
+                                        }
                                         //text atg
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)

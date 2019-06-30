@@ -15,7 +15,7 @@ namespace QBCS.Service.ViewModel
         public int NumberOfEasy { get; set; }
         public int NumberOfMedium { get; set; }
         public int NumberOfHard { get; set; }
-        public int CategoryId { get; set; }
-        public CategoryViewModel Category { get; set; }
+        public string ExamCode { get; set; }
+        public List<PartOfExamViewModel> PartOfExam { get; set; }        
     }
 }

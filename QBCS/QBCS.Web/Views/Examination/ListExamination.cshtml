@@ -15,20 +15,24 @@
 <table class="table" id="dataTable" width="100%" cellspacing="0">
     <tr>
         <th class="text-custom">Course</th>
-        <th class="text-custom">Category</th>
+        <th class="text-custom">Code</th>
         <th class="text-custom">Generated Date</th>
         <th class="text-custom">Number of question</th>
+        <th class="text-custom">Action</th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
             <td>@item.Course.Code</td>
-            <td></td>
+            <td>@item.ExamCode</td>
             <td>@item.GeneratedDate.ToString("HH:mm dd/MM/yyyy")</td>
             <td>
                 <p>Number of easy question : @item.NumberOfEasy</p>
                 <p>Number of medium question : @item.NumberOfMedium</p>
                 <p>Number of hard question : @item.NumberOfHard</p>
+            </td>
+            <td>
+                <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary" role="button">Detail</a>
             </td>
         </tr>
     }
