@@ -160,7 +160,7 @@ namespace QBCS.Service.Implement
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
             entity.QuestionContent = question.QuestionContent;
-            entity.Type = (int) TypeEnum.Update;
+            entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
             entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
@@ -402,7 +402,7 @@ namespace QBCS.Service.Implement
 
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
-                           
+
                             if (checkHTML == false)
                             {
                                 htmlDoc.LoadHtml(tempParser);
@@ -439,13 +439,13 @@ namespace QBCS.Service.Implement
 
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
-                                       
+
                                         if (checkHTML == false)
                                         {
                                             htmlDoc.LoadHtml(tempParser);
                                             tempParser = htmlDoc.DocumentNode.InnerText;
                                         }
-                                        
+
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
                                         rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
 
@@ -470,13 +470,13 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
-                                       
+
                                         if (checkHTML == false)
                                         {
                                             htmlDoc.LoadHtml(tempParser);
                                             tempParser = htmlDoc.DocumentNode.InnerText;
                                         }
-                                        
+
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
                                         wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
 
@@ -560,8 +560,8 @@ namespace QBCS.Service.Implement
                                         }
                                         tw.Close();
                                     }
- 
-                                }          
+
+                                }
                             }
                             listQuestionXml = new List<QuestionTmpModel>();
                             question = new QuestionTmpModel();
@@ -601,10 +601,10 @@ namespace QBCS.Service.Implement
                             }).ToList(),
                         }).ToList(),
                         UpdatedDate = importTime
-    
+
                     };
-                    
-                    
+
+
                     int g = 0;
                     string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
                     string fileName = "GIFTFile-" + user + @"-" + time.ToString() + ".txt";
@@ -637,14 +637,14 @@ namespace QBCS.Service.Implement
                                 }
                                 tw.Close();
                             }
-                            
-                           
+
+
                         }
-                           
-                       
-                        
+
+
+
                     }
-                    
+
                 }
                 #endregion
 
@@ -866,6 +866,38 @@ namespace QBCS.Service.Implement
 
         }
 
+        public QuestionHistoryViewModel GetQuestionHistory(int id)
+        {
+            var examList = new List<ExaminationViewModel>();
+            var questionEntity = unitOfWork.Repository<Question>().GetById(id);
+            var questionVM = new QuestionViewModel()
+            {
+                QuestionContent = questionEntity.QuestionContent,
+                QuestionCode = questionEntity.QuestionCode
+            };
+
+            var questionInExams = unitOfWork.Repository<QuestionInExam>().GetAll()
+                                    .Where(qe => qe.QuestionReference == id).ToList();
+            foreach (var questionInExam in questionInExams)
+            {
+                var entity = unitOfWork.Repository<Examination>().GetById(questionInExam.PartOfExamination.ExaminationId);
+                var exam = new ExaminationViewModel()
+                {
+                    Id = entity.Id,
+                    GeneratedDate = (DateTime)entity.GeneratedDate,
+                    //Semester = (int)entity.Semester
+                };
+                examList.Add(exam);
+            }
+            var questionHistory = new QuestionHistoryViewModel()
+            {
+                Question = questionVM,
+                Examination = examList
+            };
+            questionHistory.Examination = examList.OrderByDescending(q => q.GeneratedDate).ToList();
+            return questionHistory;
+        }
+
         public bool InsertQuestionWithTableString(string table, int userId, int courseId)
         {
             var optionCheck = new DocViewModel();
@@ -898,13 +930,13 @@ namespace QBCS.Service.Implement
                                     var getImage2 = getImage1[1].Split('"');
                                     questionTmp.Image = getImage2[0];
                                 }
-                                else if (questionTmp.QuestionContent == null && 
+                                else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
                                     var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
                                     questionTmp.QuestionContent = "[html]" + stringToValue.Replace("<br />", "<cbr>");
                                 }
-                                else if(!(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
+                                else if (!(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
                                     var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
                                     questionTmp.QuestionContent = questionTmp.QuestionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
@@ -934,7 +966,7 @@ namespace QBCS.Service.Implement
                                 optionModel.IsCorrect = false;
                                 for (int i = 1; i < contentO.Count; i++)
                                 {
-                                    if(optionModel.OptionContent == null)
+                                    if (optionModel.OptionContent == null)
                                     {
                                         var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
                                         optionModel.OptionContent = stringToValue.Replace("<br />", "<cbr>");

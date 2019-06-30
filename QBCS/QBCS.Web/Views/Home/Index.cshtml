@@ -7,7 +7,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
+    <head>
+        @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+        <script src="~/Scripts/jquery.autocomplete.js"></script>*@
+        @*<script src="~/Scripts/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="~/Scripts/jquery-ui.css">*@
 
+    </head>
+@*<script>
+    $(document).ready(function () {
+        var data = ["asddddddd","qweqweqwe"];
+        //$('#myautocomplete').change({
+
+        //});
+        $('#myautocomplete').autocomplete({
+      source: data
+    });
+    });
+    
+</script>*@
 
 <div class="container-fluid ml-5">
     <div class="row">
@@ -30,8 +48,8 @@
                     {
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
-                        <div class="form-group pb-2">
-                          <input name="ownerName" class="form-control text-custom border-dark"/>
+                        <div class="form-group pb-2 ui-widget">
+                          <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark"/>
                         </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">

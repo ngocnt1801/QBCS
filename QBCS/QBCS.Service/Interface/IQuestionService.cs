@@ -31,5 +31,6 @@ namespace QBCS.Service.Interface
         bool InsertQuestionWithTableString(string table, int userId, int courseId);
         int GetCountOfListQuestionByTopicAndId(int topicId, int levelId, int categoryId);
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId, int categoryId);
+        QuestionHistoryViewModel GetQuestionHistory(int id);
     }
 }

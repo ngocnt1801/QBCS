@@ -17,5 +17,6 @@ namespace QBCS.Service.ViewModel
         public int NumberOfHard { get; set; }
         public int CategoryId { get; set; }
         public CategoryViewModel Category { get; set; }
+        public int Semester { get; set; }
     }
 }

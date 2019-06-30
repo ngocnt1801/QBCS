@@ -13,10 +13,12 @@ namespace QBCS.Web.Controllers
     public class ActivityController : Controller
     {
         private ILogService logService;
+        private IQuestionService questionService;
 
         public ActivityController()
         {
             logService = new LogService();
+            questionService = new QuestionService();
         }
 
         // GET: Activity
@@ -40,6 +42,11 @@ namespace QBCS.Web.Controllers
         {
             var list = logService.GetActivitiesById(id);
             return View("GetListActivity", list);
+        }
+        public ActionResult GetExaminationHistory(int id)
+        {
+            var result = questionService.GetQuestionHistory(id);
+            return View(result);
         }
     }
 }

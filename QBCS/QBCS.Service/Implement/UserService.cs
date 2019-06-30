@@ -185,5 +185,21 @@ namespace QBCS.Service.Implement
             };
             return userViewModel;
         }
+        public List<UserViewModel> GetUserByNameAndRoleId(string name, int id)
+        {
+            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id && u.Fullname.Contains(name)).Select(c => new UserViewModel
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Fullname = c.Fullname,
+                Username = c.Username,
+                Password = c.Password,
+                Role = (RoleEnum)c.RoleId,
+                Email = c.Email,
+                IsDisable = c.IsDisable.Value
+            });
+
+            return list.ToList();
+        }
     }
 }
