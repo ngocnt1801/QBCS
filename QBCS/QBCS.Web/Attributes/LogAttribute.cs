@@ -5,11 +5,13 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Attributes
 {
+   
     public class LogAttribute : ActionFilterAttribute
     {
         public string Message { get; set; }
@@ -44,11 +46,20 @@ namespace QBCS.Web.Attributes
             //}
 
             QuestionViewModel questionViewModel = new QuestionViewModel();
-           
+            oldValue.QuestionContent = WebUtility.HtmlDecode(oldValue.QuestionContent);
+            for (int i = 0; i < oldValue.Options.Count; i++)
+            {
+                oldValue.Options[i].OptionContent =  WebUtility.HtmlDecode(oldValue.Options[i].OptionContent);
+            }
             jsonOldValue = JsonConvert.SerializeObject(oldValue);
             if (newQues.QuestionContent != "")
             {
                 newQues.QuestionCode = oldValue.QuestionCode;
+                newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
+                for (int i = 0; i < newQues.Options.Count; i++)
+                {
+                    newQues.Options[i].OptionContent = WebUtility.HtmlDecode(newQues.Options[i].OptionContent);
+                }
                 jsonNewValue = JsonConvert.SerializeObject(newQues);
             }
             
@@ -71,4 +82,5 @@ namespace QBCS.Web.Attributes
 
 
     }
+    
 }

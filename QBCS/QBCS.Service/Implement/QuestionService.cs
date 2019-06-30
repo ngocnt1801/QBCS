@@ -174,7 +174,7 @@ namespace QBCS.Service.Implement
 
             entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                OptionContent = o.OptionContent,
+                OptionContent = WebUtility.HtmlDecode(o.OptionContent),
                 IsCorrect = o.IsCorrect,
                 UpdateOptionId = o.Id
             }).ToList();
