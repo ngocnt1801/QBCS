@@ -139,7 +139,12 @@ namespace QBCS.Service.Implement
         public bool UpdateQuestion(QuestionViewModel question)
         {
             Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            questionById.QuestionContent = question.QuestionContent;
+            string quesContentTemp = "";
+            if (question.QuestionContent != null)
+            {
+                quesContentTemp = WebUtility.HtmlDecode(question.QuestionContent);
+            }
+            questionById.QuestionContent = quesContentTemp;
             if (question.LevelId != 0)
             {
                 questionById.LevelId = question.LevelId;
@@ -360,7 +365,7 @@ namespace QBCS.Service.Implement
                                 {
                                     file = questionXml.question[i].questiontext.file.Value.ToString();
                                     question.Image = file;
-                                    status = (int)Enum.StatusEnum.Success;
+                                    status = (int)Enum.StatusEnum.NotCheck;
                                 }
 
                             }
@@ -375,6 +380,7 @@ namespace QBCS.Service.Implement
                             }
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = stringProcess.RemoveHtmlTagXML(questionContent);
+                            questionContent = stringProcess.UpperCaseKeyWord(questionContent);
                             if (checkHTML.Equals("html"))
                             {
                                 question.QuestionContent = "[html]" + questionContent;

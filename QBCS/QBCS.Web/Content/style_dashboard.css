@@ -11,7 +11,15 @@
 #customs-display {
     width: 92%;
     height: 70%;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
+    background-color: white;
     padding: 5px;
 }
 
+#option-custom {
+    width: 92%;
+    height: 100%;
+    background-color: white;    
+    border: 2px solid #ccc;
+    padding: 5px;
+}

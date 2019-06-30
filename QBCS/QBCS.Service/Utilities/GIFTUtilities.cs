@@ -40,7 +40,7 @@ namespace QBCS.Service.Utilities
                 //string flagCategory = "";
                 int countRight = 0;
                 int countWrong = 0;
-                int countCate = 0;
+                //int countCate = 0;
                 //int countStartCate = 0;
                 int countElement = 1;
                 bool isBlock = false;
@@ -335,7 +335,9 @@ namespace QBCS.Service.Utilities
                     }
                     else
                     {
+                        question = stringProcess.UpperCaseKeyWord(question);
                         quesModel.QuestionContent = question;
+
                     }
                     question = null;
 

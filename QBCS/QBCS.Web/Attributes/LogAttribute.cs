@@ -44,8 +44,13 @@ namespace QBCS.Web.Attributes
             //}
 
             QuestionViewModel questionViewModel = new QuestionViewModel();
+           
             jsonOldValue = JsonConvert.SerializeObject(oldValue);
-            jsonNewValue = JsonConvert.SerializeObject(newQues);
+            if (newQues.QuestionContent != "")
+            {
+                jsonNewValue = JsonConvert.SerializeObject(newQues);
+            }
+            
             ILogService logger = new LogService();
             logger.Log(new LogViewModel
             {
