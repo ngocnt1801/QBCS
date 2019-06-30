@@ -105,13 +105,13 @@
         var hardPercent = 100 - easyPercent - normalPercent;
         $("#hard").val(hardPercent);
     });
-    //$("#exportExamination").submit(function (event) {
-    //    event.preventDefault();
-    //    var examinationId = $("input[name='examinationId']").val();
-    //    var fileExtension = $('#fileExtension').find(":selected").text();
-    //    var getCategory = $('#getCategory').prop('checked');
-    //    window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
-    //});
+    $("#exportExamination").submit(function (event) {
+        event.preventDefault();
+        var examinationId = $("input[name='examinationId']").val();
+        var fileExtension = $('#fileExtension').find(":selected").text();
+        var getCategory = $('#getCategory').prop('checked');
+        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+    });
     $('.btnExport').on('click', function (e) {
         var counter = $(this).data("value");
         var examinationId = $("input[name='examinationId-" + counter +"']").val();
