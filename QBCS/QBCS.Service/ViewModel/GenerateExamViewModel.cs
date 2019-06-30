@@ -40,6 +40,9 @@ namespace QBCS.Service.ViewModel
         public int OrdinaryGradeCalculate { get; set; }
         public int GoodGradeCalculate { get; set; }
         public int ExcellentGradeCalculate { get; set; }
+        public int TotalExam { get; set; }
+        public bool IsEnough { get; set; }
+        public string GroupExam { get; set; }
         public void calculateGrade()
         {
             OrdinaryGradeCalculate = (int)Math.Round(((EasyQuestion * 1.0) / TotalQuestion) * 100);

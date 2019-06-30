@@ -2238,6 +2238,7 @@
     <Content Include="Views\Activity\GetListActivity.cshtml" />
     <Content Include="Views\Home\ImportWithTextArea.cshtml" />
     <Content Include="Views\Examination\ListExamination.cshtml" />
+    <Content Include="Views\Examination\DetailExam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

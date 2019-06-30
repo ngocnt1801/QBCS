@@ -67,15 +67,17 @@ namespace QBCS.Web.Controllers
         private const string XML_PATH_ATTR_VALUE = "/";
         private const string XML_NAME_ATTR_VALUE = "Image00613.bmp";
         private IPartOfExamService partOfExamService;
+        private IExaminationService examinationService;
         public ExaminationAPIController()
         {
             partOfExamService = new PartOfExamService();
+            examinationService = new ExaminationService();
         }
         [HttpGet]
         [ActionName("export")]
         public HttpResponseMessage ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {
-            List<PartOfExamViewModel> partOfExams = partOfExamService.GetPartOfExamByExamId(examinationId);
+            ExaminationViewModel exam = examinationService.GetExanById(examinationId);            
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
             int count = 0;
             if (fileExtension.ToLower().Equals("xml"))
@@ -86,14 +88,13 @@ namespace QBCS.Web.Controllers
                     xmlWriter.Formatting = Formatting.Indented;
                     xmlWriter.WriteStartDocument();
                     xmlWriter.WriteStartElement("quiz");
-                    foreach (var part in partOfExams)
+                    foreach (var part in exam.PartOfExam)
                     {
                         if (part.Question.Count != 0)
                         {
                             string switchCategory = "";
                             if (getCategory)
                             {
-
                                 xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
                                 xmlWriter.WriteStartElement(XML_QUESTION_TAG);
                                 xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
@@ -109,7 +110,7 @@ namespace QBCS.Web.Controllers
                                 QuestionInExamViewModel question = part.Question[i];
                                 if (i != 0)
                                 {
-                                    if ((question.LevelId != part.Question[i - 1].LevelId) && (getCategory))
+                                    if ((question.LevelId != part.Question[i - 1].LevelId || !question.Category.Name.Equals(part.Question[i - 1].Category.Name)) && (getCategory))
                                     {
                                         xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
                                         xmlWriter.WriteStartElement(XML_QUESTION_TAG);
@@ -151,7 +152,7 @@ namespace QBCS.Web.Controllers
                                 else
                                 {
                                     xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".jpg");
+                                    xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
                                     xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                                     xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
                                     xmlWriter.WriteString(question.Image);
@@ -215,6 +216,21 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                                         xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
                                         xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                                        //Image tag
+                                        if (option.Image == null)
+                                        {
+                                            xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                            xmlWriter.WriteEndElement();
+                                        }
+                                        else
+                                        {
+                                            xmlWriter.WriteStartElement(XML_FILE_TAG);
+                                            xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
+                                            xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                                            xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                                            xmlWriter.WriteString(option.Image);
+                                            xmlWriter.WriteEndElement();
+                                        }
                                         //text atg
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
@@ -275,7 +291,7 @@ namespace QBCS.Web.Controllers
                     httpResponseMessage.StatusCode = HttpStatusCode.OK;
                     httpResponseMessage.Content = new ByteArrayContent(byteArray);
                     httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = "ExaminationExport.xml";
+                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".xml";
                     httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     xmlWriter.Close();
                 }
@@ -285,7 +301,7 @@ namespace QBCS.Web.Controllers
                 using (MemoryStream stream = new MemoryStream())
                 {
                     StreamWriter writer = new StreamWriter(stream);
-                    foreach (var part in partOfExams)
+                    foreach (var part in exam.PartOfExam)
                     {
                         if (part.Question.Count != 0)
                         {
@@ -305,7 +321,7 @@ namespace QBCS.Web.Controllers
                                 QuestionInExamViewModel question = part.Question[i];
                                 if (i != 0)
                                 {
-                                    if ((question.LevelId != part.Question[i - 1].LevelId) && getCategory)
+                                    if ((question.LevelId != part.Question[i - 1].LevelId || !question.Category.Name.Equals(part.Question[i - 1].Category.Name)) && (getCategory))
                                     {
                                         switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, question.Level.Name);
                                         writer.WriteLine(switchCategoryLine);
@@ -342,7 +358,7 @@ namespace QBCS.Web.Controllers
                     httpResponseMessage.StatusCode = HttpStatusCode.OK;
                     httpResponseMessage.Content = new ByteArrayContent(byteArray);
                     httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = "ExaminationExport.txt";
+                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".txt";
                     httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     writer.Close();
                 }

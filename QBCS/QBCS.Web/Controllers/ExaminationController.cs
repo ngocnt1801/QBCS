@@ -47,15 +47,25 @@ namespace QBCS.Web.Controllers
             return View(examination);
         }
 
-        public ActionResult ViewGeneratedExamination(int examinationId)
+        public ActionResult ViewGeneratedExamination(string examGroup)
         {
-            List<PartOfExamViewModel> partOfExams = partOfExamService.GetPartOfExamByExamId(examinationId);
-            return View(partOfExams);
+            List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
+            return View(exams);
         }
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
             return View("ListExamination",exams);
+        }
+        public ActionResult DetailExam(int examId)
+        {
+            ExaminationViewModel exam = examinationService.GetExanById(examId);
+            return View(exam);
+        }
+        public ActionResult DisableExam(int examId)
+        {
+            examinationService.DisableEaxam(examId);
+            return RedirectToAction("GetAllExamination", "Examination");
         }
     }
 }

@@ -1,99 +1,114 @@
-﻿@model List<QBCS.Service.ViewModel.PartOfExamViewModel>
+﻿@model List<QBCS.Service.ViewModel.ExaminationViewModel>
 @{
     ViewBag.Title = "Generate Exam";
     var counter = 0;
 }
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Examination</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
+@foreach (var exam in Model)
+{    
+        counter++;
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Examination Code : @exam.ExamCode</h6>
         </div>
-        <table class="table table-striped text-custom" id="dataTableExam" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Code</th>
-                    <th>Question</th>
-                    <th>Level</th>
-                    <th>Topic/Learning Outcome</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var part in Model)
+        <div class="card-body">
+            <div class="table-responsive">
+            </div>
+            <div class="table-counter">
+                <table class="table table-striped text-custom" id="dataTableExam-@counter" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Code</th>
+                            <th>Question</th>
+                            <th>Level</th>
+                            <th>Topic/Learning Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var part in exam.PartOfExam)
                 {
                     foreach (var question in part.Question)
                     {
-                        <tr>
-                            @{
-                                counter++;
-                            }
-                            <td>@counter</td>
-                            <td>@question.QuestionCode</td>
-                            <td>
-                                <div>
-                                    <p>@question.QuestionContent</p>
-                                    @{int charater = 0; }
-                                    @foreach (var option in question.Options)
-                                    {
-                                        char prefixOption = (char)(charater + 65); 
-                                            if (option.IsCorrect == true)
+                                <tr>                                   
+                                    <td></td>
+                                    <td>@question.QuestionCode</td>
+                                    <td>
+                                        <div>
+                                            <p>@question.QuestionContent</p>
+                                            @if (question.Image != null)
                                             {
-
-                                                <div class="container-fluid text-green-success">
-                                                    @prefixOption.ToString(). @option.OptionContent
-                                                </div>
+                                                <img class="exam-image" src="data:image/png;base64, @question.Image" />
                                             }
-                                            else
+                                            @{int charater = 0; }
+                                            @foreach (var option in question.Options)
                                             {
-                                                <div class="container-fluid">
-                                                    @prefixOption.ToString(). @option.OptionContent
-                                                </div>
-                                        }
-                                        charater++;
-                                    }
-                                </div>
-                            </td>
-                            <td>
-                                @question.Level.Name
-                            </td>
-                            <td>
-                                @if (part.LearningOutcome != null)
-                                {
-                                    @Html.DisplayFor(lo => part.LearningOutcome.Name)
-                                }
-                            </td>
-                        </tr>
+                                                char prefixOption = (char)(charater + 65);
+                                                if (option.IsCorrect == true)
+                                                {
+                                                    <div class="row">
+                                                        <div class="container-fluid text-green-success">
+                                                            @prefixOption.ToString(). @option.OptionContent
+                                                        </div>
+                                                        @if (option.Image != null)
+                                                        {
+                                                            <img class="exam-image" src="data:image/png;base64, @option.Image" />
+                                                        }
+                                                    </div>
                                                 }
+                                                else
+                                                {
+                                                    <div class="row">
+                                                        <div class="container-fluid">
+                                                            @prefixOption.ToString(). @option.OptionContent
+                                                        </div>
+                                                        @if (option.Image != null)
+                                                        {
+                                                            <img class="exam-image" src="data:image/png;base64, @option.Image" />
+                                                        }
+                                                    </div>
+                                                }
+                                                charater++;
                                             }
-
-            </tbody>
-        </table>
-    </div>
-</div>
-<form id="exportExamination">
-    <div class="row form-group">
-        <div>
-            <h5>File extension :</h5>
-        </div>
-        <input type="hidden" name="examinationId" value="@Model[0].ExaminationId" />
-
-        <div class="col-lg-2">
-            <select id="fileExtension" class="form-control">
-                <option value="gift">GIFT</option>
-                <option value="xml">XML</option>
-            </select>
-        </div>
-
-        <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
-    </div>
-    <div class="row form-group">
-        <div class="el-checkbox text-center">
-            <span class="margin-r" style="font-size:1.3em;">Get category : </span>
-            <input type="checkbox" name="getCategory" id="getCategory">
-            <label class="el-checkbox-style" for="getCategory"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @question.Level.Name
+                                    </td>
+                                    <td>
+                                        @if (part.LearningOutcome != null)
+                                        {
+                                            @Html.DisplayFor(lo => part.LearningOutcome.Name)
+                                        }
+                                    </td>
+                                </tr>
+                                                    }
+                                                }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</form>
+    <form id="exportExamination">
+        <div class="row form-group">
+            <div>
+                <h5>File extension :</h5>
+            </div>
+            <input type="hidden" name="examinationId-@counter" value="@exam.Id" />
+
+            <div class="col-lg-2">
+                <select id="fileExtension-@counter" class="form-control">
+                    <option value="gift">GIFT</option>
+                    <option value="xml">XML</option>
+                </select>
+            </div>
+            <input type="button" name="Export" data-value="@counter" value="Export" class="btn btn-primary float-right btnExport" />
+        </div>
+        <div class="row form-group">
+            <div class="el-checkbox text-center">
+                <span class="margin-r" style="font-size:1.3em;">Get category : </span>
+                <input type="checkbox" name="getCategory" id="getCategory-@counter">
+                <label class="el-checkbox-style" for="getCategory-@counter"></label>
+            </div>
+        </div>
+    </form>
+                                                }

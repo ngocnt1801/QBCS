@@ -33,7 +33,6 @@ namespace QBCS.Entity
         [StringLength(50)]
         public string QuestionCode { get; set; }
 
-        [StringLength(255)]
         public string Image { get; set; }
 
         public int? Frequency { get; set; }

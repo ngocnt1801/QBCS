@@ -11,5 +11,9 @@ namespace QBCS.Service.Interface
     {
         GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam);
         List<ExaminationViewModel> GetAllExam();
+        List<ExaminationViewModel> GetExamByExamGroup(string groupExam);
+        ExaminationViewModel GetExanById(int examId);
+        string GetExamCode();
+        void DisableEaxam(int examId);
     }
 }
