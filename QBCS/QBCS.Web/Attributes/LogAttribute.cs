@@ -22,7 +22,7 @@ namespace QBCS.Web.Attributes
         {
             var userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
             int? targetId = null;
-            object oldValue = "";
+            QuestionViewModel oldValue = new QuestionViewModel();
             string jsonOldValue = "";
             string jsonNewValue = "";
             QuestionViewModel newQues = new QuestionViewModel();
@@ -48,6 +48,7 @@ namespace QBCS.Web.Attributes
             jsonOldValue = JsonConvert.SerializeObject(oldValue);
             if (newQues.QuestionContent != "")
             {
+                newQues.QuestionCode = oldValue.QuestionCode;
                 jsonNewValue = JsonConvert.SerializeObject(newQues);
             }
             

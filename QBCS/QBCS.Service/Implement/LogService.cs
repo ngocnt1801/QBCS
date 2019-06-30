@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using QBCS.Service.Enum;
+using System.Net;
 
 namespace QBCS.Service.Implement
 {
@@ -110,8 +111,10 @@ namespace QBCS.Service.Implement
             {
                 role = "Lecturer";
             }
+           
             foreach (var item in listLog)
             {
+                string tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
@@ -120,9 +123,10 @@ namespace QBCS.Service.Implement
                     TargetId = item.TargetId,
                     Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
                     Action = item.Action,
-                    Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
+                    Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
                     LogDate = item.Date.Value
-                };
+                    
+            };
                 list.Add(logViewModel);
             }
             return list;
@@ -143,8 +147,9 @@ namespace QBCS.Service.Implement
             if (newValue.QuestionContent != null && newValue.Options != null)
             {
                 questionViewModelNew = ParseEntityToModel(newValue);
+                
             }
-
+            
             LogViewModel model = new LogViewModel()
             {
                 TargetId = logById.TargetId,
@@ -152,8 +157,9 @@ namespace QBCS.Service.Implement
                 Fullname = unitOfWork.Repository<User>().GetById(logById.UserId.Value).Fullname,
                 Message = (logById.Action + " " + logById.TargetName).ToLowerInvariant(),
                 LogDate = logById.Date.Value,
-                OldValue = questionViewModelOld.ToString(),
-                NewValue = questionViewModelNew.ToString(),
+                //OldValue = questionViewModelOld.ToString(),
+                //NewValue = questionViewModelNew.ToString(),
+             
                 QuestionOld = questionViewModelOld,
                 QuestionNew = questionViewModelNew
 
@@ -182,12 +188,13 @@ namespace QBCS.Service.Implement
                     optionViewModels.Add(optionViewModel);
                 }
             }
-            
+          
             QuestionViewModel questionViewModel = new ViewModel.QuestionViewModel()
             {
-                QuestionCode = question.QuestionCode,
+                
+                QuestionCode = unitOfWork.Repository<Question>().GetById(question.Id).QuestionCode,
                 Id = question.Id,
-                QuestionContent = question.QuestionContent,
+                QuestionContent = WebUtility.HtmlDecode(question.QuestionContent),
                 Options = optionViewModels
             };
             if (question.CourseId != null)

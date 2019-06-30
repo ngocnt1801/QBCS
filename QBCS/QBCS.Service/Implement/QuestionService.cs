@@ -203,6 +203,7 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = new ViewModel.QuestionViewModel()
             {
                 Id = question.Id,
+                QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
                 ImportId = (int)question.ImportId

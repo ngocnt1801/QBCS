@@ -20,6 +20,17 @@ function option_custom() {
         $(this).html(op);
     });
 }
+function question_custom() {
+    var op;
+    $.each($(".question-custom"), function () {
+        op = $(this).html();
+        op = op.split("<cbr>").join("");
+        op = op.split("&lt;cbr&gt;").join("<br/>");
+        op = op.split("&lt;br&gt;").join("<br/>");
+        op = op.split("[html]").join("");
+        $(this).html(op);
+    });
+}
 function customs_display() {
     var content;
     content = $('#customs-display').html();
@@ -77,13 +88,13 @@ function highlight(newElem, oldElem) {
         }
 
     });
-    newElem.html(text);
+    newElem.val(text);
 }
 
 function customs_text() {
     $('#btnUpdate').click(function (e) {
         var content;
-        content = $('#customs-display').html();
+        content = $('.question-custom').html();
         //var input;
         //input = $('#hidden-question-content').html();
         $('#hidden-question-content').val("[html]" + content);
@@ -92,13 +103,15 @@ function customs_text() {
             var content = $(this).html();
             $(this.attributes["data-for"].value).val("[html]" + content);
         })
+       // $('#success-modal').modal('show');
     });
 }
 
 
 $(document).ready(function () {
-    highlight($("#new"), $("#old"));
+    //highlight($("#new"), $("#old"));
     customs_text();
    // customs_display();
     option_custom();
+    question_custom();
 });

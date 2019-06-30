@@ -15,7 +15,7 @@
             <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-
+                        @*<th>Question Code</th>*@
                         <th>User</th>
                         <th>Date</th>
                         <th>Message</th>
@@ -26,28 +26,36 @@
 
                 <tbody>
                     @foreach (var item in Model)
-                    {                       
-                            <tr>
-
-                                <td>
-                                    @item.Fullname
-                                </td>
-                                <td>
-                                    @item.LogDate
-                                </td>
-                                <td>@item.Message</td>
-                                <td>
-                                    @if (item.Action.Equals("Import"))
+                    {
+                        <tr>
+                            @*<td>
+                                    @if (item.Action.Equals("Update") && item.QuestionNew != null)
                                     {
-                                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
-                                    }
-                                    @if (item.Action.Equals("Update"))
-                                    {
-                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                        @item.QuestionNew.QuestionCode
+                                    }else{
+                                    <p>N/A</p>
                                     }
 
-                                </td>
-                            </tr>
+                                </td>*@
+                            <td>
+                                @item.Fullname
+                            </td>
+                            <td>
+                                @item.LogDate
+                            </td>
+                            <td>@item.Message</td>
+                            <td>
+                                @if (item.Action.Equals("Import"))
+                                {
+                                    <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                }
+                                @if (item.Action.Equals("Update"))
+                                {
+                                    <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                }
+
+                            </td>
+                        </tr>
 
                     }
                 </tbody>
