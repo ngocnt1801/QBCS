@@ -23,6 +23,7 @@ namespace QBCS.Web.Controllers
             importService = new ImportService();
         }
 
+        //Lecturer
         // GET: Import
         public ActionResult Index()
         {
@@ -31,6 +32,8 @@ namespace QBCS.Web.Controllers
             return View(model);
         }
 
+
+        //Lecturer
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
@@ -43,6 +46,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("CourseDetail", "Course", new { courseId = result.CourseId});
         }
 
+        //Lecturer
         [ValidateInput(false)]
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
@@ -50,12 +54,14 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GetResult", new { importId = model.ImportId });
         }
 
+        //Lecturer
         public ActionResult GetQuestionTemp(int tempId)
         {
             var questiontemp = importService.GetQuestionTemp(tempId);
             return View(questiontemp);
         }
 
+        //Lecturer
         public ActionResult AddToBank(int importId)
         {
             Task.Factory.StartNew(() => {
@@ -65,7 +71,8 @@ namespace QBCS.Web.Controllers
             TempData["Status"] = ToastrEnum.Info;
             return RedirectToAction("Index", "Home");
         }
-    
+
+        //Lecturer
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);
@@ -74,12 +81,14 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //Lecturer
         public ActionResult Delete(int questionId, int importId)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
             return RedirectToAction("GetResult", new { importId = importId });
         }
 
+        //Lecturer
         public ActionResult Skip(int questionId, int importId)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);

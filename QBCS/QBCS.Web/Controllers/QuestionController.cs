@@ -83,6 +83,7 @@ namespace QBCS.Web.Controllers
             return View("ListQuestion", result);
         }
 
+        //Lecturer
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -101,6 +102,8 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+
+        //Lecturer
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
@@ -183,6 +186,7 @@ namespace QBCS.Web.Controllers
             return View("ReviewQuestion", question);
         }
 
+        //Lecturer
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
@@ -193,6 +197,7 @@ namespace QBCS.Web.Controllers
             return PartialView("ListQuestion", result);
         }
 
+        //Lecturer
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -200,6 +205,7 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
+        //Lecturer
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);

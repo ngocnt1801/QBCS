@@ -102,6 +102,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Staff_Index");
         }
 
+        //Staff
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -109,7 +110,7 @@ namespace QBCS.Web.Controllers
             return View("Staff_ListCourse", courses);
         }
 
-
+        //Staff
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -123,6 +124,7 @@ namespace QBCS.Web.Controllers
             return View("Staff_ListCourse", courses);
         }
 
+        //Lecturer
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
@@ -133,12 +135,18 @@ namespace QBCS.Web.Controllers
             };
             return View(model);
         }
+
+        //Lecturer
+        //Staff
         public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
             var result = courseService.GetAllCourseStat();
             return View(result);
         }
+
+        //Lecturer
+        //Staff
         public JsonResult GetCourseDetailStat(int courseId)
         {
             var result = courseService.GetCourseStatDetailByCourseId(courseId);

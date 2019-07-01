@@ -26,6 +26,7 @@ namespace QBCS.Web.Controllers
             return View();
         }
 
+        //All role
         public JsonResult GetNotification()
         {
             List<NotificationViewModel> notificationList = null;
@@ -37,6 +38,7 @@ namespace QBCS.Web.Controllers
             return Json(notificationList, JsonRequestBehavior.AllowGet);
         }
 
+        //All role
         public JsonResult ReadAll()
         {
             int userId = ((UserViewModel)Session["user"]).Id;

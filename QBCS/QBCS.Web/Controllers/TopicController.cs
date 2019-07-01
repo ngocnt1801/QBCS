@@ -48,6 +48,8 @@ namespace QBCS.Web.Controllers
             result = topicService.UpdateTopic(topic);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        
+        //Lecturer
         public JsonResult LoadCourse()
         {
             var result = courseService.GetAllCourses();

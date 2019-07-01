@@ -22,6 +22,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IPartOfExamService partOfExamService;
         private ICategoryService categoryService;
+        //Staff
         public ExaminationController()
         {
             topicService = new TopicService();
@@ -30,6 +31,7 @@ namespace QBCS.Web.Controllers
             partOfExamService = new PartOfExamService();
             categoryService = new CategoryService();
         }
+        //Staff
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
@@ -41,33 +43,38 @@ namespace QBCS.Web.Controllers
             };
             return View(listTopicLearningOutcomeViewModel);
         }
+        //Staff
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
             GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
             return View(examination);
         }
 
+        //Staff
         public ActionResult ViewGeneratedExamination(string examGroup)
         {
             List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
             return View(exams);
         }
+        //Staff
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
             return View("ListExamination",exams);
         }
+        //Staff
         public ActionResult DetailExam(int examId)
         {
             ExaminationViewModel exam = examinationService.GetExanById(examId);
             return View(exam);
         }
+        //Staff
         public ActionResult DisableExam(int examId)
         {
             examinationService.DisableEaxam(examId);
             return RedirectToAction("GetAllExamination", "Examination");
         }
-
+        //Staff
         public ActionResult GetHistoryCourse(int courseId)
         {
             var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);

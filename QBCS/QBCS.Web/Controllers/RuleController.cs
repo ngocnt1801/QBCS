@@ -17,6 +17,7 @@ namespace QBCS.Web.Controllers
         {
             ruleService = new RuleService();
         }
+        //Staff
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -27,6 +28,7 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
             return View(result);
         }
+        //Staff
         public ActionResult Edit()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -37,6 +39,7 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
             return View(result);
         }
+        //Staff
         [HttpPost]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {

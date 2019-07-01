@@ -21,6 +21,7 @@ namespace QBCS.Web.Controllers
             questionService = new QuestionService();
         }
 
+        //Lecturer
         // GET: Activity
         public ActionResult Index(int id)
         {
@@ -30,6 +31,8 @@ namespace QBCS.Web.Controllers
             var model = logService.GetAllActivitiesByUserId(id, user);
             return View(model);
         }
+
+        //Staff
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -38,6 +41,8 @@ namespace QBCS.Web.Controllers
             var model = logService.GetAllActivities();
             return View("Index", model);
         }
+
+        //Lecturer
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -51,11 +56,16 @@ namespace QBCS.Web.Controllers
             //logViews = logService.GetAllActivitiesByUserId(user.Id, user);
             return View("Index", logViews);
         }
+        //Lecturer
+        //Staff
         public ActionResult GetUpdateActivityById (int id)
         {
             var model = logService.GetActivitiesById(id);
             return View("GetUpdateActivity", model);
         }
+
+        //Lecturer
+        //Staff
         public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -73,6 +83,7 @@ namespace QBCS.Web.Controllers
             }
             return View("GetListActivity", list);
         }
+        //Staff
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);
