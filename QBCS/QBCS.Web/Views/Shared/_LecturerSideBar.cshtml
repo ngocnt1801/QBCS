@@ -2,8 +2,12 @@
 
 @{ 
     var homeClass = "";
-    var courseClass = "";
+    var giftXmlClass = "";
+    var wordClass = "";
+    var manualClass = "";
     var importClass = "";
+    var import3TypeClass = "";
+    var courseClass = "";
     var userClass = "";
     var activitiesClass = "";
     var statisticClass = "";
@@ -12,6 +16,18 @@
     {
         case "Home":
             homeClass = "active";
+            break;
+        case "GIFT, XML":
+            giftXmlClass = "active";
+            break;
+        case "Word":
+            wordClass = "active";
+            break;
+        case "Manual":
+            manualClass = "active";
+            break;
+        case "Import3Type":
+            import3TypeClass = "active";
             break;
         case "Course":
             courseClass = "active";
@@ -31,11 +47,11 @@
     }
     }
 
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
-        onclick="nav_bar_active()">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+    onclick="nav_bar_active()">
 
-        <!-- Sidebar - Brand -->
-        @*<a class="sidebar-brand d-flex align-items-center" href="index.html">
+    <!-- Sidebar - Brand -->
+    @*<a class="sidebar-brand d-flex align-items-center" href="index.html">
 
             <div class="col-xs-6 col-sm-4 mb-2">
                 <div class="row">
@@ -47,51 +63,66 @@
 
             <div class="sidebar-brand-text mx-3"></div>
         </a>*@
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-            <div class="sidebar-brand-icon pt-4" style="width:50%">
-                <img src="~/Content/logo_transparent.png" style="object-fit: contain;" width="120" height="140" />
-            </div>
-            <div class="sidebar-brand-text mr-5"><h4 class="font-weight-bolder">QBCS</h4></div>
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        <div class="sidebar-brand-icon pt-4" style="width:50%">
+            <img src="~/Content/logo_transparent.png" style="object-fit: contain;" width="120" height="140" />
+        </div>
+        <div class="sidebar-brand-text mr-5"><h4 class="font-weight-bolder">QBCS</h4></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    @*<li class="nav-item @homeClass">
+        <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
         </a>
+    </li>*@
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+    <li class="nav-item @import3TypeClass">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Import</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Import:</h6>
+                <a class="collapse-item text-custom-dashboard @giftXmlClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">GIFT, XML</a>
+                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
+                <a class="collapse-item text-custom-dashboards @manualClass" href="@Url.Action("ImportWithtextArea","Home")">Manual</a>
+            </div>
+        </div>
+    </li>
 
-        <li class="nav-item @homeClass">
-            <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+    <!-- Heading -->
+    <!-- Nav Item - Courses Menu -->
+    <li class="nav-item @courseClass">
+        <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-book"></i>
+            <span>Courses</span>
+        </a>
+    </li>
 
-        <!-- Heading -->
-        <!-- Nav Item - Courses Menu -->
-        <li class="nav-item @courseClass">
-            <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
-                <i class="fas fa-book"></i>
-                <span>Courses</span>
-            </a>
-        </li>
+    <!-- Nav Item - Course Statistics Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
+            <i class="fas fa-chart-pie"></i>
+            <span>Statistics</span>
+        </a>
+    </li>
 
-        <!-- Nav Item - Course Statistics Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
-                <i class="fas fa-chart-pie"></i>
-                <span>Statistics</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Question Menu -->
-        <li class="nav-item @importClass">
-            <a class="nav-link"
-               href="@Url.Action("Index", "Import")">
-                <i class="fas fa-question"></i>
-                <span>History</span>
-            </a>
-        </li>
+    <!-- Nav Item - Question Menu -->
+    <li class="nav-item @importClass">
+        <a class="nav-link"
+           href="@Url.Action("Index", "Import")">
+            <i class="fas fa-question"></i>
+            <span>History</span>
+        </a>
+    </li>
 
     <li class="nav-item @activitiesClass">
         <a class="nav-link" href="@Url.Action("Index", "Activity",new { id = ((UserViewModel)Session["user"]).Id })">
@@ -113,21 +144,21 @@
         </a>
     </li>
 
-        <li class="nav-item">
-            <a class="nav-link"
-               href="@Url.Action("ImportWithTextArea","Home")">
-                <i class="fas fa-user fa-chart-area"></i>
-                <span>Textarea</span>
-            </a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link"
+           href="@Url.Action("ImportWithTextArea","Home")">
+            <i class="fas fa-user fa-chart-area"></i>
+            <span>Textarea</span>
+        </a>
+    </li>
 
 
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
-    </ul>
+</ul>

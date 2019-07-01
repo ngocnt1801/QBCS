@@ -3,6 +3,11 @@
     font-weight: 400;
     font-family: Arial, Helvetica, sans-serif;
 }
+.text-custom-dashboard {
+    color: #000 !important;
+    font-weight: 300 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
 
 .text-right-answer {
     color: #0c2f94 !important;

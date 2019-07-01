@@ -71,6 +71,7 @@ namespace QBCS.Service.Implement
                     {
                         Id = item.Id,
                         UserId = (int)item.UserId,
+                        Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
                         Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
                         Action = item.Action,
