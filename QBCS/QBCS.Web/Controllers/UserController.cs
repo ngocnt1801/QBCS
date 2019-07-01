@@ -74,6 +74,8 @@ namespace QBCS.Web.Controllers
             };
             return View(model);
         }
+
+        //lecturer
         public JsonResult GetLecturer(string term)
         {
             List<string> lecturerName = new List<string>();

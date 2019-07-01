@@ -111,6 +111,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
         }
 
+        //lecturer
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
@@ -130,6 +131,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //lecturer
         [HttpPost]
         //[Log(Action = "Import", TargetName = "Question")]
         public JsonResult ImportTextarea(Textarea textarea)

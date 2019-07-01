@@ -205,7 +205,6 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Attributes\LogAttribute.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
-    <Compile Include="Controllers\CourseAPIController.cs" />
     <Compile Include="Attributes\CheckSessionAttribute.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -217,7 +216,6 @@
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
-    <Compile Include="Controllers\TopicAPIController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
