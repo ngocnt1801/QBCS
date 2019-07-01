@@ -74,5 +74,15 @@ namespace QBCS.Web.Controllers
             };
             return View(model);
         }
+        public JsonResult GetLecturer(string term)
+        {
+            List<string> lecturerName = new List<string>();
+            var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
+            foreach(var lec in result)
+            {
+                lecturerName.Add(lec.Fullname);
+            }
+            return Json(lecturerName, JsonRequestBehavior.AllowGet);
+        }
     }
 }

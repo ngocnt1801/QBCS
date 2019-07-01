@@ -56,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -126,6 +127,7 @@
     <Compile Include="ViewModel\OptionViewModel.cs" />
     <Compile Include="ViewModel\PartOfExamViewModel.cs" />
     <Compile Include="ViewModel\QuestionDetailViewModel.cs" />
+    <Compile Include="ViewModel\QuestionHistoryViewModel.cs" />
     <Compile Include="ViewModel\QuestionInExamViewModel.cs" />
     <Compile Include="ViewModel\QuestionTempViewModel.cs" />
     <Compile Include="ViewModel\QuestionTmpModel.cs" />

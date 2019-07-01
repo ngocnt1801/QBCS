@@ -144,5 +144,14 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetCourseStatDetailByCourseId(courseId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CourseDetailWithoutId()
+        {
+            List<CategoryViewModel> categories = categoryService.GetAllCategories();
+            var model = new CourseViewModel
+            {
+                Categories = categories
+            };
+            return View(model);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -71,24 +72,38 @@ namespace QBCS.Service.Utilities
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
-                        WParagraph paragraph = bodyItemEntity as WParagraph;
-                        WParagraph checkImageNameNext = row.Cells[1].ChildEntities[i].NextSibling != null ? row.Cells[1].ChildEntities[i].NextSibling as WParagraph : null;
-                        WParagraph checkImageNamePrevious = row.Cells[1].ChildEntities[i].PreviousSibling != null ? row.Cells[1].ChildEntities[i].PreviousSibling as WParagraph : null;
-                        if(checkImageNamePrevious == null)
+                        WParagraph wParagraph = bodyItemEntity as WParagraph;
+                        if(wParagraph.ChildEntities.Count != 0)
                         {
-                            quesModel.QuestionContent = paragraph.Text;
-                        }
-                        else if (checkImageNameNext == null)
-                        {
+                            ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
+                            switch (pItem.EntityType)
+                            {
+                                default:
+                                    if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")) && quesModel.QuestionContent == null)
+                                    {
+                                        quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>");
+                                    }
+                                    else if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")))
+                                    {
+                                        WTextRange text = pItem as WTextRange;
+                                        quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text;
+                                    }
+                                    break;
+                                case EntityType.Picture:
+                                    WPicture wPicture = pItem as WPicture;
+                                    Image iImage = wPicture.Image;
 
-                        }
-                        else if (paragraph.Text.Contains("[file:"))
-                        {
+                                    MemoryStream m = new MemoryStream();
+                                    iImage.Save(m, iImage.RawFormat);
+                                    byte[] imageBytes = m.ToArray();
 
+                                    quesModel.Image = Convert.ToBase64String(imageBytes);
+                                    break;
+                            }
                         }
-                        else
+                        if(quesModel.Image != null)
                         {
-                            quesModel.QuestionContent = "<br/>" +paragraph.Text;
+                            break;
                         }
                     }
                 }
@@ -100,24 +115,40 @@ namespace QBCS.Service.Utilities
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
-                        WParagraph paragraph = bodyItemEntity as WParagraph;
-                        if(!(row.Cells[1].Count == 1 && (paragraph.Text.Equals("") || paragraph.Text == null)))
+                        WParagraph wParagraph = bodyItemEntity as WParagraph;
+                        if (wParagraph.Text != "")
                         {
-                            optionModel.IsCorrect = false;
-                            if (i == 0)
+                            ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
+                            switch (pItem.EntityType)
                             {
-                                optionModel.OptionContent = paragraph.Text;
-                            }
-                            else
-                            {
-                                optionModel.OptionContent = optionModel.OptionContent + "<br/>" + paragraph.Text;
-                            }
+                                //case EntityType.TextRange:
+                                default:
+                                    if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                                    {
+                                        optionModel.IsCorrect = false;
+                                        optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                                    }
+                                    else if (!wParagraph.Text.Equals(""))
+                                    {
+                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                    }
+                                    break;
+                                case EntityType.Picture:
+                                    //WPicture wPicture = pItem as WPicture;
+                                    //Image iImage = wPicture.Image;
 
+                                    //MemoryStream m = new MemoryStream();
+                                    //iImage.Save(m, iImage.RawFormat);
+                                    //byte[] imageBytes = m.ToArray();
+
+                                    //quesModel.Image = Convert.ToBase64String(imageBytes);
+                                    break;
+                            }
                         }
                     }
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
-                    if(optionModel.OptionContent != null)
+                    if (optionModel.OptionContent != null)
                     {
                         options.Add(optionModel);
                     }
@@ -135,9 +166,9 @@ namespace QBCS.Service.Utilities
                         {
                             for (int i = 0; i < answers.Length; i++)
                             {
-                                if(optionCheck.Code.Equals(answers[i]))
+                                if (optionCheck.Code.Equals(answers[i]))
                                 {
-                                    foreach(var option in options)
+                                    foreach (var option in options)
                                     {
                                         if (option.OptionContent.Equals(optionCheck.Content))
                                         {
@@ -149,7 +180,7 @@ namespace QBCS.Service.Utilities
                                 }
                             }
                         }
-                        
+
                     }
                 }
                 else if (key.Contains("UNIT:"))
@@ -158,8 +189,27 @@ namespace QBCS.Service.Utilities
                     WParagraph paragraph = bodyItemEntity as WParagraph;
                     if (!paragraph.Text.Equals(""))
                     {
-                        quesModel.LearningOutcome = paragraph.Text;
-
+                        quesModel.LearningOutcome = "LearningOutcome" + paragraph.Text;
+                    }
+                }
+                else if (key.Contains("MARK:"))
+                {
+                    IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
+                    WParagraph paragraph = bodyItemEntity as WParagraph;
+                    switch (paragraph.Text)
+                    {
+                        //default:
+                        //    quesModel.Level = "Easy";
+                        //    break;
+                        case "1":
+                            quesModel.Level = "Easy";
+                            break;
+                        case "2":
+                            quesModel.Level = "Medium";
+                            break;
+                        case "3":
+                            quesModel.Level = "Hard";
+                            break;
                     }
                 }
                 //foreach (WTableCell cell in row.Cells)

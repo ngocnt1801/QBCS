@@ -1,0 +1,84 @@
+﻿@model List<QBCS.Service.ViewModel.QuestionViewModel>
+
+@{
+    ViewBag.Title = "ListQuestion";
+    int counter = 0;
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+}
+
+@if (TempData["NewestCount"] != null)
+{
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>@TempData["NewestCount"] new questions</strong> are inserted
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (Model.Count > 0)
+{
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">List of Questions</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive text-custom">
+                <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Question</th>
+                            <th>Action</th>
+                            <th>
+                                <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()"/>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.Id">
+                                @{
+                                    counter++;
+                                }
+                                <td>@counter</td>
+                                <td>
+                                    @Html.DisplayFor(modeItem => item.QuestionContent)
+                                    @for (var i = 0; i < item.Options.Count; i++)
+                                    {
+                                        if (item.Options[i].IsCorrect == true)
+                                        {
+                                            <div class="container-fluid text-right-answer">
+                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                            </div>
+                                        }
+
+                                        <br />
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("GetExaminationHistory", "Activity", new { id = item.Id})" class="btn btn-info mr-1 col-12 mb-2">History</a>
+                                </td>
+                                <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code"/></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h5>There is no question in this category</h5>
+}

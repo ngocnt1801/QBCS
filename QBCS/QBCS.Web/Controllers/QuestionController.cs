@@ -184,6 +184,10 @@ namespace QBCS.Web.Controllers
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
+            if(courseId == 0 || courseId == null)
+            {
+                return PartialView("Staff_ListQuestion", result);
+            }
             return PartialView("ListQuestion", result);
         }
 
