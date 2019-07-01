@@ -243,6 +243,7 @@
     <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
     <Content Include="Content\error\font-awesome.min.css" />
     <Content Include="Content\error\style.css" />
+    <Content Include="Content\facebook_profile_image.png" />
     <Content Include="Content\font-awesome\all.css" />
     <Content Include="Content\font-awesome\all.min.css" />
     <Content Include="Content\font-awesome\brands.css" />
@@ -2236,6 +2237,7 @@
     <Content Include="Views\Course\Staff_Index.cshtml" />
     <Content Include="Views\Shared\_ListCategory.cshtml" />
     <Content Include="Views\Activity\GetListActivity.cshtml" />
+    <Content Include="Views\Activity\GetUpdateActivity.cshtml" />
     <Content Include="Views\Home\ImportWithTextArea.cshtml" />
     <Content Include="Views\Examination\ListExamination.cshtml" />
     <Content Include="Views\Examination\DetailExam.cshtml" />

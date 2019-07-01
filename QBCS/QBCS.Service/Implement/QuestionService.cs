@@ -94,7 +94,7 @@ namespace QBCS.Service.Implement
                     };
                     optionViewModels.Add(optionViewModel);
                 }
-
+               
 
                 QuestionViewModel questionViewModel = ParseEntityToModel(ques, optionViewModels);
                 questionViewModels.Add(questionViewModel);
@@ -159,9 +159,14 @@ namespace QBCS.Service.Implement
             //unitOfWork.Repository<Question>().Update(questionById);
             //unitOfWork.SaveChanges();
 
+            string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
-            entity.QuestionContent = question.QuestionContent;
+            if (question.QuestionContent != null)
+            {
+                quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
+            }
+            entity.QuestionContent = quesTemp;
             entity.Type = (int) TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
@@ -169,7 +174,7 @@ namespace QBCS.Service.Implement
 
             entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                OptionContent = o.OptionContent,
+                OptionContent = WebUtility.HtmlDecode(o.OptionContent),
                 IsCorrect = o.IsCorrect,
                 UpdateOptionId = o.Id
             }).ToList();
@@ -198,8 +203,10 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = new ViewModel.QuestionViewModel()
             {
                 Id = question.Id,
+                QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
-                Options = options
+                Options = options,
+                ImportId = (int)question.ImportId
             };
             if (question.CourseId != null)
             {
@@ -259,6 +266,7 @@ namespace QBCS.Service.Implement
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,
                 QuestionContent = c.QuestionContent,
+                ImportId = (int)c.ImportId,
                 Options = c.Options.Select(d => new OptionViewModel
                 {
                     Id = d.Id,
@@ -397,7 +405,7 @@ namespace QBCS.Service.Implement
                                 {
                                     file = questionXml.question[i].questiontext.file.Value.ToString();
                                     question.Image = file;
-                                    status = (int)Enum.StatusEnum.Success;
+                                    status = (int)Enum.StatusEnum.NotCheck;
                                 }
 
                             }
@@ -411,7 +419,8 @@ namespace QBCS.Service.Implement
                                 tempParser = htmlDoc.DocumentNode.InnerText;
                             }
                             questionContent = WebUtility.HtmlDecode(tempParser);
-                            questionContent = stringProcess.RemoveHtmlTag(questionContent);
+                            questionContent = stringProcess.RemoveHtmlTagXML(questionContent);
+                            questionContent = stringProcess.UpperCaseKeyWord(questionContent);
                             if (checkHTML.Equals("html"))
                             {
                                 question.QuestionContent = "[html]" + questionContent;
@@ -449,7 +458,7 @@ namespace QBCS.Service.Implement
                                         }
                                         
                                         rightAnswer = WebUtility.HtmlDecode(tempParser);
-                                        rightAnswer = stringProcess.RemoveHtmlTag(rightAnswer);
+                                        rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
 
                                         option = new OptionTemp();
                                         if (checkHTMLTemp.Equals("html"))
@@ -480,7 +489,7 @@ namespace QBCS.Service.Implement
                                         }
                                         
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
-                                        wrongAnswer = stringProcess.RemoveHtmlTag(wrongAnswer);
+                                        wrongAnswer = stringProcess.RemoveHtmlTagXML(wrongAnswer);
 
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
@@ -631,20 +640,16 @@ namespace QBCS.Service.Implement
                                     {
                                         foreach (var itemOp in item.Options)
                                         {
-                                            tw.WriteLine("Option: " + item.Code + "\n");
+                                            tw.WriteLine("Option: " + item.Options + "\n");
                                         }
                                     }
                                     tw.WriteLine("Error: " + item.Error + "\n");
                                     tw.WriteLine();
                                 }
                                 tw.Close();
-                            }
-                            
+                            }                          
                            
-                        }
-                           
-                       
-                        
+                        }    
                     }
                     
                 }
@@ -753,6 +758,7 @@ namespace QBCS.Service.Implement
             {
                 result = result.Where(q => q.CourseId == courseId);
             }
+           
 
             if (categoryId != null && categoryId != 0)
             {
@@ -786,6 +792,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,

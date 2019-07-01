@@ -3,39 +3,38 @@
 @{
     var examClass = "";
     var courseClass = "";
-    var statClass = "";
+    var topicClass = "";
+    var locClass = "";
+    var activitiesClass = "";
+    var statisticClass = "";
     var ruleClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
-    var action = this.ViewContext.RouteData.Values["action"].ToString();
-    //switch (controller)
-    //{
-    //    case "Course":
-    //        courseClass = "active";
-    //        break;
-    //    case "Import":
-    //        statClass = "active";
-    //        break;
-    //    case "Rule":
-    //        ruleClass = "active";
-    //        break;
-    //}
-    if (controller.Equals("Rule"))
+    switch (controller)
     {
-        ruleClass = "active";
-    }
-    else if(controller.Equals("Course") && action.Equals("Staff_Index"))
-    {
-        courseClass = "active";
-    }
-    else if(controller.Equals("Course") && action.Equals("GetAllCourse"))
-    {
-        examClass = "active";
-    }
-    else if(controller.Equals("Course") && action.Equals("CourseStatistic"))
-    {
-        courseClass = "active";
+        case "Home":
+            examClass = "active";
+            break;
+        case "Course":
+            courseClass = "active";
+            break;
+        case "Course Statistics":
+            statisticClass = "active";
+            break;
+        case "Topic":
+            topicClass = "active";
+            break;
+        case "Learning Outcomes":
+            locClass = "active";
+            break;
+        case "Activity":
+            activitiesClass = "active";
+            break;
+        case "Rule":
+            ruleClass = "active";
+            break;
     }
 }
+
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -74,8 +73,8 @@
         </a>
     </li>
 
-    @*<!-- Nav Item - Topics Menu -->
-    <li class="nav-item">
+    <!-- Nav Item - Topics Menu -->
+    <li class="nav-item @topicClass">
         <a class="nav-link" href="@Url.Action("Index", "Topic")">
             <i class="fas fa-comment"></i>
             <span>Topics</span>
@@ -83,7 +82,7 @@
     </li>
 
     <!-- Nav Item - Learning Outcomes Menu -->
-    <li class="nav-item">
+    @*<li class="nav-item @locClass">
         <a class="nav-link" href="@Url.Action("Index", "LearningOutcome")">
             <i class="fas fa-comment-alt"></i>
             <span>Learning Outcomes</span>
@@ -92,13 +91,18 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Course Statistics Menu -->
-    <li class="nav-item @statClass">
+    <li class="nav-item @statisticClass">
         <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
             <i class="fas fa-chart-pie"></i>
             <span>Course Statistics</span>
         </a>
     </li>
-
+    <li class="nav-item @activitiesClass">
+        <a class="nav-link" href="@Url.Action("GetAllActivities", "Activity")">
+            <i class="fas fa-history"></i>
+            <span>Activities</span>
+        </a>
+    </li>
     <!-- Nav Item - Rules Menu -->
     <li class="nav-item @ruleClass">
         <a class="nav-link" href="@Url.Action("Index", "Rule")">

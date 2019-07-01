@@ -103,15 +103,15 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <!-- Nav Item - Account -->
-        <li class="nav-item @userClass">
-            <a class="nav-link"
-               href="@Url.Action("Details", "User",new { userId = ((UserViewModel)Session["user"]).Id })">
-                <i class="fas fa-user fa-chart-area"></i>
-                <span>Profile</span>
-            </a>
-        </li>
+    <!-- Heading -->
+    <!-- Nav Item - Account -->
+    <li class="nav-item @userClass">
+        <a class="nav-link"
+           href="@Url.Action("Details", "User", new { userId = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-user fa-chart-area"></i>
+            <span>Profile</span>
+        </a>
+    </li>
 
         <li class="nav-item">
             <a class="nav-link"

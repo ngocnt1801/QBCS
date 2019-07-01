@@ -5,11 +5,13 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Attributes
 {
+   
     public class LogAttribute : ActionFilterAttribute
     {
         public string Message { get; set; }
@@ -22,7 +24,7 @@ namespace QBCS.Web.Attributes
         {
             var userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
             int? targetId = null;
-            object oldValue = "";
+            QuestionViewModel oldValue = new QuestionViewModel();
             string jsonOldValue = "";
             string jsonNewValue = "";
             QuestionViewModel newQues = new QuestionViewModel();
@@ -38,10 +40,29 @@ namespace QBCS.Web.Attributes
                 oldValue = questionService.GetQuestionById(newQues.Id);
 
             }
+            //else if (Action.Equals("Import"))
+            //{
+            //    targetId = 
+            //}
 
             QuestionViewModel questionViewModel = new QuestionViewModel();
+            oldValue.QuestionContent = WebUtility.HtmlDecode(oldValue.QuestionContent);
+            for (int i = 0; i < oldValue.Options.Count; i++)
+            {
+                oldValue.Options[i].OptionContent =  WebUtility.HtmlDecode(oldValue.Options[i].OptionContent);
+            }
             jsonOldValue = JsonConvert.SerializeObject(oldValue);
-            jsonNewValue = JsonConvert.SerializeObject(newQues);
+            if (newQues.QuestionContent != "")
+            {
+                newQues.QuestionCode = oldValue.QuestionCode;
+                newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
+                for (int i = 0; i < newQues.Options.Count; i++)
+                {
+                    newQues.Options[i].OptionContent = WebUtility.HtmlDecode(newQues.Options[i].OptionContent);
+                }
+                jsonNewValue = JsonConvert.SerializeObject(newQues);
+            }
+            
             ILogService logger = new LogService();
             logger.Log(new LogViewModel
             {
@@ -61,4 +82,5 @@ namespace QBCS.Web.Attributes
 
 
     }
+    
 }

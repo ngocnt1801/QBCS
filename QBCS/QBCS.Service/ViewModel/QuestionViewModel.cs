@@ -27,6 +27,7 @@ namespace QBCS.Service.ViewModel
         public List<OptionViewModel> Options { get; set; }
         public LevelViewModel Level { get; set; }
         public string QuestionCode { get; set; }
+        public int ImportId { get; set; }
         public string Category { get; set; }
     }
 }

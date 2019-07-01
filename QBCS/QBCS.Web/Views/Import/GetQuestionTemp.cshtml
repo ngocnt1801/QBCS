@@ -19,12 +19,10 @@
             {
 
                 <h5>Question</h5>
-                <div class="customs-display customs-display-area mb-2" id="customs-display" contenteditable="true" data-for="#hidden-question-content">
-                    @Html.DisplayFor(m => m.QuesitonContent)
+                <div class="customs-display customs-display-area question-custom mb-2" contenteditable="true" data-for="#hidden-question-content">
+                    @Html.DisplayFor(m => m.QuestionContent)
                 </div>
-                // @Html.TextAreaFor(m => m.QuesitonContent, new { @class = "form-control col-md-11 mb-4", rows = "8" })
-
-                <input type="hidden" name="QuestionContent" id="hidden-question-content"/>
+                <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
 
                 <h5>Options</h5>
                 <div id="option-list-container">

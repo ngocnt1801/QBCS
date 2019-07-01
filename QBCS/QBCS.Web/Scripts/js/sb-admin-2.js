@@ -3,7 +3,7 @@
 
   // Toggle the side navigation
     $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
-        //Custome by Nhi
+        //Customs by Nhi
      $(".sidebar-brand-icon").width('154%');
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
@@ -14,7 +14,7 @@
 
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {
-    if ($(window).width() < 768) {
+      if ($(window).width() < 768) { 
       $('.sidebar .collapse').collapse('hide');
     };
   });

@@ -61,7 +61,7 @@ namespace QBCS.Service.Implement
                     Questions = import.QuestionTemps.Select(q => new QuestionTempViewModel
                     {
                         Id = q.Id,
-                        QuesitonContent = q.QuestionContent,
+                        QuestionContent = q.QuestionContent,
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
                         Code = q.Code,
@@ -129,7 +129,7 @@ namespace QBCS.Service.Implement
                 return new QuestionTempViewModel
                 {
                     Id = questionTemp.Id,
-                    QuesitonContent = questionTemp.QuestionContent,
+                    QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
                     DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
@@ -194,7 +194,7 @@ namespace QBCS.Service.Implement
                                     || entity.Status == (int)StatusEnum.Delete
                                     || entity.Status == (int)StatusEnum.DeleteOrSkip))
             {
-                entity.QuestionContent = question.QuesitonContent;
+                entity.QuestionContent = question.QuestionContent;
                 entity.Status = (int)StatusEnum.NotCheck;
                 var listOptionEntity = entity.OptionTemps.ToList();
                 foreach (var option in listOptionEntity)

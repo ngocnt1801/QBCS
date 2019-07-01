@@ -15,7 +15,7 @@
  }
 <div class="form-inline mb-2">
     @Html.HiddenFor(m => m.Id)
-    <div class="customs-display col-md-10 text-custom customs-display-input" contenteditable="true" data-for="#o-@((int)ViewData["index"]-1)">
+    <div class="customs-display col-md-10 text-custom customs-display-input option-customs" contenteditable="true" data-for="#o-@((int)ViewData["index"]-1)">
         @Html.DisplayFor(m => m.OptionContent)
     </div>
     <input type="hidden" class="form-control col-lg-10 text-custom mt-2 option-content" value="@content" name="Options[@((int)ViewData["index"] - 1)].OptionContent" id="o-@((int)ViewData["index"]-1)">

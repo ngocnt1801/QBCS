@@ -27,3 +27,10 @@
     height: 250px;
 }
 
+#option-custom {
+    width: 92%;
+    height: 100%;
+    background-color: white;    
+    border: 2px solid #ccc;
+    padding: 5px;
+}
