@@ -71,6 +71,7 @@ namespace QBCS.Service.Implement
                     {
                         Id = item.Id,
                         UserId = (int)item.UserId,
+                        Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
                         Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
@@ -137,6 +138,7 @@ namespace QBCS.Service.Implement
                     Id = item.Id,
                     UserId = (int)item.UserId,
                     TargetId = item.TargetId,
+                    Action = item.Action,
                     Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
                     Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                     LogDate = item.Date.Value
