@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -84,6 +85,12 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get Question Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LearningOutcomeService), nameof(LearningOutcomeService.GetLearningOutcomeByCourseId))]
+        [Dependency(typeof(QuestionService), nameof(QuestionService.GetQuestionById))]
+        [Dependency(typeof(LevelService), nameof(LevelService.GetLevel))]
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -104,6 +111,10 @@ namespace QBCS.Web.Controllers
 
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Update Question", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.UpdateQuestion))]
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
@@ -115,6 +126,10 @@ namespace QBCS.Web.Controllers
         }
 
         //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.InsertQuestion))]
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
@@ -135,6 +150,10 @@ namespace QBCS.Web.Controllers
         }
 
         //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.InsertQuestionWithTableString))]
         [HttpPost]
         //[Log(Action = "Import", TargetName = "Question")]
         public JsonResult ImportTextarea(Textarea textarea)
@@ -187,6 +206,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get List Question By Category", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.GetQuestionList))]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
@@ -198,6 +221,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.ToggleDisable))]
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -206,6 +233,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.UpdateCategory))]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);

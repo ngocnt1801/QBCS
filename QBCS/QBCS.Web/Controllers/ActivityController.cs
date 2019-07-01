@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -21,8 +22,13 @@ namespace QBCS.Web.Controllers
             questionService = new QuestionService();
         }
 
+
         //Lecturer
         // GET: Activity
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Activities", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LogService), nameof(LogService.GetAllActivitiesByUserId))]
         public ActionResult Index(int id)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -33,6 +39,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get All Activities", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LogService), nameof(LogService.GetAllActivities))]
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -43,6 +53,11 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Activity Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LogService), nameof(LogService.GetQuestionImportByTargetId))]
+        [Dependency(typeof(LogService), nameof(LogService.GetAllActivitiesByTargetId))]
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -58,6 +73,10 @@ namespace QBCS.Web.Controllers
         }
         //Lecturer
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Compare Question History", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LogService), nameof(LogService.GetActivitiesById))]
         public ActionResult GetUpdateActivityById (int id)
         {
             var model = logService.GetActivitiesById(id);
@@ -66,6 +85,10 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Activity Question LifeCycle", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LogService), nameof(LogService.GetListQuestionImportByTargetId))]
         public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -84,6 +107,10 @@ namespace QBCS.Web.Controllers
             return View("GetListActivity", list);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionService), nameof(QuestionService.GetQuestionHistory))]
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);

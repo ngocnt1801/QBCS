@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -22,6 +23,11 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
         }
         // GET: User
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "All Users", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.GetAllUser))]
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
@@ -29,6 +35,11 @@ namespace QBCS.Web.Controllers
             return View(list);
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Disable User", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.DisableUser))]
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
@@ -52,17 +63,34 @@ namespace QBCS.Web.Controllers
 
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Delete Course From User", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.RemoveUserCourse))]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
             userService.RemoveUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Add Course To User", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.AddUserCourse))]
         public ActionResult AddCourse(int courseId, int userId)
         {
             userService.AddUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
+
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "User Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.GetUserById))]
+        [Dependency(typeof(CourseService), nameof(CourseService.GetAvailableCourse))]
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);
@@ -76,6 +104,10 @@ namespace QBCS.Web.Controllers
         }
 
         //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Search Lecturer By Name", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(UserService), nameof(UserService.GetUserByNameAndRoleId))]
         public JsonResult GetLecturer(string term)
         {
             List<string> lecturerName = new List<string>();

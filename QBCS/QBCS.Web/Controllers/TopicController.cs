@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using AuthLib.Module;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
@@ -48,8 +49,12 @@ namespace QBCS.Web.Controllers
             result = topicService.UpdateTopic(topic);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        
+
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get All Course API", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
         public JsonResult LoadCourse()
         {
             var result = courseService.GetAllCourses();

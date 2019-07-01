@@ -1,4 +1,5 @@
 ﻿
+using AuthLib.Module;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
@@ -75,8 +76,13 @@ namespace QBCS.Web.Controllers
         }
 
         //Staff
+
         [HttpGet]
         [ActionName("export")]
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Export Examination", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExanById))]
         [Log(Action = "Export", IdParamName = "examinationId", TargetName = "Examination")]
         public FileResult ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {

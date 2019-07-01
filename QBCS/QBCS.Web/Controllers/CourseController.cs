@@ -1,4 +1,5 @@
-﻿using QBCS.Entity;
+﻿using AuthLib.Module;
+using QBCS.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -103,6 +104,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "All Courses For Generate", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -111,6 +116,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "All Courses For History", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -125,6 +134,10 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Course Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CategoryService), nameof(CategoryService.GetListCategories))]
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
@@ -138,6 +151,10 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Course Statistic", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourseStat))]
         public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
@@ -147,11 +164,16 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Course Detail Statistic", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseService), nameof(CourseService.GetCourseStatDetailByCourseId))]
         public JsonResult GetCourseDetailStat(int courseId)
         {
             var result = courseService.GetCourseStatDetailByCourseId(courseId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult CourseDetailWithoutId()
         {
             List<CategoryViewModel> categories = categoryService.GetAllCategories();

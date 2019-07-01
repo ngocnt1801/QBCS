@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using AuthLib.Module;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
@@ -18,6 +19,10 @@ namespace QBCS.Web.Controllers
             ruleService = new RuleService();
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get All Rules", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(RuleService), nameof(RuleService.getAllRule))]
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -29,6 +34,10 @@ namespace QBCS.Web.Controllers
             return View(result);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get Rule Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(RuleService), nameof(RuleService.getAllRule))]
         public ActionResult Edit()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -40,7 +49,12 @@ namespace QBCS.Web.Controllers
             return View(result);
         }
         //Staff
+
         [HttpPost]
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(RuleService), nameof(RuleService.UpdateRule))]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);

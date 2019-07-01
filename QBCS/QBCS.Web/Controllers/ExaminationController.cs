@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Implement;
+﻿using AuthLib.Module;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
@@ -22,7 +23,8 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IPartOfExamService partOfExamService;
         private ICategoryService categoryService;
-        //Staff
+
+        
         public ExaminationController()
         {
             topicService = new TopicService();
@@ -32,6 +34,11 @@ namespace QBCS.Web.Controllers
             categoryService = new CategoryService();
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Config to Generate", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(LearningOutcomeService), nameof(LearningOutcomeService.GetLearningOutcomeByCourseId))]
+        [Dependency(typeof(CategoryService), nameof(CategoryService.GetCategoriesByCourseId))]
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
@@ -44,6 +51,11 @@ namespace QBCS.Web.Controllers
             return View(listTopicLearningOutcomeViewModel);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Generate Examination", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GenerateExamination))]
+      
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
             GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
@@ -51,30 +63,51 @@ namespace QBCS.Web.Controllers
         }
 
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Review Examination", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExamByExamGroup))]
         public ActionResult ViewGeneratedExamination(string examGroup)
         {
             List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
             return View(exams);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "All Examinations", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetAllExam))]
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
             return View("ListExamination",exams);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Examination Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExanById))]
         public ActionResult DetailExam(int examId)
         {
             ExaminationViewModel exam = examinationService.GetExanById(examId);
             return View(exam);
         }
         //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Disable Examination", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.DisableEaxam))]
         public ActionResult DisableExam(int examId)
         {
             examinationService.DisableEaxam(examId);
             return RedirectToAction("GetAllExamination", "Examination");
         }
         //Staff
+
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get Aging Question", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExaminationHistoryQuestionsInCourse))]
         public ActionResult GetHistoryCourse(int courseId)
         {
             var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);
