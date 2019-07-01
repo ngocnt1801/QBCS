@@ -17,6 +17,10 @@ namespace QBCS.Entity
 
         public bool? IsCorrect { get; set; }
 
+        public int? UpdateOptionId { get; set; }
+
+        public string Image { get; set; }
+
         public virtual QuestionTemp QuestionTemp { get; set; }
     }
 }

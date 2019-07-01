@@ -2,11 +2,11 @@
 
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-                                     .addClass('btn btn-info')
-                                     .attr('disabled', 'disabled')
-                                     .attr('type', 'submit')
-                                     .attr('id', 'btnFinish')
-                                     .hide();
+        .addClass('btn btn-info')
+        .attr('disabled', 'disabled')
+        .attr('type', 'submit')
+        .attr('id', 'btnFinish')
+        .hide();
     //.on('click', function () {
 
     //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
@@ -22,8 +22,8 @@
     //    });
     //});
     var btnCancel = $('<button></button>').text('Cancel')
-                                     .addClass('btn btn-info')
-                                     .on('click', function () { $('#smartwizard').smartWizard("reset"); });
+        .addClass('btn btn-info')
+        .on('click', function () { $('#smartwizard').smartWizard("reset"); });
 
     // Smart Wizard
     $('#smartwizard').smartWizard({
@@ -35,8 +35,8 @@
             toolbarExtraButtons: [btnFinish, btnCancel]
         }
     });
-    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
-        if (stepNumber === 2) {
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
+        if (stepNumber === 3) {
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
@@ -71,29 +71,6 @@
         //}
     });
 
-    //$("#btnSearch").click(function (event) {
-    //    event.preventDefault();
-    //    var searchCourseValue = $("#searchCourseValue").val();
-    //    var appendValue = "<tbody id='listCourse'>";
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "http://localhost/QBCS.Web/api/CourseAPI/searchCourse",
-    //        data: {
-    //            courseCode : searchCourseValue
-    //        },
-    //        dataType: "xml",
-    //        success: function (xml) {
-    //            $(xml).find('CourseViewModel').each(function () {
-    //                var id = $(this).find("Id").text();
-    //                var code = $(this).find("Code").text();
-    //                appendValue = appendValue + "<tr><td><div class='el-radio'><span class='margin-r'></span><input type='radio' name='course' id='1_" + id + "' value='" + id + "'><label class='el-radio-style' for='1_" + id + "'></label></div></td><td><h5>" + code + "</h5></td></tr>";
-    //            });
-    //            appendValue = appendValue + "</tbody>";
-    //            $("#listCourse").replaceWith(appendValue);
-    //        }
-    //    });
-    //});
-
     $('#check-all').on('change', function (event) {
         event.preventDefault();
         if (this.checked) {
@@ -122,24 +99,296 @@
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
     });
+    $("#normal").focusout(function () {
+        var easyPercent = $("#easy").val();
+        var normalPercent = $("#normal").val();
+        var hardPercent = 100 - easyPercent - normalPercent;
+        $("#hard").val(hardPercent);
+    });
     $("#exportExamination").submit(function (event) {
         event.preventDefault();
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $('#fileExtension').find(":selected").text();
-        window.location = "http://localhost/QBCS.Web/api/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
-        //    $.ajax({
-        //        type: "GET",
-        //        url: "http://localhost/QBCS.Web/api/ExaminationAPI/export",
-        //        data: {
-        //            examinationId: examinationId,
-        //            fileExtension: fileExtension
-        //        },
-        //        success: function () {
-        //        }
-        //    });
+        var getCategory = $('#getCategory').prop('checked');
+        window.location = "http://localhost/QBCS.Web/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+    });
+    $('.btnExport').on('click', function (e) {
+        var counter = $(this).data("value");
+        var examinationId = $("input[name='examinationId-" + counter + "']").val();
+        var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
+        var getCategory = $("#getCategory-" + counter).prop('checked');
+        window.location = "http://localhost/QBCS.Web/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
     });
     $(".tab-slider--body").hide();
     $(".tab-slider--body:first").show();
+
+    //extend sort by number in string
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "formatted-num-pre": function (a) {
+            a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
+            return parseFloat(a);
+        },
+
+        "formatted-num-asc": function (a, b) {
+            return a - b;
+        },
+
+        "formatted-num-desc": function (a, b) {
+            return b - a;
+        }
+    });
+
+    //set up datatable
+    $('#dataTableExam').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $('#dataTableExam-1').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $('#dataTableExam-2').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $('#dataTableExam-3').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $('#dataTableExam-4').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $('#dataTableExam-5').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $("#datatable-history-exam").DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            },
+            {
+                'targets': [0, 3, 4],
+                'width': "2%"
+            },
+            {
+                'targets': [1, 5],
+                'width': "11%"
+            },
+        ]
+    });
 });
 $(".tab-slider--nav li").click(function () {
     $(".tab-slider--body").hide();

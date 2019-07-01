@@ -42,6 +42,17 @@ namespace QBCS.Entity
         [StringLength(200)]
         public string LevelName { get; set; }
 
+        [StringLength(200)]
+        public string LearningOutcome { get; set; }
+
+        public string Image { get; set; }
+
+        public string Message { get; set; }
+
+        public int? Type { get; set; }
+
+        public int? UpdateQuestionId { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

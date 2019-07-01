@@ -13,5 +13,6 @@ namespace QBCS.Service.Interface
     {
         List<NotificationViewModel> GetNotifyImportResult(int userId);
         void RegisterNotification(OnChangeEventHandler eventHandler);
+        void MarkAllAsRead(int userId);
     }
 }

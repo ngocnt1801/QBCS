@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,12 @@ namespace QBCS.Service.Interface
     {
         void Log(LogViewModel model);
         IEnumerable<LogViewModel> GetAllActivities();
+        List<LogViewModel> GetAllActivitiesByTargetId(int targetId);
+        List<LogViewModel> GetListQuestionImportByTargetId(int targetId);
+        LogViewModel GetQuestionImportByTargetId(int targetId);
+        List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user);
+        IEnumerable<LogViewModel> GetActivitiesById(int id);
+        QuestionViewModel ParseEntityToModel(Question question);
+        void LogManually(int targetId, int userId, string action, string targetName, string controller = "", string method = "");
     }
 }

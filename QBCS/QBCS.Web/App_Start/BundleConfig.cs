@@ -19,7 +19,8 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
                 "~/Scripts/bootstrap.bundle.js",
                 "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js"           
+                "~/Scripts/vendor/jquery/jquery.js"
+               
                 ));
 
             //data table
@@ -40,7 +41,8 @@ namespace QBCS.Web
 
             bundles.Add(new ScriptBundle("~/bundle/scripts/importfile").Include(
                 "~/Scripts/myjs/import-file.js",
-                "~/Scripts/myjs/change-partial-view.js"
+                "~/Scripts/myjs/change-partial-view.js",
+                "~/Scripts/myjs/text-process.js"
                 ));
             //smartwizard
             bundles.Add(new ScriptBundle("~/bundle/scripts/smartwizard").Include(
@@ -102,13 +104,40 @@ namespace QBCS.Web
                 "~/Content/error/font-awesome.min.css",
                 "~/Content/error/style.css"
                 ));
-
+            //for checking diff
+          
             //Spinner
             bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
                 "~/Scripts/myjs/spinner.js"
                 ));
             bundles.Add(new StyleBundle("~/bundle/content/spinner").Include(
                "~/Content/spinner/spinner.css"
+               ));
+
+            //Edit question
+            bundles.Add(new ScriptBundle("~/bundle/scripts/editquestion").Include(
+                "~/Scripts/myjs/edit-question.js"
+                ));
+
+            //Autocomplete
+            bundles.Add(new ScriptBundle("~/bundle/scripts/autocomplete").Include(
+                "~/Scripts/jquery-3.1.1.min.js",
+                "~/Scripts/jquery-ui.min.js",
+                "~/Scripts/myjs/autocomplete.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/autocomplete").Include(
+               "~/Content/jquery-ui.css"
+               ));
+            
+            //Tagsinput in rule
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tagsinputrule").Include(
+                "~/Scripts/jquery-3.3.1.min.js",
+                "~/Scripts/bootstrap-tagsinput.js",
+                "~/Scripts/sweetalert.min.js",
+                "~/Scripts/myjs/staffjs/edit-rule.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/tagsinputrule").Include(
+               "~/Content/bootstrap-tagsinput.css"
                ));
         }
     }

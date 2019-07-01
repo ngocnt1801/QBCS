@@ -1,0 +1,439 @@
+1
+Question: [html]Given XML<cbr> <?xml version="1.0" encoding="UTF-8"?><cbr> <?xml-stylesheet type="textxsl" href="books.xsl"?><cbr> <library><cbr>  <book><cbr>    <booktitle>The Firm<booktitle><cbr>    <author>John Grisham<author><cbr>    <price>99<price><cbr>  <book><cbr>  <book><cbr>    <_booktitle>Coma<_booktitle><cbr>    <2author>Robin Cock<2author><cbr>    <price.one>99.5<price.one><cbr>  <book><cbr>  <book><cbr>    <booktitle>Wild Horse<booktitle><cbr>    <author>Rebecca Moore<author><cbr>    <price>35.5<price><cbr>  <book><cbr><library><cbr>Choose the correct statement<cbr>
+Code: Q001-Q0001
+
+Option: Q001-Q0001
+
+Option: Q001-Q0001
+
+Option: Q001-Q0001
+
+Option: Q001-Q0001
+
+Error: 
+
+
+2
+Question: [html]Which following?
+Code: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Error: 
+
+
+3
+Question: [html]Which following abc are used to do something?
+Code: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Error: 
+
+
+4
+Question: [html]Which  dfe to work with?
+Code: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Error: 
+
+
+5
+Question: [html]Who are you?
+Code: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Error: 
+
+
+6
+Question: [html]Which following?
+Code: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Error: 
+
+
+7
+Question: [html]Which following?
+Code: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Error: 
+
+
+8
+Question: [html]Which following?
+Code: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Error: 
+
+
+9
+Question: [html]Which following?
+Code: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Error: 
+
+
+10
+Question: [html]Which following abc are used to do something?
+Code: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Error: 
+
+
+11
+Question: [html]Which  dfe to work with?
+Code: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Error: 
+
+
+12
+Question: [html]Who are you?
+Code: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Error: 
+
+
+13
+Question: [html]Which following?
+Code: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Error: 
+
+
+14
+Question: [html]Which following?
+Code: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Error: 
+
+
+15
+Question: [html]Which following?
+Code: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Error: 
+
+
+16
+Question: [html]Which following?
+Code: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Error: 
+
+
+17
+Question: [html]Which following abc are used to do something?
+Code: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Option: U001-Q0003
+
+Error: 
+
+
+18
+Question: [html]Which  dfe to work with?
+Code: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Option: U001-Q0005
+
+Error: 
+
+
+19
+Question: [html]Who are you?
+Code: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Option: U001-Q0006
+
+Error: 
+
+
+20
+Question: [html]Which following?
+Code: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Option: U001-Q0007
+
+Error: 
+
+
+21
+Question: [html]Which following?
+Code: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Option: U001-Q0008
+
+Error: 
+
+
+22
+Question: [html]Which following?
+Code: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Option: U001-Q0009
+
+Error: 
+
+
+23
+Question: [html]Which following?
+Code: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Option: U001-Q00010
+
+Error: 
+
+
+24
+Question: [html]Which following abc are used to do something?
+Code: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Option: U001-Q00011
+
+Error: 
+
+
+25
+Question: [html]Which  dfe to work with?
+Code: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Option: U001-Q00012
+
+Error: 
+
+
+26
+Question: [html]Who are you?
+Code: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Option: U001-Q00013
+
+Error: 
+
+
+27
+Question: [html]Which following?
+Code: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Option: U001-Q00014
+
+Error: 
+
+
+28
+Question: [html]Which following?
+Code: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Option: U001-Q00015
+
+Error: 
+
+
+29
+Question: [html]Which following?
+Code: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Option: U001-Q00016
+
+Error: 
+
+

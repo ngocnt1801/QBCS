@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.ViewModel
 {
-    public class ListTopicLearningOutcomeViewModel
+    public class ListLearningOutcomeViewModel
     {
-        public List<TopicViewModel> Topics { get; set; }
         public List<LearningOutcomeViewModel> LearningOutcomes { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
     }

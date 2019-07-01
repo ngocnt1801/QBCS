@@ -1,0 +1,90 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
+
+@{
+    ViewBag.Title = "GetListActivity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activities Detail</h2>
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="card shadow mb-4">
+        <a href="#collapse" class="d-block card-header" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+            <h2>Import Question</h2>
+        </a>
+
+        <div class="card-body collapse show" id="collapse">
+            @foreach (var item in Model)
+            {
+                <p class="text-custom"> UserImport: @item.Fullname</p>
+                <p class="text-custom"> Owner: @item.OwnerName</p>
+                <p class="text-custom"> Action: @item.Message</p>
+                <p class="text-custom"> Date: @item.LogDate</p>
+
+
+                <div class="table-responsive text-custom">
+                    <table class="table table-bordered text-custom table-hover" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Question Code</th>
+                                <th>Course</th>
+                                <th>Learning outcome</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemQues in item.listQuestion)
+                            {
+                                <tr>
+
+                                    <td>@itemQues.QuestionCode</td>
+                                    @if (itemQues.CourseCode != null)
+                                    {
+                                        <td>@itemQues.CourseCode</td>
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                    @if (!itemQues.LearningOutcomeId.Equals(0))
+                                    {
+                                        <td>@itemQues.CourseCode</td>
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                    @if (itemQues.Level != null)
+                                    {
+                                        <td>@itemQues.CourseCode</td>
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+
+                                    @*<td>@itemQues.LearningOutcomeId</td>
+                                        <td>@itemQues.Level</td>*@
+
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+}
+else
+{
+    <p class="text-custom">No record found here! PLease check again.</p>
+}
+
+
+
+
+

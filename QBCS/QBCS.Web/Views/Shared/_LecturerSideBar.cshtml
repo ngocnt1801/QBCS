@@ -2,23 +2,47 @@
 
 @{ 
     var homeClass = "";
-    var courseClass = "";
+    var giftXmlClass = "";
+    var wordClass = "";
+    var manualClass = "";
     var importClass = "";
+    var import3TypeClass = "";
+    var courseClass = "";
     var userClass = "";
+    var activitiesClass = "";
+    var statisticClass = "";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     switch (controller)
     {
         case "Home":
             homeClass = "active";
             break;
+        case "GIFT, XML":
+            giftXmlClass = "active";
+            break;
+        case "Word":
+            wordClass = "active";
+            break;
+        case "Manual":
+            manualClass = "active";
+            break;
+        case "Import3Type":
+            import3TypeClass = "active";
+            break;
         case "Course":
             courseClass = "active";
+            break;
+        case "Statistics":
+            statisticClass = "active";
             break;
         case "Import":
             importClass = "active";
             break;
         case "User":
             userClass = "active";
+            break;
+        case "Activity":
+            activitiesClass = "active";
             break;
     }
     }
@@ -49,11 +73,26 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item @homeClass">
+    @*<li class="nav-item @homeClass">
         <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
+    </li>*@
+
+    <li class="nav-item @import3TypeClass">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Import</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Import:</h6>
+                <a class="collapse-item text-custom-dashboard @giftXmlClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">GIFT, XML</a>
+                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
+                <a class="collapse-item text-custom-dashboards @manualClass" href="@Url.Action("ImportWithtextArea","Home")">Manual</a>
+            </div>
+        </div>
     </li>
 
     <!-- Divider -->
@@ -85,6 +124,13 @@
         </a>
     </li>
 
+    <li class="nav-item @activitiesClass">
+        <a class="nav-link" href="@Url.Action("Index", "Activity",new { id = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-history"></i>
+            <span>Activities</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -92,13 +138,19 @@
     <!-- Nav Item - Account -->
     <li class="nav-item @userClass">
         <a class="nav-link"
-           href="@Url.Action("Details", "User",new { userId = ((UserViewModel)Session["user"]).Id })">
+           href="@Url.Action("Details", "User", new { userId = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-user fa-chart-area"></i>
             <span>Profile</span>
         </a>
     </li>
 
-
+    <li class="nav-item">
+        <a class="nav-link"
+           href="@Url.Action("ImportWithTextArea","Home")">
+            <i class="fas fa-user fa-chart-area"></i>
+            <span>Textarea</span>
+        </a>
+    </li>
 
 
     <!-- Divider -->

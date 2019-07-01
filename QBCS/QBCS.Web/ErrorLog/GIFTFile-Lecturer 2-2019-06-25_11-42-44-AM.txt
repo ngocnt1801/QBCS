@@ -1,0 +1,47 @@
+1
+Question: [html]<p>Given XML<cbr>&nbsp;&lt;?xml version="1.0" encoding="UTF-8"?&gt;<cbr>&nbsp;&lt;?xml-stylesheet type="textxsl" href="books.xsl"?&gt;<cbr>&nbsp;&lt;library&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&nbsp; &nbsp; &lt;booktitle&gt;The Firm&lt;booktitle&gt;<cbr>&nbsp; &nbsp; &lt;author&gt;John Grisham&lt;author&gt;<cbr>&nbsp; &nbsp; &lt;price&gt;99&lt;price&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&nbsp; &nbsp; &lt;_booktitle&gt;Coma&lt;_booktitle&gt;<cbr>&nbsp; &nbsp; &lt;2author&gt;Robin Cock&lt;2author&gt;<cbr>&nbsp; &nbsp; &lt;price.one&gt;99.5&lt;price.one&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&nbsp; &nbsp; &lt;booktitle&gt;Wild Horse&lt;booktitle&gt;<cbr>&nbsp; &nbsp; &lt;author&gt;Rebecca Moore&lt;author&gt;<cbr>&nbsp; &nbsp; &lt;price&gt;35.5&lt;price&gt;<cbr>&nbsp; &lt;book&gt;<cbr>&lt;library&gt;<cbr>Choose the correct statement<cbr><p>
+Code: Q001-Q0001
+
+Option: Q001-Q0001
+
+Option: Q001-Q0001
+
+Option: Q001-Q0001
+
+Error: Number of option 3
+
+
+2
+Question: [html][html] &lt;br&gt;&lt;p&gt;What does the encoding attribute in xml declaration for?&lt;p&gt;&lt;span&gt;
+Code: U001-Q000011
+
+Option: U001-Q000011
+
+Option: U001-Q000011
+
+Option: U001-Q000011
+
+Option: U001-Q000011
+
+Error: 
+
+
+3
+Question: [html]Which following?
+Code: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Option: U001-Q0002
+
+Error: 
+
+

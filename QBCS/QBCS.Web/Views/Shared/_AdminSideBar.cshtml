@@ -1,11 +1,41 @@
-﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+﻿@using QBCS.Service.ViewModel
+
+@{
+    var homeClass = "";
+    var courseClass = "";
+    var activitiesClass = "";
+    var userClass = "";
+    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    switch (controller)
+    {
+        case "Home":
+            homeClass = "active";
+            break;
+        case "Course":
+            courseClass = "active";
+            break;
+        case "Activity":
+            activitiesClass = "active";
+            break;
+        case "User":
+            userClass = "active";
+            break;
+    }
+}
+
+
+
+
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+    onclick="nav_bar_active()">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        @*<div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>*@
-        <div class="sidebar-brand-text mx-3">Admin</div>
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        <div class="sidebar-brand-icon pt-4" style="width:50%">
+            <img src="~/Content/logo_transparent.png" style="object-fit: contain;" width="120" height="140" />
+        </div>
+        <div class="sidebar-brand-text mr-5"><h4 class="font-weight-bolder">QBCS</h4></div>
     </a>
 
     <!-- Divider -->
@@ -29,12 +59,12 @@
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="/QBCS.Web/Activity">
+    @*<li class="nav-item @activitiesClass">
+        <a class="nav-link" href="@Url.Action("Index", "Activity",new { id = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-history"></i>
             <span>Activities</span>
         </a>
-    </li>
+    </li>*@
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

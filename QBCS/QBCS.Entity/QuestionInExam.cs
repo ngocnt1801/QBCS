@@ -27,11 +27,12 @@ namespace QBCS.Entity
 
         public int? TypeId { get; set; }
 
+        public int? CategoryId { get; set; }
+
         public int? Priority { get; set; }
         [StringLength(50)]
         public string QuestionCode { get; set; }
 
-        [StringLength(255)]
         public string Image { get; set; }
 
         public int? Frequency { get; set; }
