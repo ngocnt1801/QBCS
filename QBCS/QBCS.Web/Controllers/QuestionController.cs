@@ -177,31 +177,31 @@ namespace QBCS.Web.Controllers
             return Json(check, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPartialView(bool? isDuplicate)
-        {
-            var questions = questionService.CheckDuplicated();
-            //All
-            if (!isDuplicate.HasValue)
-            {
+        //public ActionResult GetPartialView(bool? isDuplicate)
+        //{
+        //    var questions = questionService.CheckDuplicated();
+        //    //All
+        //    if (!isDuplicate.HasValue)
+        //    {
 
-            }
-            else if (isDuplicate.Value) // wrong
-            {
-                questions = questions.Where(q => q.IsDuplicated).ToList();
-            }
-            else // right
-            {
-                questions = questions.Where(q => !q.IsDuplicated).ToList();
-            }
-            return PartialView("_AllQuestion", questions);
-        }
+        //    }
+        //    else if (isDuplicate.Value) // wrong
+        //    {
+        //        questions = questions.Where(q => q.IsDuplicated).ToList();
+        //    }
+        //    else // right
+        //    {
+        //        questions = questions.Where(q => !q.IsDuplicated).ToList();
+        //    }
+        //    return PartialView("_AllQuestion", questions);
+        //}
 
         public ActionResult GetQuestionByQuestionId(int? questionId)
         {
             //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
             //var questions = questionService.GetQuestionByQuestionId(questionId.HasValue ? questionId.Value : 0);
             var question = questionService.GetQuestionById(questionId.Value);
-            question.DuplicatedQuestion = question;
+            //question.DuplicatedQuestion = question;
             return View("ReviewQuestion", question);
         }
 
