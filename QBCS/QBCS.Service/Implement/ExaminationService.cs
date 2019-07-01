@@ -443,5 +443,32 @@ namespace QBCS.Service.Implement
             }
             return result;
         }
+
+        public List<QuestionInExamViewModel> GetExaminationHistoryQuestionsInCourse(int courseId)
+        {
+            var listQuestion = unitOfWork.Repository<Question>().GetAll()
+                                        .Where(q => q.CourseId == courseId)
+                                        .Select(q => new QuestionInExamViewModel() {
+                                            Id = q.Id,
+                                            Frequency = q.Frequency.Value,
+                                            Priority = q.Priority.Value,
+                                            QuestionContent = q.QuestionContent,
+                                            Image = q.Image,
+                                            QuestionCode = q.QuestionCode,
+                                            Options = q.Options.Select(o => new OptionViewModel {
+                                                Id = o.Id,
+                                                Image = o.Image,
+                                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                                OptionContent = o.OptionContent
+                                            }).ToList()
+                                        })
+                                        .OrderBy(q => q.Priority)
+                                        .ThenByDescending(q => q.Frequency)
+                                        .ToList();
+
+
+            return listQuestion;
+
+        }
     }
 }

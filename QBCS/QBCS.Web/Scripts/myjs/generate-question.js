@@ -2,11 +2,11 @@
 
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-                                     .addClass('btn btn-info')
-                                     .attr('disabled', 'disabled')
-                                     .attr('type', 'submit')
-                                     .attr('id', 'btnFinish')
-                                     .hide();
+        .addClass('btn btn-info')
+        .attr('disabled', 'disabled')
+        .attr('type', 'submit')
+        .attr('id', 'btnFinish')
+        .hide();
     //.on('click', function () {
 
     //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
@@ -22,8 +22,8 @@
     //    });
     //});
     var btnCancel = $('<button></button>').text('Cancel')
-                                     .addClass('btn btn-info')
-                                     .on('click', function () { $('#smartwizard').smartWizard("reset"); });
+        .addClass('btn btn-info')
+        .on('click', function () { $('#smartwizard').smartWizard("reset"); });
 
     // Smart Wizard
     $('#smartwizard').smartWizard({
@@ -114,7 +114,7 @@
     });
     $('.btnExport').on('click', function (e) {
         var counter = $(this).data("value");
-        var examinationId = $("input[name='examinationId-" + counter +"']").val();
+        var examinationId = $("input[name='examinationId-" + counter + "']").val();
         var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
         var getCategory = $("#getCategory-" + counter).prop('checked');
         window.location = "http://localhost/QBCS.Web/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
@@ -164,14 +164,14 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
         ]
     });
     $('#dataTableExam-1').DataTable({
@@ -199,14 +199,14 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
         ]
     });
     $('#dataTableExam-2').DataTable({
@@ -234,14 +234,14 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
         ]
     });
     $('#dataTableExam-3').DataTable({
@@ -269,14 +269,14 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
         ]
     });
     $('#dataTableExam-4').DataTable({
@@ -304,14 +304,14 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
         ]
     });
     $('#dataTableExam-5').DataTable({
@@ -339,14 +339,54 @@
             null
         ],
         columnDefs: [
-       {
-           type: 'formatted-num',
-           targets: 4
-       },
-       {
-           'targets': [1, 2],
-           'orderable': false,
-       }
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                'targets': [1, 2],
+                'orderable': false,
+            }
+        ]
+    });
+    $("#datatable-history-exam").DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            },
+            {
+                'targets': [0, 3, 4],
+                'width': "2%"
+            },
+            {
+                'targets': [1, 5],
+                'width': "11%"
+            },
         ]
     });
 });

@@ -15,5 +15,6 @@ namespace QBCS.Service.Interface
         ExaminationViewModel GetExanById(int examId);
         string GetExamCode();
         void DisableEaxam(int examId);
+        List<QuestionInExamViewModel> GetExaminationHistoryQuestionsInCourse(int courseId);
     }
 }

@@ -67,5 +67,13 @@ namespace QBCS.Web.Controllers
             examinationService.DisableEaxam(examId);
             return RedirectToAction("GetAllExamination", "Examination");
         }
+
+        public ActionResult GetHistoryCourse(int courseId)
+        {
+            var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);
+
+            return View(listQuestion);
+        }
+
     }
 }

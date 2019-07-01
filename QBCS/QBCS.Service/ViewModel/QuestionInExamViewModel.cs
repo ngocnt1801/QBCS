@@ -22,5 +22,6 @@ namespace QBCS.Service.ViewModel
         public LevelViewModel Level { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public CategoryViewModel Category { get; set; }
+        public ExaminationViewModel Examination { get; set; }
     }
 }

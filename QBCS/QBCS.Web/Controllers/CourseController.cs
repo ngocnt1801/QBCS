@@ -105,8 +105,18 @@ namespace QBCS.Web.Controllers
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
+            TempData["CreateExam"] = true;
             return View("Staff_ListCourse", courses);
         }
+
+
+        public ActionResult GetAllCourseForHistory()
+        {
+            List<CourseViewModel> courses = courseService.GetAllCourses();
+            TempData["ViewHistory"] = true;
+            return View("Staff_ListCourse", courses);
+        }
+
         public ActionResult GetCourseByNameOrId(string searchValue)
         {
             List<CourseViewModel> courses = courseService.SearchCourseByNameOrCode(searchValue);

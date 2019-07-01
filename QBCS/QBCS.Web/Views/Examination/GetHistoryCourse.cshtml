@@ -1,0 +1,75 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.QuestionInExamViewModel>
+@{
+    ViewBag.Title = "GetHistoryCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 0;
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+}
+
+<h2>Exam history</h2>
+
+@if (Model.Count() > 0)
+{
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">History questions</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive text-custom">
+                <table class="table table-bordered table-hover text-custom" id="datatable-history-exam" width="100%" cellspacing="0">
+                    <thead class="text-center">
+                        <tr>
+                            <th>No.</th>
+                            <th>Code</th>
+                            <th>Question</th>
+                            <th>Priority</th>
+                            <th>Frequency</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.Id">
+                                @{
+                                    counter++;
+                                }
+                                <td>@counter</td>
+                                <td>@item.QuestionCode</td>
+                                <td>
+                                    @Html.DisplayFor(modeItem => item.QuestionContent)
+                                    @for (var i = 0; i < item.Options.Count; i++)
+                                    {
+                                        if (item.Options[i].IsCorrect == true)
+                                        {
+                                            <div class="container-fluid text-right-answer">
+                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                            </div>
+                                        }
+
+                                        <br />
+                                    }
+                                </td>
+                                <td>@item.Priority</td>
+                                <td>@item.Frequency</td>
+                                <td><a class="btn btn-primary" href="#">Detail</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h5>There is no history</h5>
+}

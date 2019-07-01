@@ -67,19 +67,19 @@
 
     <!-- Nav Item - Courses Menu -->
     <li class="nav-item @courseClass">
-        <a class="nav-link" href="@Url.Action("Staff_Index", "Course")">
+        <a class="nav-link" href="@Url.Action("GetAllCourseForHistory", "Course")">
             <i class="fas fa-book"></i>
             <span>Courses</span>
         </a>
     </li>
 
     <!-- Nav Item - Topics Menu -->
-    <li class="nav-item @topicClass">
+    @*<li class="nav-item @topicClass">
         <a class="nav-link" href="@Url.Action("Index", "Topic")">
             <i class="fas fa-comment"></i>
             <span>Topics</span>
         </a>
-    </li>
+    </li>*@
 
     <!-- Nav Item - Learning Outcomes Menu -->
     @*<li class="nav-item @locClass">
@@ -97,12 +97,12 @@
             <span>Course Statistics</span>
         </a>
     </li>
-    <li class="nav-item @activitiesClass">
+    @*<li class="nav-item @activitiesClass">
         <a class="nav-link" href="@Url.Action("GetAllActivities", "Activity")">
             <i class="fas fa-history"></i>
             <span>Activities</span>
         </a>
-    </li>
+    </li>*@
     <!-- Nav Item - Rules Menu -->
     <li class="nav-item @ruleClass">
         <a class="nav-link" href="@Url.Action("Index", "Rule")">
