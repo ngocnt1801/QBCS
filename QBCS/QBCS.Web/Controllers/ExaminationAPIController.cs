@@ -3,20 +3,16 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Web;
-using System.Web.Http;
+using System.Web.Mvc;
 using System.Xml;
 
 namespace QBCS.Web.Controllers
 {
-    public class ExaminationAPIController : ApiController
+    public class ExaminationAPIController : Controller
     {
         private const string COMMENT_SWITCH_CATEGORY_LINE = "// question: 0  name: Switch category to $course$/{0}/{1}/{2}";
         private const string CATEGORY_LINE = "$CATEGORY: $course$/{0}/{1}/{2}";
@@ -66,19 +62,26 @@ namespace QBCS.Web.Controllers
         private const string XML_ENCODING_ATTR_VALUE = "base64";
         private const string XML_PATH_ATTR_VALUE = "/";
         private const string XML_NAME_ATTR_VALUE = "Image00613.bmp";
+
         private IPartOfExamService partOfExamService;
         private IExaminationService examinationService;
+        private ILogService logService;
+
         public ExaminationAPIController()
         {
             partOfExamService = new PartOfExamService();
             examinationService = new ExaminationService();
+            logService = new LogService();
         }
+
+
         [HttpGet]
         [ActionName("export")]
-        public HttpResponseMessage ExportExamination(int examinationId, string fileExtension, bool getCategory)
+        [Log(Action = "Export", IdParamName = "examinationId", TargetName = "Examination")]
+        public FileResult ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {
             ExaminationViewModel exam = examinationService.GetExanById(examinationId);            
-            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            //HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
             int count = 0;
             if (fileExtension.ToLower().Equals("xml"))
             {
@@ -288,12 +291,13 @@ namespace QBCS.Web.Controllers
                     // Convert the memory stream to an array of bytes.
                     byte[] byteArray = stream.ToArray();
                     // Send the XML file to the web browser for download.
-                    httpResponseMessage.StatusCode = HttpStatusCode.OK;
-                    httpResponseMessage.Content = new ByteArrayContent(byteArray);
-                    httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".xml";
-                    httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                    //httpResponseMessage.StatusCode = HttpStatusCode.OK;
+                    //httpResponseMessage.Content = new ByteArrayContent(byteArray);
+                    //httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                    //httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".xml";
+                    //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     xmlWriter.Close();
+                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, exam.ExamCode + ".xml");
                 }
             }
             else
@@ -355,15 +359,18 @@ namespace QBCS.Web.Controllers
                     }
                     writer.Flush();
                     byte[] byteArray = stream.ToArray();
-                    httpResponseMessage.StatusCode = HttpStatusCode.OK;
-                    httpResponseMessage.Content = new ByteArrayContent(byteArray);
-                    httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                    httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".txt";
-                    httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                    //httpResponseMessage.StatusCode = HttpStatusCode.OK;
+                    //httpResponseMessage.Content = new ByteArrayContent(byteArray);
+                    //httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                    //httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".txt";
+                    //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                    
                     writer.Close();
+                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, exam.ExamCode + ".txt");
                 }
             }
-            return httpResponseMessage;
+
+            //return httpResponseMessage;
         }
     }
 

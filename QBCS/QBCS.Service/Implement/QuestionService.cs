@@ -702,7 +702,7 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
 
                     //log import
-                    logService.LogImport(entity.Id, userId);
+                    logService.LogManually(entity.Id, userId, "Import", "Question", "Question", "ImportFile");
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>

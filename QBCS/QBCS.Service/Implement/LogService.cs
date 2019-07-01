@@ -282,20 +282,21 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
         }
 
-        public void LogImport(int importId, int userId)
+        public void LogManually(int targetId, int userId, string action, string targetName, string controller = "", string method = "")
         {
             LogViewModel model = new LogViewModel
             {
-                TargetId = importId,
+                TargetId = targetId,
                 UserId = userId,
                 LogDate = DateTime.Now,
-                TargetName = "Question",
-                Action = "Import",
-                Controller = "Question",
-                Method = "ImportFile"
+                TargetName = targetName,
+                Action = action,
+                Controller = controller,
+                Method = method
             };
             Log(model);
         }
+
     }
 }
 
