@@ -60,7 +60,9 @@
                                 </td>
                                 <td>@item.Priority</td>
                                 <td>@item.Frequency</td>
-                                <td><a class="btn btn-primary" href="#">Detail</a></td>
+                                <td>
+                                    <a href="@Url.Action("GetExaminationHistory", "Activity", new { id = item.Id})" class="btn btn-primary">History</a>
+                                </td>
                             </tr>
                         }
                     </tbody>

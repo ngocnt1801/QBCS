@@ -37,7 +37,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Code</th>
-                            <th>Semester</th>
+                            @*<th>Semester</th>*@
                             <th>
                                 Generated Date
                             </th>
@@ -52,10 +52,12 @@
                                     counter++;
                                 }
                                 <td>@counter</td>
-                                <td></td>
                                 <td>
-                                    @*@item.Semester*@
+                                    @item.ExamCode
                                 </td>
+                                @*<td>
+                                    @item.Semester
+                                </td>*@
                                 <td>
                                     @item.GeneratedDate
                                 </td>
@@ -73,8 +75,8 @@
     </div>
 </div>
 <div style="text-align:right;margin-bottom:10px">
-    <a href="@Url.Action("CourseDetailWithoutId", "Course")"
+    <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = Model.Question.CourseId})"
        class="btn btn-outline-light border-dark text-custom mr-2">
-        Return to Index
+        Back to list
     </a>
 </div>

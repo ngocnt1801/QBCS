@@ -123,6 +123,7 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
             return questionViewModel;
         }
+
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -240,6 +241,7 @@ namespace QBCS.Service.Implement
             List<Question> result = questions.ToList();
             return result;
         }
+
         public List<QuestionViewModel> GetAllQuestionByCourseId(int courseId)
         {
             var course = unitOfWork.Repository<Course>().GetById(courseId);
@@ -258,6 +260,7 @@ namespace QBCS.Service.Implement
             }).ToList();
             return questions;
         }
+
         public List<QuestionViewModel> GetAllQuestions()
         {
             List<QuestionViewModel> questions = unitOfWork.Repository<Question>().GetAll().Select(c => new QuestionViewModel
@@ -744,6 +747,7 @@ namespace QBCS.Service.Implement
             return question.Count;
 
         }
+
         public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -870,7 +874,8 @@ namespace QBCS.Service.Implement
             var questionVM = new QuestionViewModel()
             {
                 QuestionContent = questionEntity.QuestionContent,
-                QuestionCode = questionEntity.QuestionCode
+                QuestionCode = questionEntity.QuestionCode,
+                CourseId = questionEntity.CourseId.Value
             };
 
             var questionInExams = unitOfWork.Repository<QuestionInExam>().GetAll()
@@ -883,6 +888,7 @@ namespace QBCS.Service.Implement
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
                     //Semester = (int)entity.Semester
+                    ExamCode = entity.ExamCode
                 };
                 examList.Add(exam);
             }
@@ -1096,6 +1102,7 @@ namespace QBCS.Service.Implement
 
             return check;
         }
+
         private string TrimSpace(string trim)
         {
             RegexOptions options = RegexOptions.None;
@@ -1103,6 +1110,7 @@ namespace QBCS.Service.Implement
             trim = regex.Replace(trim, " ");
             return trim;
         }
+
         private string TrimTags(string table)
         {
             table = table.Replace("<st1:country-region>", " ");
