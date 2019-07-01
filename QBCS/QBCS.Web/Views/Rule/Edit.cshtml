@@ -13,8 +13,13 @@
 </head>
 
 <h2>Rules</h2>
-<div>
-    Default Activation Date: <input type="date" id="default_datetime" />
+<div class="mb-4 row col-md-12">
+    <div class="mr-2">
+        <p>Default Activation Date: </p>
+    </div>
+    <div class="form-group col-md-3">
+        <input type="date" id="default_datetime" class="form-control input-date" />
+    </div>
 </div>
 @foreach (List<QBCS.Service.ViewModel.RuleViewModel> rvm in Model)
 {
@@ -25,7 +30,7 @@
         <div class="card-body collapse show" id="collapse_@rvm.FirstOrDefault().GroupTypeEnum" style="padding-left:30px">
             @*<button class="btn btn-primary" onclick="addField(event,'table_@rvm.FirstOrDefault().GroupTypeEnum','@rvm.FirstOrDefault().Value.FirstOrDefault().')">Add @rvm.FirstOrDefault().GroupTypeEnum Banned Word</button>*@
             <div class="table-responsive">
-                <table class="table table-bordered text-custom" @*id="dataTable"*@ id="table_@rvm.FirstOrDefault().GroupTypeEnum" cellspacing="0">
+                <table class="table table-bordered text-custom" id="table_@rvm.FirstOrDefault().GroupTypeEnum" cellspacing="0">
                     <thead>
                         <tr>
                             <th style="width:30%">Name</th>
@@ -70,7 +75,7 @@
                                         }
                                     </td>
                                     <td>
-                                        <input type="date" id="date">
+                                        <input type="date" id="date" class="form-control input-date">
                                     </td>
                                     <td>
                                         @if (rule.Value.Count == 0)
@@ -118,7 +123,7 @@
                                             </td>
                                         }
                                         <td>
-                                            <input type="date" id="date">
+                                            <input type="date" id="date" class="form-control input-date">
                                         </td>
                                         <td>
                                             @if (value.IsUse)
@@ -143,8 +148,8 @@
     </div>
 }
 
-<div style="text-align:right">
-    <a href="@Url.Action("Index", "Rule")" class="btn-lg btn-outline-light border-dark text-custom mr-2">Cancel</a>
-    <button id="save" class="btn-lg btn-primary">Save</button>
+<div class="text-right">
+    <a href="@Url.Action("Index", "Rule")" class="btn border-dark text-custom mr-2">Cancel</a>
+    <button id="save" class="btn btn-primary">Save</button>
 </div>
 
