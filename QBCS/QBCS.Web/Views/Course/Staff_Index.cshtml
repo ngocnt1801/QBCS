@@ -1,0 +1,66 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
+@{
+    ViewBag.Title = "Staff_Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col">
+        <h2>Courses</h2>
+    </div>
+    <div class="col mb-2">
+        <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of Courses</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive text-custom">
+            <table class="table table-bordered table-hover text-custom  table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Code)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th class="text-center">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-custom">
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td hidden></td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                            </td>
+                            @*<td width="18%">
+                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
+                                    Detail
+                                </a>
+                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
+                                    Disable
+                                </a>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

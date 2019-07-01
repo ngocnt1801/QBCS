@@ -15,6 +15,45 @@ function nav_bar_active() {
     });
 }
 
+function customs_display() {
+    $.each($(".customs-display"), function () {
+        var content;
+        content = $(this).html();
+        if (content.indexOf("[html]") >= 0) {
+            content = content.split("<cbr>").join("&lt;br&gt;");
+            content = content.split("&lt;cbr&gt;").join("<br/>");
+            content = content.split("<br>").join("<br/>");
+            content = content.split("&lt;br&gt;").join("&lt;br&gt;");
+            content = content.split("&lt;p&gt;").join("");
+            content = content.split("&lt;/p&gt;").join("");
+            content = content.split("&lt;b&gt;").join("");
+            content = content.split("&lt;/b&gt;").join("");
+            content = content.split("&lt;span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("[html]").join("");
+        }
+        $(this).html(content);
+    });
+}
+function customs_display_duplicate() {
+    var content;
+    content = $('#customs-display-duplicate').html();
+    if (content.indexOf("[html]") >= 0) {
+        content = content.split("&lt;cbr&gt;").join("<br/>");
+        content = content.split("&lt;br&gt;").join("<br/>");
+        content = content.split("&lt;p&gt;").join("");
+        content = content.split("&lt;/p&gt;").join("");
+        content = content.split("&lt;b&gt;").join("");
+        content = content.split("&lt;/b&gt;").join("");
+        content = content.split("&lt;span&gt;").join("");
+        content = content.split("&lt;/span&gt;").join("");
+        content = content.split("&lt;/span&gt;").join("");
+        content = content.split("[html]").join("");
+    }
+    $('#customs-display-duplicate').html(content);
+}
+
 function split() {
     var table1 = $('#tableEditable').DataTable({
         columns: [
@@ -26,6 +65,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
@@ -41,13 +82,22 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
                     }               
                     return data
                 }
-            }
+            },
+            null
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "44%" },
+            { targets: 2, width: "44%"},
+            { targets: 3, width: "10%"}
         ]
     });
     var table2 = $('#tableDelete').DataTable({
@@ -60,6 +110,8 @@ function split() {
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -73,8 +125,10 @@ function split() {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;p&gt;").join("");  
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -93,9 +147,10 @@ function split() {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("[html]").join("");
@@ -104,20 +159,10 @@ function split() {
                     return data
                 }
             },
-            {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("[html]").join("");
-                    }          
-                    return data
-                }
-            }
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "98%" }
         ]
     });
     var table4 = $('#tableInvalid').DataTable({
@@ -127,9 +172,10 @@ function split() {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");            
                         data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
@@ -145,6 +191,53 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "68%" },
+            { targets: 2, width: "20%" },
+            { targets: 3, width: "10%" }
+        ]
+    });
+
+    var tableCustoms = $('#table-customs').DataTable({
+        columns: [
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+
+                    return data
+                }
+            },
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
@@ -153,11 +246,26 @@ function split() {
                     return data
                 }
             }
+        ],
+        columnDefs: [
+            { targets: 0, width: "50%" },
+            { targets: 1, width: "50%" },
         ]
+    });
+}
+
+function toggleTableDuplicate() {
+    $(".toggle-table").on('click', function () {
+        $(".table-toggle").addClass("hidden");
+        $(this.attributes["data-toggle"].value).removeClass("hidden");
     });
 }
 
 $(document).ready(function () {
     nav_bar_active();
     split();
+    toggleTableDuplicate();
+    customs_display();
+    customs_display_duplicate();
+    
 });

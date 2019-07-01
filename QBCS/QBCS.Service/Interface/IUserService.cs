@@ -18,5 +18,6 @@ namespace QBCS.Service.Interface
         bool RemoveUserCourse(int courseId, int userId);
         List<UserViewModel> GetAllUser();
         UserViewModel GetUserById(int id);
+        List<UserViewModel> GetUserByNameAndRoleId(string name, int id);
     }
 }

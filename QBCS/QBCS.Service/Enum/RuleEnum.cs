@@ -10,5 +10,7 @@ namespace QBCS.Service.Enum
     {
         Question = 1,
         Option = 2,
+        Correct_Option = 3,
+        Incorrect_Option = 4
     }
 }

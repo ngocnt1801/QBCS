@@ -59,11 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
-      <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
+      <Project>{56492C99-5CAC-43BE-A406-0E630C255935}</Project>
       <Name>QBCS.Entity</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

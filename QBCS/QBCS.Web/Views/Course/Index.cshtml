@@ -9,12 +9,12 @@
     <div class="col">
         <h2>Courses</h2>
     </div>
-    @if (role == 3)
+    @*@if (role == 3)
     {
         <div class="col mb-2">
             <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
         </div>
-    }
+    }*@
 
 </div>
 <div class="card shadow mb-4">
@@ -32,12 +32,12 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        @if (role == 3)
+                        @*@if (role == 3)
                         {
                             <th>
                                 Action
                             </th>
-                        }
+                        }*@
                     </tr>
                 </thead>
 
@@ -53,7 +53,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            @if (role == 3)
+                            @*@if (role == 3)
                             {
                                 <td width="18%">
                                     <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
@@ -63,7 +63,7 @@
                                         Disable
                                     </a>
                                 </td>
-                            }
+                            }*@
                         </tr>
                     }
                 </tbody>

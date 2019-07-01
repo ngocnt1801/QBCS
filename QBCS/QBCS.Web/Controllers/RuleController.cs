@@ -23,6 +23,8 @@ namespace QBCS.Web.Controllers
             List<List<RuleViewModel>> result = new List<List<RuleViewModel>>();
             result.Add(listRule.Where(r => r.GroupType == 1).ToList());
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
+            result.Add(listRule.Where(r => r.GroupType == 3).ToList());
+            result.Add(listRule.Where(r => r.GroupType == 4).ToList());
             return View(result);
         }
         public ActionResult Edit()
@@ -31,6 +33,8 @@ namespace QBCS.Web.Controllers
             List<List<RuleViewModel>> result = new List<List<RuleViewModel>>();
             result.Add(listRule.Where(r => r.GroupType == 1).ToList());
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
+            result.Add(listRule.Where(r => r.GroupType == 3).ToList());
+            result.Add(listRule.Where(r => r.GroupType == 4).ToList());
             return View(result);
         }
         [HttpPost]

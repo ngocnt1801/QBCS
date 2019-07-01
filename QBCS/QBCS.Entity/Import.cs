@@ -30,9 +30,11 @@ namespace QBCS.Entity
 
         public int? CourseId { get; set; }
 
-        public DateTime? InsertedToBankDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public int? TotalSuccess { get; set; }
+
+        public string OwnerName { get; set; }
 
         public virtual User User { get; set; }
 

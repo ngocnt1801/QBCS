@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QBCS.Service.ViewModel;
+using System.Net;
 
 namespace QBCS.Service.Implement
 {
@@ -27,10 +28,15 @@ namespace QBCS.Service.Implement
 
         public bool UpdateOptions(List<OptionViewModel> OptionViewModels)
         {
+            string opTemp = "";
             foreach(var optionViewModel in OptionViewModels)
             {
                 Option option = unitOfWork.Repository<Option>().GetById(optionViewModel.Id);
-                option.OptionContent = optionViewModel.OptionContent;
+                if (optionViewModel.OptionContent != null)
+                {
+                    opTemp = WebUtility.HtmlDecode(optionViewModel.OptionContent);
+                }
+                option.OptionContent = opTemp;
                 option.IsCorrect = optionViewModel.IsCorrect;
                 unitOfWork.Repository<Option>().Update(option);
                 unitOfWork.SaveChanges();

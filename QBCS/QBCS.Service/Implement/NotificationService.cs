@@ -23,11 +23,25 @@ namespace QBCS.Service.Implement
             var notificationList = unitOfWork.Repository<Import>().GetAll().Where(im => im.UserId == userId && im.Seen.HasValue && !im.Seen.Value)
                                                                             .Select(im => new NotificationViewModel {
                                                                                 ImportId = im.Id,
-                                                                                Message = im.Status == (int)StatusEnum.Checked ? "Your import questions have already checked, click to see result!" : "Your question added to bank",
-                                                                                Status = im.Status.Value
+                                                                                Message = im.Status == (int)StatusEnum.Checked ? "Your import questions have already checked, click to see result!" : im.TotalSuccess + " questions were added to bank successfully.",
+                                                                                Status = im.Status.Value,
+                                                                                UpdatedDate = im.UpdatedDate.HasValue ? im.UpdatedDate.Value.ToString() : ""
                                                                             })
+                                                                            .OrderByDescending(im => im.UpdatedDate)
                                                                             .ToList();
             return notificationList;
+        }
+
+        public void MarkAllAsRead(int userId)
+        {
+            var notificationList = unitOfWork.Repository<Import>().GetAll().Where(n => !n.Seen.HasValue || !n.Seen.Value).ToList();
+            foreach (var noti in notificationList)
+            {
+                noti.Seen = true;
+                unitOfWork.Repository<Import>().Update(noti);
+            }
+
+            unitOfWork.SaveChanges();
         }
 
         public void RegisterNotification(OnChangeEventHandler eventHandler)

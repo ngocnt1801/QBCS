@@ -12,10 +12,10 @@ namespace QBCS.Service.Interface
     {
         List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId);
         List<LearningOutcomeViewModel> GetAllLearningOutcome();
-        bool UpdateDisable(int id);
-        bool UpdateLearningOutcome(LearningOutcomeViewModel model);
+        int UpdateDisable(int id);
+        int UpdateLearningOutcome(LearningOutcomeViewModel model);
         LearningOutcomeViewModel GetLearningOutcomeById(int id);
-        bool AddLearningOutcome(LearningOutcomeViewModel model);
+        int AddLearningOutcome(LearningOutcomeViewModel model);
         //List<LearningOutcomeViewModel> GetLearningOutcomeByCourseId(int CourseId);
         int GetCourseIdByLearningOutcomeId(int learningOutcomeId);
         LearningOutcomeViewModel GetLearingOutcomeById(int learningOutcomeId);

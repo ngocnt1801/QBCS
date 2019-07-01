@@ -328,3 +328,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+/QBCS/QBCS.Web/ElmahLog
+/QBCS/QBCS.Web/ErrorLog

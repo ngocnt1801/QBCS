@@ -36,5 +36,12 @@ namespace QBCS.Web.Controllers
             }
             return Json(notificationList, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult ReadAll()
+        {
+            int userId = ((UserViewModel)Session["user"]).Id;
+            notificationService.MarkAllAsRead(userId);
+            return Json("OK", JsonRequestBehavior.AllowGet);
+        }
     }
 }

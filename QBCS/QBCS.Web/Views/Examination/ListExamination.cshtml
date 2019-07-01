@@ -1,0 +1,56 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.ExaminationViewModel>
+
+@{
+    ViewBag.Title = "ListExamination";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All Examination</h2>
+
+<div class="row">
+    <div class="col mb-2">
+        <a href="@Url.Action("GetAllCourse", "Course")" class="btn btn-primary float-right">Create new Exam</a>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <table class="table table-bordered table-striped text-center" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th class="text-custom">Course</th>
+                    <th class="text-custom">Code</th>
+                    <th class="text-custom">Generated Date</th>
+                    <th class="text-custom">Easy</th>
+                    <th class="text-custom">Medium</th>
+                    <th class="text-custom">Hard</th>
+                    <th class="text-custom">Action</th>
+                </tr>
+            </thead>
+            <tbody class="text-custom">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Course.Code</td>
+                        <td>@item.ExamCode</td>
+                        <td>@item.GeneratedDate.ToString("HH:mm dd/MM/yyyy")</td>
+                        <td>@item.NumberOfEasy</td>
+                        <td>@item.NumberOfMedium</td>
+                        <td>@item.NumberOfHard</td>
+                        @*<td>
+                    <p>Number of easy question : @item.NumberOfEasy</p>
+                    <p>Number of medium question : @item.NumberOfMedium</p>
+                    <p>Number of hard question : @item.NumberOfHard</p>
+                </td>*@
+                        <td>
+                            <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary" role="button">Detail</a>
+                            <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger" role="button">Disable</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

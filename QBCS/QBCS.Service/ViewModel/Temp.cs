@@ -442,6 +442,7 @@ namespace QBCS.Service.ViewModel
         /// <remarks/>
         public quizQuestionNameFile file
         {
+
             get
             {
                 return this.fileField;
@@ -640,6 +641,7 @@ namespace QBCS.Service.ViewModel
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
         {
+            
             get
             {
                 return this.valueField;
