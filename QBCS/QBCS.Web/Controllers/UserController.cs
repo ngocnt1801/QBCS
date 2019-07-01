@@ -80,7 +80,7 @@ namespace QBCS.Web.Controllers
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
             foreach(var lec in result)
             {
-                lecturerName.Add(lec.Fullname);
+                lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
             }
             return Json(lecturerName, JsonRequestBehavior.AllowGet);
         }
