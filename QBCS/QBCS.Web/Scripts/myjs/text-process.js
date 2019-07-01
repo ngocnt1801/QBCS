@@ -94,9 +94,15 @@ function highlight(newElem, oldElem) {
 function customs_text() {
     $('#btnUpdate').click(function (e) {
         var content;
+        var option;
         content = $('.question-custom').html();
+        option = $('#option-customs').html();
         //var input;
         //input = $('#hidden-question-content').html();
+        content = content.split("\t").join("");
+        content = content.split("\n").join("");
+        content = content.replace(/(\r\n|\n|\r|\t)/gm, "");
+        content = content.replace(/\s+/g, " ");
         $('#hidden-question-content').val("[html]" + content);
 
         $.each($(".customs-display"), function () {
