@@ -29,6 +29,7 @@ namespace QBCS.Web.Attributes
             QuestionViewModel oldValue = new QuestionViewModel();
             QuestionViewModel newQues = new QuestionViewModel();
             IQuestionService questionService = new QuestionService();
+          
             if (IdParamName != null && filterContext.ActionParameters.ContainsKey(IdParamName))
             {
                 targetId = filterContext.ActionParameters[IdParamName] as Int32?;
@@ -53,9 +54,13 @@ namespace QBCS.Web.Attributes
                     oldValue.Options[i].OptionContent = WebUtility.HtmlDecode(oldValue.Options[i].OptionContent);
                 }
                 logModel.OldValue = JsonConvert.SerializeObject(oldValue);
+                
                 if (newQues.QuestionContent != "")
                 {
-                    newQues.QuestionCode = oldValue.QuestionCode;
+                    newQues.QuestionCode = oldValue.QuestionCode != null ? oldValue.QuestionCode.ToString() : "";
+                    newQues.CourseId = oldValue.CourseId;
+                    newQues.LearningOutcomeId = oldValue.LearningOutcomeId;
+                    newQues.LevelId = oldValue.LevelId;
                     newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
                     for (int i = 0; i < newQues.Options.Count; i++)
                     {
@@ -73,6 +78,7 @@ namespace QBCS.Web.Attributes
             logModel.Message = Message;
             logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             logModel.Method = filterContext.ActionDescriptor.ActionName;
+    
 
             ILogService logger = new LogService();
             logger.Log(logModel);
