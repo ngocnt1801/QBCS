@@ -20,9 +20,8 @@ namespace QBCS.Web.Controllers
         }
 
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Home page", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(HomeController), nameof(HomeController.Login))]
+        [Feature(FeatureType.SideBar, "Home page", "QBCS", protectType: ProtectType.Authorized)]
+        //[Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -78,6 +77,9 @@ namespace QBCS.Web.Controllers
 
         }
 
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Import manually", "QBCS", protectType: ProtectType.Authorized)]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         public ActionResult ImportWithTextArea()
         {
             return View();

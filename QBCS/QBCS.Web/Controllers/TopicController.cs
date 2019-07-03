@@ -53,8 +53,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get All Course API", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
         public JsonResult LoadCourse()
         {
             var result = courseService.GetAllCourses();

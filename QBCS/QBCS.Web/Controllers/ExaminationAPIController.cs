@@ -81,8 +81,6 @@ namespace QBCS.Web.Controllers
         [ActionName("export")]
         //stpm: feature declare
         [Feature(FeatureType.Page, "Export Examination", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExanById))]
         [Log(Action = "Export", IdParamName = "examinationId", TargetName = "Examination")]
         public FileResult ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {

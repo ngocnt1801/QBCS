@@ -27,9 +27,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Import
         //stpm: feature declare
-        [Feature(FeatureType.Page, "List Imports", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.GetListImport))]
+        [Feature(FeatureType.SideBar, "List Imports", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult Index()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
@@ -41,8 +39,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import Result", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.GetImportResult))]
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
@@ -58,8 +54,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Edit Question Import", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.UpdateQuestionTemp))]
         [ValidateInput(false)]
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
@@ -70,8 +64,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Question Import", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.GetQuestionTemp))]
         public ActionResult GetQuestionTemp(int tempId)
         {
             var questiontemp = importService.GetQuestionTemp(tempId);
@@ -81,8 +73,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Add Question to Bank", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.ImportToBank))]
         public ActionResult AddToBank(int importId)
         {
             Task.Factory.StartNew(() => {
@@ -96,8 +86,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Cancel Import", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.Cancel))]
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);
@@ -109,8 +97,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Delete Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.UpdateQuestionTempStatus))]
         public ActionResult Delete(int questionId, int importId)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
@@ -120,8 +106,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Accept Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ImportService), nameof(ImportService.UpdateQuestionTempStatus))]
         public ActionResult Skip(int questionId, int importId)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);

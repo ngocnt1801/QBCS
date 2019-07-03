@@ -36,9 +36,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Config to Generate", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(LearningOutcomeService), nameof(LearningOutcomeService.GetLearningOutcomeByCourseId))]
-        [Dependency(typeof(CategoryService), nameof(CategoryService.GetCategoriesByCourseId))]
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
@@ -53,9 +50,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Generate Examination", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GenerateExamination))]
-      
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
             GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
@@ -65,8 +59,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Review Examination", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExamByExamGroup))]
         public ActionResult ViewGeneratedExamination(string examGroup)
         {
             List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
@@ -74,9 +66,7 @@ namespace QBCS.Web.Controllers
         }
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "All Examinations", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetAllExam))]
+        [Feature(FeatureType.SideBar, "All Examinations", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
@@ -85,8 +75,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Examination Detail", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExanById))]
         public ActionResult DetailExam(int examId)
         {
             ExaminationViewModel exam = examinationService.GetExanById(examId);
@@ -95,8 +83,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Disable Examination", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.DisableEaxam))]
         public ActionResult DisableExam(int examId)
         {
             examinationService.DisableEaxam(examId);
@@ -106,8 +92,6 @@ namespace QBCS.Web.Controllers
 
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Aging Question", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(ExaminationService), nameof(ExaminationService.GetExaminationHistoryQuestionsInCourse))]
         public ActionResult GetHistoryCourse(int courseId)
         {
             var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);

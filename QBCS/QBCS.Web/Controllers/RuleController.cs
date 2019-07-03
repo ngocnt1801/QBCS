@@ -20,9 +20,7 @@ namespace QBCS.Web.Controllers
         }
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Get All Rules", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(RuleService), nameof(RuleService.getAllRule))]
+        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -37,7 +35,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Rule Detail", "QBCS", protectType: ProtectType.Authorized)]
         //stpm: dependency declare
-        [Dependency(typeof(RuleService), nameof(RuleService.getAllRule))]
+        [Dependency(typeof(RuleController), nameof(RuleController.UpdateAllRule))]
         public ActionResult Edit()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -52,9 +50,7 @@ namespace QBCS.Web.Controllers
 
         [HttpPost]
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(RuleService), nameof(RuleService.UpdateRule))]
+        [Feature(FeatureType.BusinessLogic, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);

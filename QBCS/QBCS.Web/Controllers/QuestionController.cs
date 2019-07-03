@@ -87,10 +87,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Question Detail", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(LearningOutcomeService), nameof(LearningOutcomeService.GetLearningOutcomeByCourseId))]
-        [Dependency(typeof(QuestionService), nameof(QuestionService.GetQuestionById))]
-        [Dependency(typeof(LevelService), nameof(LevelService.GetLevel))]
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -113,8 +109,6 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Update Question", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.UpdateQuestion))]
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
@@ -128,8 +122,6 @@ namespace QBCS.Web.Controllers
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.InsertQuestion))]
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
         {
@@ -151,11 +143,8 @@ namespace QBCS.Web.Controllers
 
         //lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.InsertQuestionWithTableString))]
+        [Feature(FeatureType.BusinessLogic, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        //[Log(Action = "Import", TargetName = "Question")]
         public JsonResult ImportTextarea(Textarea textarea)
         {
             var user = (UserViewModel)Session["user"];
@@ -207,9 +196,10 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Get List Question By Category", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.BusinessLogic, "Get List Question By Category", "QBCS", protectType: ProtectType.Authorized)]
         //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.GetQuestionList))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
@@ -222,9 +212,7 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.ToggleDisable))]
+        [Feature(FeatureType.BusinessLogic, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -234,9 +222,7 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(QuestionService), nameof(QuestionService.UpdateCategory))]
+        [Feature(FeatureType.BusinessLogic, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);

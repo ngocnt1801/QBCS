@@ -23,12 +23,15 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
             categoryService = new CategoryService();
         }
+
+        [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized)]
         // GET: Course
         public ActionResult Index(int userId)
         {
             var list = courseService.GetAllCoursesByUserId(userId);
             return View(list);
         }
+
         public ActionResult Staff_Index()
         {
             var list = courseService.GetCourseByDisable();
@@ -106,8 +109,6 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "All Courses For Generate", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -117,9 +118,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "All Courses For History", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourses))]
+        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -137,7 +136,9 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Course Detail", "QBCS", protectType: ProtectType.Authorized)]
         //stpm: dependency declare
-        [Dependency(typeof(CategoryService), nameof(CategoryService.GetListCategories))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.GetQuestions))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
@@ -152,9 +153,9 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Course Statistic", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "Course Statistic", "QBCS", protectType: ProtectType.Authorized)]
         //stpm: dependency declare
-        [Dependency(typeof(CourseService), nameof(CourseService.GetAllCourseStat))]
+        [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
         public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
@@ -165,9 +166,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Course Detail Statistic", "QBCS", protectType: ProtectType.Authorized)]
-        //stpm: dependency declare
-        [Dependency(typeof(CourseService), nameof(CourseService.GetCourseStatDetailByCourseId))]
+        [Feature(FeatureType.BusinessLogic, "Course Detail Statistic", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult GetCourseDetailStat(int courseId)
         {
             var result = courseService.GetCourseStatDetailByCourseId(courseId);
