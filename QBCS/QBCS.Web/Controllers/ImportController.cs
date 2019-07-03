@@ -28,6 +28,7 @@ namespace QBCS.Web.Controllers
         {
             int userId = ((UserViewModel)Session["user"]).Id;
             var model = importService.GetListImport(userId);
+            TempData["active"] = "History";
             return View(model);
         }
 

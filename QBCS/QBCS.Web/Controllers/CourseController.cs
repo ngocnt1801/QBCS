@@ -26,6 +26,7 @@ namespace QBCS.Web.Controllers
         public ActionResult Index(int userId)
         {
             var list = courseService.GetAllCoursesByUserId(userId);
+            TempData["active"] = "Course";
             return View(list);
         }
         public ActionResult Staff_Index()
@@ -131,12 +132,14 @@ namespace QBCS.Web.Controllers
                 Id = courseId,
                 Categories = categories
             };
+            TempData["active"] = "Course";
             return View(model);
         }
         public ActionResult CourseStatistic()
         {
             int userId = ((UserViewModel)Session["user"]).Id;
             var result = courseService.GetAllCourseStat();
+            TempData["active"] = "Statistics";
             return View(result);
         }
         public JsonResult GetCourseDetailStat(int courseId)

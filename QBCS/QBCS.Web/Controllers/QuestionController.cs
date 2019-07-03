@@ -97,7 +97,7 @@ namespace QBCS.Web.Controllers
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
-
+            TempData["active"] = "Course";
             return View("EditQuestion", qdvm);
         }
 

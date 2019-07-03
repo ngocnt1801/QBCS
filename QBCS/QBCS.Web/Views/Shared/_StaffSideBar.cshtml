@@ -8,7 +8,8 @@
     var activitiesClass = "";
     var statisticClass = "";
     var ruleClass = "";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    //var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var controller = TempData["active"] != null ? (string)TempData["active"] : "";
     switch (controller)
     {
         case "Home":

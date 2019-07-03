@@ -28,7 +28,7 @@ namespace QBCS.Web.Controllers
                 return View(viewName);
             }
             ViewBag.Name = user.Fullname;
-            
+            TempData["active"] = "Home";
             if (user.Role == RoleEnum.Admin)
             {
                 viewName = "Admin";
@@ -69,6 +69,7 @@ namespace QBCS.Web.Controllers
 
         public ActionResult ImportWithTextArea()
         {
+            TempData["active"] = "Home";
             return View();
         }
     }

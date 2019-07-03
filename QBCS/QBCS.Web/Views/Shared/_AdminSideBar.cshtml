@@ -5,7 +5,8 @@
     var courseClass = "";
     var activitiesClass = "";
     var userClass = "";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    //var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var controller = TempData["active"] != null ? (string)TempData["active"] : "";
     switch (controller)
     {
         case "Home":
@@ -22,10 +23,6 @@
             break;
     }
 }
-
-
-
-
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
     onclick="nav_bar_active()">
