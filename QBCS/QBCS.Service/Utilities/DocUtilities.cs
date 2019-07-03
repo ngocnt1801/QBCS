@@ -175,7 +175,7 @@ namespace QBCS.Service.Utilities
                                     }
                                     else if (!wParagraph.Text.Equals(""))
                                     {
-                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
                                     }
                                     break;
                                 case EntityType.Picture:
