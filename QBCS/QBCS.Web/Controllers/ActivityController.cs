@@ -80,6 +80,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);
+            TempData["active"] = "Course";
             return View(result);
         }
     }

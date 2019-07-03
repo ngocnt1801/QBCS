@@ -25,6 +25,7 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
             result.Add(listRule.Where(r => r.GroupType == 3).ToList());
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
+            TempData["active"] = "Rule";
             return View(result);
         }
         public ActionResult Edit()
@@ -35,6 +36,7 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
             result.Add(listRule.Where(r => r.GroupType == 3).ToList());
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
+            TempData["active"] = "Rule";
             return View(result);
         }
         [HttpPost]

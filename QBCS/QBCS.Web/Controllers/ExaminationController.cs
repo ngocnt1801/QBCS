@@ -39,6 +39,7 @@ namespace QBCS.Web.Controllers
                 LearningOutcomes = learningOutcomeViewModels,
                 Categories = categoryViewModels
             };
+            TempData["active"] = "Examination";
             return View(listTopicLearningOutcomeViewModel);
         }
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
@@ -50,16 +51,19 @@ namespace QBCS.Web.Controllers
         public ActionResult ViewGeneratedExamination(string examGroup)
         {
             List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
+            TempData["active"] = "Examination";
             return View(exams);
         }
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();
+            TempData["active"] = "Examination";
             return View("ListExamination",exams);
         }
         public ActionResult DetailExam(int examId)
         {
             ExaminationViewModel exam = examinationService.GetExanById(examId);
+            TempData["active"] = "Examination";
             return View(exam);
         }
         public ActionResult DisableExam(int examId)
@@ -71,7 +75,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetHistoryCourse(int courseId)
         {
             var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);
-
+            TempData["active"] = "Course";
             return View(listQuestion);
         }
 

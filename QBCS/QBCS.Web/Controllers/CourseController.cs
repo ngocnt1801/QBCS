@@ -107,6 +107,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["CreateExam"] = true;
+            TempData["active"] = "Examination";
             return View("Staff_ListCourse", courses);
         }
 
@@ -115,6 +116,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["ViewHistory"] = true;
+            TempData["active"] = "Course";
             return View("Staff_ListCourse", courses);
         }
 

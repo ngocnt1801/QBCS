@@ -25,7 +25,7 @@ namespace QBCS.Web.Controllers
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
-            
+            TempData["active"] = "User";
             return View(list);
         }
 
@@ -72,6 +72,7 @@ namespace QBCS.Web.Controllers
                 User = item,
                 AvailableToAddCourses = listAvailable
             };
+            TempData["active"] = "User";
             return View(model);
         }
         public JsonResult GetLecturer(string term)
