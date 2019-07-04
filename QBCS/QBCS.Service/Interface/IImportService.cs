@@ -17,7 +17,7 @@ namespace QBCS.Service.Interface
         Task CheckDuplicateQuestion(int questionId, int logId);
         void Cancel(int importId);
         void UpdateQuestionTempStatus(int questionTempId, int status);
-        List<ImportViewModel> GetListImport(int userId);
+        List<ImportViewModel> GetListImport(int? userId);
         List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions);
     }
 }

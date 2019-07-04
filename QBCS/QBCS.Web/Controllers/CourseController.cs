@@ -24,10 +24,12 @@ namespace QBCS.Web.Controllers
             categoryService = new CategoryService();
         }
 
-        [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = 6)]
         // GET: Course
-        public ActionResult Index(int userId)
+        public ActionResult Index()
         {
+            var user = ((UserViewModel)Session["user"]);
+            int userId = user != null ? user.Id : 0;
             var list = courseService.GetAllCoursesByUserId(userId);
             return View(list);
         }
@@ -118,7 +120,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = 7)]
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -153,13 +155,23 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Course Statistic", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "All Course Statistic", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = 8)]
         //stpm: dependency declare
         [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
         public ActionResult CourseStatistic()
         {
-            int userId = ((UserViewModel)Session["user"]).Id;
-            var result = courseService.GetAllCourseStat();
+            var result = courseService.GetAllCourseStat(null);
+            return View(result);
+        }
+
+        [Feature(FeatureType.SideBar, "Course Statistic By User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = 14)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
+        public ActionResult CourseStatisticByUser()
+        {
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCourseStat(userId);
             return View(result);
         }
 

@@ -148,6 +148,20 @@ namespace QBCS.Service.Implement
             return false;
         }
 
+        public bool EnableUser(int userId)
+        {
+            var user = unitOfWork.Repository<User>().GetById(userId);
+            if (user != null && user.IsDisable.Value)
+            {
+                user.IsDisable = false;
+                unitOfWork.Repository<User>().Update(user);
+                unitOfWork.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
         public List<UserViewModel> GetAllUser()
         {
             var list = unitOfWork.Repository<User>().GetAll().Select(c => new UserViewModel
@@ -200,6 +214,31 @@ namespace QBCS.Service.Implement
             });
 
             return list.ToList();
+        }
+
+        public UserViewModel GetUser(string code)
+        {
+            var userViewModel = unitOfWork.Repository<User>()
+                             .GetAll()
+                             .Where(u => u.Code.ToLower().Equals(code.ToLower()))
+                             .Select(u => new UserViewModel
+                             {
+                                 Id = u.Id,
+                                 Code = u.Code,
+                                 Fullname = u.Fullname
+                                
+                             })
+                             .FirstOrDefault();
+            if (userViewModel != null)
+            {
+                userViewModel.Courses = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userViewModel.Id).Select(uc => new CourseViewModel
+                {
+                    Id = uc.Course.Id,
+                    Name = uc.Course.Name,
+                    Code = uc.Course.Code
+                }).ToList();
+            }
+            return userViewModel;
         }
     }
 }

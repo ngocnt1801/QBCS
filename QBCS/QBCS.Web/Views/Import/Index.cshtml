@@ -11,62 +11,67 @@
 
     <div class="card-body text-custom">
         <div class="table-responsive text-custom">
-            <table class="table table-bordered text-custom table-striped">
-                <tr>
-                    <th>
-                        No.
-                    </th>
-                    <th>
-                        Owner
-                    </th>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Total
-                    </th>
-                    <th>
-                        Success
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    count++;
+            <table class="table table-bordered table-striped text-custom table-striped">
+                <thead>
                     <tr>
-                        <td>
-                            @count
-                        </td>
-                        <td>
-                            @item.OwnerName
-                        </td>
-                        <td>
-                            @item.Date
-                        </td>
-                        <td>
-                            @item.TotalQuestion
-                        </td>
-                        <td>
-                            @item.TotalSuccess
-                        </td>
-                        <td>
-                            @item.Status.ToString()
-                        </td>
-                        <td>
-                            @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Editing)
-                            {
-                                <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id})">View Result</a>
-                            }
-                        </td>
-                    </tr>
-                }
+                        <th>
+                            No.
+                        </th>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th>
+                            Success
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
 
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            count++;
+                            <tr>
+                                <td>
+                                    @count
+                                </td>
+                                <td>
+                                    @item.OwnerName
+                                </td>
+                                <td>
+                                    @item.Date
+                                </td>
+                                <td>
+                                    @item.TotalQuestion
+                                </td>
+                                <td>
+                                    @item.TotalSuccess
+                                </td>
+                                <td>
+                                    @item.Status.ToString()
+                                </td>
+                                <td>
+                                    @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Editing)
+                                    {
+                                        <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id})">View Result</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
             </table>
         </div>
     </div>

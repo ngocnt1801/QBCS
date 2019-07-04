@@ -148,15 +148,19 @@ namespace QBCS.Service.Implement
             return list;
         }
       
-        public List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user)
+        public List<LogViewModel> GetAllActivitiesByUserId(int id)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.UserId == id).OrderByDescending(t => t.Date).ToList(); ;
-            string role = "";
-            if (user.Role == RoleEnum.Lecturer)
-            {
-                role = "Lecturer";
-            }
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll()
+                .Where(t => t.UserId == id)
+                .OrderByDescending(t => t.Date)
+                .ToList(); 
+
+            //string role = "";
+            //if (user.Role == RoleEnum.Lecturer)
+            //{
+            //    role = "Lecturer";
+            //}
            
             foreach (var item in listLog)
             {
@@ -166,14 +170,13 @@ namespace QBCS.Service.Implement
                     tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
                 }
                
-                
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
                     UserId = (int)item.UserId,   
-                    UserRole = role,
+                    //UserRole = role,
                     TargetId = item.TargetId,
-                    Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                    Fullname = item.UserId != null && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : "Anonymous",
                     Action = item.Action,
                     Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
                     LogDate = item.Date.Value

@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\IconConstant.cs" />
     <Compile Include="Enum\LevelEnum.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />

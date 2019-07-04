@@ -22,7 +22,6 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IImportService importService;
 
-
         public QuestionController()
         {
             questionService = new QuestionService();
@@ -32,7 +31,6 @@ namespace QBCS.Web.Controllers
             learningOutcomeService = new LearningOutcomeService();
             examinationService = new ExaminationService();
             importService = new ImportService();
-
         }
 
         // GET: Question

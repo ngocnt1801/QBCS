@@ -14,10 +14,13 @@ namespace QBCS.Service.Interface
         bool AddUser(UserViewModel user);
         bool UpdateUserInfo(UserViewModel user);
         bool DisableUser(int userId);
+        bool EnableUser(int userId);
         bool AddUserCourse(int courseId, int userId);
         bool RemoveUserCourse(int courseId, int userId);
         List<UserViewModel> GetAllUser();
         UserViewModel GetUserById(int id);
         List<UserViewModel> GetUserByNameAndRoleId(string name, int id);
+
+        UserViewModel GetUser(string code);
     }
 }

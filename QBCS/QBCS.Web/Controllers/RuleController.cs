@@ -20,7 +20,7 @@ namespace QBCS.Web.Controllers
         }
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized, ShortName = "Rule", InternalId = 11)]
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();

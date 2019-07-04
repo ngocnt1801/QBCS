@@ -26,24 +26,22 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Activity
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Activities", "QBCS", protectType: ProtectType.Authorized)]
-        public ActionResult Index(int id)
+        [Feature(FeatureType.SideBar, "Get Activities by User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = 5)]
+        public ActionResult Index()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
             var user = (UserViewModel)Session["user"];
-            //var model = logService.GetAllActivities();
-            var model = logService.GetAllActivitiesByUserId(id, user);
+            int userId = user != null ? user.Id : 0;
+            var model = logService.GetAllActivitiesByUserId(userId);
             return View(model);
         }
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Get All Activities", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = 15)]
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
-            var user = (UserViewModel)Session["user"];
-            //var model = logService.GetAllActivities();
             var model = logService.GetAllActivities();
             return View("Index", model);
         }

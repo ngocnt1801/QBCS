@@ -6,6 +6,7 @@ using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using QBCS.Web.SignalRHub;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -20,39 +21,60 @@ namespace QBCS.Web.Controllers
         }
 
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Home page", "QBCS", protectType: ProtectType.Authorized)]
-        //[Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
+        [Feature(FeatureType.SideBar
+            , "Lecturer Home page"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Import"
+            , InternalId = 1)]
+        [Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "Lecturer Page";
 
             //stpm: get logged in user code
             var userCode = User.Identity.Get(a => a.Code);
+            Session["user"] = userService.GetUser(userCode);
+            
+            ViewBag.Name = "";
 
-            var user = (UserViewModel)Session["user"];
-            string viewName = "Login";
-            if (user == null)
-            {
-                return View(viewName);
-            }
-            ViewBag.Name = user.Fullname;
-
-            if (user.Role == RoleEnum.Admin)
-            {
-                viewName = "Admin";
-            }
-            else if (user.Role == RoleEnum.Lecturer)
-            {
-                viewName = "Index";
-            }
-            else
-            {
-                viewName = "Staff";
-            }
-
-            return View(viewName, user);
+            return View("Index", null);
         }
 
+        [Feature(FeatureType.SideBar
+            , "Staff Home page"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Home"
+            , InternalId = 2)]
+        public ActionResult Staff()
+        {
+            ViewBag.Title = "Staff Page";
+
+            //stpm: get logged in user code
+            var userCode = User.Identity.Get(a => a.Code);
+            Session["user"] = userService.GetUser(userCode);
+
+            ViewBag.Name = "";
+
+            return View("Staff", null);
+        }
+
+        [Feature(FeatureType.SideBar
+            , "Admin Home page"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Home"
+            , InternalId = 3)]
+        public ActionResult Admin()
+        {
+            ViewBag.Title = "Admin Page";
+
+            //stpm: get logged in user code
+            var userCode = User.Identity.Get(a => a.Code);
+            Session["user"] = userService.GetUser(userCode);
+
+            ViewBag.Name = "";
+
+            return View("Admin", null);
+        }
 
         public ActionResult Login(string username, string password)
         {
@@ -78,7 +100,11 @@ namespace QBCS.Web.Controllers
         }
 
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Import manually", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar
+            , "Import - Manually"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Manually"
+            , InternalId = 4)]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         public ActionResult ImportWithTextArea()
         {

@@ -17,7 +17,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
-    <Use64BitIISExpress>true</Use64BitIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <IISExpressSSLPort>44318</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -47,8 +48,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthLib, Version=2.4.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STPM.AuthLib.2.4.10\lib\net452\AuthLib.dll</HintPath>
+    <Reference Include="AuthLib, Version=2.4.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\STPM.AuthLib.2.4.14\lib\net452\AuthLib.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -2255,6 +2256,7 @@
     <Content Include="Views\Course\CourseDetailWithoutId.cshtml" />
     <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
     <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
+    <Content Include="Views\Shared\_SideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

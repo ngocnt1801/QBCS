@@ -20,11 +20,17 @@ namespace QBCS.Web.Attributes
         public string ObjectParamName { get; set; }
         public string IdParamName { get; set; }
 
+        private ILogService logService;
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            logService = new LogService();
+
             LogViewModel logModel = new LogViewModel();
 
-            int userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
+            var user = (UserViewModel)HttpContext.Current.Session["user"];
+            int userId = user != null ? user.Id : 0;
+
             int? targetId = null;
             QuestionViewModel oldValue = new QuestionViewModel();
             QuestionViewModel newQues = new QuestionViewModel();
@@ -74,21 +80,7 @@ namespace QBCS.Web.Attributes
             logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             logModel.Method = filterContext.ActionDescriptor.ActionName;
 
-            ILogService logger = new LogService();
-            logger.Log(logModel);
-            //logger.Log(new LogViewModel
-            //{
-            //    UserId = userId,
-            //    LogDate = DateTime.Now,
-            //    Message = Message,
-            //    Action = Action,
-            //    TargetName = TargetName,
-            //    Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
-            //    Method = filterContext.ActionDescriptor.ActionName,
-            //    TargetId = targetId,
-            //    OldValue = jsonOldValue,
-            //    NewValue = jsonNewValue
-            //});
+            logService.Log(logModel);
 
         }
 

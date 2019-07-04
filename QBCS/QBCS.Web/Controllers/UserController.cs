@@ -4,10 +4,7 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -25,11 +22,11 @@ namespace QBCS.Web.Controllers
         // GET: User
         //Admin
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized, ShortName = "User", InternalId = 12)]
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
-            
+
             return View(list);
         }
 
@@ -39,6 +36,16 @@ namespace QBCS.Web.Controllers
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
+
+            return RedirectToAction("Index");
+        }
+
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Enable User", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult Enable(int userId)
+        {
+            userService.EnableUser(userId);
 
             return RedirectToAction("Index");
         }
@@ -79,7 +86,7 @@ namespace QBCS.Web.Controllers
 
         //Admin
         //stpm: feature declare
-        [Feature(FeatureType.Page, "User Detail", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.Page, "Get detail for edit user", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);
@@ -99,7 +106,7 @@ namespace QBCS.Web.Controllers
         {
             List<string> lecturerName = new List<string>();
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
-            foreach(var lec in result)
+            foreach (var lec in result)
             {
                 lecturerName.Add(lec.Fullname);
             }

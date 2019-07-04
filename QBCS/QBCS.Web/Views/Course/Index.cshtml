@@ -3,19 +3,11 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var role = (int)((UserViewModel)Session["user"]).Role;
 }
 <div class="row">
     <div class="col">
         <h2>Courses</h2>
     </div>
-    @*@if (role == 3)
-    {
-        <div class="col mb-2">
-            <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
-        </div>
-    }*@
-
 </div>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -32,40 +24,36 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
-                        @*@if (role == 3)
-                        {
-                            <th>
-                                Action
-                            </th>
-                        }*@
+                        <th>
+                            Action
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody class="text-custom">
-
-                    @foreach (var item in Model)
+                    @if (Model != null && Model.Count() > 0)
                     {
-                        <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
-                            <td hidden></td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            @*@if (role == 3)
-                            {
+                        foreach (var item in Model)
+                        {
+                            <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
+                                <td hidden></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+
                                 <td width="18%">
-                                    <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
+                                    <a href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })" class="btn btn-primary">
                                         Detail
                                     </a>
-                                    <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
-                                        Disable
-                                    </a>
                                 </td>
-                            }*@
-                        </tr>
+
+                            </tr>
+                        }
                     }
+
                 </tbody>
             </table>
         </div>

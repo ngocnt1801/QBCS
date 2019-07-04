@@ -12,120 +12,74 @@
 <div class="col-md-9 personal-info text-custom">
     <h2>Profile</h2>
 
-    @using (Html.BeginForm("Update", "User", FormMethod.Post, new { @class = "form-horizontal" }))
-    {
-        <div class="form-row text-custom">
-            @if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
-            {
-                <div class="form-group col-md-6 text-custom">
-                    <label class="control-label">
-                        @Html.DisplayNameFor(model => model.User.Code):
-                    </label>
-                    <input class="form-control text-custom" type="text" name="Code" value="@Html.DisplayFor(model => model.User.Code)">
-                </div>
-            }
-
-            <div class="form-group col-md-6">
-                <label class="control-label">
-                    @Html.DisplayNameFor(model => model.User.Fullname):
-                </label>
-                <input class="form-control text-custom" type="text" name="Fullname" value="@Html.DisplayFor(model => model.User.Fullname)">
-            </div>
+    <div class="form-row text-custom">
+        <div class="form-group col-md-12 text-custom">
+            <label class="control-label">
+                @Html.DisplayNameFor(model => model.User.Code):
+            </label>
+            @Html.DisplayFor(model => model.User.Code)
         </div>
 
-        <div class="form-row">
-            @if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
-            {
-                <div class="form-group col-md-6">
-                    <label class="control-label text-custom">@Html.DisplayNameFor(model => model.User.Role):</label>
-                    @Html.DropDownListFor(model => model.User.Role, Enum.GetValues(typeof(RoleEnum)).Cast<RoleEnum>().Select(v => new SelectListItem
-               {
-                   Text = v.ToString(),
-                   Value = ((int)v).ToString()
-               }).ToList(), new { @class = "form-control text-custom", Name = "Role" })
-                </div>
-            }
 
-            <div class="form-group col-md-6">
-                <label class="col-lg-3 control-label">
-                    @Html.DisplayNameFor(model => model.User.Email):
-                </label>
-                <input class="form-control text-custom" type="text" name="Email" value="@Html.DisplayFor(model => model.User.Email)">
-            </div>
+        <div class="form-group col-md-12">
+            <label class="control-label">
+                @Html.DisplayNameFor(model => model.User.Fullname):
+            </label>
+            @Html.DisplayFor(model => model.User.Fullname)
         </div>
-
-        <div class="form-row">
-            @Html.Hidden("Id", Model.User.Id)
-            <div class="form-group col-md-12">
-
-                @{
-                    string actionCancel = "";
-                    if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
-                    {
-                        actionCancel = Url.Action("Index", "User");
-                    }
-                    else
-                    {
-                        actionCancel = Url.Action("Index", "Home");
-                    }
-                }
-
-                <input type="submit" class="btn btn-primary float-right" value="Save">
-                <a class="btn btn-outline-light float-right border-dark text-custom mr-2 float-right" href="@actionCancel">Cancel</a>
-            </div>
-        </div>
-    }
-</div>
-<hr class="mt-5 mb-5" />
-@if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
-{
-    <div class="col-12 text-custom">
-        <h3>List Course</h3>
     </div>
-    if (Model.AvailableToAddCourses.Count == 0)
+
+</div>
+<hr />
+
+<div class="col-12 text-custom">
+    <h3>List Course</h3>
+</div>
+@if (Model.AvailableToAddCourses.Count == 0)
+{
+    <div class="col-lg-12 row mb-2 text-custom">
+        <div class="col-6">
+            <select class="form-control">
+                <option selected>[None course available]</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <input type="button" disabled class="btn btn-info" value="Add Course" />
+        </div>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("AddCourse", "User", FormMethod.Post))
     {
         <div class="col-lg-12 row mb-2 text-custom">
             <div class="col-6">
-                <select class="form-control">
-                    <option selected>[None course available]</option>
-                </select>
+                @Html.Hidden("userId", Model.User.Id)
+                @Html.DropDownList("courseId", Model.AvailableToAddCourses.Select(c => new SelectListItem
+                     {
+                         Value = c.Id + "",
+                         Text = c.Code + " - " + c.Name,
+                     }), new { @class = "form-control" })
             </div>
             <div class="col-2">
-                <input type="button" disabled class="btn btn-info" value="Add Course" />
+                <input type="submit" class="btn btn-info" value="Add Course" />
             </div>
         </div>
     }
-    else
-    {
-        using (Html.BeginForm("AddCourse", "User", FormMethod.Post))
-        {
-            <div class="col-lg-12 row mb-2 text-custom">
-                <div class="col-6">
-                    @Html.Hidden("userId", Model.User.Id)
-                    @Html.DropDownList("courseId", Model.AvailableToAddCourses.Select(c => new SelectListItem
-                         {
-                             Value = c.Id + "",
-                             Text = c.Code + " - " + c.Name,
-                         }), new { @class = "form-control" })
-                </div>
-                <div class="col-2">
-                    <input type="submit" class="btn btn-info" value="Add Course" />
-                </div>
-            </div>
-        }
-    }
+}
 
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <div class="table-responsive text-custom">
-                <table class="table">
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped  text-custom" id="dataTable">
+                <thead>
                     <tr>
                         <th>Course Code</th>
                         <th>Course Name</th>
                         <th></th>
                     </tr>
-
-
+                </thead>
+                <tbody>
                     @foreach (var item in Model.User.Courses)
                     {
                         <tr>
@@ -140,8 +94,9 @@
                             </td>
                         </tr>
                     }
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
-}
+</div>
+

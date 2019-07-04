@@ -52,10 +52,17 @@ namespace QBCS.Web.Controllers
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Get All Course API", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.BusinessLogic, "Get All Course By User", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult LoadCourse()
         {
-            var result = courseService.GetAllCourses();
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCoursesByUserId(userId);
+            if (result == null)
+            {
+                result = new List<CourseViewModel>();
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)

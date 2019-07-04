@@ -27,14 +27,30 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Import
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "List Imports", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.SideBar, "List User Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "Import History", InternalId = 10)]
         public ActionResult Index()
         {
-            int userId = ((UserViewModel)Session["user"]).Id;
-            var model = importService.GetListImport(userId);
-            return View(model);
+            var user = ((UserViewModel)Session["user"]);
+            if (user != null)
+            {
+                var model = importService.GetListImport(user.Id);
+                return View(model);
+            }
+            else
+            {
+                return View();
+            }
         }
 
+        //Lecturer
+        // GET: Import
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "List All Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Imports", InternalId = 13)]
+        public ActionResult AllImport()
+        {
+            var model = importService.GetListImport(null);
+            return View("Index", model);
+        }
 
         //Lecturer
         //stpm: feature declare

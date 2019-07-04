@@ -51,7 +51,7 @@
                                     {
                                         <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
                                     }
-                                    else
+                                    else if (item.Action.Equals("Update"))
                                     {
                                         <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
                                     }
