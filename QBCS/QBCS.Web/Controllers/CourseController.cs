@@ -135,14 +135,13 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult CourseStatistic()
         {
-            int userId = ((UserViewModel)Session["user"]).Id;
-            var result = courseService.GetAllCourseStat();
+            var result = courseService.GetAllCoursesWithDetail();
             return View(result);
         }
-        public JsonResult GetCourseDetailStat(int courseId)
+        public ActionResult GetCourseDetailStat(int id, string type)
         {
-            var result = courseService.GetCourseStatDetailByCourseId(courseId);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var result = courseService.GetCourseStatDetailByIdAndType(id, type);
+            return PartialView("CourseDetailStatistic", result);
         }
         public ActionResult CourseDetailWithoutId()
         {

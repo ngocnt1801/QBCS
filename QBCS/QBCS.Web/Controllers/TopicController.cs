@@ -50,7 +50,7 @@ namespace QBCS.Web.Controllers
         }
         public JsonResult LoadCourse()
         {
-            var result = courseService.GetAllCourses();
+            var result = courseService.GetCourseByDisable();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)
