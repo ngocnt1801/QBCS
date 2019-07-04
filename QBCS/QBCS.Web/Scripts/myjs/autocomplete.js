@@ -13,6 +13,10 @@
 
                 },
                 success: function (data) {
+                    if (data == null || data == "") {
+                        var result = ["Not found"];
+                        return response(result);
+                    }
                     return response(data);
                 }
             });

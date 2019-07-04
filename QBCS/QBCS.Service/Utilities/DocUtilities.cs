@@ -69,39 +69,84 @@ namespace QBCS.Service.Utilities
                 if (key.Contains("QN="))
                 {
                     quesModel.Code = key.Replace("QN=", "");
+                    //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
+                    //{
+                    //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
+                    //    WParagraph wParagraph = bodyItemEntity as WParagraph;
+                    //    if (wParagraph.ChildEntities.Count != 0)
+                    //    {
+                    //        ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
+                    //        switch (pItem.EntityType)
+                    //        {
+                    //            default:
+                    //                if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")) && quesModel.QuestionContent == null)
+                    //                {
+                    //                    quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>");
+                    //                }
+                    //                else if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")))
+                    //                {
+                    //                    WTextRange text = pItem as WTextRange;
+                    //                    quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text;
+                    //                }
+                    //                break;
+                    //            case EntityType.Picture:
+                    //                WPicture wPicture = pItem as WPicture;
+                    //                Image iImage = wPicture.Image;
+
+                    //                MemoryStream m = new MemoryStream();
+                    //                iImage.Save(m, iImage.RawFormat);
+                    //                byte[] imageBytes = m.ToArray();
+
+                    //                quesModel.Image = Convert.ToBase64String(imageBytes);
+                    //                break;
+                    //        }
+                    //    }
+                    //    if (quesModel.Image != null)
+                    //    {
+                    //        break;
+                    //    }
+                    //}
+
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
+                        bool inputWholeParagraph = false;
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
                         WParagraph wParagraph = bodyItemEntity as WParagraph;
-                        if(wParagraph.ChildEntities.Count != 0)
+                        if (wParagraph.ChildEntities.Count != 0)
                         {
-                            ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
-                            switch (pItem.EntityType)
+                            foreach (var pChild in wParagraph.ChildEntities)
                             {
-                                default:
-                                    if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")) && quesModel.QuestionContent == null)
-                                    {
-                                        quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>");
-                                    }
-                                    else if (!(wParagraph.Text.Contains("[file") || wParagraph.Text.Equals("")))
-                                    {
-                                        WTextRange text = pItem as WTextRange;
-                                        quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text;
-                                    }
-                                    break;
-                                case EntityType.Picture:
-                                    WPicture wPicture = pItem as WPicture;
-                                    Image iImage = wPicture.Image;
+                                var pItem = pChild as ParagraphItem;
+                                switch (pItem.EntityType)
+                                {
+                                    case EntityType.TextRange:
+                                        if (!inputWholeParagraph)
+                                        {
+                                            if (!wParagraph.Text.Equals("") && quesModel.QuestionContent == null)
+                                            {
+                                                quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>").Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                                inputWholeParagraph = true;
+                                            }
+                                            else if (!wParagraph.Text.Equals(""))
+                                            {
+                                                quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                            }
+                                        }
+                                        break;
+                                    case EntityType.Picture:
+                                        WPicture wPicture = pItem as WPicture;
+                                        Image iImage = wPicture.Image;
 
-                                    MemoryStream m = new MemoryStream();
-                                    iImage.Save(m, iImage.RawFormat);
-                                    byte[] imageBytes = m.ToArray();
+                                        MemoryStream m = new MemoryStream();
+                                        iImage.Save(m, iImage.RawFormat);
+                                        byte[] imageBytes = m.ToArray();
 
-                                    quesModel.Image = Convert.ToBase64String(imageBytes);
-                                    break;
+                                        quesModel.Image = Convert.ToBase64String(imageBytes);
+                                        break;
+                                }
                             }
                         }
-                        if(quesModel.Image != null)
+                        if (quesModel.Image != null)
                         {
                             break;
                         }
@@ -130,7 +175,7 @@ namespace QBCS.Service.Utilities
                                     }
                                     else if (!wParagraph.Text.Equals(""))
                                     {
-                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
                                     }
                                     break;
                                 case EntityType.Picture:
@@ -146,6 +191,45 @@ namespace QBCS.Service.Utilities
                             }
                         }
                     }
+
+
+                    //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
+                    //{
+                    //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
+                    //    WParagraph wParagraph = bodyItemEntity as WParagraph;
+                    //    if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                    //    {
+                    //        foreach (var pChild in wParagraph.ChildEntities)
+                    //        {
+                    //            var pItem = pChild as ParagraphItem;
+                    //            switch (pItem.EntityType)
+                    //            {
+                    //                case EntityType.TextRange:
+                    //                    var wText = pChild as WTextRange;
+                    //                    if (!wText.Text.Equals("") && optionModel.OptionContent == null)
+                    //                    {
+                    //                        optionModel.IsCorrect = false;
+                    //                        optionModel.OptionContent = wText.Text.Replace("\v", "<cbr>");
+                    //                    }
+                    //                    else if (!wText.Text.Equals(""))
+                    //                    {
+                    //                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wText.Text;
+                    //                    }
+                    //                    break;
+                    //                case EntityType.Picture:
+                    //                    //WPicture wPicture = pItem as WPicture;
+                    //                    //Image iImage = wPicture.Image;
+
+                    //                    //MemoryStream m = new MemoryStream();
+                    //                    //iImage.Save(m, iImage.RawFormat);
+                    //                    //byte[] imageBytes = m.ToArray();
+
+                    //                    //quesModel.Image = Convert.ToBase64String(imageBytes);
+                    //                    break;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
                     if (optionModel.OptionContent != null)
