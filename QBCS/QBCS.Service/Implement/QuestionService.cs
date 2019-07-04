@@ -318,7 +318,7 @@ namespace QBCS.Service.Implement
             return result;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName)
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName, string prefix = "")
         {
             string category = "";
             string level = "";
@@ -679,7 +679,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = q.LearningOutcome,
+                            LearningOutcome = prefix + " " +q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
                             OptionTemps = q.Options.Select(o => new OptionTemp()

@@ -119,7 +119,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName);
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
             }
 
             //notify 
