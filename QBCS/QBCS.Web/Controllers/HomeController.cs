@@ -43,7 +43,6 @@ namespace QBCS.Web.Controllers
             return View(viewName, user);
         }
 
-
         public ActionResult Login(string username, string password)
         {
             var user = userService.Login(username, password);
@@ -58,6 +57,7 @@ namespace QBCS.Web.Controllers
             return View();
             
         }
+
         public ActionResult Logout(string username)
         {
 
@@ -71,6 +71,13 @@ namespace QBCS.Web.Controllers
         {
             TempData["active"] = "Home";
             return View();
+        }
+
+        public ActionResult ImportWord()
+        {
+            TempData["active"] = "word";
+            var user = (UserViewModel)Session["user"];
+            return View(user);
         }
     }
 }

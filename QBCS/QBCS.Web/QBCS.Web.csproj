@@ -2249,6 +2249,7 @@
     <Content Include="Views\Course\CourseDetailWithoutId.cshtml" />
     <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
     <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
+    <Content Include="Views\Home\ImportWord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

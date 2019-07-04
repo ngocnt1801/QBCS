@@ -78,7 +78,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Import:</h6>
                 <a class="collapse-item text-custom-dashboard @giftXmlClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">GIFT, XML</a>
-                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
+                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("ImportWord", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
                 <a class="collapse-item text-custom-dashboards @manualClass" href="@Url.Action("ImportWithtextArea","Home")">Manual</a>
             </div>
         </div>
