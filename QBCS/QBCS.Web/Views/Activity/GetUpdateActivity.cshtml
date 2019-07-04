@@ -37,7 +37,9 @@
                         <tbody>
                             <tr>
                                 <td>
-                                  
+                                    Category: <p>@item.QuestionNew.CourseName</p>
+                                    LOC: <p>@item.QuestionNew.LearningOutcomeName</p>
+                                    Level: <p>@item.QuestionNew.LevelName</p>
                                     Question:<p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
@@ -59,7 +61,10 @@
                                     }
                                 </td>
                                 <td>
-                                    Question:<p id="old">@item.QuestionOld.QuestionContent</p> 
+                                    Category: <p>@item.QuestionOld.CourseName</p>
+                                    LOC: <p>@item.QuestionOld.LearningOutcomeName</p>
+                                    Level: <p>@item.QuestionOld.LevelName</p>
+                                    Question:<p id="old">@item.QuestionOld.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {

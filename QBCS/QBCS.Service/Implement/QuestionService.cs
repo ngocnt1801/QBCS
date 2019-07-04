@@ -124,6 +124,8 @@ namespace QBCS.Service.Implement
             return questionViewModel;
         }
 
+      
+       
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -213,6 +215,10 @@ namespace QBCS.Service.Implement
             {
                 questionViewModel.CourseId = (int)question.CourseId;
             }
+            if (question.CategoryId != null)
+            {
+                questionViewModel.CategoryId = (int)question.CategoryId;
+            }
             if (question.LevelId != null)
             {
                 questionViewModel.LevelId = (int)question.LevelId;
@@ -221,7 +227,18 @@ namespace QBCS.Service.Implement
             {
                 questionViewModel.LearningOutcomeId = (int)question.LearningOutcomeId;
             }
-
+            if (question.Course != null)
+            {
+                questionViewModel.CourseName = question.Course.Name;
+            }
+            if (question.LearningOutcome != null)
+            {
+                questionViewModel.LearningOutcomeName = question.LearningOutcome.Name;
+            }
+            if (question.Level != null)
+            {
+                questionViewModel.LevelName = question.Level.Name;
+            }
             return questionViewModel;
         }
 
