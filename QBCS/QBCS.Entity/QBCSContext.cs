@@ -181,8 +181,8 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<Semester>()
                 .HasMany(e => e.Examinations)
-                .WithOptional(e => e.Semester1)
-                .HasForeignKey(e => e.Semester);
+                .WithOptional(e => e.Semester)
+                .HasForeignKey(e => e.SemesterId);
 
             modelBuilder.Entity<Topic>()
                 .Property(e => e.Name)

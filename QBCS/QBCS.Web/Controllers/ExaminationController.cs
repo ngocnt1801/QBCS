@@ -22,6 +22,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IPartOfExamService partOfExamService;
         private ICategoryService categoryService;
+        private ISemesterService semesterService;
         public ExaminationController()
         {
             topicService = new TopicService();
@@ -29,22 +30,25 @@ namespace QBCS.Web.Controllers
             examinationService = new ExaminationService();
             partOfExamService = new PartOfExamService();
             categoryService = new CategoryService();
+            semesterService = new SemesterService();
         }
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
             List<CategoryViewModel> categoryViewModels = categoryService.GetCategoriesByCourseId(courseId);
+            List<SemesterViewModel> semester = semesterService.GetAllSemester();
             ListLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListLearningOutcomeViewModel()
             {
                 LearningOutcomes = learningOutcomeViewModels,
-                Categories = categoryViewModels
+                Categories = categoryViewModels,
+                Semester = semester
             };
             TempData["active"] = "Examination";
             return View(listTopicLearningOutcomeViewModel);
         }
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
-            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);
+            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);           
             return View(examination);
         }
 

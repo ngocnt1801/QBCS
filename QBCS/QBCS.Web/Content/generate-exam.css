@@ -28,10 +28,6 @@ div.example input[type=text] {
 div.example {
     margin: auto;
 }
-    /*.list-course th{
-    color: white !important;
-    background : #335ACB !important;
-}*/
 
     div.example button {
         float: left;

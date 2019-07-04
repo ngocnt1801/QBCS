@@ -34,6 +34,7 @@ namespace QBCS.Service.ViewModel
         public int TotalQuestionGenerrate { get; set; }
         public int CategoryId { get; set; }
         public int OrdinaryGrade { get; set; }
+        public int Semeter { get; set; }
         public int GoodGrade { get; set; }
         public int ExcellentGrade { get; set; }
         public string FlagPercent { get; set; }
@@ -43,7 +44,7 @@ namespace QBCS.Service.ViewModel
         public int TotalExam { get; set; }
         public bool IsEnough { get; set; }
         public string GroupExam { get; set; }
-        public void calculateGrade()
+        public void CalculateGrade()
         {
             OrdinaryGradeCalculate = (int)Math.Round(((EasyQuestion * 1.0) / TotalQuestion) * 100);
             GoodGradeCalculate = (int)Math.Round(((MediumQuestion * 1.0) / TotalQuestion) * 100) + OrdinaryGradeCalculate;

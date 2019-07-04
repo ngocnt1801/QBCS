@@ -37,14 +37,17 @@
                         <td>@item.NumberOfEasy</td>
                         <td>@item.NumberOfMedium</td>
                         <td>@item.NumberOfHard</td>
-                        @*<td>
-                    <p>Number of easy question : @item.NumberOfEasy</p>
-                    <p>Number of medium question : @item.NumberOfMedium</p>
-                    <p>Number of hard question : @item.NumberOfHard</p>
-                </td>*@
+
                         <td>
-                            <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary" role="button">Detail</a>
-                            <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger" role="button">Disable</a>
+                            @if (item.IsDisable == false)
+                            {
+                                <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary" role="button">Detail</a>
+                                <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger" role="button">Disable</a>
+                            }
+                            else
+                            {
+                                <p>Disabled</p>
+                            }
                         </td>
                     </tr>
                 }

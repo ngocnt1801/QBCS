@@ -35,7 +35,8 @@ namespace QBCS.Service.Implement
         private ILearningOutcomeService learningOutcomeService;
         private ICourseService courseService;
         private ITopicService topicService;
-        IPartOfExamService partOfExamService;
+        private ISemesterService semesterService;
+        private IPartOfExamService partOfExamService;
 
 
         public ExaminationService()
@@ -47,15 +48,17 @@ namespace QBCS.Service.Implement
             topicService = new TopicService();
             courseService = new CourseService();
             partOfExamService = new PartOfExamService();
+            semesterService = new SemesterService();
         }
         public List<ExaminationViewModel> GetAllExam()
         {
             List<ExaminationViewModel> result = new List<ExaminationViewModel>();
-            List<Examination> exams = unitOfWork.Repository<Examination>().GetAll().Where(e => e.IsDisable == false).OrderByDescending(e => e.GeneratedDate).ToList();
+            List<Examination> exams = unitOfWork.Repository<Examination>().GetAll().OrderByDescending(e => e.GeneratedDate).ToList();
             result = exams.Select(e => new ExaminationViewModel
             {
                 Id = e.Id,
                 ExamCode = e.ExamCode,
+                IsDisable = (bool)e.IsDisable,
                 CourseId = e.CourseId.HasValue ? (int)e.CourseId : 0,
                 GeneratedDate = (DateTime)e.GeneratedDate,
                 NumberOfEasy = e.NumberOfEasy.HasValue ? (int)e.NumberOfEasy : 0,
@@ -93,8 +96,12 @@ namespace QBCS.Service.Implement
                 {
                     Id = exam.Id,
                     ExamCode = exam.ExamCode,
+                    ExamGroup = exam.GroupExam,
+                    IsDisable = (bool)exam.IsDisable,
                     CourseId = exam.CourseId.HasValue ? (int)exam.CourseId : 0,
                     GeneratedDate = (DateTime)exam.GeneratedDate,
+                    SemesterId = exam.SemesterId.HasValue ? (int)exam.SemesterId : 0,
+                    Semester = semesterService.GetById(exam.SemesterId.HasValue ? (int)exam.SemesterId : 0),               
                     NumberOfEasy = exam.NumberOfEasy.HasValue ? (int)exam.NumberOfEasy : 0,
                     NumberOfMedium = exam.NumberOfMedium.HasValue ? (int)exam.NumberOfMedium : 0,
                     NumberOfHard = exam.NumberOfHard.HasValue ? (int)exam.NumberOfHard : 0,
@@ -120,6 +127,24 @@ namespace QBCS.Service.Implement
                 int count = int.Parse(number);
                 count++;
                 result = "EX" + count.ToString("D6");
+            }
+            return result;
+        }
+        public string GetExamGroup()
+        {
+            string result = "";
+            Examination exam = unitOfWork.Repository<Examination>().GetAll().OrderByDescending(e => e.Id).FirstOrDefault();
+            if (exam == null || string.IsNullOrEmpty(exam.GroupExam))
+            {
+                int count = 1;
+                result = "EG" + count.ToString("D6");
+            }
+            else
+            {
+                string number = exam.GroupExam.Substring(2);
+                int count = int.Parse(number);
+                count++;
+                result = "EG" + count.ToString("D6");
             }
             return result;
         }
@@ -244,8 +269,6 @@ namespace QBCS.Service.Implement
                 courseId = learningOutcomeService.GetCourseIdByLearningOutcomeId(firstTopic.Id);
 
             }
-
-
             while (questionEasy != 0 || questionMedium != 0 || questionHard != 0)
             {
                 for (int i = 0; i < topics.Count; i++)
@@ -293,10 +316,9 @@ namespace QBCS.Service.Implement
                     }
                 }
             }
-            string examGroup = GetExamCode();
+            string examGroup = GetExamGroup();
             for (int i = 0; i < exam.TotalExam; i++)
             {
-
 
                 Examination examination = new Examination()
                 {
@@ -309,6 +331,10 @@ namespace QBCS.Service.Implement
                     ExamCode = GetExamCode(),
                     GroupExam = examGroup
                 };
+                if(exam.Semeter != 0)
+                {
+                    examination.SemesterId = exam.Semeter;
+                }
                 unitOfWork.Repository<Examination>().Insert(examination);
                 unitOfWork.SaveChanges();
                 foreach (var topic in topics)
@@ -345,15 +371,14 @@ namespace QBCS.Service.Implement
                             }).ToList()
                         };
                         unitOfWork.Repository<QuestionInExam>().Insert(question);
-                        unitOfWork.SaveChanges();
                     }
+                    unitOfWork.SaveChanges();
                 }
             }
             exam.GroupExam = examGroup;
-            exam.calculateGrade();
+            exam.CalculateGrade();
             return exam;
         }
-
         private List<QuestionViewModel> GeneratePartOfExamByLearningOutcome(LearingOutcomeInExamination learingOutcomeInExam, int categoryId)
         {
             List<QuestionViewModel> questionEasy = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.EasyQuestion, EASY);
@@ -403,11 +428,14 @@ namespace QBCS.Service.Implement
                         if (listQuestionRemoveRecent[i].Count != 0)
                         {
                             Random r = new Random();
-                            int randomIndex = r.Next(0, listQuestionRemoveRecent[i].Count);
+                            int randomIndex = r.Next(0, (listQuestionRemoveRecent[i].Count - 1));
                             var question = listQuestionRemoveRecent[i][randomIndex];
                             listQuestionRemoveRecent[i].RemoveAt(randomIndex);
                             QuestionViewModel questionViewModel = questionViewModelRemoveRecent.Where(q => q.Id == question.Id).FirstOrDefault();
-                            result.Add(questionViewModel);
+                            if (!result.Any(e => e.Id == questionViewModel.Id))
+                            {
+                                result.Add(questionViewModel);
+                            }
                             questionViewModelRemoveRecent.Remove(questionViewModel);
                         }
                         if (result.Count == numberOfQuestion)
@@ -423,19 +451,17 @@ namespace QBCS.Service.Implement
                 foreach (Question questionEntity in questionsByLevelAndLearningOutcome)
                 {
                     questionEntity.Priority = questionEntity.Priority + 1;
+                    unitOfWork.Repository<Question>().Update(questionEntity);
+                    unitOfWork.SaveChanges();
                 }
                 foreach (QuestionViewModel ques in result)
                 {
                     Question questionEntity = questionsByLevelAndLearningOutcome.Where(q => q.Id == ques.Id).FirstOrDefault();
                     questionEntity.Frequency = questionEntity.Frequency + 1;
                     questionEntity.Priority = 0;
-                }
-                foreach (Question questionEntity in questionsByLevelAndLearningOutcome)
-                {
                     unitOfWork.Repository<Question>().Update(questionEntity);
                     unitOfWork.SaveChanges();
-                }
-
+                }                         
                 if (result.Count == numberOfQuestion)
                 {
                     break;
@@ -448,14 +474,16 @@ namespace QBCS.Service.Implement
         {
             var listQuestion = unitOfWork.Repository<Question>().GetAll()
                                         .Where(q => q.CourseId == courseId)
-                                        .Select(q => new QuestionInExamViewModel() {
+                                        .Select(q => new QuestionInExamViewModel()
+                                        {
                                             Id = q.Id,
                                             Frequency = q.Frequency.Value,
                                             Priority = q.Priority.Value,
                                             QuestionContent = q.QuestionContent,
                                             Image = q.Image,
                                             QuestionCode = q.QuestionCode,
-                                            Options = q.Options.Select(o => new OptionViewModel {
+                                            Options = q.Options.Select(o => new OptionViewModel
+                                            {
                                                 Id = o.Id,
                                                 Image = o.Image,
                                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
