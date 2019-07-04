@@ -15,55 +15,40 @@
     <title>Staff_ListCourse</title>
 </head>
 <body>
-    <div class="row">
-        <div style="height:25px;" class="row">
 
-        </div>
-        
-        <div class="example form-input-group" style="margin:auto;max-width:300px">
-@using (Html.BeginForm("GetCourseByNameOrId", "Course", new { @class = "form-input-group" }))
-{
-            <input id="searchCourseValue" class="form-input-group" type="text" placeholder="Search Course" name="searchValue">
-
-            <button class="btn btn-primary"><i class="fa fa-search"></i></button>
-}
-        </div>
-        
-    </div>
-    <div class="list-course">
-        <table class="table table-striped text-custom" id="dataTable" width="100%" cellspacing="0">
-                <tr>
-                    <th>No.</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th></th>
-                </tr>
-                @foreach (var item in Model)
+    <table class="table table-striped text-custom" id="dataTable" width="100%" cellspacing="0">
+        <tr>
+            <th>No.</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
             {
-                    <tr>
-                        @{counter++; }
-                        <td>
-                            @counter
-                        </td>
-                        <td>
-                            @Html.DisplayFor(course => item.Code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(course => item.Name)
-                        </td>
-                        <td>
-                            @if (TempData["CreateExam"] != null && (bool)TempData["CreateExam"])
-                            {
-                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">Create Exam Test</a>
-                            }
-                            @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
-                            {
-                                <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">View history</a>
-                            }
-                        </td>
-                    </tr>
-                            }
-            </table>
-    </div>
+            <tr>
+                @{counter++; }
+                <td>
+                    @counter
+                </td>
+                <td>
+                    @Html.DisplayFor(course => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(course => item.Name)
+                </td>
+                <td>
+                    @if (TempData["CreateExam"] != null && (bool)TempData["CreateExam"])
+                    {
+                        <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">Create Exam Test</a>
+                    }
+                    @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
+                    {
+                        <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">View history</a>
+                    }
+                </td>
+            </tr>
+                    }
+    </table>
+
 </body>
 </html>
