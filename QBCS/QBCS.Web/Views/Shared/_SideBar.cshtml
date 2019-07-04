@@ -1,5 +1,27 @@
 ﻿@using QBCS.Service.ViewModel
 
+@{
+    string[] NAV_ICON =
+         {
+            "",
+            "fa fa-upload",
+            "fa fa-home",
+            "fa fa-home",
+            "",
+            "fa fa-history",
+            "fa fa-folder",
+            "fa fa-folder",
+            "fa fa-chart-line",
+            "fa fa-question",
+            "fa fa-list-ul",
+            "fa fa-file",
+            "fa fa-user",
+            "fa fa-list-ul",
+            "fa fa-chart-line",
+            "fa fa-history",
+        };
+}
+
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -27,7 +49,7 @@
             <hr class="sidebar-divider my-0">
             <li class="nav-item @active">
                 <a class="nav-link" href="@(item.Url)">
-                    <i class="fas fa-file"></i>
+                    <i class="@NAV_ICON[item.InternalId.HasValue ? item.InternalId.Value : 0]"></i>
                     <span>@item.ShortName</span>
                 </a>
             </li>
