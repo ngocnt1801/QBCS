@@ -27,7 +27,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Import
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "List User Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "Import History", InternalId = 10)]
+        [Feature(FeatureType.SideBar, "List User Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "Import History", InternalId = (int)SideBarEnum.ImportByUser)]
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
@@ -45,7 +45,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Import
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "List All Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Imports", InternalId = 13)]
+        [Feature(FeatureType.SideBar, "List All Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Imports", InternalId = (int)SideBarEnum.AllImport)]
         public ActionResult AllImport()
         {
             var model = importService.GetListImport(null);

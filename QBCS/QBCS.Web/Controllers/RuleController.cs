@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -20,7 +21,7 @@ namespace QBCS.Web.Controllers
         }
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized, ShortName = "Rule", InternalId = 11)]
+        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized, ShortName = "Rule", InternalId = (int)SideBarEnum.AllRule)]
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();

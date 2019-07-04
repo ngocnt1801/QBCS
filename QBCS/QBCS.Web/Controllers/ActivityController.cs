@@ -26,7 +26,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         // GET: Activity
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get Activities by User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = 5)]
+        [Feature(FeatureType.SideBar, "Get Activities by User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.ActivityByUser)]
         public ActionResult Index()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -38,7 +38,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = 15)]
+        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.AllActivity)]
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();

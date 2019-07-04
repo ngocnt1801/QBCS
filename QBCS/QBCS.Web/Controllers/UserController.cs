@@ -22,7 +22,7 @@ namespace QBCS.Web.Controllers
         // GET: User
         //Admin
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized, ShortName = "User", InternalId = 12)]
+        [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized, ShortName = "User", InternalId = (int)SideBarEnum.AllUser)]
         public ActionResult Index()
         {
             var list = userService.GetAllUser();

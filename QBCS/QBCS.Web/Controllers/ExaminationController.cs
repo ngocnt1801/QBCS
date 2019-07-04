@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -66,7 +67,7 @@ namespace QBCS.Web.Controllers
         }
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "All Examinations", "QBCS", protectType: ProtectType.Authorized, ShortName = "Examination", InternalId = 9)]
+        [Feature(FeatureType.SideBar, "All Examinations", "QBCS", protectType: ProtectType.Authorized, ShortName = "Examination", InternalId = (int)SideBarEnum.AllExamination)]
         public ActionResult GetAllExamination()
         {
             List<ExaminationViewModel> exams = examinationService.GetAllExam();

@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Enum\LevelEnum.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
+    <Compile Include="Enum\SideBarEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />
     <Compile Include="Enum\TypeEnum.cs" />
     <Compile Include="Implement\CategoryService.cs" />

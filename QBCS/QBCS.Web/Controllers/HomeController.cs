@@ -25,7 +25,7 @@ namespace QBCS.Web.Controllers
             , "Lecturer Home page"
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Import"
-            , InternalId = 1)]
+            , InternalId = (int)SideBarEnum.Import)]
         [Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
         public ActionResult Index()
         {
@@ -44,7 +44,7 @@ namespace QBCS.Web.Controllers
             , "Staff Home page"
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Home"
-            , InternalId = 2)]
+            , InternalId = (int)SideBarEnum.Staff)]
         public ActionResult Staff()
         {
             ViewBag.Title = "Staff Page";
@@ -62,7 +62,7 @@ namespace QBCS.Web.Controllers
             , "Admin Home page"
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Home"
-            , InternalId = 3)]
+            , InternalId = (int)SideBarEnum.Admin)]
         public ActionResult Admin()
         {
             ViewBag.Title = "Admin Page";
@@ -104,7 +104,7 @@ namespace QBCS.Web.Controllers
             , "Import - Manually"
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Manually"
-            , InternalId = 4)]
+            , InternalId = (int)SideBarEnum.Manually)]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         public ActionResult ImportWithTextArea()
         {
