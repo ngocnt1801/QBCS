@@ -23,8 +23,10 @@ namespace QBCS.Web.Controllers
             categoryService = new CategoryService();
         }
         // GET: Course
-        public ActionResult Index(int userId)
+        public ActionResult Index()
         {
+            var user = Session["user"] as UserViewModel;
+            int userId = user != null ? user.Id : 0;
             var list = courseService.GetAllCoursesByUserId(userId);
             TempData["active"] = "Course";
             return View(list);
