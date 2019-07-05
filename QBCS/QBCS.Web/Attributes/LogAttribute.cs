@@ -19,6 +19,10 @@ namespace QBCS.Web.Attributes
         public string TargetName { get; set; }
         public string ObjectParamName { get; set; }
         public string IdParamName { get; set; }
+        public string Fullname { get; set; }
+        public string UserCode { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -26,8 +30,8 @@ namespace QBCS.Web.Attributes
 
             int userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
             int? targetId = null;
-            QuestionViewModel oldValue = new QuestionViewModel();
-            QuestionViewModel newQues = new QuestionViewModel();
+            QuestionViewModel oldQuestionModel = new QuestionViewModel();
+            QuestionViewModel newQuestionModel = new QuestionViewModel();
             IQuestionService questionService = new QuestionService();
           
             if (IdParamName != null && filterContext.ActionParameters.ContainsKey(IdParamName))
@@ -36,11 +40,11 @@ namespace QBCS.Web.Attributes
             }
             else if (ObjectParamName != null && filterContext.ActionParameters.ContainsKey(ObjectParamName))
             {
-                newQues = filterContext.ActionParameters[ObjectParamName] as QuestionViewModel;
-                targetId = newQues.GetType().GetProperty(IdParamName).GetValue(newQues, null) as Int32?;
+                newQuestionModel = filterContext.ActionParameters[ObjectParamName] as QuestionViewModel;
+                targetId = newQuestionModel.GetType().GetProperty(IdParamName).GetValue(newQuestionModel, null) as Int32?;
                 if (Action.ToLower().Equals("update") && TargetName.ToLower().Equals("question"))
                 {
-                    oldValue = questionService.GetQuestionById(newQues.Id);
+                    oldQuestionModel = questionService.GetQuestionById(newQuestionModel.Id);
                 }
 
             }
@@ -48,26 +52,31 @@ namespace QBCS.Web.Attributes
             if (Action.ToLower().Equals("update") && TargetName.ToLower().Equals("question"))
             {
                 QuestionViewModel questionViewModel = new QuestionViewModel();
-                oldValue.QuestionContent = WebUtility.HtmlDecode(oldValue.QuestionContent);
-                for (int i = 0; i < oldValue.Options.Count; i++)
+                oldQuestionModel.QuestionContent = WebUtility.HtmlDecode(oldQuestionModel.QuestionContent);
+                for (int i = 0; i < oldQuestionModel.Options.Count; i++)
                 {
-                    oldValue.Options[i].OptionContent = WebUtility.HtmlDecode(oldValue.Options[i].OptionContent);
+                    oldQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(oldQuestionModel.Options[i].OptionContent);
                 }
-                logModel.OldValue = JsonConvert.SerializeObject(oldValue);
+                logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
                 
-                if (newQues.QuestionContent != "")
+                if (newQuestionModel.QuestionContent != "")
                 {
-                    newQues.QuestionCode = oldValue.QuestionCode != null ? oldValue.QuestionCode.ToString() : "";
-                    newQues.CourseId = oldValue.CourseId;
+                    newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
+                    newQuestionModel.CourseId = oldQuestionModel.CourseId;
                     //newQues.LearningOutcomeId = oldValue.LearningOutcomeId;
                     //newQues.LevelId = oldValue.LevelId;
-                    newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
-                    for (int i = 0; i < newQues.Options.Count; i++)
+                    newQuestionModel.QuestionContent = WebUtility.HtmlDecode(newQuestionModel.QuestionContent);
+                    for (int i = 0; i < newQuestionModel.Options.Count; i++)
                     {
-                        newQues.Options[i].OptionContent = WebUtility.HtmlDecode(newQues.Options[i].OptionContent);
+                        newQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(newQuestionModel.Options[i].OptionContent);
                     }
-                    logModel.NewValue = JsonConvert.SerializeObject(newQues);
+                    logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
                 }
+            }
+            else
+            {
+                logModel.OldValue = OldValue;
+                logModel.NewValue = NewValue;
             }
 
             logModel.UserId = userId;
@@ -78,7 +87,8 @@ namespace QBCS.Web.Attributes
             logModel.Message = Message;
             logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             logModel.Method = filterContext.ActionDescriptor.ActionName;
-    
+            logModel.Fullname = Fullname;
+            logModel.UserCode = UserCode;
 
             ILogService logger = new LogService();
             logger.Log(logModel);

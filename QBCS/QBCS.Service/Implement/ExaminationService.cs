@@ -37,6 +37,7 @@ namespace QBCS.Service.Implement
         private ITopicService topicService;
         private ISemesterService semesterService;
         private IPartOfExamService partOfExamService;
+        private ILogService logService;
 
 
         public ExaminationService()
@@ -49,6 +50,7 @@ namespace QBCS.Service.Implement
             courseService = new CourseService();
             partOfExamService = new PartOfExamService();
             semesterService = new SemesterService();
+            logService = new LogService();
         }
         public List<ExaminationViewModel> GetAllExam()
         {
@@ -155,7 +157,7 @@ namespace QBCS.Service.Implement
             unitOfWork.Repository<Examination>().Update(exam);
             unitOfWork.SaveChanges();
         }
-        public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam)
+        public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam, string fullname = "", string usercode = "")
         {
             exam.IsEnough = true;
             int courseId = 0;
@@ -337,6 +339,11 @@ namespace QBCS.Service.Implement
                 }
                 unitOfWork.Repository<Examination>().Insert(examination);
                 unitOfWork.SaveChanges();
+
+                //log generate exam
+                logService.LogManually(examination.Id, "Generate", "Examination", fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
+
+
                 foreach (var topic in topics)
                 {
                     List<QuestionViewModel> questionInPartOfExam;
@@ -375,6 +382,9 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
                 }
             }
+
+           
+
             exam.GroupExam = examGroup;
             exam.CalculateGrade();
             return exam;

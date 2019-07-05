@@ -29,6 +29,7 @@ namespace QBCS.Web.Controllers
             return View(list);
         }
 
+        [Log(Action = "Disable", TargetName = "User", IdParamName = "userId", Fullname = "", UserCode = "")]
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
@@ -52,17 +53,20 @@ namespace QBCS.Web.Controllers
 
         }
 
+        [Log(Action = "Delete", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
             userService.RemoveUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 
+        [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult AddCourse(int courseId, int userId)
         {
             userService.AddUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
+
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);

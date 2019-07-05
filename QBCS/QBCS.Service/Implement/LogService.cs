@@ -277,14 +277,16 @@ namespace QBCS.Service.Implement
                 Method = model.Method,
                 OldValue = model.OldValue,
                 NewValue = model.NewValue,
-                TargetId = model.TargetId
+                TargetId = model.TargetId,
+                Fullname = model.Fullname,
+                UserCode = model.UserCode
             };
 
             unitOfWork.Repository<Log>().Insert(entity);
             unitOfWork.SaveChanges();
         }
 
-        public void LogManually(int targetId, int userId, string action, string targetName, string controller = "", string method = "")
+        public void LogManually(int targetId, string action, string targetName, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel
             {
@@ -294,7 +296,9 @@ namespace QBCS.Service.Implement
                 TargetName = targetName,
                 Action = action,
                 Controller = controller,
-                Method = method
+                Method = method,
+                Fullname = fullname,
+                UserCode = usercode
             };
             Log(model);
         }

@@ -1,6 +1,7 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,6 +47,7 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Examination";
             return View(listTopicLearningOutcomeViewModel);
         }
+
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
             GenerateExamViewModel examination = examinationService.GenerateExamination(exam);           
@@ -70,6 +72,8 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Examination";
             return View(exam);
         }
+
+        [Log(Action = "Disable", IdParamName = "examId", TargetName = "Examination", Fullname = "", UserCode = "")]
         public ActionResult DisableExam(int examId)
         {
             examinationService.DisableEaxam(examId);

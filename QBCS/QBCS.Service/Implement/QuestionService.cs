@@ -706,7 +706,7 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
 
                     //log import
-                    logService.LogManually(entity.Id, userId, "Import", "Question", "Question", "ImportFile");
+                    logService.LogManually(entity.Id, "Import", "Question",controller: "Question",method: "ImportFile", userId: userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>

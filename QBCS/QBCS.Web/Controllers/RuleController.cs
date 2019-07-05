@@ -1,6 +1,7 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,9 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Rule";
             return View(result);
         }
+
         [HttpPost]
+        [Log(Action = "Edit", TargetName = "Rule", UserCode = "", Fullname = "")]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);

@@ -9,7 +9,7 @@ namespace QBCS.Service.ViewModel
     public class LogViewModel
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string UserRole { get; set; }
         public DateTime LogDate { get; set; }
         public string Message { get; set; }
@@ -21,6 +21,7 @@ namespace QBCS.Service.ViewModel
         public string OldValue { get; set; }
         public string NewValue { get; set; }
         public string Fullname { get; set; }
+        public string UserCode { get; set; }
         public string OwnerName { get; set; }
 
         public QuestionViewModel QuestionNew { get; set; }
