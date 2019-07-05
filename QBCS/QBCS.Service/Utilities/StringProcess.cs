@@ -26,17 +26,25 @@ namespace QBCS.Service.Utilities
             string TRUE = "true";
             string CORRECT = "correct";
             
-            if (source != null)
+            if (source != null || source.Contains(INCORRECT) || source.Contains(FALSE) || source.Contains(TRUE) || source.Contains(CORRECT))
             {
                 
                 result = RemoveTag(source, INCORRECT, INCORRECT.ToUpper());
                 result = RemoveTag(result, FALSE, FALSE.ToUpper());
-                result = RemoveTag(result, NOT, NOT.ToUpper());
+                string[] temp = result.Split(' ');
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    if (temp[i].Equals(NOT))
+                    {
+                        result = RemoveTag(source, temp[i].ToString(), NOT.ToUpper());
+                    }
+
+                }
+                //result = RemoveTag(result, NOT, NOT.ToUpper());
                 result = RemoveTag(result, TRUE, TRUE.ToUpper());
                 result = RemoveTag(result, CORRECT, CORRECT.ToUpper());
                
             }
-
             return result;
         }
         public string RemoveHtmlBrTag(string source)
