@@ -148,11 +148,11 @@ namespace QBCS.Web.Controllers
                                 xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                 if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                 {
-                                    xmlWriter.WriteCData(question.QuestionContent.Replace("<cbr>", " <br/>"));
+                                    xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(question.QuestionContent));
                                 }
                                 else
                                 {
-                                    xmlWriter.WriteString(question.QuestionContent.Replace("<cbr>", " <br/>"));
+                                    xmlWriter.WriteString(StringUtilities.FormatStringExportXML(question.QuestionContent));
                                 }
                                 xmlWriter.WriteEndElement();
                                 if (question.Image == null)
@@ -246,11 +246,11 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                         {
-                                            xmlWriter.WriteCData(option.OptionContent.Replace("<cbr>", " <br/>"));
+                                            xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         else
                                         {
-                                            xmlWriter.WriteString(option.OptionContent.Replace("<cbr>", " <br/>"));
+                                            xmlWriter.WriteString(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         xmlWriter.WriteEndElement();
                                         //feedback tag
@@ -271,11 +271,11 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                         {
-                                            xmlWriter.WriteCData(option.OptionContent);
+                                            xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         else
                                         {
-                                            xmlWriter.WriteString(option.OptionContent);
+                                            xmlWriter.WriteString(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         xmlWriter.WriteEndElement();
                                         //feedback tag

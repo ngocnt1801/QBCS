@@ -137,6 +137,28 @@
             return b - a;
         }
     });
+    //modify sort by level
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "formatted-level-pre": function (a) {
+            if (a.toLowerCase() === "easy") {
+                a = 1;
+            } else if (a.toLowerCase() === "medium") {
+                a = 2;
+            } else if (a.toLowerCase() === "hard") {
+                a = 3;
+            }
+            //a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
+            return parseFloat(a);
+        },
+
+        "formatted-level-asc": function (a, b) {
+            return a - b;
+        },
+
+        "formatted-level-desc": function (a, b) {
+            return b - a;
+        }
+    });
 
     //set up datatable
     $('#dataTableExam').DataTable({
@@ -167,6 +189,10 @@
             {
                 type: 'formatted-num',
                 targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
             },
             {
                 'targets': [1, 2],
@@ -204,6 +230,10 @@
                 targets: 4
             },
             {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
                 'targets': [1, 2],
                 'orderable': false,
             }
@@ -237,6 +267,10 @@
             {
                 type: 'formatted-num',
                 targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
             },
             {
                 'targets': [1, 2],
@@ -274,6 +308,10 @@
                 targets: 4
             },
             {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
                 'targets': [1, 2],
                 'orderable': false,
             }
@@ -309,6 +347,10 @@
                 targets: 4
             },
             {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
                 'targets': [1, 2],
                 'orderable': false,
             }
@@ -342,6 +384,10 @@
             {
                 type: 'formatted-num',
                 targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
             },
             {
                 'targets': [1, 2],
