@@ -389,6 +389,7 @@ namespace QBCS.Service.Implement
         }
         private List<QuestionViewModel> GeneratePartOfExamByLearningOutcomeAndLevel(int learningOutcomeId, int numberOfQuestion, string nameOfLevel)
         {
+            List<QuestionViewModel> resultTmp = new List<QuestionViewModel>();
             List<QuestionViewModel> result = new List<QuestionViewModel>();
             int idOfLevel = levelService.GetIdByName(nameOfLevel);
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -456,11 +457,22 @@ namespace QBCS.Service.Implement
                 }
                 foreach (QuestionViewModel ques in result)
                 {
-                    Question questionEntity = questionsByLevelAndLearningOutcome.Where(q => q.Id == ques.Id).FirstOrDefault();
-                    questionEntity.Frequency = questionEntity.Frequency + 1;
-                    questionEntity.Priority = 0;
-                    unitOfWork.Repository<Question>().Update(questionEntity);
-                    unitOfWork.SaveChanges();
+                    if(!resultTmp.Any(tmp => tmp.Id == ques.Id))
+                    {
+                        Question questionEntity = questionsByLevelAndLearningOutcome.Where(q => q.Id == ques.Id).FirstOrDefault();
+                        questionEntity.Frequency = questionEntity.Frequency + 1;
+                        questionEntity.Priority = 0;
+                        unitOfWork.Repository<Question>().Update(questionEntity);
+                        unitOfWork.SaveChanges();
+                        resultTmp.Add(ques);
+                    } else
+                    {
+                        Question questionEntity = questionsByLevelAndLearningOutcome.Where(q => q.Id == ques.Id).FirstOrDefault();                        
+                        questionEntity.Priority = 0;
+                        unitOfWork.Repository<Question>().Update(questionEntity);
+                        unitOfWork.SaveChanges();
+                    }
+                    
                 }                         
                 if (result.Count == numberOfQuestion)
                 {

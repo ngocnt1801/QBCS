@@ -137,7 +137,7 @@
             return b - a;
         }
     });
-    //modify sort by level
+    //extend sort by level
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "formatted-level-pre": function (a) {
             if (a.toLowerCase() === "easy") {
