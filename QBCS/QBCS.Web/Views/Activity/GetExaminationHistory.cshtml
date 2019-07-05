@@ -27,7 +27,7 @@
             @Html.DisplayFor(m => m.Question.QuestionContent)
             @if (Model.Question.Image != null)
             {
-                <img src="data:image/png;base64, @Model.Question.Image" />
+                <p><img src="data:image/png;base64, @Model.Question.Image" /></p>
             }
         </p>
         @for (int i = 0; i < Model.Question.Options.Count; i++)

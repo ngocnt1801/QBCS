@@ -41,7 +41,7 @@
                                     Question:<p id="new">@item.QuestionNew.QuestionContent</p>
                                     @if (item.QuestionNew.Image != null)
                                     {
-                                        <img src="data:image/png;base64, @item.QuestionNew.Image" />
+                                             <p><img src="data:image/png;base64, @item.QuestionNew.Image" /></p>
                                     }
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
@@ -66,7 +66,7 @@
                                     Question:<p id="old">@item.QuestionOld.QuestionContent</p>
                                     @if (item.QuestionOld.Image != null)
                                     {
-                                        <img src="data:image/png;base64, @item.QuestionOld.Image" />
+                                             <p><img src="data:image/png;base64, @item.QuestionOld.Image" /></p>
                                     }
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
