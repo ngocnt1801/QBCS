@@ -798,6 +798,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                Image = q.Image,
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
@@ -883,7 +884,9 @@ namespace QBCS.Service.Implement
                     OptionContent = o.OptionContent,
                     Image = o.Image
                 }).ToList(),
-                Category = questionEntity.Category.Name + " / " + questionEntity.LearningOutcome.Name,
+                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]") 
+                            + " / " 
+                            + (questionEntity.LearningOutcomeId.HasValue ? questionEntity.LearningOutcome.Name : "[None of learning outcome]"),
                 LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
 

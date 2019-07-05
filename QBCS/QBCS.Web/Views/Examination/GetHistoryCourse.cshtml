@@ -42,6 +42,10 @@
                                 <td>@item.QuestionCode</td>
                                 <td>
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
+                                    @if (item.Image != null)
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.Image" />
+                                    }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
                                         if (item.Options[i].IsCorrect == true)
