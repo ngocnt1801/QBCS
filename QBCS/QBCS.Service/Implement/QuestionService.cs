@@ -207,6 +207,7 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
+                Image = question.Image,
                 ImportId = (int)question.ImportId
             };
             if (question.CourseId != null)
@@ -318,7 +319,7 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName)
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName, string prefix = "")
         {
             string category = "";
             string level = "";
@@ -679,7 +680,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = q.LearningOutcome,
+                            LearningOutcome = prefix + " " +q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
@@ -706,7 +707,7 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
 
                     //log import
-                    logService.LogManually(entity.Id, userId, "Import", "Question", "Question", "ImportFile");
+                    logService.LogManually(entity.Id, "Import", "Question",controller: "Question",method: "ImportFile", userId: userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
@@ -750,7 +751,7 @@ namespace QBCS.Service.Implement
 
         public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
         {
-            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
+            IQueryable<Question> questions = unitOfWork.Repository<Question>().GetNoTracking();
             Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return question != null ? (int)question.Frequency : 0;
         }
@@ -798,6 +799,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                Image = q.Image,
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
@@ -874,8 +876,19 @@ namespace QBCS.Service.Implement
             var questionVM = new QuestionViewModel()
             {
                 QuestionContent = questionEntity.QuestionContent,
+                Image = questionEntity.Image,
                 QuestionCode = questionEntity.QuestionCode,
-                CourseId = questionEntity.CourseId.Value
+                CourseId = questionEntity.CourseId.Value,
+                Options = questionEntity.Options.Select( o => new OptionViewModel
+                {
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                    OptionContent = o.OptionContent,
+                    Image = o.Image
+                }).ToList(),
+                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]") 
+                            + " / " 
+                            + (questionEntity.LearningOutcomeId.HasValue ? questionEntity.LearningOutcome.Name : "[None of learning outcome]"),
+                LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
 
             var questionInExams = unitOfWork.Repository<QuestionInExam>().GetAll()
@@ -888,7 +901,9 @@ namespace QBCS.Service.Implement
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
                     //Semester = (int)entity.Semester
-                    ExamCode = entity.ExamCode
+                    ExamCode = entity.ExamCode,
+                    IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
+                    
                 };
                 examList.Add(exam);
             }

@@ -414,6 +414,7 @@
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
     <Content Include="libman.json" />
+    <Content Include="Content\file\QBCS_Word_Template.doc" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\datatables\datatables-demo.js" />
     <Content Include="Scripts\datatables\dataTables.bootstrap4.js" />
@@ -2257,6 +2258,7 @@
     <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
     <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
     <Content Include="Views\Shared\_SideBar.cshtml" />
+    <Content Include="Views\Home\ImportWord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

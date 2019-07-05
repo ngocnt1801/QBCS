@@ -32,9 +32,10 @@ namespace QBCS.Service.Implement
             return listLog.Select(l => new LogViewModel()
             {
                 Id = l.Id,
-                UserId = (int)l.UserId,
-                TargetId = l.TargetId,
-                Fullname = unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname,
+                UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                Fullname = l.UserId.HasValue ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                UserCode = l.UserId.HasValue ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
                 Action = l.Action,
                 Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
                 LogDate = l.Date.Value
@@ -71,9 +72,9 @@ namespace QBCS.Service.Implement
                     {
                         Id = item.Id,
                         UserId = (int)item.UserId,
+                        Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
                         Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
-                        Action = item.Action,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -280,14 +281,16 @@ namespace QBCS.Service.Implement
                 Method = model.Method,
                 OldValue = model.OldValue,
                 NewValue = model.NewValue,
-                TargetId = model.TargetId
+                TargetId = model.TargetId,
+                Fullname = model.Fullname,
+                UserCode = model.UserCode
             };
 
             unitOfWork.Repository<Log>().Insert(entity);
             unitOfWork.SaveChanges();
         }
 
-        public void LogManually(int targetId, int userId, string action, string targetName, string controller = "", string method = "")
+        public void LogManually(int targetId, string action, string targetName, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel
             {
@@ -297,7 +300,9 @@ namespace QBCS.Service.Implement
                 TargetName = targetName,
                 Action = action,
                 Controller = controller,
-                Method = method
+                Method = method,
+                Fullname = fullname,
+                UserCode = usercode
             };
             Log(model);
         }

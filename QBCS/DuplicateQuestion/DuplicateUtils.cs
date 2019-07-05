@@ -667,7 +667,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -685,6 +685,10 @@ namespace DuplicateQuestion
                     {
                         question = new QuestionModel();
                         question.QuestionContent = (string)reader["QuestionContent"];
+                        if (reader["Image"] != DBNull.Value)
+                        {
+                            question.Image = (string)reader["Image"];
+                        }
                         question.QuestionCode = (string)reader["Code"];
                         question.Status = (int)StatusEnum.Success;
                         question.Id = (int)reader["Id"];
@@ -797,7 +801,7 @@ namespace DuplicateQuestion
                 {
                     #region insert question
                     SqlCommand command = new SqlCommand(
-                        "INSERT Question (QuestionContent,CourseId,QuestionCode, CategoryId, LearningOutcomeId, ImportId, LevelId) " +
+                        "INSERT Question (QuestionContent,CourseId,QuestionCode, CategoryId, LearningOutcomeId, ImportId, LevelId, Image) " +
                         "OUTPUT INSERTED.Id AS 'Id' " +
                         "VALUES ( " +
                             "@questionContent, " +
@@ -806,7 +810,8 @@ namespace DuplicateQuestion
                             "@category, " +
                             "@learningOutcome, " +
                             "@importId, " +
-                            "@level" +
+                            "@level, " +
+                            "@image" +
                         ")",
                         connection
                         );
@@ -818,6 +823,7 @@ namespace DuplicateQuestion
                     command.Parameters.AddWithValue("@learningOutcome", question.LearningOutcomeId);
                     command.Parameters.AddWithValue("@importId", import.ImportId);
                     command.Parameters.AddWithValue("@level", question.LevelId);
+                    command.Parameters.AddWithValue("@image", question.Image);
                     var reader = command.ExecuteReader();
                     #endregion
                     int id = 0;

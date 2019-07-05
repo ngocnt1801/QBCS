@@ -33,6 +33,7 @@ namespace QBCS.Web.Controllers
             var user = (UserViewModel)Session["user"];
             int userId = user != null ? user.Id : 0;
             var model = logService.GetAllActivitiesByUserId(userId);
+            TempData["active"] = "Activity";
             return View(model);
         }
 
@@ -60,6 +61,7 @@ namespace QBCS.Web.Controllers
             logViews = logService.GetAllActivitiesByTargetId(targetId);
             logViews.Add(logModel);
             //logViews = logService.GetAllActivitiesByUserId(user.Id, user);
+            TempData["active"] = "Activity";
             return View("Index", logViews);
         }
         //Lecturer
@@ -69,6 +71,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetUpdateActivityById (int id)
         {
             var model = logService.GetActivitiesById(id);
+            TempData["active"] = "Activity";
             return View("GetUpdateActivity", model);
         }
 
@@ -91,6 +94,7 @@ namespace QBCS.Web.Controllers
                 }
                
             }
+            TempData["active"] = "Activity";
             return View("GetListActivity", list);
         }
         //Staff
@@ -99,6 +103,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);
+            TempData["active"] = "Course";
             return View(result);
         }
     }

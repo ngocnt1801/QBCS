@@ -372,19 +372,21 @@
             },
             null,
             null,
+            null,
+            null,
             null
         ],
         columnDefs: [
             {
-                'targets': [0, 1, 2, 5],
+                'targets': [0, 1, 2, 7],
                 'orderable': false,
             },
             {
-                'targets': [0, 3, 4],
+                'targets': [0, 3, 4, 5, 6],
                 'width': "2%"
             },
             {
-                'targets': [1, 5],
+                'targets': [1, 7],
                 'width': "11%"
             },
         ]

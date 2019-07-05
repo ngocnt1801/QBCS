@@ -26,5 +26,7 @@ namespace DuplicateQuestion.Entity
         public int? LearningOutcomeId { get; set; }
         public int? LevelId { get; set; }
         public int? UpdateQuestionId { get; set; }
+
+        public string Image { get; set; }
     }
 }

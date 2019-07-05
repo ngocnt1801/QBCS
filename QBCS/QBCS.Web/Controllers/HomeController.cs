@@ -90,6 +90,7 @@ namespace QBCS.Web.Controllers
             return View();
 
         }
+
         public ActionResult Logout(string username)
         {
 
@@ -108,7 +109,15 @@ namespace QBCS.Web.Controllers
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         public ActionResult ImportWithTextArea()
         {
+            TempData["active"] = "Home";
             return View();
+        }
+
+        public ActionResult ImportWord()
+        {
+            TempData["active"] = "word";
+            var user = (UserViewModel)Session["user"];
+            return View(user);
         }
     }
 }

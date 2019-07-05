@@ -47,7 +47,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Import from:</h6>
                     <a class="collapse-item" href="@Url.Action("Index", "Home")">File Moodle</a>
-                    <a class="collapse-item" href="@Url.Action("Index", "Home")">File MS Word</a>
+                    <a class="collapse-item" href="@Url.Action("ImportWord", "Home")">File MS Word</a>
                     @if (sidebar.Where(s => s.InternalId.HasValue && s.InternalId.Value == (int)QBCS.Service.Enum.SideBarEnum.Manually).Any())
                     {
                         <a class="collapse-item" href="@Url.Action("ImportWithTextArea", "Home")">Manually</a>
@@ -61,16 +61,16 @@
     @foreach (var item in sidebar.OrderBy(s => s.InternalId))
     {
 
-        if (item.IsInternal 
+        if (item.IsInternal
             && item.InternalId != (int)QBCS.Service.Enum.SideBarEnum.Import
             && item.InternalId != (int)QBCS.Service.Enum.SideBarEnum.Manually)
         {
             string active = "";
-            if (TempData["active"] != null && item.InternalId == (int)TempData["active"])
-            {
-                active = "active";
+            //if (TempData["active"] != null && item.InternalId == (int)TempData["active"])
+            //{
+            //    active = "active";
 
-            }
+            //}
 
             <hr class="sidebar-divider my-0">
             <li class="nav-item @active">

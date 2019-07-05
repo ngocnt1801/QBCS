@@ -4,59 +4,36 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="row">
-    <div class="col">
-        <h2>Courses</h2>
-    </div>
-</div>
+
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">List of Courses</h6>
+    <div class="card-header">
+        <h5>List all course</h5>
     </div>
     <div class="card-body">
-        <div class="table-responsive text-custom">
-            <table class="table table-bordered table-hover text-custom  table-striped" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Code)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Name)
-                        </th>
-                        <th>
-                            Action
-                        </th>
+        <table class="table table-striped table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
+                        <td>
+                            @Html.DisplayFor(course => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(course => item.Name)
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
+                        </td>
                     </tr>
-                </thead>
-
-                <tbody class="text-custom">
-                    @if (Model != null && Model.Count() > 0)
-                    {
-                        foreach (var item in Model)
-                        {
-                            <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
-                                <td hidden></td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-
-                                <td width="18%">
-                                    <a href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })" class="btn btn-primary">
-                                        Detail
-                                    </a>
-                                </td>
-
-                            </tr>
-                        }
-                    }
-
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-

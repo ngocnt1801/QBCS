@@ -99,7 +99,7 @@ namespace QBCS.Web.Controllers
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
-
+            TempData["active"] = "Course";
             return View("EditQuestion", qdvm);
         }
 
@@ -121,14 +121,14 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName);
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
             }
 
             //notify 

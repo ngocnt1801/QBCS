@@ -19,6 +19,10 @@
                 <label>Question</label>
                 <div class="customs-display customs-display-area question-custom" contenteditable="true" data-for="hidden-question-content">
                     @Html.DisplayFor(model => model.Question.QuestionContent)
+                    @if (Model.Question.Image != null)
+                    {
+                    <p><img class="exam-image" src="data:image/png;base64, @Model.Question.Image" /></p>
+                    }
                 </div>
                 <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
             </div>
@@ -34,7 +38,7 @@
                             @Html.DisplayFor(m => option.OptionContent)
                         </div>
                         <div class="form-group">
-                            <input class="form-control" name="Options[@counter].OptionContent" type="hidden" value="@option.OptionContent" id="o-@counter" />
+                            <input class="form-control hidden-option" name="Options[@counter].OptionContent" type="hidden" value="@option.OptionContent" id="o-@counter" />
                         </div>
                     </div>
 

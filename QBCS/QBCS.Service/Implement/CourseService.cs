@@ -71,26 +71,32 @@ namespace QBCS.Service.Implement
         }
         public List<CourseViewModel> GetAllCoursesByUserId(int id)
         {
-
-            var user = unitOfWork.Repository<User>().GetById(id);
-            if (user != null)
+            if (id != 0)
             {
+                var user = unitOfWork.Repository<User>().GetById(id);
                 var courses = user.CourseOfUsers.Select(c => new CourseViewModel
                 {
                     Id = c.Id,
-                    CourseId = (int)c.CourseId,
+                    CourseId = c.CourseId.Value,
                     Name = c.Course.Name,
                     Code = c.Course.Code,
-                    IsDisable = (bool)c.Course.IsDisable
+                    IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
                 }).Where(c => c.IsDisable == false).ToList();
                 return courses;
-
             }
             else
             {
-                return null;
+                var courses = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel
+                {
+                    Id = 0,
+                    CourseId = c.Id,
+                    Name = c.Name,
+                    Code = c.Code,
+                    IsDisable = c.IsDisable.HasValue && c.IsDisable.Value
+                }).Where(c => c.IsDisable == false).ToList();
+                return courses;
             }
-
+            
         }
         public List<Course> GetCoursesByName(string name)
         {

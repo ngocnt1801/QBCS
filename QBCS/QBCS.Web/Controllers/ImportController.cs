@@ -58,7 +58,8 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
-          
+            TempData["active"] = "Import";
+
             if (result.Status != (int)StatusEnum.Done)
             {
                 return View(result);
@@ -83,6 +84,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetQuestionTemp(int tempId)
         {
             var questiontemp = importService.GetQuestionTemp(tempId);
+            TempData["active"] = "Import";
             return View(questiontemp);
         }
 

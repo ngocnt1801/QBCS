@@ -32,6 +32,7 @@ namespace QBCS.Web.Controllers
             var user = ((UserViewModel)Session["user"]);
             int userId = user != null ? user.Id : 0;
             var list = courseService.GetAllCoursesByUserId(userId);
+            TempData["active"] = "Course";
             return View(list);
         }
 
@@ -116,6 +117,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["CreateExam"] = true;
+            TempData["active"] = "Examination";
             return View("Staff_ListCourse", courses);
         }
 
@@ -126,6 +128,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["ViewHistory"] = true;
+            TempData["active"] = "Course";
             return View("Staff_ListCourse", courses);
         }
 
@@ -150,6 +153,7 @@ namespace QBCS.Web.Controllers
                 Id = courseId,
                 Categories = categories
             };
+            TempData["active"] = "Course";
             return View(model);
         }
 
@@ -162,6 +166,7 @@ namespace QBCS.Web.Controllers
         public ActionResult CourseStatistic()
         {
             var result = courseService.GetAllCourseStat(null);
+            TempData["active"] = "Statistics";
             return View(result);
         }
 
@@ -173,6 +178,7 @@ namespace QBCS.Web.Controllers
             var user = (UserViewModel)Session["user"];
             int userId = user != null ? user.Id : 0;
             var result = courseService.GetAllCourseStat(userId);
+            TempData["active"] = "Statistics";
             return View(result);
         }
 
