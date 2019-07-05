@@ -63,6 +63,7 @@ namespace QBCS.Web.Attributes
                 {
                     newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
                     newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                    newQuestionModel.Image = oldQuestionModel.Image;
                     //newQues.LearningOutcomeId = oldValue.LearningOutcomeId;
                     //newQues.LevelId = oldValue.LevelId;
                     newQuestionModel.QuestionContent = WebUtility.HtmlDecode(newQuestionModel.QuestionContent);

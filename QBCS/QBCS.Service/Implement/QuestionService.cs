@@ -207,6 +207,7 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
+                Image = question.Image,
                 ImportId = (int)question.ImportId
             };
             if (question.CourseId != null)
