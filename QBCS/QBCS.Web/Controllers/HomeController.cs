@@ -36,7 +36,7 @@ namespace QBCS.Web.Controllers
             Session["user"] = userService.GetUser(userCode);
             
             ViewBag.Name = "";
-
+            TempData["active"] = "Import";
             return View("Index", null);
         }
 
@@ -54,6 +54,7 @@ namespace QBCS.Web.Controllers
             Session["user"] = userService.GetUser(userCode);
 
             ViewBag.Name = "";
+            TempData["active"] = "Home";
 
             return View("Staff", null);
         }
@@ -72,6 +73,7 @@ namespace QBCS.Web.Controllers
             Session["user"] = userService.GetUser(userCode);
 
             ViewBag.Name = "";
+            TempData["active"] = "Home";
 
             return View("Admin", null);
         }
@@ -109,13 +111,18 @@ namespace QBCS.Web.Controllers
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         public ActionResult ImportWithTextArea()
         {
-            TempData["active"] = "Home";
+            TempData["active"] = "Manually";
             return View();
         }
 
+        [Feature(FeatureType.SideBar
+            , "Import - Word"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Import MS Word"
+            , InternalId = (int)SideBarEnum.ImportMSWord)]
         public ActionResult ImportWord()
         {
-            TempData["active"] = "word";
+            TempData["active"] = "ImportWord";
             var user = (UserViewModel)Session["user"];
             return View(user);
         }

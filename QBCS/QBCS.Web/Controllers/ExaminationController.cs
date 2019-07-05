@@ -57,7 +57,8 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Generate Examination", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
-            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);           
+            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);     
+            TempData["active"] = "Examination";
             return View(examination);
         }
 

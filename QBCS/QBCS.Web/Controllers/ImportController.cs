@@ -31,6 +31,7 @@ namespace QBCS.Web.Controllers
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
+            TempData["active"] = "Import History";
             if (user != null)
             {
                 var model = importService.GetListImport(user.Id);
@@ -49,6 +50,7 @@ namespace QBCS.Web.Controllers
         public ActionResult AllImport()
         {
             var model = importService.GetListImport(null);
+            TempData["active"] = "All Imports";
             return View("Index", model);
         }
 
@@ -58,7 +60,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
-            TempData["active"] = "Import";
+            TempData["active"] = "All Imports";
 
             if (result.Status != (int)StatusEnum.Done)
             {
@@ -75,6 +77,7 @@ namespace QBCS.Web.Controllers
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
             importService.UpdateQuestionTemp(model);
+            TempData["active"] = "All Imports";
             return RedirectToAction("GetResult", new { importId = model.ImportId });
         }
 
@@ -84,7 +87,7 @@ namespace QBCS.Web.Controllers
         public ActionResult GetQuestionTemp(int tempId)
         {
             var questiontemp = importService.GetQuestionTemp(tempId);
-            TempData["active"] = "Import";
+            TempData["active"] = "All Import";
             return View(questiontemp);
         }
 
@@ -98,6 +101,7 @@ namespace QBCS.Web.Controllers
             });
             TempData["Message"] = "Your questions are processing";
             TempData["Status"] = ToastrEnum.Info;
+
             return RedirectToAction("Index", "Home");
         }
 

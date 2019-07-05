@@ -166,7 +166,7 @@ namespace QBCS.Web.Controllers
         public ActionResult CourseStatistic()
         {
             var result = courseService.GetAllCourseStat(null);
-            TempData["active"] = "Statistics";
+            TempData["active"] = "Statistic";
             return View(result);
         }
 
@@ -178,7 +178,7 @@ namespace QBCS.Web.Controllers
             var user = (UserViewModel)Session["user"];
             int userId = user != null ? user.Id : 0;
             var result = courseService.GetAllCourseStat(userId);
-            TempData["active"] = "Statistics";
+            TempData["active"] = "Statistic";
             return View(result);
         }
 

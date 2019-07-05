@@ -44,6 +44,7 @@ namespace QBCS.Web.Controllers
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
             var model = logService.GetAllActivities();
+            TempData["active"] = "Activity";
             return View("Index", model);
         }
 
