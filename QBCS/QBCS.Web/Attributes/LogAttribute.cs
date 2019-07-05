@@ -59,8 +59,8 @@ namespace QBCS.Web.Attributes
                 {
                     newQues.QuestionCode = oldValue.QuestionCode != null ? oldValue.QuestionCode.ToString() : "";
                     newQues.CourseId = oldValue.CourseId;
-                    newQues.LearningOutcomeId = oldValue.LearningOutcomeId;
-                    newQues.LevelId = oldValue.LevelId;
+                    //newQues.LearningOutcomeId = oldValue.LearningOutcomeId;
+                    //newQues.LevelId = oldValue.LevelId;
                     newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
                     for (int i = 0; i < newQues.Options.Count; i++)
                     {

@@ -31,28 +31,26 @@ function question_custom() {
         $(this).html(op);
     });
 }
-function customs_display() {
-    var content;
-    content = $('#customs-display').html();
-    if (content.indexOf("[html]") >= 0) {
-        content = content.split("<cbr>").join("&lt;br&gt;");
-        content = content.split("&lt;cbr&gt;").join("<br/>");
-        content = content.split("&lt;br&gt;").join("<br/>");
-        content = content.split("<br>").join("<br/>");
-        content = content.split("&lt;br&gt;").join("&lt;br&gt;");
-        content = content.split("&lt;p&gt;").join("");
-        content = content.split("&lt;/p&gt;").join("");
-        content = content.split("&lt;b&gt;").join("");
-        content = content.split("&lt;/b&gt;").join("");
-        content = content.split("&lt;span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("&lt;/span&gt;").join("");
-        content = content.split("[html]").join("");
-    } else {
-        content = content.split("<cbr>").join("<br/>");
-        content = content.split("&lt;cbr&gt;").join("<br/>");
-    }
-    $('#customs-display').html(content);
+function customs_display_p() {
+    $.each($(".customs-display-p"), function () {
+        var content;
+        content = $(this).html();
+        if (content.indexOf("[html]") >= 0) {
+            content = content.split("<cbr>").join("&lt;br&gt;");
+            content = content.split("&lt;cbr&gt;").join("<br/>");
+            content = content.split("<br>").join("<br/>");
+            content = content.split("&lt;br&gt;").join("&lt;br&gt;");
+            content = content.split("&lt;p&gt;").join("");
+            content = content.split("&lt;/p&gt;").join("");
+            content = content.split("&lt;b&gt;").join("");
+            content = content.split("&lt;/b&gt;").join("");
+            content = content.split("&lt;span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("[html]").join("");
+        }
+        $(this).html(content);
+    });
 }
 
 function highlight(newElem, oldElem) {
@@ -126,7 +124,7 @@ function customs_text() {
 $(document).ready(function () {
     highlight($("#new"), $("#old"));
     customs_text();
-   // customs_display();
+    customs_display_p();
     option_custom();
     question_custom();
 });

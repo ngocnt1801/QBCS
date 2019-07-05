@@ -480,6 +480,8 @@ namespace QBCS.Service.Implement
                                             Frequency = q.Frequency.Value,
                                             Priority = q.Priority.Value,
                                             QuestionContent = q.QuestionContent,
+                                            LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
+                                            LearningOutcome = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "",
                                             Image = q.Image,
                                             QuestionCode = q.QuestionCode,
                                             Options = q.Options.Select(o => new OptionViewModel

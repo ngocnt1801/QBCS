@@ -273,7 +273,7 @@ namespace QBCS.Service.Utilities
                     WParagraph paragraph = bodyItemEntity as WParagraph;
                     if (!paragraph.Text.Equals(""))
                     {
-                        quesModel.LearningOutcome = "LearningOutcome" + paragraph.Text;
+                        quesModel.LearningOutcome = paragraph.Text;
                     }
                 }
                 else if (key.Contains("MARK:"))

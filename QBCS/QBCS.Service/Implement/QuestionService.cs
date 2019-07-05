@@ -874,8 +874,17 @@ namespace QBCS.Service.Implement
             var questionVM = new QuestionViewModel()
             {
                 QuestionContent = questionEntity.QuestionContent,
+                Image = questionEntity.Image,
                 QuestionCode = questionEntity.QuestionCode,
-                CourseId = questionEntity.CourseId.Value
+                CourseId = questionEntity.CourseId.Value,
+                Options = questionEntity.Options.Select( o => new OptionViewModel
+                {
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                    OptionContent = o.OptionContent,
+                    Image = o.Image
+                }).ToList(),
+                Category = questionEntity.Category.Name + " / " + questionEntity.LearningOutcome.Name,
+                LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
 
             var questionInExams = unitOfWork.Repository<QuestionInExam>().GetAll()
@@ -888,7 +897,9 @@ namespace QBCS.Service.Implement
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
                     //Semester = (int)entity.Semester
-                    ExamCode = entity.ExamCode
+                    ExamCode = entity.ExamCode,
+                    IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
+                    
                 };
                 examList.Add(exam);
             }

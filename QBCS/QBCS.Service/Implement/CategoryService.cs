@@ -59,12 +59,14 @@ namespace QBCS.Service.Implement
                                                                     Name = q.CategoryId.HasValue ? q.Category.Name : "[None of category]"
                                                                 })
                                                                 .Distinct()
+                                                                .OrderBy(c => c.Name)
                                                                 .ToList();
 
             foreach (var category in categories)
             {
+                #region get learning outcome
                 var categoryQuestions = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId && q.CategoryId == category.Id && !(q.IsDisable.HasValue && q.IsDisable.Value));
-                #region has category
+                
                 category.QuestionCount = categoryQuestions.Count();
 
                 category.LearningOutcomes = categoryQuestions.Select(q => new LearningOutcomeViewModel
@@ -73,10 +75,12 @@ namespace QBCS.Service.Implement
                     Name = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "[None of LOC]",
                 })
                 .Distinct()
+                .OrderBy(lo => lo.Name)
                 .ToList();
-
+                #endregion
                 foreach (var lo in category.LearningOutcomes)
                 {
+                    #region get level
                     var loQuestion = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId 
                                                                                             && q.CategoryId == category.Id
                                                                                             && q.LearningOutcomeId == lo.Id
@@ -102,8 +106,8 @@ namespace QBCS.Service.Implement
                                                                                                 && !(q.IsDisable.HasValue && q.IsDisable.Value))
                                                                                     .Count();
                     }
+                    #endregion
                 }
-                #endregion
             }
             return categories;
         }
