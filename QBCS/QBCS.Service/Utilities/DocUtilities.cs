@@ -250,7 +250,7 @@ namespace QBCS.Service.Utilities
                         {
                             for (int i = 0; i < answers.Length; i++)
                             {
-                                if (optionCheck.Code.Equals(answers[i]))
+                                if (optionCheck.Code.Equals(answers[i].ToString()))
                                 {
                                     foreach (var option in options)
                                     {
