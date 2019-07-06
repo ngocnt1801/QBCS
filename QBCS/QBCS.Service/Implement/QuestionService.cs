@@ -211,6 +211,10 @@ namespace QBCS.Service.Implement
                 Options = options,
                 ImportId = (int)question.ImportId
             };
+            if (question.Image != null)
+            {
+                questionViewModel.Image = question.Image;
+            }
             if (question.CourseId != null)
             {
                 questionViewModel.CourseId = (int)question.CourseId;
@@ -815,6 +819,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
+                Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,

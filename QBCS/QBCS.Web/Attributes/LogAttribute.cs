@@ -74,6 +74,8 @@ namespace QBCS.Web.Attributes
                     newQues.CourseName = oldValue.CourseName;
                     newQues.LearningOutcomeName = oldValue.LearningOutcomeName;
                     newQues.LevelName = oldValue.LevelName;
+
+                    newQues.Image = oldValue.Image; // khong biet tai sao khong truyen image o tren dc
                     newQues.QuestionContent = WebUtility.HtmlDecode(newQues.QuestionContent);
                     for (int i = 0; i < newQues.Options.Count; i++)
                     {
@@ -111,7 +113,7 @@ namespace QBCS.Web.Attributes
                                 newQues.LevelId = levelId;
                                 newQues.CategoryId = categoryId;
                                 newQues.CourseId = oldValue.CourseId;
-
+                                
                                 courseView = courseService.GetCourseById(oldValue.CourseId);
                                 newQues.CourseName = courseView.Name;
                                 learningOutcomeViewModel = learningOutcomeService.GetLearingOutcomeById(learningOutComeId);

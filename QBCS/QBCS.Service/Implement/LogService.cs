@@ -250,6 +250,10 @@ namespace QBCS.Service.Implement
                 QuestionContent = WebUtility.HtmlDecode(question.QuestionContent),
                 Options = optionViewModels
             };
+            if (question.Image != null)
+            {
+                questionViewModel.Image = question.Image;
+            }
             if (question.CourseId != null)
             {
                 questionViewModel.CourseId = (int)question.CourseId;

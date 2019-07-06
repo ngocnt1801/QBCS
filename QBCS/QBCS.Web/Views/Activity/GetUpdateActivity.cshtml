@@ -37,10 +37,15 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    Category: <p>@item.QuestionNew.CourseName</p>
-                                    LOC: <p>@item.QuestionNew.LearningOutcomeName</p>
-                                    Level: <p>@item.QuestionNew.LevelName</p>
-                                    Question:<p id="new">@item.QuestionNew.QuestionContent</p>
+                                    Category: @item.QuestionNew.CourseName <br />
+                                    LOC: @item.QuestionNew.LearningOutcomeName <br/>
+                                    Level: @item.QuestionNew.LevelName <br />
+                                    Question:
+                                    @if (item.QuestionNew.Image != null)
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                    } <br/>
+                                    <p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
                                     {
@@ -61,10 +66,15 @@
                                     }
                                 </td>
                                 <td>
-                                    Category: <p>@item.QuestionOld.CourseName</p>
-                                    LOC: <p>@item.QuestionOld.LearningOutcomeName</p>
-                                    Level: <p>@item.QuestionOld.LevelName</p>
-                                    Question:<p id="old">@item.QuestionOld.QuestionContent</p>
+                                    Category: @item.QuestionOld.CourseName <br />
+                                    LOC: @item.QuestionOld.LearningOutcomeName <br />
+                                    Level: @item.QuestionOld.LevelName <br />
+                                    Question:
+                                    @if (item.QuestionOld.Image != null)
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    } <br/>
+                                    <p id="old">@item.QuestionOld.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {
