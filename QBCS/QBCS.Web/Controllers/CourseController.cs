@@ -179,7 +179,7 @@ namespace QBCS.Web.Controllers
             int userId = user != null ? user.Id : 0;
             var result = courseService.GetAllCourseStat(userId);
             TempData["active"] = "Statistic";
-            return View(result);
+            return View("CourseStatistic", result);
         }
 
         //Lecturer

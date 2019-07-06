@@ -33,7 +33,11 @@ namespace QBCS.Web.Attributes
             LogViewModel logModel = new LogViewModel();
 
             var user = (UserViewModel)HttpContext.Current.Session["user"];
-            int userId = user != null ? user.Id : 0;
+            int? userId = null;
+            if (user != null)
+            {
+                userId = user.Id;
+            }
 
             int? targetId = null;
             QuestionViewModel oldQuestionModel = new QuestionViewModel();

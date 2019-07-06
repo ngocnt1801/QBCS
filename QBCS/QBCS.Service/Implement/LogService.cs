@@ -34,8 +34,8 @@ namespace QBCS.Service.Implement
                 Id = l.Id,
                 UserId = l.UserId.HasValue ? l.UserId.Value : 0,
                 TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
-                Fullname = l.UserId.HasValue ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
-                UserCode = l.UserId.HasValue ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
                 Action = l.Action,
                 Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
                 LogDate = l.Date.Value
@@ -71,10 +71,10 @@ namespace QBCS.Service.Implement
                      logViewModel = new LogViewModel()
                     {
                         Id = item.Id,
-                        UserId = (int)item.UserId,
+                        UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                         Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
-                        Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                        Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -114,9 +114,9 @@ namespace QBCS.Service.Implement
                     LogViewModel logViewModel = new LogViewModel()
                     {
                         Id = item.Id,
-                        UserId = (int)item.UserId,
+                        UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
-                        Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                        Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -137,10 +137,10 @@ namespace QBCS.Service.Implement
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
-                    UserId = (int)item.UserId,
+                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                     TargetId = item.TargetId,
                     Action = item.Action,
-                    Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                     Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                     LogDate = item.Date.Value
                 };
@@ -174,10 +174,10 @@ namespace QBCS.Service.Implement
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
-                    UserId = (int)item.UserId,   
+                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,   
                     //UserRole = role,
                     TargetId = item.TargetId,
-                    Fullname = item.UserId != null && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : "Anonymous",
+                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                     Action = item.Action,
                     Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
                     LogDate = item.Date.Value
@@ -209,8 +209,8 @@ namespace QBCS.Service.Implement
             LogViewModel model = new LogViewModel()
             {
                 TargetId = logById.TargetId,
-                UserId = (int)logById.UserId,
-                Fullname = unitOfWork.Repository<User>().GetById(logById.UserId.Value).Fullname,
+                UserId = logById.UserId.HasValue ? logById.UserId.Value : 0,
+                Fullname = logById.UserId.HasValue && logById.UserId != 0  ? unitOfWork.Repository<User>().GetById(logById.UserId.Value).Fullname : logById.Fullname,
                 Message = (logById.Action + " " + logById.TargetName).ToLowerInvariant(),
                 LogDate = logById.Date.Value,
                 //OldValue = questionViewModelOld.ToString(),
