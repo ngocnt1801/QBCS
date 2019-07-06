@@ -19,25 +19,26 @@ namespace QBCS.Service.Utilities
         }
         public string UpperCaseKeyWord(string source)
         {
-            string result = "";
-            string INCORRECT = "incorrect";
-            string FALSE = "false";
-            string NOT = "not";
-            string TRUE = "true";
-            string CORRECT = "correct";
-            
-            if (source != null)
-            {
-                
-                result = RemoveTag(source, INCORRECT, INCORRECT.ToUpper());
-                result = RemoveTag(result, FALSE, FALSE.ToUpper());
-                result = RemoveTag(result, NOT, NOT.ToUpper());
-                result = RemoveTag(result, TRUE, TRUE.ToUpper());
-                result = RemoveTag(result, CORRECT, CORRECT.ToUpper());
-               
-            }
+            //string result = "";
+            //string INCORRECT = "incorrect";
+            //string FALSE = "false";
+            //string NOT = "not";
+            //string TRUE = "true";
+            //string CORRECT = "correct";
 
-            return result;
+            //if (source != null)
+            //{
+
+            //    result = RemoveTag(source, INCORRECT, INCORRECT.ToUpper());
+            //    result = RemoveTag(result, FALSE, FALSE.ToUpper());
+            //    result = RemoveTag(result, NOT, NOT.ToUpper());
+            //    result = RemoveTag(result, TRUE, TRUE.ToUpper());
+            //    result = RemoveTag(result, CORRECT, CORRECT.ToUpper());
+
+            //}
+
+            //return result;
+            return source;
         }
         public string RemoveHtmlBrTag(string source)
         {

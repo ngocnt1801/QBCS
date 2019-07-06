@@ -34,11 +34,12 @@ namespace QBCS.Web.Controllers
 
             //stpm: get logged in user code
             var userCode = User.Identity.Get(a => a.Code);
-            Session["user"] = userService.GetUser(userCode);
+            var model = userService.GetUser(userCode);
+            Session["user"] = model;
             
             ViewBag.Name = "";
             TempData["active"] = "Import";
-            return View("Index", null);
+            return View("Index", model);
         }
 
         [Feature(FeatureType.SideBar
@@ -94,13 +95,9 @@ namespace QBCS.Web.Controllers
 
         }
 
-        public ActionResult Logout(string username)
+        public void Logout()
         {
-
-            Session.Clear();
-
-            return RedirectToAction("Index");
-
+            Response.Redirect("/QBCS.Web/logoff");
         }
 
         //stpm: feature declare
