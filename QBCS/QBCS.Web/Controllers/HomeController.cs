@@ -29,6 +29,7 @@ namespace QBCS.Web.Controllers
         [Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
         public ActionResult Index()
         {
+            //User.CheckPermission(typeof(HomeController),nameof(Index))
             ViewBag.Title = "Lecturer Page";
 
             //stpm: get logged in user code
