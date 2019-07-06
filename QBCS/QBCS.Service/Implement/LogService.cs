@@ -144,6 +144,7 @@ namespace QBCS.Service.Implement
                     Id = item.Id,
                     UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                     TargetId = item.TargetId,
+                    TargetName = item.TargetName,
                     Action = item.Action,
                     Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                     Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
