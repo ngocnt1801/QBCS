@@ -81,9 +81,11 @@ namespace QBCS.Web.Controllers
         [ActionName("export")]
         //stpm: feature declare
         [Feature(FeatureType.Page, "Export Examination", "QBCS", protectType: ProtectType.Authorized)]
-        [Log(Action = "Export", IdParamName = "examinationId", TargetName = "Examination")]
         public FileResult ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {
+
+            logService.LogManually("Export", "Examination", targetId: examinationId, controller: "ExaminationAPI", method: "ExportExamination", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
+
             ExaminationViewModel exam = examinationService.GetExanById(examinationId);
             string semesterName;
             if(exam.SemesterId != 0)

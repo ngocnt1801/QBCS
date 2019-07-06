@@ -26,6 +26,7 @@ namespace QBCS.Web.Controllers
         private IPartOfExamService partOfExamService;
         private ICategoryService categoryService;
         private ISemesterService semesterService;
+        private ILogService logService;
         public ExaminationController()
         {
             topicService = new TopicService();
@@ -34,6 +35,7 @@ namespace QBCS.Web.Controllers
             partOfExamService = new PartOfExamService();
             categoryService = new CategoryService();
             semesterService = new SemesterService();
+            logService = new LogService();
         }
         //Staff
         //stpm: feature declare
@@ -57,7 +59,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Generate Examination", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GenerateExaminaton(GenerateExamViewModel exam)
         {
-            GenerateExamViewModel examination = examinationService.GenerateExamination(exam);     
+            GenerateExamViewModel examination = examinationService.GenerateExamination(exam, fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));     
             TempData["active"] = "Examination";
             return View(examination);
         }
@@ -92,10 +94,10 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Disable Examination", "QBCS", protectType: ProtectType.Authorized)]
-        [Log(Action = "Disable", IdParamName = "examId", TargetName = "Examination", Fullname = "", UserCode = "")]
         public ActionResult DisableExam(int examId)
         {
             examinationService.DisableEaxam(examId);
+            logService.LogManually("Disable", "Examination", targetId: examId, controller: "Examination", method: "DisableExam", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             return RedirectToAction("GetAllExamination", "Examination");
         }
         //Staff

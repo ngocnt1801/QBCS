@@ -179,7 +179,7 @@ namespace QBCS.Service.Implement
         public List<CourseStatViewModel> GetAllCourseStat(int? id)
         {
             List<CourseStatViewModel> courses = null;
-            if (id != null)
+            if (id == null)
             {
                 courses = unitOfWork.Repository<Course>().GetAll()
                 .Select(c => new CourseStatViewModel

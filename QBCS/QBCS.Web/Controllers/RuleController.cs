@@ -16,9 +16,11 @@ namespace QBCS.Web.Controllers
     {
         // GET: Rule
         private IRuleService ruleService;
+        private ILogService logService;
         public RuleController()
         {
             ruleService = new RuleService();
+            logService = new LogService();
         }
         //Staff
         //stpm: feature declare
@@ -55,10 +57,10 @@ namespace QBCS.Web.Controllers
         [HttpPost]
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
-        [Log(Action = "Edit", TargetName = "Rule", UserCode = "", Fullname = "")]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);
+            logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

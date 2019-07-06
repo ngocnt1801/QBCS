@@ -27,20 +27,25 @@ namespace QBCS.Service.Implement
         public IEnumerable<LogViewModel> GetAllActivities()
         {
             //comment
-            var listLog = unitOfWork.Repository<Log>().GetAll().OrderByDescending(l => l.Date).ToList();
-          
-            return listLog.Select(l => new LogViewModel()
-            {
-                Id = l.Id,
-                UserId = l.UserId.HasValue ? l.UserId.Value : 0,
-                TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
-                Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
-                UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
-                Action = l.Action,
-                Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
-                LogDate = l.Date.Value
+            var listLog = unitOfWork.Repository<Log>()
+                .GetAll()
+                .OrderByDescending(l => l.Date.Value)
+                .ToList()
+                .Select(l => new LogViewModel()
+                {
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
+                    LogDate = l.Date.Value
 
-            });
+                });
+          
+            return listLog;
         }
         public LogViewModel GetQuestionImportByTargetId(int targetId)
         {
@@ -290,7 +295,7 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
         }
 
-        public void LogManually(int targetId, string action, string targetName, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
+        public void LogManually(string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel
             {
