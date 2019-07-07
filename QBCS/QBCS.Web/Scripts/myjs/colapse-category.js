@@ -215,6 +215,7 @@
                         columns: [
                             null,
                             {
+                                width: "75%",
                                 render: function (data, type, row) {
                                     if (data.indexOf("[html]") >= 0) {
                                         data = data.split("&lt;cbr&gt;").join("<br/>");
