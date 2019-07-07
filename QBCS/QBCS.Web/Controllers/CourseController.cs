@@ -135,7 +135,17 @@ namespace QBCS.Web.Controllers
         }
         public ActionResult CourseStatistic()
         {
-            var result = courseService.GetAllCoursesWithDetail();
+            var user = (UserViewModel)Session["user"];
+            var result = new List<CourseViewModel>();
+            if(user.Role == Service.Enum.RoleEnum.Staff)
+            {
+                result = courseService.GetAllCoursesWithDetail();
+            }
+            else
+            {
+                result = courseService.GetAllCoursesWithDetailById(user.Id);
+            }
+            
             return View(result);
         }
         public ActionResult GetCourseDetailStat(int id, string type)
