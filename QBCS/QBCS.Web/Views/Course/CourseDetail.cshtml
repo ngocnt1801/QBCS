@@ -29,7 +29,7 @@
 
 
 <div class="row">
-    <div class="list-group list-group-root well col-md-3 text-custom show-category">
+    <div style="max-height: 100vh; overflow-y: auto; margin-bottom: 30px" class="list-group list-group-root well col-md-3 text-custom show-category">
         @Html.Partial("_ListCategory", Model)
     </div>
     <div id="list-question" class="col-md-9" data-id="@Model.Id">
