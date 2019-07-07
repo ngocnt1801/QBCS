@@ -50,6 +50,8 @@
             this.moveQuestionSubmitBtn.on("click", function () {
                 categoryOctopus.updateCategory();
             });
+
+            this.initTable();
         },
         downCount: function (spanCount) {
             var currentCount = spanCount.attr("data-count");
@@ -170,6 +172,15 @@
 
             $.each(listQuestionSelected, function (index, item) {
                 $("#" + item.id + " .checkbox")[0].checked = true;
+            });
+        },
+        initTable: function () {
+            $("#list-course-table").dataTable({
+                columns: [
+                    null,
+                    null,
+                    null
+                ]
             });
         }
     };

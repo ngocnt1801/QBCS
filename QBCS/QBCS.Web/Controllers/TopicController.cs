@@ -50,7 +50,9 @@ namespace QBCS.Web.Controllers
         }
         public JsonResult LoadCourse()
         {
-            var result = courseService.GetCourseByDisable();
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCoursesByUserId(userId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)

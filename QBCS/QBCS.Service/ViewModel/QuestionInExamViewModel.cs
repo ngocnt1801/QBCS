@@ -20,6 +20,7 @@ namespace QBCS.Service.ViewModel
         public string Image { get; set; }
         public int Frequency { get; set; }
         public LevelViewModel Level { get; set; }
+        public string LearningOutcome { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public CategoryViewModel Category { get; set; }
         public ExaminationViewModel Examination { get; set; }

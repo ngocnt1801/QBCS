@@ -17,6 +17,7 @@ namespace QBCS.Service.ViewModel
         public int CategoryId { get; set; }
         public int TopicId { get; set; }
         public int LearningOutcomeId { get; set; }
+        public string LearningOutcomeName { get; set; }
         public int LevelId { get; set; }
         public string CourseName { get; set; }
         public string CourseCode { get; set; }
@@ -26,6 +27,7 @@ namespace QBCS.Service.ViewModel
         public QuestionViewModel DuplicatedQuestion { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public LevelViewModel Level { get; set; }
+        public string LevelName { get; set; }
         public string QuestionCode { get; set; }
         public int ImportId { get; set; }
         public string Category { get; set; }

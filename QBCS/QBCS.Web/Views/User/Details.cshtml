@@ -77,7 +77,7 @@
     }
 </div>
 <hr class="mt-5 mb-5" />
-@if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin)
+@if (((UserViewModel)Session["user"]).Role == RoleEnum.Admin && Model.User.Role == RoleEnum.Lecturer)
 {
     <div class="col-12 text-custom">
         <h3>List Course</h3>

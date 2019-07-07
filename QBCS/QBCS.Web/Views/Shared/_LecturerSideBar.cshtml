@@ -1,6 +1,6 @@
 ﻿@using QBCS.Service.ViewModel
 
-@{ 
+@{
     var homeClass = "";
     var giftXmlClass = "";
     var wordClass = "";
@@ -11,23 +11,12 @@
     var userClass = "";
     var activitiesClass = "";
     var statisticClass = "";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    //var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var controller = TempData["active"] != null ? (string)TempData["active"] : "";
     switch (controller)
     {
         case "Home":
             homeClass = "active";
-            break;
-        case "GIFT, XML":
-            giftXmlClass = "active";
-            break;
-        case "Word":
-            wordClass = "active";
-            break;
-        case "Manual":
-            manualClass = "active";
-            break;
-        case "Import3Type":
-            import3TypeClass = "active";
             break;
         case "Course":
             courseClass = "active";
@@ -45,7 +34,7 @@
             activitiesClass = "active";
             break;
     }
-    }
+}
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
     onclick="nav_bar_active()">
@@ -74,13 +63,13 @@
     <hr class="sidebar-divider my-0">
 
     @*<li class="nav-item @homeClass">
-        <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>*@
+            <a class="nav-link" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>*@
 
-    <li class="nav-item @import3TypeClass">
+    <li class="nav-item @homeClass">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>Import</span>
@@ -89,7 +78,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Import:</h6>
                 <a class="collapse-item text-custom-dashboard @giftXmlClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">GIFT, XML</a>
-                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("Index", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
+                <a class="collapse-item text-custom-dashboard @wordClass" href="@Url.Action("ImportWord", "Home",new { id = ((UserViewModel)Session["user"]).Id })">Word</a>
                 <a class="collapse-item text-custom-dashboards @manualClass" href="@Url.Action("ImportWithtextArea","Home")">Manual</a>
             </div>
         </div>
@@ -101,14 +90,14 @@
     <!-- Heading -->
     <!-- Nav Item - Courses Menu -->
     <li class="nav-item @courseClass">
-        <a class="nav-link" href="@Url.Action("Index", "Course",new { userId = ((UserViewModel)Session["user"]).Id })">
+        <a class="nav-link" href="@Url.Action("Index", "Course")">
             <i class="fas fa-book"></i>
             <span>Courses</span>
         </a>
     </li>
 
     <!-- Nav Item - Course Statistics Menu -->
-    <li class="nav-item">
+    <li class="nav-item @statisticClass">
         <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
             <i class="fas fa-chart-pie"></i>
             <span>Statistics</span>
@@ -136,7 +125,7 @@
 
     <!-- Heading -->
     <!-- Nav Item - Account -->
-    <li class="nav-item @userClass">
+    @*<li class="nav-item @userClass">
         <a class="nav-link"
            href="@Url.Action("Details", "User", new { userId = ((UserViewModel)Session["user"]).Id })">
             <i class="fas fa-user fa-chart-area"></i>
@@ -150,11 +139,11 @@
             <i class="fas fa-user fa-chart-area"></i>
             <span>Textarea</span>
         </a>
-    </li>
+    </li>*@
 
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+    @*<hr class="sidebar-divider d-none d-md-block">*@
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

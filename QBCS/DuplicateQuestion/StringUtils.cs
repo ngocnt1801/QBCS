@@ -19,6 +19,7 @@ namespace DuplicateQuestion
 
         public static void RemoveSpecialCharacter(ref string s)
         {
+            RemoveHtmlSignal(ref s);
             s = Regex.Replace(s, "[.,:;]", "");
         }
 
@@ -27,6 +28,11 @@ namespace DuplicateQuestion
             s = s.ToLower();
             //RemoveSpecialCharacter(ref s);
             return s.Split(' ');
+        }
+
+        public static void RemoveHtmlSignal(ref string s)
+        {
+            s = s.Replace("[html]", "");
         }
 
     }

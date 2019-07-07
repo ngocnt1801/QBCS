@@ -74,7 +74,6 @@ namespace QBCS.Service.Implement
                         Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
                         Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
-                        //Action = item.Action,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -162,7 +161,7 @@ namespace QBCS.Service.Implement
             foreach (var item in listLog)
             {
                 string tempId = "";
-                if (item.NewValue != null)
+                if (item.NewValue != null && (item.Action == "Update" || item.Action == "Import"))
                 {
                     tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
                 }
@@ -187,21 +186,22 @@ namespace QBCS.Service.Implement
         public IEnumerable<LogViewModel> GetActivitiesById(int id)
         {
             var logById = unitOfWork.Repository<Log>().GetById(id);
-
+            
             List<LogViewModel> list = new List<LogViewModel>();
-            Question oldValue = JsonConvert.DeserializeObject<Question>(logById.OldValue);
-            Question newValue = JsonConvert.DeserializeObject<Question>(logById.NewValue);
-            QuestionViewModel questionViewModelOld = new QuestionViewModel();
-            QuestionViewModel questionViewModelNew = new QuestionViewModel();
-            if (oldValue != null)
-            {
-                questionViewModelOld = ParseEntityToModel(oldValue);
-            }
-            if (newValue.QuestionContent != null && newValue.Options != null)
-            {
-                questionViewModelNew = ParseEntityToModel(newValue);
+            QuestionViewModel oldValue = JsonConvert.DeserializeObject<QuestionViewModel>(logById.OldValue != null ? logById.OldValue.ToString() : "");
+            QuestionViewModel newValue = JsonConvert.DeserializeObject<QuestionViewModel>(logById.NewValue != null ? logById.NewValue.ToString() : "");
+            //QuestionViewModel questionViewModelOld = new QuestionViewModel();
+            //QuestionViewModel questionViewModelNew = new QuestionViewModel();
+            //if (oldValue != null && !oldValue.Equals(""))
+            //{
+            //    questionViewModelOld = ParseEntityToModel(oldValue);
+            //}
+            //if (newValue.QuestionContent != null && newValue.Options != null && !oldValue.Equals(""))
+            //{
+            //    questionViewModelNew = ParseEntityToModel(newValue);
                 
-            }
+            //}
+            
             
             LogViewModel model = new LogViewModel()
             {
@@ -213,8 +213,8 @@ namespace QBCS.Service.Implement
                 //OldValue = questionViewModelOld.ToString(),
                 //NewValue = questionViewModelNew.ToString(),
              
-                QuestionOld = questionViewModelOld,
-                QuestionNew = questionViewModelNew
+                QuestionOld = oldValue,
+                QuestionNew = newValue
 
             };
 
@@ -250,6 +250,10 @@ namespace QBCS.Service.Implement
                 QuestionContent = WebUtility.HtmlDecode(question.QuestionContent),
                 Options = optionViewModels
             };
+            if (question.Image != null)
+            {
+                questionViewModel.Image = question.Image;
+            }
             if (question.CourseId != null)
             {
                 questionViewModel.CourseId = (int)question.CourseId;
@@ -262,7 +266,19 @@ namespace QBCS.Service.Implement
             {
                 questionViewModel.LearningOutcomeId = (int)question.LearningOutcomeId;
             }
-           
+            if (question.Course != null)
+            {
+                questionViewModel.CourseName = question.Course.Name;
+            }
+            if (question.LearningOutcome != null)
+            {
+                questionViewModel.LearningOutcomeName = question.LearningOutcome.Name;
+            }
+            if (question.Level != null)
+            {
+                questionViewModel.LevelName = question.Level.Name;
+            }
+
             return questionViewModel;
         }
         public void Log(LogViewModel model)
@@ -278,14 +294,16 @@ namespace QBCS.Service.Implement
                 Method = model.Method,
                 OldValue = model.OldValue,
                 NewValue = model.NewValue,
-                TargetId = model.TargetId
+                TargetId = model.TargetId,
+                Fullname = model.Fullname,
+                UserCode = model.UserCode
             };
 
             unitOfWork.Repository<Log>().Insert(entity);
             unitOfWork.SaveChanges();
         }
 
-        public void LogManually(int targetId, int userId, string action, string targetName, string controller = "", string method = "")
+        public void LogManually(int targetId, string action, string targetName, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel
             {
@@ -295,7 +313,9 @@ namespace QBCS.Service.Implement
                 TargetName = targetName,
                 Action = action,
                 Controller = controller,
-                Method = method
+                Method = method,
+                Fullname = fullname,
+                UserCode = usercode
             };
             Log(model);
         }
