@@ -25,7 +25,7 @@ namespace QBCS.Service.Utilities
                     Log(logMessage, w);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

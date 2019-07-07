@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "GetListActivity";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 0;
 }
 
 <h2>Activities Detail</h2>
@@ -16,7 +17,7 @@
         <div class="card-body collapse show" id="collapse">
             @foreach (var item in Model)
             {
-                <p class="text-custom"> UserImport: @item.Fullname</p>
+                <p class="text-custom"> User Import: @item.Fullname</p>
                 <p class="text-custom"> Owner: @item.OwnerName</p>
                 <p class="text-custom"> Action: @item.Message</p>
                 <p class="text-custom"> Date: @item.LogDate</p>
@@ -26,42 +27,46 @@
                     <table class="table table-bordered text-custom table-hover" id="dataTable">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Question Code</th>
-                                <th>Course</th>
-                                <th>Learning outcome</th>
-                                <th>Level</th>
+                                @*<th>Course</th>
+                                    <th>Learning outcome</th>
+                                    <th>Level</th>*@
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var itemQues in item.listQuestion)
                             {
                                 <tr>
-
+                                    @{
+                                        counter++;
+                                    }
+                                    <td>@counter</td>
                                     <td>@itemQues.QuestionCode</td>
-                                    @if (itemQues.CourseCode != null)
-                                    {
-                                        <td>@itemQues.CourseCode</td>
-                                    }
-                                    else
-                                    {
-                                        <td>N/A</td>
-                                    }
-                                    @if (!itemQues.LearningOutcomeId.Equals(0))
-                                    {
-                                        <td>@itemQues.CourseCode</td>
-                                    }
-                                    else
-                                    {
-                                        <td>N/A</td>
-                                    }
-                                    @if (itemQues.Level != null)
-                                    {
-                                        <td>@itemQues.CourseCode</td>
-                                    }
-                                    else
-                                    {
-                                        <td>N/A</td>
-                                    }
+                                    @*@if (itemQues.CourseCode != null)
+                                        {
+                                            <td>@itemQues.CourseCode</td>
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @if (!itemQues.LearningOutcomeId.Equals(0))
+                                        {
+                                            <td>@itemQues.CourseCode</td>
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @if (itemQues.Level != null)
+                                        {
+                                            <td>@itemQues.CourseCode</td>
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }*@
 
                                     @*<td>@itemQues.LearningOutcomeId</td>
                                         <td>@itemQues.Level</td>*@

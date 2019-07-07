@@ -124,6 +124,8 @@ namespace QBCS.Service.Implement
             return questionViewModel;
         }
 
+      
+       
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -210,9 +212,17 @@ namespace QBCS.Service.Implement
                 Image = question.Image,
                 ImportId = (int)question.ImportId
             };
+            if (question.Image != null)
+            {
+                questionViewModel.Image = question.Image;
+            }
             if (question.CourseId != null)
             {
                 questionViewModel.CourseId = (int)question.CourseId;
+            }
+            if (question.CategoryId != null)
+            {
+                questionViewModel.CategoryId = (int)question.CategoryId;
             }
             if (question.LevelId != null)
             {
@@ -222,7 +232,18 @@ namespace QBCS.Service.Implement
             {
                 questionViewModel.LearningOutcomeId = (int)question.LearningOutcomeId;
             }
-
+            if (question.Course != null)
+            {
+                questionViewModel.CourseName = question.Course.Name;
+            }
+            if (question.LearningOutcome != null)
+            {
+                questionViewModel.LearningOutcomeName = question.LearningOutcome.Name;
+            }
+            if (question.Level != null)
+            {
+                questionViewModel.LevelName = question.Level.Name;
+            }
             return questionViewModel;
         }
 
@@ -799,7 +820,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = q.QuestionContent,
-                Image = q.Image,
+                Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,

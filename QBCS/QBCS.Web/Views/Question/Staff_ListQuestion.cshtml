@@ -46,6 +46,10 @@
                                 }
                                 <td>@counter</td>
                                 <td>
+                                    @if (item.Image != null && !item.Image.Equals(""))
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.Image" />
+                                    }
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
                                     @if (item.Image != null)
                                     {
