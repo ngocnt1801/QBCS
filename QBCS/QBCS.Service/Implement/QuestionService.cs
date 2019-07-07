@@ -182,7 +182,11 @@ namespace QBCS.Service.Implement
                 UpdateOptionId = o.Id
             }).ToList();
 
-            var tmp = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(entity);
+            var listEntity = new List<QuestionTemp>();
+            listEntity.Add(entity);
+            listEntity = importService.CheckRule(listEntity);
+
+            var tmp = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(listEntity.FirstOrDefault());
             unitOfWork.SaveChanges();
 
             //get log id
@@ -688,7 +692,7 @@ namespace QBCS.Service.Implement
                     QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
-                    listQuestion = docUltil.ParseDoc(questionFile.InputStream);
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream,prefix);
 
                     import = new Import()
                     {
@@ -1111,13 +1115,17 @@ namespace QBCS.Service.Implement
 
             if (import.QuestionTemps.Count() > 0)
             {
-                import.Status = (int)StatusEnum.NotCheck;
+                import.Status = (int)Enum.StatusEnum.NotCheck;
                 import.CourseId = courseId;
+                //import.OwnerName = ownerName;
                 //check formats
                 import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
                 var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                 import.TotalQuestion = import.QuestionTemps.Count();
                 unitOfWork.SaveChanges();
+
+                //log import
+                logService.LogManually(entity.Id, "Question", "Import", userId, "Question", "ImportFile");
 
                 //call store check duplicate
                 Task.Factory.StartNew(() =>

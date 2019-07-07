@@ -228,6 +228,22 @@ namespace QBCS.Service.Implement
             foreach (var tempQuestion in tempQuestions)
             {
                 tempQuestion.QuestionContent = Uppercase(tempQuestion.QuestionContent);
+
+                var checkCorrectOption = false;
+                foreach(var option in tempQuestion.OptionTemps)
+                {
+                    if ((bool)option.IsCorrect)
+                    {
+                        checkCorrectOption = true;
+                        break;
+                    }
+                }
+                if (!checkCorrectOption)
+                {
+                    tempQuestion.Status = (int)StatusEnum.Invalid;
+                    tempQuestion.Message = "Question must have a correct option";
+                }
+
                 if(tempQuestion.OptionTemps.Count > 1)
                 {
                     for (int i = 0; i < tempQuestion.OptionTemps.Count - 1; i++)
@@ -259,6 +275,10 @@ namespace QBCS.Service.Implement
                 
                 foreach (var rule in rules)
                 {
+                    if (tempQuestion.Status == (int)StatusEnum.Invalid)
+                    {
+                        break;
+                    }
                     if (DateTime.Compare(DateTime.Now, (DateTime)rule.ActivateDate) >= 0)
                     {
                         switch (rule.KeyId)

@@ -48,13 +48,6 @@ namespace QBCS.Web.Controllers
             result = topicService.UpdateTopic(topic);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult LoadCourse()
-        {
-            var user = (UserViewModel)Session["user"];
-            int userId = user != null ? user.Id : 0;
-            var result = courseService.GetAllCoursesByUserId(userId);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
         public ActionResult UpdateDisable(int itemId)
         {
             var update = topicService.UpdateDisable(itemId);
