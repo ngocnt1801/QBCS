@@ -68,6 +68,10 @@ namespace QBCS.Web.Controllers
             var update = learningOutcomeService.UpdateDisable(itemId);
             return RedirectToAction("Detail","Course", new { itemId = update});
         }
-
+        public JsonResult LoadCourseActive()
+        {
+            var result = courseService.GetCourseByDisable();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

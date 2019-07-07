@@ -20,6 +20,7 @@ namespace QBCS.Web.Controllers
         private ILearningOutcomeService learningOutcomeService;
         private IExaminationService examinationService;
         private IImportService importService;
+        private ICourseService courseService;
 
 
         public QuestionController()
@@ -31,7 +32,7 @@ namespace QBCS.Web.Controllers
             learningOutcomeService = new LearningOutcomeService();
             examinationService = new ExaminationService();
             importService = new ImportService();
-
+            courseService = new CourseService();
         }
 
         // GET: Question
@@ -152,7 +153,13 @@ namespace QBCS.Web.Controllers
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult LoadCourseAjax()
+        {
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCoursesByUserId(userId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();

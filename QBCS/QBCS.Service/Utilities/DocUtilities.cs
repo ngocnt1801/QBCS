@@ -22,10 +22,12 @@ namespace QBCS.Service.Utilities
         static string level = "";
         static List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
         static List<OptionTemp> options = new List<OptionTemp>();
+        static string globalPrefix = "";
 
-        public List<QuestionTmpModel> ParseDoc(Stream inputStream)
+        public List<QuestionTmpModel> ParseDoc(Stream inputStream, string prefix)
         {
             listQuestion = new List<QuestionTmpModel>();
+            globalPrefix = prefix.Replace(" ","");
             WordDocument wordDocument = new WordDocument(inputStream, FormatType.Automatic);
             foreach (WSection section in wordDocument.Sections)
             {
@@ -273,7 +275,7 @@ namespace QBCS.Service.Utilities
                     WParagraph paragraph = bodyItemEntity as WParagraph;
                     if (!paragraph.Text.Equals(""))
                     {
-                        quesModel.LearningOutcome = paragraph.Text;
+                        quesModel.LearningOutcome = globalPrefix + paragraph.Text;
                     }
                 }
                 else if (key.Contains("MARK:"))

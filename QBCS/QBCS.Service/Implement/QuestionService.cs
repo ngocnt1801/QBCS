@@ -692,7 +692,7 @@ namespace QBCS.Service.Implement
                     QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
-                    listQuestion = docUltil.ParseDoc(questionFile.InputStream);
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream,prefix);
 
                     import = new Import()
                     {
@@ -1125,7 +1125,7 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
 
                 //log import
-                logService.LogManually(entity.Id, userId, "Import", "Question", "Question", "ImportFile");
+                logService.LogManually(entity.Id, "Question", "Import", userId, "Question", "ImportFile");
 
                 //call store check duplicate
                 Task.Factory.StartNew(() =>
