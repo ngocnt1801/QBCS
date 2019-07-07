@@ -15,6 +15,7 @@ namespace QBCS.Service.Interface
         bool AddNewCourse(CourseViewModel model);
         List<CourseViewModel> GetAllCourses();
         List<CourseViewModel> GetAllCoursesWithDetail();
+        List<CourseViewModel> GetAllCoursesWithDetailById(int userId);
         List<CourseViewModel> GetAvailableCourse(int userId);
         List<CourseViewModel> GetAllCoursesByUserId(int id);
         List<Course> GetCoursesByName(string name);

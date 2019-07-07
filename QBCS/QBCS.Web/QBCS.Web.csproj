@@ -2251,6 +2251,7 @@
     <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
     <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
     <Content Include="Views\Home\ImportWord.cshtml" />
+    <Content Include="Views\Course\CourseDetailStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
