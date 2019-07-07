@@ -57,12 +57,12 @@ namespace QBCS.Service.Implement
         }
         public List<CourseViewModel> GetAllCoursesWithDetailById(int userId)
         {
-            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.IsDisable == false && c.CourseOfUsers == unitOfWork.Repository<CourseOfUser>().GetAll().Where(cou => cou.UserId == userId).ToList()).Select(c => new CourseViewModel
+            var course = unitOfWork.Repository<CourseOfUser>().GetAll().Where(c => c.User.IsDisable == false && c.UserId == userId).Select(c => new CourseViewModel
             {
-                Id = c.Id,
-                Code = c.Code,
-                Name = c.Name,
-                LearningOutcome = c.LearningOutcomes.Select(lo => new LearningOutcomeViewModel
+                Id = (int)c.CourseId,
+                Code = c.Course.Code,
+                Name = c.Course.Name,
+                LearningOutcome = c.Course.LearningOutcomes.Select(lo => new LearningOutcomeViewModel
                 {
                     Id = lo.Id,
                     Name = lo.Name
