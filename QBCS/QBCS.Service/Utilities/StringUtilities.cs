@@ -21,9 +21,20 @@ namespace QBCS.Service.Utilities
             result = StringProcess.RemoveTag(result, @"}", @"\}");
             result = StringProcess.RemoveTag(result, @"#", @"\#");
             result = StringProcess.RemoveTag(result, @"~", @"\~");
-            result = StringProcess.RemoveTag(result, @":", @"\:");
+            result = StringProcess.RemoveTag(result, @":", @"\:");            
             result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
             result = WebUtility.HtmlEncode(result);
+            return result;
+        }
+        public static string FormatStringExportXML(string textContent)
+        {
+            if(textContent == null)
+            {
+                return null;
+            }
+            string result = textContent;
+            result = StringProcess.RemoveTag(result, @"[html]", "");
+            result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
             return result;
         }
     }

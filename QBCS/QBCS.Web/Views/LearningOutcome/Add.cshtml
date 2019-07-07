@@ -65,7 +65,7 @@
     $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "@Url.Action("LoadCourse","Topic")",
+        url: "@Url.Action("LoadCourse","LearningOutcome")",
         dataType: "json",
         success: function (result) {
                 for (var i = 0; i < result.length; i++) {
@@ -80,34 +80,6 @@
             alert("Error");
         }
     });
-        @*$('#add').on('click', function () {
-            var learningoutcome = new Object();
-            learningoutcome.Code = $('#Code').val();
-            learningoutcome.Name = $('#Name').val();
-            learningoutcome.CourseId = $('#Course').children(":selected").attr("id");
-            if (learningoutcome.Code == "" || learningoutcome.Name == "") {
-                $('#error').text("*Code and Name must be filled");
-            }else{
-                $.ajax({
-                type: "POST",
-                url: '@Url.Action("Add","LearningOutcome")',
-                data: JSON.stringify(learningoutcome),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function(response) {
-                    if (response != null) {
-                        window.location.replace('@Url.Action("Detail", "Course", new { itemID = Model.CourseId})');
-                    }
-                },
-                failure: function(response) {
-                    alert(response.responseText);
-                },
-                error: function(response) {
-                    alert(response.responseText);
-                }
-            });
-            }
-        });*@
     });
 
 </script>

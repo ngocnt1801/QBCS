@@ -25,10 +25,11 @@ namespace QBCS.Web.Controllers
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
-            
+            TempData["active"] = "User";
             return View(list);
         }
 
+        [Log(Action = "Disable", TargetName = "User", IdParamName = "userId", Fullname = "", UserCode = "")]
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
@@ -52,17 +53,20 @@ namespace QBCS.Web.Controllers
 
         }
 
+        [Log(Action = "Delete", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
             userService.RemoveUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 
+        [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult AddCourse(int courseId, int userId)
         {
             userService.AddUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
+
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);
@@ -72,6 +76,7 @@ namespace QBCS.Web.Controllers
                 User = item,
                 AvailableToAddCourses = listAvailable
             };
+            TempData["active"] = "User";
             return View(model);
         }
         public JsonResult GetLecturer(string term)
@@ -80,7 +85,7 @@ namespace QBCS.Web.Controllers
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
             foreach(var lec in result)
             {
-                lecturerName.Add(lec.Fullname);
+                lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
             }
             return Json(lecturerName, JsonRequestBehavior.AllowGet);
         }

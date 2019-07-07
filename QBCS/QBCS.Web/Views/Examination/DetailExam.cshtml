@@ -36,7 +36,7 @@
                                         <p>@question.QuestionContent</p>
                                         @if (question.Image != null)
                                         {
-                                            <img class="exam-image" src="data:image/png;base64, @question.Image" />
+                                        <p><img class="exam-image" src="data:image/png;base64, @question.Image" /></p>
                                         }
                                         @{int charater = 0; }
                                         @foreach (var option in question.Options)
@@ -62,7 +62,7 @@
                                                     </div>
                                                     @if (option.Image != null)
                                                     {
-                                                        <img class="exam-image" src="data:image/png;base64, @option.Image" />
+                                                    <p><img class="exam-image" src="data:image/png;base64, @option.Image" /></p>
                                                     }
                                                 </div>
                                             }

@@ -5,14 +5,12 @@
     var courseClass = "";
     var activitiesClass = "";
     var userClass = "";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    //var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var controller = TempData["active"] != null ? (string)TempData["active"] : "";
     switch (controller)
     {
         case "Home":
             homeClass = "active";
-            break;
-        case "Course":
-            courseClass = "active";
             break;
         case "Activity":
             activitiesClass = "active";
@@ -22,10 +20,6 @@
             break;
     }
 }
-
-
-
-
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
     onclick="nav_bar_active()">
@@ -52,7 +46,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
+    <li class="nav-item @userClass">
         <a class="nav-link" href="/QBCS.Web/user">
             <i class="fas fa-user"></i>
             <span>Users</span>

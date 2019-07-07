@@ -20,6 +20,7 @@ namespace QBCS.Web.Controllers
         private ILearningOutcomeService learningOutcomeService;
         private IExaminationService examinationService;
         private IImportService importService;
+        private ICourseService courseService;
 
 
         public QuestionController()
@@ -31,7 +32,7 @@ namespace QBCS.Web.Controllers
             learningOutcomeService = new LearningOutcomeService();
             examinationService = new ExaminationService();
             importService = new ImportService();
-
+            courseService = new CourseService();
         }
 
         // GET: Question
@@ -97,7 +98,7 @@ namespace QBCS.Web.Controllers
                 Levels = levels,
                 LearningOutcomes = learningOutcomes
             };
-
+            TempData["active"] = "Course";
             return View("EditQuestion", qdvm);
         }
 
@@ -112,14 +113,14 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false)
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName);
+                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
             }
 
             //notify 
@@ -152,7 +153,13 @@ namespace QBCS.Web.Controllers
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult LoadCourseAjax()
+        {
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCoursesByUserId(userId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -198,6 +205,8 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
+        [ValidateInput(false)]
+        [Log(Action = "Move", TargetName = "Question", ObjectParamName = "ques", IdParamName = "ids", CateParamName = "categoryId", LocParamName = "learningOutcomeId", LevelParamName = "levelId")]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);

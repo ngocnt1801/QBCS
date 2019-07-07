@@ -37,7 +37,7 @@ namespace QBCS.Entity
 
         public bool? IsDisable { get; set; }
 
-        public int? Semester { get; set; }
+        public int? SemesterId { get; set; }
         [StringLength(50)]
         public string GroupExam { get; set; }
 
@@ -46,7 +46,7 @@ namespace QBCS.Entity
 
         public virtual Course Course { get; set; }
 
-        public virtual Semester Semester1 { get; set; }
+        public virtual Semester Semester { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartOfExamination> PartOfExaminations { get; set; }

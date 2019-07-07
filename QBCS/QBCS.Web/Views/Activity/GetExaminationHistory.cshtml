@@ -4,6 +4,7 @@
     ViewBag.Title = "GetExaminationHistory";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int counter = 0;
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
 
@@ -12,12 +13,40 @@
         <h5 class="m-0 font-weight-bold text-primary">Question</h5>
     </div>
     <div class="card-body text-custom">
-        <div>
-            @Model.Question.QuestionCode
-        </div>
-        <div class="customs-display">
-            @Model.Question.QuestionContent
-        </div>
+        <p>
+            <b>QuestionCode:</b> @Model.Question.QuestionCode
+        </p>
+        <p>
+            <b>Category:</b> @Model.Question.Category
+        </p>
+        <p>
+            <b>Level:</b>  @(Model.Question.LevelId != 0 ? ((QBCS.Service.Enum.LevelEnum)Model.Question.LevelId).ToString() : "[No level]")
+        </p>
+        <br/>
+        <p class="customs-display-p">
+            @Html.DisplayFor(m => m.Question.QuestionContent)
+            @if (Model.Question.Image != null)
+            {
+                <p><img src="data:image/png;base64, @Model.Question.Image" /></p>
+            }
+        </p>
+        @for (int i = 0; i < Model.Question.Options.Count; i++)
+        {
+            if (Model.Question.Options[i].IsCorrect)
+            {
+                <p class="text-right-answer customs-display-p">
+                    @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
+                </p>
+            }
+            else
+            {
+                <p class="text-custom customs-display-p">
+                    @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
+                </p>
+            }
+
+        }
+
     </div>
 </div>
 
@@ -41,6 +70,9 @@
                             <th>
                                 Generated Date
                             </th>
+                            <th>
+                                Exam Status
+                            </th>
                         </tr>
                     </thead>
 
@@ -56,10 +88,13 @@
                                     @item.ExamCode
                                 </td>
                                 @*<td>
-                                    @item.Semester
-                                </td>*@
+                                        @item.Semester
+                                    </td>*@
                                 <td>
                                     @item.GeneratedDate
+                                </td>
+                                <td>
+                                    @(item.IsDisable ? "Disabled" : "")
                                 </td>
                             </tr>
                         }

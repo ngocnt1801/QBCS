@@ -56,6 +56,7 @@ function customs_display_duplicate() {
 
 function split() {
     var table1 = $('#tableEditable').DataTable({
+        "sScrollX": "100%",
         columns: [
             null,
             {

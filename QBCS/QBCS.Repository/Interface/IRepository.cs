@@ -14,5 +14,6 @@ namespace QBCS.Repository.Interface
         T InsertAndReturn(T entity);
         void Update(T entity);
         void Delete(T entity);
+        IQueryable<T> GetNoTracking();
     }
 }

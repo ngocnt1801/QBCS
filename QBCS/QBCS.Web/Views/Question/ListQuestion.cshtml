@@ -46,7 +46,12 @@
                                 }
                                 <td>@counter</td>
                                 <td>
+                                    <p>Question Code: @item.Code</p>
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
+                                    @if (item.Image != null && !String.IsNullOrWhiteSpace(item.Image))
+                                    {
+                                    <p>    <img class="exam-image" src="data:image/png;base64,@item.Image" /></p>
+                                    }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
                                         if (item.Options[i].IsCorrect == true)

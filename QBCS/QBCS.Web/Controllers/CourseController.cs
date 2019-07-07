@@ -23,9 +23,12 @@ namespace QBCS.Web.Controllers
             categoryService = new CategoryService();
         }
         // GET: Course
-        public ActionResult Index(int userId)
+        public ActionResult Index()
         {
+            var user = Session["user"] as UserViewModel;
+            int userId = user != null ? user.Id : 0;
             var list = courseService.GetAllCoursesByUserId(userId);
+            TempData["active"] = "Course";
             return View(list);
         }
         public ActionResult Staff_Index()
@@ -106,6 +109,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["CreateExam"] = true;
+            TempData["active"] = "Examination";
             return View("Staff_ListCourse", courses);
         }
 
@@ -114,6 +118,7 @@ namespace QBCS.Web.Controllers
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
             TempData["ViewHistory"] = true;
+            TempData["active"] = "Course";
             return View("Staff_ListCourse", courses);
         }
 
@@ -131,18 +136,19 @@ namespace QBCS.Web.Controllers
                 Id = courseId,
                 Categories = categories
             };
+            TempData["active"] = "Course";
             return View(model);
         }
         public ActionResult CourseStatistic()
         {
-            int userId = ((UserViewModel)Session["user"]).Id;
-            var result = courseService.GetAllCourseStat();
+            var result = courseService.GetAllCoursesWithDetail();
+            TempData["active"] = "Statistics";
             return View(result);
         }
-        public JsonResult GetCourseDetailStat(int courseId)
+        public ActionResult GetCourseDetailStat(int id, string type)
         {
-            var result = courseService.GetCourseStatDetailByCourseId(courseId);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var result = courseService.GetCourseStatDetailByIdAndType(id, type);
+            return PartialView("CourseDetailStatistic", result);
         }
         public ActionResult CourseDetailWithoutId()
         {

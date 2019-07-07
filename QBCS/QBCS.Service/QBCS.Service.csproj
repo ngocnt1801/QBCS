@@ -85,6 +85,7 @@
     <Compile Include="Implement\QuestionService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\RuleService.cs" />
+    <Compile Include="Implement\SemesterService.cs" />
     <Compile Include="Implement\TestService.cs" />
     <Compile Include="Implement\TopicService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Interface\ICourseService.cs" />
     <Compile Include="Interface\IPartOfExamService.cs" />
     <Compile Include="Interface\IQuestionService.cs" />
+    <Compile Include="Interface\ISemesterService.cs" />
     <Compile Include="Interface\ITopicService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
+    <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
     <Compile Include="ViewModel\RuleViewModel.cs" />
@@ -146,7 +149,7 @@
       <Name>DuplicateQuestion</Name>
     </ProjectReference>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
-      <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
+      <Project>{56492C99-5CAC-43BE-A406-0E630C255935}</Project>
       <Name>QBCS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\QBCS.Repository\QBCS.Repository.csproj">

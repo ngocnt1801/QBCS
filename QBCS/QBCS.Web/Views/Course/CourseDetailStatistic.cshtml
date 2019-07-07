@@ -1,0 +1,43 @@
+﻿@model QBCS.Service.ViewModel.CourseStatDetailViewModel
+@{
+    ViewBag.Title = "CourseDetailStatistic";
+}
+<link rel="stylesheet" href="~/Content/chartjs/Chart.css" />
+<script src="~/Scripts/myjs/chartjs/Chart.min.js"></script>
+@if (Model.Easy != 0 || Model.Medium != 0 || Model.Hard != 0)
+{
+    <div class="col-lg-10">
+        <canvas id="myChart"></canvas>
+    </div>
+    <br/>
+    <div class="col-lg-2 text-custom">
+        Warning:
+    </div>
+    <script>
+    var ctx = document.getElementById('myChart');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [
+                'Easy',
+                'Medium',
+                'Hard'
+            ],
+            datasets: [{
+                data: [@Model.Easy, @Model.Medium, @Model.Hard],
+            
+            backgroundColor: [
+                'rgb(45,201,55)',
+                'rgb(231,180,22)',
+                'rgb(204,50,50)'
+                ]
+            }]
+        }
+    });
+    </script>
+}
+else
+{
+    <div class="text-custom col-md-7"><h4>There is not enough statistic to show</h4> </div>
+}
+

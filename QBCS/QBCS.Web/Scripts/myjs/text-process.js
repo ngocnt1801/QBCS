@@ -31,6 +31,28 @@ function question_custom() {
         $(this).html(op);
     });
 }
+function customs_display_p() {
+    $.each($(".customs-display-p"), function () {
+        var content;
+        content = $(this).html();
+        if (content.indexOf("[html]") >= 0) {
+            content = content.split("<cbr>").join("&lt;br&gt;");
+            content = content.split("&lt;cbr&gt;").join("<br/>");
+            content = content.split("<br>").join("<br/>");
+            content = content.split("&lt;br&gt;").join("&lt;br&gt;");
+            content = content.split("&lt;p&gt;").join("");
+            content = content.split("&lt;/p&gt;").join("");
+            content = content.split("&lt;b&gt;").join("");
+            content = content.split("&lt;/b&gt;").join("");
+            content = content.split("&lt;span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("&lt;/span&gt;").join("");
+            content = content.split("[html]").join("");
+        }
+        $(this).html(content);
+    });
+}
+
 function customs_display() {
     var content;
     content = $('#customs-display').html();
@@ -94,16 +116,31 @@ function highlight(newElem, oldElem) {
 function customs_text() {
     $('#btnUpdate').click(function (e) {
         var content;
+        var option;
         content = $('.question-custom').html();
+        //option = $('.option-customs').html();
         //var input;
         //input = $('#hidden-question-content').html();
+        content = content.split("\t").join("");
+        content = content.split("\n").join("");
+        content = content.replace(/(\r\n|\n|\r|\t)/gm, "");
+        content = content.replace(/\s+/g, " ");
         $('#hidden-question-content').val("[html]" + content);
+        $.each($(".option-customs"), function () {
+            option = $(this).html();
+            option = option.split("\t").join("");
+            option = option.split("\n").join("");
+            option = option.replace(/(\r\n|\n|\r|\t)/gm, "");
+            option = option.replace(/\s+/g, " ");
+            $(this).html(option);
+            $('.hidden-option').val(option);
+        });
 
         $.each($(".customs-display"), function () {
             var content = $(this).html();
             $(this.attributes["data-for"].value).val("[html]" + content);
         })
-       // $('#success-modal').modal('show');
+        // $('#success-modal').modal('show');
     });
 }
 
@@ -111,7 +148,8 @@ function customs_text() {
 $(document).ready(function () {
     highlight($("#new"), $("#old"));
     customs_text();
-   // customs_display();
+    customs_display_p();
+    customs_display();
     option_custom();
     question_custom();
 });
