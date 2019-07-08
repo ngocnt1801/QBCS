@@ -52,10 +52,10 @@
                             <td>
                                 @if (item.Action != null)
                                 {
-                                    @*if (item.Action.Equals("Import"))
+                                    if (item.Action.Equals("Import"))
                                     {
                                         <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
-                                    }*@
+                                    }
                                      if (item.Action.Equals("Update") && item.TargetName.Equals("Question"))
                                     {
                                         <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
