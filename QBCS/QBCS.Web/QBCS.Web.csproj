@@ -2324,7 +2324,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50353</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/QBCS.Web</IISUrl>
+          <IISUrl>http://localhost/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
