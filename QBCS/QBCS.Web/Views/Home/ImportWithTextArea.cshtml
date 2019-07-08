@@ -85,10 +85,10 @@
                     window.location.replace('Index');
                 },
                 failure: function(response) {
-                    alert(response.responseText);
+                    toastr.error("Import error. Please try again!");
                 },
                 error: function(response) {
-                    alert(response.responseText);
+                    toastr.error("Import error. Please try again!");
                 }
             });
         });
