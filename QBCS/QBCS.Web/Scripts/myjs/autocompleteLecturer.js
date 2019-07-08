@@ -22,7 +22,9 @@
             });
         },
         select: function (event, ui) {
-            $('#myautocomplete').val(i.item[0].innerText.split(" (")[0]);
+            event.preventDefault();
+            var lec = ui.item.value.split(" (")[0];
+            $('#myautocomplete').val(lec);
         }
     });
 });

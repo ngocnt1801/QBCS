@@ -5,7 +5,7 @@
     $('#autocompleteCourse').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "http://localhost/QBCS.Web/LearningOutcome/LoadCourse",
+                url: "/LearningOutcome/LoadCourseLive",
                 type: "GET",
                 dataType: "json",
                 data: request,
@@ -19,12 +19,20 @@
                         return response(result);
                     }
                     for (var i = 0; i < data.length; i++){
-                        var string = data[i].Name + " (" + data[i].Code + ")";
-                        result.push(string);
+                        var Obj = {};
+                        Obj['label'] = data[i].Name + " (" + data[i].Code + ")";
+                        Obj['value'] = data[i].Id;
+                        result.push(Obj);
                     }
                     return response(result);
                 }
             });
+        },
+        select: function (event, ui) {
+            event.preventDefault();
+            var course = ui.item.label.split(" (")[0];
+            $("#autocompleteCourse").val(course);
+            $("#autocompleteCourseId").val(ui.item.value);
         }
     });
 });

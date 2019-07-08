@@ -124,19 +124,10 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/autocompleteLecturer").Include(
                 "~/Scripts/jquery-3.1.1.min.js",
                 "~/Scripts/jquery-ui.min.js",
-                "~/Scripts/myjs/autocompleteLecturer.js"
+                "~/Scripts/myjs/autocompleteLecturer.js",
+                "~/Scripts/myjs/autocompleteCourse.js"
                 ));
             bundles.Add(new StyleBundle("~/bundle/content/autocompleteLecturer").Include(
-               "~/Content/jquery-ui.css"
-               ));
-
-            //Autocomplete Course
-            bundles.Add(new ScriptBundle("~/bundle/scripts/autocompleteCourse").Include(
-                "~/Scripts/jquery-3.1.1.min.js",
-                "~/Scripts/jquery-ui.min.js",
-                "~/Scripts/myjs/autocompleteLecturer.js"
-                ));
-            bundles.Add(new StyleBundle("~/bundle/content/autocompleteCourse").Include(
                "~/Content/jquery-ui.css"
                ));
 

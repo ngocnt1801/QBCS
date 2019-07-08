@@ -63,6 +63,11 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetAllCourses();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult LoadCourseLive(string term)
+        {
+            var result = courseService.GetCoursesVMByName(term);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult UpdateDisable(int itemId)
         {
             var update = learningOutcomeService.UpdateDisable(itemId);
