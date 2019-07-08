@@ -37,8 +37,15 @@
                         <tbody>
                             <tr>
                                 <td>
-                                  
-                                    Question:<p id="new">@item.QuestionNew.QuestionContent</p>
+                                    Category: @item.QuestionNew.CourseName <br />
+                                    LOC: @item.QuestionNew.LearningOutcomeName <br/>
+                                    Level: @item.QuestionNew.LevelName <br />
+                                    Question:
+                                    @if (item.QuestionNew.Image != null)
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                    } <br/>
+                                    <p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
                                     {
@@ -59,7 +66,15 @@
                                     }
                                 </td>
                                 <td>
-                                    Question:<p id="old">@item.QuestionOld.QuestionContent</p> 
+                                    Category: @item.QuestionOld.CourseName <br />
+                                    LOC: @item.QuestionOld.LearningOutcomeName <br />
+                                    Level: @item.QuestionOld.LevelName <br />
+                                    Question:
+                                    @if (item.QuestionOld.Image != null)
+                                    {
+                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    } <br/>
+                                    <p id="old">@item.QuestionOld.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {
@@ -92,80 +107,6 @@
 
 
         }
-
-        @*<div class="table-responsive text-custom">
-                <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-
-                            <th>User</th>
-                            <th>Date</th>
-                            <th>Message</th>
-                            <th>New</th>
-                            <th>Old</th>
-
-
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-
-                                <td>
-                                    @item.Fullname
-                                </td>
-                                <td>
-                                    @item.LogDate
-                                </td>
-                                <td>@item.Message</td>
-                                <td>
-                                    @item.QuestionNew.QuestionContent <br />
-                                    @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
-                                    {
-                                        if (item.QuestionNew.Options[i].IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-right-answer">
-                                                @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
-                                            </div>
-                                        }
-
-                                        <br />
-                                    }
-
-                                </td>
-                                <td>
-                                    @item.QuestionOld.QuestionContent <br />
-                                    @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
-                                    {
-                                        if (item.QuestionOld.Options[i].IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-right-answer">
-                                                @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
-                                            </div>
-                                        }
-
-                                        <br />
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>*@
     </div>
 </div>
 

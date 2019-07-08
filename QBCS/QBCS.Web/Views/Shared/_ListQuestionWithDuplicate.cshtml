@@ -67,7 +67,7 @@
                                     @item.QuestionContent <br />
                                     @if (item.Image != null)
                                     {
-                                        <img src="data:image/png;base64, @item.Image" />
+                                                          <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
@@ -91,31 +91,35 @@
                                     || item.Status == StatusEnum.DeleteOrSkip
                                     || item.Status == StatusEnum.Editable)
                                 {
-                                    <td>
-                                        @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
+                                <td>
+                                    @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
+                                    {
+                                        <p> </p>
+                                        <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                        @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
+                                        if (item.Image != null)
                                         {
-                                            <p> </p>
-                                            <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
-                                            @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
-                                            for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
-                                            {
-                                                if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
-                                                {
-                                                    <div class="container-fluid text-right-answer">
-                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="container-fluid">
-                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                    </div>
-                                                }
-
-                                                <br />
-                                            }
+                                        <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
                                         }
-                                    </td>
+                                        for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
+                                        {
+                                            if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                            {
+                                                <div class="container-fluid text-right-answer">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="container-fluid">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                </div>
+                                            }
+
+                                            <br />
+                                        }
+                                    }
+                                </td>
                                 }
                                 @if (item.Status == StatusEnum.Invalid)
                                 {

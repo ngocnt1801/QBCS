@@ -45,7 +45,7 @@
             .hasClass("input-ghost")
         ) {
           var element = $(
-            "<input type='file' class='input-ghost' style='visibility:hidden; height:0' accept='.txt,.xml'>"
+            "<input type='file' class='input-ghost' style='visibility:hidden; height:0' accept='.txt,.xml,.doc,.docx'>"
           );
           element.attr("name", $(this).attr("name"));
           element.change(function() {

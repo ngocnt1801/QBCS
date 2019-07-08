@@ -80,8 +80,16 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Export", IdParamName = "examinationId", TargetName = "Examination")]
         public FileResult ExportExamination(int examinationId, string fileExtension, bool getCategory)
         {
-            ExaminationViewModel exam = examinationService.GetExanById(examinationId);            
-            //HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            ExaminationViewModel exam = examinationService.GetExanById(examinationId);
+            string semesterName;
+            if(exam.SemesterId != 0)
+            {
+                semesterName = exam.Semester.Name + exam.GeneratedDate.Year.ToString();
+            } else
+            {
+                semesterName = exam.Semester.Name;
+            }
+            string fileName = semesterName + "_" + exam.Course.Code + "_" + exam.ExamGroup + "_" + exam.ExamCode + "_" + DateTime.Now.ToString("yyyyMMdd");
             int count = 0;
             if (fileExtension.ToLower().Equals("xml"))
             {
@@ -140,11 +148,11 @@ namespace QBCS.Web.Controllers
                                 xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                 if (question.QuestionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                 {
-                                    xmlWriter.WriteCData(question.QuestionContent.Replace("<cbr>", " <br/>"));
+                                    xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(question.QuestionContent));
                                 }
                                 else
                                 {
-                                    xmlWriter.WriteString(question.QuestionContent.Replace("<cbr>", " <br/>"));
+                                    xmlWriter.WriteString(StringUtilities.FormatStringExportXML(question.QuestionContent));
                                 }
                                 xmlWriter.WriteEndElement();
                                 if (question.Image == null)
@@ -238,11 +246,11 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                         {
-                                            xmlWriter.WriteCData(option.OptionContent.Replace("<cbr>", " <br/>"));
+                                            xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         else
                                         {
-                                            xmlWriter.WriteString(option.OptionContent.Replace("<cbr>", " <br/>"));
+                                            xmlWriter.WriteString(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         xmlWriter.WriteEndElement();
                                         //feedback tag
@@ -263,11 +271,11 @@ namespace QBCS.Web.Controllers
                                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
                                         if (option.OptionContent.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                                         {
-                                            xmlWriter.WriteCData(option.OptionContent);
+                                            xmlWriter.WriteCData(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         else
                                         {
-                                            xmlWriter.WriteString(option.OptionContent);
+                                            xmlWriter.WriteString(StringUtilities.FormatStringExportXML(option.OptionContent));
                                         }
                                         xmlWriter.WriteEndElement();
                                         //feedback tag
@@ -297,7 +305,7 @@ namespace QBCS.Web.Controllers
                     //httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".xml";
                     //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     xmlWriter.Close();
-                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, exam.ExamCode + ".xml");
+                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, fileName + ".xml");
                 }
             }
             else
@@ -366,7 +374,7 @@ namespace QBCS.Web.Controllers
                     //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                     
                     writer.Close();
-                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, exam.ExamCode + ".txt");
+                    return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, fileName + ".txt");
                 }
             }
 

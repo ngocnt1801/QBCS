@@ -22,16 +22,16 @@
                     {
                         var borderLeft = "";
                         var action = "";
-                        if (item.Status == DuplicateQuestion.Entity.StatusEnum.Delete)
+                        if (item.Status == QBCS.Service.Enum.StatusEnum.Delete)
                         {
                             borderLeft = "border-left-danger";
                         }
-                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Editable)
+                        else if (item.Status == QBCS.Service.Enum.StatusEnum.Editable)
                         {
                             borderLeft = "border-left-warning";
                             action = "editableTemp";
                         }
-                        else if (item.Status == DuplicateQuestion.Entity.StatusEnum.Success)
+                        else if (item.Status == QBCS.Service.Enum.StatusEnum.Success)
                         {
                             borderLeft = "border-left-success";
                         }
@@ -43,6 +43,10 @@
                             <td>
                                 <p>@item.Code</p>
                                 @item.QuestionContent
+                                @if (item.Image != null)
+                                {
+                                <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
+                                }
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {
                                     if (item.Options[i].IsCorrect == true)
@@ -64,8 +68,12 @@
                             <td>
                                 @if (item.DuplicatedQuestion != null)
                                 {
-                                <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                    <p>Bank: @item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
+                                    @if (item.Image != null)
+                                    {
+                                    <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
+                                    }
                                     for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
                                     {
                                         if (item.DuplicatedQuestion.Options[i].IsCorrect == true)

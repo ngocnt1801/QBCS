@@ -8,16 +8,17 @@
     var activitiesClass = "";
     var statisticClass = "";
     var ruleClass = "";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    //var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var controller = TempData["active"] != null ? (string)TempData["active"] : "";
     switch (controller)
     {
-        case "Home":
+        case "Examination":
             examClass = "active";
             break;
         case "Course":
             courseClass = "active";
             break;
-        case "Course Statistics":
+        case "Statistics":
             statisticClass = "active";
             break;
         case "Topic":
@@ -102,7 +103,7 @@
     <li class="nav-item @statisticClass">
         <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
             <i class="fas fa-chart-pie"></i>
-            <span>Course Statistics</span>
+            <span>Statistics</span>
         </a>
     </li>
     @*<li class="nav-item @activitiesClass">

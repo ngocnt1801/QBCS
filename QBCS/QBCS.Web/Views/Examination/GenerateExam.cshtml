@@ -23,6 +23,15 @@
                         <div class="col-xs-2 ml-2">
                             <input class="form-control text-right" id="total" min="1" type="number" name="TotalQuestion" required>
                         </div>
+                        <label for="semester" class="control-label col-xs-10" style="margin-left:15px;">Semester : </label>
+                        <div class="col-xs-2 ml-2">
+                            <select id="semester" name="Semeter" class="form-control">
+                                @foreach (var sem in Model.Semester)
+                                {
+                                    <option value="@sem.Id">@sem.Name</option>
+                                }
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>

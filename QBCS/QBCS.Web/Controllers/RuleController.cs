@@ -1,6 +1,7 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
             result.Add(listRule.Where(r => r.GroupType == 3).ToList());
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
+            TempData["active"] = "Rule";
             return View(result);
         }
         public ActionResult Edit()
@@ -35,9 +37,12 @@ namespace QBCS.Web.Controllers
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
             result.Add(listRule.Where(r => r.GroupType == 3).ToList());
             result.Add(listRule.Where(r => r.GroupType == 4).ToList());
+            TempData["active"] = "Rule";
             return View(result);
         }
+
         [HttpPost]
+        [Log(Action = "Edit", TargetName = "Rule", UserCode = "", Fullname = "")]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);

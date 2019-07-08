@@ -20,7 +20,7 @@
         $.ajax({
         type: "GET",
         contentType: "application/json; charset=utf-8",
-        url: "@Url.Action("LoadCourse","Topic")",
+        url: "@Url.Action("LoadCourseAjax","Question")",
         dataType: "json",
         success: function (result) {
                 for (var i = 0; i < result.length; i++) {

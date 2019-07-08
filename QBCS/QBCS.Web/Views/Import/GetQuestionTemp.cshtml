@@ -21,6 +21,10 @@
                 <h5>Question</h5>
                 <div class="customs-display customs-display-area question-custom mb-2" contenteditable="true" data-for="#hidden-question-content">
                     @Html.DisplayFor(m => m.QuestionContent)
+                    @if (Model.Image != null)
+                    {
+                    <p><img class="exam-image" src="data:image/png;base64, @Model.Image" /></p>
+                    }
                 </div>
                 <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
 
@@ -56,9 +60,13 @@
             <h6 class="m-0 font-weight-bold text-custom">Duplicated Question</h6>
         </div>
 
-        <div class="card-body text-custom" id="customs-display-duplicate">
+        <div class="card-body text-custom custom-display-p" id="customs-display-duplicate">
 
             @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
+            @if (Model.DuplicatedQuestion.Image != null)
+            {
+            <p><img class="exam-image" src="data:image/png;base64, @Model.DuplicatedQuestion.Image" /></p>
+            }
             @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
             {
                 if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)

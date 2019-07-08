@@ -28,7 +28,7 @@ namespace QBCS.Web.Controllers
                 return View(viewName);
             }
             ViewBag.Name = user.Fullname;
-            
+            TempData["active"] = "Home";
             if (user.Role == RoleEnum.Admin)
             {
                 viewName = "Admin";
@@ -42,7 +42,6 @@ namespace QBCS.Web.Controllers
 
             return View(viewName, user);
         }
-
 
         public ActionResult Login(string username, string password)
         {
@@ -58,6 +57,7 @@ namespace QBCS.Web.Controllers
             return View();
             
         }
+
         public ActionResult Logout(string username)
         {
 
@@ -69,7 +69,15 @@ namespace QBCS.Web.Controllers
 
         public ActionResult ImportWithTextArea()
         {
+            TempData["active"] = "Home";
             return View();
+        }
+
+        public ActionResult ImportWord()
+        {
+            TempData["active"] = "word";
+            var user = (UserViewModel)Session["user"];
+            return View(user);
         }
     }
 }

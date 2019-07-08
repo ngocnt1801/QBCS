@@ -13,5 +13,6 @@ namespace QBCS.Service.ViewModel
         public int Easy { get; set; }
         public int Medium { get; set; }
         public int Hard { get; set; }
+        public List<string> Warning { get; set; }
     }
 }
