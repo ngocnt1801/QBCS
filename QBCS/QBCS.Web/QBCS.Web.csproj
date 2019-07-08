@@ -216,6 +216,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Attributes\CheckSessionAttribute.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\ElmahController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExaminationAPIController.cs" />
     <Compile Include="Controllers\ExaminationController.cs" />
@@ -2265,6 +2266,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\picture\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Elmah\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\Statistic\" />
   </ItemGroup>
@@ -2324,7 +2326,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50353</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/QBCS.Web</IISUrl>
+          <IISUrl>http://localhost/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

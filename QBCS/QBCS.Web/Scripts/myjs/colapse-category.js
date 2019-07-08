@@ -190,7 +190,7 @@
             categoryView.init();
             if (categoryView.questionListContainter[0] != null) {
                 this.loadQuestion(
-                    "/QBCS.Web/Question/GetQuestions?courseId=" +
+                    "/Question/GetQuestions?courseId=" +
                     categoryView.questionListContainter[0].attributes["data-id"].value
                 );
             }
@@ -280,7 +280,7 @@
             });
 
             $.ajax({
-                url: "/QBCS.Web/Question/UpdateCategory",
+                url: "/Question/UpdateCategory",
                 type: "POST",
                 data: {
                     ids: ids,

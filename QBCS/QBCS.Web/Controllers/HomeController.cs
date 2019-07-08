@@ -95,9 +95,9 @@ namespace QBCS.Web.Controllers
 
         }
 
-        public void Logout()
+        public RedirectResult Logout()
         {
-            Response.Redirect("/QBCS.Web/logoff");
+            return Redirect("/logoff");
         }
 
         //stpm: feature declare
