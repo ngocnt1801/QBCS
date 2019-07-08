@@ -9,6 +9,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Entity;
 using QBCS.Service.Utilities;
+using System.Net;
 
 namespace QBCS.Service.Implement
 {
@@ -496,22 +497,23 @@ namespace QBCS.Service.Implement
         {
             var listQuestion = unitOfWork.Repository<Question>().GetAll()
                                         .Where(q => q.CourseId == courseId)
+                                        .ToList()
                                         .Select(q => new QuestionInExamViewModel()
                                         {
                                             Id = q.Id,
                                             Frequency = q.Frequency.Value,
                                             Priority = q.Priority.Value,
-                                            QuestionContent = q.QuestionContent,
+                                            QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
                                             LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                                             LearningOutcome = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "",
                                             Image = q.Image,
                                             QuestionCode = q.QuestionCode,
-                                            Options = q.Options.Select(o => new OptionViewModel
+                                            Options = q.Options.ToList().Select(o => new OptionViewModel
                                             {
                                                 Id = o.Id,
                                                 Image = o.Image,
                                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                                OptionContent = o.OptionContent
+                                                OptionContent = WebUtility.HtmlDecode(o.OptionContent)
                                             }).ToList()
                                         })
                                         .OrderBy(q => q.Priority)

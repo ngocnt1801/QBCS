@@ -34,9 +34,10 @@
 
     @{
         var sidebar = Session[AuthLib.Constant.SIDE_BAR_SESSION] as List<AuthLib.Models.SideBarModel>;
+        sidebar = sidebar ?? new List<AuthLib.Models.SideBarModel>();
     }
 
-    @if (sidebar.Where(s => s.InternalId.HasValue && s.InternalId.Value == (int)QBCS.Service.Enum.SideBarEnum.Import).Any())
+    @if (sidebar.Any(s => (s.InternalId??-1) == (int)QBCS.Service.Enum.SideBarEnum.Import))
     {
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -46,14 +47,14 @@
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Import from:</h6>
-                    <a class="collapse-item @((TempData["active"] as string).Equals("Import") ? "active" : "")" href="@Url.Action("Index", "Home")">File Moodle</a>
+                    <a class="collapse-item @("Import".Equals((TempData["active"] as string)) ? "active" : "")" href="@Url.Action("Index", "Home")">File Moodle</a>
                     @if (sidebar.Where(s => s.InternalId.HasValue && s.InternalId.Value == (int)QBCS.Service.Enum.SideBarEnum.ImportMSWord).Any())
                     {
-                        <a class="collapse-item @((TempData["active"] as string).Equals("ImportWord") ? "active" : "")" href="@Url.Action("ImportWord", "Home")">File MS Word</a>
+                        <a class="collapse-item @("ImportWord".Equals((TempData["active"] as string)) ? "active" : "")" href="@Url.Action("ImportWord", "Home")">File MS Word</a>
                     }
                     @if (sidebar.Where(s => s.InternalId.HasValue && s.InternalId.Value == (int)QBCS.Service.Enum.SideBarEnum.Manually).Any())
                     {
-                        <a class="collapse-item @((TempData["active"] as string).Equals("Manually") ? "active" : "")" href="@Url.Action("ImportWithTextArea", "Home")">Manually</a>
+                        <a class="collapse-item @("Manually".Equals((TempData["active"] as string)) ? "active" : "")" href="@Url.Action("ImportWithTextArea", "Home")">Manually</a>
                     }
                 </div>
             </div>
@@ -61,7 +62,7 @@
     }
 
 
-    @foreach (var item in sidebar.OrderBy(s => s.InternalId))
+    @foreach (var item in sidebar.OrderBy(s => s.InternalId??99))
     {
 
         if (item.IsInternal
@@ -70,7 +71,7 @@
             && item.InternalId != (int)QBCS.Service.Enum.SideBarEnum.Manually)
         {
             <hr class="sidebar-divider my-0">
-            <li class="nav-item  @((TempData["active"] as string).Equals(item.ShortName) ? "active" : "")">
+            <li class="nav-item  @((TempData["active"] as string ?? "").Equals(item.ShortName) ? "active" : "")">
                 <a class="nav-link" href="@(Context.GetOwinContext().Request.PathBase.Value + (item.Url))">
                     <i class="@NAV_ICON[item.InternalId.HasValue ? item.InternalId.Value : 0]"></i>
                     <span>@item.ShortName</span>
