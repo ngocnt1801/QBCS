@@ -1011,10 +1011,16 @@ namespace QBCS.Service.Implement
                                 optionModel.IsCorrect = false;
                                 for (int i = 1; i < contentO.Count; i++)
                                 {
-                                    if (optionModel.OptionContent == null)
+                                    if (contentO.ElementAt(i).ToString().Contains("base64,"))
+                                    {
+                                        var getImage1 = contentO.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
+                                        var getImage2 = getImage1[1].Split('"');
+                                        optionModel.Image = getImage2[0];
+                                    }
+                                    else if (optionModel.OptionContent == null)
                                     {
                                         var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
-                                        optionModel.OptionContent = stringToValue.Replace("<br />", "<cbr>");
+                                        optionModel.OptionContent = stringToValue.Replace("<br/>", "<cbr>");
                                     }
                                     else
                                     {
