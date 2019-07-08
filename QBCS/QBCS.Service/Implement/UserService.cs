@@ -233,7 +233,7 @@ namespace QBCS.Service.Implement
             {
                 userViewModel.Courses = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userViewModel.Id).Select(uc => new CourseViewModel
                 {
-                    Id = uc.Course.Id,
+                    CourseId = uc.Course.Id,
                     Name = uc.Course.Name,
                     Code = uc.Course.Code
                 }).ToList();

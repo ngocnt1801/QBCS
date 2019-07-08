@@ -5,7 +5,7 @@
     $('#myautocomplete').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "http://localhost/QBCS.Web/User/GetLecturer",
+                url: "/User/GetLecturer",
                 type: "GET",
                 dataType: "json",
                 data: request,

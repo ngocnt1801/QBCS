@@ -819,20 +819,22 @@ namespace QBCS.Service.Implement
                 result = result.Where(q => q.LevelId == null);
             }
 
-            return result.Select(q => new QuestionViewModel
+            var list = result.ToList();
+
+            return list.Select(q => new QuestionViewModel
             {
                 Id = q.Id,
                 Code = q.QuestionCode,
-                QuestionContent = q.QuestionContent,
+                QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
                 Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
-                Options = q.Options.Select(o => new OptionViewModel
+                Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
                     Id = o.Id,
-                    OptionContent = o.OptionContent,
+                    OptionContent = WebUtility.HtmlDecode(o.OptionContent),
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                 }).ToList(),
                 IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
