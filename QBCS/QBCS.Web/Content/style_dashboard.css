@@ -34,3 +34,7 @@
     border: 2px solid #ccc;
     padding: 5px;
 }
+
+.bg-danger-light{
+    background-color: antiquewhite;
+}

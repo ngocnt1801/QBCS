@@ -1,12 +1,10 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -22,6 +20,9 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
         }
         // GET: User
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized, ShortName = "User", InternalId = (int)SideBarEnum.AllUser)]
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
@@ -29,10 +30,23 @@ namespace QBCS.Web.Controllers
             return View(list);
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Disable User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Disable", TargetName = "User", IdParamName = "userId", Fullname = "", UserCode = "")]
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
+
+            return RedirectToAction("Index");
+        }
+
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Enable User", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult Enable(int userId)
+        {
+            userService.EnableUser(userId);
 
             return RedirectToAction("Index");
         }
@@ -53,6 +67,9 @@ namespace QBCS.Web.Controllers
 
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Delete Course From User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Delete", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
@@ -60,6 +77,9 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Add Course To User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult AddCourse(int courseId, int userId)
         {
@@ -67,6 +87,9 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 
+        //Admin
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get detail for edit user", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);
@@ -79,11 +102,15 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "User";
             return View(model);
         }
+
+        //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Search Lecturer By Name", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult GetLecturer(string term)
         {
             List<string> lecturerName = new List<string>();
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
-            foreach(var lec in result)
+            foreach (var lec in result)
             {
                 lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
             }

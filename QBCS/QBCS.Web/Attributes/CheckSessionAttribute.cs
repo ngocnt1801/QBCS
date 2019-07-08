@@ -10,11 +10,11 @@ namespace QBCS.Web.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var user = HttpContext.Current.Session["user"];
-            if (user == null)
-            {
-                filterContext.Result = new RedirectResult("/QBCS.Web/");
-            }
+            //var user = HttpContext.Current.Session["user"];
+            //if (user == null)
+            //{
+            //    filterContext.Result = new RedirectResult("/QBCS.Web/");
+            //}
         }
     }
 }

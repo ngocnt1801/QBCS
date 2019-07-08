@@ -49,6 +49,7 @@ namespace QBCS.Repository.Implement
         {
             context.Entry(entity).State = EntityState.Modified;
         }
+
         public IQueryable<T> GetNoTracking()
         {
             return dbSet.AsNoTracking<T>();

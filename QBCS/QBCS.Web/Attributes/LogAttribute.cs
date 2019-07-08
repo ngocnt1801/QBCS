@@ -26,14 +26,25 @@ namespace QBCS.Web.Attributes
         public string OldValue { get; set; }
         public string NewValue { get; set; }
 
+        private ILogService logService;
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            logService = new LogService();
+
             LogViewModel logModel = new LogViewModel();
+
+            var user = (UserViewModel)HttpContext.Current.Session["user"];
+            int? userId = null;
+            if (user != null)
+            {
+                userId = user.Id;
+            }
+
             ILogService logger = new LogService();
             CourseService courseService = new CourseService();
             LearningOutcomeService learningOutcomeService = new LearningOutcomeService();
             LevelService levelService = new LevelService();
-            int userId = ((UserViewModel)HttpContext.Current.Session["user"]).Id;
             int? targetId = null;
             QuestionViewModel oldQuestionModel = new QuestionViewModel();
             QuestionViewModel newQuestionModel = new QuestionViewModel();
@@ -187,6 +198,7 @@ namespace QBCS.Web.Attributes
             }*/
             #endregion
 
+            logService.Log(logModel);
             logModel.UserId = userId;
             logModel.TargetId = targetId;
             logModel.Action = Action;

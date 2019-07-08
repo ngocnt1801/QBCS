@@ -105,10 +105,10 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public List<ImportViewModel> GetListImport(int userId)
+        public List<ImportViewModel> GetListImport(int? userId)
         {
             return unitOfWork.Repository<Import>().GetAll()
-                .Where(im => im.UserId == userId)
+                .Where(im => userId.HasValue ? im.UserId == userId.Value : true)
                 .Select(im => new ImportViewModel
                 {
                     Id = im.Id,

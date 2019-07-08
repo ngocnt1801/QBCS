@@ -1,4 +1,6 @@
-﻿using QBCS.Service.Implement;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
@@ -14,10 +16,15 @@ namespace QBCS.Web.Controllers
     {
         // GET: Rule
         private IRuleService ruleService;
+        private ILogService logService;
         public RuleController()
         {
             ruleService = new RuleService();
+            logService = new LogService();
         }
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "Get All Rules", "QBCS", protectType: ProtectType.Authorized, ShortName = "Rule", InternalId = (int)SideBarEnum.AllRule)]
         public ActionResult Index()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -29,6 +36,11 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Rule";
             return View(result);
         }
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get Rule Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(RuleController), nameof(RuleController.UpdateAllRule))]
         public ActionResult Edit()
         {
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -40,12 +52,15 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Rule";
             return View(result);
         }
+        //Staff
 
         [HttpPost]
-        [Log(Action = "Edit", TargetName = "Rule", UserCode = "", Fullname = "")]
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);
+            logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

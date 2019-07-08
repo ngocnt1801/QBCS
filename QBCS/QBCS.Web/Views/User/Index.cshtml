@@ -15,52 +15,58 @@
 <div class="card shadow mb-4">
 
     <div class="card-body">
-        <div class="table-responsive text-custom">
-            <table class="table">
-                <tr>
+        <div class="table-responsive">
+            <table class="table table-bordered text-custom" id="dataTable">
+                <thead>
+                    <tr>
 
-                    <th>
-                        @Html.DisplayNameFor(model => model.Code)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Fullname)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Role)
-                    </th>
-                    <th class="text-center">Action</th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    string disableClass = "";
-                    if (item.IsDisable)
-                    {
-
-                        disableClass = "bg-gray-300";
-                    }
-                    <tr class="@disableClass" onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
-
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Fullname)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Role)
-                        </td>
-                        <td class="text-center">
-                            <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
-                            @if (!item.IsDisable)
-                            {
-                                <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
-                            }
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Code)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Fullname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Role)
+                        </th>
+                        <th class="text-center">Action</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        string disableClass = "";
+                        if (item.IsDisable)
+                        {
 
+                            disableClass = "bg-danger-light";
+                        }
+                        <tr class="@disableClass" onClick="document.location.href='@Url.Action("Details", "User",new { userId = item.Id})'">
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fullname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Role)
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Details", "User",new { userId = item.Id })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                                @if (!item.IsDisable)
+                                {
+                                    <a href="@Url.Action("Disable", "User", new { userId = item.Id})" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Enable", "User", new { userId = item.Id})" class="btn btn-success mr-1"><i class="fa fa-undo"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
     </div>

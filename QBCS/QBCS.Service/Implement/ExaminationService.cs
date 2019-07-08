@@ -341,7 +341,7 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
 
                 //log generate exam
-                logService.LogManually(examination.Id, "Generate", "Examination", fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
+                logService.LogManually("Generate", "Examination", examination.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
 
 
                 foreach (var topic in topics)

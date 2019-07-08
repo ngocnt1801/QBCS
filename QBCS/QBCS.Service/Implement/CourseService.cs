@@ -6,11 +6,9 @@ using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QBCS.Service.Implement
-{ 
+{
     public class CourseService : ICourseService
     {
         private IUnitOfWork unitOfWork;
@@ -32,12 +30,13 @@ namespace QBCS.Service.Implement
         }
         public List<CourseViewModel> GetAllCourses()
         {
-            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel {
+            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel
+            {
                 Id = c.Id,
                 Code = c.Code,
                 Name = c.Name
             });
-            
+
             return course.ToList();
         }
         public List<CourseViewModel> GetAllCoursesWithDetail()
@@ -88,15 +87,15 @@ namespace QBCS.Service.Implement
             var listAvailable = new List<CourseViewModel>();
             if (userId != 0)
             {
-               var listCurrentCourse = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userId).Select(uc => uc.CourseId).ToList();
-               listAvailable = unitOfWork.Repository<Course>().GetAll()
-                                                                    .Where(c => !listCurrentCourse.Contains(c.Id))
-                                                                    .Select(c => new CourseViewModel
-                                                                    {
-                                                                        Id = c.Id,
-                                                                        Code = c.Code,
-                                                                        Name = c.Name
-                                                                    }).ToList();
+                var listCurrentCourse = unitOfWork.Repository<CourseOfUser>().GetAll().Where(uc => uc.UserId == userId).Select(uc => uc.CourseId).ToList();
+                listAvailable = unitOfWork.Repository<Course>().GetAll()
+                                                                     .Where(c => !listCurrentCourse.Contains(c.Id))
+                                                                     .Select(c => new CourseViewModel
+                                                                     {
+                                                                         Id = c.Id,
+                                                                         Code = c.Code,
+                                                                         Name = c.Name
+                                                                     }).ToList();
             }
 
             return listAvailable;
@@ -109,10 +108,10 @@ namespace QBCS.Service.Implement
                 var courses = user.CourseOfUsers.Select(c => new CourseViewModel
                 {
                     Id = c.Id,
-                    CourseId = (int)c.CourseId,
+                    CourseId = c.CourseId.Value,
                     Name = c.Course.Name,
                     Code = c.Course.Code,
-                    IsDisable = (bool)c.Course.IsDisable
+                    IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
                 }).Where(c => c.IsDisable == false).ToList();
                 return courses;
             }
@@ -150,7 +149,7 @@ namespace QBCS.Service.Implement
             {
                 return false;
             }
-            
+
         }
         public bool AddNewCourse(CourseViewModel model)
         {
@@ -170,7 +169,7 @@ namespace QBCS.Service.Implement
             var course = unitOfWork.Repository<Course>().GetById(id);
             var listTopic = new List<TopicViewModel>();
             var listLearningOutcome = new List<LearningOutcomeViewModel>();
-            foreach(LearningOutcome learningOutcome in course.LearningOutcomes)
+            foreach (LearningOutcome learningOutcome in course.LearningOutcomes)
             {
                 var learningOutcomeVM = new LearningOutcomeViewModel()
                 {
@@ -208,16 +207,34 @@ namespace QBCS.Service.Implement
             }
             return courseViewModels;
         }
-        public List<CourseStatViewModel> GetAllCourseStat()
+        public List<CourseStatViewModel> GetAllCourseStat(int? id)
         {
-            var courses = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseStatViewModel
+            List<CourseStatViewModel> courses = null;
+            if (id == null)
             {
-                Id = (int)c.Id,
-                Name = c.Name,
-                Code = c.Code,
-                IsDisable = (bool)c.IsDisable
-            }).Where(c => c.IsDisable == false).ToList();
-            foreach(var course in courses)
+                courses = unitOfWork.Repository<Course>().GetAll()
+                .Select(c => new CourseStatViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Code = c.Code,
+                    IsDisable = c.IsDisable.HasValue && c.IsDisable.Value
+                }).Where(c => c.IsDisable == false).ToList();
+            }
+            else
+            {
+                courses = unitOfWork.Repository<CourseOfUser>().GetAll()
+                    .Where(c => c.UserId == id)
+                    .Select(c => new CourseStatViewModel
+                    {
+                        Id = c.CourseId.Value,
+                        Name = c.Course.Name,
+                        Code = c.Course.Code,
+                        IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
+                    }).ToList();
+            }
+            
+            foreach (var course in courses)
             {
                 var questions = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == course.Id);
                 course.Easy = questions.Where(q => q.LevelId == (int)LevelEnum.Easy).Count();

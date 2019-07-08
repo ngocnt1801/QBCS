@@ -34,7 +34,7 @@ namespace QBCS.Service.Implement
             {
                 Id = learningOutcome.Id,
                 //Code = learningOutcome.Code != null ? learningOutcome.Code.ToString() : "", //bo field nay dc khong
-                CourseId = (int)learningOutcome.CourseId != null ? learningOutcome.CourseId.Value : 0,
+                CourseId = learningOutcome.CourseId.HasValue ? learningOutcome.CourseId.Value : 0,
                 //IsDisable = (bool)learningOutcome.IsDisable != null ? learningOutcome.IsDisable.Value : true, //bo field nay dc khong
                 Name = learningOutcome.Name
             };

@@ -1,13 +1,11 @@
-﻿using QBCS.Entity;
+﻿using AuthLib.Module;
+using QBCS.Entity;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
@@ -22,15 +20,18 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
             categoryService = new CategoryService();
         }
+
+        [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.CourseByUser)]
         // GET: Course
         public ActionResult Index()
         {
-            var user = Session["user"] as UserViewModel;
+            var user = ((UserViewModel)Session["user"]);
             int userId = user != null ? user.Id : 0;
             var list = courseService.GetAllCoursesByUserId(userId);
             TempData["active"] = "Course";
             return View(list);
         }
+
         public ActionResult Staff_Index()
         {
             var list = courseService.GetCourseByDisable();
@@ -57,13 +58,13 @@ namespace QBCS.Web.Controllers
             var result = courseService.UpdateCourse(model);
             if (result)
             {
-                return RedirectToAction("Detail","Course", new { itemId = model.Id});
+                return RedirectToAction("Detail", "Course", new { itemId = model.Id });
             }
             else
             {
                 return RedirectToAction("Index", "Error");
             }
-            
+
         }
         public ActionResult GetCoursesByName(string name)
         {
@@ -105,6 +106,9 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Staff_Index");
         }
 
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "All Courses For Generate", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -113,7 +117,9 @@ namespace QBCS.Web.Controllers
             return View("Staff_ListCourse", courses);
         }
 
-
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.AllCourseHistory)]
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -128,6 +134,13 @@ namespace QBCS.Web.Controllers
             return View("Staff_ListCourse", courses);
         }
 
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Course Detail", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionController), nameof(QuestionController.GetQuestions))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
@@ -139,26 +152,43 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Course";
             return View(model);
         }
+
+        //Lecturer
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "All Course Statistic", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = (int)SideBarEnum.AllStatistic)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
         public ActionResult CourseStatistic()
         {
-            var user = (UserViewModel)Session["user"];
-            var result = new List<CourseViewModel>();
-            if(user.Role == Service.Enum.RoleEnum.Staff)
-            {
-                result = courseService.GetAllCoursesWithDetail();
-            }
-            else
-            {
-                result = courseService.GetAllCoursesWithDetailById(user.Id);
-            }
+
+            var result = courseService.GetAllCoursesWithDetail();
             TempData["active"] = "Statistics";
             return View(result);
         }
+
+        [Feature(FeatureType.SideBar, "Course Statistic By User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = (int)SideBarEnum.StatisticByUser)]
+        //stpm: dependency declare
+        [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
+        public ActionResult CourseStatisticByUser()
+        {
+            var user = (UserViewModel)Session["user"];
+            int userId = user != null ? user.Id : 0;
+            var result = courseService.GetAllCoursesWithDetailById(userId);
+            TempData["active"] = "Statistic";
+            return View("CourseStatistic", result);
+        }
+
+        //Lecturer
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Course Detail Statistic", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetCourseDetailStat(int id, string type)
         {
             var result = courseService.GetCourseStatDetailByIdAndType(id, type);
             return PartialView("CourseDetailStatistic", result);
         }
+
         public ActionResult CourseDetailWithoutId()
         {
             List<CategoryViewModel> categories = categoryService.GetAllCategories();

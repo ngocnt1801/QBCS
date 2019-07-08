@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -21,7 +22,6 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IImportService importService;
         private ICourseService courseService;
-
 
         public QuestionController()
         {
@@ -84,6 +84,9 @@ namespace QBCS.Web.Controllers
             return View("ListQuestion", result);
         }
 
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Get Question Detail", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -102,16 +105,23 @@ namespace QBCS.Web.Controllers
             return View("EditQuestion", qdvm);
         }
 
+
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Update Question", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             bool result = questionService.UpdateQuestion(ques);
-           // bool optionResult = optionService.UpdateOptions(ques.Options);
+            // bool optionResult = optionService.UpdateOptions(ques.Options);
             TempData["Modal"] = "#success-modal";
-            return RedirectToAction("CourseDetail","Course", new { courseId = ques.CourseId });
+            return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
         }
 
+        //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
@@ -131,8 +141,10 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        //[Log(Action = "Import", TargetName = "Question")]
         public JsonResult ImportTextarea(Textarea textarea)
         {
             var user = (UserViewModel)Session["user"];
@@ -184,20 +196,29 @@ namespace QBCS.Web.Controllers
             //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
             //var questions = questionService.GetQuestionByQuestionId(questionId.HasValue ? questionId.Value : 0);
             var question = questionService.GetQuestionById(questionId.Value);
-            question.DuplicatedQuestion = question;
+            //question.DuplicatedQuestion = question;
             return View("ReviewQuestion", question);
         }
 
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Get List Question By Category", "QBCS", protectType: ProtectType.Authorized)]
+        //stpm: dependency declare
+        [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
-            if(courseId == 0 || courseId == null)
+            if (courseId == 0 || courseId == null)
             {
                 return PartialView("Staff_ListQuestion", result);
             }
             return PartialView("ListQuestion", result);
         }
 
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -205,6 +226,9 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.BusinessLogic, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Move", TargetName = "Question", ObjectParamName = "ques", IdParamName = "ids", CateParamName = "categoryId", LocParamName = "learningOutcomeId", LevelParamName = "levelId")]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)

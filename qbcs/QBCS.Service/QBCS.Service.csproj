@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Enum\LevelEnum.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
+    <Compile Include="Enum\SideBarEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />
     <Compile Include="Enum\TypeEnum.cs" />
     <Compile Include="Implement\CategoryService.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="ViewModel\CourseStatViewModel.cs" />
     <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
+    <Compile Include="ViewModel\DuplicatedQuestionViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
     <Compile Include="ViewModel\GenerateExamViewModel.cs" />

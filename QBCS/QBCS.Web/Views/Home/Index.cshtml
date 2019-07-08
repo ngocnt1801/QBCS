@@ -57,7 +57,7 @@
                         </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">
-                            @if (Model.Courses == null || Model.Courses.Count == 0)
+                            @if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
                             {
                                 <select class="form-control text-custom border-dark">
                                     <option selected>[None course available]</option>

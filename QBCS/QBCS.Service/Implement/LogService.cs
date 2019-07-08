@@ -7,10 +7,6 @@ using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using QBCS.Service.Enum;
 using System.Net;
 
 namespace QBCS.Service.Implement
@@ -27,19 +23,25 @@ namespace QBCS.Service.Implement
         public IEnumerable<LogViewModel> GetAllActivities()
         {
             //comment
-            var listLog = unitOfWork.Repository<Log>().GetAll().OrderByDescending(l => l.Date).ToList();
-          
-            return listLog.Select(l => new LogViewModel()
-            {
-                Id = l.Id,
-                UserId = (int)l.UserId,
-                TargetId = l.TargetId,
-                Fullname = unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname,
-                Action = l.Action,
-                Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
-                LogDate = l.Date.Value
+            var listLog = unitOfWork.Repository<Log>()
+                .GetAll()
+                .OrderByDescending(l => l.Date.Value)
+                .ToList()
+                .Select(l => new LogViewModel()
+                {
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
+                    LogDate = l.Date.Value
 
-            });
+                });
+          
+            return listLog;
         }
         public LogViewModel GetQuestionImportByTargetId(int targetId)
         {
@@ -70,10 +72,10 @@ namespace QBCS.Service.Implement
                      logViewModel = new LogViewModel()
                     {
                         Id = item.Id,
-                        UserId = (int)item.UserId,
+                        UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                         Action = item.Action,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
-                        Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                        Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -113,9 +115,9 @@ namespace QBCS.Service.Implement
                     LogViewModel logViewModel = new LogViewModel()
                     {
                         Id = item.Id,
-                        UserId = (int)item.UserId,
+                        UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                         TargetId = item.TargetId.HasValue ? item.TargetId.Value : 0,
-                        Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                        Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
@@ -136,10 +138,11 @@ namespace QBCS.Service.Implement
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
-                    UserId = (int)item.UserId,
+                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,
                     TargetId = item.TargetId,
+                    TargetName = item.TargetName,
                     Action = item.Action,
-                    Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                     Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                     LogDate = item.Date.Value
                 };
@@ -148,15 +151,19 @@ namespace QBCS.Service.Implement
             return list;
         }
       
-        public List<LogViewModel> GetAllActivitiesByUserId(int id, UserViewModel user)
+        public List<LogViewModel> GetAllActivitiesByUserId(int id)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.UserId == id).OrderByDescending(t => t.Date).ToList(); ;
-            string role = "";
-            if (user.Role == RoleEnum.Lecturer)
-            {
-                role = "Lecturer";
-            }
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll()
+                .Where(t => t.UserId == id)
+                .OrderByDescending(t => t.Date)
+                .ToList(); 
+
+            //string role = "";
+            //if (user.Role == RoleEnum.Lecturer)
+            //{
+            //    role = "Lecturer";
+            //}
            
             foreach (var item in listLog)
             {
@@ -166,14 +173,13 @@ namespace QBCS.Service.Implement
                     tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
                 }
                
-                
                 LogViewModel logViewModel = new LogViewModel()
                 {
                     Id = item.Id,
-                    UserId = (int)item.UserId,   
-                    UserRole = role,
+                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,   
+                    //UserRole = role,
                     TargetId = item.TargetId,
-                    Fullname = unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname,
+                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                     Action = item.Action,
                     Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
                     LogDate = item.Date.Value
@@ -206,8 +212,8 @@ namespace QBCS.Service.Implement
             LogViewModel model = new LogViewModel()
             {
                 TargetId = logById.TargetId,
-                UserId = (int)logById.UserId,
-                Fullname = unitOfWork.Repository<User>().GetById(logById.UserId.Value).Fullname,
+                UserId = logById.UserId.HasValue ? logById.UserId.Value : 0,
+                Fullname = logById.UserId.HasValue && logById.UserId != 0  ? unitOfWork.Repository<User>().GetById(logById.UserId.Value).Fullname : logById.Fullname,
                 Message = (logById.Action + " " + logById.TargetName).ToLowerInvariant(),
                 LogDate = logById.Date.Value,
                 //OldValue = questionViewModelOld.ToString(),
@@ -303,7 +309,7 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
         }
 
-        public void LogManually(int targetId, string action, string targetName, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
+        public void LogManually(string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel
             {

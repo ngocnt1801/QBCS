@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -21,24 +22,35 @@ namespace QBCS.Web.Controllers
             questionService = new QuestionService();
         }
 
+
+        //Lecturer
         // GET: Activity
-        public ActionResult Index(int id)
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "Get Activities by User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.ActivityByUser)]
+        public ActionResult Index()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
             var user = (UserViewModel)Session["user"];
-            //var model = logService.GetAllActivities();
-            var model = logService.GetAllActivitiesByUserId(id, user);
+            int userId = user != null ? user.Id : 0;
+            var model = logService.GetAllActivitiesByUserId(userId);
             TempData["active"] = "Activity";
             return View(model);
         }
+
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.AllActivity)]
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
-            var user = (UserViewModel)Session["user"];
-            //var model = logService.GetAllActivities();
             var model = logService.GetAllActivities();
+            TempData["active"] = "Activity";
             return View("Index", model);
         }
+
+        //Lecturer
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Activity Detail", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -53,12 +65,21 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Activity";
             return View("Index", logViews);
         }
+        //Lecturer
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Compare Question History", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetUpdateActivityById (int id)
         {
             var model = logService.GetActivitiesById(id);
             TempData["active"] = "Activity";
             return View("GetUpdateActivity", model);
         }
+
+        //Lecturer
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Activity Question LifeCycle", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -77,6 +98,9 @@ namespace QBCS.Web.Controllers
             TempData["active"] = "Activity";
             return View("GetListActivity", list);
         }
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);
