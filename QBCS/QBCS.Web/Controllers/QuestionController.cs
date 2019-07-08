@@ -165,6 +165,8 @@ namespace QBCS.Web.Controllers
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
+
+        [Feature(FeatureType.BusinessLogic, "Get All Course By User for import", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult LoadCourseAjax()
         {
             var user = (UserViewModel)Session["user"];

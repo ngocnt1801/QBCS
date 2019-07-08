@@ -18,7 +18,7 @@ namespace QBCS.Entity
         }
 
         public int Id { get; set; }
-
+        [Column(TypeName = "NVARCHAR")]
         public string QuestionContent { get; set; }
 
         public int? CourseId { get; set; }

@@ -20,7 +20,7 @@ namespace QBCS.Entity
         public int? PartId { get; set; }
 
         public int? QuestionReference { get; set; }
-
+        [Column(TypeName ="NVARCHAR")]
         public string QuestionContent { get; set; }
 
         public int? LevelId { get; set; }

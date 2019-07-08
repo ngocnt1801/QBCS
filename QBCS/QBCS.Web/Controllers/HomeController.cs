@@ -95,9 +95,9 @@ namespace QBCS.Web.Controllers
 
         }
 
-        public void Logout()
+        public RedirectResult Logout()
         {
-            Response.Redirect("/QBCS.Web/logoff");
+            return Redirect("/logoff");
         }
 
         //stpm: feature declare
@@ -107,6 +107,7 @@ namespace QBCS.Web.Controllers
             , ShortName = "Manually"
             , InternalId = (int)SideBarEnum.Manually)]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.LoadCourseAjax))]
         public ActionResult ImportWithTextArea()
         {
             TempData["active"] = "Manually";

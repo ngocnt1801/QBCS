@@ -63,7 +63,7 @@
         },
         renderNotification: function(importId, message, date){
             var template = notificationView.getTemplateNotification();
-            template = template.replace("{{noti.link}}", "/QBCS.Web/Import/GetResult?importId="+importId)
+            template = template.replace("{{noti.link}}", "/Import/GetResult?importId="+importId)
                                 .replace("{{noti.icon}}", "fa-file-alt")
                                 .replace("{{noti.date}}", date)
                                 .replace("{{noti.message}}", message);
@@ -101,7 +101,7 @@
         },
         getAmountNewNotification: function () {
             $.ajax({
-                url: '/QBCS.Web/Notification/GetNotification',
+                url: '/Notification/GetNotification',
                 type: 'GET',
                 success: function (response) {
                     notificationModel.listNotification = [];

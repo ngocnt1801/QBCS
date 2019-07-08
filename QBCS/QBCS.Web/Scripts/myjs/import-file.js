@@ -91,7 +91,7 @@
     },
 
     redirectToDetail: function(id) {
-      document.location.href = "/QBCS.Web/Import/GetQuestionTemp?tempId=" + id;
+      document.location.href = "/Import/GetQuestionTemp?tempId=" + id;
     },
     importQuestionToBank: function(importId) {
     //   console.log("import to bank");
@@ -104,7 +104,7 @@
     //     }
     //   });
 
-    document.location.href = "/QBCS.Web/Import/AddToBank?importId=" + importId;
+    document.location.href = "/Import/AddToBank?importId=" + importId;
     },
     cancelImport: function(importId) {
       //   console.log("import to bank");
@@ -116,7 +116,7 @@
       //       document.location.href = "/QBCS.Web/";
       //     }
       //   });
-      document.location.href = "/QBCS.Web/Import/Cancel?importId=" + importId;
+      document.location.href = "/Import/Cancel?importId=" + importId;
     }
   };
 

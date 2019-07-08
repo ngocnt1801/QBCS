@@ -708,7 +708,7 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
-                            OptionContent = (string)reader["OptionContent"],
+                            OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
                         import.Add(question);
@@ -719,7 +719,7 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
-                            OptionContent = (string)reader["OptionContent"],
+                            OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
                     }
