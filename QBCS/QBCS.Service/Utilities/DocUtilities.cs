@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using QBCS.Entity;
@@ -126,13 +127,16 @@ namespace QBCS.Service.Utilities
                                         {
                                             if (!wParagraph.Text.Equals("") && quesModel.QuestionContent == null)
                                             {
-                                                quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>").Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                                var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>").Split(new string[] { "[file" }, StringSplitOptions.None)[0]);
+                                                quesModel.QuestionContent = "[html] " + temp;
                                                 inputWholeParagraph = true;
                                             }
                                             else if (!wParagraph.Text.Equals(""))
                                             {
-                                                quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                                var temp = WebUtility.HtmlDecode(wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0]);
+                                                quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + temp;
                                             }
+
                                         }
                                         break;
                                     case EntityType.Picture:
@@ -173,11 +177,13 @@ namespace QBCS.Service.Utilities
                                     if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
                                     {
                                         optionModel.IsCorrect = false;
-                                        optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                                        var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
+                                        optionModel.OptionContent = "[html]" + temp;
                                     }
                                     else if (!wParagraph.Text.Equals(""))
                                     {
-                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
+                                        var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
+                                        optionModel.OptionContent = "[html]" + optionModel.OptionContent + "<cbr>" + temp;
                                     }
                                     break;
                                 case EntityType.Picture:

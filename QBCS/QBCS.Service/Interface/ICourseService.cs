@@ -17,7 +17,7 @@ namespace QBCS.Service.Interface
         List<CourseViewModel> GetAllCoursesWithDetail();
         List<CourseViewModel> GetAllCoursesWithDetailById(int userId);
         List<CourseViewModel> GetAvailableCourse(int userId);
-        List<CourseViewModel> GetAllCoursesByUserId(int id);
+        List<CourseViewModel> GetAllCoursesByUserId(int? id);
         List<Course> GetCoursesByName(string name);
         bool UpdateCourse(CourseViewModel course);
         List<CourseViewModel> SearchCourseByNameOrCode(string searchContent);

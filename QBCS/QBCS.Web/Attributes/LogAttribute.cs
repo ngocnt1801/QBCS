@@ -79,7 +79,7 @@ namespace QBCS.Web.Attributes
                 if (newQuestionModel.QuestionContent != "")
                 {
                     newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
-                    newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                    //newQuestionModel.CourseId = oldQuestionModel.CourseId;
                     newQuestionModel.Image = oldQuestionModel.Image;
                     newQuestionModel.CourseName = oldQuestionModel.CourseName;
                     newQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeName;
@@ -105,7 +105,7 @@ namespace QBCS.Web.Attributes
                 if (filterContext.ActionParameters.ContainsKey(IdParamName))
                 {
                     ids = filterContext.ActionParameters[IdParamName] as int[];
-                    categoryId = (int)filterContext.ActionParameters[CateParamName];
+                    categoryId = filterContext.ActionParameters[CateParamName] != null ? (int)filterContext.ActionParameters[CateParamName] : 0;
                     learningOutComeId = (int)filterContext.ActionParameters[LocParamName];
                     levelId = (int)filterContext.ActionParameters[LevelParamName];
                     if (ids != null)
@@ -119,7 +119,7 @@ namespace QBCS.Web.Attributes
                                 newQuestionModel.LearningOutcomeId = learningOutComeId;
                                 newQuestionModel.LevelId = levelId;
                                 newQuestionModel.CategoryId = categoryId;
-                                newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                                //newQuestionModel.CourseId = oldQuestionModel.CourseId;
 
                                 courseView = courseService.GetCourseById(oldQuestionModel.CourseId);
                                 newQuestionModel.CourseName = courseView.Name;
@@ -198,7 +198,6 @@ namespace QBCS.Web.Attributes
             }*/
             #endregion
 
-            logService.Log(logModel);
             logModel.UserId = userId;
             logModel.TargetId = targetId;
             logModel.Action = Action;

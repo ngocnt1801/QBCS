@@ -19,9 +19,9 @@ namespace QBCS.Entity
         public int Id { get; set; }
 
         public int? ImportId { get; set; }
-
+        [Column(TypeName = "NVARCHAR")]
         public string QuestionContent { get; set; }
-
+        [Column(TypeName = "NVARCHAR")]
         public string OptionsContent { get; set; }
 
         public int? Status { get; set; }
