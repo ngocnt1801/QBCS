@@ -98,7 +98,8 @@ namespace QBCS.Web.Controllers
         public RedirectResult Logout()
         {
             Session.Clear();
-            return Redirect("/logoff");
+            var url = Url.Content("~/logoff");
+            return Redirect(url);
         }
 
         //stpm: feature declare
