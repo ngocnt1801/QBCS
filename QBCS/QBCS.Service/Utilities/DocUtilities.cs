@@ -159,79 +159,78 @@ namespace QBCS.Service.Utilities
                 {
                     var optionCheck = new DocViewModel();
                     optionCheck.Code = key.Replace(".", "").ToLower();
-                    for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
-                    {
-                        IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
-                        WParagraph wParagraph = bodyItemEntity as WParagraph;
-                        if (wParagraph.Text != "")
-                        {
-                            ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
-                            switch (pItem.EntityType)
-                            {
-                                //case EntityType.TextRange:
-                                default:
-                                    if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
-                                    {
-                                        optionModel.IsCorrect = false;
-                                        optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
-                                    }
-                                    else if (!wParagraph.Text.Equals(""))
-                                    {
-                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
-                                    }
-                                    break;
-                                case EntityType.Picture:
-                                    //WPicture wPicture = pItem as WPicture;
-                                    //Image iImage = wPicture.Image;
-
-                                    //MemoryStream m = new MemoryStream();
-                                    //iImage.Save(m, iImage.RawFormat);
-                                    //byte[] imageBytes = m.ToArray();
-
-                                    //quesModel.Image = Convert.ToBase64String(imageBytes);
-                                    break;
-                            }
-                        }
-                    }
-
-
                     //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     //{
                     //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
                     //    WParagraph wParagraph = bodyItemEntity as WParagraph;
-                    //    if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                    //    if (wParagraph.Text != "")
                     //    {
-                    //        foreach (var pChild in wParagraph.ChildEntities)
+                    //        ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
+                    //        switch (pItem.EntityType)
                     //        {
-                    //            var pItem = pChild as ParagraphItem;
-                    //            switch (pItem.EntityType)
-                    //            {
-                    //                case EntityType.TextRange:
-                    //                    var wText = pChild as WTextRange;
-                    //                    if (!wText.Text.Equals("") && optionModel.OptionContent == null)
-                    //                    {
-                    //                        optionModel.IsCorrect = false;
-                    //                        optionModel.OptionContent = wText.Text.Replace("\v", "<cbr>");
-                    //                    }
-                    //                    else if (!wText.Text.Equals(""))
-                    //                    {
-                    //                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wText.Text;
-                    //                    }
-                    //                    break;
-                    //                case EntityType.Picture:
-                    //                    //WPicture wPicture = pItem as WPicture;
-                    //                    //Image iImage = wPicture.Image;
+                    //            //case EntityType.TextRange:
+                    //            default:
+                    //                if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                    //                {
+                    //                    optionModel.IsCorrect = false;
+                    //                    optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                    //                }
+                    //                else if (!wParagraph.Text.Equals(""))
+                    //                {
+                    //                    optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
+                    //                }
+                    //                break;
+                    //            case EntityType.Picture:
+                    //                //WPicture wPicture = pItem as WPicture;
+                    //                //Image iImage = wPicture.Image;
 
-                    //                    //MemoryStream m = new MemoryStream();
-                    //                    //iImage.Save(m, iImage.RawFormat);
-                    //                    //byte[] imageBytes = m.ToArray();
+                    //                //MemoryStream m = new MemoryStream();
+                    //                //iImage.Save(m, iImage.RawFormat);
+                    //                //byte[] imageBytes = m.ToArray();
 
-                    //                    //quesModel.Image = Convert.ToBase64String(imageBytes);
-                    //                    break;
-                    //            }
+                    //                //quesModel.Image = Convert.ToBase64String(imageBytes);
+                    //                break;
                     //        }
                     //    }
                     //}
+
+
+                    for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
+                    {
+                        IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
+                        WParagraph wParagraph = bodyItemEntity as WParagraph;
+                        if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                        {
+                            foreach (var pChild in wParagraph.ChildEntities)
+                            {
+                                var pItem = pChild as ParagraphItem;
+                                switch (pItem.EntityType)
+                                {
+                                    case EntityType.TextRange:
+                                        if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                                        {
+                                            optionModel.IsCorrect = false;
+                                            optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                                        }
+                                        else if (!wParagraph.Text.Equals(""))
+                                        {
+                                            optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                        }
+                                        break;
+                                    case EntityType.Picture:
+                                        WPicture wPicture = pItem as WPicture;
+                                        Image iImage = wPicture.Image;
+
+                                        MemoryStream m = new MemoryStream();
+                                        iImage.Save(m, iImage.RawFormat);
+                                        byte[] imageBytes = m.ToArray();
+
+                                        optionModel.Image = Convert.ToBase64String(imageBytes);
+                                        break;
+                                }
+                            }
+                        }
+                    }
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
                     if (optionModel.OptionContent != null)

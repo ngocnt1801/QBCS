@@ -131,7 +131,6 @@ namespace QBCS.Web
             
             //Tagsinput in rule
             bundles.Add(new ScriptBundle("~/bundle/scripts/tagsinputrule").Include(
-                "~/Scripts/jquery-3.3.1.min.js",
                 "~/Scripts/bootstrap-tagsinput.js",
                 "~/Scripts/sweetalert.min.js",
                 "~/Scripts/myjs/staffjs/edit-rule.js"
