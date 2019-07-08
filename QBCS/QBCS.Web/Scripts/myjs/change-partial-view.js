@@ -25,8 +25,7 @@ function customs_display() {
             content = content.split("<br>").join("<br/>");
             content = content.split("&lt;br&gt;").join("&lt;br&gt;");
             content = content.split("&lt;p&gt;").join("");
-            content = content.split("&lt;").join("<");
-            content = content.split("&gt;").join(">");
+           
             content = content.split("&lt;/p&gt;").join("");
             content = content.split("&lt;b&gt;").join("");
             content = content.split("&lt;/b&gt;").join("");
@@ -45,8 +44,7 @@ function customs_display_duplicate() {
         content = content.split("&lt;cbr&gt;").join("<br/>");
         content = content.split("&lt;br&gt;").join("<br/>");
         content = content.split("&lt;p&gt;").join("");
-        content = content.split("&lt").join("<");
-        content = content.split("&gt").join(">");
+      
         content = content.split("&lt;/p&gt;").join("");
         content = content.split("&lt;b&gt;").join("");
         content = content.split("&lt;/b&gt;").join("");
@@ -69,8 +67,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                      
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
@@ -88,8 +85,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                  
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
@@ -118,8 +114,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                      
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
@@ -137,8 +132,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");  
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                      
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
@@ -161,8 +155,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                   
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
@@ -189,8 +182,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");            
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                     
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
@@ -208,8 +200,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                    
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
@@ -238,8 +229,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+               
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
@@ -257,8 +247,7 @@ function split() {
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt").join("<");
-                        data = data.split("&gt").join(">");
+                   
                         data = data.split("&lt;b&gt;").join("");
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;/p&gt;").join("");
