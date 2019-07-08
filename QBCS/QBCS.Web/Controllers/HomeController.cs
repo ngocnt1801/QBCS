@@ -107,6 +107,7 @@ namespace QBCS.Web.Controllers
             , ShortName = "Manually"
             , InternalId = (int)SideBarEnum.Manually)]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
+        [Dependency(typeof(QuestionController), nameof(QuestionController.LoadCourseAjax))]
         public ActionResult ImportWithTextArea()
         {
             TempData["active"] = "Manually";

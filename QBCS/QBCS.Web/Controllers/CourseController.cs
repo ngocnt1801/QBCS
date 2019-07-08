@@ -26,8 +26,17 @@ namespace QBCS.Web.Controllers
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
-            int userId = user != null ? user.Id : 0;
-            var list = courseService.GetAllCoursesByUserId(userId);
+            List<CourseViewModel> list = new List<CourseViewModel>();
+            if (user != null)
+            {
+                list = courseService.GetAllCoursesByUserId(user.Id);
+            }
+            else
+            {
+                list = courseService.GetAllCoursesByUserId(null);
+            }
+
+          
             TempData["active"] = "Course";
             return View(list);
         }

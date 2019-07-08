@@ -16,6 +16,8 @@ function option_custom() {
         op = op.split("<cbr>").join("");
         op = op.split("&lt;cbr&gt;").join("<br/>");
         op = op.split("&lt;br&gt;").join("<br/>");
+        op = op.split("&lt").join("<");
+        op = op.split("&gt").join(">");
         op = op.split("[html]").join("");
         $(this).html(op);
     });
@@ -27,6 +29,8 @@ function question_custom() {
         op = op.split("<cbr>").join("");
         op = op.split("&lt;cbr&gt;").join("<br/>");
         op = op.split("&lt;br&gt;").join("<br/>");
+        op = op.split("&lt").join("<");
+        op = op.split("&gt").join(">");
         op = op.split("[html]").join("");
         $(this).html(op);
     });
@@ -41,6 +45,8 @@ function customs_display_p() {
             content = content.split("<br>").join("<br/>");
             content = content.split("&lt;br&gt;").join("&lt;br&gt;");
             content = content.split("&lt;p&gt;").join("");
+            content = content.split("&lt").join("<");
+            content = content.split("&gt").join(">");
             content = content.split("&lt;/p&gt;").join("");
             content = content.split("&lt;b&gt;").join("");
             content = content.split("&lt;/b&gt;").join("");
@@ -63,6 +69,8 @@ function customs_display() {
         content = content.split("<br>").join("<br/>");
         content = content.split("&lt;br&gt;").join("&lt;br&gt;");
         content = content.split("&lt;p&gt;").join("");
+        content = content.split("&lt").join("<");
+        content = content.split("&gt").join(">");
         content = content.split("&lt;/p&gt;").join("");
         content = content.split("&lt;b&gt;").join("");
         content = content.split("&lt;/b&gt;").join("");

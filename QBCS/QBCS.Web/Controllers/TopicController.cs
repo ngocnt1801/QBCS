@@ -51,8 +51,6 @@ namespace QBCS.Web.Controllers
         }
 
         //Lecturer
-        //stpm: feature declare
-        [Feature(FeatureType.BusinessLogic, "Get All Course By User", "QBCS", protectType: ProtectType.Authorized)]
         public JsonResult LoadCourse()
         {
             var user = (UserViewModel)Session["user"];
