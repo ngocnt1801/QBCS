@@ -29,10 +29,6 @@ namespace QBCS.Web.Controllers
             return View();
         }
 
-        public ActionResult Test()
-        {
-            return View("Index");
-        }
         [Feature(FeatureType.Page
             , "Run Scripts"
             , "QBCS", protectType: ProtectType.Authorized
