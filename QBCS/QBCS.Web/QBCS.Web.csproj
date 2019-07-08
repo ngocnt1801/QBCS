@@ -448,6 +448,7 @@
     <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\myjs\init-datatable.js" />
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
