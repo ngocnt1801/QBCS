@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using System;
@@ -36,6 +37,8 @@ namespace QBCS.Web.Controllers
         public ActionResult Run(string raw)
         {
             scriptService.RunScirpt(raw);
+            TempData["Message"] = "Script run successfully";
+            TempData["Status"] = ToastrEnum.Success;
             return RedirectToAction("Index");
         }
     }
