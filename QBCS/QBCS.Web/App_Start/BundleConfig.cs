@@ -119,16 +119,26 @@ namespace QBCS.Web
                 "~/Scripts/myjs/edit-question.js"
                 ));
 
-            //Autocomplete
-            bundles.Add(new ScriptBundle("~/bundle/scripts/autocomplete").Include(
+            //Autocomplete Lecturer
+            bundles.Add(new ScriptBundle("~/bundle/scripts/autocompleteLecturer").Include(
                 "~/Scripts/jquery-3.1.1.min.js",
                 "~/Scripts/jquery-ui.min.js",
-                "~/Scripts/myjs/autocomplete.js"
+                "~/Scripts/myjs/autocompleteLecturer.js"
                 ));
-            bundles.Add(new StyleBundle("~/bundle/content/autocomplete").Include(
+            bundles.Add(new StyleBundle("~/bundle/content/autocompleteLecturer").Include(
                "~/Content/jquery-ui.css"
                ));
-            
+
+            //Autocomplete Course
+            bundles.Add(new ScriptBundle("~/bundle/scripts/autocompleteCourse").Include(
+                "~/Scripts/jquery-3.1.1.min.js",
+                "~/Scripts/jquery-ui.min.js",
+                "~/Scripts/myjs/autocompleteLecturer.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/autocompleteCourse").Include(
+               "~/Content/jquery-ui.css"
+               ));
+
             //Tagsinput in rule
             bundles.Add(new ScriptBundle("~/bundle/scripts/tagsinputrule").Include(
                 "~/Scripts/bootstrap-tagsinput.js",

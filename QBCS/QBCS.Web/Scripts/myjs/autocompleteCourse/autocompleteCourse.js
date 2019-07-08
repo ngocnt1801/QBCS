@@ -2,10 +2,10 @@
     //$('#myautocomplete').change({
 
     //});
-    $('#myautocomplete').autocomplete({
+    $('#autocompleteCourse').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "http://localhost/QBCS.Web/User/GetLecturer",
+                url: "http://localhost/QBCS.Web/LearningOutcome/LoadCourse",
                 type: "GET",
                 dataType: "json",
                 data: request,
@@ -13,11 +13,16 @@
 
                 },
                 success: function (data) {
+                    var result = [];
                     if (data == null || data == "") {
-                        var result = ["Not found"];
+                        result = ["Not found"];
                         return response(result);
                     }
-                    return response(data);
+                    for (var i = 0; i < data.length; i++){
+                        var string = data[i].Name + " (" + data[i].Code + ")";
+                        result.push(string);
+                    }
+                    return response(result);
                 }
             });
         }

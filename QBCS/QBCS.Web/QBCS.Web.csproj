@@ -437,7 +437,8 @@
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
     <Content Include="Scripts\js\demo\datatables-demo.js" />
-    <Content Include="Scripts\myjs\autocomplete.js" />
+    <Content Include="Scripts\myjs\autocompleteCourse\autocompleteCourse.js" />
+    <Content Include="Scripts\myjs\autocompleteLecturer.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
@@ -447,6 +448,7 @@
     <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\myjs\autocompleteCourse\jquery-ui.min.js" />
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
