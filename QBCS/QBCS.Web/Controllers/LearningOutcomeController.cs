@@ -67,7 +67,7 @@ namespace QBCS.Web.Controllers
         }
         public JsonResult LoadCourseLive(string term)
         {
-            var result = courseService.GetCoursesVMByName(term);
+            var result = courseService.GetCoursesVMByNameAndCode(term);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)

@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,16 +40,27 @@ namespace QBCS.Service.Implement
 
             return course.ToList();
         }
-        public List<CourseViewModel> GetCoursesVMByName(string name)
+        public List<CourseViewModel> GetCoursesVMByNameAndCode(string name)
         {
-            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name)).Select(c => new CourseViewModel
+            name = name.ToLower();
+            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel
             {
                 Id = c.Id,
                 Code = c.Code,
                 Name = c.Name
-            });
+            }).ToList();
 
-            return course.ToList();
+            var result = new List<CourseViewModel>();
+            foreach (var c in course)
+            {
+                var fullname = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(c.Name).ToLower();
+                var code = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(c.Code).ToLower();
+                if (fullname.Contains(name) || code.Contains(name) || c.Name.ToLower().Contains(name) || c.Code.ToLower().Contains(name))
+                {
+                    result.Add(c);
+                }
+            }
+            return result;
         }
         public List<CourseViewModel> GetAllCoursesWithDetail()
         {

@@ -716,6 +716,50 @@ namespace QBCS.Service.Implement
                         }).ToList(),
                         ImportedDate = DateTime.Now
                     };
+
+                    int g = 0;
+                    string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+                    string fileName = "unknownFile-" + user + @"-" + time.ToString() + ".txt";
+                    if (extensionFile.Equals(".doc"))
+                    {
+                        fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
+                    }
+                    else if (extensionFile.Equals(".docx"))
+                    {
+                        fileName = "DOCXFile-" + user + @"-" + time.ToString() + ".txt";
+                    }
+                    string filePath = "ErrorLog\\";
+                    string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+                    string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+                    if (!File.Exists(fullPath))
+                    {
+                        var myFile = File.Create(fullPath);
+                        myFile.Close();
+                        using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                        {
+                            if (listQuestion != null)
+                            {
+                                foreach (var item in listQuestion)
+                                {
+                                    g++;
+                                    tw.WriteLine(g + "");
+                                    tw.WriteLine("Question: " + item.QuestionContent);
+                                    tw.WriteLine("Code: " + item.Code + "\n");
+                                    if (item.Options != null)
+                                    {
+                                        foreach (var itemOp in item.Options)
+                                        {
+                                            tw.WriteLine("Option: " + item.Options + "\n");
+                                        }
+                                    }
+                                    tw.WriteLine("Error: " + item.Error + "\n");
+                                    tw.WriteLine();
+                                }
+                                tw.Close();
+                            }
+
+                        }
+                    }
                 }
 
                 #endregion
@@ -964,9 +1008,9 @@ namespace QBCS.Service.Implement
                     {
                         var key = tr.Elements("td").ElementAt(0).Value;
                         var value = tr.Elements("td").ElementAt(1).Value;
-                        if (key.Contains("QN="))
+                        if (key.Contains("QN=") || key.Contains("QN ="))
                         {
-                            questionTmp.Code = key.Replace("QN=", "");
+                            questionTmp.Code = key.Replace("QN=", "").Replace("QN =", "").Trim();
                             var contentQ = tr.Elements("td").Elements("p").ToList();
                             for (int i = 1; i < contentQ.Count; i++)
                             {
