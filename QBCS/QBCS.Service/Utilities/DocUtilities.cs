@@ -178,12 +178,12 @@ namespace QBCS.Service.Utilities
                                     {
                                         optionModel.IsCorrect = false;
                                         var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
-                                        optionModel.OptionContent = temp;
+                                        optionModel.OptionContent = "[html]" + temp;
                                     }
                                     else if (!wParagraph.Text.Equals(""))
                                     {
                                         var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
-                                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + temp;
+                                        optionModel.OptionContent = "[html]" + optionModel.OptionContent + "<cbr>" + temp;
                                     }
                                     break;
                                 case EntityType.Picture:

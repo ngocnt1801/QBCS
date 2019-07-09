@@ -31,7 +31,8 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundles/script/datatables").Include(
                 "~/Scripts/datatables/jquery.dataTables.js",
                 "~/Scripts/datatables/dataTables.bootstrap4.js",
-                "~/Scripts/datatables/dataTables-demo.js"
+                "~/Scripts/datatables/dataTables-demo.js",
+                "~/Scripts/myjs/init-datatable.js"
                 ));
 
             //data table

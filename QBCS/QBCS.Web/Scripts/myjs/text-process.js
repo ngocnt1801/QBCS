@@ -43,8 +43,8 @@ function customs_display_p() {
             content = content.split("<br>").join("<br/>");
             content = content.split("&lt;br&gt;").join("&lt;br&gt;");
             content = content.split("&lt;p&gt;").join("");
-            content = content.split("&lt").join("<");
-            content = content.split("&gt").join(">");
+            content = content.split("&lt;").join("<");
+            content = content.split("&gt;").join(">");
             content = content.split("&lt;/p&gt;").join("");
             content = content.split("&lt;b&gt;").join("");
             content = content.split("&lt;/b&gt;").join("");
