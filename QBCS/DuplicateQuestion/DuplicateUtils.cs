@@ -331,7 +331,7 @@ namespace DuplicateQuestion
 
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
-                            AssignDuplicated(question, item, StatusEnum.Delete);
+                            AssignDuplicated(question, item, StatusEnum.Editable);
                             isUpdate = true;
                         }
 
@@ -396,7 +396,7 @@ namespace DuplicateQuestion
 
                         if (questionResult >= HIGH_DUPLICATE) //same question content
                         {
-                            AssignDuplicated(question, item, StatusEnum.Delete);
+                            AssignDuplicated(question, item, StatusEnum.Editable);
                             isUpdate = true;
 
                         } // end if > HIGH_Duplicate

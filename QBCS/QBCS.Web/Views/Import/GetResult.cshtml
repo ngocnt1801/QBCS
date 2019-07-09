@@ -11,7 +11,7 @@
 @{
 
     int total = Model.Questions.Count;
-    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip || q.Status == StatusEnum.Delete).Count();
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
     //int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
     int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
     int invalid = Model.Questions.Where(q => q.Status == StatusEnum.Invalid).Count();
@@ -30,8 +30,7 @@
                 <section id="section-topline-1">
                     @{
                         var editList = Model.Questions.Where(q => q.Status == StatusEnum.Editable
-                                                            || q.Status == StatusEnum.DeleteOrSkip
-                                                            || q.Status == StatusEnum.Delete);
+                                                          );
                     }
                     <div class="mb-4">
                         <span class="text-custom align-middle mr-4">Duplicated with:</span>
