@@ -48,8 +48,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthLib, Version=2.4.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STPM.AuthLib.2.4.15\lib\net452\AuthLib.dll</HintPath>
+    <Reference Include="AuthLib, Version=2.4.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\STPM.AuthLib.2.4.16\lib\net452\AuthLib.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -226,6 +226,7 @@
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
+    <Compile Include="Controllers\ScriptController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -268,7 +269,6 @@
     <Content Include="Content\font-awesome\v4-shims.min.css" />
     <Content Include="Content\font.css" />
     <Content Include="Content\generate-exam.css" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\logo%402x.png" />
     <Content Include="Content\logo-colored%402x.png" />
@@ -293,7 +293,11 @@
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Global.asax" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
@@ -335,87 +339,11 @@
     <Content Include="Content\webfonts\fa-solid-900.ttf" />
     <Content Include="Content\webfonts\fa-solid-900.woff" />
     <Content Include="Content\webfonts\fa-solid-900.woff2" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap\wells.less" />
-    <Content Include="Content\bootstrap\variables.less" />
-    <Content Include="Content\bootstrap\utilities.less" />
-    <Content Include="Content\bootstrap\type.less" />
-    <Content Include="Content\bootstrap\tooltip.less" />
-    <Content Include="Content\bootstrap\thumbnails.less" />
-    <Content Include="Content\bootstrap\theme.less" />
-    <Content Include="Content\bootstrap\tables.less" />
-    <Content Include="Content\bootstrap\scaffolding.less" />
-    <Content Include="Content\bootstrap\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\responsive-embed.less" />
-    <Content Include="Content\bootstrap\progress-bars.less" />
-    <Content Include="Content\bootstrap\print.less" />
-    <Content Include="Content\bootstrap\popovers.less" />
-    <Content Include="Content\bootstrap\panels.less" />
-    <Content Include="Content\bootstrap\pagination.less" />
-    <Content Include="Content\bootstrap\pager.less" />
-    <Content Include="Content\bootstrap\normalize.less" />
-    <Content Include="Content\bootstrap\navs.less" />
-    <Content Include="Content\bootstrap\navbar.less" />
-    <Content Include="Content\bootstrap\modals.less" />
-    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
-    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
-    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
-    <Content Include="Content\bootstrap\mixins\table-row.less" />
-    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
-    <Content Include="Content\bootstrap\mixins\size.less" />
-    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
-    <Content Include="Content\bootstrap\mixins\resize.less" />
-    <Content Include="Content\bootstrap\mixins\reset-text.less" />
-    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
-    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
-    <Content Include="Content\bootstrap\mixins\panels.less" />
-    <Content Include="Content\bootstrap\mixins\pagination.less" />
-    <Content Include="Content\bootstrap\mixins\opacity.less" />
-    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
-    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
-    <Content Include="Content\bootstrap\mixins\list-group.less" />
-    <Content Include="Content\bootstrap\mixins\labels.less" />
-    <Content Include="Content\bootstrap\mixins\image.less" />
-    <Content Include="Content\bootstrap\mixins\hide-text.less" />
-    <Content Include="Content\bootstrap\mixins\grid.less" />
-    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
-    <Content Include="Content\bootstrap\mixins\gradients.less" />
-    <Content Include="Content\bootstrap\mixins\forms.less" />
-    <Content Include="Content\bootstrap\mixins\clearfix.less" />
-    <Content Include="Content\bootstrap\mixins\center-block.less" />
-    <Content Include="Content\bootstrap\mixins\buttons.less" />
-    <Content Include="Content\bootstrap\mixins\border-radius.less" />
-    <Content Include="Content\bootstrap\mixins\background-variant.less" />
-    <Content Include="Content\bootstrap\mixins\alerts.less" />
-    <Content Include="Content\bootstrap\mixins.less" />
-    <Content Include="Content\bootstrap\media.less" />
-    <Content Include="Content\bootstrap\list-group.less" />
-    <Content Include="Content\bootstrap\labels.less" />
-    <Content Include="Content\bootstrap\jumbotron.less" />
-    <Content Include="Content\bootstrap\input-groups.less" />
-    <Content Include="Content\bootstrap\grid.less" />
-    <Content Include="Content\bootstrap\glyphicons.less" />
-    <Content Include="Content\bootstrap\forms.less" />
-    <Content Include="Content\bootstrap\dropdowns.less" />
-    <Content Include="Content\bootstrap\component-animations.less" />
-    <Content Include="Content\bootstrap\code.less" />
-    <Content Include="Content\bootstrap\close.less" />
-    <Content Include="Content\bootstrap\carousel.less" />
-    <Content Include="Content\bootstrap\buttons.less" />
-    <Content Include="Content\bootstrap\button-groups.less" />
-    <Content Include="Content\bootstrap\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\bootstrap.less" />
-    <Content Include="Content\bootstrap\badges.less" />
-    <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Content\_bootstrap-datetimepicker.less" />
-    <Content Include="Content\bootstrap-datetimepicker-build.less" />
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
     <Content Include="libman.json" />
     <Content Include="Content\file\QBCS_Word_Template.doc" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\datatables\datatables-demo.js" />
     <Content Include="Scripts\datatables\dataTables.bootstrap4.js" />
@@ -478,9 +406,7 @@
     <Content Include="Scripts\vendor\chart.js\Chart.bundle.min.js" />
     <Content Include="Scripts\vendor\chart.js\Chart.js" />
     <Content Include="Scripts\vendor\chart.js\Chart.min.js" />
-    <Content Include="Scripts\vendor\datatables\dataTables.bootstrap4.css" />
     <Content Include="Scripts\vendor\datatables\dataTables.bootstrap4.js" />
-    <Content Include="Scripts\vendor\datatables\dataTables.bootstrap4.min.css" />
     <Content Include="Scripts\vendor\datatables\dataTables.bootstrap4.min.js" />
     <Content Include="Scripts\vendor\datatables\jquery.dataTables.js" />
     <Content Include="Scripts\vendor\datatables\jquery.dataTables.min.js" />
@@ -2042,6 +1968,70 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.js" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.js" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.js" />
+    <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
+    <Content Include="Views\Activity\GetListActivity.cshtml" />
+    <Content Include="Views\Activity\GetUpdateActivity.cshtml" />
+    <Content Include="Views\Activity\Index.cshtml" />
+    <Content Include="Views\Course\Add.cshtml" />
+    <Content Include="Views\Course\CourseDetail.cshtml" />
+    <Content Include="Views\Course\CourseDetailStatistic.cshtml" />
+    <Content Include="Views\Course\CourseDetailWithoutId.cshtml" />
+    <Content Include="Views\Course\CourseStatistic.cshtml" />
+    <Content Include="Views\Course\Detail.cshtml" />
+    <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Course\ListCourse.cshtml" />
+    <Content Include="Views\Course\Staff_Index.cshtml" />
+    <Content Include="Views\Course\Staff_ListCourse.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Examination\DetailExam.cshtml" />
+    <Content Include="Views\Examination\GenerateExam.cshtml" />
+    <Content Include="Views\Examination\GenerateExaminaton.cshtml" />
+    <Content Include="Views\Examination\GetHistoryCourse.cshtml" />
+    <Content Include="Views\Examination\ListExamination.cshtml" />
+    <Content Include="Views\Examination\ViewGeneratedExamination.cshtml" />
+    <Content Include="Views\Home\Admin.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\Home\ImportWithTextArea.cshtml" />
+    <Content Include="Views\Home\ImportWord.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Staff.cshtml" />
+    <Content Include="Views\Import\GetQuestionTemp.cshtml" />
+    <Content Include="Views\Import\GetResult.cshtml" />
+    <Content Include="Views\Import\Index.cshtml" />
+    <Content Include="Views\LearningOutcome\Add.cshtml" />
+    <Content Include="Views\LearningOutcome\Edit.cshtml" />
+    <Content Include="Views\LearningOutcome\Index.cshtml" />
+    <Content Include="Views\Question\AddQuestion.cshtml" />
+    <Content Include="Views\Question\DemoUpdate.cshtml" />
+    <Content Include="Views\Question\EditQuestion.cshtml" />
+    <Content Include="Views\Question\ImportResult.cshtml" />
+    <Content Include="Views\Question\ListQuestion.cshtml" />
+    <Content Include="Views\Question\ReviewQuestion.cshtml" />
+    <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
+    <Content Include="Views\Rule\Edit.cshtml" />
+    <Content Include="Views\Rule\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\OptionViewModel.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_AdminSideBar.cshtml" />
+    <Content Include="Views\Shared\_AllQuestion.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LecturerSideBar.cshtml" />
+    <Content Include="Views\Shared\_ListCategory.cshtml" />
+    <Content Include="Views\Shared\_ListQuestionWithDuplicate.cshtml" />
+    <Content Include="Views\Shared\_RightQuestion.cshtml" />
+    <Content Include="Views\Shared\_SideBar.cshtml" />
+    <Content Include="Views\Shared\_StaffSideBar.cshtml" />
+    <Content Include="Views\Shared\_WrongQuestion.cshtml" />
+    <Content Include="Views\Topic\Add.cshtml" />
+    <Content Include="Views\Topic\Edit.cshtml" />
+    <Content Include="Views\Topic\Index.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -2053,11 +2043,6 @@
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\Site.css" />
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js.map" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.js.map" />
@@ -2202,69 +2187,12 @@
     <Content Include="Scripts\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
-    <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\Admin.cshtml" />
-    <Content Include="Views\Home\Staff.cshtml" />
-    <Content Include="Views\Question\AddQuestion.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\OptionViewModel.cshtml" />
-    <Content Include="Views\Question\ListQuestion.cshtml" />
-    <Content Include="Views\Question\EditQuestion.cshtml" />
-    <Content Include="Views\Course\Index.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Details\Details.cshtml" />
-    <Content Include="Views\Shared\_LecturerSideBar.cshtml" />
-    <Content Include="Views\Shared\_AdminSideBar.cshtml" />
-    <Content Include="Views\Shared\_StaffSideBar.cshtml" />
-    <Content Include="Views\User\Details.cshtml" />
-    <Content Include="Views\Home\Dashboard.cshtml" />
-    <Content Include="Views\Question\ImportResult.cshtml" />
-    <Content Include="Views\Shared\_AllQuestion.cshtml" />
-    <Content Include="Views\Shared\_WrongQuestion.cshtml" />
-    <Content Include="Views\Shared\_RightQuestion.cshtml" />
-    <Content Include="Views\User\AddUser.cshtml" />
-    <Content Include="Views\Course\ListCourse.cshtml" />
-    <Content Include="Views\Examination\GenerateExam.cshtml" />
-    <Content Include="Views\Examination\ViewGeneratedExamination.cshtml" />
-    <Content Include="Views\Course\Staff_ListCourse.cshtml" />
-    <Content Include="Views\Examination\GenerateExaminaton.cshtml" />
-    <Content Include="Views\Question\DemoUpdate.cshtml" />
-    <Content Include="Views\Question\ReviewQuestion.cshtml" />
-    <Content Include="Views\Import\GetResult.cshtml" />
-    <Content Include="Views\Import\GetQuestionTemp.cshtml" />
-    <Content Include="Views\Shared\_ListQuestionWithDuplicate.cshtml" />
-    <Content Include="Views\LearningOutcome\Add.cshtml" />
-    <Content Include="Views\LearningOutcome\Edit.cshtml" />
-    <Content Include="Views\LearningOutcome\Index.cshtml" />
-    <Content Include="Views\Rule\Edit.cshtml" />
-    <Content Include="Views\Rule\Index.cshtml" />
-    <Content Include="Views\Topic\Add.cshtml" />
-    <Content Include="Views\Topic\Edit.cshtml" />
-    <Content Include="Views\Topic\Index.cshtml" />
-    <Content Include="Views\Course\CourseDetail.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Import\Index.cshtml" />
-    <Content Include="Views\Activity\Index.cshtml" />
-    <Content Include="Views\Course\Detail.cshtml" />
-    <Content Include="Views\Course\CourseStatistic.cshtml" />
-    <Content Include="Views\Course\Add.cshtml" />
-    <Content Include="Views\Course\Edit.cshtml" />
-    <Content Include="Views\Course\Staff_Index.cshtml" />
-    <Content Include="Views\Shared\_ListCategory.cshtml" />
-    <Content Include="Views\Activity\GetListActivity.cshtml" />
-    <Content Include="Views\Activity\GetUpdateActivity.cshtml" />
-    <Content Include="Views\Home\ImportWithTextArea.cshtml" />
-    <Content Include="Views\Examination\ListExamination.cshtml" />
-    <Content Include="Views\Examination\DetailExam.cshtml" />
-    <Content Include="Views\Examination\GetHistoryCourse.cshtml" />
-    <Content Include="Views\Course\CourseDetailWithoutId.cshtml" />
-    <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
-    <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
-    <Content Include="Views\Shared\_SideBar.cshtml" />
-    <Content Include="Views\Home\ImportWord.cshtml" />
-    <Content Include="Views\Course\CourseDetailStatistic.cshtml" />
+    <Content Include="Views\Script\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\bootstrap\" />
+    <Folder Include="Content\fonts\" />
     <Folder Include="Content\picture\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Elmah\" />
@@ -2272,23 +2200,13 @@
     <Folder Include="Views\Statistic\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
   </ItemGroup>
@@ -2327,7 +2245,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50353</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/</IISUrl>
+          <IISUrl>http://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
