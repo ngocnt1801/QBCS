@@ -791,7 +791,7 @@ namespace DuplicateQuestion
             }
 
             //generate code
-            GenerateCode(importSuccessList);
+            GenerateCode(importSuccessList, import.CourseId);
 
             //add question
             using (SqlConnection connection = new SqlConnection("context connection=true"))
@@ -1051,13 +1051,13 @@ namespace DuplicateQuestion
             return 0;
         }
 
-        private static void GenerateCode(List<QuestionModel> questions)
+        private static void GenerateCode(List<QuestionModel> questions, int courseId)
         {
             var no = GetLastCode() + 1;
             foreach (var q in questions)
             {
-                string prefix = q.QuestionCode.Split('-')[0];
-                q.QuestionCode = prefix + '-' + 'Q' + no.ToString("D6");
+                //string prefix = q.QuestionCode.Split('-')[0];
+                q.QuestionCode = "C" + courseId.ToString("D3") + '-' + 'Q' + no.ToString("D6");
                 no += 1;
             }
         }
