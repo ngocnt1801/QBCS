@@ -94,7 +94,7 @@ namespace QBCS.Service.Implement
                     };
                     optionViewModels.Add(optionViewModel);
                 }
-               
+
 
                 QuestionViewModel questionViewModel = ParseEntityToModel(ques, optionViewModels);
                 questionViewModels.Add(questionViewModel);
@@ -124,8 +124,8 @@ namespace QBCS.Service.Implement
             return questionViewModel;
         }
 
-      
-       
+
+
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -170,7 +170,7 @@ namespace QBCS.Service.Implement
                 quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
             }
             entity.QuestionContent = quesTemp;
-            entity.Type = (int) TypeEnum.Update;
+            entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
             entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
@@ -344,7 +344,15 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName, string prefix = "")
+        public bool InsertQuestion(
+            HttpPostedFileBase questionFile
+            , int userId
+            , int courseId
+            , bool checkCate
+            , bool checkHTML
+            , string ownerName
+            , string prefix = ""
+            , bool allowLogFile = false)
         {
             string category = "";
             string level = "";
@@ -569,39 +577,9 @@ namespace QBCS.Service.Implement
 
                             }
                             int g = 0;
-                            string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
-                            string fileName = "XMLFILE-" + user + @"-" + time.ToString() + ".txt";
-                            string filePath = "ErrorLog\\";
-                            string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
-                            string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
-                            if (!File.Exists(fullPath))
+                            if (allowLogFile)
                             {
-                                var myFile = File.Create(fullPath);
-                                myFile.Close();
-                                using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
-                                {
-                                    if (listQuestionXml != null)
-                                    {
-                                        foreach (var item in listQuestionXml)
-                                        {
-                                            countLog++;
-                                            tw.WriteLine(countLog + "");
-                                            tw.WriteLine("Question: " + item.QuestionContent);
-                                            tw.WriteLine("Code: " + item.Code + "\n");
-                                            if (item.Options != null)
-                                            {
-                                                foreach (var itemOp in item.Options)
-                                                {
-                                                    tw.WriteLine("Option: " + itemOp.OptionContent);
-                                                }
-                                            }
-                                            tw.WriteLine("Error: " + item.Error + "\n");
-                                            tw.WriteLine();
-                                        }
-                                        tw.Close();
-                                    }
-
-                                }
+                                this.LogXmlError(user, listQuestionXml, ref countLog);
                             }
                             listQuestionXml = new List<QuestionTmpModel>();
                             question = new QuestionTmpModel();
@@ -646,39 +624,9 @@ namespace QBCS.Service.Implement
 
 
                     int g = 0;
-                    string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
-                    string fileName = "GIFTFile-" + user + @"-" + time.ToString() + ".txt";
-                    string filePath = "ErrorLog\\";
-                    string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
-                    string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
-                    if (!File.Exists(fullPath))
+                    if (allowLogFile)
                     {
-                        var myFile = File.Create(fullPath);
-                        myFile.Close();
-                        using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
-                        {
-                            if (listQuestion != null)
-                            {
-                                foreach (var item in listQuestion)
-                                {
-                                    g++;
-                                    tw.WriteLine(g + "");
-                                    tw.WriteLine("Question: " + item.QuestionContent);
-                                    tw.WriteLine("Code: " + item.Code + "\n");
-                                    if (item.Options != null)
-                                    {
-                                        foreach (var itemOp in item.Options)
-                                        {
-                                            tw.WriteLine("Option: " + item.Options + "\n");
-                                        }
-                                    }
-                                    tw.WriteLine("Error: " + item.Error + "\n");
-                                    tw.WriteLine();
-                                }
-                                tw.Close();
-                            }                          
-                           
-                        }    
+                        this.LogGiftError(user, listQuestion, g);
                     }
 
                 }
@@ -692,7 +640,7 @@ namespace QBCS.Service.Implement
                     QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
-                    listQuestion = docUltil.ParseDoc(questionFile.InputStream,prefix);
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream, prefix);
 
                     import = new Import()
                     {
@@ -705,7 +653,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = prefix + " " +q.LearningOutcome,
+                            LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
@@ -732,7 +680,7 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
 
                     //log import
-                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question",method: "ImportFile", userId: userId);
+                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question", method: "ImportFile", userId: userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
@@ -761,7 +709,83 @@ namespace QBCS.Service.Implement
 
             return check;
         }
-        
+
+        private void LogGiftError(string user, List<QuestionTmpModel> listQuestion, int g)
+        {
+            string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+            string fileName = "GIFTFile-" + user + @"-" + time.ToString() + ".txt";
+            string filePath = "ErrorLog\\";
+            string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+            string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+            if (!File.Exists(fullPath))
+            {
+                var myFile = File.Create(fullPath);
+                myFile.Close();
+                using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                {
+                    if (listQuestion != null)
+                    {
+                        foreach (var item in listQuestion)
+                        {
+                            g++;
+                            tw.WriteLine(g + "");
+                            tw.WriteLine("Question: " + item.QuestionContent);
+                            tw.WriteLine("Code: " + item.Code + "\n");
+                            if (item.Options != null)
+                            {
+                                foreach (var itemOp in item.Options)
+                                {
+                                    tw.WriteLine("Option: " + item.Options + "\n");
+                                }
+                            }
+                            tw.WriteLine("Error: " + item.Error + "\n");
+                            tw.WriteLine();
+                        }
+                        tw.Close();
+                    }
+
+                }
+            }
+        }
+
+        private void LogXmlError(string user, List<QuestionTmpModel> listQuestionXml, ref int countLog)
+        {
+            string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+            string fileName = "XMLFILE-" + user + @"-" + time.ToString() + ".txt";
+            string filePath = "ErrorLog\\";
+            string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+            string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+            if (!File.Exists(fullPath))
+            {
+                var myFile = File.Create(fullPath);
+                myFile.Close();
+                using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                {
+                    if (listQuestionXml != null)
+                    {
+                        foreach (var item in listQuestionXml)
+                        {
+                            countLog++;
+                            tw.WriteLine(countLog + "");
+                            tw.WriteLine("Question: " + item.QuestionContent);
+                            tw.WriteLine("Code: " + item.Code + "\n");
+                            if (item.Options != null)
+                            {
+                                foreach (var itemOp in item.Options)
+                                {
+                                    tw.WriteLine("Option: " + itemOp.OptionContent);
+                                }
+                            }
+                            tw.WriteLine("Error: " + item.Error + "\n");
+                            tw.WriteLine();
+                        }
+                        tw.Close();
+                    }
+
+                }
+            }
+        }
+
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -789,7 +813,7 @@ namespace QBCS.Service.Implement
             {
                 result = result.Where(q => q.CourseId == courseId);
             }
-           
+
 
             if (categoryId != null && categoryId != 0)
             {
@@ -906,14 +930,14 @@ namespace QBCS.Service.Implement
                 Image = questionEntity.Image,
                 QuestionCode = questionEntity.QuestionCode,
                 CourseId = questionEntity.CourseId.Value,
-                Options = questionEntity.Options.Select( o => new OptionViewModel
+                Options = questionEntity.Options.Select(o => new OptionViewModel
                 {
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                     OptionContent = o.OptionContent,
                     Image = o.Image
                 }).ToList(),
-                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]") 
-                            + " / " 
+                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]")
+                            + " / "
                             + (questionEntity.LearningOutcomeId.HasValue ? questionEntity.LearningOutcome.Name : "[None of learning outcome]"),
                 LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
@@ -930,7 +954,7 @@ namespace QBCS.Service.Implement
                     //Semester = (int)entity.Semester
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
-                    
+
                 };
                 examList.Add(exam);
             }

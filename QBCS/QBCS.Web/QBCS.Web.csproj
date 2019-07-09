@@ -17,8 +17,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
-    <Use64BitIISExpress>
-    </Use64BitIISExpress>
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>44318</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -2004,7 +2003,6 @@
     <Content Include="Views\LearningOutcome\Edit.cshtml" />
     <Content Include="Views\LearningOutcome\Index.cshtml" />
     <Content Include="Views\Question\AddQuestion.cshtml" />
-    <Content Include="Views\Question\DemoUpdate.cshtml" />
     <Content Include="Views\Question\EditQuestion.cshtml" />
     <Content Include="Views\Question\ImportResult.cshtml" />
     <Content Include="Views\Question\ListQuestion.cshtml" />
@@ -2012,6 +2010,7 @@
     <Content Include="Views\Question\Staff_ListQuestion.cshtml" />
     <Content Include="Views\Rule\Edit.cshtml" />
     <Content Include="Views\Rule\Index.cshtml" />
+    <Content Include="Views\Script\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\OptionViewModel.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_AdminSideBar.cshtml" />
@@ -2187,7 +2186,6 @@
     <Content Include="Scripts\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
-    <Content Include="Views\Script\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2195,7 +2193,7 @@
     <Folder Include="Content\fonts\" />
     <Folder Include="Content\picture\" />
     <Folder Include="Views\Account\" />
-    <Folder Include="Views\Elmah\" />
+    <Folder Include="Views\Details\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\Statistic\" />
   </ItemGroup>
