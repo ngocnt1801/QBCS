@@ -108,6 +108,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Cancel Import", "QBCS", protectType: ProtectType.Authorized)]
+        [Log(Action = "Cancel", TargetName = "Question", IdParamName = "importId")]
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);

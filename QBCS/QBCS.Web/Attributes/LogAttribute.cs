@@ -4,6 +4,7 @@ using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -34,6 +35,7 @@ namespace QBCS.Web.Attributes
 
             LogViewModel logModel = new LogViewModel();
 
+
             var user = (UserViewModel)HttpContext.Current.Session["user"];
             int? userId = null;
             if (user != null)
@@ -46,6 +48,7 @@ namespace QBCS.Web.Attributes
             LearningOutcomeService learningOutcomeService = new LearningOutcomeService();
             LevelService levelService = new LevelService();
             int? targetId = null;
+            int? importId = null;
             QuestionViewModel oldQuestionModel = new QuestionViewModel();
             QuestionViewModel newQuestionModel = new QuestionViewModel();
             IQuestionService questionService = new QuestionService();
@@ -65,7 +68,7 @@ namespace QBCS.Web.Attributes
                 }
 
             }
-
+            #region update Log
             if (Action.ToLower().Equals("update") && TargetName.ToLower().Equals("question"))
             {
                 QuestionViewModel questionViewModel = new QuestionViewModel();
@@ -79,19 +82,23 @@ namespace QBCS.Web.Attributes
                 if (newQuestionModel.QuestionContent != "")
                 {
                     newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
-                    //newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                    newQuestionModel.CourseId = oldQuestionModel.CourseId;
                     newQuestionModel.Image = oldQuestionModel.Image;
                     newQuestionModel.CourseName = oldQuestionModel.CourseName;
-                    newQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeName;
-                    newQuestionModel.LevelName = oldQuestionModel.LevelName;
+                    //newQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeName;
+                    //newQuestionModel.LevelName = oldQuestionModel.LevelName;
                     newQuestionModel.QuestionContent = WebUtility.HtmlDecode(newQuestionModel.QuestionContent);
                     for (int i = 0; i < newQuestionModel.Options.Count; i++)
                     {
                         newQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(newQuestionModel.Options[i].OptionContent);
                     }
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
+
                 }
             }
+            #endregion
+
+            #region move Question Log
             else if (Action.ToLower().Equals("move") && TargetName.ToLower().Equals("question"))
             {
 
@@ -147,6 +154,8 @@ namespace QBCS.Web.Attributes
                                 logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
                                 logModel.Method = filterContext.ActionDescriptor.ActionName;
                                 logger.Log(logModel);
+
+                                logModel = new LogViewModel();
                                 #endregion
                             }
 
@@ -154,6 +163,20 @@ namespace QBCS.Web.Attributes
                     }
 
                 }
+            }
+            
+            #endregion
+            else if (Action.ToLower().Equals("Cancel") && TargetName.ToLower().Equals("question"))
+            {
+                
+                if (filterContext.ActionParameters.ContainsKey(IdParamName))
+                {
+                    importId = (int)filterContext.ActionParameters[IdParamName];
+                }
+                 if (importId != null)
+                {
+                    logService.UpdateLogStatus((int)importId);
+                }   
             }
             else
             {
@@ -167,7 +190,19 @@ namespace QBCS.Web.Attributes
                     }
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
                 }
-
+                logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
+                logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
+                logModel.UserId = userId;
+                logModel.TargetId = targetId;
+                logModel.Action = Action;
+                logModel.TargetName = TargetName;
+                logModel.LogDate = DateTime.Now;
+                logModel.Message = Message;
+                logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+                logModel.Method = filterContext.ActionDescriptor.ActionName;
+                logModel.Fullname = Fullname;
+                logModel.UserCode = UserCode;
+                logger.Log(logModel);
             }
 
             #region comment
@@ -196,19 +231,24 @@ namespace QBCS.Web.Attributes
                 logModel.Fullname = Fullname;
                 logModel.UserCode = UserCode;
             }*/
-            #endregion
 
-            logModel.UserId = userId;
-            logModel.TargetId = targetId;
-            logModel.Action = Action;
-            logModel.TargetName = TargetName;
-            logModel.LogDate = DateTime.Now;
-            logModel.Message = Message;
-            logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
-            logModel.Method = filterContext.ActionDescriptor.ActionName;
-            logModel.Fullname = Fullname;
-            logModel.UserCode = UserCode;
-            logger.Log(logModel);
+            //else
+            //{
+            //    logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
+            //    logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
+            //    logModel.UserId = userId;
+            //    logModel.TargetId = targetId;
+            //    logModel.Action = Action;
+            //    logModel.TargetName = TargetName;
+            //    logModel.LogDate = DateTime.Now;
+            //    logModel.Message = Message;
+            //    logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+            //    logModel.Method = filterContext.ActionDescriptor.ActionName;
+            //    logModel.Fullname = Fullname;
+            //    logModel.UserCode = UserCode;
+            //    logger.Log(logModel);
+            //}
+            #endregion
 
         }
 

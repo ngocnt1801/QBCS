@@ -19,6 +19,22 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
+        public bool UpdateLogStatus(int importId)
+        {
+            bool check = false;
+           var import =  unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == importId);
+            foreach (var item in import)
+            {
+                if (item.Action.Equals("Import"))
+                {
+                    item.Status = (int)Enum.StatusEnum.Canceled;
+                    unitOfWork.Repository<Log>().Update(item);
+                }
+                
+            }
+            
+            return check;
+        }
 
         public IEnumerable<LogViewModel> GetAllActivities()
         {
@@ -45,7 +61,7 @@ namespace QBCS.Service.Implement
         }
         public LogViewModel GetQuestionImportByTargetId(int targetId)
         {
-            List<LogViewModel> list = new List<LogViewModel>();
+            
             List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList();
             QuestionViewModel questionViewModel = new QuestionViewModel();
             List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
@@ -59,17 +75,21 @@ namespace QBCS.Service.Implement
                 {
                     ownerName = import.OwnerName;
                 }
-                
 
-                foreach (var itemQues in import.Questions)
+
+                if (import.Status == (int)Enum.StatusEnum.Done)
                 {
-                    questionViewModel = ParseEntityToModel(itemQues);
-                    if (questionViewModel != null)
+                    foreach (var itemQues in import.Questions)
                     {
-                        listTmp.Add(questionViewModel);
+                        questionViewModel = ParseEntityToModel(itemQues);
+                        if (questionViewModel != null)
+                        {
+                            listTmp.Add(questionViewModel);
+                        }
                     }
                 }
-                if (listTmp.Count > 0 && item != null)
+                
+                if (listTmp.Count > 0 && item != null )
                 {
                      logViewModel = new LogViewModel()
                     {
@@ -98,6 +118,7 @@ namespace QBCS.Service.Implement
             List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
             string ownerName = "";
             string courseCode = "";
+            int status = 0;
             foreach (var item in listLog)
             {
                 var import = unitOfWork.Repository<Import>().GetById(targetId);
@@ -109,6 +130,11 @@ namespace QBCS.Service.Implement
                 {
                     int courseId = (int)import.CourseId;
                     courseCode = unitOfWork.Repository<Course>().GetById(courseId).Code;
+                }
+                if (import.Status != null)
+                {
+                   status = (int)import.Status.Value;
+
                 }
 
                 foreach (var itemQues in import.Questions)
@@ -130,6 +156,7 @@ namespace QBCS.Service.Implement
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
+                        Status = status,
                         CourseCode = courseCode != null ? courseCode.ToString() : "",
                         listQuestion = listTmp.ToList()
                     };

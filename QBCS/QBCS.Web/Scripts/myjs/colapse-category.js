@@ -201,7 +201,7 @@
         loadQuestion: function (url) {
             $('#spinner').css("display", "block");
             $('#spinner').css("z-index", "1060");
-            $("#nhiModal").modal();
+            $('#pleaseWaitDialog').modal();
             $.ajax({
                 url: url,
                 type: "GET",
@@ -246,7 +246,7 @@
                         }, 'slow');
                     });
                     $('#spinner').css("display", "none");
-                    $('#nhiModal').modal('hide');
+                    $('#pleaseWaitDialog').modal('hide');
                 }
             });
         },
