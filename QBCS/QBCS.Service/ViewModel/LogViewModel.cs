@@ -23,6 +23,7 @@ namespace QBCS.Service.ViewModel
         public string Fullname { get; set; }
         public string UserCode { get; set; }
         public string OwnerName { get; set; }
+        public string CourseCode { get; set; }
 
         public QuestionViewModel QuestionNew { get; set; }
         public QuestionViewModel QuestionOld { get; set; }

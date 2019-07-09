@@ -51,6 +51,7 @@ namespace QBCS.Service.Implement
             List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
             LogViewModel logViewModel = new LogViewModel();
             string ownerName = "";
+            
             foreach (var item in listLog)
             {
                 var import = unitOfWork.Repository<Import>().GetById(targetId);
@@ -58,6 +59,7 @@ namespace QBCS.Service.Implement
                 {
                     ownerName = import.OwnerName;
                 }
+                
 
                 foreach (var itemQues in import.Questions)
                 {
@@ -79,7 +81,7 @@ namespace QBCS.Service.Implement
                         Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
-                        OwnerName = ownerName,
+                        OwnerName = ownerName,                       
                         listQuestion = listTmp.ToList()
                     };
                     
@@ -95,6 +97,7 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = new QuestionViewModel();
             List<QuestionViewModel> listTmp = new List<QuestionViewModel>();
             string ownerName = "";
+            string courseCode = "";
             foreach (var item in listLog)
             {
                 var import = unitOfWork.Repository<Import>().GetById(targetId);
@@ -102,7 +105,12 @@ namespace QBCS.Service.Implement
                 {
                     ownerName = import.OwnerName;
                 }
-               
+                if (import.CourseId != null)
+                {
+                    int courseId = (int)import.CourseId;
+                    courseCode = unitOfWork.Repository<Course>().GetById(courseId).Code;
+                }
+
                 foreach (var itemQues in import.Questions)
                 {
                     questionViewModel = ParseEntityToModel(itemQues);
@@ -122,6 +130,7 @@ namespace QBCS.Service.Implement
                         Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
                         LogDate = item.Date.Value,
                         OwnerName = ownerName,
+                        CourseCode = courseCode != null ? courseCode.ToString() : "",
                         listQuestion = listTmp.ToList()
                     };
                     list.Add(logViewModel);
@@ -256,7 +265,8 @@ namespace QBCS.Service.Implement
                 QuestionCode = unitOfWork.Repository<Question>().GetById(question.Id).QuestionCode,
                 Id = question.Id,
                 QuestionContent = WebUtility.HtmlDecode(question.QuestionContent),
-                Options = optionViewModels
+                Options = optionViewModels,
+                
             };
             if (question.Image != null)
             {
