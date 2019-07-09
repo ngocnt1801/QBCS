@@ -442,7 +442,7 @@ $(".tab-slider--nav li").click(function () {
     $(".tab-slider--body").hide();
     var activeTab = $(this).attr("rel");
     $("#" + activeTab).fadeIn();
-    if ($(this).attr("rel") == "tab2") {
+    if ($(this).attr("rel") === "tab2") {
         $('.tab-slider--tabs').addClass('slide');
         $('#flagPercent').attr('value', 'grade');
     } else {

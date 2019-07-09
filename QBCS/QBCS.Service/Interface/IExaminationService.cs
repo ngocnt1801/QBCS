@@ -17,5 +17,6 @@ namespace QBCS.Service.Interface
         void DisableEaxam(int examId);
         List<QuestionInExamViewModel> GetExaminationHistoryQuestionsInCourse(int courseId);
         string GetExamGroup();
+        void ResetPriorityAndFrequency(string groupExam);
     }
 }
