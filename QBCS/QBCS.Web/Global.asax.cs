@@ -37,7 +37,8 @@ namespace QBCS.Web
             {
                 Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
                 HttpContext.Current.ClearError();
-                Response.Redirect("/Error", false);
+                var url = VirtualPathUtility.ToAbsolute("~/Error");
+                Response.Redirect(url, false);
             }
         }
     }

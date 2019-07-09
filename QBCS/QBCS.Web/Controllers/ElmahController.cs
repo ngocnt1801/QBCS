@@ -13,7 +13,8 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Error Log", "QBCS", protectType: ProtectType.Authorized)]
         public RedirectResult Index()
         {
-            return Redirect("/elmah.axd");
+            var url = Url.Content("~/elmah.axd");
+            return Redirect(url);
         }
     }
 }

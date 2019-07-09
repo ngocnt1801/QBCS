@@ -172,7 +172,7 @@ namespace QBCS.Web.Controllers
         {
 
             var result = courseService.GetAllCoursesWithDetail();
-            TempData["active"] = "Statistics";
+            TempData["active"] = "Statistic";
             return View(result);
         }
 
