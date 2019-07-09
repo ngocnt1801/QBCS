@@ -13,6 +13,7 @@ using System.Xml;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class ExaminationAPIController : Controller
     {
         private const string COMMENT_SWITCH_CATEGORY_LINE = "// question: 0  name: Switch category to $course$/{0}/{1}/{2}";

@@ -153,11 +153,8 @@ namespace QBCS.Web.Controllers
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
-            var model = new CourseViewModel
-            {
-                Id = courseId,
-                Categories = categories
-            };
+            var model = courseService.GetCourseById(courseId);
+            model.Categories = categories;
             TempData["active"] = "Course";
             return View(model);
         }

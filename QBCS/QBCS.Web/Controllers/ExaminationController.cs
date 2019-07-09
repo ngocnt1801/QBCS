@@ -18,6 +18,7 @@ using System.Web.Mvc;
 namespace QBCS.Web.Controllers
 {
 
+    [CheckSession]
     public class ExaminationController : Controller
     {
         private ITopicService topicService;
