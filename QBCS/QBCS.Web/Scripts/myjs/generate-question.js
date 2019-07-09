@@ -458,12 +458,12 @@
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
     });
-    tableExam.on('page.dt', function () {
+    tableExam4.on('page.dt', function () {
         $('html, body').animate({
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
     });
-    tableExam.on('page.dt', function () {
+    tableExam5.on('page.dt', function () {
         $('html, body').animate({
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');

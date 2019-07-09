@@ -731,7 +731,8 @@ namespace QBCS.Service.Implement
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
 
-                    //log import
+                    //log imports
+                    
                     logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question",method: "ImportFile", userId: userId);
 
                     //call store check duplicate
