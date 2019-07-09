@@ -1,6 +1,4 @@
-﻿
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     var datatableView = {
         init: function () {
             this.initImportHistoryTable();

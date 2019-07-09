@@ -161,7 +161,7 @@
     });
 
     //set up datatable
-    $('#dataTableExam').DataTable({
+    var tableExam = $('#dataTableExam').DataTable({
         columns: [
             null,
             null,
@@ -200,7 +200,7 @@
             }
         ]
     });
-    $('#dataTableExam-1').DataTable({
+    var tableExam1 = $('#dataTableExam-1').DataTable({
         columns: [
             null,
             null,
@@ -239,7 +239,7 @@
             }
         ]
     });
-    $('#dataTableExam-2').DataTable({
+    var tableExam2= $('#dataTableExam-2').DataTable({
         columns: [
             null,
             null,
@@ -278,7 +278,7 @@
             }
         ]
     });
-    $('#dataTableExam-3').DataTable({
+    var tableExam3 = $('#dataTableExam-3').DataTable({
         columns: [
             null,
             null,
@@ -317,7 +317,7 @@
             }
         ]
     });
-    $('#dataTableExam-4').DataTable({
+    var tableExam4 = $('#dataTableExam-4').DataTable({
         columns: [
             null,
             null,
@@ -356,7 +356,7 @@
             }
         ]
     });
-    $('#dataTableExam-5').DataTable({
+    var tableExam5 =  $('#dataTableExam-5').DataTable({
         columns: [
             null,
             null,
@@ -395,7 +395,7 @@
             }
         ]
     });
-    $("#datatable-history-exam").DataTable({
+    var tableHistoryExam = $("#datatable-history-exam").DataTable({
         columns: [
             null,
             null,
@@ -436,6 +436,37 @@
                 'width': "11%"
             },
         ]
+    });
+    
+    tableExam.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+    tableExam1.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+    tableExam2.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+     tableExam3.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+    tableExam.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+    tableExam.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
     });
 });
 $(".tab-slider--nav li").click(function () {
