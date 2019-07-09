@@ -110,6 +110,7 @@
     <Compile Include="Utilities\ListUtilities.cs" />
     <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\LogUtilities.cs" />
+    <Compile Include="Utilities\NaturalSort.cs" />
     <Compile Include="Utilities\StringProcess.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />

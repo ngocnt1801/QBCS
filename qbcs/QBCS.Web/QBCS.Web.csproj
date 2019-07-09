@@ -292,6 +292,14 @@
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-24_09-16-33-PM.txt" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-24_09-20-33-PM.txt" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-24_09-22-48-PM.txt" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-25_01-03-09-PM.txt" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-25_11-42-25-AM.txt" />
+    <Content Include="ErrorLog\GIFTFile-Lecturer 2-2019-06-25_11-42-44-AM.txt" />
+    <Content Include="ErrorLog\XMLFILE-Lecturer 2-2019-06-24_09-26-43-PM.txt" />
+    <Content Include="ErrorLog\XMLFILE-Lecturer 2-2019-06-24_09-28-42-PM.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
