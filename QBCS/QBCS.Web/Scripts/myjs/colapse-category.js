@@ -199,12 +199,16 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $("#nhiModal").modal();
             $.ajax({
                 url: url,
                 type: "GET",
                 success: function (response) {
                     categoryView.questionListContainter.html(response);
-                    $("#dataTable").dataTable({
+                    
+                  var table = $("#dataTable").dataTable({
                         ordering: false,
                         columnDefs: [
                             { targets: 0, width: "5%" },
@@ -236,9 +240,13 @@
                         ]
                     });
                     categoryView.setOnClickDisableBtn();
-                    $("spinner")
-                        .removeAttr("style")
-                        .hide();
+                    table.on('page.dt', function () {
+                        $('html, body').animate({
+                            scrollTop: $(".dataTables_wrapper").offset().top
+                        }, 'slow');
+                    });
+                    $('#spinner').css("display", "none");
+                    $('#nhiModal').modal('hide');
                 }
             });
         },

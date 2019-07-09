@@ -273,8 +273,13 @@ function toggleTableDuplicate() {
     });
 }
 
-function spinner_loading() {
-
+function table_on_top() {
+    var table = $('#dataTable')
+    table.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
 }
 $(document).ready(function () {
     nav_bar_active();
@@ -282,5 +287,5 @@ $(document).ready(function () {
     toggleTableDuplicate();
     customs_display();
     customs_display_duplicate();
-   
+    table_on_top();
 });

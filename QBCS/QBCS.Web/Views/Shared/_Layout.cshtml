@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="~/Content/facebook_profile_image.png"/>
+    <link rel="shortcut icon" href="~/Content/facebook_profile_image.png" />
     <title>@ViewBag.Title</title>
     @*@Styles.Render("~/bundles/content/css")*@
     @Styles.Render("~/bundles/content/template")
@@ -234,6 +234,10 @@
 
         <!-- Modal Caption (Image Text) -->
         <div id="caption"></div>
+    </div>
+    <div id="nhiModal" class="modal"></div>
+    <div class="spinner-grow" role="status" id="spinner" style="display:none;">
+        <span class="sr-only">Loading...</span>
     </div>
     @Scripts.Render("~/bundles/script/template")
     @Scripts.Render("~/bundles/script/datatables")
