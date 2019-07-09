@@ -723,7 +723,8 @@ namespace QBCS.Service.Implement
                     if (extensionFile.Equals(".doc"))
                     {
                         fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
-                    }else if (extensionFile.Equals(".docx"))
+                    }
+                    else if (extensionFile.Equals(".docx"))
                     {
                         fileName = "DOCXFile-" + user + @"-" + time.ToString() + ".txt";
                     }
@@ -1006,9 +1007,9 @@ namespace QBCS.Service.Implement
                     {
                         var key = tr.Elements("td").ElementAt(0).Value;
                         var value = tr.Elements("td").ElementAt(1).Value;
-                        if (key.Contains("QN="))
+                        if (key.Contains("QN=") || key.Contains("QN ="))
                         {
-                            questionTmp.Code = key.Replace("QN=", "");
+                            questionTmp.Code = key.Replace("QN=", "").Replace("QN =", "").Trim();
                             var contentQ = tr.Elements("td").Elements("p").ToList();
                             for (int i = 1; i < contentQ.Count; i++)
                             {

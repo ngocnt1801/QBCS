@@ -68,9 +68,9 @@ namespace QBCS.Service.Utilities
 
                 #endregion
                 #region question content
-                if (key.Contains("QN="))
+                if (key.Contains("QN=") || key.Contains("QN ="))
                 {
-                    quesModel.Code = key.Replace("QN=", "");
+                    quesModel.Code = key.Replace("QN=", "").Replace("QN =", "").Trim();
                     //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     //{
                     //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];

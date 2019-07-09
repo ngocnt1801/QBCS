@@ -202,8 +202,8 @@ namespace QBCS.Service.Implement
         }
         public List<UserViewModel> GetUserByNameAndRoleId(string name, int id)
         {
-            name = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(name);
-            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id && (u.Fullname.Contains(name) || u.Code.Contains(name))).Select(c => new UserViewModel
+            name = name.ToLower();
+            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id).Select(c => new UserViewModel
             {
                 Id = c.Id,
                 Code = c.Code,
@@ -213,9 +213,18 @@ namespace QBCS.Service.Implement
                 Role = (RoleEnum)c.RoleId,
                 Email = c.Email,
                 IsDisable = c.IsDisable.Value
-            });
-
-            return list.ToList();
+            }).ToList();
+            var result = new List<UserViewModel>();
+            foreach(var u in list)
+            {
+                var fullname = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(u.Fullname).ToLower();
+                var code = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(u.Code).ToLower();
+                if (fullname.Contains(name) || code.Contains(name) || u.Fullname.ToLower().Contains(name) || u.Code.ToLower().Contains(name))
+                {
+                    result.Add(u);
+                }
+            }
+            return result;
         }
 
         public UserViewModel GetUser(string code)

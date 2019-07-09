@@ -227,7 +227,7 @@ namespace QBCS.Service.Implement
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
-                tempQuestion.QuestionContent = Uppercase(tempQuestion.QuestionContent);
+                //tempQuestion.QuestionContent = Uppercase(tempQuestion.QuestionContent);
 
                 var checkCorrectOption = false;
                 foreach(var option in tempQuestion.OptionTemps)
