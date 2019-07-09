@@ -567,7 +567,8 @@ namespace QBCS.Service.Implement
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
             if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip 
                                         || questionTemp.Status == (int)StatusEnum.Delete
-                                        || questionTemp.Status == (int)StatusEnum.Editable))
+                                        || questionTemp.Status == (int)StatusEnum.Editable
+                                        || questionTemp.Status == (int)StatusEnum.Invalid))
             {
                 questionTemp.Status = status;
                 unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
