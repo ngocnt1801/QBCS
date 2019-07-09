@@ -113,6 +113,7 @@
     <Compile Include="Utilities\StringProcess.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />
+    <Compile Include="Utilities\VietnameseToEnglish.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CourseStatViewModel.cs" />
     <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
