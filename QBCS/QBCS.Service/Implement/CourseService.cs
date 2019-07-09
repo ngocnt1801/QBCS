@@ -39,9 +39,9 @@ namespace QBCS.Service.Implement
 
             return course.ToList();
         }
-        public List<CourseViewModel> GetCoursesVMByName(string name)
+        public List<CourseViewModel> GetCoursesVMByNameAndCode(string name)
         {
-            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name)).Select(c => new CourseViewModel
+            var course = unitOfWork.Repository<Course>().GetAll().Where(c => c.Name.Contains(name) || c.Code.Contains(name)).Select(c => new CourseViewModel
             {
                 Id = c.Id,
                 Code = c.Code,
