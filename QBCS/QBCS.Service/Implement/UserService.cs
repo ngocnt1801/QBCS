@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -201,7 +202,8 @@ namespace QBCS.Service.Implement
         }
         public List<UserViewModel> GetUserByNameAndRoleId(string name, int id)
         {
-            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id && u.Fullname.Contains(name)).Select(c => new UserViewModel
+            name = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(name);
+            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id && (u.Fullname.Contains(name) || u.Code.Contains(name))).Select(c => new UserViewModel
             {
                 Id = c.Id,
                 Code = c.Code,
