@@ -22,7 +22,8 @@
     @Styles.Render("~/bundle/content/category")
     @Styles.Render("~/bundle/content/spinner")
     @Styles.Render("~/bundle/content/autocomplete")
-    @Styles.Render("~/bundle/content/tagsinput")
+    @Styles.Render("~/bundle/content/img")
+    @*@Styles.Render("~/bundle/content/tagsinputrule")*@
 
 
     <meta name="description" content="">
@@ -49,17 +50,17 @@
 
         <!-- Sidebar -->
         @*@switch (((UserViewModel)Session["user"]).Role)
-        {
-            case RoleEnum.Admin:
-                @Html.Partial("_AdminSideBar")
-                break;
-            case RoleEnum.Lecturer:
-                @Html.Partial("_LecturerSideBar")
-                break;
-            case RoleEnum.Staff:
-                @Html.Partial("_StaffSideBar")
-                break;
-        }*@
+            {
+                case RoleEnum.Admin:
+                    @Html.Partial("_AdminSideBar")
+                    break;
+                case RoleEnum.Lecturer:
+                    @Html.Partial("_LecturerSideBar")
+                    break;
+                case RoleEnum.Staff:
+                    @Html.Partial("_StaffSideBar")
+                    break;
+            }*@
 
         @Html.Partial("_SideBar")
         <!-- End of Sidebar -->
@@ -79,15 +80,15 @@
 
                     <!-- Topbar Search -->
                     @*<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>*@
+                        </form>*@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -136,7 +137,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-custom small">@(User.Get(a=>a.FullName))</span>
+                                <span class="mr-2 d-none d-lg-inline text-custom small">@(User.Get(a => a.FullName))</span>
                                 <img class="img-profile rounded-circle" src="~/Content/user.png">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -220,6 +221,20 @@
             </div>
         </div>
     </div>
+
+    <!--Modal img-->
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- The Close Button -->
+        <span class="image-close">&times;</span>
+
+        <!-- Modal Content (The Image) -->
+        <img class="modal-content" id="img01">
+
+        <!-- Modal Caption (Image Text) -->
+        <div id="caption"></div>
+    </div>
     @Scripts.Render("~/bundles/script/template")
     @Scripts.Render("~/bundles/script/datatables")
     @Scripts.Render("~/bundle/scripts/importfile")
@@ -233,7 +248,8 @@
     @Scripts.Render("~/bundle/scripts/spinner")
     @Scripts.Render("~/bundle/scripts/editquestion")
     @Scripts.Render("~/bundle/scripts/autocomplete")
-    @Scripts.Render("~/bundle/scripts/tagsinput")
+    @Scripts.Render("~/bundle/scripts/img-zoom")
+    @*@Scripts.Render("~/bundle/scripts/tagsinputrule")*@
     @RenderSection("scripts", required: false)
 
 

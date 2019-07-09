@@ -43,7 +43,7 @@
                                     Question:
                                     @if (item.QuestionNew.Image != null)
                                     {
-                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
                                     } <br/>
                                     <p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
@@ -72,7 +72,7 @@
                                     Question:
                                     @if (item.QuestionOld.Image != null)
                                     {
-                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
                                     } <br/>
                                     <p id="old">@item.QuestionOld.QuestionContent</p>
                                     Answer:

@@ -53,7 +53,7 @@
                                                         <p>@question.QuestionContent</p>
                                                         @if (question.Image != null)
                                                         {
-                                                        <p><img class="exam-image" src="data:image/png;base64, @question.Image" /></p>
+                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
                                                         }
                                                         @{int charater = 0; }
                                                         @foreach (var option in question.Options)
@@ -67,7 +67,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" src="data:image/png;base64, @option.Image" /></p>
+                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -79,7 +79,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" src="data:image/png;base64, @option.Image" /></p>
+                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }

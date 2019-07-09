@@ -139,6 +139,15 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/tagsinputrule").Include(
                "~/Content/bootstrap-tagsinput.css"
                ));
+
+            //Image zoom onclick
+            bundles.Add(new ScriptBundle("~/bundle/scripts/img-zoom").Include(
+                "~/Scripts/myjs/img-zoom/img-zoom.js"
+
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/img").Include(
+                       "~/Content/img/image-zoom.css"
+                       ));
         }
     }
 }
