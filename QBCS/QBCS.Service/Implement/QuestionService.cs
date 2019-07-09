@@ -588,14 +588,15 @@ namespace QBCS.Service.Implement
                                             tw.WriteLine(countLog + "");
                                             tw.WriteLine("Question: " + item.QuestionContent);
                                             tw.WriteLine("Code: " + item.Code + "\n");
-                                            if (item.Options != null)
-                                            {
-                                                foreach (var itemOp in item.Options)
-                                                {
-                                                    tw.WriteLine("Option: " + itemOp.OptionContent);
-                                                }
-                                            }
+                                            //if (item.Options != null)
+                                            //{
+                                            //    foreach (var itemOp in item.Options)
+                                            //    {
+                                            //        tw.WriteLine("Option: " + itemOp.OptionContent);
+                                            //    }
+                                            //}
                                             tw.WriteLine("Error: " + item.Error + "\n");
+                                            tw.WriteLine("Other Error: " + item.OtherError + "\n");
                                             tw.WriteLine();
                                         }
                                         tw.Close();
@@ -663,16 +664,17 @@ namespace QBCS.Service.Implement
                                 {
                                     g++;
                                     tw.WriteLine(g + "");
-                                    tw.WriteLine("Question: " + item.QuestionContent);
+                                    //tw.WriteLine("Question: " + item.QuestionContent);
                                     tw.WriteLine("Code: " + item.Code + "\n");
-                                    if (item.Options != null)
-                                    {
-                                        foreach (var itemOp in item.Options)
-                                        {
-                                            tw.WriteLine("Option: " + item.Options + "\n");
-                                        }
-                                    }
+                                    //if (item.Options != null)
+                                    //{
+                                    //    foreach (var itemOp in item.Options)
+                                    //    {
+                                    //        tw.WriteLine("Option: " + item.Options + "\n");
+                                    //    }
+                                    //}
                                     tw.WriteLine("Error: " + item.Error + "\n");
+                                    tw.WriteLine("Other Error: " + item.OtherError + "\n");
                                     tw.WriteLine();
                                 }
                                 tw.Close();

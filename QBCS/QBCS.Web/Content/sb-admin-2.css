@@ -5733,7 +5733,7 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .list-group-item.active {
-  z-index: 2;
+  /*z-index: 2;*/ /*Nhi delete*/
   color: #fff;
   background-color: #4e73df;
   border-color: #4e73df;
@@ -6214,7 +6214,7 @@ a.close.disabled {
 }
 
 .modal-backdrop {
-  position: fixed;
+  /*position: fixed;*/ /*Nhi delete*/
   top: 0;
   left: 0;
   z-index: 1040;
