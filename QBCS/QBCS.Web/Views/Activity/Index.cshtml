@@ -59,7 +59,7 @@
                                     {
                                         @item.Action <text> </text>@item.TargetId<text>st</text>
                                     }
-                                    @if (item.Action.Equals("Update"))
+                                    @if (item.Action.Equals("Update") || item.Action.Equals("Move"))
                                     {
                                         @item.Message
                                     }

@@ -212,7 +212,8 @@ namespace QBCS.Service.Implement
                 string tempId = "";
                 if (item.NewValue != null && (item.Action == "Update" || item.Action == "Import"))
                 {
-                    tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
+                    var temp = JsonConvert.DeserializeObject<QuestionViewModel>(item.NewValue);
+                    tempId = temp.QuestionCode;
                 }
 
                 LogViewModel logViewModel = new LogViewModel()
