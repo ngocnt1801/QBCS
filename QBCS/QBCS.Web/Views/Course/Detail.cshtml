@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="row float-right">
-                    <a href="@Url.Action("Edit", "Course", new { itemId = Model.CourseId })" class="btn btn-primary">
+                    <a href="@Url.Action("Edit", "Course", new { itemId = Model.CourseId })" class="btn btn-primary btn-spinner">
                         Edit
                     </a>
                 </div>
@@ -101,7 +101,7 @@
 
     <div class="card-body text-custom">
         <div class="row float-right" style="margin-bottom: 10px">
-            <a href="@Url.Action("Add", "LearningOutcome", new { courseId = Model.CourseId})" class="btn btn-primary float-right">Add</a>
+            <a href="@Url.Action("Add", "LearningOutcome", new { courseId = Model.CourseId})" class="btn btn-primary float-right btn-spinner">Add</a>
         </div>
         <div class="row table-responsive col-md-12">
             <table class="table table-bordered table-hover text-custom  table-striped" cellspacing="0">
@@ -132,8 +132,8 @@
                                 @learningOutcome.Name
                             </td>
                             <td class="text-center">
-                                <a href="@Url.Action("Edit", "LearningOutcome", new { id = learningOutcome.Id })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = learningOutcome.Id })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                                <a href="@Url.Action("Edit", "LearningOutcome", new { id = learningOutcome.Id })" class="btn btn-primary btn-spinner"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = learningOutcome.Id })" class="btn btn-danger mr-1 btn-spinner"><i class="fa fa-ban"></i></a>
                             </td>
                             @*<td width="18%">
                                     <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">
@@ -152,7 +152,7 @@
 </div>
 <div style="text-align:right;margin-bottom:10px">
     <a href="@Url.Action("Staff_Index", "Course")"
-       class="btn btn-outline-light border-dark text-custom mr-2">
+       class="btn btn-outline-light border-dark text-custom mr-2 btn-spinner">
         Return to Index
     </a>
 </div>
