@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('.btn').on('click', function () {
+    $('.btn-spinner').on('click', function () {
         $('#spinner').css("display", "block");
         $('#spinner').css("z-index", "1060");
         $("#nhiModal").modal();

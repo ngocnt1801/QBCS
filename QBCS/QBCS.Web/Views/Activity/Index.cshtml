@@ -54,15 +54,15 @@
                                 {
                                     if (item.Action.Equals("Import") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetListTargetByID)))
                                     {
-                                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                        <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                     }
                                     if (item.Action.Equals("Update") && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
                                     {
-                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                     }
                                     if (item.Action.Equals("Move") && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
                                     {
-                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12">Detail</a>
+                                        <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                     }
                                 }
                                 else

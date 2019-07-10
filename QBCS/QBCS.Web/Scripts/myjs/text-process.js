@@ -59,7 +59,7 @@ function customs_display_p() {
 
 function customs_display() {
     var content;
-    content = $('#customs-display').html();
+    content = $('.question-custom').html();
     if (content.indexOf("[html]") >= 0) {
         content = content.split("<cbr>").join("&lt;br&gt;");
         content = content.split("&lt;cbr&gt;").join("<br/>");
@@ -75,11 +75,8 @@ function customs_display() {
         content = content.split("&lt;/span&gt;").join("");
         content = content.split("&lt;/span&gt;").join("");
         content = content.split("[html]").join("");
-    } else {
-        content = content.split("<cbr>").join("<br/>");
-        content = content.split("&lt;cbr&gt;").join("<br/>");
-    }
-    $('#customs-display').html(content);
+    } 
+    $('.question-custom').html(content);
 }
 
 function highlight(newElem, oldElem) {

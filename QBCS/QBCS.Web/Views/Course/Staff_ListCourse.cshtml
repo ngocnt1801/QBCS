@@ -38,11 +38,11 @@
                         <td>
                             @if (TempData["CreateExam"] != null && (bool)TempData["CreateExam"])
                             {
-                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">Create Exam Test</a>
+                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right btn-spinner">Create Exam Test</a>
                             }
                             @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
                             {
-                                <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right">View history</a>
+                                <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right btn-spinner">View history</a>
                             }
                         </td>
                     </tr>
