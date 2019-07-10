@@ -83,7 +83,12 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult AddCourse(int courseId, int userId)
         {
-            userService.AddUserCourse(courseId, userId);
+            var result = userService.AddUserCourse(courseId, userId);
+            if (result == false)
+            {
+                TempData["Message"] = "This course is already add for user";
+                TempData["Status"] = ToastrEnum.Warning;
+            }
             return RedirectToAction("Details", "User", new { userId = userId });
         }
 

@@ -8,7 +8,7 @@
         <h2>Courses</h2>
     </div>
     <div class="col mb-2">
-        <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right">Add new Course</a>
+        <a href="@Url.Action("Add", "Course")" class="btn btn-primary float-right btn-spinner">Add new Course</a>
     </div>
 </div>
 <div class="card shadow mb-4">
@@ -45,8 +45,8 @@
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
                             <td class="text-center">
-                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-danger mr-1"><i class="fa fa-ban"></i></a>
+                                <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary btn-spinner"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="@Url.Action("UpdateDisable", "Course", new { itemId = item.CourseId })" class="btn btn-danger mr-1 btn-spinner"><i class="fa fa-ban"></i></a>
                             </td>
                             @*<td width="18%">
                                 <a href="@Url.Action("Detail", "Course", new { itemId = item.CourseId })" class="btn btn-primary">

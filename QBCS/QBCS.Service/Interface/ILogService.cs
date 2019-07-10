@@ -18,6 +18,7 @@ namespace QBCS.Service.Interface
         List<LogViewModel> GetAllActivitiesByUserId(int id);
         IEnumerable<LogViewModel> GetActivitiesById(int id);
         QuestionViewModel ParseEntityToModel(Question question);
+        bool UpdateLogStatus(int importId);
         void LogManually( string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "");
     }
 }

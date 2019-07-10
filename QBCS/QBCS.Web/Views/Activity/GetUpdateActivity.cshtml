@@ -22,12 +22,13 @@
             {
                 <p class="text-custom"> User: @item.Fullname</p>
                 <p class="text-custom"> Action: @item.Message</p>
+                <p class="text-custom"> Course: @item.QuestionNew.CourseName</p>
                 <p class="text-custom"> Date: @item.LogDate</p>
                 <p class="text-custom"> Question Code: @item.QuestionNew.QuestionCode</p>
 
 
-                <div class="table-responsive text-custom">
-                    <table class="table table-bordered table-hover text-custom" id="customs-display">
+                <div class="table-responsive text-custom" id="customs-display-full">
+                    <table class="table table-bordered table-hover text-custom question-custom">
                         <thead>
                             <tr>
                                 <th>New Question</th>
@@ -37,13 +38,13 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    Category: @item.QuestionNew.CourseName <br />
+                                    Category: @item.QuestionNew.Category<br />
                                     LOC: @item.QuestionNew.LearningOutcomeName <br/>
                                     Level: @item.QuestionNew.LevelName <br />
                                     Question:
                                     @if (item.QuestionNew.Image != null)
                                     {
-                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
                                     } <br/>
                                     <p id="new">@item.QuestionNew.QuestionContent</p>
                                     Answer:
@@ -66,13 +67,13 @@
                                     }
                                 </td>
                                 <td>
-                                    Category: @item.QuestionOld.CourseName <br />
+                                    Category: @item.QuestionOld.Category <br />
                                     LOC: @item.QuestionOld.LearningOutcomeName <br />
                                     Level: @item.QuestionOld.LevelName <br />
                                     Question:
                                     @if (item.QuestionOld.Image != null)
                                     {
-                                        <img class="exam-image" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
                                     } <br/>
                                     <p id="old">@item.QuestionOld.QuestionContent</p>
                                     Answer:

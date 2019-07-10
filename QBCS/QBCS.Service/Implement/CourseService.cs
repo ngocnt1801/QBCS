@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,28 @@ namespace QBCS.Service.Implement
             });
 
             return course.ToList();
+        }
+        public List<CourseViewModel> GetCoursesVMByNameAndCode(string name)
+        {
+            name = name.ToLower();
+            var course = unitOfWork.Repository<Course>().GetAll().Select(c => new CourseViewModel
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Name = c.Name
+            }).ToList();
+
+            var result = new List<CourseViewModel>();
+            foreach (var c in course)
+            {
+                var fullname = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(c.Name).ToLower();
+                var code = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(c.Code).ToLower();
+                if (fullname.Contains(name) || code.Contains(name) || c.Name.ToLower().Contains(name) || c.Code.ToLower().Contains(name))
+                {
+                    result.Add(c);
+                }
+            }
+            return result;
         }
         public List<CourseViewModel> GetAllCoursesWithDetail()
         {
@@ -107,12 +130,14 @@ namespace QBCS.Service.Implement
                 var user = unitOfWork.Repository<User>().GetById(id);
                 if (user != null)
                 {
-                    var courses = user.CourseOfUsers.Select(c => new CourseViewModel
+                    var courses = user.CourseOfUsers
+                        .Select(c => new CourseViewModel
                     {
                         Id = c.Id,
                         CourseId = c.CourseId.Value,
                         Name = c.Course.Name,
                         Code = c.Course.Code,
+                        Total = c.Course.Questions.Count,
                         IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
                     }).Where(c => c.IsDisable == false).ToList();
                     return courses;

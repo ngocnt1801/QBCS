@@ -32,7 +32,7 @@
                             <th>Question</th>
                             <th>Action</th>
                             <th>
-                                <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()"/>
+                                <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />
                             </th>
                         </tr>
                     </thead>
@@ -50,7 +50,9 @@
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
                                     @if (item.Image != null && !String.IsNullOrWhiteSpace(item.Image))
                                     {
-                                    <p>    <img class="exam-image" src="data:image/png;base64,@item.Image" /></p>
+                                        <p>                                           
+                                                <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64,@item.Image" />
+                                        </p>
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
@@ -73,19 +75,19 @@
                                 <td>
                                     @if (User.CheckPermission(typeof(QBCS.Web.Controllers.QuestionController), nameof(QBCS.Web.Controllers.QuestionController.GetQuestionDetail)))
                                     {
-                                        <a href="@Url.Action("GetQuestionDetail", "Question", new { id = item.Id})" class="btn btn-primary mr-1 col-12 mb-2">Detail</a>
+                                        <a href="@Url.Action("GetQuestionDetail", "Question", new { id = item.Id})" class="btn btn-primary mr-1 col-12 mb-2 btn-spinner">Detail</a>
                                     }
                                     @if (User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetLogByQuestionID)))
                                     {
-                                        <a href="@Url.Action("GetLogByQuestionID", "Activity", new { targetId = item.Id , importId = item.ImportId})" class="btn btn-info mr-1 col-12 mb-2">History</a>
+                                        <a href="@Url.Action("GetLogByQuestionID", "Activity", new { targetId = item.Id , importId = item.ImportId})" class="btn btn-info mr-1 col-12 mb-2 btn-spinner">History</a>
 
                                     }
                                     @if (User.CheckPermission(typeof(QBCS.Web.Controllers.QuestionController), nameof(QBCS.Web.Controllers.QuestionController.ToggleDisable)))
                                     {
-                                        <button data-id="@item.Id" data-url="@Url.Action("ToggleDisable", "Question", new { id = item.Id})" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-@item.CategoryId" data-lo="#count-c-@item.CategoryId-l-@item.LearningOutcomeId" data-lv="#count-c-@item.CategoryId-l-@item.LearningOutcomeId-lv-@item.LevelId">Disable</button>
+                                        <button data-id="@item.Id" data-url="@Url.Action("ToggleDisable", "Question", new { id = item.Id})" class="btn btn-danger toggleDisable col-12 mb-2 btn-spinner" data-category="#count-c-@item.CategoryId" data-lo="#count-c-@item.CategoryId-l-@item.LearningOutcomeId" data-lv="#count-c-@item.CategoryId-l-@item.LearningOutcomeId-lv-@item.LevelId">Disable</button>
                                     }
                                 </td>
-                                <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code"/></td>
+                                <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code" /></td>
 
                             </tr>
                         }
@@ -99,3 +101,5 @@ else
 {
     <h5>There is no question in this category</h5>
 }
+
+

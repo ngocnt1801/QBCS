@@ -245,6 +245,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\category-style.css" />
+    <Content Include="Content\chartjs\Chart.css" />
     <Content Include="Content\checkbox-style.css" />
     <Content Include="Content\custom-css.css" />
     <Content Include="Content\checkbox.min.css" />
@@ -269,6 +270,8 @@
     <Content Include="Content\font-awesome\v4-shims.min.css" />
     <Content Include="Content\font.css" />
     <Content Include="Content\generate-exam.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\img\image-zoom.css" />
     <Content Include="Content\instagram_profile_image.png" />
     <Content Include="Content\logo%402x.png" />
     <Content Include="Content\logo-colored%402x.png" />
@@ -366,7 +369,10 @@
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
     <Content Include="Scripts\js\demo\datatables-demo.js" />
+    <Content Include="Scripts\myjs\autocompleteCourse.js" />
+    <Content Include="Scripts\myjs\autocompleteLecturer.js" />
     <Content Include="Scripts\myjs\autocomplete.js" />
+    <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
@@ -374,6 +380,7 @@
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\myjs\change-partial-view.js" />
+    <Content Include="Scripts\myjs\img-zoom\img-zoom.js" />
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\myjs\init-datatable.js" />

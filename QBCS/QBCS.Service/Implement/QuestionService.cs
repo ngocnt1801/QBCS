@@ -588,14 +588,15 @@ namespace QBCS.Service.Implement
                                             tw.WriteLine(countLog + "");
                                             tw.WriteLine("Question: " + item.QuestionContent);
                                             tw.WriteLine("Code: " + item.Code + "\n");
-                                            if (item.Options != null)
-                                            {
-                                                foreach (var itemOp in item.Options)
-                                                {
-                                                    tw.WriteLine("Option: " + itemOp.OptionContent);
-                                                }
-                                            }
+                                            //if (item.Options != null)
+                                            //{
+                                            //    foreach (var itemOp in item.Options)
+                                            //    {
+                                            //        tw.WriteLine("Option: " + itemOp.OptionContent);
+                                            //    }
+                                            //}
                                             tw.WriteLine("Error: " + item.Error + "\n");
+                                            tw.WriteLine("Other Error: " + item.OtherError + "\n");
                                             tw.WriteLine();
                                         }
                                         tw.Close();
@@ -663,16 +664,17 @@ namespace QBCS.Service.Implement
                                 {
                                     g++;
                                     tw.WriteLine(g + "");
-                                    tw.WriteLine("Question: " + item.QuestionContent);
+                                    //tw.WriteLine("Question: " + item.QuestionContent);
                                     tw.WriteLine("Code: " + item.Code + "\n");
-                                    if (item.Options != null)
-                                    {
-                                        foreach (var itemOp in item.Options)
-                                        {
-                                            tw.WriteLine("Option: " + item.Options + "\n");
-                                        }
-                                    }
+                                    //if (item.Options != null)
+                                    //{
+                                    //    foreach (var itemOp in item.Options)
+                                    //    {
+                                    //        tw.WriteLine("Option: " + item.Options + "\n");
+                                    //    }
+                                    //}
                                     tw.WriteLine("Error: " + item.Error + "\n");
+                                    tw.WriteLine("Other Error: " + item.OtherError + "\n");
                                     tw.WriteLine();
                                 }
                                 tw.Close();
@@ -716,6 +718,50 @@ namespace QBCS.Service.Implement
                         }).ToList(),
                         ImportedDate = DateTime.Now
                     };
+
+                    //int g = 0;
+                    //string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+                    //string fileName = "unknownFile-" + user + @"-" + time.ToString() + ".txt";
+                    //if (extensionFile.Equals(".doc"))
+                    //{
+                    //    fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
+                    //}
+                    //else if (extensionFile.Equals(".docx"))
+                    //{
+                    //    fileName = "DOCXFile-" + user + @"-" + time.ToString() + ".txt";
+                    //}
+                    //string filePath = "ErrorLog\\";
+                    //string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+                    //string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+                    //if (!File.Exists(fullPath))
+                    //{
+                    //    var myFile = File.Create(fullPath);
+                    //    myFile.Close();
+                    //    using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                    //    {
+                    //        if (listQuestion != null)
+                    //        {
+                    //            foreach (var item in listQuestion)
+                    //            {
+                    //                g++;
+                    //                tw.WriteLine(g + "");
+                    //                tw.WriteLine("Question: " + item.QuestionContent);
+                    //                tw.WriteLine("Code: " + item.Code + "\n");
+                    //                if (item.Options != null)
+                    //                {
+                    //                    foreach (var itemOp in item.Options)
+                    //                    {
+                    //                        tw.WriteLine("Option: " + item.Options + "\n");
+                    //                    }
+                    //                }
+                    //                tw.WriteLine("Error: " + item.Error + "\n");
+                    //                tw.WriteLine();
+                    //            }
+                    //            tw.Close();
+                    //        }
+
+                    //    }
+                    //}
                 }
 
                 #endregion
@@ -731,7 +777,8 @@ namespace QBCS.Service.Implement
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
 
-                    //log import
+                    //log imports
+                    
                     logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question",method: "ImportFile", userId: userId);
 
                     //call store check duplicate
@@ -777,7 +824,7 @@ namespace QBCS.Service.Implement
         public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetNoTracking();
-            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.Priority != 0).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return question != null ? (int)question.Frequency : 0;
         }
 
@@ -963,9 +1010,9 @@ namespace QBCS.Service.Implement
                     {
                         var key = tr.Elements("td").ElementAt(0).Value;
                         var value = tr.Elements("td").ElementAt(1).Value;
-                        if (key.Contains("QN="))
+                        if (key.Contains("QN=") || key.Contains("QN ="))
                         {
-                            questionTmp.Code = key.Replace("QN=", "");
+                            questionTmp.Code = key.Replace("QN=", "").Replace("QN =", "").Trim();
                             var contentQ = tr.Elements("td").Elements("p").ToList();
                             for (int i = 1; i < contentQ.Count; i++)
                             {
@@ -1011,10 +1058,16 @@ namespace QBCS.Service.Implement
                                 optionModel.IsCorrect = false;
                                 for (int i = 1; i < contentO.Count; i++)
                                 {
-                                    if (optionModel.OptionContent == null)
+                                    if (contentO.ElementAt(i).ToString().Contains("base64,"))
+                                    {
+                                        var getImage1 = contentO.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
+                                        var getImage2 = getImage1[1].Split('"');
+                                        optionModel.Image = getImage2[0];
+                                    }
+                                    else if (optionModel.OptionContent == null)
                                     {
                                         var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
-                                        optionModel.OptionContent = stringToValue.Replace("<br />", "<cbr>");
+                                        optionModel.OptionContent = stringToValue.Replace("<br/>", "<cbr>");
                                     }
                                     else
                                     {

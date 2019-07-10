@@ -40,5 +40,6 @@ namespace QBCS.Entity
         public string Fullname { get; set; }
 
         public string UserCode { get; set; }
+        public int? Status { get; set; }
     }
 }

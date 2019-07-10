@@ -94,6 +94,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Add Question to Bank", "QBCS", protectType: ProtectType.Authorized)]
+        [Log(Action = "Save", TargetName = "Question", IdParamName = "importId")]
         public ActionResult AddToBank(int importId)
         {
             Task.Factory.StartNew(() => {
@@ -108,6 +109,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Cancel Import", "QBCS", protectType: ProtectType.Authorized)]
+        [Log(Action = "Cancel", TargetName = "Question", IdParamName = "importId")]
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);

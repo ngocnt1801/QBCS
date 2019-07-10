@@ -38,6 +38,9 @@ namespace QBCS.Service.Implement
                     CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,
                     Category = categoryService.GetCategoryById(c.CategoryId.HasValue ? (int)c.CategoryId : 0),               
                     QuestionCode = c.QuestionCode,
+                    QuestionReference = c.QuestionReference.HasValue ? (int)c.QuestionReference : 0,
+                    Frequency = c.Frequency.HasValue ? (int)c.Frequency : 0,
+                    Priority = c.Priority.HasValue ? (int)c.Priority : 0,
                     Image = c.Image,
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {

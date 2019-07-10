@@ -227,11 +227,15 @@ namespace QBCS.Service.Implement
             var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
             foreach (var tempQuestion in tempQuestions)
             {
-                tempQuestion.QuestionContent = Uppercase(tempQuestion.QuestionContent);
-
                 var checkCorrectOption = false;
                 foreach(var option in tempQuestion.OptionTemps)
                 {
+                    if (option.OptionContent.Equals(""))
+                    {
+                        tempQuestion.Status = (int)StatusEnum.Invalid;
+                        tempQuestion.Message = "Option must not be empty";
+                        break;
+                    }
                     if ((bool)option.IsCorrect)
                     {
                         checkCorrectOption = true;
@@ -552,11 +556,15 @@ namespace QBCS.Service.Implement
         }
         private string TrimOption(string option)
         {
-            option = option.Replace("  ", " ");
-            if (option.Last().ToString().Equals("."))
+            if (option != null && !String.IsNullOrWhiteSpace(option))
             {
-                option.Remove(option.Length - 1);
+                option = option.Replace("  ", " ");
+                if (option.Last().ToString().Equals("."))
+                {
+                    option.Remove(option.Length - 1);
+                }
             }
+            
             //option = option.Replace(",", "");
             return option;
         }
@@ -567,7 +575,8 @@ namespace QBCS.Service.Implement
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
             if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip 
                                         || questionTemp.Status == (int)StatusEnum.Delete
-                                        || questionTemp.Status == (int)StatusEnum.Editable))
+                                        || questionTemp.Status == (int)StatusEnum.Editable
+                                        || questionTemp.Status == (int)StatusEnum.Invalid))
             {
                 questionTemp.Status = status;
                 unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
