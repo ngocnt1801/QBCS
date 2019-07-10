@@ -1,5 +1,6 @@
 ﻿
 using Newtonsoft.Json;
+using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
@@ -45,6 +46,7 @@ namespace QBCS.Web.Attributes
 
             ILogService logger = new LogService();
             CourseService courseService = new CourseService();
+            CategoryService categoryService = new CategoryService();
             LearningOutcomeService learningOutcomeService = new LearningOutcomeService();
             LevelService levelService = new LevelService();
             int? targetId = null;
@@ -73,6 +75,11 @@ namespace QBCS.Web.Attributes
             {
                 QuestionViewModel questionViewModel = new QuestionViewModel();
                 oldQuestionModel.QuestionContent = WebUtility.HtmlDecode(oldQuestionModel.QuestionContent);
+                if (oldQuestionModel.CategoryId != 0)
+                {
+                    oldQuestionModel.Category = categoryService.GetCategoryById(oldQuestionModel.CategoryId).Name;
+                }
+                oldQuestionModel.Category = oldQuestionModel.CategoryId != 0 ? oldQuestionModel.Category : "[None of Category]";
                 for (int i = 0; i < oldQuestionModel.Options.Count; i++)
                 {
                     oldQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(oldQuestionModel.Options[i].OptionContent);
@@ -82,7 +89,23 @@ namespace QBCS.Web.Attributes
                 if (newQuestionModel.QuestionContent != "")
                 {
                     newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
-                    newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                   newQuestionModel.CourseId = oldQuestionModel.CourseId;
+                   newQuestionModel.CategoryId = oldQuestionModel.CategoryId;
+                    if (newQuestionModel.CategoryId != 0)
+                    {
+                        newQuestionModel.Category = categoryService.GetCategoryById(newQuestionModel.CategoryId).Name;
+                    }
+                    newQuestionModel.Category = newQuestionModel.CategoryId != 0 ? newQuestionModel.Category : "[None of Category]";
+                    if (newQuestionModel.LevelId != 0)
+                    {
+                        newQuestionModel.LevelName = levelService.GetLevelById(newQuestionModel.LevelId).Name;
+                    }
+                    newQuestionModel.LevelName = newQuestionModel.LevelId != 0 ? newQuestionModel.LevelName : "[None of Level]";
+                    if (newQuestionModel.LearningOutcomeId != 0)
+                    {
+                        newQuestionModel.LearningOutcomeName = learningOutcomeService.GetLearingOutcomeById(newQuestionModel.LearningOutcomeId).Name;
+                    }
+                    newQuestionModel.LearningOutcomeName = newQuestionModel.LearningOutcomeId != 0 ? newQuestionModel.LearningOutcomeName : "[None of LOC]";
                     newQuestionModel.Image = oldQuestionModel.Image;
                     newQuestionModel.CourseName = oldQuestionModel.CourseName;
                     //newQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeName;
@@ -95,6 +118,19 @@ namespace QBCS.Web.Attributes
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
 
                 }
+                logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
+                logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
+                logModel.UserId = userId;
+                logModel.TargetId = targetId;
+                logModel.Action = Action;
+                logModel.TargetName = TargetName;
+                logModel.LogDate = DateTime.Now;
+                logModel.Message = Message;
+                logModel.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+                logModel.Method = filterContext.ActionDescriptor.ActionName;
+                logModel.Fullname = Fullname;
+                logModel.UserCode = UserCode;
+                logger.Log(logModel);
             }
             #endregion
 
@@ -166,18 +202,7 @@ namespace QBCS.Web.Attributes
             }
             
             #endregion
-            else if (Action.ToLower().Equals("Cancel") && TargetName.ToLower().Equals("question"))
-            {
-                
-                if (filterContext.ActionParameters.ContainsKey(IdParamName))
-                {
-                    importId = (int)filterContext.ActionParameters[IdParamName];
-                }
-                 if (importId != null)
-                {
-                    logService.UpdateLogStatus((int)importId);
-                }   
-            }
+           
             else
             {
                 logModel.OldValue = OldValue;
@@ -189,6 +214,13 @@ namespace QBCS.Web.Attributes
                         newQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(newQuestionModel.Options[i].OptionContent);
                     }
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
+                }
+                if (Action.ToLower().Equals("cancel")) {
+                    logModel.Status = (int)StatusEnum.Canceled;
+                }
+                else
+                {
+                    logModel.Status = (int)StatusEnum.Done;
                 }
                 logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
                 logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);

@@ -22,6 +22,7 @@
             {
                 <p class="text-custom"> User: @item.Fullname</p>
                 <p class="text-custom"> Action: @item.Message</p>
+                <p class="text-custom"> Course: @item.QuestionNew.CourseName</p>
                 <p class="text-custom"> Date: @item.LogDate</p>
                 <p class="text-custom"> Question Code: @item.QuestionNew.QuestionCode</p>
 
@@ -37,7 +38,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    Category: @item.QuestionNew.CourseName <br />
+                                    Category: @item.QuestionNew.Category<br />
                                     LOC: @item.QuestionNew.LearningOutcomeName <br/>
                                     Level: @item.QuestionNew.LevelName <br />
                                     Question:
@@ -66,7 +67,7 @@
                                     }
                                 </td>
                                 <td>
-                                    Category: @item.QuestionOld.CourseName <br />
+                                    Category: @item.QuestionOld.Category <br />
                                     LOC: @item.QuestionOld.LearningOutcomeName <br />
                                     Level: @item.QuestionOld.LevelName <br />
                                     Question:
