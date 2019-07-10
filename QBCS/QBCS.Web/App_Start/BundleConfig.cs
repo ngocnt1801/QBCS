@@ -117,7 +117,8 @@ namespace QBCS.Web
 
             //Edit question
             bundles.Add(new ScriptBundle("~/bundle/scripts/editquestion").Include(
-                "~/Scripts/myjs/edit-question.js"
+                "~/Scripts/myjs/edit-question.js",
+                "~/Scripts/myjs/check-form.js"
                 ));
 
             //Autocomplete
