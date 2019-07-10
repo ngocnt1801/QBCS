@@ -297,10 +297,15 @@ namespace QBCS.Service.Utilities
                             break;
                     }
                 }
-                //foreach (WTableCell cell in row.Cells)
-                //{
-                //    IterateTextBody(cell);
-                //}
+                else if (key.Contains("CATEGORY:"))
+                {
+                    IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
+                    WParagraph paragraph = bodyItemEntity as WParagraph;
+                    if(paragraph != null && !paragraph.Text.Equals(""))
+                    {
+                        quesModel.Category = paragraph.Text;
+                    }
+                }
             }
             quesModel.Options = options;
             listQuestion.Add(quesModel);
