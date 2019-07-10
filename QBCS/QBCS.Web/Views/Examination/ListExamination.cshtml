@@ -44,11 +44,11 @@
                         <td>
                             @if (item.IsDisable == false)
                             {
-                                @if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DetailExam)))
+                                if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DetailExam)))
                                 {
                                     <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary btn-spinner" role="button">Detail</a>
                                 }
-                                @if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DisableExam)))
+                                if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DisableExam)))
                                 {
                                     <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger btn-spinner" role="button">Disable</a>
                                 }
