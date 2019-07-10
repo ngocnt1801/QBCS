@@ -53,14 +53,23 @@ else
     using (Html.BeginForm("AddCourse", "User", FormMethod.Post))
     {
         <div class="col-lg-12 row mb-2 text-custom">
-            <div class="col-6">
-                @Html.Hidden("userId", Model.User.Id)
-                <input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                <input id="autocompleteCourseId" name="courseId" hidden />
+
+            <div class="row col-md-12">
+                <div class="col-md-3">
+                    <h6>Enter a course:</h6>
+                </div>
             </div>
-            <div class="col-2">
-                <input type="submit" class="btn btn-info" value="Add Course" />
+            <div class="row col-md-12">
+                <div class="col-6">
+                    @Html.Hidden("userId", Model.User.Id)
+                    <input id="autocompleteCourse" class="form-control text-custom border-dark" />
+                    <input id="autocompleteCourseId" name="courseId" hidden />
+                </div>
+                <div class="col-2">
+                    <input type="submit" class="btn btn-info" value="Add Course" />
+                </div>
             </div>
+
         </div>
     }
 }
