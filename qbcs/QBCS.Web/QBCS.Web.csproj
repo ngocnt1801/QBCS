@@ -371,6 +371,7 @@
     <Content Include="Scripts\js\demo\datatables-demo.js" />
     <Content Include="Scripts\myjs\autocomplete.js" />
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
+    <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
@@ -2197,7 +2198,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\bootstrap\" />
-    <Folder Include="Content\fonts\" />
     <Folder Include="Content\picture\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Elmah\" />
