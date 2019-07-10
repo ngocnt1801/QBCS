@@ -33,7 +33,7 @@
 
         </textarea>
             <div style="margin-top:5px">
-                <a href="#" class="btn btn-primary float-right">Import</a>
+                <a href="#" class="btn btn-primary float-right importmanually">Import</a>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                 toastr.error(result);
             }
         });
-        $('.btn-primary').on('click', function (event) {
+        $('.importmanually').on('click', function (event) {
             event.preventDefault();
             var editors = textboxio.get('#textbox');
             var editor = "";
