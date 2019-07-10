@@ -130,12 +130,14 @@ namespace QBCS.Service.Implement
                 var user = unitOfWork.Repository<User>().GetById(id);
                 if (user != null)
                 {
-                    var courses = user.CourseOfUsers.Select(c => new CourseViewModel
+                    var courses = user.CourseOfUsers
+                        .Select(c => new CourseViewModel
                     {
                         Id = c.Id,
                         CourseId = c.CourseId.Value,
                         Name = c.Course.Name,
                         Code = c.Course.Code,
+                        Total = c.Course.Questions.Count,
                         IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
                     }).Where(c => c.IsDisable == false).ToList();
                     return courses;
