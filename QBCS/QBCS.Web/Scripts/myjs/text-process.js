@@ -16,7 +16,14 @@ function option_custom() {
         op = op.split("<cbr>").join("");
         op = op.split("&lt;cbr&gt;").join("<br/>");
         op = op.split("&lt;br&gt;").join("<br/>");
-      
+        op = op.split("&lt;u&gt;").join("");
+        op = op.split("&lt;/u&gt;").join("");
+        op = op.split("&lt;i&gt;").join("");
+        op = op.split("&lt;/i&gt;").join("");
+        op = op.split("&lt;sub&gt;").join("<sub>");
+        op = op.split("&lt;/sub&gt;").join("</sub>");
+        op = op.split("&lt;sup&gt;").join("<sup>");
+        op = op.split("&lt;/sup&gt;").join("</sup>");
         op = op.split("[html]").join("");
         $(this).html(op);
     });
@@ -28,7 +35,14 @@ function question_custom() {
         op = op.split("<cbr>").join("");
         op = op.split("&lt;cbr&gt;").join("<br/>");
         op = op.split("&lt;br&gt;").join("<br/>");
-   
+        op = op.split("&lt;u&gt;").join("");
+        op = op.split("&lt;/u&gt;").join("");
+        op = op.split("&lt;i&gt;").join("");
+        op = op.split("&lt;/i&gt;").join("");
+        op = op.split("&lt;sub&gt;").join("<sub>");
+        op = op.split("&lt;/sub&gt;").join("</sub>");
+        op = op.split("&lt;sup&gt;").join("<sup>");
+        op = op.split("&lt;/sup&gt;").join("</sup>");
         op = op.split("[html]").join("");
         $(this).html(op);
     });
@@ -51,6 +65,14 @@ function customs_display_p() {
             content = content.split("&lt;span&gt;").join("");
             content = content.split("&lt;/span&gt;").join("");
             content = content.split("&lt;/span&gt;").join("");
+            content = content.split("&lt;u&gt;").join("");
+            content = content.split("&lt;/u&gt;").join("");
+            content = content.split("&lt;i&gt;").join("");
+            content = content.split("&lt;/i&gt;").join("");
+            content = content.split("&lt;sub&gt;").join("<sub>");
+            content = content.split("&lt;/sub&gt;").join("</sub>");
+            content = content.split("&lt;sup&gt;").join("<sup>");
+            content = content.split("&lt;/sup&gt;").join("</sup>");
             content = content.split("[html]").join("");
         }
         $(this).html(content);
@@ -74,10 +96,20 @@ function customs_display() {
         content = content.split("&lt;span&gt;").join("");
         content = content.split("&lt;/span&gt;").join("");
         content = content.split("&lt;/span&gt;").join("");
+        content = content.split("&lt;u&gt;").join("");
+        content = content.split("&lt;/u&gt;").join("");
+        content = content.split("&lt;i&gt;").join("");
+        content = content.split("&lt;/i&gt;").join("");
+        content = content.split("&lt;sub&gt;").join("<sub>");
+        content = content.split("&lt;/sub&gt;").join("</sub>");
+        content = content.split("&lt;sup&gt;").join("<sup>");
+        content = content.split("&lt;/sup&gt;").join("</sup>");
         content = content.split("[html]").join("");
     } 
     $('.question-custom').html(content);
 }
+
+
 
 function highlight(newElem, oldElem) {
     var oldText = oldElem.text(),
@@ -154,4 +186,5 @@ $(document).ready(function () {
     customs_display();
     option_custom();
     question_custom();
+ 
 });
