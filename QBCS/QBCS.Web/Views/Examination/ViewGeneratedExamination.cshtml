@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Generate Exam";
     var counter = 0;
+    var no = 0;
 }
 
 @using (Html.BeginForm("BackToGenerate", "Examination", FormMethod.Post))
@@ -15,7 +16,9 @@
         <ul>
             @foreach (var exam in Model)
             {
-                <li><a href="#generate-exam-@exam.Id"><span>@exam.ExamCode</span></a></li>
+                no++;
+
+                <li><a href="#generate-exam-@exam.Id"><span>Exam @no</span></a></li>
             }
         </ul>
     </nav>

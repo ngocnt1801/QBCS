@@ -990,7 +990,7 @@ namespace QBCS.Service.Implement
             return questionHistory;
         }
 
-        public bool InsertQuestionWithTableString(string table, int userId, int courseId)
+        public bool InsertQuestionWithTableString(string table, int userId, int courseId, string prefix)
         {
             var optionCheck = new DocViewModel();
             var optionCheckList = new List<DocViewModel>();
@@ -1053,7 +1053,7 @@ namespace QBCS.Service.Implement
                         {
                             optionCheck.Code = key.Replace(".", "");
                             var contentO = tr.Elements("td").Elements("p").ToList();
-                            if (!value.Equals(""))
+                            if (value != null && !value.Equals(""))
                             {
                                 optionModel.IsCorrect = false;
                                 for (int i = 1; i < contentO.Count; i++)
@@ -1110,14 +1110,14 @@ namespace QBCS.Service.Implement
                         }
                         else if (key.Contains("UNIT:"))
                         {
-                            if (!value.Equals(""))
+                            if (value != null && !value.Equals(""))
                             {
-                                questionTmp.LearningOutcome = "LearningOutcome" + value;
+                                questionTmp.LearningOutcome = prefix + value;
                             }
                         }
                         else if (key.Contains("MARK:"))
                         {
-                            if (!value.Equals(""))
+                            if (value != null && !value.Equals(""))
                             {
                                 switch (value)
                                 {
@@ -1134,6 +1134,13 @@ namespace QBCS.Service.Implement
                                         questionTmp.Level = "Hard";
                                         break;
                                 }
+                            }
+                        }
+                        else if (key.Contains("CATEGORY:"))
+                        {
+                            if(value != null && !value.Equals(""))
+                            {
+                                questionTmp.Category = value;
                             }
                         }
                     }
