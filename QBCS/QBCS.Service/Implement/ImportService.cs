@@ -543,11 +543,15 @@ namespace QBCS.Service.Implement
         #region validate rule stuff
         private string TrimOption(string option)
         {
-            option = option.Replace("  ", " ");
-            if (option.Last().ToString().Equals("."))
+            if (option != null && !String.IsNullOrWhiteSpace(option))
             {
-                option.Remove(option.Length - 1);
+                option = option.Replace("  ", " ");
+                if (option.Last().ToString().Equals("."))
+                {
+                    option.Remove(option.Length - 1);
+                }
             }
+            
             //option = option.Replace(",", "");
             return option;
         }

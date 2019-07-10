@@ -112,5 +112,13 @@ namespace QBCS.Web.Controllers
             return View(listQuestion);
         }
 
+        //[Feature(FeatureType.Page, "Back To Generate Exam View", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult BackToGenerate(int courseId, string groupExam)
+        {
+            TempData["active"] = "Examination";
+            examinationService.ResetPriorityAndFrequency(groupExam);
+            return RedirectToAction("GenerateExam", "Examination",  new { courseId = courseId });
+        }
+
     }
 }
