@@ -119,5 +119,12 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("GenerateExam", "Examination",  new { courseId = courseId });
         }
 
+        //[Feature(FeatureType.Page, "Replace Question In Exam", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult DeleteQuestionInExam(int questionId)
+        {
+            string groupExam = examinationService.ReplaceQuestionInExam(questionId);
+            return RedirectToAction("ViewGeneratedExamination", "Examination", new { examGroup  = groupExam});
+        }
+
     }
 }

@@ -18,5 +18,6 @@ namespace QBCS.Service.Interface
         List<QuestionInExamViewModel> GetExaminationHistoryQuestionsInCourse(int courseId);
         string GetExamGroup();
         void ResetPriorityAndFrequency(string groupExam);
+        string ReplaceQuestionInExam(int questionId);
     }
 }

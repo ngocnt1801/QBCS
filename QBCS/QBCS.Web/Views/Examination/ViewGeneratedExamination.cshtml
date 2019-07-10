@@ -43,6 +43,7 @@
                                         <th>Question</th>
                                         <th>Level</th>
                                         <th>Topic/Learning Outcome</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -100,6 +101,9 @@
                                                     {
                                                         @Html.DisplayFor(lo => part.LearningOutcome.Name)
                                                     }
+                                                </td>
+                                                <td>
+                                                    <button class="delete-question btn-danger btn" data-question-id="@question.Id"><i class='fas fa-trash-alt'></i></button>
                                                 </td>
                                             </tr>
                                         }

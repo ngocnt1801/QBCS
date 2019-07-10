@@ -105,19 +105,42 @@
         var hardPercent = 100 - easyPercent - normalPercent;
         $("#hard").val(hardPercent);
     });
-    $("#exportExamination").submit(function (event) {
-        event.preventDefault();
-        var examinationId = $("input[name='examinationId']").val();
-        var fileExtension = $('#fileExtension').find(":selected").text();
-        var getCategory = $('#getCategory').prop('checked');
-        window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
-    });
     $('.btnExport').on('click', function (e) {
         var counter = $(this).data("value");
         var examinationId = $("input[name='examinationId-" + counter + "']").val();
         var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
         var getCategory = $("#getCategory-" + counter).prop('checked');
         window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+    });
+    $('.delete-question').on('click', function (e) {
+        e.preventDefault();
+        var questionId = $(this).data('question-id');
+        bootbox.dialog({
+            message: "Are you sure you want to Delete Question and replace by another question?",
+            title: "<i class='fas fa-trash-alt'></i> Delete Question!",
+            buttons: {
+                success: {
+                    label: "No",
+                    className: "btn-info",
+                    callback: function () {
+                        $('.bootbox').modal('hide');
+                    }
+                },
+                danger: {
+                    label: "Delete",
+                    className: "btn-primary",
+                    callback: function () {
+                        window.location = "/Examination/DeleteQuestionInExam?questionId=" + questionId;
+                        //$.ajax({
+                        //    type: 'POST',
+                        //    url: '/Examination/DeleteQuestionInExam',
+                        //    data: 'questionId=' + questionId
+
+                        //})
+                    }
+                }
+            }
+        });
     });
     $(".tab-slider--body").hide();
     $(".tab-slider--body:first").show();
@@ -195,7 +218,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2],
                 'orderable': false,
             }
         ]
@@ -234,7 +257,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2, 5],
                 'orderable': false,
             }
         ]
@@ -273,7 +296,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2, 5],
                 'orderable': false,
             }
         ]
@@ -312,7 +335,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2, 5],
                 'orderable': false,
             }
         ]
@@ -351,7 +374,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2, 5],
                 'orderable': false,
             }
         ]
@@ -390,7 +413,7 @@
                 targets: 3
             },
             {
-                'targets': [1, 2],
+                'targets': [0, 1, 2, 5],
                 'orderable': false,
             }
         ]

@@ -41,7 +41,7 @@ namespace QBCS.Service.Implement
         private ISemesterService semesterService;
         private IPartOfExamService partOfExamService;
         private ILogService logService;
-
+        private IQuestionInExamService questionInExamService;
 
         public ExaminationService()
         {
@@ -54,6 +54,7 @@ namespace QBCS.Service.Implement
             partOfExamService = new PartOfExamService();
             semesterService = new SemesterService();
             logService = new LogService();
+            questionInExamService = new QuestionInExamService();
         }
         public List<ExaminationViewModel> GetAllExam()
         {
@@ -402,6 +403,7 @@ namespace QBCS.Service.Implement
                             QuestionCode = ques.QuestionCode,
                             LevelId = ques.LevelId,
                             CategoryId = ques.CategoryId,
+                            IsDisable = false,
                             OptionInExams = ques.Options.Select(o => new OptionInExam()
                             {
                                 IsCorrect = o.IsCorrect,
@@ -423,17 +425,19 @@ namespace QBCS.Service.Implement
         }
         private List<QuestionViewModel> GeneratePartOfExamByLearningOutcome(LearingOutcomeInExamination learingOutcomeInExam, int categoryId)
         {
-            List<QuestionViewModel> questionEasy = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.EasyQuestion, EASY);
-            List<QuestionViewModel> questionMedium = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.MediumQuestion, MEDIUM);
-            List<QuestionViewModel> questionHard = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.HardQuestion, HARD);
+            int idOfLevel = levelService.GetIdByName(EASY);
+            List<QuestionViewModel> questionEasy = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.EasyQuestion, idOfLevel);
+            idOfLevel = levelService.GetIdByName(MEDIUM);
+            List<QuestionViewModel> questionMedium = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.MediumQuestion, idOfLevel);
+            idOfLevel = levelService.GetIdByName(HARD);
+            List<QuestionViewModel> questionHard = GeneratePartOfExamByLearningOutcomeAndLevel(learingOutcomeInExam.Id, learingOutcomeInExam.HardQuestion, idOfLevel);
             List<QuestionViewModel> result = questionEasy.Concat(questionMedium).Concat(questionHard).ToList();
             return result;
         }
-        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcomeAndLevel(int learningOutcomeId, int numberOfQuestion, string nameOfLevel)
+        private List<QuestionViewModel> GeneratePartOfExamByLearningOutcomeAndLevel(int learningOutcomeId, int numberOfQuestion, int idOfLevel)
         {
             List<QuestionViewModel> resultTmp = new List<QuestionViewModel>();
             List<QuestionViewModel> result = new List<QuestionViewModel>();
-            int idOfLevel = levelService.GetIdByName(nameOfLevel);
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
             while(result.Count < numberOfQuestion)
             {
@@ -544,7 +548,7 @@ namespace QBCS.Service.Implement
                                             Priority = q.Priority.Value,
                                             QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
                                             LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
-                                            LearningOutcome = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "",
+                                            LearningOutcomeName = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "",
                                             Image = q.Image,
                                             QuestionCode = q.QuestionCode,
                                             Options = q.Options.ToList().Select(o => new OptionViewModel
@@ -562,6 +566,40 @@ namespace QBCS.Service.Implement
 
             return listQuestion;
 
+        }
+
+        public string ReplaceQuestionInExam(int questionId)
+        {
+            QuestionInExamViewModel questionInExam = questionInExamService.GetQuestionInExamById(questionId);
+            QuestionInExam oldQuestion = unitOfWork.Repository<QuestionInExam>().GetById(questionInExam.Id);
+            oldQuestion.IsDisable = true;
+            List<QuestionViewModel> newQuestion = GeneratePartOfExamByLearningOutcomeAndLevel(questionInExam.PartOfExam.LearningOutcomeId, 1, questionInExam.LevelId);
+            foreach (var ques in newQuestion)
+            {
+                QuestionInExam question = new QuestionInExam()
+                {
+                    QuestionContent = ques.QuestionContent,
+                    PartId = questionInExam.PartId,
+                    QuestionReference = ques.Id,
+                    Priority = ques.Priority,
+                    Frequency = ques.Frequency,
+                    Image = ques.Image,
+                    QuestionCode = ques.QuestionCode,
+                    LevelId = ques.LevelId,
+                    CategoryId = ques.CategoryId,
+                    IsDisable = false,
+                    OptionInExams = ques.Options.Select(o => new OptionInExam()
+                    {
+                        IsCorrect = o.IsCorrect,
+                        OptionContent = o.OptionContent,
+                        Image = o.Image
+                    }).ToList()
+                };
+                unitOfWork.Repository<QuestionInExam>().Insert(question);
+            }
+            unitOfWork.SaveChanges();
+            ExaminationViewModel exam = GetExanById(questionInExam.PartOfExam.ExaminationId);
+            return exam.ExamGroup;
         }
     }
 }
