@@ -100,6 +100,9 @@
             });
         },
         getAmountNewNotification: function () {
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $('#pleaseWaitDialog').modal();
             $.ajax({
                 url: '/Notification/GetNotification',
                 type: 'GET',
@@ -111,6 +114,9 @@
                     
                     notificationModel.count = response.length;
                     notificationView.render();
+
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
                 }
             });
         },
