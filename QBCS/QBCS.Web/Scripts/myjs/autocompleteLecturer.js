@@ -20,7 +20,7 @@
                     }
                     for (var i = 0; i < data.length; i++) {
                         var Obj = {};
-                        Obj['label'] = data[i].Name + " (" + data[i].Code + ")";
+                        Obj['label'] = data[i].Fullname + " (" + data[i].Code + ")";
                         Obj['value'] = data[i].Id;
                         result.push(Obj);
                     }
