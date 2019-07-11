@@ -31,6 +31,6 @@ namespace QBCS.Service.Interface
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId);
         QuestionHistoryViewModel GetQuestionHistory(int id);
-        
+        List<QuestionTempViewModel> GetQuestionTempByImportId(int importId, string type);
     }
 }

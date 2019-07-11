@@ -64,7 +64,8 @@ namespace QBCS.Web.Controllers
 
             if (result.Status != (int)StatusEnum.Done)
             {
-                return View(result);
+                //return View(result);
+                return View(result.Id);
             }
             TempData["NewestCount"] = result.NumberOfSuccess;
             return RedirectToAction("CourseDetail", "Course", new { courseId = result.CourseId});

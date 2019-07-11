@@ -94,7 +94,7 @@ namespace QBCS.Service.Implement
                     };
                     optionViewModels.Add(optionViewModel);
                 }
-               
+
 
                 QuestionViewModel questionViewModel = ParseEntityToModel(ques, optionViewModels);
                 questionViewModels.Add(questionViewModel);
@@ -124,8 +124,8 @@ namespace QBCS.Service.Implement
             return questionViewModel;
         }
 
-      
-       
+
+
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -170,7 +170,7 @@ namespace QBCS.Service.Implement
                 quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
             }
             entity.QuestionContent = quesTemp;
-            entity.Type = (int) TypeEnum.Update;
+            entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
             entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
@@ -678,9 +678,9 @@ namespace QBCS.Service.Implement
                                     tw.WriteLine();
                                 }
                                 tw.Close();
-                            }                          
-                           
-                        }    
+                            }
+
+                        }
                     }
 
                 }
@@ -694,7 +694,7 @@ namespace QBCS.Service.Implement
                     QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
-                    listQuestion = docUltil.ParseDoc(questionFile.InputStream,prefix);
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream, prefix);
 
                     import = new Import()
                     {
@@ -707,7 +707,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = prefix + " " +q.LearningOutcome,
+                            LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
@@ -778,8 +778,8 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
 
                     //log imports
-                    
-                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question",method: "ImportFile", userId: userId);
+
+                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question", method: "ImportFile", userId: userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
@@ -808,7 +808,7 @@ namespace QBCS.Service.Implement
 
             return check;
         }
-        
+
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -836,7 +836,7 @@ namespace QBCS.Service.Implement
             {
                 result = result.Where(q => q.CourseId == courseId);
             }
-           
+
 
             if (categoryId != null && categoryId != 0)
             {
@@ -953,14 +953,14 @@ namespace QBCS.Service.Implement
                 Image = questionEntity.Image,
                 QuestionCode = questionEntity.QuestionCode,
                 CourseId = questionEntity.CourseId.Value,
-                Options = questionEntity.Options.Select( o => new OptionViewModel
+                Options = questionEntity.Options.Select(o => new OptionViewModel
                 {
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                     OptionContent = o.OptionContent,
                     Image = o.Image
                 }).ToList(),
-                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]") 
-                            + " / " 
+                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]")
+                            + " / "
                             + (questionEntity.LearningOutcomeId.HasValue ? questionEntity.LearningOutcome.Name : "[None of learning outcome]"),
                 LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
@@ -977,7 +977,7 @@ namespace QBCS.Service.Implement
                     //Semester = (int)entity.Semester
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
-                    
+
                 };
                 examList.Add(exam);
             }
@@ -1053,6 +1053,67 @@ namespace QBCS.Service.Implement
             //}
 
             return check;
+        }
+
+        public List<QuestionTempViewModel> GetQuestionTempByImportId(int importId, string type)
+        {
+            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).ToList();
+            var questionTemp = entities.Select(q => new QuestionTempViewModel()
+            {
+                Id = q.Id,
+                QuestionContent = q.QuestionContent,
+                Status = (StatusEnum)q.Status,
+                ImportId = importId,
+                Code = q.Code,
+                Message = q.Message,
+                Image = q.Image,
+                IsInImportFile = q.DuplicateInImportId.HasValue,
+                Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
+                DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
+                {
+                    Id = q.DuplicatedWithBank.Id,
+                    CourseName = "Bank: " + q.DuplicatedWithBank.Course.Name,
+                    Code = q.DuplicatedWithBank.QuestionCode,
+                    QuestionContent = q.DuplicatedWithBank.QuestionContent,
+                    Options = q.DuplicatedWithBank.Options.Select(o => new OptionViewModel
+                    {
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
+                } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel
+                {
+                    Id = q.DuplicatedWithImport.Id,
+                    Code = q.DuplicatedWithImport.Code,
+                    CourseName = "Import File",
+                    QuestionContent = q.DuplicatedWithImport.QuestionContent,
+                    Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                    {
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
+                } : null),
+                Options = q.OptionTemps.Select(o => new OptionViewModel
+                {
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList()
+            });
+            switch (type)
+            {
+                case "editable1":
+                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip || q.Status == StatusEnum.Delete) && q.IsInImportFile);
+                    break;
+                case "editable2":
+                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip || q.Status == StatusEnum.Delete) && !q.IsInImportFile);
+                    break;
+                case "success":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success);
+                    break;
+                case "invalid":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid);
+                    break;
+            }
+            return questionTemp.ToList();
         }
 
         public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)

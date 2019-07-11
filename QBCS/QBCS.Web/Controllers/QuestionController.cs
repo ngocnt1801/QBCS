@@ -2,6 +2,7 @@
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System.Collections.Generic;
@@ -255,6 +256,24 @@ namespace QBCS.Web.Controllers
         {
             QuestionViewModel qvm = questionService.GetQuestionById(4);
             return PartialView("EditQuestionWithTextbox", qvm);
+        }
+        public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
+        {
+            var search = Request["search[value]"].ToLower();
+            var entities = questionService.GetQuestionTempByImportId(importId, type);
+            var recordTotal = entities.Count;
+            var result = new List<QuestionTempViewModel>();
+            foreach (var q in entities)
+            {
+                var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+                if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+                {
+                    result.Add(q);
+                }
+            }
+            var recordFiltered = result.Count();
+            result = result.Skip(start).Take(length).ToList();
+            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
         }
     }
 

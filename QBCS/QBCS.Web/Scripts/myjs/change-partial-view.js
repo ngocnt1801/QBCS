@@ -1,11 +1,11 @@
 ﻿function bt_change_partial(url, btn) {
 
-        $.get(url, {}, function (response) {
-            $("#question-import").html(response);
-            $('#dataTable').DataTable();
-        });
-        $(".btn-group > .btn").removeClass("active");
-        $(btn).addClass("active");
+    $.get(url, {}, function (response) {
+        $("#question-import").html(response);
+        $('#dataTable').DataTable();
+    });
+    $(".btn-group > .btn").removeClass("active");
+    $(btn).addClass("active");
 }
 
 function nav_bar_active() {
@@ -26,7 +26,7 @@ function customs_display() {
             content = content.split("&lt;br&gt;").join("&lt;br&gt;");
             content = content.split("&lt;br/&gt;").join("<br/>");
             content = content.split("&lt;p&gt;").join("");
-           
+
             content = content.split("&lt;/p&gt;").join("");
             content = content.split("&lt;b&gt;").join("");
             content = content.split("&lt;/b&gt;").join("");
@@ -74,216 +74,362 @@ function customs_display_duplicate() {
 }
 
 function split() {
-    var table1 = $('#tableEditable').DataTable({
+    var table1 = $('#tableEditable1').DataTable({
+        paging: true,
+        ordering: false,
+        filter: true,
+        destroy: true,
+        searching: true,
+        serverSide: true,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+        Processing: true,
+        ajax:
+        {
+            url: "/Question/GetQuestionByImportIdAndType",
+            type: "GET",
+            data: {
+                importId: $('#importId').val(),
+                type: "editable1"
+            },
+            dataType: "json"
+        },
+
         columns: [
-            null,
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
-                    }       
-                    return data
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
-                    }               
-                    return data
+                data: "QuestionTempViewModel",
+                render: function (data, type, row, meta) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p class="text-custom">Category' + row.Category + '<br/>';
+                    var code = 'Question Code: ' + row.Code + '</p>';
+                    var questionContent = changeHtml(row.QuestionContent) + '<br/>';
+                    var image = row.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
+                    }
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < row.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(row.Options[i].OptionContent);
+                        option["correct"] = row.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
                 }
             },
-            null
+            {
+                data: "DuplicatedQuestion",
+                render: function (data) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p> </p>';
+                    var code = ' <p class="text-custom">' + data.CourseName + data.Code + '</p>';
+                    var questionContent = changeHtml(data.QuestionContent) + '<br/>';
+                    var image = data.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
+                    }
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < data.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(data.Options[i].OptionContent);
+                        option["correct"] = data.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
+                }
+            },
+            {
+                data: "Id",
+                render: function (data) {
+                    var importId = $('#importId').val();
+                    var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                    var accept = '<a href="/Import/Skip?questionId=' + data + '&importId=' + importId + '" class="btn btn-success mb-2 col-md-12">Accept</a>';
+                    var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                    var result = edit + accept + deleteQ;
+                    return result;
+                }
+            }
         ],
         columnDefs: [
             { targets: 0, width: "2%" },
             { targets: 1, width: "44%" },
-            { targets: 2, width: "44%"},
-            { targets: 3, width: "10%"}
+            { targets: 2, width: "44%" },
+            { targets: 3, width: "10%" }
         ]
     });
-    var table2 = $('#tableDelete').DataTable({
+
+    var table2 = $('#tableEditable2').DataTable({
+        paging: true,
+        ordering: false,
+        filter: true,
+        destroy: true,
+        searching: true,
+        serverSide: true,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+        Processing: true,
+        ajax:
+        {
+            url: "/Question/GetQuestionByImportIdAndType",
+            type: "GET",
+            data: {
+                importId: $('#importId').val(),
+                type: "editable2"
+            },
+            dataType: "json"
+        },
+
         columns: [
-            null,
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
-                    }
-                   
-                    return data
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");  
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
+                data: "QuestionTempViewModel",
+                render: function (data, type, row, meta) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p class="text-custom">Category' + row.Category + '<br/>';
+                    var code = 'Question Code: ' + row.Code + '</p>';
+                    var questionContent = changeHtml(row.QuestionContent) + '<br/>';
+                    var image = row.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
                     }
-                    
-                    return data
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < row.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(row.Options[i].OptionContent);
+                        option["correct"] = row.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
+                }
+            },
+            {
+                data: "DuplicatedQuestion",
+                render: function (data) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p> </p>';
+                    var code = ' <p class="text-custom">' + data.CourseName + data.Code + '</p>';
+                    var questionContent = changeHtml(data.QuestionContent) + '<br/>';
+                    var image = data.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
+                    }
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < data.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(data.Options[i].OptionContent);
+                        option["correct"] = data.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
+                }
+            },
+            {
+                data: "Id",
+                render: function (data) {
+                    var importId = $('#importId').val();
+                    var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                    var accept = '<a href="/Import/Skip?questionId=' + data + '&importId=' + importId + '" class="btn btn-success mb-2 col-md-12">Accept</a>';
+                    var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                    var result = edit + accept + deleteQ;
+                    return result;
                 }
             }
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "44%" },
+            { targets: 2, width: "44%" },
+            { targets: 3, width: "10%" }
         ]
     });
+
     var table3 = $('#tableSuccess').DataTable({
+        paging: true,
+        ordering: false,
+        filter: true,
+        destroy: true,
+        searching: true,
+        serverSide: true,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+        Processing: true,
+        ajax:
+        {
+            url: "/Question/GetQuestionByImportIdAndType",
+            type: "GET",
+            data: {
+                importId: $('#importId').val(),
+                type: "success"
+            },
+            dataType: "json"
+        },
+
         columns: [
-            null,
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
-                    }
-                    
-                    return data
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
+            {
+                data: "QuestionTempViewModel",
+                render: function (data, type, row, meta) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p class="text-custom">Category' + row.Category + '<br/>';
+                    var code = 'Question Code: ' + row.Code + '</p>';
+                    var questionContent = changeHtml(row.QuestionContent) + '<br/>';
+                    var image = row.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
+                    }
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < row.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(row.Options[i].OptionContent);
+                        option["correct"] = row.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
+                }
+            }
         ],
         columnDefs: [
             { targets: 0, width: "2%" },
             { targets: 1, width: "98%" }
         ]
     });
-    var table4 = $('#tableInvalid').DataTable({
-        columns: [
-            null,
-            {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");            
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
-                    }
 
-                    return data
+    var table4 = $('#tableInvalid').DataTable({
+        paging: true,
+        ordering: false,
+        filter: true,
+        destroy: true,
+        searching: true,
+        serverSide: true,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+        Processing: true,
+        ajax:
+        {
+            url: "/Question/GetQuestionByImportIdAndType",
+            type: "GET",
+            data: {
+                importId: $('#importId').val(),
+                type: "invalid"
+            },
+            dataType: "json"
+        },
+
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
             {
-                "render": function (data, type, row) {
-                    if (data.indexOf("[html]") >= 0) {
-                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                        data = data.split("&lt;br&gt;").join("<br/>");
-                        data = data.split("&lt;p&gt;").join("");
-                        data = data.split("&lt;br/&gt;").join("<br/>");
-                        data = data.split("&lt;b&gt;").join("");
-                        data = data.split("&lt;/b&gt;").join("");
-                        data = data.split("&lt;/p&gt;").join("");
-                        data = data.split("&lt;span&gt;").join("");
-                        data = data.split("&lt;/span&gt;").join("");
-                        data = data.split("&lt;u&gt;").join("");
-                        data = data.split("&lt;/u&gt;").join("");
-                        data = data.split("&lt;i&gt;").join("");
-                        data = data.split("&lt;/i&gt;").join("");
-                        data = data.split("&lt;sub&gt;").join("<sub>");
-                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                        data = data.split("&lt;sup&gt;").join("<sup>");
-                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                        data = data.split("[html]").join("");
+                data: "QuestionTempViewModel",
+                render: function (data, type, row, meta) {
+                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                    var category = '<p class="text-custom">Category' + row.Category + '<br/>';
+                    var code = 'Question Code: ' + row.Code + '</p>';
+                    var questionContent = changeHtml(row.QuestionContent) + '<br/>';
+                    var image = row.Image;
+                    if (image != null && image != "") {
+                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                    } else {
+                        image = "";
                     }
-                    return data
+                    var options = [];
+                    var i = 0;
+                    for (i = 0; i < row.Options.length; i++) {
+                        var option = {};
+                        option["content"] = changeHtml(row.Options[i].OptionContent);
+                        option["correct"] = row.Options[i].IsCorrect;
+                        options.push(option);
+                    }
+                    var result = category + code + questionContent + image;
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i]['correct']) {
+                            result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        } else {
+                            result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                        }
+                    }
+                    return result;
                 }
             },
-            null
+            {
+                data: "Message"
+            },
+            {
+                data: "Id",
+                render: function (data) {
+                    var importId = $('#importId').val();
+                    var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                    var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                    var result = edit + deleteQ;
+                    return result;
+                }
+            }
         ],
         columnDefs: [
             { targets: 0, width: "2%" },
@@ -292,6 +438,164 @@ function split() {
             { targets: 3, width: "10%" }
         ]
     });
+    {
+        //var table2 = $('#tableDelete').DataTable({
+    //    columns: [
+    //        null,
+    //        {
+    //            "render": function (data, type, row) {
+    //                if (data.indexOf("[html]") >= 0) {
+    //                    data = data.split("&lt;cbr&gt;").join("<br/>");
+    //                    data = data.split("&lt;br&gt;").join("<br/>");
+    //                    data = data.split("&lt;p&gt;").join("");
+    //                    data = data.split("&lt;br/&gt;").join("<br/>");
+    //                    data = data.split("&lt;/p&gt;").join("");
+    //                    data = data.split("&lt;b&gt;").join("");
+    //                    data = data.split("&lt;/b&gt;").join("");
+    //                    data = data.split("&lt;span&gt;").join("");
+    //                    data = data.split("&lt;/span&gt;").join("");
+    //                    data = data.split("&lt;u&gt;").join("");
+    //                    data = data.split("&lt;/u&gt;").join("");
+    //                    data = data.split("&lt;i&gt;").join("");
+    //                    data = data.split("&lt;/i&gt;").join("");
+    //                    data = data.split("&lt;sub&gt;").join("<sub>");
+    //                    data = data.split("&lt;/sub&gt;").join("</sub>");
+    //                    data = data.split("&lt;sup&gt;").join("<sup>");
+    //                    data = data.split("&lt;/sup&gt;").join("</sup>");
+    //                    data = data.split("[html]").join("");
+    //                }
+
+    //                return data
+    //            }
+    //        },
+    //        {
+    //            "render": function (data, type, row) {
+    //                if (data.indexOf("[html]") >= 0) {
+    //                    data = data.split("&lt;cbr&gt;").join("<br/>");
+    //                    data = data.split("&lt;br&gt;").join("<br/>");
+    //                    data = data.split("&lt;p&gt;").join("");
+    //                    data = data.split("&lt;br/&gt;").join("<br/>");
+    //                    data = data.split("&lt;/p&gt;").join("");
+    //                    data = data.split("&lt;b&gt;").join("");
+    //                    data = data.split("&lt;/b&gt;").join("");
+    //                    data = data.split("&lt;span&gt;").join("");
+    //                    data = data.split("&lt;/span&gt;").join("");
+    //                    data = data.split("&lt;u&gt;").join("");
+    //                    data = data.split("&lt;/u&gt;").join("");
+    //                    data = data.split("&lt;i&gt;").join("");
+    //                    data = data.split("&lt;/i&gt;").join("");
+    //                    data = data.split("&lt;sub&gt;").join("<sub>");
+    //                    data = data.split("&lt;/sub&gt;").join("</sub>");
+    //                    data = data.split("&lt;sup&gt;").join("<sup>");
+    //                    data = data.split("&lt;/sup&gt;").join("</sup>");
+    //                    data = data.split("[html]").join("");
+    //                }
+
+    //                return data
+    //            }
+    //        }
+    //    ]
+    //});
+    //var table3 = $('#tableSuccess').DataTable({
+    //    columns: [
+    //        null,
+    //        {
+    //            "render": function (data, type, row) {
+    //                if (data.indexOf("[html]") >= 0) {
+    //                    data = data.split("&lt;cbr&gt;").join("<br/>");
+    //                    data = data.split("&lt;br&gt;").join("<br/>");
+    //                    data = data.split("&lt;p&gt;").join("");
+    //                    data = data.split("&lt;br/&gt;").join("<br/>");
+    //                    data = data.split("&lt;/p&gt;").join("");
+    //                    data = data.split("&lt;b&gt;").join("");
+    //                    data = data.split("&lt;/b&gt;").join("");
+    //                    data = data.split("&lt;span&gt;").join("");
+    //                    data = data.split("&lt;/span&gt;").join("");
+    //                    data = data.split("&lt;u&gt;").join("");
+    //                    data = data.split("&lt;/u&gt;").join("");
+    //                    data = data.split("&lt;i&gt;").join("");
+    //                    data = data.split("&lt;/i&gt;").join("");
+    //                    data = data.split("&lt;sub&gt;").join("<sub>");
+    //                    data = data.split("&lt;/sub&gt;").join("</sub>");
+    //                    data = data.split("&lt;sup&gt;").join("<sup>");
+    //                    data = data.split("&lt;/sup&gt;").join("</sup>");
+    //                    data = data.split("[html]").join("");
+    //                }
+
+    //                return data
+    //            }
+    //        },
+    //    ],
+    //    columnDefs: [
+    //        { targets: 0, width: "2%" },
+    //        { targets: 1, width: "98%" }
+    //    ]
+    //});
+    //var table4 = $('#tableInvalid').DataTable({
+    //    columns: [
+    //        null,
+    //        {
+    //            "render": function (data, type, row) {
+    //                if (data.indexOf("[html]") >= 0) {
+    //                    data = data.split("&lt;cbr&gt;").join("<br/>");
+    //                    data = data.split("&lt;br&gt;").join("<br/>");
+    //                    data = data.split("&lt;p&gt;").join("");
+    //                    data = data.split("&lt;br/&gt;").join("<br/>");
+    //                    data = data.split("&lt;b&gt;").join("");
+    //                    data = data.split("&lt;/b&gt;").join("");
+    //                    data = data.split("&lt;/p&gt;").join("");
+    //                    data = data.split("&lt;span&gt;").join("");
+    //                    data = data.split("&lt;/span&gt;").join("");
+    //                    data = data.split("&lt;u&gt;").join("");
+    //                    data = data.split("&lt;/u&gt;").join("");
+    //                    data = data.split("&lt;i&gt;").join("");
+    //                    data = data.split("&lt;/i&gt;").join("");
+    //                    data = data.split("&lt;sub&gt;").join("<sub>");
+    //                    data = data.split("&lt;/sub&gt;").join("</sub>");
+    //                    data = data.split("&lt;sup&gt;").join("<sup>");
+    //                    data = data.split("&lt;/sup&gt;").join("</sup>");
+    //                    data = data.split("[html]").join("");
+    //                }
+
+    //                return data
+    //            }
+    //        },
+    //        {
+    //            "render": function (data, type, row) {
+    //                if (data.indexOf("[html]") >= 0) {
+    //                    data = data.split("&lt;cbr&gt;").join("<br/>");
+    //                    data = data.split("&lt;br&gt;").join("<br/>");
+    //                    data = data.split("&lt;p&gt;").join("");
+    //                    data = data.split("&lt;br/&gt;").join("<br/>");
+    //                    data = data.split("&lt;b&gt;").join("");
+    //                    data = data.split("&lt;/b&gt;").join("");
+    //                    data = data.split("&lt;/p&gt;").join("");
+    //                    data = data.split("&lt;span&gt;").join("");
+    //                    data = data.split("&lt;/span&gt;").join("");
+    //                    data = data.split("&lt;u&gt;").join("");
+    //                    data = data.split("&lt;/u&gt;").join("");
+    //                    data = data.split("&lt;i&gt;").join("");
+    //                    data = data.split("&lt;/i&gt;").join("");
+    //                    data = data.split("&lt;sub&gt;").join("<sub>");
+    //                    data = data.split("&lt;/sub&gt;").join("</sub>");
+    //                    data = data.split("&lt;sup&gt;").join("<sup>");
+    //                    data = data.split("&lt;/sup&gt;").join("</sup>");
+    //                    data = data.split("[html]").join("");
+    //                }
+    //                return data
+    //            }
+    //        },
+    //        null
+    //    ],
+    //    columnDefs: [
+    //        { targets: 0, width: "2%" },
+    //        { targets: 1, width: "68%" },
+    //        { targets: 2, width: "20%" },
+    //        { targets: 3, width: "10%" }
+    //    ]
+    //});
+    }
+    
 
     table1.on('page.dt', function () {
         $('html, body').animate({
@@ -409,3 +713,26 @@ $(document).ready(function () {
     customs_display_duplicate();
     table_on_top();
 });
+function changeHtml(data) {
+    if (data.indexOf("[html]") >= 0) {
+        data = data.split("&lt;cbr&gt;").join("<br/>");
+        data = data.split("&lt;br&gt;").join("<br/>");
+        data = data.split("&lt;p&gt;").join("");
+        data = data.split("&lt;br/&gt;").join("<br/>");
+        data = data.split("&lt;b&gt;").join("");
+        data = data.split("&lt;/b&gt;").join("");
+        data = data.split("&lt;/p&gt;").join("");
+        data = data.split("&lt;span&gt;").join("");
+        data = data.split("&lt;/span&gt;").join("");
+        data = data.split("&lt;u&gt;").join("");
+        data = data.split("&lt;/u&gt;").join("");
+        data = data.split("&lt;i&gt;").join("");
+        data = data.split("&lt;/i&gt;").join("");
+        data = data.split("&lt;sub&gt;").join("<sub>");
+        data = data.split("&lt;/sub&gt;").join("</sub>");
+        data = data.split("&lt;sup&gt;").join("<sup>");
+        data = data.split("&lt;/sup&gt;").join("</sup>");
+        data = data.split("[html]").join("");
+    }
+    return data;
+}

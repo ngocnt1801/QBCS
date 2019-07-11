@@ -7,8 +7,8 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-@if (Model != null && Model.Count() > 0)
-{
+@*@if (Model != null && Model.Count() > 0)
+{*@
     <div class="card shadow mb-4" id="testhere">
 
         <div class="card-body text-custom">
@@ -19,27 +19,22 @@
                         <tr>
                             <th>No.</th>
                             <th>Question</th>
-                            @if (Model.FirstOrDefault().Status == StatusEnum.Delete
-                                || Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
-                                || Model.FirstOrDefault().Status == StatusEnum.Editable)
+                            @if (ViewData["tableId"].Equals("tableEditable1") || ViewData["tableId"].Equals("tableEditable2"))
                             {
                                 <th>Duplicated With</th>
                             }
-                            @if (Model.FirstOrDefault().Status == StatusEnum.Invalid)
+                            @if (ViewData["tableId"].Equals("tableInvalid"))
                             {
                                 <th>Error</th>
                             }
-                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
-                                || Model.FirstOrDefault().Status == StatusEnum.Editable
-                                || Model.FirstOrDefault().Status == StatusEnum.Delete
-                                || Model.FirstOrDefault().Status == StatusEnum.Invalid)
+                            @if (!ViewData["tableId"].Equals("tableSuccess"))
                             {
                                 <th>Action</th>
                             }
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @*@foreach (var item in Model)
                         {
                             var borderLeft = "";
                             var action = "";
@@ -140,17 +135,17 @@
                                     </td>
                                 }
                             </tr>
-                        }
+                        }*@
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-}
+@*}
 else
 {
     <p class="text-custom">No record found here! PLease check again.</p>
-}
+}*@
 
 
