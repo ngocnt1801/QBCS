@@ -160,14 +160,19 @@ namespace QBCS.Web.Attributes
                             {
                                 targetId = item;
                                 oldQuestionModel = questionService.GetQuestionById((int)targetId);
+                                if (oldQuestionModel.CategoryId != 0)
+                                {
+                                    oldQuestionModel.Category = categoryService.GetCategoryById(oldQuestionModel.CategoryId).Name;
+                                }
+                                oldQuestionModel.Category = oldQuestionModel.CategoryId != 0 ? oldQuestionModel.Category : "[None of Category]";
                                 newQuestionModel.LearningOutcomeId = learningOutComeId;
                                 newQuestionModel.LevelId = levelId;
                                 if (categoryId != 0)
                                 {
-                                    categoryView = categoryService.GetCategoryById(categoryId);
+                                    newQuestionModel.Category = categoryService.GetCategoryById(categoryId).Name;
                                    
                                 }
-                                newQuestionModel.Category = categoryId != 0 ? categoryView.Name : "[None of Category]";
+                                newQuestionModel.Category = categoryId != 0 ? newQuestionModel.Category : "[None of Category]";
                                 //newQuestionModel.CourseId = oldQuestionModel.CourseId;
 
                                 courseView = courseService.GetCourseById(oldQuestionModel.CourseId);

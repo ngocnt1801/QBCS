@@ -279,8 +279,11 @@
                             scrollTop: $(".dataTables_wrapper").offset().top
                         }, 'slow');
                     });
-                    $('#spinner').css("display", "none");
-                    $('#pleaseWaitDialog').modal('hide');
+                    setTimeout(function () {
+                        $('#spinner').css("display", "none");
+                        $('#pleaseWaitDialog').modal('hide');
+                    }, 500);
+                    
                 }
             });
         },
