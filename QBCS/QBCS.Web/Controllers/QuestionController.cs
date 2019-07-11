@@ -119,6 +119,19 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
         }
 
+        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        {
+            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
+            //var question = new QuestionViewModel()
+            //{
+            //    Id
+            //}
+            // bool optionResult = optionService.UpdateOptions(ques.Options);
+            TempData["Modal"] = "#success-modal";
+            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
+        }
+
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
@@ -151,7 +164,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, "");
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))
             //{
@@ -238,11 +251,18 @@ namespace QBCS.Web.Controllers
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+        public ActionResult EditQuestionWithTextbox()
+        {
+            QuestionViewModel qvm = questionService.GetQuestionById(4);
+            return PartialView("EditQuestionWithTextbox", qvm);
+        }
     }
 
     public class Textarea
     {
         public string Table { get; set; }
         public int CourseId { get; set; }
+        public string OwnerName { get; set; }
+        public string Prefix { get; set; }
     }
 }

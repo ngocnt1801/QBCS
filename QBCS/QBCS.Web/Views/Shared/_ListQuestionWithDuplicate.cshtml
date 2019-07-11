@@ -5,6 +5,7 @@
     ViewBag.Title = "ListQuestion";
     int counter = 0;
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+
 }
 
 @if (Model != null && Model.Count() > 0)
@@ -62,28 +63,47 @@
                                 }
                                 <td class="@borderLeft">@counter</td>
                                 <td>
-                                    <p class="text-custom">Category: @item.Category <br/>
-                                    Question Code: @item.Code</p>
+                                    <p class="text-custom">
+                                        Category: @item.Category <br />
+                                        Question Code: @item.Code
+                                    </p>
                                     @item.QuestionContent <br />
                                     @if (item.Image != null)
                                     {
-                                                          <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
+                                        <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
-                                        if (item.Options[i].IsCorrect == true)
+                                        var invalid = false;
+                                        for (var j = 0; j < item.Options.Count; j++)
                                         {
-                                            <div class="container-fluid text-right-answer">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
+                                            if (i != j && item.Options[i].OptionContent.Equals(item.Options[j].OptionContent))
+                                            {
+                                                <div class="container-fluid">
+                                                    <mark>
+                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                    </mark>
+                                                    
+                                                </div>
+                                                invalid = true;
+                                                break;
+                                            }
                                         }
-                                        else
+                                        if (!invalid)
                                         {
-                                            <div class="container-fluid">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
+                                            if (item.Options[i].IsCorrect == true)
+                                            {
+                                                <div class="container-fluid text-right-answer">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="container-fluid">
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                </div>
+                                            }
                                         }
-
                                         <br />
                                     }
                                 </td>
@@ -91,35 +111,35 @@
                                     || item.Status == StatusEnum.DeleteOrSkip
                                     || item.Status == StatusEnum.Editable)
                                 {
-                                <td>
-                                    @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
-                                    {
-                                        <p> </p>
-                                        <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
-                                        @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
-                                        if (item.Image != null)
+                                    <td>
+                                        @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
                                         {
-                                        <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
-                                        }
-                                        for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
-                                        {
-                                            if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                            <p> </p>
+                                            <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                            @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
+                                            if (item.Image != null)
                                             {
-                                                <div class="container-fluid text-right-answer">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                </div>
+                                                <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
                                             }
-                                            else
+                                            for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
                                             {
-                                                <div class="container-fluid">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
-                                                </div>
-                                            }
+                                                if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                                {
+                                                    <div class="container-fluid text-right-answer">
+                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="container-fluid">
+                                                        @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                    </div>
+                                                }
 
-                                            <br />
+                                                <br />
+                                            }
                                         }
-                                    }
-                                </td>
+                                    </td>
                                 }
                                 @if (item.Status == StatusEnum.Invalid)
                                 {
