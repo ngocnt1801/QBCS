@@ -55,13 +55,18 @@
                                     @if (item.Action.Equals("Save") || item.Action.Equals("Cancel"))
                                     {
                                         @item.Action <text> Import </text>@item.TargetId<text>st</text>
-                                    }@if (item.Action.Equals("Import"))
+                                    }
+                                    else if (item.Action.Equals("Import"))
                                     {
                                         @item.Action <text> </text>@item.TargetId<text>st</text>
                                     }
-                                    @if (item.Action.Equals("Update"))
+                                    else if (item.Action.Equals("Update") || item.Action.Equals("Move"))
                                     {
                                         @item.Message
+                                    }
+                                    else
+                                    {
+                                        @item.Message @(item.TargetId.HasValue && item.TargetId.Value != 0 ? " " + item.TargetId.ToString() + "st" : "")
                                     }
 
                                 </td>

@@ -151,21 +151,21 @@ function customs_text() {
     $('#btnUpdate').click(function (e) {
         var content;
         var option;
-        content = $('.question-custom').html();
+        content = $('.question-custom').get(0).outerText;
         //option = $('.option-customs').html();
         //var input;
         //input = $('#hidden-question-content').html();
-        content = content.split("\t").join("");
-        content = content.split("\n").join("");
-        content = content.replace(/(\r\n|\n|\r|\t)/gm, "");
-        content = content.replace(/\s+/g, " ");
+        //content = content.split("\t").join("");
+        //content = content.split("\n").join("");
+        //content = content.replace(/(\r\n|\n|\r|\t)/gm, "");
+        //content = content.replace(/\s+/g, " ");
         $('#hidden-question-content').val("[html]" + content);
         $.each($(".option-customs"), function () {
-            option = $(this).html();
-            option = option.split("\t").join("");
-            option = option.split("\n").join("");
-            option = option.replace(/(\r\n|\n|\r|\t)/gm, "");
-            option = option.replace(/\s+/g, " ");
+            option = $(this).get(0).innerText;
+            //option = option.split("\t").join("");
+            //option = option.split("\n").join("");
+            //option = option.replace(/(\r\n|\n|\r|\t)/gm, "");
+            //option = option.replace(/\s+/g, " ");
             $(this).html(option);
             $('.hidden-option').val(option);
         });

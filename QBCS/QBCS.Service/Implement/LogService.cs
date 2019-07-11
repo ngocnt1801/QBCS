@@ -52,7 +52,7 @@ namespace QBCS.Service.Implement
                     Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
                     UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
                     Action = l.Action,
-                    Message = (l.Action + " " + l.TargetName).ToLowerInvariant(),
+                    Message = (l.Action + " " + l.TargetName),
                     LogDate = l.Date.Value
 
                 });
@@ -212,7 +212,8 @@ namespace QBCS.Service.Implement
                 string tempId = "";
                 if (item.NewValue != null && (item.Action == "Update" || item.Action == "Import"))
                 {
-                    tempId = JsonConvert.DeserializeObject<Question>(item.NewValue).QuestionCode;
+                    var temp = JsonConvert.DeserializeObject<QuestionViewModel>(item.NewValue);
+                    tempId = temp.QuestionCode;
                 }
 
                 LogViewModel logViewModel = new LogViewModel()
