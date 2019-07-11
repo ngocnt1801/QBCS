@@ -13,8 +13,9 @@
 
                 },
                 success: function (data) {
+                    var result = [];
                     if (data == null || data == "") {
-                        var result = ["Not found"];
+                        result = ["Not found"];
                         return response(result);
                     }
                     for (var i = 0; i < data.length; i++) {
@@ -23,7 +24,7 @@
                         Obj['value'] = data[i].Id;
                         result.push(Obj);
                     }
-                    return response(data);
+                    return response(result);
                 }
             });
         },
