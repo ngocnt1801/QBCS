@@ -1,9 +1,14 @@
 ﻿
 function isNotEmpty() {
+    var check = true;
     var question = $('.question-custom').html();
     if (question == "") {
-        alert("Question is null");
+        swal('Question is null');
+        check = false;
     }
+    //if (check) {
+    //    $('.form-group').submit();
+    //}
 }
 
 $(document).ready(function () {
@@ -22,5 +27,16 @@ $(document).ready(function () {
     //    }
     //    e.preventDefault();
     //});
-    isNotEmpty();
+    //$('#btnUpdate').on('click', function () {
+    //    var check = true;
+    //    var question = $('.question-custom').val();
+    //    if (question == "") {
+    //        swal('Question is null');
+    //        check = false;
+    //    }
+    //    if (check) {
+    //        $('.form-group').submit();
+    //    }
+    //});
+    //isNotEmpty();
 });

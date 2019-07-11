@@ -28,3 +28,9 @@
 .highlight {
     background-color: #B4D5FF
 }
+
+.error-block ul {
+    list-style-type: none;
+    margin: 0; 
+    padding: 0;
+}

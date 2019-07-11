@@ -113,10 +113,38 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
-            bool result = questionService.UpdateQuestion(ques);
-            // bool optionResult = optionService.UpdateOptions(ques.Options);
-            TempData["Modal"] = "#success-modal";
-            return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
+            if (ModelState.IsValid && !ques.QuestionContent.Trim().Equals("[html]"))
+            {
+                bool result = questionService.UpdateQuestion(ques);
+                // bool optionResult = optionService.UpdateOptions(ques.Options);
+                TempData["Modal"] = "#success-modal";
+                return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            }
+
+            else
+            {
+                foreach (var item in ques.Options)
+                {
+                    if (item.OptionContent.Trim().Equals("[html]"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Please enter Option Content");
+                    }
+                }
+                
+                //ModelState.AddModelError(string.Empty, "Question Content is required");
+                //ModelState.AddModelError(string.Empty, "Option Content is required");
+                List<LevelViewModel> levels = levelService.GetLevel();
+                List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(ques.CourseId);
+                questionDetailViewModel = new QuestionDetailViewModel()
+                {
+                    Question = ques,
+                    Levels = levels,
+                    LearningOutcomes = learningOutcomes
+                };
+
+            }
+            return View("EditQuestion", questionDetailViewModel);
         }
 
         //lecturer
