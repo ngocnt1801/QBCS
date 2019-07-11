@@ -115,7 +115,7 @@ namespace QBCS.Web.Controllers
         {
             bool result = questionService.UpdateQuestion(ques);
             // bool optionResult = optionService.UpdateOptions(ques.Options);
-            TempData["Modal"] = "#success-modal";
+            ViewBag.Modal = "#success-modal";
             return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
         }
 
@@ -134,7 +134,7 @@ namespace QBCS.Web.Controllers
             }
 
             //notify 
-            TempData["Modal"] = "#success-modal";
+            ViewBag.Modal = "#success-modal";
             TempData["CourseId"] = courseId;
             TempData["OwnereName"] = ownerName;
 

@@ -258,7 +258,7 @@
     @Scripts.Render("~/bundle/scripts/spinner")
     @Scripts.Render("~/bundle/scripts/editquestion")
     @Scripts.Render("~/bundle/scripts/autocompleteLecturer")
-    
+
     @Scripts.Render("~/bundle/scripts/tagsinputrule")
     @Scripts.Render("~/bundle/scripts/img-zoom")
     @RenderSection("scripts", required: false)
@@ -286,7 +286,7 @@
             }
         }
 
-        var modal = TempData["Modal"];
+        var modal = ViewBag.Modal;
         if (modal != null)
         {
             <script>$("@modal").modal('show')</script>
