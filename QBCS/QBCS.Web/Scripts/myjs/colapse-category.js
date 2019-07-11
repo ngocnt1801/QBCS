@@ -13,9 +13,17 @@
         init: function () {
             this.categoryItem = $(".show-category .list-group-item");
             this.categoryItem.on("click", function () {
-                $(".show-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+                //$(".show-category .fa", this)
+                //    .toggleClass("fa-plus-circle")
+                //    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".show-category .list-group-item").removeClass("active");
                 this.className += " active";
@@ -26,9 +34,14 @@
 
             this.modelCategoryItem = $(".modal-category .list-group-item");
             this.modelCategoryItem.on("click", function () {
-                $(".modal-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".modal-category .list-group-item").removeClass("active");
                 this.className += " active";
