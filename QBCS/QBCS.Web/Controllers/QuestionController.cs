@@ -151,7 +151,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId);
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, "");
             }
             //if (table != null && !table.Equals(""))
             //{

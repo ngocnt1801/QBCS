@@ -33,6 +33,14 @@ function customs_display() {
             content = content.split("&lt;span&gt;").join("");
             content = content.split("&lt;/span&gt;").join("");
             content = content.split("&lt;/span&gt;").join("");
+            content = content.split("&lt;u&gt;").join("");
+            content = content.split("&lt;/u&gt;").join("");
+            content = content.split("&lt;i&gt;").join("");
+            content = content.split("&lt;/i&gt;").join("");
+            content = content.split("&lt;sub&gt;").join("<sub>");
+            content = content.split("&lt;/sub&gt;").join("</sub>");
+            content = content.split("&lt;sup&gt;").join("<sup>");
+            content = content.split("&lt;/sup&gt;").join("</sup>");
             content = content.split("[html]").join("");
         }
         $(this).html(content);
@@ -52,6 +60,14 @@ function customs_display_duplicate() {
         content = content.split("&lt;span&gt;").join("");
         content = content.split("&lt;/span&gt;").join("");
         content = content.split("&lt;/span&gt;").join("");
+        content = content.split("&lt;u&gt;").join("");
+        content = content.split("&lt;/u&gt;").join("");
+        content = content.split("&lt;i&gt;").join("");
+        content = content.split("&lt;/i&gt;").join("");
+        content = content.split("&lt;sub&gt;").join("<sub>");
+        content = content.split("&lt;/sub&gt;").join("</sub>");
+        content = content.split("&lt;sup&gt;").join("<sup>");
+        content = content.split("&lt;/sup&gt;").join("</sup>");
         content = content.split("[html]").join("");
     }
     $('#customs-display-duplicate').html(content);
@@ -74,6 +90,14 @@ function split() {
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }       
                     return data
@@ -91,6 +115,14 @@ function split() {
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }               
                     return data
@@ -120,6 +152,14 @@ function split() {
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
                    
@@ -138,6 +178,14 @@ function split() {
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
                     
@@ -161,6 +209,14 @@ function split() {
                         data = data.split("&lt;/b&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
                     
@@ -188,6 +244,14 @@ function split() {
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
 
@@ -206,6 +270,14 @@ function split() {
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
                     return data
@@ -219,6 +291,30 @@ function split() {
             { targets: 2, width: "20%" },
             { targets: 3, width: "10%" }
         ]
+    });
+
+    table1.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table2.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table3.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table4.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
     });
 
     var tableCustoms = $('#table-customs').DataTable({
@@ -235,6 +331,14 @@ function split() {
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
 
@@ -253,6 +357,14 @@ function split() {
                         data = data.split("&lt;/p&gt;").join("");
                         data = data.split("&lt;span&gt;").join("");
                         data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;u&gt;").join("");
+                        data = data.split("&lt;/u&gt;").join("");
+                        data = data.split("&lt;i&gt;").join("");
+                        data = data.split("&lt;/i&gt;").join("");
+                        data = data.split("&lt;sub&gt;").join("<sub>");
+                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                        data = data.split("&lt;sup&gt;").join("<sup>");
+                        data = data.split("&lt;/sup&gt;").join("</sup>");
                         data = data.split("[html]").join("");
                     }
                     return data
@@ -264,6 +376,11 @@ function split() {
             { targets: 1, width: "50%" },
         ]
     });
+    tableCustoms.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
 }
 
 function toggleTableDuplicate() {
@@ -273,6 +390,14 @@ function toggleTableDuplicate() {
     });
 }
 
+function table_on_top() {
+    var table = $('#dataTable')
+    table.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+}
 function spinner_loading() {
 
 }
@@ -282,5 +407,5 @@ $(document).ready(function () {
     toggleTableDuplicate();
     customs_display();
     customs_display_duplicate();
-   
+    table_on_top();
 });

@@ -6,6 +6,7 @@ using QBCS.Service.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using QBCS.Service.Utilities;
 
 namespace QBCS.Service.Implement
 {
@@ -65,8 +66,10 @@ namespace QBCS.Service.Implement
             foreach (var category in categories)
             {
                 #region get learning outcome
+                var listString = new List<string>();
+                var categoryLOs = new List<LearningOutcomeViewModel>();
                 var categoryQuestions = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId && q.CategoryId == category.Id && !(q.IsDisable.HasValue && q.IsDisable.Value));
-                
+
                 category.QuestionCount = categoryQuestions.Count();
 
                 category.LearningOutcomes = categoryQuestions.Select(q => new LearningOutcomeViewModel
@@ -77,11 +80,31 @@ namespace QBCS.Service.Implement
                 .Distinct()
                 .OrderBy(lo => lo.Name)
                 .ToList();
+                foreach (var lo in category.LearningOutcomes)
+                {
+                    if (!listString.Contains(lo.Name))
+                    {
+                        listString.Add(lo.Name);
+                    }   
+                }
+                using(NaturalSort comparer = new NaturalSort())
+                {
+                    listString.Sort(comparer);
+                }
+                foreach(string str in listString)
+                {
+                    var listLO = category.LearningOutcomes.Where(lo => lo.Name == str).ToList().OrderBy(lo => lo.Name);
+                    foreach(var lo in listLO)
+                    {
+                        categoryLOs.Add(lo);
+                    }
+                }
+                category.LearningOutcomes = categoryLOs;
                 #endregion
                 foreach (var lo in category.LearningOutcomes)
                 {
                     #region get level
-                    var loQuestion = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId 
+                    var loQuestion = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId
                                                                                             && q.CategoryId == category.Id
                                                                                             && q.LearningOutcomeId == lo.Id
                                                                                             && !(q.IsDisable.HasValue && q.IsDisable.Value));

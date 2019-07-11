@@ -35,7 +35,7 @@
                                 @Html.DisplayFor(modeItem => item.QuestionContent)
                                 @if (item.Image != null)
                                 {
-                                <p><img class="exam-image" src="data:image/png;base64, @item.Image" /></p>
+                                <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
                                 }
                                 @for (var i = 0; i < item.Options.Count; i++)
                                 {

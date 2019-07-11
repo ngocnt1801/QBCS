@@ -33,8 +33,8 @@
 
                 <br />
             }
-            <input type="submit" name="Save" class="btn btn-primary float-right" />
-            <a class="btn btn-default float-right" href="@Url.Action("GetQuestionByQuestionId",
+            <input type="submit" name="Save" class="btn btn-primary float-right btn-spinner" />
+            <a class="btn btn-default float-right btn-spinner" href="@Url.Action("GetQuestionByQuestionId",
                       "Question",new { questionId  = Model.Id})">Cancel</a>
         </div>
     </div>
@@ -49,7 +49,7 @@
         @Html.DisplayFor(modeItem => Model.QuestionContent)
         @if (Model.Image != null)
         {
-        <p><img class="exam-image" src="data:image/png;base64, @Model.Image" /></p>
+        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Image" /></p>
         }
         @for (var i = 0; i < Model.Options.Count; i++)
         {

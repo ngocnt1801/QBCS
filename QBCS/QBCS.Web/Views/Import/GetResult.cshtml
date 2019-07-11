@@ -11,7 +11,7 @@
 @{
 
     int total = Model.Questions.Count;
-    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.DeleteOrSkip || q.Status == StatusEnum.Delete).Count();
+    int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
     //int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
     int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
     int invalid = Model.Questions.Where(q => q.Status == StatusEnum.Invalid).Count();
@@ -21,7 +21,6 @@
             <nav>
                 <ul>
                     <li><a href="#section-topline-1"><span>Editable (@editable/@total)</span></a></li>
-                    @*<li><a href="#section-topline-2"><span>Delete (@delete/@total)</span></a></li>*@
                     <li><a href="#section-topline-3"><span>Sucess (@success/@total)</span></a></li>
                     <li><a href="#section-topline-4"><span>Invalid (@invalid/@total)</span></a></li>
                 </ul>
@@ -29,26 +28,48 @@
             <div class="content-wrap">
                 <section id="section-topline-1">
                     @{
-                        var editList = Model.Questions.Where(q => q.Status == StatusEnum.Editable
-                                                            || q.Status == StatusEnum.DeleteOrSkip
-                                                            || q.Status == StatusEnum.Delete);
+                        var editList = Model.Questions.Where(q => q.Status == StatusEnum.Editable);
+
+                        var importFile = "active toggle-table";
+                        var bank = "toggle-table";
+                        var importFileHidden = "";
+                        var bankHidden = "hidden";
+
+                        if (editList.Where(q => q.IsInImportFile).Count() > 0)
+                        {
+                            if (editList.Where(q => !q.IsInImportFile).Count() == 0)
+                            {
+                                bank = "disabled";
+                            }
+                        }
+                        else
+                        {
+                            if (editList.Where(q => !q.IsInImportFile).Count() > 0)
+                            {
+                                bank = "active toggle-table";
+                                importFile = "disabled";
+                                bankHidden = "";
+                                importFileHidden = "hidden";
+                            }
+                        }
+
                     }
                     <div class="mb-4">
                         <span class="text-custom align-middle mr-4">Duplicated with:</span>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-outline-dark active toggle-table" data-toggle="#importfile-duplicate">
+                            <label class="btn btn-outline-dark @importFile" data-toggle="#importfile-duplicate">
                                 <input type="radio" name="options" autocomplete="off" checked> Import file
                             </label>
-                            <label class="btn btn-outline-dark toggle-table" data-toggle="#bank-duplicate">
+                            <label class="btn btn-outline-dark @bank" data-toggle="#bank-duplicate">
                                 <input type="radio" name="options" autocomplete="off"> Bank
                             </label>
                         </div>
                     </div>
 
-                    <div class="table-toggle" id="importfile-duplicate">
+                    <div class="@importFileHidden table-toggle" id="importfile-duplicate">
                         @Html.Partial("_ListQuestionWithDuplicate", editList.Where(q => q.IsInImportFile).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, { "importId", Model.Id } })
                     </div>
-                    <div class="hidden table-toggle" id="bank-duplicate">
+                    <div class="@bankHidden table-toggle" id="bank-duplicate">
                         @Html.Partial("_ListQuestionWithDuplicate", editList.Where(q => !q.IsInImportFile).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, { "importId", Model.Id } })
                     </div>
                 </section>
@@ -101,8 +122,8 @@
                     <p>All your question in this import will be removed</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="cancel-import-btn" data-id="@Model.Id">OK</button>
+                    <button type="button" class="btn btn-default btn-spinner" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-spinner" id="cancel-import-btn" data-id="@Model.Id">OK</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

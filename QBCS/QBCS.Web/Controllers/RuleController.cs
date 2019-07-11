@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class RuleController : Controller
     {
         // GET: Rule

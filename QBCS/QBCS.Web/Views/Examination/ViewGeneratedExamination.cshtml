@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Generate Exam";
     var counter = 0;
+    var no = 0;
 }
 
 @using (Html.BeginForm("BackToGenerate", "Examination", FormMethod.Post))
@@ -15,7 +16,9 @@
         <ul>
             @foreach (var exam in Model)
             {
-                <li><a href="#generate-exam-@exam.Id"><span>@exam.ExamCode</span></a></li>
+                no++;
+
+                <li><a href="#generate-exam-@exam.Id"><span>Exam @no</span></a></li>
             }
         </ul>
     </nav>
@@ -59,7 +62,7 @@
                                                         <p>@question.QuestionContent</p>
                                                         @if (question.Image != null)
                                                         {
-                                                        <p><img class="exam-image" src="data:image/png;base64, @question.Image" /></p>
+                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
                                                         }
                                                         @{int charater = 0; }
                                                         @foreach (var option in question.Options)
@@ -73,7 +76,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" src="data:image/png;base64, @option.Image" /></p>
+                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -85,7 +88,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" src="data:image/png;base64, @option.Image" /></p>
+                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }

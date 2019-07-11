@@ -1,6 +1,7 @@
 ﻿using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
+using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class LearningOutcomeController : Controller
     {
         private ILearningOutcomeService learningOutcomeService;
@@ -61,6 +63,11 @@ namespace QBCS.Web.Controllers
         public JsonResult LoadCourse()
         {
             var result = courseService.GetAllCourses();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult LoadCourseLive(string term)
+        {
+            var result = courseService.GetCoursesVMByNameAndCode(term);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult UpdateDisable(int itemId)

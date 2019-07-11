@@ -5,7 +5,8 @@
             categoryId: 0,
             learningoutcomeId: 0,
             levelId: 0
-        }
+        },
+        isMoveQuestion: false
     };
 
     categoryView = {
@@ -42,6 +43,8 @@
             this.moveBtn = $("#move-btn");
             this.moveBtn.on("click", function () {
                 categoryView.addCheckbox();
+                categoryOctopus.setMoveQuestion(true);
+
             });
 
             this.moveBtnGroup = $("#move-btn-group");
@@ -52,6 +55,9 @@
             });
 
             this.initTable();
+
+            
+            
         },
         downCount: function (spanCount) {
             var currentCount = spanCount.attr("data-count");
@@ -94,15 +100,16 @@
             this.cancelMove = $("#cancel-move");
             this.cancelMove.on("click", function () {
                 categoryView.removeButtonGroup();
+                categoryOctopus.setMoveQuestion(false)
             });
 
             this.moveBtn = $("#move-btn");
             this.moveBtn.on("click", function () {
                 categoryView.modal = $("#modal");
                 categoryView.modal.modal("show");
-                categoryView.listChecked = $(".checkbox[id!='select-all']:checked");
-                categoryOctopus.addListSelectedQuestion();
-
+                //categoryView.listChecked = $(".checkbox[id!='select-all']:checked");
+                //categoryOctopus.addListSelectedQuestion();
+                categoryView.renderListQuestionSelected();
                 categoryView.modal.off("hidden.bs.modal");
                 categoryView.modal.on("hidden.bs.modal", function () {
                     categoryView.resetCheckList();
@@ -119,13 +126,15 @@
             this.moveBtn = $("#move-btn");
             this.moveBtn.on("click", function () {
                 categoryView.addCheckbox();
+                categoryOctopus.setMoveQuestion(true);
             });
         },
         toggleAll: function () {
             var selectAllChk = $("#select-all")[0];
-            $.each($(".checkbox"), function (index, item) {
-                item.checked = selectAllChk.checked;
-            });
+            $(".checkbox[id!='select-all']").trigger('click');
+            //$.each($(".checkbox"), function (index, item) {
+            //    item.checked = selectAllChk.checked;
+            //});
         },
         renderListQuestionSelected: function () {
             var questionCotainer = $("#selected-questions");
@@ -135,7 +144,7 @@
                 questionCotainer.append(
                     "<tr>" +
                     "<td>" +
-                    index +
+                    (index + 1) +
                     "</td>" +
                     "<td>" +
                     item.code +
@@ -182,6 +191,18 @@
                     null
                 ]
             });
+        },
+        setOnClickCkb: function () {
+            $(".checkbox[id!='select-all']").off('change');
+            $(".checkbox[id!='select-all']").on('change', function () {
+
+                if (this.checked) {
+                    categoryOctopus.addSelectedQuestion(this.attributes["data-code"].value, this.attributes["data-id"].value);
+                } else {
+                    categoryOctopus.deleteSelectedQuestion(this.attributes["data-code"].value, this.attributes["data-id"].value);
+                }
+
+            });
         }
     };
 
@@ -199,12 +220,16 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $('#pleaseWaitDialog').modal();
             $.ajax({
                 url: url,
                 type: "GET",
                 success: function (response) {
                     categoryView.questionListContainter.html(response);
-                    $("#dataTable").dataTable({
+                    
+                  var table = $("#dataTable").dataTable({
                         ordering: false,
                         columnDefs: [
                             { targets: 0, width: "5%" },
@@ -232,13 +257,33 @@
                                 }
                             },
                             null,
-                            null
+                            null,
                         ]
                     });
+                    $('#dataTable').on('draw.dt', function () {
+                        if (categoryModel.isMoveQuestion) {
+                            $.each($(".checkbox"), function (index, item) {
+                                $(item).removeClass("hidden");
+                            });
+                        } else {
+                            $.each($(".checkbox"), function (index, item) {
+                                $(item).addClass( "hidden");
+                            });
+                        }
+                        categoryView.setOnClickCkb();
+                    });
+                    categoryView.setOnClickCkb();
                     categoryView.setOnClickDisableBtn();
-                    $("spinner")
-                        .removeAttr("style")
-                        .hide();
+                    table.on('page.dt', function () {
+                        $('html, body').animate({
+                            scrollTop: $(".dataTables_wrapper").offset().top
+                        }, 'slow');
+                    });
+                    setTimeout(function () {
+                        $('#spinner').css("display", "none");
+                        $('#pleaseWaitDialog').modal('hide');
+                    }, 500);
+                    
                 }
             });
         },
@@ -255,7 +300,14 @@
             categoryModel.listQuestionSelected = [];
         },
         addSelectedQuestion: function (code, id) {
-            categoryModel.listQuestionSelected.push({ code: code, id: id });
+            var index = categoryModel.listQuestionSelected.findIndex(l => l.id === id);
+            if (index < 0) {
+                categoryModel.listQuestionSelected.push({ code: code, id: id });
+            }
+        },
+        deleteSelectedQuestion: function (code, id) {
+            var index = categoryModel.listQuestionSelected.findIndex(l => l.id === id);
+            removeQuestionSelected(index);
         },
         addListSelectedQuestion: function () {
             var listSelected = categoryView.listChecked;
@@ -297,6 +349,12 @@
             categoryModel.categorySelected.categoryId = categoryId;
             categoryModel.categorySelected.learningoutcomeId = loId;
             categoryModel.categorySelected.levelId = levelId;
+        },
+        isMoveQuestion: function () {
+            return categoryModel.isMoveQuestion;
+        },
+        setMoveQuestion: function (value) {
+            categoryModel.isMoveQuestion = value;
         }
     };
 

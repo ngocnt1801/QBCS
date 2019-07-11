@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QBCS.Service.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace QBCS.Service.ViewModel
         public string Fullname { get; set; }
         public string UserCode { get; set; }
         public string OwnerName { get; set; }
+        public string CourseCode { get; set; }
+        public int Status { get; set; }
 
         public QuestionViewModel QuestionNew { get; set; }
         public QuestionViewModel QuestionOld { get; set; }
