@@ -18,6 +18,7 @@ using System.Web.Mvc;
 namespace QBCS.Web.Controllers
 {
 
+    [CheckSession]
     public class ExaminationController : Controller
     {
         private ITopicService topicService;
@@ -109,6 +110,14 @@ namespace QBCS.Web.Controllers
             var listQuestion = examinationService.GetExaminationHistoryQuestionsInCourse(courseId);
             TempData["active"] = "Course";
             return View(listQuestion);
+        }
+
+        //[Feature(FeatureType.Page, "Back To Generate Exam View", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult BackToGenerate(int courseId, string groupExam)
+        {
+            TempData["active"] = "Examination";
+            examinationService.ResetPriorityAndFrequency(groupExam);
+            return RedirectToAction("GenerateExam", "Examination",  new { courseId = courseId });
         }
 
     }

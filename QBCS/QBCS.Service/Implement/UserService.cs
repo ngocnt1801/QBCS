@@ -103,22 +103,24 @@ namespace QBCS.Service.Implement
         }
         public bool AddUserCourse(int courseId, int userId)
         {
-            var user = unitOfWork.Repository<User>().GetById(userId);
-            var course = unitOfWork.Repository<Course>().GetById(courseId);
-
-            if (!user.IsDisable.Value && !course.IsDisable.Value)
+            if (!unitOfWork.Repository<CourseOfUser>().GetAll().Any(uc => uc.CourseId == courseId && uc.UserId == userId))
             {
-                var userCourse = new CourseOfUser
+                var user = unitOfWork.Repository<User>().GetById(userId);
+                var course = unitOfWork.Repository<Course>().GetById(courseId);
+
+                if (!user.IsDisable.Value && !course.IsDisable.Value)
                 {
-                    UserId = userId,
-                    CourseId = courseId
-                };
+                    var userCourse = new CourseOfUser
+                    {
+                        UserId = userId,
+                        CourseId = courseId
+                    };
 
-                unitOfWork.Repository<CourseOfUser>().Insert(userCourse);
-                unitOfWork.SaveChanges();
-                return true;
+                    unitOfWork.Repository<CourseOfUser>().Insert(userCourse);
+                    unitOfWork.SaveChanges();
+                    return true;
+                }
             }
-
             return false;
         }
 

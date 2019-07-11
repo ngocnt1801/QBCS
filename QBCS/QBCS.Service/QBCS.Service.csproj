@@ -86,6 +86,7 @@
     <Compile Include="Implement\QuestionService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\RuleService.cs" />
+    <Compile Include="Implement\ScriptService.cs" />
     <Compile Include="Implement\SemesterService.cs" />
     <Compile Include="Implement\TestService.cs" />
     <Compile Include="Implement\TopicService.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Interface\ICourseService.cs" />
     <Compile Include="Interface\IPartOfExamService.cs" />
     <Compile Include="Interface\IQuestionService.cs" />
+    <Compile Include="Interface\IScriptService.cs" />
     <Compile Include="Interface\ISemesterService.cs" />
     <Compile Include="Interface\ITopicService.cs" />
     <Compile Include="Interface\IUserService.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Utilities\ListUtilities.cs" />
     <Compile Include="Utilities\GIFTUtilities.cs" />
     <Compile Include="Utilities\LogUtilities.cs" />
+    <Compile Include="Utilities\NaturalSort.cs" />
     <Compile Include="Utilities\StringProcess.cs" />
     <Compile Include="Utilities\StringSimilarity.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />

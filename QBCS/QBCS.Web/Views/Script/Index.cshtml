@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid ml-5">
+    <div class="row">
+
+        <div class="col-md-10">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Run Script</h6>
+
+                </div>
+                @using (Html.BeginForm("Run", "Script", FormMethod.Post))
+                {
+                    <div class="card-body">
+                        <div class="form-group pb-2">
+                            <select class="form-control text-custom border-dark">
+                                <option selected>Delete All Script</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <h5>SQL Query</h5>
+                            <textarea class="form-control border-dark text-custom" name="raw" value="" rows = "12">
+use QBCS
+delete from OptionInExam
+delete from QuestionInExam
+delete from PartOfExamination
+delete from Examination
+delete from QuestionTemp
+delete from [Option]
+delete from Question
+delete from Import
+delete from LearningOutcome
+delete from Category
+delete from [Log]
+</textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary float-right mb-4" value="Run Scripts" />
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

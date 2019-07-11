@@ -541,13 +541,30 @@ namespace QBCS.Service.Implement
         }
 
         #region validate rule stuff
+        private string Uppercase(string content)
+        {
+            string[] uppercase = { "invalid", "incorrect", "not true" };
+            for(int i = 0; i < uppercase.Length; i++)
+            {
+                var culture = CultureInfo.GetCultureInfo("en-GB");
+                if (culture.CompareInfo.IndexOf(content, uppercase[i], CompareOptions.IgnoreCase) >= 0)
+                {
+                    content = Regex.Replace(content,uppercase[i], uppercase[i].ToUpper(),RegexOptions.IgnoreCase);
+                }
+            }
+            return content;
+        }
         private string TrimOption(string option)
         {
-            option = option.Replace("  ", " ");
-            if (option.Last().ToString().Equals("."))
+            if (option != null && !String.IsNullOrWhiteSpace(option))
             {
-                option.Remove(option.Length - 1);
+                option = option.Replace("  ", " ");
+                if (option.Last().ToString().Equals("."))
+                {
+                    option.Remove(option.Length - 1);
+                }
             }
+            
             //option = option.Replace(",", "");
             return option;
         }
@@ -558,7 +575,8 @@ namespace QBCS.Service.Implement
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
             if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip 
                                         || questionTemp.Status == (int)StatusEnum.Delete
-                                        || questionTemp.Status == (int)StatusEnum.Editable))
+                                        || questionTemp.Status == (int)StatusEnum.Editable
+                                        || questionTemp.Status == (int)StatusEnum.Invalid))
             {
                 questionTemp.Status = status;
                 unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
