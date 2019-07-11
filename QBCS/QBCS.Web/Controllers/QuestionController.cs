@@ -130,6 +130,11 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
+                if (ownerName != null && string.IsNullOrWhiteSpace(ownerName))
+                {
+                    ownerName = user.Fullname;
+                }
+
                 check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
             }
 
