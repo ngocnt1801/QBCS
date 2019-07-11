@@ -73,6 +73,14 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Delete", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
+
+            var user = (UserViewModel)Session["user"];
+            if (user != null && user.Id == userId)
+            {
+                var model = userService.GetUser(user.Code);
+                Session["user"] = model;
+            }
+
             userService.RemoveUserCourse(courseId, userId);
             return RedirectToAction("Details", "User", new { userId = userId });
         }
@@ -83,6 +91,13 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
         public ActionResult AddCourse(int courseId, int userId)
         {
+            var user = (UserViewModel)Session["user"];
+            if (user != null && user.Id == userId)
+            {
+                var model = userService.GetUser(user.Code);
+                Session["user"] = model;
+            }
+
             var result = userService.AddUserCourse(courseId, userId);
             if (result == false)
             {
