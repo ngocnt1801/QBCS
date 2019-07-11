@@ -974,7 +974,10 @@ namespace QBCS.Service.Implement
                 {
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
-                    //Semester = (int)entity.Semester
+                    Semester = new SemesterViewModel
+                    {
+                        Name = entity.Semester.Name,
+                    },
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
                     
