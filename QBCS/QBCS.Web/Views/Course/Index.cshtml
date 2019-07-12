@@ -12,21 +12,25 @@
     <div class="card-body">
         <table class="table table-striped table-bordered text-custom" id="dataTable" cellspacing="0">
             <thead>
-                <tr>
+                <tr class="text-center">
                     <th>Code</th>
                     <th>Name</th>
-                    <th></th>
+                    <th>Total Questions</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr onClick="document.location.href='@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })'">
-                        <td>
+                        <td class="text-center">
                             @Html.DisplayFor(course => item.Code)
                         </td>
                         <td>
                             @Html.DisplayFor(course => item.Name)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(course => item.Total)
                         </td>
                         <td>
                             <a class="btn btn-primary btn-spinner" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>

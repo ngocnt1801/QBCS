@@ -144,12 +144,13 @@ namespace QBCS.Web.Attributes
                 CourseViewModel courseView = new CourseViewModel();
                 LearningOutcomeViewModel learningOutcomeViewModel = new LearningOutcomeViewModel();
                 LevelViewModel levelViewModel = new LevelViewModel();
+                CategoryViewModel categoryView = new CategoryViewModel();
 
                 if (filterContext.ActionParameters.ContainsKey(IdParamName))
                 {
                     ids = filterContext.ActionParameters[IdParamName] as int[];
                     categoryId = filterContext.ActionParameters[CateParamName] != null ? (int)filterContext.ActionParameters[CateParamName] : 0;
-                    learningOutComeId = (int)filterContext.ActionParameters[LocParamName];
+                    learningOutComeId = filterContext.ActionParameters[LocParamName] != null ? (int)filterContext.ActionParameters[LocParamName] : 0;
                     levelId = (int)filterContext.ActionParameters[LevelParamName];
                     if (ids != null)
                     {
@@ -159,17 +160,33 @@ namespace QBCS.Web.Attributes
                             {
                                 targetId = item;
                                 oldQuestionModel = questionService.GetQuestionById((int)targetId);
+                                if (oldQuestionModel.CategoryId != 0)
+                                {
+                                    oldQuestionModel.Category = categoryService.GetCategoryById(oldQuestionModel.CategoryId).Name;
+                                }
+                                oldQuestionModel.Category = oldQuestionModel.CategoryId != 0 ? oldQuestionModel.Category : "[None of Category]";
                                 newQuestionModel.LearningOutcomeId = learningOutComeId;
                                 newQuestionModel.LevelId = levelId;
-                                newQuestionModel.CategoryId = categoryId;
+                                if (categoryId != 0)
+                                {
+                                    newQuestionModel.Category = categoryService.GetCategoryById(categoryId).Name;
+                                   
+                                }
+                                newQuestionModel.Category = categoryId != 0 ? newQuestionModel.Category : "[None of Category]";
                                 //newQuestionModel.CourseId = oldQuestionModel.CourseId;
 
                                 courseView = courseService.GetCourseById(oldQuestionModel.CourseId);
                                 newQuestionModel.CourseName = courseView.Name;
-                                learningOutcomeViewModel = learningOutcomeService.GetLearingOutcomeById(learningOutComeId);
-                                newQuestionModel.LearningOutcomeName = learningOutcomeViewModel.Name;
-                                levelViewModel = levelService.GetLevelById(levelId);
-                                newQuestionModel.LevelName = levelViewModel.Name;
+                                if (learningOutComeId != 0)
+                                {
+                                    learningOutcomeViewModel = learningOutcomeService.GetLearingOutcomeById(learningOutComeId);
+                                }
+                                newQuestionModel.LearningOutcomeName = learningOutComeId != 0 ? learningOutcomeViewModel.Name : "[None of LOC]";
+                                if (levelId != 0)
+                                {
+                                    levelViewModel = levelService.GetLevelById(levelId);
+                                }
+                                newQuestionModel.LevelName = levelId != 0 ? levelViewModel.Name : "[None of level]";
                                 //newQues.CourseName = oldValue.CourseName;
                                 //newQues.LearningOutcomeName = oldValue.LearningOutcomeName;
                                 //newQues.LevelName = oldValue.LevelName;

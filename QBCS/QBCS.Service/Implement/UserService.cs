@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -102,22 +103,24 @@ namespace QBCS.Service.Implement
         }
         public bool AddUserCourse(int courseId, int userId)
         {
-            var user = unitOfWork.Repository<User>().GetById(userId);
-            var course = unitOfWork.Repository<Course>().GetById(courseId);
-
-            if (!user.IsDisable.Value && !course.IsDisable.Value)
+            if (!unitOfWork.Repository<CourseOfUser>().GetAll().Any(uc => uc.CourseId == courseId && uc.UserId == userId))
             {
-                var userCourse = new CourseOfUser
+                var user = unitOfWork.Repository<User>().GetById(userId);
+                var course = unitOfWork.Repository<Course>().GetById(courseId);
+
+                if (!user.IsDisable.Value && !course.IsDisable.Value)
                 {
-                    UserId = userId,
-                    CourseId = courseId
-                };
+                    var userCourse = new CourseOfUser
+                    {
+                        UserId = userId,
+                        CourseId = courseId
+                    };
 
-                unitOfWork.Repository<CourseOfUser>().Insert(userCourse);
-                unitOfWork.SaveChanges();
-                return true;
+                    unitOfWork.Repository<CourseOfUser>().Insert(userCourse);
+                    unitOfWork.SaveChanges();
+                    return true;
+                }
             }
-
             return false;
         }
 
@@ -201,7 +204,8 @@ namespace QBCS.Service.Implement
         }
         public List<UserViewModel> GetUserByNameAndRoleId(string name, int id)
         {
-            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id && u.Fullname.Contains(name)).Select(c => new UserViewModel
+            name = name.ToLower();
+            var list = unitOfWork.Repository<User>().GetAll().Where(u => u.RoleId == id).Select(c => new UserViewModel
             {
                 Id = c.Id,
                 Code = c.Code,
@@ -211,9 +215,18 @@ namespace QBCS.Service.Implement
                 Role = (RoleEnum)c.RoleId,
                 Email = c.Email,
                 IsDisable = c.IsDisable.Value
-            });
-
-            return list.ToList();
+            }).ToList();
+            var result = new List<UserViewModel>();
+            foreach(var u in list)
+            {
+                var fullname = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(u.Fullname).ToLower();
+                var code = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(u.Code).ToLower();
+                if (fullname.Contains(name) || code.Contains(name) || u.Fullname.ToLower().Contains(name) || u.Code.ToLower().Contains(name))
+                {
+                    result.Add(u);
+                }
+            }
+            return result;
         }
 
         public UserViewModel GetUser(string code)

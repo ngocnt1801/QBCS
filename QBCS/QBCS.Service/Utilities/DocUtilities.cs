@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using QBCS.Entity;
@@ -69,9 +68,9 @@ namespace QBCS.Service.Utilities
 
                 #endregion
                 #region question content
-                if (key.Contains("QN="))
+                if (key.Contains("QN=") || key.Contains("QN ="))
                 {
-                    quesModel.Code = key.Replace("QN=", "");
+                    quesModel.Code = key.Replace("QN=", "").Replace("QN =", "").Trim();
                     //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     //{
                     //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
@@ -127,16 +126,13 @@ namespace QBCS.Service.Utilities
                                         {
                                             if (!wParagraph.Text.Equals("") && quesModel.QuestionContent == null)
                                             {
-                                                var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>").Split(new string[] { "[file" }, StringSplitOptions.None)[0]);
-                                                quesModel.QuestionContent = "[html] " + temp;
+                                                quesModel.QuestionContent = "[html] " + wParagraph.Text.Replace("\v", "<cbr>").Split(new string[] { "[file" }, StringSplitOptions.None)[0];
                                                 inputWholeParagraph = true;
                                             }
                                             else if (!wParagraph.Text.Equals(""))
                                             {
-                                                var temp = WebUtility.HtmlDecode(wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0]);
-                                                quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + temp;
+                                                quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0];
                                             }
-
                                         }
                                         break;
                                     case EntityType.Picture:
@@ -163,81 +159,78 @@ namespace QBCS.Service.Utilities
                 {
                     var optionCheck = new DocViewModel();
                     optionCheck.Code = key.Replace(".", "").ToLower();
-                    for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
-                    {
-                        IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
-                        WParagraph wParagraph = bodyItemEntity as WParagraph;
-                        if (wParagraph.Text != "")
-                        {
-                            ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
-                            switch (pItem.EntityType)
-                            {
-                                //case EntityType.TextRange:
-                                default:
-                                    if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
-                                    {
-                                        optionModel.IsCorrect = false;
-                                        var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
-                                        optionModel.OptionContent = "[html]" + temp;
-                                    }
-                                    else if (!wParagraph.Text.Equals(""))
-                                    {
-                                        var temp = WebUtility.HtmlDecode(wParagraph.Text.Replace("\v", "<cbr>"));
-                                        optionModel.OptionContent = "[html]" + optionModel.OptionContent + "<cbr>" + temp;
-                                    }
-                                    break;
-                                case EntityType.Picture:
-                                    //WPicture wPicture = pItem as WPicture;
-                                    //Image iImage = wPicture.Image;
-
-                                    //MemoryStream m = new MemoryStream();
-                                    //iImage.Save(m, iImage.RawFormat);
-                                    //byte[] imageBytes = m.ToArray();
-
-                                    //quesModel.Image = Convert.ToBase64String(imageBytes);
-                                    break;
-                            }
-                        }
-                    }
-
-
                     //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     //{
                     //    IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
                     //    WParagraph wParagraph = bodyItemEntity as WParagraph;
-                    //    if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                    //    if (wParagraph.Text != "")
                     //    {
-                    //        foreach (var pChild in wParagraph.ChildEntities)
+                    //        ParagraphItem pItem = wParagraph.ChildEntities[0] as ParagraphItem;
+                    //        switch (pItem.EntityType)
                     //        {
-                    //            var pItem = pChild as ParagraphItem;
-                    //            switch (pItem.EntityType)
-                    //            {
-                    //                case EntityType.TextRange:
-                    //                    var wText = pChild as WTextRange;
-                    //                    if (!wText.Text.Equals("") && optionModel.OptionContent == null)
-                    //                    {
-                    //                        optionModel.IsCorrect = false;
-                    //                        optionModel.OptionContent = wText.Text.Replace("\v", "<cbr>");
-                    //                    }
-                    //                    else if (!wText.Text.Equals(""))
-                    //                    {
-                    //                        optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wText.Text;
-                    //                    }
-                    //                    break;
-                    //                case EntityType.Picture:
-                    //                    //WPicture wPicture = pItem as WPicture;
-                    //                    //Image iImage = wPicture.Image;
+                    //            //case EntityType.TextRange:
+                    //            default:
+                    //                if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                    //                {
+                    //                    optionModel.IsCorrect = false;
+                    //                    optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                    //                }
+                    //                else if (!wParagraph.Text.Equals(""))
+                    //                {
+                    //                    optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text.Replace("\v", "<cbr>");
+                    //                }
+                    //                break;
+                    //            case EntityType.Picture:
+                    //                //WPicture wPicture = pItem as WPicture;
+                    //                //Image iImage = wPicture.Image;
 
-                    //                    //MemoryStream m = new MemoryStream();
-                    //                    //iImage.Save(m, iImage.RawFormat);
-                    //                    //byte[] imageBytes = m.ToArray();
+                    //                //MemoryStream m = new MemoryStream();
+                    //                //iImage.Save(m, iImage.RawFormat);
+                    //                //byte[] imageBytes = m.ToArray();
 
-                    //                    //quesModel.Image = Convert.ToBase64String(imageBytes);
-                    //                    break;
-                    //            }
+                    //                //quesModel.Image = Convert.ToBase64String(imageBytes);
+                    //                break;
                     //        }
                     //    }
                     //}
+
+
+                    for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
+                    {
+                        IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
+                        WParagraph wParagraph = bodyItemEntity as WParagraph;
+                        if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                        {
+                            foreach (var pChild in wParagraph.ChildEntities)
+                            {
+                                var pItem = pChild as ParagraphItem;
+                                switch (pItem.EntityType)
+                                {
+                                    case EntityType.TextRange:
+                                        if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                                        {
+                                            optionModel.IsCorrect = false;
+                                            optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                                        }
+                                        else if (!wParagraph.Text.Equals(""))
+                                        {
+                                            optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                        }
+                                        break;
+                                    case EntityType.Picture:
+                                        WPicture wPicture = pItem as WPicture;
+                                        Image iImage = wPicture.Image;
+
+                                        MemoryStream m = new MemoryStream();
+                                        iImage.Save(m, iImage.RawFormat);
+                                        byte[] imageBytes = m.ToArray();
+
+                                        optionModel.Image = Convert.ToBase64String(imageBytes);
+                                        break;
+                                }
+                            }
+                        }
+                    }
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
                     if (optionModel.OptionContent != null)
@@ -304,10 +297,15 @@ namespace QBCS.Service.Utilities
                             break;
                     }
                 }
-                //foreach (WTableCell cell in row.Cells)
-                //{
-                //    IterateTextBody(cell);
-                //}
+                else if (key.Contains("CATEGORY:"))
+                {
+                    IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
+                    WParagraph paragraph = bodyItemEntity as WParagraph;
+                    if(paragraph != null && !paragraph.Text.Equals(""))
+                    {
+                        quesModel.Category = paragraph.Text;
+                    }
+                }
             }
             quesModel.Options = options;
             listQuestion.Add(quesModel);

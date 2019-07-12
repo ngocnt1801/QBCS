@@ -2,15 +2,23 @@
 @{
     ViewBag.Title = "Generate Exam";
     var counter = 0;
+    var no = 0;
 }
 
-
+@using (Html.BeginForm("BackToGenerate", "Examination", FormMethod.Post))
+{
+    <input type="hidden" name="courseId" value="@Model[0].CourseId"/>
+    <input type="hidden" name="groupExam" value="@Model[0].ExamGroup" />
+    <button type="submit" class="btn btn-primary float-left mb-2">Delete Examinations</button>
+}
 <div class="tabs tabs-style-topline">
     <nav>
         <ul>
             @foreach (var exam in Model)
             {
-                <li><a href="#generate-exam-@exam.Id"><span>@exam.ExamCode</span></a></li>
+                no++;
+
+                <li><a href="#generate-exam-@exam.Id"><span>Exam @no</span></a></li>
             }
         </ul>
     </nav>

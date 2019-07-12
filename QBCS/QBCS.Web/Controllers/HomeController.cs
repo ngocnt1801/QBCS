@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace QBCS.Web.Controllers
 {
+    [CheckSession]
     public class HomeController : Controller
     {
         private IUserService userService;

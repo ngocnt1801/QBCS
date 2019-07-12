@@ -20,6 +20,11 @@
                     return response(data);
                 }
             });
+        },
+        select: function (event, ui) {
+            event.preventDefault();
+            var lec = ui.item.value.split(" (")[0];
+            $('#myautocomplete').val(lec);
         }
     });
 });

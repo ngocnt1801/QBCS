@@ -293,6 +293,30 @@ function split() {
         ]
     });
 
+    table1.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table2.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table3.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
+    table4.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
+
     var tableCustoms = $('#table-customs').DataTable({
         columns: [
             {
@@ -352,6 +376,11 @@ function split() {
             { targets: 1, width: "50%" },
         ]
     });
+    tableCustoms.on('page.dt', function () {
+        $('html, body').animate({
+            scrollTop: $(".dataTables_wrapper").offset().top
+        }, 'slow');
+    });
 }
 
 function toggleTableDuplicate() {
@@ -368,6 +397,9 @@ function table_on_top() {
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
     });
+}
+function spinner_loading() {
+
 }
 $(document).ready(function () {
     nav_bar_active();

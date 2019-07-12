@@ -63,6 +63,10 @@
                                     {
                                         @item.Message
                                     }
+                                    else
+                                    {
+                                        @item.Message @(item.TargetId.HasValue && item.TargetId.Value != 0 ? " " + item.TargetId.ToString() + "st" : "")
+                                    }
 
                                 </td>
                                 <td>

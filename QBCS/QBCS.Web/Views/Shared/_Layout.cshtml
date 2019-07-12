@@ -21,9 +21,10 @@
     @Styles.Render("~/bundle/content/tab")
     @Styles.Render("~/bundle/content/category")
     @Styles.Render("~/bundle/content/spinner")
-    @Styles.Render("~/bundle/content/autocomplete")
+    
     @Styles.Render("~/bundle/content/img")
-    @*@Styles.Render("~/bundle/content/tagsinputrule")*@
+    @Styles.Render("~/bundle/content/autocompleteLecturer")
+    @Styles.Render("~/bundle/content/tagsinputrule")
 
 
     <meta name="description" content="">
@@ -244,7 +245,7 @@
         </div>
         </div>
     </div>
-    
+
     @Scripts.Render("~/bundles/script/template")
     @Scripts.Render("~/bundles/script/datatables")
     @Scripts.Render("~/bundle/scripts/importfile")
@@ -257,9 +258,10 @@
     @Scripts.Render("~/bundle/scripts/category")
     @Scripts.Render("~/bundle/scripts/spinner")
     @Scripts.Render("~/bundle/scripts/editquestion")
-    @Scripts.Render("~/bundle/scripts/autocomplete")
+    @Scripts.Render("~/bundle/scripts/autocompleteLecturer")
+    
+    @Scripts.Render("~/bundle/scripts/tagsinputrule")
     @Scripts.Render("~/bundle/scripts/img-zoom")
-    @*@Scripts.Render("~/bundle/scripts/tagsinputrule")*@
     @RenderSection("scripts", required: false)
 
 
