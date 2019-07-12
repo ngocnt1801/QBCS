@@ -25,7 +25,7 @@ $(document).ready(function () {
                     case 1:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -35,7 +35,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             qlMin = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1 !!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -43,7 +43,7 @@ $(document).ready(function () {
                     case 2:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -53,7 +53,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             qlMax = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1 !!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -79,7 +79,7 @@ $(document).ready(function () {
                     case 4:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -89,7 +89,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             nOpMin = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -97,7 +97,7 @@ $(document).ready(function () {
                     case 5:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -107,7 +107,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             nOpMax = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -152,7 +152,7 @@ $(document).ready(function () {
                     case 6:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -162,7 +162,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             olMin = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -170,7 +170,7 @@ $(document).ready(function () {
                     case 7:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -180,7 +180,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             olMax = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -206,7 +206,7 @@ $(document).ready(function () {
                     case 8:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -215,7 +215,7 @@ $(document).ready(function () {
                             Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
                             testList.push(Obj);
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -259,7 +259,7 @@ $(document).ready(function () {
                     case 10:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -269,7 +269,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             cOlMin = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
@@ -277,7 +277,7 @@ $(document).ready(function () {
                     case 11:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue)) {
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
                             Obj['Value'] = value;
                             Obj['ActivateDate'] = $(this).find('#date').val();
                             if (Obj['ActivateDate'] == "") {
@@ -287,7 +287,7 @@ $(document).ready(function () {
                             testList.push(Obj);
                             cOlMax = value;
                         } else {
-                            swal('Min max must be integer!!!');
+                            swal('Min max must be integer and no less than -1!!!');
                             $(this).find('#value').focus();
                             check = false;
                         }
