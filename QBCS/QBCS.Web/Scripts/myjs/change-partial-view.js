@@ -127,14 +127,7 @@ function split() {
                     }               
                     return data
                 }
-            },
-            null
-        ],
-        columnDefs: [
-            { targets: 0, width: "2%" },
-            { targets: 1, width: "44%" },
-            { targets: 2, width: "44%"},
-            { targets: 3, width: "10%"}
+            }
         ]
     });
     var table2 = $('#tableDelete').DataTable({

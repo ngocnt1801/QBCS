@@ -26,6 +26,8 @@ namespace QBCS.Entity
 
         public int? Status { get; set; }
 
+        public int? OldStatus { get; set; }
+
         public int? DuplicatedId { get; set; }
 
         [StringLength(50)]

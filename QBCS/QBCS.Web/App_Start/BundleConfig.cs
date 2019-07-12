@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace QBCS.Web
 {
@@ -20,7 +19,7 @@ namespace QBCS.Web
                 "~/Scripts/bootstrap.bundle.js",
                 "~/Scripts/js/sb-admin-2.js",
                 "~/Scripts/vendor/jquery/jquery.js"
-               
+
                 ));
 
             //data table
@@ -106,7 +105,7 @@ namespace QBCS.Web
                 "~/Content/error/style.css"
                 ));
             //for checking diff
-          
+
             //Spinner
             bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
                 "~/Scripts/myjs/spinner.js"
@@ -149,6 +148,11 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/img").Include(
                        "~/Content/img/image-zoom.css"
                        ));
+
+            //Toggle question
+            bundles.Add(new ScriptBundle("~/bundle/scripts/togglequestion").Include(
+                "~/Scripts/myjs/toggle-question.js"
+                ));
         }
     }
 }

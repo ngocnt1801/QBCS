@@ -399,6 +399,7 @@
     <Content Include="Scripts\myjs\textWord\textboxio\resources\js\wordimport.js" />
     <Content Include="Scripts\myjs\textWord\textboxio\textboxio.js" />
     <Content Include="Scripts\myjs\text-process.js" />
+    <Content Include="Scripts\myjs\toggle-question.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
@@ -2194,6 +2195,7 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\Script\Index.cshtml" />
+    <Content Include="Views\Import\GetDuplicatedDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,5 +19,7 @@ namespace QBCS.Service.Interface
         void UpdateQuestionTempStatus(int questionTempId, int status);
         List<ImportViewModel> GetListImport(int? userId);
         List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions);
+        QuestionTempViewModel GetDuplicatedDetail(int questionTempId);
+        void RecoveryQuestionTemp(int questionTempId);
     }
 }

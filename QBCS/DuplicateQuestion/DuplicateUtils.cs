@@ -26,7 +26,7 @@ namespace DuplicateQuestion
 
             if (item != null)
             {
-                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate);
+                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, null);
 
                 if (isUpdate)
                 {
@@ -303,7 +303,7 @@ namespace DuplicateQuestion
             }
         }
 
-        private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate)
+        private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate, List<string> duplicatedList)
         {
             bool firstIsContent = true;
 
@@ -315,6 +315,11 @@ namespace DuplicateQuestion
 
             foreach (var question in bank)
             {
+                if (!question.IsBank && item.Id == question.Id)
+                {
+                    continue;
+                }
+
                 if (firstIsContent)
                 {
                     #region main is question content
@@ -333,6 +338,12 @@ namespace DuplicateQuestion
                         {
                             AssignDuplicated(question, item, StatusEnum.Editable);
                             isUpdate = true;
+
+                            if (duplicatedList != null)
+                            {
+                                duplicatedList.Add(question.ToString());
+                            }
+
                         }
 
                         #endregion
@@ -355,6 +366,11 @@ namespace DuplicateQuestion
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
                                 isUpdate = true;
+
+                                if (duplicatedList != null)
+                                {
+                                    duplicatedList.Add(question.ToString());
+                                }
                             }
                             #endregion
                         }
@@ -375,6 +391,11 @@ namespace DuplicateQuestion
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
                                 isUpdate = true;
+
+                                if (duplicatedList != null)
+                                {
+                                    duplicatedList.Add(question.ToString());
+                                }
                             }
                             #endregion
                         }
@@ -399,6 +420,11 @@ namespace DuplicateQuestion
                             AssignDuplicated(question, item, StatusEnum.Editable);
                             isUpdate = true;
 
+                            if (duplicatedList != null)
+                            {
+                                duplicatedList.Add(question.ToString());
+                            }
+
                         } // end if > HIGH_Duplicate
                         else if (questionResult >= MINIMUM_DUPLICATE)
                         {
@@ -411,6 +437,11 @@ namespace DuplicateQuestion
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
                                 isUpdate = true;
+
+                                if (duplicatedList != null)
+                                {
+                                    duplicatedList.Add(question.ToString());
+                                }
                             }
                             #endregion
 
@@ -430,6 +461,11 @@ namespace DuplicateQuestion
                                 {
                                     AssignDuplicated(question, item, StatusEnum.Editable);
                                     isUpdate = true;
+
+                                    if (duplicatedList != null)
+                                    {
+                                        duplicatedList.Add(question.ToString());
+                                    }
                                 }
                                 #endregion
                             }
@@ -438,10 +474,10 @@ namespace DuplicateQuestion
                     #endregion
                 }
 
-                if (isUpdate)
-                {
-                    break;
-                }
+                //if (isUpdate)
+                //{
+                //    break;
+                //}
             }
         }
 
@@ -483,6 +519,9 @@ namespace DuplicateQuestion
 
         private static void CheckDuplicateAndUpdateDb(List<QuestionModel> bank, List<QuestionModel> import)
         {
+            //
+            bank.AddRange(import);
+
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -490,9 +529,12 @@ namespace DuplicateQuestion
                 //bool firstIsContent = true;
                 foreach (var item in import)
                 {
+
                     isUpdate = false;
 
-                    CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate);
+                    List<string> duplicatedList = new List<string>();
+                    CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, duplicatedList);
+                    item.Test = String.Join(",", duplicatedList.ToArray());
 
                     //update database
                     SqlCommand command = new SqlCommand(
@@ -510,10 +552,10 @@ namespace DuplicateQuestion
                     command.ExecuteNonQuery();
 
                     //add not duplicate question to check
-                    if (!isUpdate)
-                    {
-                        bank.Add(item);
-                    }
+                    //if (!isUpdate)
+                    //{
+                    //    bank.Add(item);
+                    //}
 
                 }
 
@@ -1061,6 +1103,7 @@ namespace DuplicateQuestion
                 no += 1;
             }
         }
+
         #endregion
     }
 }

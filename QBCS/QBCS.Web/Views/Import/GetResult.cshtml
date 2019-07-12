@@ -12,7 +12,7 @@
 
     int total = Model.Questions.Count;
     int editable = Model.Questions.Where(q => q.Status == StatusEnum.Editable).Count();
-    //int delete = Model.Questions.Where(q => q.Status == StatusEnum.Delete).Count();
+    int delete = Model.Questions.Where(q => q.Status == StatusEnum.Deleted).Count();
     int success = Model.Questions.Where(q => q.Status == StatusEnum.Success).Count();
     int invalid = Model.Questions.Where(q => q.Status == StatusEnum.Invalid).Count();
 
@@ -23,6 +23,7 @@
                     <li><a href="#section-topline-1"><span>Editable (@editable/@total)</span></a></li>
                     <li><a href="#section-topline-3"><span>Sucess (@success/@total)</span></a></li>
                     <li><a href="#section-topline-4"><span>Invalid (@invalid/@total)</span></a></li>
+                    <li><a href="#section-topline-4"><span>Delete (@delete/@total)</span></a></li>
                 </ul>
             </nav>
             <div class="content-wrap">
@@ -73,14 +74,15 @@
                         @Html.Partial("_ListQuestionWithDuplicate", editList.Where(q => !q.IsInImportFile).ToList(), new ViewDataDictionary { { "tableId", "tableEditable" }, { "importId", Model.Id } })
                     </div>
                 </section>
-                @*<section id="section-topline-2">
-                        @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Delete).ToList(), new ViewDataDictionary { { "tableId", "tableDelete" }, { "importId", Model.Id } })
-                    </section>*@
+
                 <section id="section-topline-3">
                     @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Success).ToList(), new ViewDataDictionary { { "tableId", "tableSuccess" }, { "importId", Model.Id } })
                 </section>
                 <section id="section-topline-4">
                     @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Invalid).ToList(), new ViewDataDictionary { { "tableId", "tableInvalid" }, { "importId", Model.Id } })
+                </section>
+                <section id="section-topline-2">
+                    @Html.Partial("_ListQuestionWithDuplicate", Model.Questions.Where(q => q.Status == StatusEnum.Deleted).ToList(), new ViewDataDictionary { { "tableId", "tableDelete" }, { "importId", Model.Id } })
                 </section>
             </div><!-- /content -->
         </div><!-- /tabs -->
@@ -99,7 +101,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Are your sure want to save these questions?</p>
-                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete || q.Status == StatusEnum.Invalid).Count()/@Model.Questions.Count</b> will not insert to bank</p>
+                    <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Deleted || q.Status == StatusEnum.Invalid).Count()/@Model.Questions.Count</b> will not insert to bank</p>
                     <p>- <b>@Model.Questions.Where(q => q.Status == StatusEnum.NotCheck).Count()/@Model.Questions.Count</b> will be checked again</p>
                 </div>
                 <div class="modal-footer">

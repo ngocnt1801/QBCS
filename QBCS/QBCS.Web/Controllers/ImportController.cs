@@ -121,19 +121,36 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Delete Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
-        public ActionResult Delete(int questionId, int importId)
+        public ActionResult Delete(int questionId, string url)
         {
-            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
-            return RedirectToAction("GetResult", new { importId = importId });
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Deleted);
+            return Redirect(url);
+
+            //return RedirectToAction("GetResult", new { importId = importId });
         }
 
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Accept Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
-        public ActionResult Skip(int questionId, int importId)
+        public ActionResult Skip(int questionId, string url)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);
-            return RedirectToAction("GetResult", new { importId = importId });
+            return Redirect(url);
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public ActionResult GetDuplicatedDetail(int id)
+        {
+            var model = importService.GetDuplicatedDetail(id);
+
+            return View(model);
+        }
+
+        public ActionResult Recovery(int tempId, string url)
+        {
+            importService.RecoveryQuestionTemp(tempId);
+            return Redirect(url);
+            //return RedirectToAction("GetResult", new { importId = importId });
         }
     }
 }
