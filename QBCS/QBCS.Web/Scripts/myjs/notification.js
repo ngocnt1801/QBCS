@@ -26,7 +26,7 @@
                 var newTitle = '! ' + title;
                 document.title = newTitle;
             }
-           
+
         },
 
         getTemplateNotification: function () {
@@ -42,10 +42,10 @@
                 "</a>";
 
             return template;
-                
+
         },
 
-        renderCountNotification: function(){
+        renderCountNotification: function () {
             var count = notificationOctopus.getCount();
             if (count > 0) {
                 this.notificationSpan.html(count);
@@ -54,20 +54,21 @@
             }
         },
 
-        renderListNotification: function(){
+        renderListNotification: function () {
             var listNotification = notificationOctopus.getListNotification();
             this.notificationContainter.empty();
             listNotification.forEach(element => {
                 this.notificationContainter.append(notificationView.renderNotification(element.ImportId, element.Message, element.UpdatedDate));
             });
         },
-        renderNotification: function(importId, message, date){
+        renderNotification: function (importId, message, date) {
             var template = notificationView.getTemplateNotification();
-            template = template.replace("{{noti.link}}", "/Import/GetResult?importId="+importId)
-                                .replace("{{noti.icon}}", "fa-file-alt")
-                                .replace("{{noti.date}}", date)
-                                .replace("{{noti.message}}", message);
-
+            
+            template = template.replace("{{noti.link}}", "/Import/GetResult?importId=" + importId)
+                .replace("{{noti.icon}}", "fa-file-alt")
+                .replace("{{noti.date}}", date)
+                .replace("{{noti.message}}", message);
+           
             return template;
         }
 
@@ -82,7 +83,7 @@
         getCount: function () {
             return notificationModel.count;
         },
-        getListNotification: function(){
+        getListNotification: function () {
             return notificationModel.listNotification;
         },
         connectHub: function () {
@@ -100,23 +101,27 @@
             });
         },
         getAmountNewNotification: function () {
-            $('#spinner').css("display", "block");
-            $('#spinner').css("z-index", "1060");
-            $('#pleaseWaitDialog').modal();
+            //$('#spinner').css("display", "block");
+            //$('#spinner').css("z-index", "1060");
+            //$('#pleaseWaitDialog').modal();
             $.ajax({
                 url: '/Notification/GetNotification',
                 type: 'GET',
                 success: function (response) {
+                    //$('#spinner').css("display", "block");
+                    //$('#spinner').css("z-index", "1060");
+                    //$('#pleaseWaitDialog').modal();
                     notificationModel.listNotification = [];
                     response.forEach(element => {
                         notificationModel.listNotification.push(element);
                     });
-                    
-                    notificationModel.count = response.length;
-                    notificationView.render();
 
-                    $('#spinner').css("display", "none");
-                    $('#pleaseWaitDialog').modal('hide');
+                    notificationModel.count = response.length;
+                    notificationView.render();                  
+                    //setTimeout(function () {
+                    //    $('#spinner').css("display", "none");
+                    //    $('#pleaseWaitDialog').modal('hide');
+                    //}, 500);
                 }
             });
         },

@@ -145,13 +145,14 @@ namespace QBCS.Web.Controllers
 
             }
             return View("EditQuestion", questionDetailViewModel);
+            
         }
 
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
@@ -162,11 +163,12 @@ namespace QBCS.Web.Controllers
             }
 
             //notify 
-            TempData["Modal"] = "#success-modal";
+           // TempData["Modal"] = "#success-modal";
             TempData["CourseId"] = courseId;
             TempData["OwnereName"] = ownerName;
 
-            return RedirectToAction("Index", "Home");
+            return Json("OK");
+            //return RedirectToAction("Index", "Home");
         }
 
         //lecturer

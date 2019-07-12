@@ -156,7 +156,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="@Url.Action("Logout", "Home")">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -262,6 +262,10 @@
     
     @Scripts.Render("~/bundle/scripts/tagsinputrule")
     @Scripts.Render("~/bundle/scripts/img-zoom")
+    @Scripts.Render("~/bundle/scripts/tracking")
+    @Scripts.Render("~/bundle/scripts/unobtrusive")
+    @Scripts.Render("~/bundle/scripts/dragFile")
+
     @RenderSection("scripts", required: false)
 
 
