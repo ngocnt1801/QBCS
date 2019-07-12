@@ -1,4 +1,5 @@
-﻿@model QBCS.Service.ViewModel.QuestionTempViewModel
+﻿
+@model QBCS.Service.ViewModel.QuestionTempViewModel
 
 @using QBCS.Service.Enum
 
@@ -32,10 +33,10 @@
             <input type="checkbox" class="custom-control-input" id="chk-main-question" checked>
             <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
         </div>
-        @foreach (var duplicated in Model.DuplicatedList)
+        @for (int i = 0; i < Model.DuplicatedList.Count; i++)
         {
             string chkstatusClass = "";
-            switch (duplicated.Status)
+            switch (Model.DuplicatedList[i].Status)
             {
                 case StatusEnum.Success:
                     chkstatusClass = "badge-success";
@@ -52,16 +53,17 @@
             }
 
             <div class="custom-control custom-checkbox small mr-3">
-                <input type="checkbox" class="custom-control-input" checked id="@(duplicated.IsBank ? "chk-bank-" + duplicated.Id : "chk-import-" + duplicated.Id)">
-                <label class="custom-control-label toggle-question" for="@(duplicated.IsBank ? "chk-bank-" + duplicated.Id : "chk-import-" + duplicated.Id)"
-                       toggle-for="#@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">@Model.Code<span class="badge ml-2 @chkstatusClass">@Model.Status</span></label>
+                <input type="checkbox" class="custom-control-input"
+                       @(i > 0 ? "" : "checked")
+                       id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
+                <label class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
+                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.Code<span class="badge ml-2 @chkstatusClass">@Model.Status</span></label>
                 </div>
             }
     </div>
 </div>
 
 <table>
-
     <tr>
         <td>
             <div class="card shadow mb-4" id="main-question">
@@ -111,8 +113,9 @@
             </div>
         </td>
 
-        @foreach (var duplicated in Model.DuplicatedList)
+        @for (int j = 0; j < Model.DuplicatedList.Count; j++)
         {
+            var duplicated = Model.DuplicatedList[j];
             statusClass = "";
             switch (duplicated.Status)
             {
@@ -131,7 +134,7 @@
             }
 
             <td>
-                <div class="card shadow mb-4" id="@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">
+                <div class="card shadow mb-4 @(j  > 0 ? "hidden":"")" id="@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">
                     <a href="#@(duplicated.IsBank ? "cd-bank-" + duplicated.Id : "cd-import-" + duplicated.Id)" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
                         @(duplicated.IsBank ? "Bank: " : "Import File: ") @duplicated.Code
                         @if (!duplicated.IsBank)

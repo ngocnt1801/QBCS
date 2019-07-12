@@ -213,7 +213,7 @@ namespace DuplicateQuestion
                     if (prev != (int)reader["Id"])
                     {
                         question = new QuestionModel();
-                        if(reader["QuestionContent"] != null)
+                        if (reader["QuestionContent"] != null)
                         {
                             question.QuestionContent = (string)reader["QuestionContent"];
                         }
@@ -239,13 +239,13 @@ namespace DuplicateQuestion
                         }
                         if (reader["LearningOutcome"] != DBNull.Value)
                         {
-                            int tmp =0;
+                            int tmp = 0;
                             Int32.TryParse((string)reader["LearningOutcome"], out tmp);
                             if (tmp != 0)
                             {
                                 question.LearningOutcomeId = tmp;
                             }
-                          
+
                         }
                         if (reader["LevelName"] != DBNull.Value)
                         {
@@ -255,7 +255,7 @@ namespace DuplicateQuestion
                             {
                                 question.LevelId = tmp;
                             }
-                           
+
                         }
                         question.IsBank = false;
                         question.Options = new List<OptionModel>();
@@ -292,7 +292,7 @@ namespace DuplicateQuestion
                 SqlDataReader quesReader = quesCommand.ExecuteReader();
                 if (quesReader.Read())
                 {
-                    if(quesReader["CourseId"] != null)
+                    if (quesReader["CourseId"] != null)
                     {
                         question.CourseId = (int)quesReader["CourseId"];
                     }
@@ -492,7 +492,8 @@ namespace DuplicateQuestion
             {
                 var bank = GetBank(importModel.CourseId);
                 var import = GetImportedQuestion(importModel.ImportId, (int)StatusEnum.NotCheck);
-
+                var otherImpor = GetOtherImportQuestion(importId.Value, importModel.CourseId);
+                bank.AddRange(otherImpor);
                 CheckDuplicateAndUpdateDb(bank, import);
 
                 #region move temp to bank
@@ -1102,6 +1103,79 @@ namespace DuplicateQuestion
                 q.QuestionCode = "C" + courseId.ToString("D3") + '-' + 'Q' + no.ToString("D6");
                 no += 1;
             }
+        }
+
+        private static List<QuestionModel> GetOtherImportQuestion(int importId, int courseId)
+        {
+            List<QuestionModel> import = new List<QuestionModel>();
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(
+                    "select q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image " +
+                    "from Import i inner join QuestionTemp q on i.Id = q.ImportId inner join OptionTemp o on q.Id = o.TempId " +
+                    "where i.CourseId = @courseId and i.Id != @importId and (i.Status = @checked or i.Status= @fixing)",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@importId", importId);
+                command.Parameters.AddWithValue("@courseId", courseId);
+                command.Parameters.AddWithValue("@checked", StatusEnum.Checked);
+                command.Parameters.AddWithValue("@fixing", StatusEnum.Editing);
+                SqlDataReader reader = command.ExecuteReader();
+
+                int prev = 0;
+                QuestionModel question = null;
+                while (reader.Read())
+                {
+                    if (prev != (int)reader["Id"])
+                    {
+                        question = new QuestionModel();
+                        question.QuestionContent = (string)reader["QuestionContent"];
+                        if (reader["Image"] != DBNull.Value)
+                        {
+                            question.Image = (string)reader["Image"];
+                        }
+                        question.QuestionCode = (string)reader["Code"];
+                        question.Status = (int)StatusEnum.Success;
+                        question.Id = (int)reader["Id"];
+                        if (reader["Category"] != DBNull.Value)
+                        {
+                            question.Category = (string)reader["Category"];
+                        }
+                        if (reader["LearningOutcome"] != DBNull.Value)
+                        {
+                            question.LearningOutcome = (string)reader["LearningOutcome"];
+                        }
+                        if (reader["LevelName"] != DBNull.Value)
+                        {
+                            question.Level = (string)reader["LevelName"];
+                        }
+                        question.IsBank = false;
+                        question.Options = new List<OptionModel>();
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                        import.Add(question);
+
+                        prev = question.Id;
+                    }
+                    else
+                    {
+                        question.Options.Add(new OptionModel
+                        {
+                            OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
+                            IsCorrect = (bool)reader["IsCorrect"]
+                        });
+                    }
+
+                }
+
+            }
+            return import;
         }
 
         #endregion
