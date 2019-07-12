@@ -568,12 +568,29 @@ namespace QBCS.Service.Implement
 
         }
 
-        public string ReplaceQuestionInExam(int questionId)
-        {
+        public string ReplaceQuestionInExam(int questionId, string fullname = "", string usercode = "")
+        {            
             QuestionInExamViewModel questionInExam = questionInExamService.GetQuestionInExamById(questionId);
+            ExaminationViewModel exam = GetExanById(questionInExam.PartOfExam.ExaminationId);
             QuestionInExam oldQuestion = unitOfWork.Repository<QuestionInExam>().GetById(questionInExam.Id);
+            int learningOutcomeId = questionInExam.PartOfExam.LearningOutcomeId;
+            int levelId = questionInExam.LevelId;
+            int countQuestionInBank = questionService.GetCountOfListQuestionByLearningOutcomeAndId(learningOutcomeId, levelId);
+            int countQuestionInExam = questionInExamService.GetCountByLearningOutcome(learningOutcomeId, levelId);
+            if(countQuestionInBank == countQuestionInExam)
+            {
+                foreach (PartOfExamViewModel part in exam.PartOfExam)
+                {
+                    countQuestionInBank = questionService.GetCountOfListQuestionByLearningOutcomeAndId(part.LearningOutcomeId, levelId);
+                    countQuestionInExam = questionInExamService.GetCountByLearningOutcome(part.LearningOutcomeId, levelId);
+                    if(countQuestionInExam < countQuestionInBank)
+                    {
+                        learningOutcomeId = part.LearningOutcomeId;
+                    }
+                }
+            }
             oldQuestion.IsDisable = true;
-            List<QuestionViewModel> newQuestion = GeneratePartOfExamByLearningOutcomeAndLevel(questionInExam.PartOfExam.LearningOutcomeId, 1, questionInExam.LevelId);
+            List<QuestionViewModel> newQuestion = GeneratePartOfExamByLearningOutcomeAndLevel(learningOutcomeId, 1, levelId);
             foreach (var ques in newQuestion)
             {
                 QuestionInExam question = new QuestionInExam()
@@ -598,7 +615,12 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<QuestionInExam>().Insert(question);
             }
             unitOfWork.SaveChanges();
-            ExaminationViewModel exam = GetExanById(questionInExam.PartOfExam.ExaminationId);
+            
+            
+
+            //log delete and replace question exam
+            logService.LogManually("Delete And Replace Question", "Examination", exam.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "DeleteQuestionInExam");
+
             return exam.ExamGroup;
         }
     }

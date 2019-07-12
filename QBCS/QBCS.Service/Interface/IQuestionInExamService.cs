@@ -10,5 +10,6 @@ namespace QBCS.Service.Interface
     public interface IQuestionInExamService
     {
         QuestionInExamViewModel GetQuestionInExamById(int questionId);
+        int GetCountByLearningOutcome(int learingOutcomeId, int levelId);
     }
 }

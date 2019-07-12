@@ -6,10 +6,12 @@ using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml;
+using System.IO.Compression;
 
 namespace QBCS.Web.Controllers
 {
@@ -89,10 +91,11 @@ namespace QBCS.Web.Controllers
 
             ExaminationViewModel exam = examinationService.GetExanById(examinationId);
             string semesterName;
-            if(exam.SemesterId != 0)
+            if (exam.SemesterId != 0)
             {
                 semesterName = exam.Semester.Name + exam.GeneratedDate.Year.ToString();
-            } else
+            }
+            else
             {
                 semesterName = exam.Semester.Name;
             }
@@ -352,7 +355,7 @@ namespace QBCS.Web.Controllers
                                 }
                                 string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                                 writer.WriteLine(questionComment);
-                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.HtmlEncode( question.QuestionContent)) + "{";
+                                string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.HtmlEncode(question.QuestionContent)) + "{";
                                 writer.WriteLine(questionTitle);
                                 foreach (var option in question.Options)
                                 {
@@ -379,13 +382,98 @@ namespace QBCS.Web.Controllers
                     //httpResponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
                     //httpResponseMessage.Content.Headers.ContentDisposition.FileName = exam.ExamCode + ".txt";
                     //httpResponseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-                    
+
                     writer.Close();
                     return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, fileName + ".txt");
                 }
             }
 
             //return httpResponseMessage;
+        }
+
+        [HttpGet]
+        [ActionName("exportAll")]
+        //[Feature(FeatureType.Page, "Export Group Examination ", "QBCS", protectType: ProtectType.Authorized)]
+        public FileResult ExportGroupExamination(string examGroup, string fileExtension, bool getCategory)
+        {
+            string zipFileName = null;
+            List<ExaminationViewModel> exams = examinationService.GetExamByExamGroup(examGroup);
+            //the output bytes of the zip file
+            byte[] fileBytes = null;
+            //create working memory stream of zip file
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                //create a zip file
+                using (ZipArchive zip = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    if(fileExtension.ToLower().Equals("xml"))
+                    {
+                        foreach (var exam in exams)
+                        {
+                            string semesterName;
+                            if (exam.SemesterId != 0)
+                            {
+                                semesterName = exam.Semester.Name + exam.GeneratedDate.Year.ToString();
+                            }
+                            else
+                            {
+                                semesterName = exam.Semester.Name;
+                            }
+                            string fileName = semesterName + "_" + exam.Course.Code + "_" + exam.ExamGroup + "_" + exam.ExamCode + "_" + DateTime.Now.ToString("yyyyMMdd");
+                            if (zipFileName == null)
+                            {
+                                zipFileName = semesterName + "_" + exam.Course.Code + "_" + exam.ExamGroup + "_" + DateTime.Now.ToString("yyyyMMdd");
+                            }
+                            //add item to zip
+                            ZipArchiveEntry zipItem = zip.CreateEntry(fileName + ".xml");
+                            //stream for item
+                            using (MemoryStream stream = new MemoryStream())
+                            {
+                                //Todo: write stream for file here
+
+                                using (Stream entryStream = zipItem.Open())
+                                {
+                                    stream.CopyTo(entryStream);
+                                }
+                            }
+                        }
+                    } else
+                    {
+                        foreach(var exam in exams)
+                        {
+                            string semesterName;
+                            if (exam.SemesterId != 0)
+                            {
+                                semesterName = exam.Semester.Name + exam.GeneratedDate.Year.ToString();
+                            }
+                            else
+                            {
+                                semesterName = exam.Semester.Name;
+                            }
+                            string fileName = semesterName + "_" + exam.Course.Code + "_" + exam.ExamGroup + "_" + exam.ExamCode + "_" + DateTime.Now.ToString("yyyyMMdd");
+                            if (zipFileName == null)
+                            {
+                                zipFileName = semesterName + "_" + exam.Course.Code + "_" + exam.ExamGroup + "_" + DateTime.Now.ToString("yyyyMMdd");
+                            }
+                            //add item to zip
+                            ZipArchiveEntry zipItem = zip.CreateEntry(fileName + ".txt");
+                            //stream for item
+                            using (MemoryStream stream = new MemoryStream())
+                            {
+                                //Todo: write stream for file here
+
+                                using (Stream entryStream = zipItem.Open())
+                                {
+                                    stream.CopyTo(entryStream);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                fileBytes = memoryStream.ToArray();
+            }
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, zipFileName + ".zip");
         }
     }
 

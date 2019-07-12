@@ -18,6 +18,18 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
+
+        public int GetCountByLearningOutcome(int learingOutcomeId, int levelId)
+        {
+            IQueryable<QuestionInExam> questions = unitOfWork.Repository<QuestionInExam>().GetAll();
+            List<QuestionInExam> question = questions.Where(q => q.PartOfExamination.LearningOutcomeId == learingOutcomeId && q.LevelId == levelId).ToList();
+            if (question == null)
+            {
+                return 0;
+            }
+            return question.Count;
+        }
+
         public QuestionInExamViewModel GetQuestionInExamById(int questionId)
         {
             QuestionInExam question = unitOfWork.Repository<QuestionInExam>().GetById(questionId);

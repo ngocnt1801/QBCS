@@ -123,7 +123,7 @@ namespace QBCS.Web.Controllers
         //[Feature(FeatureType.Page, "Replace Question In Exam", "QBCS", protectType: ProtectType.Authorized)]
         public ActionResult DeleteQuestionInExam(int questionId)
         {
-            string groupExam = examinationService.ReplaceQuestionInExam(questionId);
+            string groupExam = examinationService.ReplaceQuestionInExam(questionId, fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             return RedirectToAction("ViewGeneratedExamination", "Examination", new { examGroup  = groupExam});
         }
 
