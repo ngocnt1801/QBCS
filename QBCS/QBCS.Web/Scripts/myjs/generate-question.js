@@ -108,9 +108,16 @@
     $('.btnExport').on('click', function (e) {
         var counter = $(this).data("value");
         var examinationId = $("input[name='examinationId-" + counter + "']").val();
+        var examGroup = $("input[name='examGroup-" + counter + "']").val();
         var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
         var getCategory = $("#getCategory-" + counter).prop('checked');
-        window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+        var exportAll = $("#exportAll-" + counter).prop('checked');
+        if (exportAll === true) {
+            window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+        } else {
+            window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+        }
+        
     });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();

@@ -86,6 +86,8 @@ namespace QBCS.Service.Implement
                 ExamGroup = e.GroupExam,
                 CourseId = e.CourseId.HasValue ? (int)e.CourseId : 0,
                 GeneratedDate = (DateTime)e.GeneratedDate,
+                SemesterId = e.SemesterId.HasValue ? (int)e.SemesterId : 0,
+                Semester = semesterService.GetById(e.SemesterId.HasValue ? (int)e.SemesterId : 0),
                 NumberOfEasy = e.NumberOfEasy.HasValue ? (int)e.NumberOfEasy : 0,
                 NumberOfMedium = e.NumberOfMedium.HasValue ? (int)e.NumberOfMedium : 0,
                 NumberOfHard = e.NumberOfHard.HasValue ? (int)e.NumberOfHard : 0,

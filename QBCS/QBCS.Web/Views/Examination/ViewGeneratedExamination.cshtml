@@ -122,6 +122,7 @@
                             <h5>File extension :</h5>
                         </div>
                         <input type="hidden" name="examinationId-@counter" value="@exam.Id" />
+                        <input type="hidden" name="examGroup-@counter" value="@exam.ExamGroup" />
 
                         <div class="col-lg-2">
                             <select id="fileExtension-@counter" class="form-control">
@@ -136,6 +137,13 @@
                             <span class="margin-r" style="font-size:1.3em;">Get category : </span>
                             <input type="checkbox" name="getCategory" id="getCategory-@counter">
                             <label class="el-checkbox-style" for="getCategory-@counter"></label>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="el-checkbox text-center">
+                            <span class="margin-r" style="font-size:1.3em;">Export All : </span>
+                            <input type="checkbox" name="exportAll" id="exportAll-@counter">
+                            <label class="el-checkbox-style" for="exportAll-@counter"></label>
                         </div>
                     </div>
                 </form>
