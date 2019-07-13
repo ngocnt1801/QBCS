@@ -216,6 +216,7 @@ function split() {
                     return data
                 }
             },
+            null
         ],
         columnDefs: [
             { targets: 0, width: "2%" },

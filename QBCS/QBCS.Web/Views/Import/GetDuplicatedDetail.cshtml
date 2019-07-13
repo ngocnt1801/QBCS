@@ -57,7 +57,7 @@
                        @(i > 0 ? "" : "checked")
                        id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
                 <label class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
-                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.Code<span class="badge ml-2 @chkstatusClass">@Model.Status</span></label>
+                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@Model.DuplicatedList[i].Status</span></label>
                 </div>
             }
     </div>

@@ -1,4 +1,5 @@
-﻿using QBCS.Service.Enum;
+﻿
+using QBCS.Service.Enum;
 using System.Collections.Generic;
 
 namespace QBCS.Service.ViewModel
@@ -17,5 +18,6 @@ namespace QBCS.Service.ViewModel
         public List<OptionViewModel> Options { get; set; }
         public string Category { get; set; }
         public List<DuplicatedQuestionViewModel> DuplicatedList { get; set; }
+        public bool IsHide { get; set; }
     }
 }

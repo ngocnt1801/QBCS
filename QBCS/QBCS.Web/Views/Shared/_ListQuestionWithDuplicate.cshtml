@@ -28,7 +28,7 @@
                                 <th>Error</th>
                             }
                             @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
-                                //|| Model.FirstOrDefault().Status == StatusEnum.Editable
+                                || Model.FirstOrDefault().Status == StatusEnum.Success
                                 || Model.FirstOrDefault().Status == StatusEnum.Deleted
                                 || Model.FirstOrDefault().Status == StatusEnum.Invalid)
                             {
@@ -39,6 +39,11 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            if (item.IsHide && item.Status == StatusEnum.Editable)
+                            {
+                                continue;
+                            }
+
                             var borderLeft = "";
                             var action = "";
                             if (item.Status == StatusEnum.Deleted)
@@ -197,6 +202,12 @@
                                 else if (item.Status == StatusEnum.Deleted)
                                 {
                                     <td><a href="@Url.Action("Recovery", "Import", new { tempId = item.Id,  url = Request.RawUrl})" class="btn btn-success mb-2 col-md-12">Recovery</a></td>
+                                }
+                                else if (item.Status == StatusEnum.Success)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})" class="btn btn-danger col-md-12">Delete</a>
+                                    </td>
                                 }
                             </tr>
                         }

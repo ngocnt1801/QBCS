@@ -111,7 +111,10 @@ namespace QBCS.Service.Implement
                     }).OrderBy(q => q.Status).ToList(),
                 };
 
-                foreach (var question in importModel.Questions.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 1))
+
+                RemoveDuplicateGroup(importModel);
+
+                foreach (var question in importModel.Questions.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
                 {
                     if (question.DuplicatedList[0].IsBank)
                     {
@@ -158,6 +161,33 @@ namespace QBCS.Service.Implement
             }
 
             return null;
+        }
+
+        private void RemoveDuplicateGroup(ImportResultViewModel importModel)
+        {
+            List<string> duplicateGroup = new List<String>();
+            foreach (var question in importModel.Questions.Where(q => q.DuplicatedList != null))
+            {
+                bool isInGroup = false;
+                string duplicateString = ParseListDuplicateToString(question);
+                foreach (string item in duplicateGroup)
+                {
+                    if (item.Equals(duplicateString))
+                    {
+                        isInGroup = true;
+                        break;
+                    }
+                }
+
+                if (!isInGroup)
+                {
+                    duplicateGroup.Add(duplicateString);
+                }
+                else
+                {
+                    question.IsHide = true;
+                }
+            }
         }
 
         public List<ImportViewModel> GetListImport(int? userId)
@@ -719,6 +749,16 @@ namespace QBCS.Service.Implement
             }
             unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
             unitOfWork.SaveChanges();
+        }
+
+        private string ParseListDuplicateToString(QuestionTempViewModel temp)
+        {
+            temp.DuplicatedList.Add(new DuplicatedQuestionViewModel
+            {
+                Id = temp.Id,
+                IsBank = false
+            });
+            return String.Join(",", temp.DuplicatedList.OrderBy(t => t.Id).Select(s => $"{s.Id}-{s.IsBank}").ToArray());
         }
     }
 }
