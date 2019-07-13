@@ -28,6 +28,7 @@ namespace QBCS.Web.Controllers
         // GET: Import
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "List User Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "Import History", InternalId = (int)SideBarEnum.ImportByUser)]
+        [LogAction(Action = "Import", IdParamName = "History")]
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
@@ -47,6 +48,7 @@ namespace QBCS.Web.Controllers
         // GET: Import
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "List All Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Imports", InternalId = (int)SideBarEnum.AllImport)]
+        [LogAction(Action = "Imports")]
         public ActionResult AllImport()
         {
             var model = importService.GetListImport(null);
@@ -57,6 +59,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import Result", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Import", Message = "Detail", IdParamName = "importId")]
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
@@ -74,6 +77,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Edit Question Import", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
+        [LogAction(Action = "Question", Message = "Edit", ObjectParamName = "model")]
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
             importService.UpdateQuestionTemp(model);

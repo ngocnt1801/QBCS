@@ -78,6 +78,7 @@
     <Compile Include="Implement\ImportService.cs" />
     <Compile Include="Implement\LearningOutcomeService.cs" />
     <Compile Include="Implement\LevelService.cs" />
+    <Compile Include="Implement\LogActionService.cs" />
     <Compile Include="Implement\LogService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OptionService.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Interface\IImportService.cs" />
     <Compile Include="Interface\ILearningOutcomeService.cs" />
     <Compile Include="Interface\ILevelService.cs" />
+    <Compile Include="Interface\ILogActionService.cs" />
     <Compile Include="Interface\ILogService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IRuleService.cs" />

@@ -6,8 +6,8 @@ namespace QBCS.Entity
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Log")]
-    public partial class Log
+    [Table("LogAction")]
+    public partial class LogAction
     {
         public int Id { get; set; }
 
@@ -22,7 +22,7 @@ namespace QBCS.Entity
 
         public int? TargetId { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public string TargetName { get; set; }
 
         [StringLength(50)]
@@ -40,9 +40,13 @@ namespace QBCS.Entity
         [StringLength(200)]
         public string Fullname { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public string UserCode { get; set; }
 
         public int? Status { get; set; }
+        public int? CourseId { get; set; }
+        public int? LearningOutcomeId { get; set; }
+        public int? CategoryId { get; set; }
+
     }
 }

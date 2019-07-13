@@ -29,6 +29,7 @@ namespace QBCS.Web.Controllers
         // GET: Activity
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "Get Activities by User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.ActivityByUser)]
+        [LogAction(Action = "Activities")]
         public ActionResult Index()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -42,6 +43,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "Activity", InternalId = (int)SideBarEnum.AllActivity)]
+        [LogAction(Action = "Activities")]
         public ActionResult GetAllActivities()
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -53,6 +55,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Activity Detail", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Import", Message = "Question Activity", TargetId = "targetId", IdParamName = "importId")]
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
             List<LogViewModel> logViews = new List<LogViewModel>();
@@ -71,6 +74,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Compare Question History", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Update", Message = "Question Activity", TargetId = "id")]
         public ActionResult GetUpdateActivityById (int id)
         {
             var model = logService.GetActivitiesById(id);
@@ -81,7 +85,20 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //Staff
         //stpm: feature declare
+        //[Feature(FeatureType.Page, "Compare Question History", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Move", Message = "Question Activity", TargetId = "id")]
+        public ActionResult GetMoveActivityById(int id)
+        {
+            var model = logService.GetActivitiesById(id);
+            TempData["active"] = "Activity";
+            return View("GetUpdateActivity", model);
+        }
+
+        //Lecturer
+        //Staff
+        //stpm: feature declare
         [Feature(FeatureType.Page, "Activity Question LifeCycle", "QBCS", protectType: ProtectType.Authorized)]
+        
         public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
@@ -103,6 +120,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Examination", Message = "History Activity", IdParamName = "id")]
         public ActionResult GetExaminationHistory(int id)
         {
             var result = questionService.GetQuestionHistory(id);

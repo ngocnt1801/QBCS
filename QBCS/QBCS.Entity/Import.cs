@@ -34,6 +34,7 @@ namespace QBCS.Entity
 
         public int? TotalSuccess { get; set; }
 
+        [StringLength(200)]
         public string OwnerName { get; set; }
 
         public virtual User User { get; set; }

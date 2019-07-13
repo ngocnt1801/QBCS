@@ -238,6 +238,7 @@ namespace QBCS.Web.Controllers
         //stpm: dependency declare
         [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
+        [LogAction(Action = "Questions", Message = "Details", CateParamName = "categoryId", LevelParamName = "levelId", CourseParamName = "courseId", LocParamName = "learningoutcomeId")]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);

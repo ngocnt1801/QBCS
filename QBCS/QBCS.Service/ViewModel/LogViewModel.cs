@@ -26,6 +26,10 @@ namespace QBCS.Service.ViewModel
         public string OwnerName { get; set; }
         public string CourseCode { get; set; }
         public int Status { get; set; }
+        public int CourseId { get; set; }
+        public int CategoryId { get; set; }
+        public int LevelId { get; set; }
+        public int LearningOutcomeId { get; set; }
 
         public QuestionViewModel QuestionNew { get; set; }
         public QuestionViewModel QuestionOld { get; set; }

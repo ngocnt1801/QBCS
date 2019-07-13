@@ -54,12 +54,16 @@
                                 <td>
                                     @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)) || item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
                                     {
-                                        @item.Action <text> Import </text>@item.TargetId<text>st</text>
-                                    }@if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
+                                        @item.Action <text> Import File </text>@item.TargetId<text>st</text>
+                                    }else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
                                     {
-                                        @item.Action <text> </text>@item.TargetId<text>st</text>
+                                        @item.Action <text> File </text>@item.TargetId<text>st</text>
                                     }
-                                    @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)))
+                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)))
+                                    {
+                                        @item.Action <text> Question </text>@item.TargetId<text>st</text>
+                                    }
+                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)))
                                     {
                                         @item.Message
                                     }
@@ -80,9 +84,9 @@
                                         {
                                             <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                         }
-                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById)))
                                         {
-                                            <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
+                                            <a href="@Url.Action("GetMoveActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                         }
                                     }
                                     else
