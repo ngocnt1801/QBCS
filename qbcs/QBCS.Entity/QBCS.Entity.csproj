@@ -60,6 +60,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="LevelInCourse.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogAction.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionInExam.cs" />
     <Compile Include="OptionTemp.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="Rule.cs" />
     <Compile Include="RuleKey.cs" />
     <Compile Include="Semester.cs" />
-    <Compile Include="sysdiagram.cs" />
     <Compile Include="Topic.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
