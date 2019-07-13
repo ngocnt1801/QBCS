@@ -15,6 +15,7 @@ namespace QBCS.Service.ViewModel
         public string Image { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public bool IsBank { get; set; }
+        public bool IsAnotherImport { get; set; }
         public StatusEnum Status { get; set; }
     }
 }

@@ -130,7 +130,8 @@ namespace QBCS.Service.Implement
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList(),
-                            IsBank = true
+                            IsBank = true,
+                            IsAnotherImport = false
                         };
 
                     }
@@ -149,7 +150,8 @@ namespace QBCS.Service.Implement
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                             }).ToList(),
                             Status = (StatusEnum)entity.Status.Value,
-                            IsBank = false
+                            IsBank = false,
+                            IsAnotherImport = !(entity.ImportId == importId)
                         };
                     }
                 }
@@ -713,6 +715,7 @@ namespace QBCS.Service.Implement
                             Image = o.Image
                         }).ToList();
                         duplicated.Image = questionEntity.Image;
+                        duplicated.IsAnotherImport = false;
                     }
                     else
                     {
@@ -727,6 +730,7 @@ namespace QBCS.Service.Implement
                         }).ToList();
                         duplicated.Image = questionEntity.Image;
                         duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                        duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
                     }
                 }
 

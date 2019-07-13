@@ -34,5 +34,6 @@ namespace QBCS.Service.ViewModel
         public string Category { get; set; }
         public bool IsBank { get; set; }
         public StatusEnum Status { get; set; }
+        public bool IsAnotherImport { get; set; }
     }
 }
