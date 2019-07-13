@@ -359,12 +359,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Scripts\jquery-ui.js" />
-    <Content Include="Scripts\jquery.ba-hashchange.min.js" />
-    <Content Include="Scripts\jquery.filedrop.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -378,7 +374,6 @@
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
-    <Content Include="Scripts\myjs\dragAndDrop\filedrag.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
     <Content Include="Scripts\js\sb-admin-2.js" />
@@ -389,7 +384,6 @@
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\myjs\init-datatable.js" />
-    <Content Include="Scripts\myjs\modal\manage-modal.js" />
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
@@ -406,7 +400,6 @@
     <Content Include="Scripts\myjs\textWord\textboxio\resources\js\wordimport.js" />
     <Content Include="Scripts\myjs\textWord\textboxio\textboxio.js" />
     <Content Include="Scripts\myjs\text-process.js" />
-    <Content Include="Scripts\myjs\track-window.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
