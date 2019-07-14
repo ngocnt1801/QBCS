@@ -6,6 +6,8 @@
     int count = 0;
 }
 
+@Styles.Render("~/bundles/content/datatables")
+
 <h2>Import history</h2>
 <div class="card shadow mb-4">
 
@@ -65,7 +67,10 @@
                                 <td>
                                     @if (item.Status == StatusEnum.Checked || item.Status == StatusEnum.Editing)
                                     {
-                                        <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id})">View Result</a>
+                                        if (User.CheckPermission(typeof(QBCS.Web.Controllers.ImportController), nameof(QBCS.Web.Controllers.ImportController.GetResult)))
+                                        {
+                                        <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id })">View Result</a>
+                                        }
                                     }
                                 </td>
                             </tr>
@@ -77,4 +82,4 @@
     </div>
 </div>
 
-
+@Scripts.Render("~/bundles/script/datatables")

@@ -395,6 +395,7 @@ function table_on_top() {
 function spinner_loading() {
 
 }
+
 $(document).ready(function () {
     nav_bar_active();
     split();

@@ -7,6 +7,9 @@
     ViewBag.Title = "GetResult";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/tab")
+
 <h2>Result</h2>
 @{
 
@@ -88,8 +91,7 @@
         </div><!-- /tabs -->
 
     </div>
-    <button class="btn btn-primary float-right col-md-1 ml-1 mb-4" data-toggle="modal" data-target="#import-modal">Save</button>
-    <button class="btn btn-outline-light float-right border-dark text-custom mr-2 col-md-1 mb-4" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>
+
 
 
     <div class="modal fade" tabindex="-1" role="dialog" id="import-modal">
@@ -131,3 +133,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 }
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/tab")
+@Scripts.Render("~/bundle/scripts/tabresult")
+@Scripts.Render("~/bundle/scripts/importfile")

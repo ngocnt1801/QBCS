@@ -5,13 +5,12 @@
     var counter = 0;
 }
 
+@Styles.Render("~/bundle/content/checkbox")
+@Styles.Render("~/bundle/content/detailquestion")
+
 <h2>Edit Question</h2>
-
-
 @using (Html.BeginForm("UpdateQuestion", "Question", FormMethod.Post, new { @class = "form-group" }))
 {
-
-
     <div class="container text-custom">
         <div class="col-lg-8">
 
@@ -31,7 +30,7 @@
                 </div>
                 @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                 @Html.ValidationMessageFor(model => model.Question.QuestionContent, "Please enter question content", new { @class = "text-danger" })
-                <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
+                <input type="hidden" name="QuestionContent" value="@Model.Question.QuestionContent" id="hidden-question-content" />
             </div>
             <span class="error-block">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger mr-7" })
@@ -122,3 +121,5 @@
     </div>
 }
 
+@Scripts.Render("~/bundle/scripts/editquestion")
+@Scripts.Render("~/bundle/scripts/processtext")

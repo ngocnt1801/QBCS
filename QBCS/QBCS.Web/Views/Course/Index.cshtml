@@ -1,9 +1,13 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.CourseViewModel>
 @using QBCS.Service.ViewModel
 @{
+    /**/
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@Styles.Render("~/bundles/content/datatables")
 
 <div class="card shadow mb-4">
     <div class="card-header">
@@ -41,3 +45,5 @@
         </table>
     </div>
 </div>
+
+@Scripts.Render("~/bundles/script/datatables")

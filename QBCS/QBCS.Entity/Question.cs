@@ -18,7 +18,7 @@ namespace QBCS.Entity
         }
 
         public int Id { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+
         public string QuestionContent { get; set; }
 
         public int? CourseId { get; set; }
@@ -45,6 +45,8 @@ namespace QBCS.Entity
         public int? CategoryId { get; set; }
 
         public int? ImportId { get; set; }
+
+        public int? Status { get; set; }
 
         public virtual Category Category { get; set; }
 

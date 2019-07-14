@@ -76,24 +76,31 @@
                             <input type="checkbox" name="checkHTML" value="true" class="custom-control-input" id="defaultChecked1">
                             <label class="custom-control-label" for="defaultChecked1">Get HTML element in File</label>
                         </div>
-                        <div id="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
-                            <div id="drag_upload_file">
-                                <p>Drag and Drop file here</p> 
-                                <input type="file" id="selectfile">
-                            </div>
-                        </div>
+
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom mt-3">
-                            <i class="text-dark text-custom">Or Choose a File:</i>
-                            <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control border-dark" id="inFile" required />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-import-file btn-choose" type="button">Choose</button>
-                                </span>
+                            @*<div id="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
+                                    <div id="drag_upload_file">
+                                        <p>Drag and Drop file here</p>
+                                        <input type="file" id="selectfile" name="questionFile">
+                                    </div>
+                                </div>*@
+                            @*<i class="text-dark text-custom">Or Choose a File:</i>*@
+                            <div class="input-group input-file text-custom" name="questionFile" id="drop_file_zone" ondrop="upload_file(event)" ondragover="addClassDrop(event)" ondragleave="removeClassDrop(event)">
+                                <div class="col-12">
+                                    <input type="text" class="form-control border-0 col-10" id="inFile" required />
+                                    <input type="file" id="selectfile" name="questionFile" class="hidden">
+                                    <span class="input-group-btn col-2">
+                                        <i class="fa fa-2x fa-cloud-upload-alt text-primary mr-2"></i>
+                                        <span class="text-gray-500">Drag and Drop file here or</span>
+                                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                                    </span>
+                                </div>
+
 
                             </div>
                         </div>
-                        <div id="uploads"></div>
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary float-right" id="btnImport">Import</button>
                             <button type="reset" class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</button>
@@ -124,3 +131,5 @@
 
 @Scripts.Render("~/bundle/scripts/importfile")
 @Scripts.Render("~/bundle/scripts/autocompleteLecturer")
+@Scripts.Render("~/bundle/scripts/unobtrusive")
+@Scripts.Render("~/bundle/scripts/dragFile")

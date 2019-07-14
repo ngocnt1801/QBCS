@@ -27,6 +27,7 @@ namespace QBCS.Web.Controllers
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "ShowScript"
             , InternalId = 16)]
+        [LogAction(Action = "Script", Message = "Get Script", Method = "GET")]
         public ActionResult Index()
         {
             return View();
@@ -36,6 +37,7 @@ namespace QBCS.Web.Controllers
             , "Run Scripts"
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "RunScript")]
+        [LogAction(Action = "Script", Message = "Run Script", Method = "GET")]
         public ActionResult Run(string raw)
         {
             scriptService.RunScirpt(raw);

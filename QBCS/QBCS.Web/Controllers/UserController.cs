@@ -23,6 +23,7 @@ namespace QBCS.Web.Controllers
         //Admin
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "All Users", "QBCS", protectType: ProtectType.Authorized, ShortName = "User", InternalId = (int)SideBarEnum.AllUser)]
+        [LogAction(Action = "User", Message = "Get All User", Method = "GET")]
         public ActionResult Index()
         {
             var list = userService.GetAllUser();
@@ -34,6 +35,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Disable User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Disable", TargetName = "User", IdParamName = "userId", Fullname = "", UserCode = "")]
+        [LogAction(Action = "User", Message = "Disable User", Method = "GET")]
         public ActionResult Disable(int userId)
         {
             userService.DisableUser(userId);
@@ -44,6 +46,7 @@ namespace QBCS.Web.Controllers
         //Admin
         //stpm: feature declare
         [Feature(FeatureType.Page, "Enable User", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "User", Message = "Enable User", Method = "GET")]
         public ActionResult Enable(int userId)
         {
             userService.EnableUser(userId);
@@ -51,6 +54,7 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [LogAction(Action = "User", Message = "Update User", Method = "GET")]
         public ActionResult Update(UserViewModel model)
         {
             userService.UpdateUserInfo(model);
@@ -71,6 +75,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Delete Course From User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Delete", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
+        [LogAction(Action = "Course", Message = "Delete Course", Method = "GET")]
         public ActionResult DeleteCourse(int userId, int courseId)
         {
 
@@ -89,6 +94,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Add Course To User", "QBCS", protectType: ProtectType.Authorized)]
         [Log(Action = "Add", TargetName = "Courses of User", Fullname = "", UserCode = "", IdParamName = "userId")]
+        [LogAction(Action = "Course", Message = "Add Course", Method = "GET")]
         public ActionResult AddCourse(int courseId, int userId)
         {
             var user = (UserViewModel)Session["user"];
@@ -110,6 +116,7 @@ namespace QBCS.Web.Controllers
         //Admin
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get detail for edit user", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "User", Message = "Get User Information", Method = "GET")]
         public ActionResult Details(int userId)
         {
             var item = userService.GetUserById(userId);
@@ -126,6 +133,7 @@ namespace QBCS.Web.Controllers
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Search Lecturer By Name", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "User", Message = "Get Lecturer", Method = "GET")]
         public JsonResult GetLecturer(string term)
         {
             List<string> lecturerName = new List<string>();

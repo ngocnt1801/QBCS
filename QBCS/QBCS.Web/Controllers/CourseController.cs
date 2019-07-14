@@ -23,6 +23,7 @@ namespace QBCS.Web.Controllers
 
         [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.CourseByUser)]
         // GET: Course
+        [LogAction(Action = "Courses", Message = "Get All Courses", Method = "GET")]
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
@@ -51,6 +52,7 @@ namespace QBCS.Web.Controllers
             return View();
         }
         [HttpPost]
+        [LogAction(Action = "Courses", Message = "Add Course", Method = "POST")]
         public ActionResult Add(CourseViewModel model)
         {
             courseService.AddNewCourse(model);
@@ -62,6 +64,7 @@ namespace QBCS.Web.Controllers
             return View(result);
         }
         [HttpPost]
+        [LogAction(Action = "Courses", Message = "Edit Course", Method = "POST")]
         public ActionResult Edit(CourseViewModel model)
         {
             var result = courseService.UpdateCourse(model);
@@ -75,6 +78,7 @@ namespace QBCS.Web.Controllers
             }
 
         }
+        [LogAction(Action = "Courses", Message = "Get Course", Method = "GET")]
         public ActionResult GetCoursesByName(string name)
         {
             List<CourseViewModel> result = new List<CourseViewModel>();
@@ -92,11 +96,15 @@ namespace QBCS.Web.Controllers
             }
             return View("ListCourse", result);
         }
+
+        [LogAction(Action = "Courses", Message = "Get Course Detail", Method = "GET")]
         public ActionResult Detail(int itemId)
         {
             var result = courseService.GetDetailCourseById(itemId);
             return View(result);
         }
+
+        [LogAction(Action = "Courses", Message = "Update Disable Course", Method = "GET")]
         public ActionResult UpdateDisable(int itemId)
         {
             //int itemId = 0;
@@ -118,6 +126,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "All Courses For Generate", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Courses", Message = "View Courses", Method = "GET")]
         public ActionResult GetAllCourse()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -129,6 +138,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.AllCourseHistory)]
+        [LogAction(Action = "Courses", Message = "View All Course", Method = "GET")]
         public ActionResult GetAllCourseForHistory()
         {
             List<CourseViewModel> courses = courseService.GetAllCourses();
@@ -150,6 +160,7 @@ namespace QBCS.Web.Controllers
         [Dependency(typeof(QuestionController), nameof(QuestionController.GetQuestions))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
+        [LogAction(Action = "Courses", Message = "Get Course Detail", Method = "GET")]
         public ActionResult CourseDetail(int courseId)
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
@@ -165,6 +176,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.SideBar, "All Course Statistic", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = (int)SideBarEnum.AllStatistic)]
         //stpm: dependency declare
         [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
+        [LogAction(Action = "Courses", Message = "View Course Statistic", Method = "GET")]
         public ActionResult CourseStatistic()
         {
 
@@ -176,6 +188,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.SideBar, "Course Statistic By User", "QBCS", protectType: ProtectType.Authorized, ShortName = "Statistic", InternalId = (int)SideBarEnum.StatisticByUser)]
         //stpm: dependency declare
         [Dependency(typeof(CourseController), nameof(CourseController.GetCourseDetailStat))]
+        [LogAction(Action = "Courses", Message = "View Course Statistic", Method = "GET")]
         public ActionResult CourseStatisticByUser()
         {
             var user = (UserViewModel)Session["user"];
@@ -189,6 +202,7 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Course Detail Statistic", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Courses", Message = "View Course Statistic Detail", Method = "GET")]
         public ActionResult GetCourseDetailStat(int id, string type)
         {
             var result = courseService.GetCourseStatDetailByIdAndType(id, type);

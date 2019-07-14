@@ -7,10 +7,13 @@
 
 @using (Html.BeginForm("BackToGenerate", "Examination", FormMethod.Post))
 {
-    <input type="hidden" name="courseId" value="@Model[0].CourseId"/>
+    <input type="hidden" name="courseId" value="@Model[0].CourseId" />
     <input type="hidden" name="groupExam" value="@Model[0].ExamGroup" />
     <button type="submit" class="btn btn-primary float-left mb-2">Delete Examinations</button>
 }
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/smartwizard")
+@Styles.Render("~/bundle/content/tab")
 <div class="tabs tabs-style-topline">
     <nav>
         <ul>
@@ -61,7 +64,7 @@
                                                         <p>@question.QuestionContent</p>
                                                         @if (question.Image != null)
                                                         {
-                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
+                                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
                                                         }
                                                         @{int charater = 0; }
                                                         @foreach (var option in question.Options)
@@ -75,7 +78,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -87,7 +90,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -139,3 +142,6 @@
         }
     </div><!-- /content -->
 </div><!-- /tabs -->
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")
+@Scripts.Render("~/bundle/scripts/tab")

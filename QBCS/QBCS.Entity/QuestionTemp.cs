@@ -19,9 +19,9 @@ namespace QBCS.Entity
         public int Id { get; set; }
 
         public int? ImportId { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+
         public string QuestionContent { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+
         public string OptionsContent { get; set; }
 
         public int? Status { get; set; }
@@ -44,12 +44,12 @@ namespace QBCS.Entity
         [StringLength(200)]
         public string LevelName { get; set; }
 
+        public string Message { get; set; }
+
         [StringLength(200)]
         public string LearningOutcome { get; set; }
 
         public string Image { get; set; }
-
-        public string Message { get; set; }
 
         public int? Type { get; set; }
 

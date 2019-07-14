@@ -7,6 +7,11 @@ namespace QBCS.Web
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            //jquery
+            bundles.Add(new ScriptBundle("~/bundles/script/jquery").Include(
+                "~/Scripts/vendor/jquery/jquery.js"
+                ));
+
             //basic template
             bundles.Add(new StyleBundle("~/bundles/content/template").Include(
                 "~/Content/sb-admin-2.css",
@@ -17,9 +22,7 @@ namespace QBCS.Web
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
                 "~/Scripts/bootstrap.bundle.js",
-                "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js"
-
+                "~/Scripts/js/sb-admin-2.js"
                 ));
 
             //data table
@@ -43,10 +46,13 @@ namespace QBCS.Web
                 "~/Scripts/myjs/import-file.js"
                 ));
 
+            //process text
+            bundles.Add(new ScriptBundle("~/bundle/scripts/processtext").Include(
+                "~/Scripts/myjs/text-process.js"
+                ));
             //tab import result
             bundles.Add(new ScriptBundle("~/bundle/scripts/tabresult").Include(
-                "~/Scripts/myjs/change-partial-view.js",
-                "~/Scripts/myjs/text-process.js"
+                "~/Scripts/myjs/change-partial-view.js"
                 ));
 
             //smartwizard
@@ -157,13 +163,14 @@ namespace QBCS.Web
             //Track window
             bundles.Add(new ScriptBundle("~/bundle/scripts/tracking").Include(
                 "~/Scripts/myjs/track-window.js",
-                "~/Scripts/myjs/modal/manage-modal.js"
+                "~/Scripts/myjs/modal/manage-modal.js",
+                 "~/Scripts/jquery.ba-hashchange.min.js"
                 ));
 
             //AJAX FORM
             bundles.Add(new ScriptBundle("~/bundle/scripts/unobtrusive").Include(
-                 "~/Scripts/jquery.unobtrusive-ajax.js",
-                 "~/Scripts/jquery.ba-hashchange.min.js"
+                 "~/Scripts/jquery.unobtrusive-ajax.js"
+
                 ));
             bundles.Add(new ScriptBundle("~/bundle/scripts/dragFile").Include(
                 "~/Scripts/myjs/dragAndDrop/filedrag.js"
@@ -173,6 +180,11 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/togglequestion").Include(
                 "~/Scripts/myjs/toggle-question.js"
                 ));
+
+            //Edit question
+            bundles.Add(new StyleBundle("~/bundle/content/detailquestion").Include(
+                      "~/Content/style-detail-question.css"
+                      ));
         }
     }
 }

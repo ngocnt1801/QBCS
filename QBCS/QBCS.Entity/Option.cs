@@ -10,7 +10,7 @@ namespace QBCS.Entity
     public partial class Option
     {
         public int Id { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+
         public string OptionContent { get; set; }
 
         public int? QuestionId { get; set; }

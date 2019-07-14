@@ -7,18 +7,19 @@
     <script type='text/javascript' src='~/Scripts/myjs/textWord/textboxio/textboxio.js'></script>
     <link rel="stylesheet" type="text/css" href="~/Scripts/myjs/textWord/example.css" />
     <script src="~/Scripts/jquery-3.3.1.js"></script>
-    
+    @Styles.Render("~/bundle/content/autocompleteLecturer")
+    @Styles.Render("~/bundle/content/importfile")
 </head>
 
 <body onload="instantiateTextbox();">
-    <div class="row">
+    @*<div class="row">
         <div class="col-md-12">
             <a class="text-info btn-link  float-right" href="@Url.Action("Index", "Home")">Switch to import file</a>
         </div>
-    </div>
+    </div>*@
     <div class="row" style="margin-bottom:10px">
         <div class="col-md-3 float-left">
-            <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" placeholder="Search Lecturer" /> 
+            <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" placeholder="Search Lecturer" />
         </div>
         <div class="col-sm-6">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -41,22 +42,23 @@
         </div>
         <div class="col-md-3">
             @*<div class="col-md-1">
-            <h4>Course</h4>
-        </div>*@
-            <select class="form-control border-dark" id="Course" style="margin-bottom:5px"></select>            
+                    <h4>Course</h4>
+                </div>*@
+            <select class="form-control border-dark" id="Course" style="margin-bottom:5px"></select>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12" style="height:35em">
+        <div class="col-md-12" style="height:28em">
             <textarea id="textbox" style="height:100% !important">
 
         </textarea>
             <div style="margin-top:5px">
-                <a href="#" class="btn btn-primary float-right importmanually">Import</a>
+                <button href="#" class="btn btn-primary float-right importmanually">Import</button>
             </div>
         </div>
     </div>
-
+    @Scripts.Render("~/bundle/scripts/importfile")
+    @Scripts.Render("~/bundle/scripts/autocompleteLecturer")
     <script>
     var instantiateTextbox = function () {
         textboxio.replaceAll('textarea', {
@@ -103,7 +105,8 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    window.location.replace('Index');
+                    $("iframe").get(0).contentWindow.document.body.innerHTML = "";
+                    toastr.info("Your question are processing. It will notify when done.");
                 },
                 failure: function(response) {
                     toastr.error("Import error. Please try again!");

@@ -28,6 +28,7 @@ namespace QBCS.Web.Controllers
         // GET: Import
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "List User Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "Import History", InternalId = (int)SideBarEnum.ImportByUser)]
+        [LogAction(Action = "Import", Message = "View All Import History", Method = "GET")]
         public ActionResult Index()
         {
             var user = ((UserViewModel)Session["user"]);
@@ -47,6 +48,7 @@ namespace QBCS.Web.Controllers
         // GET: Import
         //stpm: feature declare
         [Feature(FeatureType.SideBar, "List All Imports", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Imports", InternalId = (int)SideBarEnum.AllImport)]
+        [LogAction(Action = "Import", Message = "View All Import History", Method = "GET")]
         public ActionResult AllImport()
         {
             var model = importService.GetListImport(null);
@@ -57,6 +59,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import Result", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Import", Message = "View Detail Import History", Method = "GET")]
         public ActionResult GetResult(int importId)
         {
             var result = importService.GetImportResult(importId);
@@ -74,6 +77,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Edit Question Import", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
+        [LogAction(Action = "Question", Message = "Edit Question", Method = "GET")]
         public ActionResult EditQuestion(QuestionTempViewModel model)
         {
             importService.UpdateQuestionTemp(model);
@@ -84,6 +88,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Question Import", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "Get Question Temp", Method = "GET")]
         public ActionResult GetQuestionTemp(int tempId)
         {
             var questiontemp = importService.GetQuestionTemp(tempId);
@@ -94,7 +99,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Add Question to Bank", "QBCS", protectType: ProtectType.Authorized)]
-        [Log(Action = "Save", TargetName = "Question", IdParamName = "importId")]
+        [LogAction(Action = "Question", Message = "Add Question To Bank", Method = "GET")]
         public ActionResult AddToBank(int importId)
         {
             Task.Factory.StartNew(() => {
@@ -109,7 +114,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Cancel Import", "QBCS", protectType: ProtectType.Authorized)]
-        [Log(Action = "Cancel", TargetName = "Question", IdParamName = "importId")]
+        [LogAction(Action = "Question", Message = "Cancel Import", Method = "GET")]
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);
@@ -121,6 +126,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Delete Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "Delete Question", Method = "GET")]
         public ActionResult Delete(int questionId, string url)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Deleted);
@@ -132,6 +138,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Accept Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "Accept Invalid Question", Method = "GET")]
         public ActionResult Skip(int questionId, string url)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);

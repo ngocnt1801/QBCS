@@ -1,5 +1,5 @@
 ﻿function turnon_modal() {
-    var contentFile;
+   
     $('#btnImport').click(function () {
         content = $('#inFile').val();
         if (content != "") {

@@ -45,6 +45,7 @@ namespace QBCS.Web.Controllers
 
         [HttpPost]
         [Log(Action = "Create", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        [LogAction(Action = "Question", Message = "Add Question", Method = "POST")]
         public ActionResult Add(QuestionViewModel model)
         {
             questionService.Add(model);
@@ -53,12 +54,14 @@ namespace QBCS.Web.Controllers
         }
 
         // GET: Question
+        [LogAction(Action = "Question", Message = "Get Question By CourseId", Method = "GET")]
         public ActionResult GetListQuestion(int courseId)
         {
             List<QuestionViewModel> ListQuestion = questionService.GetQuestionsByCourse(courseId);
             return View("ListQuestion", ListQuestion);
         }
 
+        [LogAction(Action = "Question", Message = "Add Question in Course", Method = "GET")]
         public ActionResult AddQuestion(int courseId)
         {
             var question = new QuestionViewModel();
@@ -67,6 +70,7 @@ namespace QBCS.Web.Controllers
         }
 
         //GET: Question
+        [LogAction(Action = "Question", Message = "Get Question", Method = "GET")]
         public ActionResult GetQuestionsByContent(string content)
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
@@ -88,6 +92,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Question Detail", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "View Question Detail", Method = "GET")]
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -112,6 +117,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Update Question", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        [LogAction(Action = "Question", Message = "Update Question", Method = "GET")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
@@ -166,6 +172,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
+        [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
         public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
@@ -194,6 +201,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
+        [LogAction(Action = "Question", Message = "Import File Text area", Method = "POST")]
         public JsonResult ImportTextarea(Textarea textarea)
         {
             var user = (UserViewModel)Session["user"];
@@ -216,6 +224,7 @@ namespace QBCS.Web.Controllers
         }
 
         [Feature(FeatureType.BusinessLogic, "Get All Course By User for import", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Course", Message = "Load All Course", Method = "GET")]
         public JsonResult LoadCourseAjax()
         {
             var user = (UserViewModel)Session["user"];
@@ -243,6 +252,7 @@ namespace QBCS.Web.Controllers
             return PartialView("_AllQuestion", questions);
         }
 
+        [LogAction(Action = "Question", Message = "Get Question By Question Id", Method = "GET")]
         public ActionResult GetQuestionByQuestionId(int? questionId)
         {
             //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
@@ -258,6 +268,7 @@ namespace QBCS.Web.Controllers
         //stpm: dependency declare
         [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
+        [LogAction(Action = "Questions", Message = "View Question Detail", Method = "GET")]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
@@ -271,6 +282,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "Update File", Method = "GET")]
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -283,6 +295,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.BusinessLogic, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Move", TargetName = "Question", ObjectParamName = "ques", IdParamName = "ids", CateParamName = "categoryId", LocParamName = "learningOutcomeId", LevelParamName = "levelId")]
+        [LogAction(Action = "Question", Message = "Move Question", Method = "GET")]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
