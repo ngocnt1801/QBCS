@@ -220,29 +220,29 @@ namespace QBCS.Service.Implement
                     QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
-                    DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
-                    {
-                        Id = questionTemp.DuplicatedWithBank.Id,
-                        CourseName = questionTemp.DuplicatedWithBank.Course.Name,
-                        Code = questionTemp.DuplicatedWithBank.QuestionCode,
-                        QuestionContent = questionTemp.DuplicatedWithBank.QuestionContent,
-                        Options = questionTemp.DuplicatedWithBank.Options.Select(o => new OptionViewModel
-                        {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                        }).ToList()
-                    }) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
-                    {
-                        Id = questionTemp.DuplicatedWithImport.Id,
-                        CourseName = "Import file",
-                        Code = questionTemp.DuplicatedWithImport.Code,
-                        QuestionContent = questionTemp.DuplicatedWithImport.QuestionContent,
-                        Options = questionTemp.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
-                        {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                        }).ToList()
-                    }) : null,
+                    //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
+                    //{
+                    //    Id = questionTemp.DuplicatedWithBank.Id,
+                    //    CourseName = questionTemp.DuplicatedWithBank.Course.Name,
+                    //    Code = questionTemp.DuplicatedWithBank.QuestionCode,
+                    //    QuestionContent = questionTemp.DuplicatedWithBank.QuestionContent,
+                    //    Options = questionTemp.DuplicatedWithBank.Options.Select(o => new OptionViewModel
+                    //    {
+                    //        OptionContent = o.OptionContent,
+                    //        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    //    }).ToList()
+                    //}) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
+                    //{
+                    //    Id = questionTemp.DuplicatedWithImport.Id,
+                    //    CourseName = "Import file",
+                    //    Code = questionTemp.DuplicatedWithImport.Code,
+                    //    QuestionContent = questionTemp.DuplicatedWithImport.QuestionContent,
+                    //    Options = questionTemp.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                    //    {
+                    //        OptionContent = o.OptionContent,
+                    //        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    //    }).ToList()
+                    //}) : null,
                     Options = questionTemp.OptionTemps.Select(o => new OptionViewModel
                     {
                         Id = o.Id,

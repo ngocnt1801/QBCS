@@ -493,6 +493,7 @@ namespace DuplicateQuestion
                 var bank = GetBank(importModel.CourseId);
                 var import = GetImportedQuestion(importModel.ImportId, (int)StatusEnum.NotCheck);
                 var otherImpor = GetOtherImportQuestion(importId.Value, importModel.CourseId);
+                bank.AddRange(import);
                 bank.AddRange(otherImpor);
                 CheckDuplicateAndUpdateDb(bank, import);
 
@@ -520,8 +521,6 @@ namespace DuplicateQuestion
 
         private static void CheckDuplicateAndUpdateDb(List<QuestionModel> bank, List<QuestionModel> import)
         {
-            //
-            bank.AddRange(import);
 
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {

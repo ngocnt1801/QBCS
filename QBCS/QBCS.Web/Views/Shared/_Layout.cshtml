@@ -307,8 +307,8 @@
 
 
     @{
-        var message = TempData["Message"];
-        var status = TempData["Status"];
+        var message = ViewBag.Message;
+        var status = ViewBag.Status;
         if (message != null)
         {
             switch ((ToastrEnum)status)

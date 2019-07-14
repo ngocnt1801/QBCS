@@ -105,8 +105,8 @@ namespace QBCS.Web.Controllers
             Task.Factory.StartNew(() => {
                 importService.ImportToBank(importId);
             });
-            TempData["Message"] = "Your questions are processing";
-            TempData["Status"] = ToastrEnum.Info;
+            ViewBag.Message = "Your questions are processing";
+            ViewBag.Status = ToastrEnum.Info;
 
             return RedirectToAction("Index", "Home");
         }
@@ -118,8 +118,8 @@ namespace QBCS.Web.Controllers
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);
-            TempData["Message"] = "Your import is canceled";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "Your import is canceled";
+            ViewBag.Status = ToastrEnum.Success;
             return RedirectToAction("Index", "Home");
         }
 

@@ -107,8 +107,8 @@ namespace QBCS.Web.Controllers
             var result = userService.AddUserCourse(courseId, userId);
             if (result == false)
             {
-                TempData["Message"] = "This course is already add for user";
-                TempData["Status"] = ToastrEnum.Warning;
+                ViewBag.Message = "This course is already add for user";
+                ViewBag.Status = ToastrEnum.Warning;
             }
             return RedirectToAction("Details", "User", new { userId = userId });
         }

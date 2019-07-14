@@ -23,6 +23,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IImportService importService;
         private ICourseService courseService;
+        private IUserService userService;
 
         public QuestionController()
         {
@@ -34,6 +35,7 @@ namespace QBCS.Web.Controllers
             examinationService = new ExaminationService();
             importService = new ImportService();
             courseService = new CourseService();
+            userService = new UserService();
         }
 
         // GET: Question
@@ -173,25 +175,39 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
-        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                if (ownerName != null && string.IsNullOrWhiteSpace(ownerName))
+                if (owner != null && owner != 0)
                 {
-                    ownerName = user.Fullname;
+                    var ownerUser = userService.GetUserById(owner.Value);
+                    if (ownerUser != null)
+                    {
+                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
+
+                        //notify 
+                        ViewBag.Modal = "#success-modal";
+                        TempData["CourseId"] = courseId;
+                        TempData["OwnereName"] = ownerUser.Fullname;
+                        return Json("OK");
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Owner lecturer does not exists";
+                        ViewBag.Status = ToastrEnum.Error;
+                        return Json("Error");
+                    }
+                }
+                else
+                {
+                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
                 }
 
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
             }
-
-            //notify 
-            ViewBag.Modal = "#success-modal";
-            TempData["CourseId"] = courseId;
-            TempData["OwnereName"] = ownerName;
 
             return Json("OK");
             //return RedirectToAction("Index", "Home");
@@ -217,8 +233,8 @@ namespace QBCS.Web.Controllers
 
 
             //notify 
-            TempData["Message"] = "You import successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "You import successfully";
+            ViewBag.Status = ToastrEnum.Success;
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
