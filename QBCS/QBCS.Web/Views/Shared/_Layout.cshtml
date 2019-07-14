@@ -13,20 +13,7 @@
     <title>@ViewBag.Title</title>
     @*@Styles.Render("~/bundles/content/css")*@
     @Styles.Render("~/bundles/content/template")
-    @Styles.Render("~/bundles/content/datatables")
-    @Styles.Render("~/bundle/content/importfile")
-    @Styles.Render("~/bundle/content/checkbox")
-    @Styles.Render("~/bundle/content/smartwizard")
-    @Styles.Render("~/bundle/content/toastr")
-    @Styles.Render("~/bundle/content/tab")
-    @Styles.Render("~/bundle/content/category")
-    @Styles.Render("~/bundle/content/spinner")
-    
-    @Styles.Render("~/bundle/content/img")
-    @Styles.Render("~/bundle/content/autocompleteLecturer")
-    @Styles.Render("~/bundle/content/tagsinputrule")
-
-
+    @Scripts.Render("~/bundles/script/template")
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -245,23 +232,11 @@
         </div>
     </div>
 
-    @Scripts.Render("~/bundles/script/template")
-    @Scripts.Render("~/bundles/script/datatables")
-    @Scripts.Render("~/bundle/scripts/importfile")
-    @Scripts.Render("~/bundle/scripts/smartwizard")
+    
     @Scripts.Render("~/bundle/scripts/signalr")
     <script src="~/signalr/hubs"></script>
     @Scripts.Render("~/bundle/scripts/notification")
     @Scripts.Render("~/bundle/scripts/toastr")
-    @Scripts.Render("~/bundle/scripts/tab")
-    @Scripts.Render("~/bundle/scripts/category")
-    @Scripts.Render("~/bundle/scripts/spinner")
-    @Scripts.Render("~/bundle/scripts/editquestion")
-    @Scripts.Render("~/bundle/scripts/autocompleteLecturer")
-
-    @Scripts.Render("~/bundle/scripts/tagsinputrule")
-    @Scripts.Render("~/bundle/scripts/img-zoom")
-    @Scripts.Render("~/bundle/scripts/togglequestion")
     @RenderSection("scripts", required: false)
 
 

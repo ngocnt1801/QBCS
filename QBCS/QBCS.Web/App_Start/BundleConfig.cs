@@ -40,10 +40,15 @@ namespace QBCS.Web
                 ));
 
             bundles.Add(new ScriptBundle("~/bundle/scripts/importfile").Include(
-                "~/Scripts/myjs/import-file.js",
+                "~/Scripts/myjs/import-file.js"
+                ));
+
+            //tab import result
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tabresult").Include(
                 "~/Scripts/myjs/change-partial-view.js",
                 "~/Scripts/myjs/text-process.js"
                 ));
+
             //smartwizard
             bundles.Add(new ScriptBundle("~/bundle/scripts/smartwizard").Include(
                 "~/Scripts/myjs/jquery.smartWizard.min.js",

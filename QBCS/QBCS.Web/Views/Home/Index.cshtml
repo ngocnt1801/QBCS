@@ -3,30 +3,14 @@
 @{
     /**/
 
+    /**/
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
-<head>
-    @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-        <script src="~/Scripts/jquery.autocomplete.js"></script>*@
-    @*<script src="~/Scripts/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="~/Scripts/jquery-ui.css">*@
-
-</head>
-@*<script>
-        $(document).ready(function () {
-            var data = ["asddddddd","qweqweqwe"];
-            //$('#myautocomplete').change({
-
-            //});
-            $('#myautocomplete').autocomplete({
-          source: data
-        });
-        });
-
-    </script>*@
-
+@Styles.Render("~/bundle/content/autocompleteLecturer")
+@Styles.Render("~/bundle/content/importfile")
 <div class="container-fluid ml-5">
     @*<div class="row">
             <div class="col-md-10 mb-2">
@@ -39,15 +23,15 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Import Question</h6>
-                    
+
                 </div>
 
-               
+
                 <div class="card-body">
 
                     @*<div class="col-xl-3 col-md-6 mb-4">
-                <a href="" class="btn btn-primary float-left">Import Question</a>
-            </div>*@
+                            <a href="" class="btn btn-primary float-left">Import Question</a>
+                        </div>*@
                     @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <!-- COMPONENT START -->
@@ -120,3 +104,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@Scripts.Render("~/bundle/scripts/importfile")
+@Scripts.Render("~/bundle/scripts/autocompleteLecturer")
