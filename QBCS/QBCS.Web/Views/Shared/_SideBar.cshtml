@@ -37,7 +37,7 @@
         sidebar = sidebar ?? new List<AuthLib.Models.SideBarModel>();
     }
 
-    @if (sidebar.Any(s => (s.InternalId??-1) == (int)QBCS.Service.Enum.SideBarEnum.Import))
+    @if (sidebar.Any(s => (s.InternalId ?? -1) == (int)QBCS.Service.Enum.SideBarEnum.Import))
     {
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -62,7 +62,7 @@
     }
 
 
-    @foreach (var item in sidebar.OrderBy(s => s.InternalId??99))
+    @foreach (var item in sidebar.OrderBy(s => s.InternalId ?? 99))
     {
 
         if (item.IsInternal
@@ -80,7 +80,12 @@
         }
 
     }
-
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "LogAction",new { id = ((UserViewModel)Session["user"]).Id })">
+            <i class="fas fa-history"></i>
+            <span>Log</span>
+        </a>
+    </li>
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

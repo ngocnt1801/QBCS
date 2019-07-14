@@ -28,6 +28,7 @@ namespace QBCS.Web.Controllers
             , ShortName = "Import"
             , InternalId = (int)SideBarEnum.Import)]
         [Dependency(typeof(UserController), nameof(UserController.GetLecturer))]
+        [LogAction(Action = "Navigation", Message = "Get Import Moodle Navigation", Method = "GET")]
         public ActionResult Index()
         {
             //User.CheckPermission(typeof(HomeController),nameof(Index))
@@ -48,6 +49,7 @@ namespace QBCS.Web.Controllers
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Home"
             , InternalId = (int)SideBarEnum.Staff)]
+        [LogAction(Action = "Navigation", Message = "Get Staff's Navigation Home", Method = "GET")]
         public ActionResult Staff()
         {
             ViewBag.Title = "Staff Page";
@@ -67,6 +69,7 @@ namespace QBCS.Web.Controllers
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Home"
             , InternalId = (int)SideBarEnum.Admin)]
+        [LogAction(Action = "Navigation", Message = "Get Admin's Navigation Home", Method = "GET")]
         public ActionResult Admin()
         {
             ViewBag.Title = "Admin Page";
@@ -81,6 +84,7 @@ namespace QBCS.Web.Controllers
             return View("Admin", null);
         }
 
+        [LogAction(Action = "Login", Message = "Login", Method = "POST")]
         public ActionResult Login(string username, string password)
         {
             var user = userService.Login(username, password);
@@ -96,6 +100,7 @@ namespace QBCS.Web.Controllers
 
         }
 
+        [LogAction(Action = "Logout", Message = "Logout", Method = "POST")]
         public RedirectResult Logout()
         {
             Session.Clear();
@@ -111,6 +116,7 @@ namespace QBCS.Web.Controllers
             , InternalId = (int)SideBarEnum.Manually)]
         [Dependency(typeof(QuestionController), nameof(QuestionController.ImportTextarea))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.LoadCourseAjax))]
+        [LogAction(Action = "Import", Message = "Get View Import File manually", Method = "GET")]
         public ActionResult ImportWithTextArea()
         {
             TempData["active"] = "Manually";
@@ -122,6 +128,7 @@ namespace QBCS.Web.Controllers
             , "QBCS", protectType: ProtectType.Authorized
             , ShortName = "Import MS Word"
             , InternalId = (int)SideBarEnum.ImportMSWord)]
+        [LogAction(Action = "Import", Message = "Get View Import File By Word", Method = "GET")]
         public ActionResult ImportWord()
         {
             TempData["active"] = "ImportWord";

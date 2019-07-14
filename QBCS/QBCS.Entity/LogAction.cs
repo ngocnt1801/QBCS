@@ -44,9 +44,9 @@ namespace QBCS.Entity
         public string UserCode { get; set; }
 
         public int? Status { get; set; }
-        public int? CourseId { get; set; }
-        public int? LearningOutcomeId { get; set; }
-        public int? CategoryId { get; set; }
+
+        [StringLength(100)]
+        public string Ip { get; set; }
 
     }
 }

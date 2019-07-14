@@ -27,6 +27,7 @@ namespace QBCS.Web.Controllers
         }
 
         //All role
+       
         public JsonResult GetNotification()
         {
             List<NotificationViewModel> notificationList = null;
@@ -39,6 +40,7 @@ namespace QBCS.Web.Controllers
         }
 
         //All role
+        [LogAction(Action = "Notification", Message = "Mark Read All Notification", Method = "GET")]
         public JsonResult ReadAll()
         {
             int userId = ((UserViewModel)Session["user"]).Id;

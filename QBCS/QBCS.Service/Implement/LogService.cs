@@ -174,7 +174,7 @@ namespace QBCS.Service.Implement
         public List<LogViewModel> GetAllActivitiesByTargetId(int targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList(); ;
+            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList(); 
             foreach (var item in listLog)
             {
                 LogViewModel logViewModel = new LogViewModel()

@@ -21,11 +21,13 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
         }
         // GET: LearningOutcome
+        [LogAction(Action = "LOC", Message = "Get LOC", Method = "GET")]
         public ActionResult Index()
         {
             var list = learningOutcomeService.GetAllLearningOutcome();
             return View(list);
         }
+        [LogAction(Action = "LOC", Message = "Add LOC", Method = "GET")]
         public ActionResult Add(int courseId)
         {
             var learningOutcome = new LearningOutcomeViewModel()
@@ -35,6 +37,7 @@ namespace QBCS.Web.Controllers
             return View(learningOutcome);
         }
         [HttpPost]
+        [LogAction(Action = "LOC", Message = "Add LOC", Method = "POST")]
         public ActionResult Add(LearningOutcomeViewModel learningOutcome)
         {
             var courseId = learningOutcomeService.AddLearningOutcome(learningOutcome);
@@ -44,12 +47,14 @@ namespace QBCS.Web.Controllers
             }
             return RedirectToAction("Detail","Course", new { itemId = courseId });
         }
+        [LogAction(Action = "LOC", Message = "Edit LOC", Method = "GET")]
         public ActionResult Edit(int id)
         {
             var result = learningOutcomeService.GetLearningOutcomeById(id);
             return View(result);
         }
         [HttpPost]
+        [LogAction(Action = "LOC", Message = "Edit LOC", Method = "POST")]
         public ActionResult Edit(LearningOutcomeViewModel learningoutcome)
         {
             var courseId = learningOutcomeService.UpdateLearningOutcome(learningoutcome);
@@ -60,21 +65,27 @@ namespace QBCS.Web.Controllers
             }
             return RedirectToAction("Detail", "Course", new { itemId = courseId });
         }
+        [LogAction(Action = "LOC", Message = "Get LOC", Method = "GET")]
         public JsonResult LoadCourse()
         {
             var result = courseService.GetAllCourses();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [LogAction(Action = "Course", Message = "Search Course Live", Method = "GET")]
         public JsonResult LoadCourseLive(string term)
         {
             var result = courseService.GetCoursesVMByNameAndCode(term);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        [LogAction(Action = "LOC", Message = "Update LOC", Method = "GET")]
         public ActionResult UpdateDisable(int itemId)
         {
             var update = learningOutcomeService.UpdateDisable(itemId);
             return RedirectToAction("Detail","Course", new { itemId = update});
         }
+
+        [LogAction(Action = "Course", Message = "View Course Active", Method = "GET")]
         public JsonResult LoadCourseActive()
         {
             var result = courseService.GetCourseByDisable();

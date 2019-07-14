@@ -164,6 +164,7 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/dragFile").Include(
                 "~/Scripts/myjs/dragAndDrop/filedrag.js"
                 ));
+            
         }
     }
 }
