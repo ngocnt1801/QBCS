@@ -1097,23 +1097,23 @@ namespace QBCS.Service.Implement
                     OptionContent = o.OptionContent,
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                 }).ToList()
-            });
+            }).ToList();
             switch (type)
             {
                 case "editable1":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && q.IsInImportFile);
+                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete)  && q.IsInImportFile && q.DuplicatedQuestion != null).ToList();
                     break;
                 case "editable2":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && !q.IsInImportFile);
+                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete) && !q.IsInImportFile && q.DuplicatedQuestion != null).ToList();
                     break;
                 case "success":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success);
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
                     break;
                 case "invalid":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid);
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
                     break;
             }
-            return questionTemp.ToList();
+            return questionTemp;
         }
 
         public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)

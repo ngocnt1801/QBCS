@@ -211,7 +211,7 @@
             categoryView.init();
             if (categoryView.questionListContainter[0] != null) {
                 this.loadQuestion(
-                    "/Question/GetQuestions?courseId=" +
+                    "/Question/GetQuestionsDatable?courseId=" +
                     categoryView.questionListContainter[0].attributes["data-id"].value
                 );
             }
@@ -223,69 +223,165 @@
             $('#spinner').css("display", "block");
             $('#spinner').css("z-index", "1060");
             $('#pleaseWaitDialog').modal();
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function (response) {
-                    categoryView.questionListContainter.html(response);
-                    
-                  var table = $("#dataTable").dataTable({
-                        ordering: false,
-                        columnDefs: [
-                            { targets: 0, width: "5%" },
-                            { targets: 1, width: "75%" },
-                            { targets: 2, width: "15%", className: "text-center" },
-                            { targets: 3, width: "5%", className: "text-center" }
-                        ],
-                        columns: [
-                            null,
-                            {
-                                width: "75%",
-                                render: function (data, type, row) {
-                                    if (data.indexOf("[html]") >= 0) {
-                                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                                        data = data.split("&lt;br&gt;").join("<br/>");
-                                        data = data.split("&lt;br&gt;").join("<br/>");
-                                        data = data.split("&lt;p&gt;").join("");
-                                        data = data.split("&lt;/p&gt;").join("");
-                                        data = data.split("&lt;span&gt;").join("");
-                                        data = data.split("&lt;/span&gt;").join("");
-                                        data = data.split("[html]").join("");
-                                    }
+            if (url.includes("GetCourseDetailStat")) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (response) {
+                        categoryView.questionListContainter.html(response);
+                        {
+                            //var table = $("#dataTable").dataTable({
+                            //      ordering: false,
+                            //      columnDefs: [
+                            //          { targets: 0, width: "5%" },
+                            //          { targets: 1, width: "75%" },
+                            //          { targets: 2, width: "15%", className: "text-center" },
+                            //          { targets: 3, width: "5%", className: "text-center" }
+                            //      ],
+                            //      columns: [
+                            //          null,
+                            //          {
+                            //              width: "75%",
+                            //              render: function (data, type, row) {
+                            //                  if (data.indexOf("[html]") >= 0) {
+                            //                      data = data.split("&lt;cbr&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;p&gt;").join("");
+                            //                      data = data.split("&lt;/p&gt;").join("");
+                            //                      data = data.split("&lt;span&gt;").join("");
+                            //                      data = data.split("&lt;/span&gt;").join("");
+                            //                      data = data.split("[html]").join("");
+                            //                  }
 
-                                    return data;
-                                }
-                            },
-                            null,
-                            null,
-                        ]
-                    });
-                    $('#dataTable').on('draw.dt', function () {
-                        if (categoryModel.isMoveQuestion) {
-                            $.each($(".checkbox"), function (index, item) {
-                                $(item).removeClass("hidden");
-                            });
-                        } else {
-                            $.each($(".checkbox"), function (index, item) {
-                                $(item).addClass( "hidden");
-                            });
+                            //                  return data;
+                            //              }
+                            //          },
+                            //          null,
+                            //          null,
+                            //      ]
+                            //  });
+                            //  $('#dataTable').on('draw.dt', function () {
+                            //      if (categoryModel.isMoveQuestion) {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).removeClass("hidden");
+                            //          });
+                            //      } else {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).addClass( "hidden");
+                            //          });
+                            //      }
+                            //      categoryView.setOnClickCkb();
+                            //  });
                         }
                         categoryView.setOnClickCkb();
-                    });
-                    categoryView.setOnClickCkb();
-                    categoryView.setOnClickDisableBtn();
-                    table.on('page.dt', function () {
-                        $('html, body').animate({
-                            scrollTop: $(".dataTables_wrapper").offset().top
-                        }, 'slow');
-                    });
-                    setTimeout(function () {
-                        $('#spinner').css("display", "none");
-                        $('#pleaseWaitDialog').modal('hide');
-                    }, 500);
-                    
-                }
-            });
+                        categoryView.setOnClickDisableBtn();
+                        table.on('page.dt', function () {
+                            $('html, body').animate({
+                                scrollTop: $(".dataTables_wrapper").offset().top
+                            }, 'slow');
+                        });
+                        setTimeout(function () {
+                            $('#spinner').css("display", "none");
+                            $('#pleaseWaitDialog').modal('hide');
+                        }, 500);
+
+                    }
+                });
+            } else {
+                var table = $('#dataTable').DataTable({
+                    paging: true,
+                    ordering: false,
+                    filter: true,
+                    destroy: true,
+                    searching: true,
+                    serverSide: true,
+                    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    Processing: true,
+                    ajax:
+                    {
+                        url: url,
+                        type: "GET",
+                        dataType: "json"
+                    },
+
+                    columns: [
+                        {
+                            data: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: "QuestionViewModel",
+                            render: function (data, type, row, meta) {
+                                var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+                                var code = '<p>Question Code: ' + row.Code + '</p>';
+                                var questionContent = '<p>' + changeHtml(row.QuestionContent) + '<p>';
+                                var image = row.Image;
+                                if (image != null && image != "") {
+                                    image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                                } else {
+                                    image = "";
+                                }
+                                var options = [];
+                                var i = 0;
+                                for (i = 0; i < row.Options.length; i++) {
+                                    var option = {};
+                                    option["content"] = changeHtml(row.Options[i].OptionContent);
+                                    option["correct"] = row.Options[i].IsCorrect;
+                                    options.push(option);
+                                }
+                                var result = code + questionContent + image;
+                                for (i = 0; i < options.length; i++) {
+                                    if (options[i]['correct']) {
+                                        result = result + '<div class="container-fluid text-right-answer">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                                    } else {
+                                        result = result + '<div class="container-fluid">' + alpha[i] + '. ' + options[i]['content'] + '</div>';
+                                    }
+                                }
+                                return result;
+                            }
+                        },
+                        {
+                            data: "Id",
+                            render: function (data) {
+                                var importId = $('#importId').val();
+                                var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                                var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                                var result = edit + deleteQ;
+                                return result;
+                            }
+                        },
+                        {
+                            data: "Id",
+                            render: function (data) {
+                                var importId = $('#importId').val();
+                                var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                                var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                                var result = edit + deleteQ;
+                                return result;
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { targets: 0, width: "2%" },
+                        { targets: 1, width: "98%" }
+                    ]
+                });
+
+                categoryView.setOnClickCkb();
+                categoryView.setOnClickDisableBtn();
+                table.on('page.dt', function () {
+                    $('html, body').animate({
+                        scrollTop: $(".dataTables_wrapper").offset().top
+                    }, 'slow');
+                });
+                setTimeout(function () {
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
+                }, 500);
+
+            }
         },
         toggleDisable: function (url, item) {
             $.ajax({
@@ -360,3 +456,26 @@
 
     categoryOctopus.init();
 });
+function changeHtml(data) {
+    if (data.indexOf("[html]") >= 0) {
+        data = data.split("&lt;cbr&gt;").join("<br/>");
+        data = data.split("&lt;br&gt;").join("<br/>");
+        data = data.split("&lt;p&gt;").join("");
+        data = data.split("&lt;br/&gt;").join("<br/>");
+        data = data.split("&lt;b&gt;").join("");
+        data = data.split("&lt;/b&gt;").join("");
+        data = data.split("&lt;/p&gt;").join("");
+        data = data.split("&lt;span&gt;").join("");
+        data = data.split("&lt;/span&gt;").join("");
+        data = data.split("&lt;u&gt;").join("");
+        data = data.split("&lt;/u&gt;").join("");
+        data = data.split("&lt;i&gt;").join("");
+        data = data.split("&lt;/i&gt;").join("");
+        data = data.split("&lt;sub&gt;").join("<sub>");
+        data = data.split("&lt;/sub&gt;").join("</sub>");
+        data = data.split("&lt;sup&gt;").join("<sup>");
+        data = data.split("&lt;/sup&gt;").join("</sup>");
+        data = data.split("[html]").join("");
+    }
+    return data;
+}
