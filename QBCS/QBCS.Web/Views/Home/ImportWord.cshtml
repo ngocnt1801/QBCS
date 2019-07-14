@@ -30,7 +30,7 @@
                         </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">
-                            @if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
+                            @*@if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
                              {
                                  <select class="form-control text-custom border-dark">
                                      <option selected>[None course available]</option>
@@ -44,9 +44,9 @@
                                 Text = c.Code + " - " + c.Name,
                                 Selected = c.CourseId == selectedCourse
                             }), new { @class = "form-control text-custom border-dark" })
-                             }
-                            @*<input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                            <input id="autocompleteCourseId" name="courseId" hidden />*@
+                             }*@
+                            <input id="autocompleteCourse" class="form-control text-custom border-dark"/>
+                            <input id="autocompleteCourseId" name="courseId" hidden />
                         </div>
 
                         <i class="text-dark text-custom">Choose unit type:</i>

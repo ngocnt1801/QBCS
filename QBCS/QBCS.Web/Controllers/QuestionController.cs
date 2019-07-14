@@ -2,6 +2,7 @@
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System.Collections.Generic;
@@ -119,6 +120,19 @@ namespace QBCS.Web.Controllers
             return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
         }
 
+        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        {
+            //var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
+            ////var question = new QuestionViewModel()
+            ////{
+            ////    Id
+            ////}
+            //// bool optionResult = optionService.UpdateOptions(ques.Options);
+            //TempData["Modal"] = "#success-modal";
+            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
+        }
+
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
@@ -156,7 +170,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, "");
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))
             //{
@@ -179,6 +193,7 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetAllCoursesByUserId(userId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -243,11 +258,38 @@ namespace QBCS.Web.Controllers
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult EditQuestionWithTextbox()
+        {
+            QuestionViewModel qvm = questionService.GetQuestionById(4);
+            return PartialView("EditQuestionWithTextbox", qvm);
+        }
+
+        //public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
+        //{
+        //    var search = Request["search[value]"].ToLower();
+        //    var entities = questionService.GetQuestionTempByImportId(importId, type);
+        //    var recordTotal = entities.Count;
+        //    var result = new List<QuestionTempViewModel>();
+        //    foreach (var q in entities)
+        //    {
+        //        var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+        //        if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+        //        {
+        //            result.Add(q);
+        //        }
+        //    }
+        //    var recordFiltered = result.Count();
+        //    result = result.Skip(start).Take(length).ToList();
+        //    return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
+        //}
     }
 
     public class Textarea
     {
         public string Table { get; set; }
         public int CourseId { get; set; }
+        public string OwnerName { get; set; }
+        public string Prefix { get; set; }
     }
 }

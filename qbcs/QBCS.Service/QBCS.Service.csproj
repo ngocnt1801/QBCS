@@ -122,6 +122,7 @@
     <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\DuplicatedQuestionViewModel.cs" />
+    <Compile Include="ViewModel\GetResultViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
     <Compile Include="ViewModel\GenerateExamViewModel.cs" />

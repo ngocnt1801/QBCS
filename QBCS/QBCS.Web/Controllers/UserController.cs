@@ -130,11 +130,11 @@ namespace QBCS.Web.Controllers
         {
             List<string> lecturerName = new List<string>();
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
-            foreach (var lec in result)
-            {
-                lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
-            }
-            return Json(lecturerName, JsonRequestBehavior.AllowGet);
+            //foreach (var lec in result)
+            //{
+            //    lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
+            //}
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
