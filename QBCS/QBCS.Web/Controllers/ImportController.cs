@@ -68,7 +68,7 @@ namespace QBCS.Web.Controllers
                 return View(new GetResultViewModel() {
                     ImportId = result.Id,
                     totalNumber = result.Questions.Count(),
-                    editableNumber = result.Questions.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete) && q.DuplicatedQuestion != null).Count(),
+                    editableNumber = result.Questions.Where(q => q.Status == StatusEnum.Editable).Count(),
                     successNumber = result.Questions.Where(q => q.Status == StatusEnum.Success).Count(),
                     invalidNumber = result.Questions.Where(q => q.Status == StatusEnum.Invalid).Count()
                 });

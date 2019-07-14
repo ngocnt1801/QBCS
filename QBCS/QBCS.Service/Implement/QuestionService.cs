@@ -1101,10 +1101,10 @@ namespace QBCS.Service.Implement
             switch (type)
             {
                 case "editable1":
-                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete)  && q.IsInImportFile && q.DuplicatedQuestion != null).ToList();
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && q.IsInImportFile).ToList();
                     break;
                 case "editable2":
-                    questionTemp = questionTemp.Where(q => (q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete) && !q.IsInImportFile && q.DuplicatedQuestion != null).ToList();
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && !q.IsInImportFile).ToList();
                     break;
                 case "success":
                     questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();

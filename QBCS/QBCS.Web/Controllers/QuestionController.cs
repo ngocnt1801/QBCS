@@ -247,7 +247,14 @@ namespace QBCS.Web.Controllers
                 }
             }
             var recordFiltered = result.Count();
-            result = result.Skip(start).Take(length).ToList();
+            if(length >= 0)
+            {
+                result = result.Skip(start).Take(length).ToList();
+            }
+            else
+            {
+                result = result.ToList();
+            }
             return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
         }
 
