@@ -64,14 +64,14 @@ namespace QBCS.Web.Attributes
             {
                 newQuestionModel = filterContext.ActionParameters[ObjectParamName] as QuestionViewModel;
                 targetId = newQuestionModel.GetType().GetProperty(IdParamName).GetValue(newQuestionModel, null) as Int32?;
-                if (Action.ToLower().Equals("update") && TargetName.ToLower().Equals("question"))
+                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && TargetName.ToLower().Equals("question"))
                 {
                     oldQuestionModel = questionService.GetQuestionById(newQuestionModel.Id);
                 }
 
             }
             #region update Log
-            if (Action.ToLower().Equals("update") && TargetName.ToLower().Equals("question"))
+            if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && TargetName.ToLower().Equals("question"))
             {
                 QuestionViewModel questionViewModel = new QuestionViewModel();
                 oldQuestionModel.QuestionContent = WebUtility.HtmlDecode(oldQuestionModel.QuestionContent);
@@ -135,7 +135,7 @@ namespace QBCS.Web.Attributes
             #endregion
 
             #region move Question Log
-            else if (Action.ToLower().Equals("move") && TargetName.ToLower().Equals("question"))
+            else if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && TargetName.ToLower().Equals("question"))
             {
 
                 int categoryId = 0;
@@ -232,12 +232,15 @@ namespace QBCS.Web.Attributes
                     }
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
                 }
-                if (Action.ToLower().Equals("cancel")) {
+                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel))) {
                     logModel.Status = (int)StatusEnum.Canceled;
+                }
+                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save))) {
+                    logModel.Status = (int)StatusEnum.Done;
                 }
                 else
                 {
-                    logModel.Status = (int)StatusEnum.Done;
+                    logModel.Status = (int)StatusEnum.Checked;
                 }
                 logModel.OldValue = JsonConvert.SerializeObject(oldQuestionModel);
                 logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\LevelEnum.cs" />
+    <Compile Include="Enum\LogEnum.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Enum\SideBarEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />

@@ -21,70 +21,79 @@
                 </div>
                 <div class="card-body">
 
-                    @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
                     {
-                        <!-- COMPONENT START -->
-                        <i class="text-dark text-custom">Enter owner name:</i>
-                        <div class="form-group pb-2 ui-widget">
-                            <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
-                        </div>
-                        <i class="text-dark text-custom">Choose a course:</i>
-                        <div class="form-group pb-2">
-                            @*@if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
-                             {
-                                 <select class="form-control text-custom border-dark">
-                                     <option selected>[None course available]</option>
-                                 </select>
-                             }
-                             else
-                             {
-                                 @Html.DropDownList("courseId", Model.Courses.Select(c => new SelectListItem
-                            {
-                                Value = c.CourseId + "",
-                                Text = c.Code + " - " + c.Name,
-                                Selected = c.CourseId == selectedCourse
-                            }), new { @class = "form-control text-custom border-dark" })
-                             }*@
-                            <input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                            <input id="autocompleteCourseId" name="courseId" hidden />
-                        </div>
+                        OnSuccess = "turnon_modal",
+                        HttpMethod = "POST",
 
-                        <i class="text-dark text-custom">Choose unit type:</i>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-outline-dark active">
-                                <input type="radio" name="prefix" autocomplete="off" checked value="Learning Outcome"> Learning Outcome
-                            </label>
-                            <label class="btn btn-outline-dark">
-                                <input type="radio" name="prefix" autocomplete="off" value="Topic"> Topic
-                            </label>
-                            <label class="btn btn-outline-dark">
-                                <input type="radio" name="prefix" autocomplete="off" value="Chapter"> Chapter
-                            </label>
-                            <label class="btn btn-outline-dark">
-                                <input type="radio" name="prefix" autocomplete="off" value="Unit"> Unit
-                            </label>
-                            <label class="btn btn-outline-dark">
-                                <input type="radio" name="prefix" autocomplete="off" value=""> [None Prefix]
-                            </label>
-                        </div>
 
-                        <!-- COMPONENT END -->
-                        <div class="form-group text-custom mt-3">
-                            <i class="text-dark text-custom">Choose a file:</i>
-                            <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control border-dark" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-import-file btn-choose" type="button">Choose</button>
-                                </span>
+                    }, new { enctype = "multipart/form-data" }))
+                    {
+
+                        @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {*@
+                            <!-- COMPONENT START -->
+                            <i class="text-dark text-custom">Enter owner name:</i>
+                            <div class="form-group pb-2 ui-widget">
+                                <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
                             </div>
-                        </div>
+                            <i class="text-dark text-custom">Choose a course:</i>
+                            <div class="form-group pb-2">
+                                @if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
+                                {
+                                    <select class="form-control text-custom border-dark">
+                                        <option selected>[None course available]</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("courseId", Model.Courses.Select(c => new SelectListItem
+                               {
+                                   Value = c.CourseId + "",
+                                   Text = c.Code + " - " + c.Name,
+                                   Selected = c.CourseId == selectedCourse
+                               }), new { @class = "form-control text-custom border-dark" })
+                                }
+                                @*<input id="autocompleteCourse" class="form-control text-custom border-dark"/>
+                    <input id="autocompleteCourseId" name="courseId" hidden />*@
+                            </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary float-right">Import</button>
-                            <button type="reset" class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</button>
-                        </div>
-                    }
-                </div>
+                            <i class="text-dark text-custom">Choose unit type:</i>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-dark active">
+                                    <input type="radio" name="prefix" autocomplete="off" checked value="Learning Outcome"> Learning Outcome
+                                </label>
+                                <label class="btn btn-outline-dark">
+                                    <input type="radio" name="prefix" autocomplete="off" value="Topic"> Topic
+                                </label>
+                                <label class="btn btn-outline-dark">
+                                    <input type="radio" name="prefix" autocomplete="off" value="Chapter"> Chapter
+                                </label>
+                                <label class="btn btn-outline-dark">
+                                    <input type="radio" name="prefix" autocomplete="off" value="Unit"> Unit
+                                </label>
+                                <label class="btn btn-outline-dark">
+                                    <input type="radio" name="prefix" autocomplete="off" value=""> [None Prefix]
+                                </label>
+                            </div>
+
+                            <!-- COMPONENT END -->
+                            <div class="form-group text-custom mt-3">
+                                <i class="text-dark text-custom">Choose a file:</i>
+                                <div class="input-group input-file text-custom" name="questionFile">
+                                    <input type="text" class="form-control border-dark" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary float-right">Import</button>
+                                <button type="reset" class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</button>
+                            </div>
+                        }
+                    </div>
             </div>
         </div>
     </div>

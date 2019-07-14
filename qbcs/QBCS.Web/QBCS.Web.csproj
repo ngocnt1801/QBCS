@@ -372,6 +372,7 @@
     <Content Include="Scripts\myjs\autocompleteCourse.js" />
     <Content Include="Scripts\myjs\autocompleteLecturer.js" />
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
+    <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />

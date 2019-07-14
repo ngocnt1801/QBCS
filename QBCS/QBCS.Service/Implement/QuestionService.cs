@@ -1058,7 +1058,7 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        private List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)
+        public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)
         {
             var optionCheck = new DocViewModel();
             var optionCheckList = new List<DocViewModel>();

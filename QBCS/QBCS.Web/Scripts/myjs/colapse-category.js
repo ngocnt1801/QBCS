@@ -27,7 +27,6 @@
 
                 $(".show-category .list-group-item").removeClass("active");
                 this.className += " active";
-                $("spinner").show();
                 categoryOctopus.loadQuestion(this.attributes["data-link"].value);
                 categoryView.removeButtonGroup();
             });

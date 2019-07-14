@@ -33,3 +33,51 @@
 .highlight {
     background-color: #B4D5FF
 }
+
+.error-block ul {
+    list-style-type: none;
+    margin: 0; 
+    padding: 0;
+}
+
+/*Drag and Drop FIle*/
+
+#drop_file_zone {
+   
+    border: 2px dashed #ccc;
+  text-align: center;
+    height: 100px;
+    padding: 8px;
+    font-size: 18px;
+}
+
+#drag_upload_file {
+    width: 50%;
+    margin: 0 auto;
+}
+
+    #drag_upload_file p {
+        text-align: center;
+    }
+
+    #drag_upload_file #selectfile {
+        display: none;
+    }
+
+
+
+.dropArea {
+   
+    border: 2px dashed #ccc;
+    height: 200px;
+    text-align: center;
+    line-height: 300px;
+    color: #000;
+}
+
+.active-drop {
+    border-color: #0c2f94;
+    color: #000;
+}
+
+

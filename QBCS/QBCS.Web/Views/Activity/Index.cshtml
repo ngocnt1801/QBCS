@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
-
+@using QBCS.Service.Enum
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -52,15 +52,14 @@
                                     @item.LogDate
                                 </td>
                                 <td>
-                                    @if (item.Action.Equals("Save") || item.Action.Equals("Cancel"))
+                                    @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)) || item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
                                     {
                                         @item.Action <text> Import </text>@item.TargetId<text>st</text>
-                                    }
-                                    else if (item.Action.Equals("Import"))
+                                    }@if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
                                     {
                                         @item.Action <text> </text>@item.TargetId<text>st</text>
                                     }
-                                    else if (item.Action.Equals("Update") || item.Action.Equals("Move"))
+                                    @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)))
                                     {
                                         @item.Message
                                     }
@@ -73,15 +72,15 @@
                                 <td>
                                     @if (item.Action != null)
                                     {
-                                        if (item.Action.Equals("Import") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetListTargetByID)))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)) && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetListTargetByID)))
                                         {
                                             <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                         }
-                                        if (item.Action.Equals("Update") && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
                                         {
                                             <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                         }
-                                        if (item.Action.Equals("Move") && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
                                         {
                                             <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 btn-spinner">Detail</a>
                                         }

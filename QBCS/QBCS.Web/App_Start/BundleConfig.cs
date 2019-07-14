@@ -154,6 +154,21 @@ namespace QBCS.Web
                        "~/Content/img/image-zoom.css"
                        ));
 
+            //Track window
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tracking").Include(
+                "~/Scripts/myjs/track-window.js",
+                "~/Scripts/myjs/modal/manage-modal.js"
+                ));
+
+            //AJAX FORM
+            bundles.Add(new ScriptBundle("~/bundle/scripts/unobtrusive").Include(
+                 "~/Scripts/jquery.unobtrusive-ajax.js",
+                 "~/Scripts/jquery.ba-hashchange.min.js"
+                ));
+            bundles.Add(new ScriptBundle("~/bundle/scripts/dragFile").Include(
+                "~/Scripts/myjs/dragAndDrop/filedrag.js"
+                ));
+
             //Toggle question
             bundles.Add(new ScriptBundle("~/bundle/scripts/togglequestion").Include(
                 "~/Scripts/myjs/toggle-question.js"

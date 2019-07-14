@@ -114,22 +114,51 @@ namespace QBCS.Web.Controllers
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
-            bool result = questionService.UpdateQuestion(ques);
-            // bool optionResult = optionService.UpdateOptions(ques.Options);
-            ViewBag.Modal = "#success-modal";
-            return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
+            if (ModelState.IsValid && !ques.QuestionContent.Trim().Equals("[html]"))
+            {
+                bool result = questionService.UpdateQuestion(ques);
+                // bool optionResult = optionService.UpdateOptions(ques.Options);
+                ViewBag.Modal = "#success-modal";
+                return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            }
+
+            else
+            {
+                foreach (var item in ques.Options)
+                {
+                    if (item.OptionContent.Trim().Equals("[html]"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Please enter Option Content");
+                    }
+                }
+                
+                //ModelState.AddModelError(string.Empty, "Question Content is required");
+                //ModelState.AddModelError(string.Empty, "Option Content is required");
+                List<LevelViewModel> levels = levelService.GetLevel();
+                List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(ques.CourseId);
+                questionDetailViewModel = new QuestionDetailViewModel()
+                {
+                    Question = ques,
+                    Levels = levels,
+                    LearningOutcomes = learningOutcomes
+                };
+
+            }
+            return View("EditQuestion", questionDetailViewModel);
+            
         }
 
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
         public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
         {
-            //var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
-            ////var question = new QuestionViewModel()
-            ////{
-            ////    Id
-            ////}
-            //// bool optionResult = optionService.UpdateOptions(ques.Options);
-            //TempData["Modal"] = "#success-modal";
+            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
+            //var question = new QuestionViewModel()
+            //{
+            //    Id
+            //}
+            // bool optionResult = optionService.UpdateOptions(ques.Options);
+            TempData["Modal"] = "#success-modal";
             return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
         }
 
@@ -137,7 +166,7 @@ namespace QBCS.Web.Controllers
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
@@ -157,7 +186,8 @@ namespace QBCS.Web.Controllers
             TempData["CourseId"] = courseId;
             TempData["OwnereName"] = ownerName;
 
-            return RedirectToAction("Index", "Home");
+            return Json("OK");
+            //return RedirectToAction("Index", "Home");
         }
 
         //lecturer
