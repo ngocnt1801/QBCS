@@ -450,15 +450,16 @@ namespace QBCS.Service.Implement
                             questionContent = WebUtility.HtmlDecode(tempParser);
                             questionContent = stringProcess.RemoveHtmlTagXML(questionContent);
                             questionContent = stringProcess.UpperCaseKeyWord(questionContent);
-                            if (checkHTML.Equals("html"))
-                            {
-                                question.QuestionContent = "[html]" + questionContent;
-                            }
-                            else
-                            {
+                            //if (!checkHTML)
+                            //{
+                            //    question.QuestionContent = "[html]" + questionContent;
+                            //}
+                            //else
+                            //{
 
-                                question.QuestionContent = questionContent;
-                            }
+                            //    question.QuestionContent = questionContent;
+                            //}
+                            question.QuestionContent = "[html]" + questionContent;
                             question.Code = questionXml.question[i].name.text.ToString();
                             if (category != null)
                             {
@@ -490,16 +491,16 @@ namespace QBCS.Service.Implement
                                         rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
 
                                         option = new OptionTemp();
-                                        if (checkHTMLTemp.Equals("html"))
-                                        {
-                                            option.OptionContent = "[html]" + rightAnswer;
-                                        }
-                                        else
-                                        {
-                                            option.OptionContent = rightAnswer;
-                                        }
+                                        //if (checkHTML)
+                                        //{
+                                        //    option.OptionContent = "[html]" + rightAnswer;
+                                        //}
+                                        //else
+                                        //{
+                                        //    option.OptionContent = rightAnswer;
+                                        //}
                                         //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
-
+                                        option.OptionContent = rightAnswer;
 
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
@@ -522,14 +523,14 @@ namespace QBCS.Service.Implement
 
                                         //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
-                                        if (checkHTMLTemp.Equals("html"))
-                                        {
-                                            option.OptionContent = "[html]" + wrongAnswer;
-                                        }
-                                        else
-                                        {
-                                            option.OptionContent = wrongAnswer;
-                                        }
+                                        //if (!checkHTML)
+                                        //{
+                                        //    option.OptionContent = "[html]" + wrongAnswer;
+                                        //}
+                                        //else
+                                        //{
+                                        //    option.OptionContent = wrongAnswer;
+                                        //}
                                         option.OptionContent = wrongAnswer;
                                         option.IsCorrect = false;
                                         tempAns.Add(option);

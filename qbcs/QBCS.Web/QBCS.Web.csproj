@@ -253,6 +253,7 @@
     <Content Include="Content\checkbox.min.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\diff\jquery.picadiff.css" />
     <Content Include="Content\error\font-awesome.min.css" />
     <Content Include="Content\error\style.css" />
     <Content Include="Content\facebook_profile_image.png" />
@@ -379,6 +380,10 @@
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
+    <Content Include="Scripts\myjs\diff\diff_match_patch.js" />
+    <Content Include="Scripts\myjs\diff\diff_match_patch_extended.js" />
+    <Content Include="Scripts\myjs\diff\picadiff.js" />
+    <Content Include="Scripts\myjs\dragAndDrop\filedrag.js" />
     <Content Include="Scripts\myjs\edit-question.js" />
     <Content Include="Scripts\myjs\generate-question.js" />
     <Content Include="Scripts\js\sb-admin-2.js" />
