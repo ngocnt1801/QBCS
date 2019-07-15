@@ -224,6 +224,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LearningOutcomeController.cs" />
+    <Compile Include="Controllers\LogActionController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\RuleController.cs" />
@@ -363,6 +364,8 @@
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -386,6 +389,7 @@
     <Content Include="Scripts\myjs\import-file.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\myjs\init-datatable.js" />
+    <Content Include="Scripts\myjs\modal\manage-modal.js" />
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\jquery.smartWizard.min.js" />
     <Content Include="Scripts\myjs\spinner.js" />
@@ -402,6 +406,7 @@
     <Content Include="Scripts\myjs\textWord\textboxio\resources\js\wordimport.js" />
     <Content Include="Scripts\myjs\textWord\textboxio\textboxio.js" />
     <Content Include="Scripts\myjs\text-process.js" />
+    <Content Include="Scripts\myjs\track-window.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
     <Content Include="Scripts\tab\modernizr.custom.js" />
@@ -2197,6 +2202,7 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\Script\Index.cshtml" />
+    <Content Include="Views\LogAction\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
