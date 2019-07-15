@@ -38,6 +38,7 @@ namespace QBCS.Entity
         public bool? IsDisable { get; set; }
 
         public int? SemesterId { get; set; }
+
         [StringLength(50)]
         public string GroupExam { get; set; }
 

@@ -4,7 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
-
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/smartwizard")
 <h2>Exam history</h2>
 
 @if (Model.Count() > 0)
@@ -40,7 +41,7 @@
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
                                     @if (item.Image != null)
                                     {
-                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
+                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
@@ -79,3 +80,5 @@ else
 {
     <h5>There is no question in this course</h5>
 }
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")

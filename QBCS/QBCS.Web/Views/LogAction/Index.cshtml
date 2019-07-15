@@ -1,0 +1,70 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 0;
+}
+@Styles.Render("~/bundles/content/datatables")
+<h2>Log Action</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive text-custom">
+            <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                        <th>User</th>
+                        <th>Method</th>
+                        <th>Route</th>
+                        <th>Ip Adress</th>
+                        <th>Date</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.LogDate != DateTime.MinValue)
+                        {
+                            counter++;
+
+                            <tr>
+                                <td>
+                                    @counter
+                                </td>
+                                <td>
+                                    @item.TimeAgo
+                                </td>
+                                <td>
+                                    @item.Message
+                                </td>
+                                <td>
+                                    @item.Fullname (@item.UserCode)
+                                </td>
+                                <td>
+                                    @item.Method
+                                </td>
+                                <td>
+                                    @item.Route
+                                </td>
+                                <td>
+                                    @item.Ip
+                                </td>
+                                <td>
+                                    @item.LogDate
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/script/datatables")

@@ -11,5 +11,6 @@ namespace QBCS.Service.Interface
     {
         List<RuleViewModel> getAllRule();
         bool UpdateRule(List<RuleAjaxHandleViewModel> rule);
+        RuleValueViewModel GetRuleById(int id);
     }
 }

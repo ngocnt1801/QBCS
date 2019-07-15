@@ -52,13 +52,10 @@ function customs_display_p() {
         var content;
         content = $(this).html();
         if (content.indexOf("[html]") >= 0) {
-            content = content.split("<cbr>").join("&lt;br&gt;");
             content = content.split("&lt;cbr&gt;").join("<br/>");
-            content = content.split("<br>").join("<br/>");
-            content = content.split("&lt;br&gt;").join("&lt;br&gt;");
+            content = content.split("&lt;br&gt;").join("<br/>");
             content = content.split("&lt;p&gt;").join("");
-            content = content.split("&lt;").join("<");
-            content = content.split("&gt;").join(">");
+            content = content.split("&lt;br/&gt;").join("<br/>");
             content = content.split("&lt;/p&gt;").join("");
             content = content.split("&lt;b&gt;").join("");
             content = content.split("&lt;/b&gt;").join("");
@@ -180,7 +177,8 @@ function customs_text() {
 
 
 $(document).ready(function () {
-    highlight($("#new"), $("#old"));
+   // highlight($("#new"), $("#old"));
+    $(".picadiff").picadiff();
     customs_text();
     customs_display_p();
     customs_display();

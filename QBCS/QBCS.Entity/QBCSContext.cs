@@ -23,6 +23,7 @@ namespace QBCS.Entity
         public virtual DbSet<Level> Levels { get; set; }
         public virtual DbSet<LevelInCourse> LevelInCourses { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
+        public virtual DbSet<LogAction> LogActions { get; set; }
         public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<OptionInExam> OptionInExams { get; set; }
         public virtual DbSet<OptionTemp> OptionTemps { get; set; }
@@ -42,10 +43,6 @@ namespace QBCS.Entity
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Course>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Course>()
                 .Property(e => e.Code)
                 .IsUnicode(false);
 
@@ -57,6 +54,14 @@ namespace QBCS.Entity
                 .HasMany(e => e.Courses)
                 .WithOptional(e => e.CourseDepartment)
                 .HasForeignKey(e => e.DepartmentId);
+
+            modelBuilder.Entity<Examination>()
+                .Property(e => e.GroupExam)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Examination>()
+                .Property(e => e.ExamCode)
+                .IsUnicode(false);
 
             modelBuilder.Entity<LearningOutcome>()
                 .Property(e => e.Name)
@@ -82,19 +87,31 @@ namespace QBCS.Entity
                 .Property(e => e.Method)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Option>()
-                .Property(e => e.OptionContent)
+            modelBuilder.Entity<Log>()
+                .Property(e => e.UserCode)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<LogAction>()
+                .Property(e => e.Controller)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<LogAction>()
+                .Property(e => e.Method)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<LogAction>()
+                .Property(e => e.Ip)
+                .IsFixedLength();
 
             modelBuilder.Entity<Option>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
 
             modelBuilder.Entity<OptionInExam>()
-                .Property(e => e.OptionContent)
+                .Property(e => e.Image)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<OptionInExam>()
+            modelBuilder.Entity<OptionTemp>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
 
@@ -102,10 +119,6 @@ namespace QBCS.Entity
                 .HasMany(e => e.QuestionInExams)
                 .WithOptional(e => e.PartOfExamination)
                 .HasForeignKey(e => e.PartId);
-
-            modelBuilder.Entity<Question>()
-                .Property(e => e.QuestionContent)
-                .IsUnicode(false);
 
             modelBuilder.Entity<Question>()
                 .Property(e => e.QuestionCode)
@@ -120,13 +133,12 @@ namespace QBCS.Entity
                 .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.QuestionReference);
 
-            modelBuilder.Entity<Question>()
-                .HasMany(e => e.QuestionTemps)
-                .WithOptional(e => e.DuplicatedWithBank)
-                .HasForeignKey(e => e.DuplicatedId);
-
             modelBuilder.Entity<QuestionInExam>()
                 .Property(e => e.Image)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<QuestionInExam>()
+                .Property(e => e.QuestionCode)
                 .IsUnicode(false);
 
             modelBuilder.Entity<QuestionInExam>()
@@ -139,15 +151,14 @@ namespace QBCS.Entity
                 .IsUnicode(false);
 
             modelBuilder.Entity<QuestionTemp>()
+                .Property(e => e.Image)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<QuestionTemp>()
                 .HasMany(e => e.OptionTemps)
                 .WithOptional(e => e.QuestionTemp)
                 .HasForeignKey(e => e.TempId)
                 .WillCascadeOnDelete();
-
-            modelBuilder.Entity<QuestionTemp>()
-                .HasMany(e => e.QuestionTemp1)
-                .WithOptional(e => e.DuplicatedWithImport)
-                .HasForeignKey(e => e.DuplicateInImportId);
 
             modelBuilder.Entity<QuestionType>()
                 .Property(e => e.Name)
@@ -179,11 +190,6 @@ namespace QBCS.Entity
                 .Property(e => e.Name)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Semester>()
-                .HasMany(e => e.Examinations)
-                .WithOptional(e => e.Semester)
-                .HasForeignKey(e => e.SemesterId);
-
             modelBuilder.Entity<Topic>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
@@ -194,10 +200,6 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Code)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<User>()
-                .Property(e => e.Fullname)
                 .IsUnicode(false);
 
             modelBuilder.Entity<User>()

@@ -5,13 +5,13 @@
 
 }
 @*<head>
-    <link rel="stylesheet" href="~/Content/bootstrap-tagsinput.css" />
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="~/Scripts/bootstrap-tagsinput.js"></script>
-    <script src="~/Scripts/sweetalert.min.js"></script>
-    <script src="~/Scripts/myjs/staffjs/edit-rule.js"></script>
-</head>*@
-
+        <link rel="stylesheet" href="~/Content/bootstrap-tagsinput.css" />
+        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+        <script src="~/Scripts/bootstrap-tagsinput.js"></script>
+        <script src="~/Scripts/sweetalert.min.js"></script>
+        <script src="~/Scripts/myjs/staffjs/edit-rule.js"></script>
+    </head>*@
+@Styles.Render("~/bundle/content/tagsinputrule")
 <h2>Rules</h2>
 <div class="mb-4 row col-md-12">
     <div class="mr-2">
@@ -111,7 +111,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <input type="checkbox" id="value"/>
+                                                        <input type="checkbox" id="value" />
                                                     }
                                                 </div>
                                             </td>
@@ -149,7 +149,7 @@
 }
 
 <div class="text-right">
-    <a href="@Url.Action("Index", "Rule")" class="btn border-dark text-custom mr-2 btn-spinner">Cancel</a>
-    <button id="save" class="btn btn-primary btn-spinner">Save</button>
+    <a href="@Url.Action("Index", "Rule")" class="btn border-dark text-custom mr-2 spinner-loading">Cancel</a>
+    <button id="save" class="btn btn-primary spinner-loading">Save</button>
 </div>
-
+@Scripts.Render("~/bundle/scripts/tagsinputrule")

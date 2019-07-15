@@ -4,6 +4,10 @@
     ViewBag.Title = "Create Exam Manually";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/category")
+@Styles.Render("~/bundle/content/smartwizard")
+@Styles.Render("~/bundle/content/checkbox")
 <div class="row" id="move-btn-group">
     <div class="col mb-2">
         <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal">Review Exam</button>
@@ -69,4 +73,7 @@
     </div>
 </div>
 
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/category")
+@Scripts.Render("~/bundle/scripts/smartwizard")
 

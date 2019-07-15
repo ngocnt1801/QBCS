@@ -14,11 +14,10 @@ namespace QBCS.Entity
         {
             Options = new HashSet<Option>();
             QuestionInExams = new HashSet<QuestionInExam>();
-            QuestionTemps = new HashSet<QuestionTemp>();
         }
 
         public int Id { get; set; }
-        [Column(TypeName = "NVARCHAR")]
+
         public string QuestionContent { get; set; }
 
         public int? CourseId { get; set; }
@@ -46,6 +45,8 @@ namespace QBCS.Entity
 
         public int? ImportId { get; set; }
 
+        public int? Status { get; set; }
+
         public virtual Category Category { get; set; }
 
         public virtual Course Course { get; set; }
@@ -65,8 +66,5 @@ namespace QBCS.Entity
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionInExam> QuestionInExams { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionTemp> QuestionTemps { get; set; }
     }
 }

@@ -5,34 +5,46 @@
     var counter = 0;
 }
 
+@Styles.Render("~/bundle/content/checkbox")
+@Styles.Render("~/bundle/content/detailquestion")
+
 <h2>Edit Question</h2>
 @using (Html.BeginForm("UpdateQuestion", "Question", FormMethod.Post, new { @class = "form-group" }))
 {
-
-
     <div class="container text-custom">
         <div class="col-lg-8">
+
             <div class="form-group">
                 <input type="hidden" name="Id" value="@Model.Question.Id" />
+
             </div>
             <div class="form-group text-custom">
                 <label>Question</label>
-                <div class="customs-display customs-display-area question-custom" contenteditable="true" data-for="hidden-question-content">
+                <div class="customs-display customs-display-area question-custom" id="QuestionContent" contenteditable="true" data-for="hidden-question-content">
                     @Html.DisplayFor(model => model.Question.QuestionContent)
                     @if (Model.Question.Image != null)
                     {
-                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" /></p>
+                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" /></p>
                     }
+
                 </div>
-                <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
+                @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.Question.QuestionContent, "Please enter question content", new { @class = "text-danger" })
+                <input type="hidden" name="QuestionContent" value="@Model.Question.QuestionContent" id="hidden-question-content" />
             </div>
+            <span class="error-block">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mr-7" })
+            </span>
             <label>Options</label>
             @foreach (var option in Model.Question.Options)
             {
                 <div class="row">
                     <div class="form-group">
                         <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
+
                     </div>
+
+
                     <div class="col-lg-10">
                         <div class="customs-display customs-display-input option-customs" contenteditable="true" data-for="#o-@counter">
                             @Html.DisplayFor(m => option.OptionContent)
@@ -100,8 +112,8 @@
             <div class="row">
                 <input type="hidden" name="CourseId" value="@Model.Question.CourseId" />
                 <div class="float-right col-md-12">
-                    <input type="submit" name="Update" value="Update" class="btn btn-primary float-right ml-2 btn-spinner" id="btnUpdate" />
-                    <a class="btn btn-default border-dark text-custom float-right btn-spinner" href="@Url.Action("CourseDetail", "Course", new { courseId=Model.Question.CourseId })">Cancel</a>
+                    <input type="submit" name="Update" value="Update" class="btn btn-primary float-right ml-2 spinner-loading" id="btnUpdate" />
+                    <a class="btn btn-default border-dark text-custom float-right spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId=Model.Question.CourseId })">Cancel</a>
                 </div>
             </div>
         </div>
@@ -109,3 +121,5 @@
     </div>
 }
 
+@Scripts.Render("~/bundle/scripts/editquestion")
+@Scripts.Render("~/bundle/scripts/processtext")

@@ -3,30 +3,14 @@
 @{
     /**/
 
+    /**/
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
-<head>
-    @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-        <script src="~/Scripts/jquery.autocomplete.js"></script>*@
-    @*<script src="~/Scripts/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="~/Scripts/jquery-ui.css">*@
-
-</head>
-@*<script>
-        $(document).ready(function () {
-            var data = ["asddddddd","qweqweqwe"];
-            //$('#myautocomplete').change({
-
-            //});
-            $('#myautocomplete').autocomplete({
-          source: data
-        });
-        });
-
-    </script>*@
-
+@Styles.Render("~/bundle/content/autocompleteLecturer")
+@Styles.Render("~/bundle/content/importfile")
 <div class="container-fluid ml-5">
     @*<div class="row">
             <div class="col-md-10 mb-2">
@@ -39,21 +23,32 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Import Question</h6>
-                    
+
                 </div>
 
-               
+
                 <div class="card-body">
 
                     @*<div class="col-xl-3 col-md-6 mb-4">
-                <a href="" class="btn btn-primary float-left">Import Question</a>
-            </div>*@
-                    @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            <a href="" class="btn btn-primary float-left">Import Question</a>
+                        </div>*@
+
+                    @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
                     {
+                        OnSuccess = "turnon_modal",
+                        HttpMethod = "POST",
+
+
+                    }, new { enctype = "multipart/form-data" }))
+                    {
+
+                        @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
-                            <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
+                            <input id="myautocomplete" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
+                            <input id="autocompleteLecturerId" name="owner" hidden />
                         </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">
@@ -81,19 +76,33 @@
                             <input type="checkbox" name="checkHTML" value="true" class="custom-control-input" id="defaultChecked1">
                             <label class="custom-control-label" for="defaultChecked1">Get HTML element in File</label>
                         </div>
+
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom mt-3">
-                            <i class="text-dark text-custom">Choose a file:</i>
-                            <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control border-dark" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-import-file btn-choose" type="button">Choose</button>
-                                </span>
+                            @*<div id="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
+                                    <div id="drag_upload_file">
+                                        <p>Drag and Drop file here</p>
+                                        <input type="file" id="selectfile" name="questionFile">
+                                    </div>
+                                </div>*@
+                            @*<i class="text-dark text-custom">Or Choose a File:</i>*@
+                            <div class="input-group input-file text-custom" name="questionFile" id="drop_file_zone" ondrop="upload_file(event)" ondragover="addClassDrop(event)" ondragleave="removeClassDrop(event)">
+                                <div class="col-12">
+                                    <input type="text" class="form-control border-0 col-10" id="inFile" required />
+                                    <input type="file" id="selectfile" name="questionFile" class="hidden">
+                                    <span class="input-group-btn col-2">
+                                        <i class="fa fa-2x fa-cloud-upload-alt text-primary mr-2"></i>
+                                        <span class="text-gray-500">Drag and Drop file here or</span>
+                                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                                    </span>
+                                </div>
+
+
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary float-right">Import</button>
+                            <button type="submit" class="btn btn-primary float-right" id="btnImport">Import</button>
                             <button type="reset" class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</button>
                         </div>
                     }
@@ -119,3 +128,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@Scripts.Render("~/bundle/scripts/importfile")
+@Scripts.Render("~/bundle/scripts/autocompleteLecturer")
+@Scripts.Render("~/bundle/scripts/unobtrusive")
+@Scripts.Render("~/bundle/scripts/dragFile")

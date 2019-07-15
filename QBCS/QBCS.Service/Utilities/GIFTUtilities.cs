@@ -339,7 +339,7 @@ namespace QBCS.Service.Utilities
                         else
                         {
                             question = stringProcess.UpperCaseKeyWord(question);
-                            quesModel.QuestionContent = question;
+                            quesModel.QuestionContent = "[html]" + question;
 
                         }
                         question = null;

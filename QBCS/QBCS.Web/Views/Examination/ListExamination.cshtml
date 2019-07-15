@@ -4,14 +4,15 @@
     ViewBag.Title = "ListExamination";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/smartwizard")
 <h2>All Examination</h2>
 
 <div class="row">
     <div class="col mb-2">
         @if (User.CheckPermission(typeof(QBCS.Web.Controllers.CourseController), nameof(QBCS.Web.Controllers.CourseController.GetAllCourse)))
         {
-            <a href="@Url.Action("GetAllCourse", "Course")" class="btn btn-primary float-right btn-spinner">Create new Exam</a>
+            <a href="@Url.Action("GetAllCourse", "Course")" class="btn btn-primary float-right spinner-loading">Create new Exam</a>
         }
     </div>
 </div>
@@ -46,11 +47,11 @@
                             {
                                 if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DetailExam)))
                                 {
-                                    <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary btn-spinner" role="button">Detail</a>
+                                    <a href="@Url.Action("DetailExam", "Examination", new { examId = item.Id })" class="btn btn-primary spinner-loading" role="button">Detail</a>
                                 }
                                 if (User.CheckPermission(typeof(QBCS.Web.Controllers.ExaminationController), nameof(QBCS.Web.Controllers.ExaminationController.DisableExam)))
                                 {
-                                    <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger btn-spinner" role="button">Disable</a>
+                                    <a href="@Url.Action("DisableExam", "Examination", new { examId = item.Id })" class="btn btn-danger spinner-loading" role="button">Disable</a>
                                 }
                             }
                             else
@@ -65,4 +66,5 @@
     </div>
 </div>
 
-
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")

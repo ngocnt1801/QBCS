@@ -23,13 +23,16 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();        
         int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
-        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName, string prefix="");
+        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="");
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
         void ToggleDisable(int id);
         void UpdateCategory(int[] questionIds, int? categoyrId, int? learningOutcomeId, int? levelId);
-        bool InsertQuestionWithTableString(string table, int userId, int courseId,string prefix);
+        bool InsertQuestionWithTableString(string table, int userId, int courseId,string prefix, string ownerName);
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId);
         QuestionHistoryViewModel GetQuestionHistory(int id);
+        List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
+
+
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
 
 

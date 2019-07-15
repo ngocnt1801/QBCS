@@ -37,9 +37,12 @@ namespace QBCS.Entity
 
         public bool? IsDisable { get; set; }
 
+        [StringLength(200)]
         public string Fullname { get; set; }
 
+        [StringLength(50)]
         public string UserCode { get; set; }
+
         public int? Status { get; set; }
     }
 }

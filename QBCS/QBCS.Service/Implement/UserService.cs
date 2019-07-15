@@ -233,7 +233,7 @@ namespace QBCS.Service.Implement
         {
             var userViewModel = unitOfWork.Repository<User>()
                              .GetAll()
-                             .Where(u => u.Code.ToLower().Equals(code.ToLower()))
+                             .Where(u => u.Username.ToLower().Equals(code.ToLower()))
                              .Select(u => new UserViewModel
                              {
                                  Id = u.Id,

@@ -197,6 +197,7 @@ namespace QBCS.Service.Utilities
 
                     for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
                     {
+                        bool inputWholeParagraph = false;
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
                         WParagraph wParagraph = bodyItemEntity as WParagraph;
                         if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
@@ -207,14 +208,18 @@ namespace QBCS.Service.Utilities
                                 switch (pItem.EntityType)
                                 {
                                     case EntityType.TextRange:
-                                        if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                                        if (!inputWholeParagraph)
                                         {
-                                            optionModel.IsCorrect = false;
-                                            optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
-                                        }
-                                        else if (!wParagraph.Text.Equals(""))
-                                        {
-                                            optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                            if (!wParagraph.Text.Equals("") && optionModel.OptionContent == null)
+                                            {
+                                                optionModel.IsCorrect = false;
+                                                optionModel.OptionContent = wParagraph.Text.Replace("\v", "<cbr>");
+                                                inputWholeParagraph = true;
+                                            }
+                                            else if (!wParagraph.Text.Equals(""))
+                                            {
+                                                optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + wParagraph.Text;
+                                            }
                                         }
                                         break;
                                     case EntityType.Picture:

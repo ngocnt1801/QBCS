@@ -7,32 +7,27 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-@if (Model != null && Model.Count() > 0)
+@if (Model != null)
 {
     <div class="card shadow mb-4" id="testhere">
 
         <div class="card-body text-custom">
             <div class="table-responsive text-custom">
-                <table class="table table-bordered text-custom" id="@ViewData["tableId"]" width="100%" cellspacing="0">
+                <table class="table table-bordered text-custom" id="@ViewBag.tableId" width="100%" cellspacing="0">
                     @*  id="datatable"  *@
                     <thead>
                         <tr>
                             <th>No.</th>
                             <th>Question</th>
-                            @if (Model.FirstOrDefault().Status == StatusEnum.Delete
-                                || Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
-                                || Model.FirstOrDefault().Status == StatusEnum.Editable)
+                            @if (ViewBag.tableId.Equals("tableEditable"))
                             {
                                 <th>Duplicated With</th>
                             }
-                            @if (Model.FirstOrDefault().Status == StatusEnum.Invalid)
+                            @if (ViewBag.tableId.Equals("tableInvalid"))
                             {
                                 <th>Error</th>
                             }
-                            @if (Model.FirstOrDefault().Status == StatusEnum.DeleteOrSkip
-                                || Model.FirstOrDefault().Status == StatusEnum.Editable
-                                || Model.FirstOrDefault().Status == StatusEnum.Delete
-                                || Model.FirstOrDefault().Status == StatusEnum.Invalid)
+                            @if (!ViewBag.tableId.Equals("tableEditable"))
                             {
                                 <th>Action</th>
                             }
@@ -41,9 +36,14 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            if (item.IsHide && item.Status == StatusEnum.Editable)
+                            {
+                                continue;
+                            }
+
                             var borderLeft = "";
                             var action = "";
-                            if (item.Status == StatusEnum.Delete)
+                            if (item.Status == StatusEnum.Deleted)
                             {
                                 //borderLeft = "border-left-danger";
                             }
@@ -56,87 +56,220 @@
                             {
                                 //borderLeft = "border-left-success";
                             }
-                            <tr class="@action" data-id="@item.Id">
+                            <tr data-id="@item.Id" id="@item.Id">
                                 @{
                                     counter++;
                                 }
                                 <td class="@borderLeft">@counter</td>
                                 <td>
-                                    <p class="text-custom">Category: @item.Category <br/>
-                                    Question Code: @item.Code</p>
-                                    @item.QuestionContent <br />
-                                    @if (item.Image != null)
-                                    {
-                                                          <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
-                                    }
-                                    @for (var i = 0; i < item.Options.Count; i++)
-                                    {
-                                        if (item.Options[i].IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-right-answer">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
-                                            </div>
-                                        }
+                                    <div data-question="content">
 
-                                        <br />
-                                    }
-                                </td>
-                                @if (item.Status == StatusEnum.Delete
-                                    || item.Status == StatusEnum.DeleteOrSkip
-                                    || item.Status == StatusEnum.Editable)
-                                {
-                                <td>
-                                    @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
-                                    {
-                                        <p> </p>
-                                        <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
-                                        @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
-                                        if (item.Image != null)
+                                        <p class="text-custom">
+                                            Category: @item.Category <br />
+                                            Question Code: @item.Code
+                                        </p>
+                                        <p>@item.QuestionContent</p> <br />
+                                        @if (item.Image != null)
                                         {
-                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
                                         }
-                                        for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
+                                        @for (var i = 0; i < item.Options.Count; i++)
                                         {
-                                            if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                            if (item.Options[i].IsCorrect == true)
                                             {
                                                 <div class="container-fluid text-right-answer">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                                 </div>
                                             }
                                             else
                                             {
                                                 <div class="container-fluid">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                                 </div>
                                             }
 
                                             <br />
                                         }
+                                    </div>
+
+                                    @if (item.Status == StatusEnum.Editable)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
+                                                <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl})"
+                                                        class="btn btn-success float-md-right ml-1 reload-partial"
+                                                        data-id="#@item.Id"
+                                                        data-from="tableEditable"
+                                                        data-to="tableSuccess"
+                                                        data-container="#section-topline-1"
+                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
+                                                        >
+                                                    Accept
+                                                </button>
+                                                <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                        class="btn btn-danger float-md-right reload-partial"
+                                                        data-id="#@item.Id"
+                                                        data-from="tableEditable"
+                                                        data-to="tableDelete"
+                                                        data-container="#section-topline-1"
+                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
+                                                        >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
                                     }
+
                                 </td>
+                                @if (item.Status == StatusEnum.Editable)
+                                {
+
+                                    if (String.IsNullOrWhiteSpace(item.Message))
+                                    {
+                                        <td>
+                                            @if (item.DuplicatedQuestion != null && item.Status != StatusEnum.NotCheck)
+                                            {
+                                                string statusClass = "";
+                                                switch (item.DuplicatedQuestion.Status)
+                                                {
+                                                    case StatusEnum.Success:
+                                                        statusClass = "badge-success";
+                                                        break;
+                                                    case StatusEnum.Editable:
+                                                        statusClass = "badge-warning";
+                                                        break;
+                                                    case StatusEnum.Deleted:
+                                                        statusClass = "badge-danger";
+                                                        break;
+                                                    case StatusEnum.Invalid:
+                                                        statusClass = "badge-secondary";
+                                                        break;
+                                                }
+
+                                                <div data-question="duplicate">
+                                                    <p>
+                                                        @if (!item.DuplicatedQuestion.IsBank)
+                                                        {
+                                                            <span class="badge ml-2 @statusClass">@item.DuplicatedQuestion.Status</span>
+                                                        }
+                                                    </p>
+                                                    <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
+                                                    @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
+                                                    @if (item.Image != null)
+                                                    {
+                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
+                                                    }
+                                                    @for (var i = 0; i < item.DuplicatedQuestion.Options.Count; i++)
+                                                    {
+                                                        if (item.DuplicatedQuestion.Options[i].IsCorrect == true)
+                                                        {
+                                                            <div class="container-fluid text-right-answer">
+                                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="container-fluid">
+                                                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.DuplicatedQuestion.Options[i].OptionContent)
+                                                            </div>
+                                                        }
+
+                                                        <br />
+                                                    }
+                                                </div>
+
+                                                if (!item.DuplicatedQuestion.IsBank && !item.DuplicatedQuestion.IsAnotherImport && item.DuplicatedQuestion.Status == StatusEnum.Editable)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.DuplicatedQuestion.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
+                                                            <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl})"
+                                                                    class="btn btn-success float-md-right ml-1 reload-partial"
+                                                                    data-id="#@item.Id"
+                                                                    data-from="tableEditable"
+                                                                    data-update="Success"
+                                                                    data-to="tableSuccess"
+                                                                    data-container="#section-topline-1"
+                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
+                                                                    >
+                                                                Accept
+                                                            </button>
+                                                            <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                                    class="btn btn-danger float-md-right reload-partial"
+                                                                    data-id="#@item.Id"
+                                                                    data-from="tableEditable"
+                                                                    data-update="Deleted"
+                                                                    data-to="tableDelete"
+                                                                    data-container="#section-topline-1"
+                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status =(int) StatusEnum.Editable})"
+                                                                    >
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <div data-question="duplicate">
+                                                @item.Message <br /><a href="@Url.Action("GetDuplicatedDetail", "Import", new { id = item.Id})" class="text-info btn-link font-weight-bold">See more</a>
+                                            </div>
+                                        </td>
+                                    }
+
                                 }
                                 @if (item.Status == StatusEnum.Invalid)
                                 {
-                                    <td>@item.Message</td>
                                     <td>
-                                        <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
-                                        <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                        <div data-question="message">
+                                            @item.Message
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-question="action">
+                                            <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
+                                            <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                    class="btn btn-danger float-md-right delete-question-dt"
+                                                    data-id="#@item.Id"
+                                                    data-from="tableInvalid"
+                                                    data-to="tableDelete">
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 }
-                                else if (item.Status == StatusEnum.Editable
-                                    || item.Status == StatusEnum.Delete
-                                    || item.Status == StatusEnum.DeleteOrSkip)
+                                @*else if (item.Status == StatusEnum.Editable)
+                                    {
+                                        <td>
+                                            <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
+                                            <a href="@Url.Action("Skip", "Import", new { questionId = item.Id,  url = Request.RawUrl})" class="btn btn-success mb-2 col-md-12">Accept</a>
+                                            <a href="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})" class="btn btn-danger col-md-12">Delete</a>
+                                        </td>
+                                    }*@
+                                else if (item.Status == StatusEnum.Deleted)
                                 {
                                     <td>
-                                        <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary mb-2 col-md-12">Edit</a>
-                                        <a href="@Url.Action("Skip", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-success mb-2 col-md-12">Accept</a>
-                                        <a href="@Url.Action("Delete", "Import", new { questionId = item.Id, importId =  ViewData["importId"]})" class="btn btn-danger col-md-12">Delete</a>
+                                        <div data-question="action">
+                                            <a href="@Url.Action("Recovery", "Import", new { tempId = item.Id,  url = Request.RawUrl})" class="btn btn-success mb-2 col-md-12">Recovery</a>
+                                        </div>
+                                    </td>
+                                }
+                                else if (item.Status == StatusEnum.Success)
+                                {
+                                    <td>
+                                        <div data-question="action">
+                                            <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                    class="btn btn-danger float-md-right delete-question-dt"
+                                                    data-id="#@item.Id"
+                                                    data-from="tableSuccess"
+                                                    data-to="tableDelete">
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 }
                             </tr>
@@ -153,4 +286,5 @@ else
     <p class="text-custom">No record found here! PLease check again.</p>
 }
 
-
+<button class="btn btn-primary float-right col-md-1 ml-1 mb-4" data-toggle="modal" data-target="#import-modal">Save</button>
+<button class="btn btn-outline-light float-right border-dark text-custom mr-2 col-md-1 mb-4" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>

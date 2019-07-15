@@ -1,5 +1,7 @@
-﻿using System;
+﻿using QBCS.Service.Enum;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,8 @@ namespace QBCS.Service.ViewModel
     public class QuestionViewModel
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Please enter question content.")]
         public string QuestionContent { get; set; }
         public string Code { get; set; }
         public int Frequency { get; set; }
@@ -25,11 +29,16 @@ namespace QBCS.Service.ViewModel
         public bool IsDuplicated { get; set; }
         public bool IsDisable { get; set; }
         public DuplicatedQuestionViewModel DuplicatedQuestion { get; set; }
+
+        [Required(ErrorMessage = "Please enter option content.")]
         public List<OptionViewModel> Options { get; set; }
         public LevelViewModel Level { get; set; }
         public string LevelName { get; set; }
         public string QuestionCode { get; set; }
         public int ImportId { get; set; }
         public string Category { get; set; }
+        public bool IsBank { get; set; }
+        public StatusEnum Status { get; set; }
+        public bool IsAnotherImport { get; set; }
     }
 }

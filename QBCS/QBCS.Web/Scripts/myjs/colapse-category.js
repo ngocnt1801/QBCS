@@ -13,22 +13,34 @@
         init: function () {
             this.categoryItem = $(".show-category .list-group-item");
             this.categoryItem.on("click", function () {
-                $(".show-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+                //$(".show-category .fa", this)
+                //    .toggleClass("fa-plus-circle")
+                //    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".show-category .list-group-item").removeClass("active");
                 this.className += " active";
-                $("spinner").show();
                 categoryOctopus.loadQuestion(this.attributes["data-link"].value);
                 categoryView.removeButtonGroup();
             });
 
             this.modelCategoryItem = $(".modal-category .list-group-item");
             this.modelCategoryItem.on("click", function () {
-                $(".modal-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".modal-category .list-group-item").removeClass("active");
                 this.className += " active";
@@ -56,8 +68,8 @@
 
             this.initTable();
 
-            
-            
+
+
         },
         downCount: function (spanCount) {
             var currentCount = spanCount.attr("data-count");
@@ -228,8 +240,8 @@
                 type: "GET",
                 success: function (response) {
                     categoryView.questionListContainter.html(response);
-                    
-                  var table = $("#dataTable").dataTable({
+
+                    var table = $("#dataTable").dataTable({
                         ordering: false,
                         columnDefs: [
                             { targets: 0, width: "5%" },
@@ -245,11 +257,25 @@
                                     if (data.indexOf("[html]") >= 0) {
                                         data = data.split("&lt;cbr&gt;").join("<br/>");
                                         data = data.split("&lt;br&gt;").join("<br/>");
-                                        data = data.split("&lt;br&gt;").join("<br/>");
+                                        data = data.split("&lt;br/&gt;").join("<br/>");
                                         data = data.split("&lt;p&gt;").join("");
                                         data = data.split("&lt;/p&gt;").join("");
                                         data = data.split("&lt;span&gt;").join("");
                                         data = data.split("&lt;/span&gt;").join("");
+
+                                        
+                                        data = data.split("&lt;b&gt;").join("");
+                                        data = data.split("&lt;/b&gt;").join("");
+                                        data = data.split("&lt;span&gt;").join("");
+                                    
+                                        data = data.split("&lt;u&gt;").join("");
+                                        data = data.split("&lt;/u&gt;").join("");
+                                        data = data.split("&lt;i&gt;").join("");
+                                        data = data.split("&lt;/i&gt;").join("");
+                                        data = data.split("&lt;sub&gt;").join("<sub>");
+                                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                                        data = data.split("&lt;sup&gt;").join("<sup>");
+                                        data = data.split("&lt;/sup&gt;").join("</sup>");
                                         data = data.split("[html]").join("");
                                     }
 
@@ -267,7 +293,7 @@
                             });
                         } else {
                             $.each($(".checkbox"), function (index, item) {
-                                $(item).addClass( "hidden");
+                                $(item).addClass("hidden");
                             });
                         }
                         categoryView.setOnClickCkb();
@@ -279,11 +305,9 @@
                             scrollTop: $(".dataTables_wrapper").offset().top
                         }, 'slow');
                     });
-                    setTimeout(function () {
-                        $('#spinner').css("display", "none");
-                        $('#pleaseWaitDialog').modal('hide');
-                    }, 500);
-                    
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
+
                 }
             });
         },

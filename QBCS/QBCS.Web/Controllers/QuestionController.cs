@@ -2,6 +2,7 @@
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IImportService importService;
         private ICourseService courseService;
+        private IUserService userService;
 
         public QuestionController()
         {
@@ -33,6 +35,7 @@ namespace QBCS.Web.Controllers
             examinationService = new ExaminationService();
             importService = new ImportService();
             courseService = new CourseService();
+            userService = new UserService();
         }
 
         // GET: Question
@@ -44,6 +47,7 @@ namespace QBCS.Web.Controllers
 
         [HttpPost]
         [Log(Action = "Create", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        [LogAction(Action = "Question", Message = "Add Question", Method = "POST")]
         public ActionResult Add(QuestionViewModel model)
         {
             questionService.Add(model);
@@ -52,12 +56,14 @@ namespace QBCS.Web.Controllers
         }
 
         // GET: Question
+        [LogAction(Action = "Question", Message = "Get Question By CourseId", Method = "GET")]
         public ActionResult GetListQuestion(int courseId)
         {
             List<QuestionViewModel> ListQuestion = questionService.GetQuestionsByCourse(courseId);
             return View("ListQuestion", ListQuestion);
         }
 
+        [LogAction(Action = "Question", Message = "Add Question in Course", Method = "GET")]
         public ActionResult AddQuestion(int courseId)
         {
             var question = new QuestionViewModel();
@@ -66,6 +72,7 @@ namespace QBCS.Web.Controllers
         }
 
         //GET: Question
+        [LogAction(Action = "Question", Message = "Get Question", Method = "GET")]
         public ActionResult GetQuestionsByContent(string content)
         {
             List<QuestionViewModel> result = new List<QuestionViewModel>();
@@ -87,6 +94,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Get Question Detail", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "View Question Detail", Method = "GET")]
         public ActionResult GetQuestionDetail(int id)
         {
             QuestionViewModel qvm = questionService.GetQuestionById(id);
@@ -111,47 +119,112 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Update Question", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        [LogAction(Action = "Question", Message = "Update Question", Method = "GET")]
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
-            bool result = questionService.UpdateQuestion(ques);
+            QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
+            if (ModelState.IsValid && !ques.QuestionContent.Trim().Equals("[html]"))
+            {
+                bool result = questionService.UpdateQuestion(ques);
+                // bool optionResult = optionService.UpdateOptions(ques.Options);
+                ViewBag.Modal = "#success-modal";
+                return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            }
+
+            else
+            {
+                foreach (var item in ques.Options)
+                {
+                    if (item.OptionContent.Trim().Equals("[html]"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Please enter Option Content");
+                    }
+                }
+                
+                //ModelState.AddModelError(string.Empty, "Question Content is required");
+                //ModelState.AddModelError(string.Empty, "Option Content is required");
+                List<LevelViewModel> levels = levelService.GetLevel();
+                List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(ques.CourseId);
+                questionDetailViewModel = new QuestionDetailViewModel()
+                {
+                    Question = ques,
+                    Levels = levels,
+                    LearningOutcomes = learningOutcomes
+                };
+
+            }
+            return View("EditQuestion", questionDetailViewModel);
+            
+        }
+
+        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        {
+            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
+            //var question = new QuestionViewModel()
+            //{
+            //    Id
+            //}
             // bool optionResult = optionService.UpdateOptions(ques.Options);
             TempData["Modal"] = "#success-modal";
-            return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
+            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
         }
 
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
+        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
+                if (owner != null && owner != 0)
+                {
+                    var ownerUser = userService.GetUserById(owner.Value);
+                    if (ownerUser != null)
+                    {
+                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
+
+                        //notify 
+                        ViewBag.Modal = "#success-modal";
+                        TempData["CourseId"] = courseId;
+                        TempData["OwnereName"] = ownerUser.Fullname;
+                        return Json("OK");
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Owner lecturer does not exists";
+                        ViewBag.Status = ToastrEnum.Error;
+                        return Json("Error");
+                    }
+                }
+                else
+                {
+                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                }
+
             }
 
-            //notify 
-            TempData["Modal"] = "#success-modal";
-            TempData["CourseId"] = courseId;
-            TempData["OwnereName"] = ownerName;
-
-            return RedirectToAction("Index", "Home");
+            return Json("OK");
+            //return RedirectToAction("Index", "Home");
         }
 
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Import Manually", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
+        [LogAction(Action = "Question", Message = "Import File Text area", Method = "POST")]
         public JsonResult ImportTextarea(Textarea textarea)
         {
             var user = (UserViewModel)Session["user"];
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, "");
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))
             //{
@@ -160,13 +233,14 @@ namespace QBCS.Web.Controllers
 
 
             //notify 
-            TempData["Message"] = "You import successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "You import successfully";
+            ViewBag.Status = ToastrEnum.Success;
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
 
         [Feature(FeatureType.BusinessLogic, "Get All Course By User for import", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Course", Message = "Load All Course", Method = "GET")]
         public JsonResult LoadCourseAjax()
         {
             var user = (UserViewModel)Session["user"];
@@ -174,6 +248,7 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetAllCoursesByUserId(userId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -193,6 +268,7 @@ namespace QBCS.Web.Controllers
             return PartialView("_AllQuestion", questions);
         }
 
+        [LogAction(Action = "Question", Message = "Get Question By Question Id", Method = "GET")]
         public ActionResult GetQuestionByQuestionId(int? questionId)
         {
             //var content = JsonConvert.DeserializeObject<QuestionViewModel>(question);
@@ -208,6 +284,7 @@ namespace QBCS.Web.Controllers
         //stpm: dependency declare
         [Dependency(typeof(QuestionController), nameof(QuestionController.ToggleDisable))]
         [Dependency(typeof(QuestionController), nameof(QuestionController.UpdateCategory))]
+        [LogAction(Action = "Questions", Message = "View Question Detail", Method = "GET")]
         public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
@@ -221,6 +298,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Question", Message = "Update File", Method = "GET")]
         public ActionResult ToggleDisable(int id, int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
         {
             questionService.ToggleDisable(id);
@@ -233,16 +311,45 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.BusinessLogic, "Move Questions", "QBCS", protectType: ProtectType.Authorized)]
         [ValidateInput(false)]
         [Log(Action = "Move", TargetName = "Question", ObjectParamName = "ques", IdParamName = "ids", CateParamName = "categoryId", LocParamName = "learningOutcomeId", LevelParamName = "levelId")]
+        [LogAction(Action = "Question", Message = "Move Question", Method = "GET")]
         public ActionResult UpdateCategory(int[] ids, int? categoryId, int? learningOutcomeId, int? levelId)
         {
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult EditQuestionWithTextbox()
+        {
+            QuestionViewModel qvm = questionService.GetQuestionById(4);
+            return PartialView("EditQuestionWithTextbox", qvm);
+        }
+
+        //public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
+        //{
+        //    var search = Request["search[value]"].ToLower();
+        //    var entities = questionService.GetQuestionTempByImportId(importId, type);
+        //    var recordTotal = entities.Count;
+        //    var result = new List<QuestionTempViewModel>();
+        //    foreach (var q in entities)
+        //    {
+        //        var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+        //        if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+        //        {
+        //            result.Add(q);
+        //        }
+        //    }
+        //    var recordFiltered = result.Count();
+        //    result = result.Skip(start).Take(length).ToList();
+        //    return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
+        //}
+
     }
 
     public class Textarea
     {
         public string Table { get; set; }
         public int CourseId { get; set; }
+        public string OwnerName { get; set; }
+        public string Prefix { get; set; }
     }
 }

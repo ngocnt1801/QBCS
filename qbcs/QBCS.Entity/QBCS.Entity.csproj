@@ -60,6 +60,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="LevelInCourse.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogAction.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionInExam.cs" />
     <Compile Include="OptionTemp.cs" />

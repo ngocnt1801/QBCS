@@ -3,6 +3,7 @@
         $('#spinner').css("display", "block");
         $('#spinner').css("z-index", "1060");
         $("#nhiModal").modal();
+        //$("#pleaseWaitDialog").modal();
         //setTimeout(function () {
         //    $this.html($this.data('original-text'));
         //}, 100000);

@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace QBCS.Web
 {
@@ -8,6 +7,11 @@ namespace QBCS.Web
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            //jquery
+            bundles.Add(new ScriptBundle("~/bundles/script/jquery").Include(
+                "~/Scripts/vendor/jquery/jquery.js"
+                ));
+
             //basic template
             bundles.Add(new StyleBundle("~/bundles/content/template").Include(
                 "~/Content/sb-admin-2.css",
@@ -18,9 +22,7 @@ namespace QBCS.Web
 
             bundles.Add(new ScriptBundle("~/bundles/script/template").Include(
                 "~/Scripts/bootstrap.bundle.js",
-                "~/Scripts/js/sb-admin-2.js",
-                "~/Scripts/vendor/jquery/jquery.js"
-               
+                "~/Scripts/js/sb-admin-2.js"
                 ));
 
             //data table
@@ -41,10 +43,18 @@ namespace QBCS.Web
                 ));
 
             bundles.Add(new ScriptBundle("~/bundle/scripts/importfile").Include(
-                "~/Scripts/myjs/import-file.js",
-                "~/Scripts/myjs/change-partial-view.js",
+                "~/Scripts/myjs/import-file.js"
+                ));
+
+            //process text
+            bundles.Add(new ScriptBundle("~/bundle/scripts/processtext").Include(
                 "~/Scripts/myjs/text-process.js"
                 ));
+            //tab import result
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tabresult").Include(
+                "~/Scripts/myjs/change-partial-view.js"
+                ));
+
             //smartwizard
             bundles.Add(new ScriptBundle("~/bundle/scripts/smartwizard").Include(
                 "~/Scripts/myjs/jquery.smartWizard.min.js",
@@ -110,7 +120,7 @@ namespace QBCS.Web
                 "~/Content/error/style.css"
                 ));
             //for checking diff
-          
+
             //Spinner
             bundles.Add(new ScriptBundle("~/bundle/scripts/spinner").Include(
                 "~/Scripts/myjs/spinner.js"
@@ -153,6 +163,43 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/img").Include(
                        "~/Content/img/image-zoom.css"
                        ));
+
+            //Track window
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tracking").Include(
+                "~/Scripts/myjs/track-window.js",
+                "~/Scripts/myjs/modal/manage-modal.js",
+                 "~/Scripts/jquery.ba-hashchange.min.js"
+                ));
+
+            //AJAX FORM
+            bundles.Add(new ScriptBundle("~/bundle/scripts/unobtrusive").Include(
+                 "~/Scripts/jquery.unobtrusive-ajax.js"
+
+                ));
+            bundles.Add(new ScriptBundle("~/bundle/scripts/dragFile").Include(
+                "~/Scripts/myjs/dragAndDrop/filedrag.js"
+                ));
+
+            //Different highlight
+            bundles.Add(new ScriptBundle("~/bundle/scripts/diff").Include(
+                "~/Scripts/myjs/diff/diff_match_patch.js",
+                "~/Scripts/myjs/diff/diff_match_patch_extended.js",
+                "~/Scripts/myjs/diff/picadiff.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/diff").Include(
+                "~/Content/diff/jquery.picadiff.css"
+                ));
+
+
+            //Toggle question
+            bundles.Add(new ScriptBundle("~/bundle/scripts/togglequestion").Include(
+                "~/Scripts/myjs/toggle-question.js"
+                ));
+
+            //Edit question
+            bundles.Add(new StyleBundle("~/bundle/content/detailquestion").Include(
+                      "~/Content/style-detail-question.css"
+                      ));
         }
     }
 }

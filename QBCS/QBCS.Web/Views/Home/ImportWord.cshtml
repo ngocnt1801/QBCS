@@ -6,6 +6,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int selectedCourse = TempData["CourseId"] != null ? (int)TempData["CourseId"] : 0;
 }
+
+@Styles.Render("~/bundle/content/autocompleteLecturer")
+@Styles.Render("~/bundle/content/importfile")
 <div class="container-fluid ml-5">
     <div class="row">
         <a href="~/Content/file/QBCS_Word_Template.doc" class="col-md-10 mb-2" download>
@@ -21,32 +24,42 @@
                 </div>
                 <div class="card-body">
 
-                    @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
                     {
+                        OnSuccess = "turnon_modal",
+                        HttpMethod = "POST",
+
+
+                    }, new { enctype = "multipart/form-data" }))
+                    {
+
+                        @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
-                            <input id="myautocomplete" name="ownerName" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
+                            <input id="myautocomplete" class="form-control text-custom border-dark" value="@TempData["OwnereName"]" />
+                            <input id="autocompleteLecturerId" name="owner" hidden />
                         </div>
                         <i class="text-dark text-custom">Choose a course:</i>
                         <div class="form-group pb-2">
                             @if (Model == null || Model.Courses == null || Model.Courses.Count == 0)
-                             {
-                                 <select class="form-control text-custom border-dark">
-                                     <option selected>[None course available]</option>
-                                 </select>
-                             }
-                             else
-                             {
-                                 @Html.DropDownList("courseId", Model.Courses.Select(c => new SelectListItem
                             {
-                                Value = c.CourseId + "",
-                                Text = c.Code + " - " + c.Name,
-                                Selected = c.CourseId == selectedCourse
-                            }), new { @class = "form-control text-custom border-dark" })
-                             }
+                                <select class="form-control text-custom border-dark">
+                                    <option selected>[None course available]</option>
+                                </select>
+                            }
+                            else
+                            {
+                                @Html.DropDownList("courseId", Model.Courses.Select(c => new SelectListItem
+                           {
+                               Value = c.CourseId + "",
+                               Text = c.Code + " - " + c.Name,
+                               Selected = c.CourseId == selectedCourse
+                           }), new { @class = "form-control text-custom border-dark" })
+                            }
                             @*<input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                            <input id="autocompleteCourseId" name="courseId" hidden />*@
+                                <input id="autocompleteCourseId" name="courseId" hidden />*@
                         </div>
 
                         <i class="text-dark text-custom">Choose unit type:</i>
@@ -80,7 +93,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary float-right">Import</button>
+                            <button type="submit" class="btn btn-primary float-right" id="btnImport">Import</button>
                             <button type="reset" class="btn btn-outline-light float-right border-dark text-custom mr-2">Cancel</button>
                         </div>
                     }
@@ -106,3 +119,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+@Scripts.Render("~/bundle/scripts/importfile")
+@Scripts.Render("~/bundle/scripts/autocompleteLecturer")
+@Scripts.Render("~/bundle/scripts/unobtrusive")
+@Scripts.Render("~/bundle/scripts/dragFile")

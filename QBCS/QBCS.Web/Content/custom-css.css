@@ -3,10 +3,16 @@
     font-weight: 400;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 .text-custom-dashboard {
     color: #000 !important;
     font-weight: 300 !important;
     font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.text-invalid {
+    font-weight: bold;
+    background-color: #dfeb73;
 }
 
 .text-right-answer {
@@ -27,4 +33,51 @@
 /**Highlight diffrent between string*/
 .highlight {
     background-color: #B4D5FF
+}
+
+.error-block ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/*Drag and Drop FIle*/
+
+#drop_file_zone {
+    border: 2px dashed #ccc;
+    text-align: center;
+    height: auto;
+    padding: 8px;
+    font-size: 18px;
+}
+
+#drag_upload_file {
+    width: 50%;
+    margin: 0 auto;
+}
+
+    #drag_upload_file p {
+        text-align: center;
+    }
+
+    #drag_upload_file #selectfile {
+        display: none;
+    }
+
+
+
+.dropArea {
+    border: 2px dashed #ccc;
+    height: 200px;
+    text-align: center;
+    line-height: 300px;
+    color: #000;
+}
+
+.active-drop {
+    border: 2px dashed cornflowerblue !important;
+    
+}
+.hidden{
+    display: none;
 }

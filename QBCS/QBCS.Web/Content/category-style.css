@@ -38,6 +38,14 @@
         background-color: #4e73df !important;
     }
 
+.modal-category .active {
+    color: #fffeee !important;
+}
+
+    .modal-category .active:hover {
+        background-color: #4e73df !important;
+    }
+
 .list-group-item:hover{
     background-color: #eeeeee;
     cursor: pointer;
