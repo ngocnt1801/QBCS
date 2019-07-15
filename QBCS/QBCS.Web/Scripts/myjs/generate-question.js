@@ -80,15 +80,21 @@
         var examinationId = $("input[name='examinationId-" + counter + "']").val();
         var examGroup = $("input[name='examGroup-" + counter + "']").val();
         var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
-        var getCategory = $("#getCategory-" + counter).prop('checked');
         var exportAll = $("#exportAll-" + counter).prop('checked');
         if (exportAll === true) {
-            window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+            window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
         } else {
-            window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+            window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
         }
 
     });
+    $('#exportDetailExamination').on('submit',function(e){
+        e.preventDefault();
+        var examinationId = $("input[name='examinationId']").val();
+        var fileExtension = $("#fileExtension").find(":selected").text();
+        window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
+
+    });    
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
         var questionId = $(this).data('question-id');

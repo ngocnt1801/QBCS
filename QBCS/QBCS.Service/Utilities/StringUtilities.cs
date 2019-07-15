@@ -10,7 +10,7 @@ namespace QBCS.Service.Utilities
 {
     public class StringUtilities
     {
-        public static string HtmlEncode(string textContent)
+        public static string FormatStringExportGIFT(string textContent)
         {
             if (textContent == null)
                 return null;
@@ -21,9 +21,9 @@ namespace QBCS.Service.Utilities
             result = StringProcess.RemoveTag(result, @"}", @"\}");
             result = StringProcess.RemoveTag(result, @"#", @"\#");
             result = StringProcess.RemoveTag(result, @"~", @"\~");
-            result = StringProcess.RemoveTag(result, @":", @"\:");            
-            result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
-            result = WebUtility.HtmlEncode(result);
+            result = StringProcess.RemoveTag(result, @":", @"\:");                        
+            result = EncodeHTML(result);
+            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<br/>");
             return result;
         }
         public static string FormatStringExportXML(string textContent)
@@ -34,8 +34,19 @@ namespace QBCS.Service.Utilities
             }
             string result = textContent;
             result = StringProcess.RemoveTag(result, @"[html]", "");
-            result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
-            result = WebUtility.HtmlEncode(result);
+            result = EncodeHTML(result);
+            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<br/>");
+            return result;
+        }
+        public static string EncodeHTML(string source)
+        {
+            if (source == null)
+                return null;
+            string result = source;
+            result = StringProcess.RemoveTag(result, @"&", @"&amp;");
+            result = StringProcess.RemoveTag(result, "\"", @"&quot;");
+            result = StringProcess.RemoveTag(result, @"<", @"&lt;");
+            result = StringProcess.RemoveTag(result, @">", @"&gt;");
             return result;
         }
     }

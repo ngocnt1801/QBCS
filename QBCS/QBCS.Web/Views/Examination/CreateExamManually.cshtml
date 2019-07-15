@@ -34,19 +34,21 @@
                 <p id="numberEasyQuestion">Number of easy question : 0</p>
                 <p id="numberMediumQuestion">Number of medium question : 0</p>
                 <p id="numberHardQuestion">Number of hard question : 0</p>
-                <table class="table table-bordered text-custom" id="listQuestionExam" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Code</th>
-                            <th>Question Content</th>
-                            <th>Topic/LO</th>
-                            <th>Level</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive text-custom">
+                    <table class="table table-bordered text-custom" id="listQuestionExam" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Code</th>
+                                <th>Question Content</th>
+                                <th>Topic/LO</th>
+                                <th>Level</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 @using (Html.BeginForm("SaveQuestionToExam", "Examination", new { @class = "form-group-exam" }))

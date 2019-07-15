@@ -41,7 +41,6 @@
                     var tableExam = $('#listQuestionGenrate').DataTable({
                         columns: [
                             null,
-                            null,
                             {
                                 "render": function (data, type, row) {
                                     if (data.indexOf("[html]") >= 0) {
