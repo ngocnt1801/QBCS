@@ -19,5 +19,6 @@ namespace QBCS.Service.Interface
         string GetExamGroup();
         void ResetPriorityAndFrequency(string groupExam);
         string ReplaceQuestionInExam(int questionId, string fullname, string usercode);
+        GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId, int semeterId);
     }
 }

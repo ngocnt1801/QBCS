@@ -1,5 +1,4 @@
-﻿$(document).ready(function () {
-
+﻿$(document).ready(function () {    
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
         .addClass('btn btn-info')
@@ -40,35 +39,6 @@
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
-        //if (stepNumber === 0 && stepDirection === 'forward') {
-        //    var courseId = $("input[name=course]:checked").val();
-        //    var string = "<div class='col-lg-8'><table class='table table-striped'><tbody>";
-        //    $.ajax({
-        //        type: "GET",
-        //        url: "http://localhost/QBCS.Web/api/TopicAPI/topics",
-        //        data: {
-        //            CourseId : courseId
-        //        },
-        //        cache: false,
-        //        dataType: "xml",
-        //        success: function (xml) {
-        //            $(xml).find('TopicViewModel').each(function () {
-        //                var name = $(this).find("Name").text();
-        //                var id = $(this).find("Id").text();
-        //                var idValue = $(this).find("IdValue").text();
-        //                string = string + "<tr class='d-flex'><td class='col-1'><div class='el-checkbox el-checkbox-green text-center form-group'><span class='margin-l'></span><input value='" + idValue + "' type='checkbox' class='checkbox' name='topic' id='checkbox" + id + "' /><label class='el-checkbox-style' for='checkbox" + id + "'></label></div></td><td class='col-11'><h5 style='word-wrap:break-word;'>" + name + "</h5></td></tr>"
-        //            });
-        //            $(xml).find('LearningOutcomeViewModel').each(function () {
-        //                var name = $(this).find("Name").text();
-        //                var id = $(this).find("Id").text();
-        //                var idValue = $(this).find("IdValue").text();
-        //                string = string + "<tr class='d-flex'><td class='col-1'><div class='el-checkbox el-checkbox-green text-center form-group'><span class='margin-l'></span><input value='" + idValue + "' type='checkbox' class='checkbox' name='topic' id='checkbox" + id + "' /><label class='el-checkbox-style' for='checkbox" + id + "'></label></div></td><td class='col-11'><h5 style='word-wrap:break-word;'>" + name + "</h5></td></tr>"
-        //            });
-        //            string = string + "</tbody></table></div>";
-        //            $("#listTopic").html(string);
-        //        }
-        //    });
-        //}
     });
 
     $('#check-all').on('change', function (event) {
@@ -117,7 +87,7 @@
         } else {
             window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
         }
-        
+
     });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
@@ -149,6 +119,7 @@
             }
         });
     });
+
     $(".tab-slider--body").hide();
     $(".tab-slider--body:first").show();
 
@@ -189,7 +160,6 @@
             return b - a;
         }
     });
-
     //set up datatable
     var tableExam = $('#dataTableExam').DataTable({
         columns: [
@@ -269,7 +239,7 @@
             }
         ]
     });
-    var tableExam2= $('#dataTableExam-2').DataTable({
+    var tableExam2 = $('#dataTableExam-2').DataTable({
         columns: [
             null,
             null,
@@ -386,7 +356,7 @@
             }
         ]
     });
-    var tableExam5 =  $('#dataTableExam-5').DataTable({
+    var tableExam5 = $('#dataTableExam-5').DataTable({
         columns: [
             null,
             null,
@@ -467,7 +437,7 @@
             },
         ]
     });
-    
+
     tableExam.on('page.dt', function () {
         $('html, body').animate({
             scrollTop: $(".dataTables_wrapper").offset().top
@@ -483,7 +453,7 @@
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
     });
-     tableExam3.on('page.dt', function () {
+    tableExam3.on('page.dt', function () {
         $('html, body').animate({
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
@@ -497,6 +467,47 @@
         $('html, body').animate({
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
+    });
+    $('#btnSaveManually').attr('disabled', 'disabled');
+    var tableQuestionExamManually = $('#listQuestionExam').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 3
+            },
+            {
+                type: 'formatted-level',
+                targets: 4
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
     });
 });
 $(".tab-slider--nav li").click(function () {
@@ -513,5 +524,78 @@ $(".tab-slider--nav li").click(function () {
     $(".tab-slider--nav li").removeClass("active");
     $(this).addClass("active");
 });
+$(document).on('click', '.add-question', function (e) {
+    e.preventDefault();
+    var tableExamManually = $('#listQuestionGenrate').dataTable();
+    var indexRow = $(this).data('row-id');
+    var data = tableExamManually.api().row(indexRow).data();
+    var questionCode = data[0];
+    var questionContent = data[1];
+    var questionLO = data[2];
+    var questionLevel = data[3];
+    var tableQuestionAdded = $('#listQuestionExam').dataTable();
+    if (!checkQuestionCode(questionCode)) {
+        tableQuestionAdded.fnAddData([
+            null,
+            questionCode,
+            questionContent,
+            questionLO,
+            questionLevel,
+            '<button class="delete-question btn-danger btn delete-question-exam"><i class="fas fa-trash-alt"></i></button>'
+        ]);
+        $(".form-group-exam").append("<input type='hidden' class='input-question-code' name='questionCode' value='" + questionCode + "'/>");
+        $('#btnSaveManually').removeAttr('disabled');
+        countNumberOfQuestion();
+        toastr.options.timeOut = 500;
+        toastr.success("Question " + questionCode + " has been added to exam!");
+    } else {
+        toastr.options.timeOut = 500;
+        toastr.warning("Question " + questionCode + " already exists in the exam");
+    }
+});
+$(document).on('click', '.delete-question-exam', function (e) {
+    var dtRow = $(this).parents('tr');
+    var table = $('#listQuestionExam').DataTable();
+    var data = table.row(dtRow[0].rowIndex - 1).data();
+    var questionCode = data[1];
+    $(".form-group-exam input[value=" + questionCode + "]").remove();
+    table.row(dtRow[0].rowIndex - 1).remove().draw(false);
+    var dataTable = $('#listQuestionExam').dataTable().api().rows().data();
+    if (dataTable.length === 0) {
+        $('#btnSaveManually').attr('disabled', 'disabled');
+    }
+    countNumberOfQuestion();
+});
+function checkQuestionCode(questionCode) {
+    var tableQuestionAdded = $('#listQuestionExam').dataTable();
+    var data = tableQuestionAdded.api().rows().data();
+    for (var i = 0; i < data.length; i++) {
+        if (data[i][1] === questionCode) {
+            return true;
+        }
+    }
+    return false;
+};
+function countNumberOfQuestion() {
+    var questionEasy = 0;
+    var questionMedium = 0;
+    var questionHard = 0;
+    var tableQuestionAdded = $('#listQuestionExam').dataTable();
+    var data = tableQuestionAdded.api().rows().data();
+    for (var i = 0; i < data.length; i++) {
+        if (data[i][4] === "Easy") {
+            questionEasy++;
+        } else if (data[i][4] === "Medium") {
+            questionMedium++;
+        } else if (data[i][4] === "Hard") {
+            questionHard++;
+        }
+    }
+    $('#numberEasyQuestion').html("Number of easy question : " + questionEasy);
+    $('#numberMediumQuestion').html("Number of medium question : " + questionMedium);
+    $('#numberHardQuestion').html("Number of hard question : " + questionHard);
+};
+
+
 
 

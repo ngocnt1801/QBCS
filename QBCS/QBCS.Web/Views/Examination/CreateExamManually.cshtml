@@ -1,0 +1,72 @@
+﻿@model QBCS.Service.ViewModel.CourseViewModel
+
+@{
+    ViewBag.Title = "Create Exam Manually";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" id="move-btn-group">
+    <div class="col mb-2">
+        <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal">Review Exam</button>
+    </div>
+</div>
+<div class="row">
+    <div style="max-height: 100vh; overflow-y: auto; margin-bottom: 30px" class="list-group list-group-root well col-md-3 text-custom show-category-exam">
+        @Html.Partial("ListCategoryCreateExam", Model)
+    </div>
+    <div id="list-question-exam" class="col-md-9" data-id="@Model.Id">
+        <div class="row"></div>
+        @* Render list question here *@
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Review Exam</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body table-counter">
+                <p id="numberEasyQuestion">Number of easy question : 0</p>
+                <p id="numberMediumQuestion">Number of medium question : 0</p>
+                <p id="numberHardQuestion">Number of hard question : 0</p>
+                <table class="table table-bordered text-custom" id="listQuestionExam" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Code</th>
+                            <th>Question Content</th>
+                            <th>Topic/LO</th>
+                            <th>Level</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("SaveQuestionToExam", "Examination", new { @class = "form-group-exam" }))
+                {
+                    <div class="form-group-exam">
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                    </div>
+                    <div class="form-inline row">
+                        <label for="semester" class="control-label col-xs-10" style="margin-left:15px;">Semester : </label>
+                        <div class="col-xs-2 ml-2">
+                            <select id="semester" name="semeterId" class="form-control">
+                                @foreach (var sem in Model.Semester)
+                                {
+                                    <option value="@sem.Id">@sem.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <button id="btnSaveManually" type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

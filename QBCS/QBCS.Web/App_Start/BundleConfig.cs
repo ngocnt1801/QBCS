@@ -96,7 +96,8 @@ namespace QBCS.Web
 
             //categories tree
             bundles.Add(new ScriptBundle("~/bundle/scripts/category").Include(
-                "~/Scripts/myjs/colapse-category.js"
+                "~/Scripts/myjs/colapse-category.js",
+                "~/Scripts/myjs/colapse-category-exam.js"
                 ));
 
             bundles.Add(new StyleBundle("~/bundle/content/category").Include(

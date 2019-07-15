@@ -1,4 +1,4 @@
-﻿using AuthLib.Module;
+using AuthLib.Module;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
@@ -28,6 +28,8 @@ namespace QBCS.Web.Controllers
         private ICategoryService categoryService;
         private ISemesterService semesterService;
         private ILogService logService;
+        private ICourseService courseService;
+        private IQuestionService questionService;
         public ExaminationController()
         {
             topicService = new TopicService();
@@ -37,6 +39,8 @@ namespace QBCS.Web.Controllers
             categoryService = new CategoryService();
             semesterService = new SemesterService();
             logService = new LogService();
+            courseService = new CourseService();
+            questionService = new QuestionService();
         }
         //Staff
         //stpm: feature declare
@@ -125,6 +129,25 @@ namespace QBCS.Web.Controllers
         {
             string groupExam = examinationService.ReplaceQuestionInExam(questionId, fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             return RedirectToAction("ViewGeneratedExamination", "Examination", new { examGroup  = groupExam});
+        }
+        public ActionResult CreateExamManually(int courseId)
+        {
+            List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
+            List<SemesterViewModel> semesters = semesterService.GetAllSemester();
+            var model = courseService.GetCourseById(courseId);
+            model.Categories = categories;
+            model.Semester = semesters;
+            return View(model);
+        }
+        public ActionResult GetQuestions(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId)
+        {
+            var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
+            return PartialView("ListQuestionCreateExamManually", result);
+        }
+        public ActionResult SaveQuestionToExam(List<string> questionCode, int courseId, int semeterId)
+        {
+            GenerateExamViewModel exam = examinationService.SaveQuestionsToExam(questionCode, courseId, semeterId);
+            return View("GenerateExaminaton", exam);
         }
 
     }

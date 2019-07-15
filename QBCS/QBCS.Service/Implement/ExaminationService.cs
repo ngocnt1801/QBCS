@@ -192,6 +192,171 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
             }
         }
+        public GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId, int semeterId)
+        {
+            int questionEasy = 0;
+            int questionMedium = 0;
+            int questionHard = 0;
+            int idOfEasyLevel = levelService.GetIdByName(EASY);
+            int idOfMediumLevel = levelService.GetIdByName(MEDIUM);
+            int idOfHardLevel = levelService.GetIdByName(HARD);
+            string groupExam = GetExamGroup();
+            string examCode = GetExamCode();
+            Examination exam = new Examination()
+            {
+                ExamCode = examCode,
+                GroupExam = groupExam,
+                CourseId = courseId,
+                SemesterId = semeterId,
+                IsDisable = false,
+                GeneratedDate = DateTime.Now
+            };
+            unitOfWork.Repository<Examination>().Insert(exam);
+            unitOfWork.SaveChanges();
+            foreach (var quesCode in questionCode)
+            {
+                QuestionViewModel questionViewModel = questionService.GetQuestionByQuestionCode(quesCode);
+                if(questionViewModel.LevelId == idOfEasyLevel)
+                {
+                    questionEasy++;
+                } else if (questionViewModel.LevelId == idOfMediumLevel)
+                {
+                    questionMedium++;
+                } else
+                {
+                    questionHard++;
+                }
+                PartOfExamination part;
+                if (exam.PartOfExaminations.Count == 0 || exam.PartOfExaminations.Where(p => p.LearningOutcomeId == questionViewModel.LearningOutcomeId).FirstOrDefault() == null)
+                {
+                    part = new PartOfExamination()
+                    {
+                        LearningOutcomeId = questionViewModel.LearningOutcomeId,
+                        ExaminationId = exam.Id,
+                        NumberOfQuestion = 0
+                    };
+                    unitOfWork.Repository<PartOfExamination>().Insert(part);
+                    unitOfWork.SaveChanges();
+                    
+                } else
+                {
+                    part = exam.PartOfExaminations.Where(p => p.LearningOutcomeId == questionViewModel.LearningOutcomeId).FirstOrDefault();
+                }
+                QuestionInExam question = new QuestionInExam()
+                {
+                    QuestionContent = questionViewModel.QuestionContent,
+                    PartId = part.Id,
+                    QuestionReference = questionViewModel.Id,
+                    Priority = questionViewModel.Priority,
+                    Frequency = questionViewModel.Frequency,
+                    Image = questionViewModel.Image,
+                    QuestionCode = questionViewModel.QuestionCode,
+                    LevelId = questionViewModel.LevelId,
+                    CategoryId = questionViewModel.CategoryId,
+                    IsDisable = false,
+                    OptionInExams = questionViewModel.Options.Select(o => new OptionInExam()
+                    {
+                        IsCorrect = o.IsCorrect,
+                        OptionContent = o.OptionContent,
+                        Image = o.Image
+                    }).ToList()
+                };
+                part.NumberOfQuestion = part.NumberOfQuestion + 1;
+                unitOfWork.Repository<PartOfExamination>().Update(part);
+                unitOfWork.Repository<QuestionInExam>().Insert(question);
+                unitOfWork.SaveChanges();
+            }//end for
+            //update Frequency and Priority
+            foreach (var part in exam.PartOfExaminations)
+            {
+                //update easy level
+                if(part.QuestionInExams.Where(q => q.LevelId == idOfEasyLevel) != null)
+                {
+                    List<Question> questionByLevelAndLO = unitOfWork.Repository<Question>().GetAll().Where(q => q.LevelId == idOfEasyLevel && q.LearningOutcomeId == part.LearningOutcomeId).ToList();
+                    foreach (var questionByLevel in questionByLevelAndLO)
+                    {
+                        if(part.QuestionInExams.Any(q => q.QuestionReference == questionByLevel.Id))
+                        {
+                            questionByLevel.Priority = 0;
+                            questionByLevel.Frequency = questionByLevel.Frequency + 1;
+                        } else
+                        {
+                            questionByLevel.Priority = questionByLevel.Priority + 1;
+                        }
+                        unitOfWork.Repository<Question>().Update(questionByLevel);
+                    }
+                }
+                //update medium question
+                if (part.QuestionInExams.Where(q => q.LevelId == idOfMediumLevel) != null)
+                {
+                    List<Question> questionByLevelAndLO = unitOfWork.Repository<Question>().GetAll().Where(q => q.LevelId == idOfMediumLevel && q.LearningOutcomeId == part.LearningOutcomeId).ToList();
+                    foreach (var questionByLevel in questionByLevelAndLO)
+                    {
+                        if (part.QuestionInExams.Any(q => q.QuestionReference == questionByLevel.Id))
+                        {
+                            questionByLevel.Priority = 0;
+                            questionByLevel.Frequency = questionByLevel.Frequency + 1;
+                        }
+                        else
+                        {
+                            questionByLevel.Priority = questionByLevel.Priority + 1;
+                        }
+                        unitOfWork.Repository<Question>().Update(questionByLevel);
+                    }
+                }
+
+                //update hard question
+                if (part.QuestionInExams.Where(q => q.LevelId == idOfHardLevel) != null)
+                {
+                    List<Question> questionByLevelAndLO = unitOfWork.Repository<Question>().GetAll().Where(q => q.LevelId == idOfHardLevel && q.LearningOutcomeId == part.LearningOutcomeId).ToList();
+                    foreach (var questionByLevel in questionByLevelAndLO)
+                    {
+                        if (part.QuestionInExams.Any(q => q.QuestionReference == questionByLevel.Id))
+                        {
+                            questionByLevel.Priority = 0;
+                            questionByLevel.Frequency = questionByLevel.Frequency + 1;
+                        }
+                        else
+                        {
+                            questionByLevel.Priority = questionByLevel.Priority + 1;
+                        }
+                        unitOfWork.Repository<Question>().Update(questionByLevel);
+                    }
+                }
+            }
+            // save question list
+            unitOfWork.SaveChanges();
+            exam.NumberOfEasy = questionEasy;
+            exam.NumberOfMedium = questionMedium;
+            exam.NumberOfHard = questionHard;
+            unitOfWork.Repository<Examination>().Update(exam);
+            unitOfWork.SaveChanges();
+            int totalQuestion = questionEasy + questionMedium + questionHard;
+            int percentQuestionEasy = questionEasy / totalQuestion;
+            int percentQuestionMedium = questionMedium / totalQuestion;
+            int percentQuestionHard = 100 - percentQuestionEasy - percentQuestionMedium;
+            GenerateExamViewModel result = new GenerateExamViewModel()
+            {
+                ExamId = exam.Id,
+                EasyQuestion = questionEasy,
+                MediumQuestion = questionMedium,
+                HardQuestion = questionHard,
+                EasyQuestionGenerrate = questionEasy,
+                MediumQuestionGenerrate = questionMedium,
+                HardQuestionGenerrate = questionHard,
+                GroupExam = exam.GroupExam,
+                TotalQuestion = totalQuestion,
+                EasyPercent = percentQuestionEasy,
+                MediumPercent = percentQuestionMedium,
+                HardPercent = percentQuestionHard,
+                TotalQuestionGenerrate = totalQuestion,
+                TotalExam = 1,
+                IsEnough = true
+            };
+            result.CalculateGrade();
+            return result;
+        }
+        
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam, string fullname = "", string usercode = "")
         {
             exam.IsEnough = true;
