@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "ListQuestion";
-    int counter = 0;
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
@@ -24,7 +23,7 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive text-custom">
+            <div class="table-responsive text-custom table-counter">
                 <table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -41,10 +40,8 @@
                         @foreach (var item in Model)
                         {
                             <tr id="@item.Id">
-                                @{
-                                    counter++;
-                                }
-                                <td>@counter</td>
+                                
+                                <td></td>
                                 <td>
                                     @if (item.Image != null && !item.Image.Equals(""))
                                     {

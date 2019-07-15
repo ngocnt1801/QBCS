@@ -123,9 +123,28 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
             return questionViewModel;
         }
+        public QuestionViewModel GetQuestionByQuestionCode(string questionCode)
+        {
+            Question QuestionById = unitOfWork.Repository<Question>().GetAll().Where( q => q.QuestionCode.Equals(questionCode)).FirstOrDefault();
+            List<OptionViewModel> optionViewModels = new List<OptionViewModel>();
+            foreach (var option in QuestionById.Options)
+            {
+                OptionViewModel optionViewModel = new OptionViewModel()
+                {
+                    Id = option.Id,
+                    OptionContent = option.OptionContent,
+                    Image = option.Image,
+                    IsCorrect = (bool)option.IsCorrect
+                };
+                optionViewModels.Add(optionViewModel);
+            }
 
-      
-       
+
+            QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
+            return questionViewModel;
+        }
+
+
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -879,6 +898,8 @@ namespace QBCS.Service.Implement
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
+                LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                 Options = q.Options.ToList().Select(o => new OptionViewModel
                 {

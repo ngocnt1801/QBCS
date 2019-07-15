@@ -70,6 +70,9 @@ namespace QBCS.Web
                 "~/Content/generate-exam.css"
                 ));
 
+            //Confirm box
+            bundles.Add(new ScriptBundle("~/bundle/scripts/confirmbox").Include ("~/Scripts/myjs/bootbox.min.js"));
+
             //signalR
             bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(
                 "~/Scripts/jquery.signalR-2.4.1.js"
@@ -103,7 +106,8 @@ namespace QBCS.Web
 
             //categories tree
             bundles.Add(new ScriptBundle("~/bundle/scripts/category").Include(
-                "~/Scripts/myjs/colapse-category.js"
+                "~/Scripts/myjs/colapse-category.js",
+                "~/Scripts/myjs/colapse-category-exam.js"
                 ));
 
             bundles.Add(new StyleBundle("~/bundle/content/category").Include(

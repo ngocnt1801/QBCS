@@ -1,7 +1,16 @@
 ﻿.has-search .form-control {
     padding-left: 2.375rem;
 }
-
+@media screen and (min-width: 992px) {
+        .modal-xlg {
+          width: 90% !important;
+          max-width:1080px !important; /* New width for large modal */
+        }
+        .modal-dialog-xl {
+            width: 90% !important;
+            max-width:1080px !important;
+        }
+    }
 .has-search .form-control-feedback {
     position: absolute;
     z-index: 2;

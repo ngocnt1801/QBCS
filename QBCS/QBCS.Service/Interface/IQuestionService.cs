@@ -33,5 +33,8 @@ namespace QBCS.Service.Interface
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
 
 
+        QuestionViewModel GetQuestionByQuestionCode(string questionCode);
+
+
     }
 }
