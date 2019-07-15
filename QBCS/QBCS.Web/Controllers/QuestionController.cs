@@ -232,9 +232,9 @@ namespace QBCS.Web.Controllers
             return PartialView("ListQuestion", result);
         }
 
-        public JsonResult GetQuestionsDatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int draw, int start, int length)
+        public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int? draw, int? start, int? length)
         {
-            var search = Request["search[value]"].ToLower();
+            var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
             var entities = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
             var recordTotal = entities.Count();
             var result = new List<QuestionViewModel>();
@@ -247,15 +247,15 @@ namespace QBCS.Web.Controllers
                 }
             }
             var recordFiltered = result.Count();
-            if(length >= 0)
+            if(length != null && length >= 0 )
             {
-                result = result.Skip(start).Take(length).ToList();
+                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
             }
             else
             {
                 result = result.ToList();
             }
-            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw != null? draw : 1, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
         }
 
         //Lecturer
