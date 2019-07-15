@@ -420,13 +420,14 @@ function split() {
         var fromContainer = table[$(this).attr("data-from")][0];
         var toContainer = table[$(this).attr("data-to")][0];
 
-        minusTotal($(table[$(this).attr("data-from")][1]));
-        var index = plusTotal($(table[$(this).attr("data-to")][1]));
+       
 
         var question = getQuestionObject($($(this).attr('data-id')));
 
         deleteQuestion($(this).attr('data-url'));
         reloadTable($(this).attr('data-url-reload'), $(this).attr("data-container"));
+        minusTotal($(table[$(this).attr("data-from")][1]));
+        var index = plusTotal($(table[$(this).attr("data-to")][1]));
 
         var tableId = toContainer.tables().nodes().to$().attr('id');
         var dataRow = [
@@ -525,6 +526,9 @@ function spinner_loading() {
 
 }
 function reloadTable(url, container) {
+    $('#spinner').css("display", "block");
+    $('#spinner').css("z-index", "1060");
+    $('#pleaseWaitDialog').modal();
     $.ajax({
         url: url,
         type: 'GET',
@@ -586,6 +590,8 @@ function reloadTable(url, container) {
                     }
                 ]
             });
+            $('#spinner').css("display", "none");
+            $('#pleaseWaitDialog').modal('hide');
         }
     });
 }
