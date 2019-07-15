@@ -232,9 +232,9 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
-            //$('#spinner').css("display", "block");
-            //$('#spinner').css("z-index", "1060");
-            //$('#pleaseWaitDialog').modal();
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $('#pleaseWaitDialog').modal();
             $.ajax({
                 url: url,
                 type: "GET",
@@ -305,8 +305,8 @@
                             scrollTop: $(".dataTables_wrapper").offset().top
                         }, 'slow');
                     });
-                    //$('#spinner').css("display", "none");
-                    //$('#pleaseWaitDialog').modal('hide');
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
 
                 }
             });

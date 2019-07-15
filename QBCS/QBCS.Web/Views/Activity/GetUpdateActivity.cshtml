@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
-
+@Styles.Render("~/bundle/content/diff")
 <h2>Activities Detail</h2>
 
 
@@ -39,9 +39,9 @@
                             <tr class="picadiff-content">
                                 <td>
                                     <div class="left">
-                                        <div>Category: @item.QuestionNew.Category</div><br/>
-                                        <div>LOC: @item.QuestionNew.LearningOutcomeName</div><br/>
-                                        <div>Level: @item.QuestionNew.LevelName</div><br/>
+                                        <div>Category: @item.QuestionNew.Category</div><br />
+                                        <div>LOC: @item.QuestionNew.LearningOutcomeName</div><br />
+                                        <div>Level: @item.QuestionNew.LevelName</div><br />
                                         Question:
                                         @if (item.QuestionNew.Image != null)
                                         {
@@ -71,9 +71,9 @@
                                 </td>
                                 <td>
                                     <div class="right">
-                                        <div>Category: @item.QuestionOld.Category</div><br/>
-                                        <div>LOC: @item.QuestionOld.LearningOutcomeName</div><br/>
-                                        <div>Level: @item.QuestionOld.LevelName</div><br/>
+                                        <div>Category: @item.QuestionOld.Category</div><br />
+                                        <div>LOC: @item.QuestionOld.LearningOutcomeName</div><br />
+                                        <div>Level: @item.QuestionOld.LevelName</div><br />
                                         Question:
                                         @if (item.QuestionOld.Image != null)
                                         {
@@ -116,4 +116,4 @@
         }
     </div>
 </div>
-
+@Scripts.Render("~/bundle/scripts/diff")

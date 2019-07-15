@@ -11,3 +11,6 @@
 .bg-danger-light{
     background-color: antiquewhite;
 }
+.hidden{
+    display: none;
+}
