@@ -13,7 +13,6 @@ namespace QBCS.Entity
         public QuestionTemp()
         {
             OptionTemps = new HashSet<OptionTemp>();
-            QuestionTemp1 = new HashSet<QuestionTemp>();
         }
 
         public int Id { get; set; }
@@ -22,11 +21,9 @@ namespace QBCS.Entity
 
         public string QuestionContent { get; set; }
 
-        public string OptionsContent { get; set; }
+        public string DuplicatedString { get; set; }
 
         public int? Status { get; set; }
-
-        public int? OldStatus { get; set; }
 
         public int? DuplicatedId { get; set; }
 
@@ -55,16 +52,11 @@ namespace QBCS.Entity
 
         public int? UpdateQuestionId { get; set; }
 
+        public int? OldStatus { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OptionTemp> OptionTemps { get; set; }
-
-        public virtual Question DuplicatedWithBank { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionTemp> QuestionTemp1 { get; set; }
-
-        public virtual QuestionTemp DuplicatedWithImport { get; set; }
     }
 }

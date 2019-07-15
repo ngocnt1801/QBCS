@@ -539,7 +539,7 @@ namespace DuplicateQuestion
                     //update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
-                       "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport, OptionsContent=@test " +
+                       "SET Status=@status, DuplicatedId=@duplicatedId, DuplicateInImportId=@duplicatedWithImport, DuplicatedString=@test " +
                        "WHERE Id=@id",
                        connection
                        );

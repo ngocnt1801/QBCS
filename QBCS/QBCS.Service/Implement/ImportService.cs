@@ -67,7 +67,7 @@ namespace QBCS.Service.Implement
                         ImportId = importId,
                         Code = q.Code,
                         Message = q.Status == (int)StatusEnum.Invalid ? q.Message
-                        : (q.OptionsContent != null && q.OptionsContent.Split(',').Count() > 1 ? $"It was duplicated with {q.OptionsContent.Split(',').Count()} questions" : ""),
+                        : (q.DuplicatedString != null && q.DuplicatedString.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedString.Split(',').Count()} questions" : ""),
                         Image = q.Image,
                         IsInImportFile = q.DuplicateInImportId.HasValue,
                         Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
@@ -103,7 +103,7 @@ namespace QBCS.Service.Implement
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                             Image = o.Image
                         }).ToList(),
-                        DuplicatedList = String.IsNullOrWhiteSpace(q.OptionsContent) ? null : q.OptionsContent.Split(',').Select(s => new DuplicatedQuestionViewModel
+                        DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
                         {
                             Id = int.Parse(s.Split('-')[0]),
                             IsBank = bool.Parse(s.Split('-')[1])
@@ -695,7 +695,7 @@ namespace QBCS.Service.Implement
                     }).ToList()
                 };
 
-                var listDuplicated = entity.OptionsContent.Split(',').Select(d => new DuplicatedQuestionViewModel
+                var listDuplicated = entity.DuplicatedString.Split(',').Select(d => new DuplicatedQuestionViewModel
                 {
                     Id = int.Parse(d.Split('-')[0]),
                     IsBank = bool.Parse(d.Split('-')[1])

@@ -36,6 +36,7 @@ namespace QBCS.Entity
         public virtual DbSet<Rule> Rules { get; set; }
         public virtual DbSet<RuleKey> RuleKeys { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -98,6 +99,10 @@ namespace QBCS.Entity
                 .Property(e => e.Method)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<LogAction>()
+                .Property(e => e.Ip)
+                .IsFixedLength();
+
             modelBuilder.Entity<Option>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
@@ -128,11 +133,6 @@ namespace QBCS.Entity
                 .WithOptional(e => e.Question)
                 .HasForeignKey(e => e.QuestionReference);
 
-            modelBuilder.Entity<Question>()
-                .HasMany(e => e.QuestionTemps)
-                .WithOptional(e => e.DuplicatedWithBank)
-                .HasForeignKey(e => e.DuplicatedId);
-
             modelBuilder.Entity<QuestionInExam>()
                 .Property(e => e.Image)
                 .IsUnicode(false);
@@ -159,11 +159,6 @@ namespace QBCS.Entity
                 .WithOptional(e => e.QuestionTemp)
                 .HasForeignKey(e => e.TempId)
                 .WillCascadeOnDelete();
-
-            modelBuilder.Entity<QuestionTemp>()
-                .HasMany(e => e.QuestionTemp1)
-                .WithOptional(e => e.DuplicatedWithImport)
-                .HasForeignKey(e => e.DuplicateInImportId);
 
             modelBuilder.Entity<QuestionType>()
                 .Property(e => e.Name)
