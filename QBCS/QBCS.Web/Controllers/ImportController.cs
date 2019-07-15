@@ -159,5 +159,14 @@ namespace QBCS.Web.Controllers
             return Redirect(url);
             //return RedirectToAction("GetResult", new { importId = importId });
         }
+
+
+        public ActionResult GetPartialTable(int importId, int status)
+        {
+            var result = importService.GetListQuestionTempByStatus(importId, status);
+            TempData["active"] = "All Imports";
+            ViewBag.tableId = "tableEditable";
+            return PartialView("_ListQuestionWithDuplicate", result);
+        }
     }
 }

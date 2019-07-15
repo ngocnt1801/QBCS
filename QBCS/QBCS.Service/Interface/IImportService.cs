@@ -21,5 +21,6 @@ namespace QBCS.Service.Interface
         List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions);
         QuestionTempViewModel GetDuplicatedDetail(int questionTempId);
         void RecoveryQuestionTemp(int questionTempId);
+        List<QuestionTempViewModel> GetListQuestionTempByStatus(int importId, int status);
     }
 }

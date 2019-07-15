@@ -342,6 +342,7 @@ namespace QBCS.Web.Controllers
         //    result = result.Skip(start).Take(length).ToList();
         //    return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
         //}
+
     }
 
     public class Textarea
