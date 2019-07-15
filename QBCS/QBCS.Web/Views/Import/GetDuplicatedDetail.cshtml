@@ -26,6 +26,12 @@
     }
 }
 
+<div class="row">
+    <div class="col-md-12">
+        <a class="float-left mb-2 ml-4" href="@Url.Action("GetResult", "Import", new { importId = Model.ImportId})"><i class="fa fa-arrow-circle-left fa-2x"></i></a>
+    </div>
+</div>
+
 <div class="container">
     <h6>Check to show question:</h6>
     <div class="form-group form-inline">
@@ -134,7 +140,7 @@
             }
 
             <td class="@(j  > 0 ? "hidden":"")" id="@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">
-                <div class="card shadow mb-4 " >
+                <div class="card shadow mb-4 ">
                     <a href="#@(duplicated.IsBank ? "cd-bank-" + duplicated.Id : "cd-import-" + duplicated.Id)" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
                         @(duplicated.IsBank ? "Bank: " : "Import File: ") @duplicated.Code
                         @if (!duplicated.IsBank)
