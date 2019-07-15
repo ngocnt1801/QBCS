@@ -478,7 +478,15 @@ namespace QBCS.Service.Implement
 
                             //    question.QuestionContent = questionContent;
                             //}
-                            question.QuestionContent = "[html]" + questionContent;
+                            if (questionContent.Contains("[html]"))
+                            {
+                                question.QuestionContent = questionContent;
+                            }
+                            else
+                            {
+                                question.QuestionContent = "[html]" + questionContent;
+                            }
+                           
                             question.Code = questionXml.question[i].name.text.ToString();
                             if (category != null)
                             {
