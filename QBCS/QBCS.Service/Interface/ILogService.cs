@@ -20,5 +20,7 @@ namespace QBCS.Service.Interface
         QuestionViewModel ParseEntityToModel(Question question);
         bool UpdateLogStatus(int importId);
         void LogManually( string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "");
+        void LogFullManually(string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "",
+            string fullname = "", string usercode = "", string newValue = "", string oldValue = "");
     }
 }

@@ -132,6 +132,11 @@ namespace QBCS.Web.Attributes
                 logModel.UserCode = UserCode;
                 logger.Log(logModel);
             }
+
+            if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && TargetName.ToLower().Equals("rule"))
+            {
+
+            }
             #endregion
 
             #region move Question Log
@@ -165,12 +170,15 @@ namespace QBCS.Web.Attributes
                                     oldQuestionModel.Category = categoryService.GetCategoryById(oldQuestionModel.CategoryId).Name;
                                 }
                                 oldQuestionModel.Category = oldQuestionModel.CategoryId != 0 ? oldQuestionModel.Category : "[None of Category]";
+                                
+                                oldQuestionModel.LevelName = oldQuestionModel.LevelId != 0 ? oldQuestionModel.LevelName : "[None of Level]";
+                                oldQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeId != 0 ? oldQuestionModel.LearningOutcomeName : "[None of LOC]";
                                 newQuestionModel.LearningOutcomeId = learningOutComeId;
                                 newQuestionModel.LevelId = levelId;
                                 if (categoryId != 0)
                                 {
                                     newQuestionModel.Category = categoryService.GetCategoryById(categoryId).Name;
-                                   
+
                                 }
                                 newQuestionModel.Category = categoryId != 0 ? newQuestionModel.Category : "[None of Category]";
                                 //newQuestionModel.CourseId = oldQuestionModel.CourseId;
@@ -217,9 +225,9 @@ namespace QBCS.Web.Attributes
 
                 }
             }
-            
+
             #endregion
-           
+
             else
             {
                 logModel.OldValue = OldValue;
@@ -232,10 +240,12 @@ namespace QBCS.Web.Attributes
                     }
                     logModel.NewValue = JsonConvert.SerializeObject(newQuestionModel);
                 }
-                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel))) {
+                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)))
+                {
                     logModel.Status = (int)StatusEnum.Canceled;
                 }
-                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save))) {
+                if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
+                {
                     logModel.Status = (int)StatusEnum.Done;
                 }
                 else
