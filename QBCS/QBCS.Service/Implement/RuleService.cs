@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using QBCS.Entity;
 using QBCS.Service.Enum;
+using Newtonsoft.Json;
 
 namespace QBCS.Service.Implement
 {
-    public class RuleService: IRuleService
+    public class RuleService : IRuleService
     {
         private IUnitOfWork unitOfWork;
 
@@ -20,24 +21,41 @@ namespace QBCS.Service.Implement
         {
             unitOfWork = new UnitOfWork();
         }
+
+        public RuleValueViewModel GetRuleById(int id)
+        {
+            RuleValueViewModel ruleValueViewModel = new RuleValueViewModel();
+            var rule = unitOfWork.Repository<Rule>().GetById(id);
+            ruleValueViewModel = new RuleValueViewModel()
+            {
+                Id = rule.Id,
+                KeyId = (int)rule.KeyId,
+                Value = rule.Value.Replace("·case_sensitive·", ""),
+                ActivateDate = (DateTime)rule.ActivateDate,
+                IsCaseSensitive = rule.Value.Contains("·case_sensitive·"),
+                ValueGroup = rule.ValueGroup,
+                IsUse = (bool)rule.IsUse
+            };
+            return ruleValueViewModel;
+        }
         public List<RuleViewModel> getAllRule()
         {
             List<RuleViewModel> result = new List<RuleViewModel>();
             List<RuleValueViewModel> rvvm = new List<RuleValueViewModel>();
             List<RuleKey> rules = unitOfWork.Repository<RuleKey>().GetAll().ToList();
             List<Rule> values = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false).ToList();
-            foreach(var rule in rules)
+            foreach (var rule in rules)
             {
-                foreach(var value in values)
+                foreach (var value in values)
                 {
-                    if(value.KeyId == rule.Id)
+                    if (value.KeyId == rule.Id)
                     {
                         var addValue = new RuleValueViewModel()
                         {
                             Id = value.Id,
                             KeyId = (int)value.KeyId,
                             IsCaseSensitive = value.Value.Contains("·case_sensitive·"),
-                            Value = value.Value.Replace("·case_sensitive·",""),
+                            Value = value.Value.Replace("·case_sensitive·", ""),
                             CreateDate = (DateTime)value.CreateDate,
                             ActivateDate = (DateTime)value.ActivateDate,
                             ValueGroup = value.ValueGroup,
@@ -52,8 +70,8 @@ namespace QBCS.Service.Implement
                     Code = rule.Code,
                     Name = rule.Name,
                     Value = rvvm,
-                    GroupType = (int) rule.GroupType,
-                    GroupTypeEnum = (RuleEnum) rule.GroupType
+                    GroupType = (int)rule.GroupType,
+                    GroupTypeEnum = (RuleEnum)rule.GroupType
                 };
                 result.Add(addResult);
                 rvvm = new List<RuleValueViewModel>();
@@ -64,7 +82,8 @@ namespace QBCS.Service.Implement
         public bool UpdateRule(List<RuleAjaxHandleViewModel> rules)
         {
             List<Rule> disableValues = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false).ToList();
-            foreach(var disableValue in disableValues)
+            
+            foreach (var disableValue in disableValues)
             {
                 disableValue.IsDisable = true;
                 unitOfWork.Repository<Rule>().Update(disableValue);
@@ -87,5 +106,7 @@ namespace QBCS.Service.Implement
 
             return false;
         }
+
+        
     }
 }

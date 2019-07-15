@@ -85,7 +85,7 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //Staff
         //stpm: feature declare
-        //[Feature(FeatureType.Page, "Compare Question History", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.Page, "Compare Question Move History", "QBCS", protectType: ProtectType.Authorized)]
         [LogAction(Action = "Activities", Message = "View All Update Question Activity", Method = "GET")]
         public ActionResult GetMoveActivityById(int id)
         {

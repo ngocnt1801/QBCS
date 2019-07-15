@@ -1,4 +1,10 @@
-﻿/* Style the Image Used to Trigger the Modal */
+﻿
+.scrollStyle {
+    max-height: 100%;
+    overflow-y: scroll;
+}
+
+/* Style the Image Used to Trigger the Modal */
 #myImg {
     border-radius: 5px;
     cursor: pointer;

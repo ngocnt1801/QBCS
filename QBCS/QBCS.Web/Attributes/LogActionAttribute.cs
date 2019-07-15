@@ -52,7 +52,15 @@ namespace QBCS.Web.Attributes
             strHostName = Dns.GetHostName();
             IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
             IPAddress[] addr = ipEntry.AddressList;
-            //ip = addr[3].ToString();
+            if (addr.Count() == 2)
+            {
+                ip = addr[1].ToString();
+            }
+            else
+            {
+                ip = addr[3].ToString();
+            }
+           
 
 
             if (IdParamName != null && filterContext.ActionParameters.ContainsKey(IdParamName))

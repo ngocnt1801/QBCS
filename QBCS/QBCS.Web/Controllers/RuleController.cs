@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using Newtonsoft.Json;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
@@ -60,11 +61,30 @@ namespace QBCS.Web.Controllers
         [HttpPost]
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Update Rule", "QBCS", protectType: ProtectType.Authorized)]
-        [LogAction(Action = "Rule", Message = "Update Rule", Method = "GET")]
+
+        [LogAction(Action = "Rule", Message = "Update Rule", Method = "POST")]
+        
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
             var result = ruleService.UpdateRule(rules);
-            logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
+            string newValue = "";
+            string oldValue = "";
+            List<RuleViewModel> listRule = ruleService.getAllRule();
+            List<List<RuleViewModel>> oldRules = new List<List<RuleViewModel>>();
+            oldRules.Add(listRule.Where(r => r.GroupType == 1).ToList());
+            oldRules.Add(listRule.Where(r => r.GroupType == 2).ToList());
+            oldRules.Add(listRule.Where(r => r.GroupType == 3).ToList());
+            oldRules.Add(listRule.Where(r => r.GroupType == 4).ToList());
+
+            oldValue = JsonConvert.SerializeObject(oldRules);
+            newValue = JsonConvert.SerializeObject(rules);
+            
+           // logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
+            logService.LogFullManually("Update", "Rule", controller: "Rule",
+                        method: "UpdateAllRule", fullname: User.Get(u => u.FullName), 
+                        usercode: User.Get(u => u.Code),
+                        newValue: newValue,
+                        oldValue: oldValue);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

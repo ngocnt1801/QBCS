@@ -372,7 +372,26 @@ namespace QBCS.Service.Implement
             };
             Log(model);
         }
-
+        public void LogFullManually(string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", 
+            string fullname = "", string usercode = "", string newValue = "", string oldValue = "")
+        {
+            LogViewModel model = new LogViewModel
+            {
+                TargetId = targetId,
+                UserId = userId,
+                LogDate = DateTime.Now,
+                TargetName = targetName,
+                Action = action,
+                Controller = controller,
+                OldValue = oldValue,
+                NewValue = newValue,
+                Method = method,
+                Fullname = fullname,
+                Status = (int)Enum.StatusEnum.Checked,
+                UserCode = usercode
+            };
+            Log(model);
+        }
     }
 }
 
