@@ -1,11 +1,15 @@
 ﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
 @using QBCS.Service.Enum
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    int counter = 0;
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+                int counter = 0;
 
 }
+
+@Styles.Render("~/bundles/content/datatables")
 
 <h2>Activity</h2>
 
@@ -55,7 +59,8 @@
                                     @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)) || item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
                                     {
                                         @item.Action <text> Import File </text>@item.TargetId<text>st</text>
-                                    }else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
+                                    }
+                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
                                     {
                                         @item.Action <text> File </text>@item.TargetId<text>st</text>
                                     }
@@ -105,3 +110,5 @@
         </div>
     </div>
 </div>
+
+@Scripts.Render("~/bundles/script/datatables")

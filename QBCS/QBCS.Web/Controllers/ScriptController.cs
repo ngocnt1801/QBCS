@@ -41,8 +41,8 @@ namespace QBCS.Web.Controllers
         public ActionResult Run(string raw)
         {
             scriptService.RunScirpt(raw);
-            TempData["Message"] = "Script run successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "Script run successfully";
+            ViewBag.Status = ToastrEnum.Success;
             return RedirectToAction("Index");
         }
     }

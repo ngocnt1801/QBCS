@@ -20,10 +20,10 @@ namespace QBCS.Entity
 
         public DateTime? Date { get; set; }
 
-        public int? TargetId { get; set; }
-
         [StringLength(200)]
         public string TargetName { get; set; }
+
+        public int? TargetId { get; set; }
 
         [StringLength(50)]
         public string Controller { get; set; }
@@ -47,6 +47,5 @@ namespace QBCS.Entity
 
         [StringLength(100)]
         public string Ip { get; set; }
-
     }
 }

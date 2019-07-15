@@ -1,0 +1,196 @@
+﻿
+@model QBCS.Service.ViewModel.QuestionTempViewModel
+
+@using QBCS.Service.Enum
+
+@{
+    ViewBag.Title = "GetDuplicatedDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+
+    string statusClass = "";
+    switch (Model.Status)
+    {
+        case StatusEnum.Success:
+            statusClass = "badge-success";
+            break;
+        case StatusEnum.Editable:
+            statusClass = "badge-warning";
+            break;
+        case StatusEnum.Deleted:
+            statusClass = "badge-danger";
+            break;
+        case StatusEnum.Invalid:
+            statusClass = "badge-secondary";
+            break;
+    }
+}
+
+<div class="container">
+    <h6>Check to show question:</h6>
+    <div class="form-group form-inline">
+        <div class="custom-control custom-checkbox small mr-3">
+            <input type="checkbox" class="custom-control-input" id="chk-main-question" checked>
+            <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
+        </div>
+        @for (int i = 0; i < Model.DuplicatedList.Count; i++)
+        {
+            string chkstatusClass = "";
+            switch (Model.DuplicatedList[i].Status)
+            {
+                case StatusEnum.Success:
+                    chkstatusClass = "badge-success";
+                    break;
+                case StatusEnum.Editable:
+                    chkstatusClass = "badge-warning";
+                    break;
+                case StatusEnum.Deleted:
+                    chkstatusClass = "badge-danger";
+                    break;
+                case StatusEnum.Invalid:
+                    chkstatusClass = "badge-secondary";
+                    break;
+            }
+
+            <div class="custom-control custom-checkbox small mr-3">
+                <input type="checkbox" class="custom-control-input"
+                       @(i > 0 ? "" : "checked")
+                       id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
+                <label class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
+                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@Model.DuplicatedList[i].Status</span></label>
+                </div>
+            }
+    </div>
+</div>
+
+<table>
+    <tr>
+        <td>
+            <div class="card shadow mb-4" id="main-question">
+                <a href="#cd-main-question" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                    Import File: @Model.Code <span class="badge ml-2 @statusClass">@Model.Status</span>
+                </a>
+                <div class="card-body collapse show customs-display-p text-custom" id="cd-main-question" style="padding-left:30px">
+                    @Html.DisplayFor(m => m.QuestionContent)
+                    @if (Model.Image != null)
+                    {
+                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Image" /></p>
+                    }
+                    @for (var i = 0; i < Model.Options.Count; i++)
+                    {
+                        if (Model.Options[i].IsCorrect == true)
+                        {
+                            <div class="container-fluid text-right-answer">
+                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="container-fluid">
+                                @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                            </div>
+                        }
+
+                        <br />
+                    }
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = Model.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
+
+                            @if (Model.Status != StatusEnum.Success)
+                            {
+                                <a href="@Url.Action("Skip", "Import", new { questionId = Model.Id,  url = Request.RawUrl})" class="btn btn-success float-md-right ml-1">Accept</a>
+
+                            }
+                            @if (Model.Status != StatusEnum.Deleted)
+                            {
+                                <a href="@Url.Action("Delete", "Import", new { questionId = Model.Id,  url = Request.RawUrl})" class="btn btn-danger float-md-right ">Delete</a>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        @for (int j = 0; j < Model.DuplicatedList.Count; j++)
+        {
+            var duplicated = Model.DuplicatedList[j];
+            statusClass = "";
+            switch (duplicated.Status)
+            {
+                case StatusEnum.Success:
+                    statusClass = "badge-success";
+                    break;
+                case StatusEnum.Editable:
+                    statusClass = "badge-warning";
+                    break;
+                case StatusEnum.Deleted:
+                    statusClass = "badge-danger";
+                    break;
+                case StatusEnum.Invalid:
+                    statusClass = "badge-secondary";
+                    break;
+            }
+
+            <td class="@(j  > 0 ? "hidden":"")" id="@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">
+                <div class="card shadow mb-4 " >
+                    <a href="#@(duplicated.IsBank ? "cd-bank-" + duplicated.Id : "cd-import-" + duplicated.Id)" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                        @(duplicated.IsBank ? "Bank: " : "Import File: ") @duplicated.Code
+                        @if (!duplicated.IsBank)
+                        {
+                            <span class="badge ml-2 @statusClass">@duplicated.Status</span>
+                        }
+                    </a>
+                    <div class="card-body collapse customs-display-p text-custom show" id="@(duplicated.IsBank ? "cd-bank-" + duplicated.Id : "cd-import-" + duplicated.Id)" style="padding-left:30px">
+                        @Html.DisplayFor(m => duplicated.QuestionContent)
+                        @if (duplicated.Image != null)
+                        {
+                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @duplicated.Image" /></p>
+                        }
+                        @for (var i = 0; i < duplicated.Options.Count; i++)
+                        {
+                            if (duplicated.Options[i].IsCorrect == true)
+                            {
+                                <div class="container-fluid text-right-answer">
+                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="container-fluid">
+                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                </div>
+                            }
+
+                            <br />
+                        }
+
+                        @if (!duplicated.IsBank && !duplicated.IsAnotherImport)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = duplicated.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
+
+                                    @if (duplicated.Status != StatusEnum.Success)
+                                    {
+                                        <a href="@Url.Action("Skip", "Import", new { questionId = duplicated.Id,  url = Request.RawUrl})" class="btn btn-success float-md-right ml-1">Accept</a>
+
+                                    }
+                                    @if (duplicated.Status != StatusEnum.Deleted)
+                                    {
+                                        <a href="@Url.Action("Delete", "Import", new { questionId = duplicated.Id,  url = Request.RawUrl})" class="btn btn-danger float-md-right ">Delete</a>
+
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </td>
+        }
+    </tr>
+</table>
+
+@Scripts.Render("~/bundle/scripts/togglequestion")
+@Scripts.Render("~/bundle/scripts/processtext")

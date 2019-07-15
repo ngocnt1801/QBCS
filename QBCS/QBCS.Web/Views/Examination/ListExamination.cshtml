@@ -4,7 +4,8 @@
     ViewBag.Title = "ListExamination";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/smartwizard")
 <h2>All Examination</h2>
 
 <div class="row">
@@ -65,4 +66,5 @@
     </div>
 </div>
 
-
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")

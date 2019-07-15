@@ -59,6 +59,9 @@ namespace QBCS.Web.Controllers
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import Result", "QBCS", protectType: ProtectType.Authorized)]
+        [Dependency(typeof(ImportController), nameof(ImportController.GetPartialTable))]
+        [Dependency(typeof(ImportController), nameof(ImportController.Skip))]
+        [Dependency(typeof(ImportController), nameof(ImportController.Delete))]
         [LogAction(Action = "Import", Message = "View Detail Import History", Method = "GET")]
         public ActionResult GetResult(int importId)
         {
@@ -105,8 +108,8 @@ namespace QBCS.Web.Controllers
             Task.Factory.StartNew(() => {
                 importService.ImportToBank(importId);
             });
-            TempData["Message"] = "Your questions are processing";
-            TempData["Status"] = ToastrEnum.Info;
+            ViewBag.Message = "Your questions are processing";
+            ViewBag.Status = ToastrEnum.Info;
 
             return RedirectToAction("Index", "Home");
         }
@@ -118,29 +121,57 @@ namespace QBCS.Web.Controllers
         public ActionResult Cancel(int importId)
         {
             importService.Cancel(importId);
-            TempData["Message"] = "Your import is canceled";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "Your import is canceled";
+            ViewBag.Status = ToastrEnum.Success;
             return RedirectToAction("Index", "Home");
         }
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Delete Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.BusinessLogic, "Delete Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
         [LogAction(Action = "Question", Message = "Delete Question", Method = "GET")]
-        public ActionResult Delete(int questionId, int importId)
+        public ActionResult Delete(int questionId, string url)
         {
-            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Delete);
-            return RedirectToAction("GetResult", new { importId = importId });
+            importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Deleted);
+            return Redirect(url);
+
+            //return RedirectToAction("GetResult", new { importId = importId });
         }
 
         //Lecturer
         //stpm: feature declare
-        [Feature(FeatureType.Page, "Accept Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
+        [Feature(FeatureType.BusinessLogic, "Accept Invalid Question", "QBCS", protectType: ProtectType.Authorized)]
         [LogAction(Action = "Question", Message = "Accept Invalid Question", Method = "GET")]
-        public ActionResult Skip(int questionId, int importId)
+        public ActionResult Skip(int questionId, string url)
         {
             importService.UpdateQuestionTempStatus(questionId, (int)StatusEnum.Success);
-            return RedirectToAction("GetResult", new { importId = importId });
+            return Redirect(url);
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        [Feature(FeatureType.Page, "Get multiple compare question", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult GetDuplicatedDetail(int id)
+        {
+            var model = importService.GetDuplicatedDetail(id);
+
+            return View(model);
+        }
+
+        [Feature(FeatureType.Page, "Recovery deleted question", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult Recovery(int tempId, string url)
+        {
+            importService.RecoveryQuestionTemp(tempId);
+            return Redirect(url);
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        [Feature(FeatureType.BusinessLogic, "Get partial editable", "QBCS", protectType: ProtectType.Authorized)]
+        public ActionResult GetPartialTable(int importId, int status)
+        {
+            var result = importService.GetListQuestionTempByStatus(importId, status);
+            TempData["active"] = "All Imports";
+            ViewBag.tableId = "tableEditable";
+            return PartialView("_ListQuestionWithDuplicate", result);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace QBCS.Service.Enum
     {
         NotCheck = 1,
         Editable = 2,
-        Delete = 3,
+        Deleted = 3,
         Success = 4,
         Checked = 5,
         Editing = 6,

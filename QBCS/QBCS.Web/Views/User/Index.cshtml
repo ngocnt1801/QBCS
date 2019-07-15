@@ -4,13 +4,13 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Styles.Render("~/bundles/content/datatables")
 <h2>User list</h2>
 
 @*<p>
-    <a href="@Html.Action("Create", "User")" class="btn btn-primary"></a> 
-    
-</p>*@
+        <a href="@Html.Action("Create", "User")" class="btn btn-primary"></a>
+
+    </p>*@
 
 <div class="card shadow mb-4">
 
@@ -71,3 +71,4 @@
         </div>
     </div>
 </div>
+@Scripts.Render("~/bundles/script/datatables")

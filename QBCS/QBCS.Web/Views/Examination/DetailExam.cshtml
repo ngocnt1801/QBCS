@@ -4,7 +4,7 @@
     ViewBag.Title = "Detail Exam";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Styles.Render("~/bundles/content/datatables")
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Examination Code : @Model.ExamCode</h6>
@@ -36,7 +36,7 @@
                                         <p>@question.QuestionContent</p>
                                         @if (question.Image != null)
                                         {
-                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
                                         }
                                         @{int charater = 0; }
                                         @foreach (var option in question.Options)
@@ -62,7 +62,7 @@
                                                     </div>
                                                     @if (option.Image != null)
                                                     {
-                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                     }
                                                 </div>
                                             }
@@ -80,8 +80,8 @@
                                     }
                                 </td>
                             </tr>
-                                                }
-                                            }
+                        }
+                    }
                 </tbody>
             </table>
         </div>
@@ -109,3 +109,5 @@
             <label class="el-checkbox-style" for="getCategory"></label>
         </div>
     </div>
+    @Scripts.Render("~/bundles/script/datatables")
+    @Scripts.Render("~/bundle/scripts/smartwizard")

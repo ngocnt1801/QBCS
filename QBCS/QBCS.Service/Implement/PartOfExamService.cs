@@ -29,7 +29,7 @@ namespace QBCS.Service.Implement
             List<PartOfExamViewModel> result = new List<PartOfExamViewModel>();                 
             foreach(PartOfExamination part in partOfExamsByExamId)
             {
-                List<QuestionInExamViewModel> questions = part.QuestionInExams.Select(c => new QuestionInExamViewModel
+                List<QuestionInExamViewModel> questions = part.QuestionInExams.Where(q => q.IsDisable != true).Select(c => new QuestionInExamViewModel
                 {
                     Id = (int)c.Id,
                     QuestionContent = c.QuestionContent,

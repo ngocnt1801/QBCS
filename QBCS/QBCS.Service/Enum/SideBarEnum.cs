@@ -17,6 +17,7 @@
         AllImport = 13,
         StatisticByUser = 14,
         AllActivity = 15,
-        ImportMSWord = 16
+        ImportMSWord = 16,
+        LogAction=17
     }
 }

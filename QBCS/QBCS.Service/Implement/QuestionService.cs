@@ -123,9 +123,28 @@ namespace QBCS.Service.Implement
             QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
             return questionViewModel;
         }
+        public QuestionViewModel GetQuestionByQuestionCode(string questionCode)
+        {
+            Question QuestionById = unitOfWork.Repository<Question>().GetAll().Where( q => q.QuestionCode.Equals(questionCode)).FirstOrDefault();
+            List<OptionViewModel> optionViewModels = new List<OptionViewModel>();
+            foreach (var option in QuestionById.Options)
+            {
+                OptionViewModel optionViewModel = new OptionViewModel()
+                {
+                    Id = option.Id,
+                    OptionContent = option.OptionContent,
+                    Image = option.Image,
+                    IsCorrect = (bool)option.IsCorrect
+                };
+                optionViewModels.Add(optionViewModel);
+            }
 
-      
-       
+
+            QuestionViewModel questionViewModel = ParseEntityToModel(QuestionById, optionViewModels);
+            return questionViewModel;
+        }
+
+
         public List<QuestionViewModel> GetQuestionByQuestionId(int questionId)
         {
             var question = unitOfWork.Repository<Question>().GetById(questionId);
@@ -344,7 +363,7 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, string ownerName, string prefix = "")
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix = "")
         {
             string category = "";
             string level = "";
@@ -771,7 +790,9 @@ namespace QBCS.Service.Implement
                 {
                     import.Status = (int)Enum.StatusEnum.NotCheck;
                     import.CourseId = courseId;
+                    import.OwnerId = ownerId;
                     import.OwnerName = ownerName;
+                    import.ImportedDate = DateTime.Now;
                     //check formats
                     import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
@@ -878,6 +899,8 @@ namespace QBCS.Service.Implement
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
+                LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                 Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
@@ -975,7 +998,10 @@ namespace QBCS.Service.Implement
                 {
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
-                    //Semester = (int)entity.Semester
+                    Semester = new SemesterViewModel
+                    {
+                        Name = entity.Semester.Name,
+                    },
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
                     
@@ -991,15 +1017,79 @@ namespace QBCS.Service.Implement
             return questionHistory;
         }
 
-        public bool InsertQuestionWithTableString(string table, int userId, int courseId, string prefix)
+        public bool InsertQuestionWithTableString(string table, int userId, int courseId, string prefix, string ownerName)
+        {
+            var import = new Import();
+            bool check = false;
+
+            var listQuestion = TableStringToListQuestion(table, prefix);
+
+
+            import = new Import()
+            {
+                CourseId = courseId,
+                UserId = userId,
+                TotalQuestion = listQuestion.Count(),
+                OwnerName = ownerName,
+                QuestionTemps = listQuestion.Select(q => new QuestionTemp()
+                {
+                    QuestionContent = q.QuestionContent,
+                    Code = q.Code,
+                    Status = (int)StatusEnum.NotCheck,
+                    Category = q.Category,
+                    LearningOutcome = q.LearningOutcome,
+                    LevelName = q.Level,
+                    Image = q.Image,
+                    OptionTemps = q.Options.Select(o => new OptionTemp()
+                    {
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect
+                    }).ToList(),
+                }).ToList(),
+                ImportedDate = DateTime.Now
+            };
+
+            if (import.QuestionTemps.Count() > 0)
+            {
+                import.Status = (int)Enum.StatusEnum.NotCheck;
+                import.CourseId = courseId;
+                //import.OwnerName = ownerName;
+                //check formats
+                import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
+                var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
+                import.TotalQuestion = import.QuestionTemps.Count();
+                unitOfWork.SaveChanges();
+
+                //log import
+                logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question", method: "ImportFile", userId: userId);
+
+                //call store check duplicate
+                Task.Factory.StartNew(() =>
+                {
+                    importService.ImportToBank(entity.Id);
+                });
+                check = true;
+            }
+            else
+            {
+                // return user have to import file
+            }
+            //catch (Exception ex)
+            //{
+            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+            //    //Console.WriteLine(ex.Message);
+            //}
+
+            return check;
+        }
+
+        public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)
         {
             var optionCheck = new DocViewModel();
             var optionCheckList = new List<DocViewModel>();
-            bool check = false;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             List<OptionTemp> optionList = new List<OptionTemp>();
             var optionModel = new OptionTemp();
-            var import = new Import();
             table = TrimTags(table);
             XElement parseTable = XElement.Parse(table);
             foreach (XElement eTable in parseTable.Elements("table"))
@@ -1139,7 +1229,7 @@ namespace QBCS.Service.Implement
                         }
                         else if (key.Contains("CATEGORY:"))
                         {
-                            if(value != null && !value.Equals(""))
+                            if (value != null && !value.Equals(""))
                             {
                                 questionTmp.Category = value;
                             }
@@ -1152,63 +1242,9 @@ namespace QBCS.Service.Implement
                     optionCheckList = new List<DocViewModel>();
                 }
             }
-
-            import = new Import()
-            {
-                CourseId = courseId,
-                UserId = userId,
-                TotalQuestion = listQuestion.Count(),
-                QuestionTemps = listQuestion.Select(q => new QuestionTemp()
-                {
-                    QuestionContent = q.QuestionContent,
-                    Code = q.Code,
-                    Status = (int)StatusEnum.NotCheck,
-                    Category = q.Category,
-                    LearningOutcome = q.LearningOutcome,
-                    LevelName = q.Level,
-                    Image = q.Image,
-                    OptionTemps = q.Options.Select(o => new OptionTemp()
-                    {
-                        OptionContent = o.OptionContent,
-                        IsCorrect = o.IsCorrect
-                    }).ToList(),
-                }).ToList(),
-                ImportedDate = DateTime.Now
-            };
-
-            if (import.QuestionTemps.Count() > 0)
-            {
-                import.Status = (int)Enum.StatusEnum.NotCheck;
-                import.CourseId = courseId;
-                //import.OwnerName = ownerName;
-                //check formats
-                import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
-                var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
-                import.TotalQuestion = import.QuestionTemps.Count();
-                unitOfWork.SaveChanges();
-
-                //log import
-                logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question", method: "ImportFile", userId: userId);
-
-                //call store check duplicate
-                Task.Factory.StartNew(() =>
-                {
-                    importService.ImportToBank(entity.Id);
-                });
-                check = true;
-            }
-            else
-            {
-                // return user have to import file
-            }
-            //catch (Exception ex)
-            //{
-            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-            //    //Console.WriteLine(ex.Message);
-            //}
-
-            return check;
+            return listQuestion;
         }
+
 
         private string TrimSpace(string trim)
         {

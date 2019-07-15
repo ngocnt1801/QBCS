@@ -107,8 +107,8 @@ namespace QBCS.Web.Controllers
             var result = userService.AddUserCourse(courseId, userId);
             if (result == false)
             {
-                TempData["Message"] = "This course is already add for user";
-                TempData["Status"] = ToastrEnum.Warning;
+                ViewBag.Message = "This course is already add for user";
+                ViewBag.Status = ToastrEnum.Warning;
             }
             return RedirectToAction("Details", "User", new { userId = userId });
         }
@@ -138,11 +138,11 @@ namespace QBCS.Web.Controllers
         {
             List<string> lecturerName = new List<string>();
             var result = userService.GetUserByNameAndRoleId(term, (int)RoleEnum.Lecturer);
-            foreach (var lec in result)
-            {
-                lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
-            }
-            return Json(lecturerName, JsonRequestBehavior.AllowGet);
+            //foreach (var lec in result)
+            //{
+            //    lecturerName.Add(lec.Fullname + " (" + lec.Code + ")");
+            //}
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

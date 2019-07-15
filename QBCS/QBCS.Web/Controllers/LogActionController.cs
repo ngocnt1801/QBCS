@@ -1,4 +1,6 @@
-﻿using QBCS.Service.Implement;
+﻿using AuthLib.Module;
+using QBCS.Service.Enum;
+using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
@@ -18,7 +20,12 @@ namespace QBCS.Web.Controllers
             logActionService = new LogActionService();
         }
         // GET: LogAction
-        
+
+        [Feature(FeatureType.SideBar
+            , "Log action page"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Log"
+            , InternalId = (int)SideBarEnum.LogAction)]
         public ActionResult Index()
         {
            

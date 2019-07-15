@@ -7,10 +7,13 @@
 
 @using (Html.BeginForm("BackToGenerate", "Examination", FormMethod.Post))
 {
-    <input type="hidden" name="courseId" value="@Model[0].CourseId"/>
+    <input type="hidden" name="courseId" value="@Model[0].CourseId" />
     <input type="hidden" name="groupExam" value="@Model[0].ExamGroup" />
     <button type="submit" class="btn btn-primary float-left mb-2">Delete Examinations</button>
 }
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/tab")
+@Styles.Render("~/bundle/content/checkbox")
 <div class="tabs tabs-style-topline">
     <nav>
         <ul>
@@ -46,6 +49,7 @@
                                         <th>Question</th>
                                         <th>Level</th>
                                         <th>Topic/Learning Outcome</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +65,7 @@
                                                         <p>@question.QuestionContent</p>
                                                         @if (question.Image != null)
                                                         {
-                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
+                                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
                                                         }
                                                         @{int charater = 0; }
                                                         @foreach (var option in question.Options)
@@ -75,7 +79,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -87,7 +91,7 @@
                                                                     </div>
                                                                     @if (option.Image != null)
                                                                     {
-                                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
                                                                     }
                                                                 </div>
                                                             }
@@ -104,6 +108,9 @@
                                                         @Html.DisplayFor(lo => part.LearningOutcome.Name)
                                                     }
                                                 </td>
+                                                <td>
+                                                    <button class="delete-question btn-danger btn" data-question-id="@question.Id"><i class='fas fa-trash-alt'></i></button>
+                                                </td>
                                             </tr>
                                         }
                                     }
@@ -118,6 +125,7 @@
                             <h5>File extension :</h5>
                         </div>
                         <input type="hidden" name="examinationId-@counter" value="@exam.Id" />
+                        <input type="hidden" name="examGroup-@counter" value="@exam.ExamGroup" />
 
                         <div class="col-lg-2">
                             <select id="fileExtension-@counter" class="form-control">
@@ -134,8 +142,19 @@
                             <label class="el-checkbox-style" for="getCategory-@counter"></label>
                         </div>
                     </div>
+                    <div class="row form-group">
+                        <div class="el-checkbox text-center">
+                            <span class="margin-r" style="font-size:1.3em;">Export All : </span>
+                            <input type="checkbox" name="exportAll" id="exportAll-@counter">
+                            <label class="el-checkbox-style" for="exportAll-@counter"></label>
+                        </div>
+                    </div>
                 </form>
             </section>
         }
     </div><!-- /content -->
 </div><!-- /tabs -->
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")
+@Scripts.Render("~/bundle/scripts/tab")
+@Scripts.Render("~/bundle/scripts/confirmbox")

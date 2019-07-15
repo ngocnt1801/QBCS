@@ -33,6 +33,8 @@ namespace QBCS.Entity
 
         public int? Frequency { get; set; }
 
+        public bool? IsDisable { get; set; }
+
         [StringLength(50)]
         public string QuestionCode { get; set; }
 

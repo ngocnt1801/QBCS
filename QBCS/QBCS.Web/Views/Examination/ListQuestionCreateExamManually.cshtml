@@ -1,0 +1,88 @@
+﻿@model List<QBCS.Service.ViewModel.QuestionViewModel>
+
+@{
+    ViewBag.Title = "ListQuestionCreateExamManually";
+    int couter = 0;
+}
+
+@if (Model.Count > 0)
+{
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">List of Questions</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive text-custom">
+                <table class="table table-bordered text-custom" id="listQuestionGenrate" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Question</th>
+                            <th>Topic/LO</th>
+                            <th>Level</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.Id">
+
+                                <td> @item.Code</td>
+                                <td>
+
+                                    @Html.DisplayFor(modeItem => item.QuestionContent)
+                                    @if (item.Image != null && !String.IsNullOrWhiteSpace(item.Image))
+                                    {
+                                        <p>
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64,@item.Image" />
+                                        </p>
+                                    }
+                                    @for (var i = 0; i < item.Options.Count; i++)
+                                    {
+                                        char prefixOption = (char)(i + 65);
+                                        if (item.Options[i].IsCorrect == true)
+                                        {
+                                            <div class="row">
+                                                <div class="container-fluid text-green-success">
+                                                    @prefixOption.ToString(). @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                </div>
+                                                @if (item.Options[i].Image != null)
+                                                {
+                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="container-fluid">
+                                                    @prefixOption.ToString(). @item.Options[i].OptionContent
+                                                </div>
+                                                @if (item.Options[i].Image != null)
+                                                {
+                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
+                                                }
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.LearningOutcomeName</td>
+                                <td>@item.LevelName</td>
+                                <td><button class="btn btn-primary btn-spinner add-question" data-row-id="@couter"><i class="fas fa-plus"></i></button></td>
+                            </tr>
+                            couter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h5>There is no question in this category</h5>
+}
+

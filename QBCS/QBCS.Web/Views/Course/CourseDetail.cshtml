@@ -4,7 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-
+@Styles.Render("~/bundles/content/datatables")
+@Styles.Render("~/bundle/content/category")
 
 @if (TempData["NewestCount"] != null)
 {
@@ -123,5 +124,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 @*<div class="spinner-grow" role="status" id="spinner" style="display:block;">
-    <span class="sr-only">Loading...</span>
-</div>*@
+        <span class="sr-only">Loading...</span>
+    </div>*@
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/category")

@@ -10,6 +10,11 @@
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
+.text-invalid {
+    font-weight: bold;
+    background-color: #dfeb73;
+}
+
 .text-right-answer {
     color: #0c2f94 !important;
     font-weight: bold;
@@ -72,4 +77,7 @@
 .active-drop {
     border: 2px dashed cornflowerblue !important;
     
+}
+.hidden{
+    display: none;
 }

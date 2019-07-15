@@ -19,6 +19,7 @@ namespace QBCS.Service.ViewModel
         public List<CategoryViewModel> Categories { get; set; }
         public bool IsDisable { get; set; }
         public int Total { get; set; }
+        public List<SemesterViewModel> Semester { get; set; }
 
     }
 }

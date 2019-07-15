@@ -5,7 +5,7 @@
 
 }
 
-
+@Styles.Render("~/bundle/content/category")
 
 
 <div class="row">
@@ -24,9 +24,9 @@
                         {
                             foreach (var lo in course.LearningOutcome)
                             {
-                                    <a style="padding-left:30px" id="learningoutcome_@lo.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })" class="list-group list-group-item" data-toggle="collapse" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })">
-                                        <i class="fa fa-plus-circle"></i>@lo.Name
-                                    </a>
+                                <a style="padding-left:30px" id="learningoutcome_@lo.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })" class="list-group list-group-item" data-toggle="collapse" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })">
+                                    <i class="fa fa-plus-circle"></i>@lo.Name
+                                </a>
                             }
                         }
                     </div>
@@ -55,21 +55,22 @@
             if (Obj['Id'].includes("course")) {
                 checkCourse.push(Obj);
             }
-            
+
         });
         $('input').keyup(function (e) {
             var input = this.value.toLowerCase();
-            for (var i = 0; i < checkCourse.length; i++){
+            for (var i = 0; i < checkCourse.length; i++) {
                 var value = checkCourse[i]['Value'].toLowerCase();
                 var jqCourse = "#" + checkCourse[i]['Id'];
-                var jqLO = jqCourse.replace("course_","c-");
+                var jqLO = jqCourse.replace("course_", "c-");
                 if (!value.includes(input)) {
                     $(jqCourse).hide();
                     $(jqLO).removeClass("show");
                 } else {
                     $(jqCourse).show();
                 }
-        }
+            }
         });
     });
 </script>
+@Scripts.Render("~/bundle/scripts/category")

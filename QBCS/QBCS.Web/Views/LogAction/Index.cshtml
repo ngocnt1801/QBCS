@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int counter = 0;
 }
-
+@Styles.Render("~/bundles/content/datatables")
 <h2>Log Action</h2>
 
 <div class="card shadow mb-4">
@@ -34,32 +34,32 @@
                         {
                             counter++;
 
-                    <tr>
-                        <td>
-                            @counter
-                        </td>
-                        <td>
-                            @item.TimeAgo
-                        </td>
-                        <td>
-                            @item.Message
-                        </td>
-                        <td>
-                            @item.Fullname (@item.UserCode)
-                        </td>
-                        <td>
-                            @item.Method
-                        </td>
-                        <td>
-                            @item.Route
-                        </td>
-                        <td>
-                            @item.Ip
-                        </td>
-                        <td>
-                            @item.LogDate
-                        </td>
-                    </tr>
+                            <tr>
+                                <td>
+                                    @counter
+                                </td>
+                                <td>
+                                    @item.TimeAgo
+                                </td>
+                                <td>
+                                    @item.Message
+                                </td>
+                                <td>
+                                    @item.Fullname (@item.UserCode)
+                                </td>
+                                <td>
+                                    @item.Method
+                                </td>
+                                <td>
+                                    @item.Route
+                                </td>
+                                <td>
+                                    @item.Ip
+                                </td>
+                                <td>
+                                    @item.LogDate
+                                </td>
+                            </tr>
                         }
                     }
                 </tbody>
@@ -67,3 +67,4 @@
         </div>
     </div>
 </div>
+@Scripts.Render("~/bundles/script/datatables")

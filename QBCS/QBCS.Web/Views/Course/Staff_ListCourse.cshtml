@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var counter = 0;
 }
-
+@Styles.Render("~/bundles/content/datatables")
 <div class="card shadow mb-4">
     <div class="card-header">
         <h5>List all course</h5>
@@ -18,7 +18,7 @@
                     <th>No.</th>
                     <th>Code</th>
                     <th>Name</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,10 +35,11 @@
                         <td>
                             @Html.DisplayFor(course => item.Name)
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if (TempData["CreateExam"] != null && (bool)TempData["CreateExam"])
                             {
-                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right spinner-loading">Create Exam Test</a>
+                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary spinner-loading">Create Automated Exam</a>
+                                <a href="@Url.Action("CreateExamManually", "Examination", new { courseId = item.Id})" class="btn btn-primary spinner-loading mt-1">Create Manual Exam</a>
                             }
                             @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
                             {
@@ -51,3 +52,4 @@
         </table>
     </div>
 </div>
+@Scripts.Render("~/bundles/script/datatables")

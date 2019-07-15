@@ -6,12 +6,14 @@
     int counter = 0;
 }
 
-<h2>Activities Detail</h2>
+@Styles.Render("~/bundles/content/datatables")
+
+<h4>Activities Detail</h4>
 @if (Model != null && Model.Count() > 0)
 {
     <div class="card shadow mb-4">
         <a href="#collapse" class="d-block card-header" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-            <h2>Import Question</h2>
+            <h5>Import Question</h5>
         </a>
 
         <div class="card-body collapse show" id="collapse">
@@ -24,80 +26,80 @@
                     <p class="text-custom"> Owner: @item.OwnerName</p>
                     <p class="text-custom"> Action: @item.Message</p>
                     <p class="text-custom">
-                        Course Code: 
+                        Course Code:
                         @if (item.CourseCode != null || item.CourseCode != "")
                         {
                             @item.CourseCode
                         }
                         else
                         {
-                            <p>N/A</p>
-                        }
+                        <p>N/A</p>
+                    }
 
-                    </p>
-                    <p class="text-custom"> Date: @item.LogDate</p>
-                    <div class="table-responsive text-custom">
-                        <table class="table table-bordered text-custom table-hover" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Question Code</th>
-                                   
-                                    @*<th>Course</th>
-                                <th>Learning outcome</th>
-                                <th>Level</th>*@
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var itemQues in item.listQuestion)
-                                {
+                        </p>
+                        <p class="text-custom"> Date: @item.LogDate</p>
+                        <div class="table-responsive text-custom">
+                            <table class="table table-bordered text-custom table-hover" id="dataTable">
+                                <thead>
                                     <tr>
-                                        @{
-                                            counter++;
-                                        }
-                                        <td>@counter</td>
-                                        <td>@itemQues.QuestionCode</td>
-                                        @*@if (itemQues.CourseCode != null)
-                                        {
-                                            <td>@itemQues.CourseCode</td>
-                                        }
-                                        else
-                                        {
-                                            <td>N/A</td>
-                                        }*@
-                                        @*@if (!itemQues.LearningOutcomeId.Equals(0))
-                                    {
-                                        <td>@itemQues.CourseCode</td>
-                                    }
-                                    else
-                                    {
-                                        <td>N/A</td>
-                                    }
-                                    @if (itemQues.Level != null)
-                                    {
-                                        <td>@itemQues.CourseCode</td>
-                                    }
-                                    else
-                                    {
-                                        <td>N/A</td>
-                                    }*@
+                                        <th>No</th>
+                                        <th>Question Code</th>
 
-                                        @*<td>@itemQues.LearningOutcomeId</td>
-                                    <td>@itemQues.Level</td>*@
-
-
+                                        @*<th>Course</th>
+                                            <th>Learning outcome</th>
+                                            <th>Level</th>*@
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itemQues in item.listQuestion)
+                                    {
+                                        <tr>
+                                            @{
+                                                counter++;
+                                            }
+                                            <td>@counter</td>
+                                            <td>@itemQues.QuestionCode</td>
+                                            @*@if (itemQues.CourseCode != null)
+                                                {
+                                                    <td>@itemQues.CourseCode</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>N/A</td>
+                                                }*@
+                                            @*@if (!itemQues.LearningOutcomeId.Equals(0))
+                                                {
+                                                    <td>@itemQues.CourseCode</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>N/A</td>
+                                                }
+                                                @if (itemQues.Level != null)
+                                                {
+                                                    <td>@itemQues.CourseCode</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>N/A</td>
+                                                }*@
+
+                                            @*<td>@itemQues.LearningOutcomeId</td>
+                                                <td>@itemQues.Level</td>*@
+
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+
+
+
+
                 }
-
-
-
-
-
-            }
 
         </div>
 
@@ -108,7 +110,7 @@ else
     <p class="text-custom">This import was canceled</p>
 }
 
-
+@Scripts.Render("~/bundles/script/datatables")
 
 
 

@@ -13,9 +13,17 @@
         init: function () {
             this.categoryItem = $(".show-category .list-group-item");
             this.categoryItem.on("click", function () {
-                $(".show-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+                //$(".show-category .fa", this)
+                //    .toggleClass("fa-plus-circle")
+                //    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".show-category .list-group-item").removeClass("active");
                 this.className += " active";
@@ -25,9 +33,14 @@
 
             this.modelCategoryItem = $(".modal-category .list-group-item");
             this.modelCategoryItem.on("click", function () {
-                $(".modal-category .fa", this)
-                    .toggleClass("fa-plus-circle")
-                    .toggleClass("fa-minus-circle");
+
+                if ($($(this).children("i").get(0)).hasClass("fa-plus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-plus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-minus-circle");
+                } else if ($($(this).children("i").get(0)).hasClass("fa-minus-circle")) {
+                    $($(this).children("i").get(0)).removeClass("fa-minus-circle");
+                    $($(this).children("i").get(0)).addClass("fa-plus-circle");
+                }
 
                 $(".modal-category .list-group-item").removeClass("active");
                 this.className += " active";
@@ -55,8 +68,8 @@
 
             this.initTable();
 
-            
-            
+
+
         },
         downCount: function (spanCount) {
             var currentCount = spanCount.attr("data-count");
@@ -219,16 +232,16 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
-            $('#spinner').css("display", "block");
-            $('#spinner').css("z-index", "1060");
-            $('#pleaseWaitDialog').modal();
+            //$('#spinner').css("display", "block");
+            //$('#spinner').css("z-index", "1060");
+            //$('#pleaseWaitDialog').modal();
             $.ajax({
                 url: url,
                 type: "GET",
                 success: function (response) {
                     categoryView.questionListContainter.html(response);
-                    
-                  var table = $("#dataTable").dataTable({
+
+                    var table = $("#dataTable").dataTable({
                         ordering: false,
                         columnDefs: [
                             { targets: 0, width: "5%" },
@@ -280,7 +293,7 @@
                             });
                         } else {
                             $.each($(".checkbox"), function (index, item) {
-                                $(item).addClass( "hidden");
+                                $(item).addClass("hidden");
                             });
                         }
                         categoryView.setOnClickCkb();
@@ -292,11 +305,9 @@
                             scrollTop: $(".dataTables_wrapper").offset().top
                         }, 'slow');
                     });
-                    setTimeout(function () {
-                        $('#spinner').css("display", "none");
-                        $('#pleaseWaitDialog').modal('hide');
-                    }, 500);
-                    
+                    //$('#spinner').css("display", "none");
+                    //$('#pleaseWaitDialog').modal('hide');
+
                 }
             });
         },

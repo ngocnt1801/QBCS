@@ -104,6 +104,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -286,6 +290,7 @@
     <Content Include="Content\sb-admin-2.min.css" />
     <Content Include="Content\smart_wizard_theme_arrows.min.css" />
     <Content Include="Content\spinner\spinner.css" />
+    <Content Include="Content\style-detail-question.css" />
     <Content Include="Content\style_dashboard.css" />
     <Content Include="Content\switch-button-style.css" />
     <Content Include="Content\tab\demo.css" />
@@ -371,6 +376,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\myjs\colapse-category-exam.js" />
     <Content Include="Scripts\js\demo\chart-area-demo.js" />
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
@@ -378,6 +384,8 @@
     <Content Include="Scripts\myjs\autocompleteCourse.js" />
     <Content Include="Scripts\myjs\autocompleteLecturer.js" />
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
+    <Content Include="Scripts\myjs\autocomplete.js" />
+    <Content Include="Scripts\myjs\bootbox.min.js" />
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\diff\diff_match_patch.js" />
@@ -411,6 +419,7 @@
     <Content Include="Scripts\myjs\textWord\textboxio\resources\js\wordimport.js" />
     <Content Include="Scripts\myjs\textWord\textboxio\textboxio.js" />
     <Content Include="Scripts\myjs\text-process.js" />
+    <Content Include="Scripts\myjs\toggle-question.js" />
     <Content Include="Scripts\myjs\track-window.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\tab\cbpFWTabs.js" />
@@ -2207,7 +2216,11 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\Script\Index.cshtml" />
+    <Content Include="Views\Import\GetDuplicatedDetail.cshtml" />
     <Content Include="Views\LogAction\Index.cshtml" />
+    <Content Include="Views\Examination\CreateExamManually.cshtml" />
+    <Content Include="Views\Examination\ListQuestionCreateExamManually.cshtml" />
+    <Content Include="Views\Examination\ListCategoryCreateExam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

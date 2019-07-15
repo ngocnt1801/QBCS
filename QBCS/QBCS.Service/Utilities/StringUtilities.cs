@@ -35,6 +35,7 @@ namespace QBCS.Service.Utilities
             string result = textContent;
             result = StringProcess.RemoveTag(result, @"[html]", "");
             result = StringProcess.RemoveTag(result, @"<cbr>", @"<br/>");
+            result = WebUtility.HtmlEncode(result);
             return result;
         }
     }

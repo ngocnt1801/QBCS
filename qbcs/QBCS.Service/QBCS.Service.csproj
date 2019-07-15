@@ -85,6 +85,7 @@
     <Compile Include="Enum\RoleEnum.cs" />
     <Compile Include="Implement\CourseService.cs" />
     <Compile Include="Implement\PartOfExamService.cs" />
+    <Compile Include="Implement\QuestionInExamService.cs" />
     <Compile Include="Implement\QuestionService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\RuleService.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Interface\ILogActionService.cs" />
     <Compile Include="Interface\ILogService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
+    <Compile Include="Interface\IQuestionInExamService.cs" />
     <Compile Include="Interface\IRuleService.cs" />
     <Compile Include="Interface\IOptionService.cs" />
     <Compile Include="Implement\UserService.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\DuplicatedQuestionViewModel.cs" />
+    <Compile Include="ViewModel\GetResultViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
     <Compile Include="ViewModel\GenerateExamViewModel.cs" />

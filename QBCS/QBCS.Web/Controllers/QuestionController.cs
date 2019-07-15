@@ -2,6 +2,7 @@
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private IImportService importService;
         private ICourseService courseService;
+        private IUserService userService;
 
         public QuestionController()
         {
@@ -33,6 +35,7 @@ namespace QBCS.Web.Controllers
             examinationService = new ExaminationService();
             importService = new ImportService();
             courseService = new CourseService();
+            userService = new UserService();
         }
 
         // GET: Question
@@ -124,7 +127,7 @@ namespace QBCS.Web.Controllers
             {
                 bool result = questionService.UpdateQuestion(ques);
                 // bool optionResult = optionService.UpdateOptions(ques.Options);
-                TempData["Modal"] = "#success-modal";
+                ViewBag.Modal = "#success-modal";
                 return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
             }
 
@@ -154,25 +157,57 @@ namespace QBCS.Web.Controllers
             
         }
 
+        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
+        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        {
+            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
+            //var question = new QuestionViewModel()
+            //{
+            //    Id
+            //}
+            // bool optionResult = optionService.UpdateOptions(ques.Options);
+            TempData["Modal"] = "#success-modal";
+            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
+        }
+
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
-        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, string ownerName, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
             if (questionFile.ContentLength > 0)
             {
-                check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerName, prefix);
-            }
+                if (owner != null && owner != 0)
+                {
+                    var ownerUser = userService.GetUserById(owner.Value);
+                    if (ownerUser != null)
+                    {
+                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
 
-            //notify 
-           // TempData["Modal"] = "#success-modal";
-            TempData["CourseId"] = courseId;
-            TempData["OwnereName"] = ownerName;
+                        //notify 
+                        ViewBag.Modal = "#success-modal";
+                        TempData["CourseId"] = courseId;
+                        TempData["OwnereName"] = ownerUser.Fullname;
+                        return Json("OK");
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Owner lecturer does not exists";
+                        ViewBag.Status = ToastrEnum.Error;
+                        return Json("Error");
+                    }
+                }
+                else
+                {
+                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                }
+
+            }
 
             return Json("OK");
             //return RedirectToAction("Index", "Home");
@@ -189,7 +224,7 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, "");
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))
             //{
@@ -198,8 +233,8 @@ namespace QBCS.Web.Controllers
 
 
             //notify 
-            TempData["Message"] = "You import successfully";
-            TempData["Status"] = ToastrEnum.Success;
+            ViewBag.Message = "You import successfully";
+            ViewBag.Status = ToastrEnum.Success;
 
             return Json(check, JsonRequestBehavior.AllowGet);
         }
@@ -213,6 +248,7 @@ namespace QBCS.Web.Controllers
             var result = courseService.GetAllCoursesByUserId(userId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult GetPartialView(bool? isDuplicate)
         {
             var questions = questionService.CheckDuplicated();
@@ -281,11 +317,39 @@ namespace QBCS.Web.Controllers
             questionService.UpdateCategory(ids, categoryId, learningOutcomeId, levelId);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult EditQuestionWithTextbox()
+        {
+            QuestionViewModel qvm = questionService.GetQuestionById(4);
+            return PartialView("EditQuestionWithTextbox", qvm);
+        }
+
+        //public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
+        //{
+        //    var search = Request["search[value]"].ToLower();
+        //    var entities = questionService.GetQuestionTempByImportId(importId, type);
+        //    var recordTotal = entities.Count;
+        //    var result = new List<QuestionTempViewModel>();
+        //    foreach (var q in entities)
+        //    {
+        //        var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+        //        if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+        //        {
+        //            result.Add(q);
+        //        }
+        //    }
+        //    var recordFiltered = result.Count();
+        //    result = result.Skip(start).Take(length).ToList();
+        //    return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
+        //}
+
     }
 
     public class Textarea
     {
         public string Table { get; set; }
         public int CourseId { get; set; }
+        public string OwnerName { get; set; }
+        public string Prefix { get; set; }
     }
 }

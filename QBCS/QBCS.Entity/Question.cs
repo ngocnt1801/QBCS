@@ -14,7 +14,6 @@ namespace QBCS.Entity
         {
             Options = new HashSet<Option>();
             QuestionInExams = new HashSet<QuestionInExam>();
-            QuestionTemps = new HashSet<QuestionTemp>();
         }
 
         public int Id { get; set; }
@@ -67,8 +66,5 @@ namespace QBCS.Entity
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionInExam> QuestionInExams { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionTemp> QuestionTemps { get; set; }
     }
 }

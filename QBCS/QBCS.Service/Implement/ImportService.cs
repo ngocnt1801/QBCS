@@ -26,7 +26,7 @@ namespace QBCS.Service.Implement
         public void Cancel(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetById(importId);
-            var listQuestion = import.QuestionTemps.ToList();
+            var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
             if (import != null)
             {
                 foreach (var question in listQuestion)
@@ -53,7 +53,7 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<Import>().Update(import);
                 unitOfWork.SaveChanges();
 
-                return new ImportResultViewModel
+                var importModel = new ImportResultViewModel
                 {
                     Id = import.Id,
                     Status = import.Status.Value,
@@ -66,43 +66,103 @@ namespace QBCS.Service.Implement
                         Status = (StatusEnum)q.Status,
                         ImportId = importId,
                         Code = q.Code,
-                        Message = q.Message,
+                        Message = q.Status == (int)StatusEnum.Invalid ? q.Message
+                        : (q.DuplicatedString != null && q.DuplicatedString.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedString.Split(',').Count()} questions" : ""),
                         Image = q.Image,
                         IsInImportFile = q.DuplicateInImportId.HasValue,
                         Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
-                        DuplicatedQuestion = q.DuplicatedId.HasValue ? new QuestionViewModel
-                        {
-                            Id = q.DuplicatedWithBank.Id,
-                            CourseName = "Bank: " + q.DuplicatedWithBank.Course.Name,
-                            Code = q.DuplicatedWithBank.QuestionCode,
-                            QuestionContent = q.DuplicatedWithBank.QuestionContent,
-                            Options = q.DuplicatedWithBank.Options.Select(o => new OptionViewModel
-                            {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList()
-                        } : (q.DuplicateInImportId.HasValue ? new QuestionViewModel
-                        {
-                            Id = q.DuplicatedWithImport.Id,
-                            Code = q.DuplicatedWithImport.Code,
-                            CourseName = "Import File",
-                            QuestionContent = q.DuplicatedWithImport.QuestionContent,
-                            Options = q.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
-                            {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList()
-                        } : null),
                         Options = q.OptionTemps.Select(o => new OptionViewModel
                         {
                             OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                            Image = o.Image
+                        }).ToList(),
+                        DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
+                        {
+                            Id = int.Parse(s.Split('-')[0]),
+                            IsBank = bool.Parse(s.Split('-')[1])
                         }).ToList()
-                    }).OrderBy(q => q.Status).ToList()
+                    }).OrderBy(q => q.Status).ToList(),
                 };
+
+                RemoveDuplicateGroup(importModel.Questions);
+
+                foreach (var question in importModel.Questions.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                {
+                    if (question.DuplicatedList[0].IsBank)
+                    {
+                        var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                        question.DuplicatedQuestion = new QuestionViewModel
+                        {
+                            Id = entity.Id,
+                            Code = entity.QuestionCode,
+                            CourseName = "Bank: " + entity.Course.Name,
+                            QuestionContent = entity.QuestionContent,
+                            Options = entity.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList(),
+                            IsBank = true,
+                            IsAnotherImport = false
+                        };
+
+                    }
+                    else
+                    {
+                        var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                        question.DuplicatedQuestion = new QuestionViewModel
+                        {
+                            Id = entity.Id,
+                            Code = entity.Code,
+                            CourseName = "Import file: ",
+                            QuestionContent = entity.QuestionContent,
+                            Options = entity.OptionTemps.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList(),
+                            Status = (StatusEnum)entity.Status.Value,
+                            IsBank = false,
+                            IsAnotherImport = !(entity.ImportId == importId)
+                        };
+                    }
+                }
+
+
+
+                return importModel;
+
             }
 
             return null;
+        }
+
+        private void RemoveDuplicateGroup(List<QuestionTempViewModel> list)
+        {
+            List<string> duplicateGroup = new List<String>();
+            foreach (var question in list.Where(q => q.DuplicatedList != null))
+            {
+                bool isInGroup = false;
+                string duplicateString = ParseListDuplicateToString(question);
+                foreach (string item in duplicateGroup)
+                {
+                    if (item.Equals(duplicateString))
+                    {
+                        isInGroup = true;
+                        break;
+                    }
+                }
+
+                if (!isInGroup)
+                {
+                    duplicateGroup.Add(duplicateString);
+                }
+                else
+                {
+                    question.IsHide = true;
+                }
+            }
         }
 
         public List<ImportViewModel> GetListImport(int? userId)
@@ -133,29 +193,29 @@ namespace QBCS.Service.Implement
                     QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
-                    DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
-                    {
-                        Id = questionTemp.DuplicatedWithBank.Id,
-                        CourseName = questionTemp.DuplicatedWithBank.Course.Name,
-                        Code = questionTemp.DuplicatedWithBank.QuestionCode,
-                        QuestionContent = questionTemp.DuplicatedWithBank.QuestionContent,
-                        Options = questionTemp.DuplicatedWithBank.Options.Select(o => new OptionViewModel
-                        {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                        }).ToList()
-                    }) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
-                    {
-                        Id = questionTemp.DuplicatedWithImport.Id,
-                        CourseName = "Import file",
-                        Code = questionTemp.DuplicatedWithImport.Code,
-                        QuestionContent = questionTemp.DuplicatedWithImport.QuestionContent,
-                        Options = questionTemp.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
-                        {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                        }).ToList()
-                    }) : null,
+                    //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
+                    //{
+                    //    Id = questionTemp.DuplicatedWithBank.Id,
+                    //    CourseName = questionTemp.DuplicatedWithBank.Course.Name,
+                    //    Code = questionTemp.DuplicatedWithBank.QuestionCode,
+                    //    QuestionContent = questionTemp.DuplicatedWithBank.QuestionContent,
+                    //    Options = questionTemp.DuplicatedWithBank.Options.Select(o => new OptionViewModel
+                    //    {
+                    //        OptionContent = o.OptionContent,
+                    //        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    //    }).ToList()
+                    //}) : questionTemp.DuplicatedWithImport != null ? (new QuestionViewModel
+                    //{
+                    //    Id = questionTemp.DuplicatedWithImport.Id,
+                    //    CourseName = "Import file",
+                    //    Code = questionTemp.DuplicatedWithImport.Code,
+                    //    QuestionContent = questionTemp.DuplicatedWithImport.QuestionContent,
+                    //    Options = questionTemp.DuplicatedWithImport.OptionTemps.Select(o => new OptionViewModel
+                    //    {
+                    //        OptionContent = o.OptionContent,
+                    //        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    //    }).ToList()
+                    //}) : null,
                     Options = questionTemp.OptionTemps.Select(o => new OptionViewModel
                     {
                         Id = o.Id,
@@ -190,9 +250,9 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && (entity.Status == (int)StatusEnum.Editable 
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable
                                     || entity.Status == (int)StatusEnum.Invalid
-                                    || entity.Status == (int)StatusEnum.Delete
+                                    || entity.Status == (int)StatusEnum.Deleted
                                     || entity.Status == (int)StatusEnum.DeleteOrSkip))
             {
                 entity.QuestionContent = question.QuestionContent;
@@ -220,7 +280,7 @@ namespace QBCS.Service.Implement
 
         public List<QuestionTemp> CheckRule(List<QuestionTemp> tempQuestions)
         {
-            if(tempQuestions == null)
+            if (tempQuestions == null)
             {
                 return null;
             }
@@ -228,7 +288,7 @@ namespace QBCS.Service.Implement
             foreach (var tempQuestion in tempQuestions)
             {
                 var checkCorrectOption = false;
-                foreach(var option in tempQuestion.OptionTemps)
+                foreach (var option in tempQuestion.OptionTemps)
                 {
                     if (option.OptionContent.Equals(""))
                     {
@@ -242,17 +302,17 @@ namespace QBCS.Service.Implement
                         break;
                     }
                 }
-                if (!checkCorrectOption)
+                if (!checkCorrectOption && tempQuestion.Status != (int)StatusEnum.Invalid)
                 {
                     tempQuestion.Status = (int)StatusEnum.Invalid;
                     tempQuestion.Message = "Question must have a correct option";
                 }
 
-                if(tempQuestion.OptionTemps.Count > 1)
+                if (tempQuestion.OptionTemps.Count > 1)
                 {
                     for (int i = 0; i < tempQuestion.OptionTemps.Count - 1; i++)
                     {
-                        for (int j = i+1; j < tempQuestion.OptionTemps.Count; j++)
+                        for (int j = i + 1; j < tempQuestion.OptionTemps.Count; j++)
                         {
                             //var option1 = tempQuestion.OptionTemps.ElementAtOrDefault(i);
                             //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
@@ -261,7 +321,7 @@ namespace QBCS.Service.Implement
                             if (trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
-                                tempQuestion.Message = "All options must different with each others";
+                                tempQuestion.Message = "All options must different from each others";
                                 break;
                             }
                         }
@@ -276,7 +336,7 @@ namespace QBCS.Service.Implement
                     tempQuestion.Status = (int)StatusEnum.Invalid;
                     break;
                 }
-                
+
                 foreach (var rule in rules)
                 {
                     if (tempQuestion.Status == (int)StatusEnum.Invalid)
@@ -292,7 +352,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Question length must at least " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Question length must at least " + int.Parse(rule.Value) + " characters";
                                 }
                                 break;
                             //check max question length
@@ -300,7 +360,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.QuestionContent.Length > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Question length can not exceed " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Question length can not exceed " + int.Parse(rule.Value) + " characters";
                                 }
                                 break;
                             //check banned words in question
@@ -321,7 +381,7 @@ namespace QBCS.Service.Implement
                                     if (tempQuestion.QuestionContent.Contains(varRule))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Question can not contain '" + (rule.Value) + "'";
+                                        tempQuestion.Message = "Question can not contain '" + (varRule) + "'";
                                     }
                                 }
 
@@ -331,7 +391,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count < int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Number of options must at least " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Number of options must at least " + int.Parse(rule.Value) + " options";
                                 }
                                 break;
                             //check max option count in question
@@ -339,7 +399,7 @@ namespace QBCS.Service.Implement
                                 if (tempQuestion.OptionTemps.Count > int.Parse(rule.Value))
                                 {
                                     tempQuestion.Status = (int)StatusEnum.Invalid;
-                                    tempQuestion.Message = "Number of options can not exceed " + int.Parse(rule.Value);
+                                    tempQuestion.Message = "Number of options can not exceed " + int.Parse(rule.Value) + " options";
                                 }
                                 break;
                             //check min option length
@@ -349,7 +409,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Option length must at least " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Option length must at least " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -361,7 +421,7 @@ namespace QBCS.Service.Implement
                                     if (option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Option length can not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Option length can not exceed " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -388,7 +448,7 @@ namespace QBCS.Service.Implement
                                         if (option.OptionContent.Contains(varRule))
                                         {
                                             tempQuestion.Status = (int)StatusEnum.Invalid;
-                                            tempQuestion.Message = "Options can not contain '" + (rule.Value) + "'";
+                                            tempQuestion.Message = "Options can not contain '" + (varRule) + "'";
                                         }
                                     }
                                 }
@@ -400,7 +460,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct option length must at least " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Correct option length must at least " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -412,7 +472,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)option.IsCorrect && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct option length can not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Correct option length can not exceed " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -439,7 +499,7 @@ namespace QBCS.Service.Implement
                                             if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
-                                                tempQuestion.Message = "Correct options can not contain '" + (rule.Value) + "'";
+                                                tempQuestion.Message = "Correct options can not contain '" + (varRule) + "'";
                                             }
                                         }
                                     }
@@ -452,7 +512,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length < int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Incorrect option length must at least " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Incorrect option length must at least " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -464,7 +524,7 @@ namespace QBCS.Service.Implement
                                     if ((!(bool)option.IsCorrect) && option.OptionContent.Length > int.Parse(rule.Value))
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Incorrect option length can not exceed " + int.Parse(rule.Value);
+                                        tempQuestion.Message = "Incorrect option length must not exceed " + int.Parse(rule.Value) + " characters";
                                         break;
                                     }
                                 }
@@ -482,7 +542,7 @@ namespace QBCS.Service.Implement
                                             if (culture.CompareInfo.IndexOf(option.OptionContent, varRule, CompareOptions.IgnoreCase) >= 0)
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
-                                                tempQuestion.Message = "Incorrect options can not contain '" + (varRule) + "'";
+                                                tempQuestion.Message = "Incorrect options must not contain '" + (varRule) + "'";
                                             }
                                         }
                                         else
@@ -492,7 +552,7 @@ namespace QBCS.Service.Implement
                                             if (option.OptionContent.Contains(varRule))
                                             {
                                                 tempQuestion.Status = (int)StatusEnum.Invalid;
-                                                tempQuestion.Message = "Incorrect options can not contain '" + (rule.Value) + "'";
+                                                tempQuestion.Message = "Incorrect options must not contain '" + (rule.Value) + "'";
                                             }
                                         }
                                     }
@@ -509,7 +569,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct Option can not be a longest option";
+                                        tempQuestion.Message = "Correct Option must not be a longest option";
                                     }
                                 }
                                 break;
@@ -524,7 +584,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct Option can not be a shortest option";
+                                        tempQuestion.Message = "Correct Option must not be a shortest option";
                                     }
                                 }
                                 break;
@@ -544,12 +604,12 @@ namespace QBCS.Service.Implement
         private string Uppercase(string content)
         {
             string[] uppercase = { "invalid", "incorrect", "not true" };
-            for(int i = 0; i < uppercase.Length; i++)
+            for (int i = 0; i < uppercase.Length; i++)
             {
                 var culture = CultureInfo.GetCultureInfo("en-GB");
                 if (culture.CompareInfo.IndexOf(content, uppercase[i], CompareOptions.IgnoreCase) >= 0)
                 {
-                    content = Regex.Replace(content,uppercase[i], uppercase[i].ToUpper(),RegexOptions.IgnoreCase);
+                    content = Regex.Replace(content, uppercase[i], uppercase[i].ToUpper(), RegexOptions.IgnoreCase);
                 }
             }
             return content;
@@ -564,7 +624,7 @@ namespace QBCS.Service.Implement
                     option.Remove(option.Length - 1);
                 }
             }
-            
+
             //option = option.Replace(",", "");
             return option;
         }
@@ -573,15 +633,184 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTempStatus(int questionTempId, int status)
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
-            if (questionTemp != null && (questionTemp.Status == (int)StatusEnum.DeleteOrSkip 
-                                        || questionTemp.Status == (int)StatusEnum.Delete
-                                        || questionTemp.Status == (int)StatusEnum.Editable
-                                        || questionTemp.Status == (int)StatusEnum.Invalid))
+
+            if (status == (int)StatusEnum.Deleted)
             {
-                questionTemp.Status = status;
-                unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
-                unitOfWork.SaveChanges();
+                questionTemp.OldStatus = questionTemp.Status;
             }
+            questionTemp.Status = status;
+            unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
+            unitOfWork.SaveChanges();
+
+        }
+
+        public QuestionTempViewModel GetDuplicatedDetail(int questionTempId)
+        {
+
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
+            if (entity != null)
+            {
+
+                QuestionTempViewModel model = new QuestionTempViewModel()
+                {
+                    Id = entity.Id,
+                    QuestionContent = entity.QuestionContent,
+                    Status = (StatusEnum)entity.Status,
+                    ImportId = entity.ImportId.Value,
+                    Code = entity.Code,
+                    Image = entity.Image,
+                    Category = entity.Category + " / " + entity.LearningOutcome + " / " + entity.LevelName,
+                    Options = entity.OptionTemps.Select(o => new OptionViewModel
+                    {
+                        Id = o.Id,
+                        OptionContent = o.OptionContent,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
+                };
+
+                var listDuplicated = entity.DuplicatedString.Split(',').Select(d => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(d.Split('-')[0]),
+                    IsBank = bool.Parse(d.Split('-')[1])
+                }).ToList();
+
+                foreach (var duplicated in listDuplicated)
+                {
+                    if (duplicated.IsBank)
+                    {
+                        var questionEntity = unitOfWork.Repository<Question>().GetById(duplicated.Id);
+                        duplicated.Code = questionEntity.QuestionCode;
+                        duplicated.QuestionContent = questionEntity.QuestionContent;
+                        duplicated.Options = questionEntity.Options.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                            Image = o.Image
+                        }).ToList();
+                        duplicated.Image = questionEntity.Image;
+                        duplicated.IsAnotherImport = false;
+                    }
+                    else
+                    {
+                        var questionEntity = unitOfWork.Repository<QuestionTemp>().GetById(duplicated.Id);
+                        duplicated.Code = questionEntity.Code;
+                        duplicated.QuestionContent = questionEntity.QuestionContent;
+                        duplicated.Options = questionEntity.OptionTemps.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                            Image = o.Image
+                        }).ToList();
+                        duplicated.Image = questionEntity.Image;
+                        duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                        duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
+                    }
+                }
+
+                model.DuplicatedList = listDuplicated;
+
+                return model;
+
+            }
+
+            return null;
+
+        }
+
+        public void RecoveryQuestionTemp(int questionTempId)
+        {
+            var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
+            if (questionTemp.OldStatus != null)
+            {
+                questionTemp.Status = questionTemp.OldStatus;
+            }
+            unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
+            unitOfWork.SaveChanges();
+        }
+
+        private string ParseListDuplicateToString(QuestionTempViewModel temp)
+        {
+            temp.DuplicatedList.Add(new DuplicatedQuestionViewModel
+            {
+                Id = temp.Id,
+                IsBank = false
+            });
+            return String.Join(",", temp.DuplicatedList.OrderBy(t => t.Id).Select(s => $"{s.Id}-{s.IsBank}").ToArray());
+        }
+
+        public List<QuestionTempViewModel> GetListQuestionTempByStatus(int importId, int status)
+        {
+            var list = unitOfWork.Repository<QuestionTemp>().GetAll()
+              .Where(q => q.ImportId == importId && q.Status == status)
+              .ToList()
+              .Select(q => new QuestionTempViewModel
+              {
+                  Id = q.Id,
+                  QuestionContent = q.QuestionContent,
+                  Status = (StatusEnum)q.Status,
+                  ImportId = importId,
+                  Code = q.Code,
+                  Message = q.Status == (int)StatusEnum.Invalid ? q.Message
+                      : (q.DuplicatedString != null && q.DuplicatedString.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedString.Split(',').Count()} questions" : ""),
+                  Image = q.Image,
+                  IsInImportFile = q.DuplicateInImportId.HasValue,
+                  Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
+                  Options = q.OptionTemps.Select(o => new OptionViewModel
+                  {
+                      OptionContent = o.OptionContent,
+                      IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                      Image = o.Image
+                  }).ToList(),
+                  DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
+                  {
+                      Id = int.Parse(s.Split('-')[0]),
+                      IsBank = bool.Parse(s.Split('-')[1])
+                  }).ToList()
+              }).ToList();
+                RemoveDuplicateGroup(list);
+                foreach (var question in list.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                {
+                    if (question.DuplicatedList[0].IsBank)
+                    {
+                        var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                        question.DuplicatedQuestion = new QuestionViewModel
+                        {
+                            Id = entity.Id,
+                            Code = entity.QuestionCode,
+                            CourseName = "Bank: " + entity.Course.Name,
+                            QuestionContent = entity.QuestionContent,
+                            Options = entity.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList(),
+                            IsBank = true,
+                            IsAnotherImport = false
+                        };
+
+                    }
+                    else
+                    {
+                        var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                        question.DuplicatedQuestion = new QuestionViewModel
+                        {
+                            Id = entity.Id,
+                            Code = entity.Code,
+                            CourseName = "Import file: ",
+                            QuestionContent = entity.QuestionContent,
+                            Options = entity.OptionTemps.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                            }).ToList(),
+                            Status = (StatusEnum)entity.Status.Value,
+                            IsBank = false,
+                            IsAnotherImport = !(entity.ImportId == importId)
+                        };
+                    }
+                }
+                return list;
+            
         }
     }
 }
