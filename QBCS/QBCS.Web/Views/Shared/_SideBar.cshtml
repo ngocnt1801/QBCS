@@ -19,6 +19,8 @@
     "fa fa-list-ul",
     "fa fa-chart-line",
     "fa fa-history",
+    "",
+    ""
     };
 }
 
@@ -72,7 +74,7 @@
         {
             <hr class="sidebar-divider my-0">
             <li class="nav-item  @((TempData["active"] as string ?? "").Equals(sidebar[i].ShortName) ? "active" : "")">
-                <a class="nav-link" href="@(Context.GetOwinContext().Request.PathBase.Value + (sidebar[i].Url))">
+                <a class="nav-link spinner-loading" href="@(Context.GetOwinContext().Request.PathBase.Value + (sidebar[i].Url))">
                     <i class="@NAV_ICON[sidebar[i].InternalId.HasValue ? sidebar[i].InternalId.Value : 0]"></i>
                     <span>@sidebar[i].ShortName</span>
                 </a>

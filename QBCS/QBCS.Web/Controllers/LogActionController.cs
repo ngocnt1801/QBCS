@@ -21,11 +21,11 @@ namespace QBCS.Web.Controllers
         }
         // GET: LogAction
 
-        //[Feature(FeatureType.SideBar
-        //    , "Log action page"
-        //    , "QBCS", protectType: ProtectType.Authorized
-        //    , ShortName = "Log"
-        //    , InternalId = (int)SideBarEnum.LogAction)]
+        [Feature(FeatureType.SideBar
+            , "Log action page"
+            , "QBCS", protectType: ProtectType.Authorized
+            , ShortName = "Log"
+            , InternalId = (int)SideBarEnum.LogAction)]
         public ActionResult Index()
         {
            

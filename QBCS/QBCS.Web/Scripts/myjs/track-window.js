@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     $(function () {
         $(document).on('click', '.spinner-loading',function () {
-            $(`<div class=loadingDiv>
+            $(`<div class="loadingDiv">
                     <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
                 </div>`).prependTo(document.body);
         })
