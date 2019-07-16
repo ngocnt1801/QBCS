@@ -15,10 +15,12 @@ namespace QBCS.Web.Controllers
     {
         private ICourseService courseService;
         private ICategoryService categoryService;
+        private ILearningOutcomeService learningOutcomeService;
         public CourseController()
         {
             courseService = new CourseService();
             categoryService = new CategoryService();
+            learningOutcomeService = new LearningOutcomeService();
         }
 
         [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.CourseByUser)]
@@ -165,6 +167,7 @@ namespace QBCS.Web.Controllers
         {
             List<CategoryViewModel> categories = categoryService.GetListCategories(courseId);
             var model = courseService.GetCourseById(courseId);
+            model.LearningOutcome = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
             model.Categories = categories;
             TempData["active"] = "Course";
             return View(model);
