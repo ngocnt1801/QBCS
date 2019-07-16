@@ -156,7 +156,7 @@
                                                     </p>
                                                     <p class="text-custom">@item.DuplicatedQuestion.CourseName - @item.DuplicatedQuestion.Code</p>
                                                     @Html.DisplayFor(modeItem => item.DuplicatedQuestion.QuestionContent)
-                                                    @if (item.Image != null)
+                                                    @if (item.DuplicatedQuestion.Image != null)
                                                     {
                                                         <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
                                                     }

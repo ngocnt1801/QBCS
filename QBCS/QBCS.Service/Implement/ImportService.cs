@@ -96,6 +96,7 @@ namespace QBCS.Service.Implement
                         {
                             Id = entity.Id,
                             Code = entity.QuestionCode,
+                            Image = entity.Image,
                             CourseName = "Bank: " + entity.Course.Name,
                             QuestionContent = entity.QuestionContent,
                             Options = entity.Options.Select(o => new OptionViewModel
@@ -116,6 +117,7 @@ namespace QBCS.Service.Implement
                             Id = entity.Id,
                             Code = entity.Code,
                             CourseName = "Import file: ",
+                            Image = entity.Image,
                             QuestionContent = entity.QuestionContent,
                             Options = entity.OptionTemps.Select(o => new OptionViewModel
                             {
@@ -664,6 +666,7 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
+                        Image = o.Image,
                         IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                     }).ToList()
                 };
@@ -767,50 +770,50 @@ namespace QBCS.Service.Implement
                       IsBank = bool.Parse(s.Split('-')[1])
                   }).ToList()
               }).ToList();
-                RemoveDuplicateGroup(list);
-                foreach (var question in list.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+            RemoveDuplicateGroup(list);
+            foreach (var question in list.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+            {
+                if (question.DuplicatedList[0].IsBank)
                 {
-                    if (question.DuplicatedList[0].IsBank)
+                    var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                    question.DuplicatedQuestion = new QuestionViewModel
                     {
-                        var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
-                        question.DuplicatedQuestion = new QuestionViewModel
+                        Id = entity.Id,
+                        Code = entity.QuestionCode,
+                        CourseName = "Bank: " + entity.Course.Name,
+                        QuestionContent = entity.QuestionContent,
+                        Options = entity.Options.Select(o => new OptionViewModel
                         {
-                            Id = entity.Id,
-                            Code = entity.QuestionCode,
-                            CourseName = "Bank: " + entity.Course.Name,
-                            QuestionContent = entity.QuestionContent,
-                            Options = entity.Options.Select(o => new OptionViewModel
-                            {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList(),
-                            IsBank = true,
-                            IsAnotherImport = false
-                        };
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        }).ToList(),
+                        IsBank = true,
+                        IsAnotherImport = false
+                    };
 
-                    }
-                    else
-                    {
-                        var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
-                        question.DuplicatedQuestion = new QuestionViewModel
-                        {
-                            Id = entity.Id,
-                            Code = entity.Code,
-                            CourseName = "Import file: ",
-                            QuestionContent = entity.QuestionContent,
-                            Options = entity.OptionTemps.Select(o => new OptionViewModel
-                            {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList(),
-                            Status = (StatusEnum)entity.Status.Value,
-                            IsBank = false,
-                            IsAnotherImport = !(entity.ImportId == importId)
-                        };
-                    }
                 }
-                return list;
-            
+                else
+                {
+                    var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                    question.DuplicatedQuestion = new QuestionViewModel
+                    {
+                        Id = entity.Id,
+                        Code = entity.Code,
+                        CourseName = "Import file: ",
+                        QuestionContent = entity.QuestionContent,
+                        Options = entity.OptionTemps.Select(o => new OptionViewModel
+                        {
+                            OptionContent = o.OptionContent,
+                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        }).ToList(),
+                        Status = (StatusEnum)entity.Status.Value,
+                        IsBank = false,
+                        IsAnotherImport = !(entity.ImportId == importId)
+                    };
+                }
+            }
+            return list;
+
         }
     }
 }
