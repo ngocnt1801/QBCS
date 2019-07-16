@@ -37,7 +37,7 @@
     <div class="form-group form-inline">
         <div class="custom-control custom-checkbox small mr-3">
             <input type="checkbox" class="custom-control-input" id="chk-main-question" checked>
-            <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
+            <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question" id="lb-main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
         </div>
         @for (int i = 0; i < Model.DuplicatedList.Count; i++)
         {
@@ -62,7 +62,8 @@
                 <input type="checkbox" class="custom-control-input"
                        @(i > 0 ? "" : "checked")
                        id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
-                <label class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
+                <label id="@(Model.DuplicatedList[i].IsBank ? "lb-bank-" + Model.DuplicatedList[i].Id : "lb-import-" + Model.DuplicatedList[i].Id)"
+                       class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
                        toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@Model.DuplicatedList[i].Status</span></label>
                 </div>
             }
@@ -71,8 +72,8 @@
 
 <table>
     <tr>
-        <td>
-            <div class="card shadow mb-4" id="main-question">
+        <td id="main-question" class="">
+            <div class="card shadow mb-4">
                 <a href="#cd-main-question" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
                     Import File: @Model.Code <span class="badge ml-2 @statusClass">@Model.Status</span>
                 </a>
