@@ -339,7 +339,15 @@ namespace QBCS.Service.Utilities
                         else
                         {
                             question = stringProcess.UpperCaseKeyWord(question);
-                            quesModel.QuestionContent = question;
+                            if (question.Contains("[html]"))
+                            {
+                                quesModel.QuestionContent = question;
+                            }
+                            else
+                            {
+                                quesModel.QuestionContent = "[html]" + question;
+                            }
+                           
 
                         }
                         question = null;

@@ -180,6 +180,17 @@ namespace QBCS.Web
                 "~/Scripts/myjs/dragAndDrop/filedrag.js"
                 ));
 
+            //Different highlight
+            bundles.Add(new ScriptBundle("~/bundle/scripts/diff").Include(
+                "~/Scripts/myjs/diff/diff_match_patch.js",
+                "~/Scripts/myjs/diff/diff_match_patch_extended.js",
+                "~/Scripts/myjs/diff/picadiff.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundle/content/diff").Include(
+                "~/Content/diff/jquery.picadiff.css"
+                ));
+
+
             //Toggle question
             bundles.Add(new ScriptBundle("~/bundle/scripts/togglequestion").Include(
                 "~/Scripts/myjs/toggle-question.js"

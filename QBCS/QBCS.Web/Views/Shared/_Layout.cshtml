@@ -14,6 +14,8 @@
     @*@Styles.Render("~/bundles/content/css")*@
     @Styles.Render("~/bundles/content/template")
     @Styles.Render("~/bundle/content/spinner")
+    
+    
     @Styles.Render("~/bundle/content/img")
     @Styles.Render("~/bundle/content/toastr")
 
@@ -99,17 +101,17 @@
 
         <!-- Sidebar -->
         @*@switch (((UserViewModel)Session["user"]).Role)
-            {
-                case RoleEnum.Admin:
-                    @Html.Partial("_AdminSideBar")
-                    break;
-                case RoleEnum.Lecturer:
-                    @Html.Partial("_LecturerSideBar")
-                    break;
-                case RoleEnum.Staff:
-                    @Html.Partial("_StaffSideBar")
-                    break;
-            }*@
+        {
+        case RoleEnum.Admin:
+        @Html.Partial("_AdminSideBar")
+        break;
+        case RoleEnum.Lecturer:
+        @Html.Partial("_LecturerSideBar")
+        break;
+        case RoleEnum.Staff:
+        @Html.Partial("_StaffSideBar")
+        break;
+        }*@
 
         @Html.Partial("_SideBar")
         <!-- End of Sidebar -->
@@ -129,15 +131,15 @@
 
                     <!-- Topbar Search -->
                     @*<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
                             </div>
-                        </form>*@
+                        </div>
+                    </form>*@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -177,7 +179,7 @@
                                 <div id="list_notification">
                                 </div>
 
-                                <p class="dropdown-item text-center small text-gray-500 ajax-no-response mb-0" data-url="@Url.Action("ReadAll", "Notification")" href="#">Mark all as read</p>
+                                <p class="dropdown-item text-center small text-gray-500 ajax-no-response mb-0" data-url="@Url.Action(" ReadAll", "Notification" )" href="#">Mark all as read</p>
                             </div>
                         </li>
 
@@ -204,7 +206,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="@Url.Action("Logout", "Home")">
+                                <a class="dropdown-item" href="@Url.Action(" Logout", "Home" )">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -265,7 +267,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="@Url.Action("Logout", "Home")">Logout</a>
+                    <a class="btn btn-primary" href="@Url.Action(" Logout", "Home" )">Logout</a>
                 </div>
             </div>
         </div>
@@ -303,36 +305,37 @@
     @Scripts.Render("~/bundle/scripts/tracking")
     @Scripts.Render("~/bundle/scripts/spinner")
     @Scripts.Render("~/bundle/scripts/img-zoom")
+  
     @RenderSection("scripts", required: false)
 
 
     @{
-        var message = ViewBag.Message;
-        var status = ViewBag.Status;
-        if (message != null)
-        {
-            switch ((ToastrEnum)status)
-            {
-                case ToastrEnum.Success:
-                    <script>toastr.success("@message")</script>
-                    break;
-                case ToastrEnum.Warning:
-                    <script>toastr.warning("@message")</script>
-                    break;
-                case ToastrEnum.Error:
-                    <script>toastr.error("@message")</script>
-                    break;
-                case ToastrEnum.Info:
-                    <script>toastr.info("@message")</script>
-                    break;
-            }
-        }
+    var message = ViewBag.Message;
+    var status = ViewBag.Status;
+    if (message != null)
+    {
+    switch ((ToastrEnum)status)
+    {
+    case ToastrEnum.Success:
+    <script>toastr.success("@message")</script>
+    break;
+    case ToastrEnum.Warning:
+    <script>toastr.warning("@message")</script>
+    break;
+    case ToastrEnum.Error:
+    <script>toastr.error("@message")</script>
+    break;
+    case ToastrEnum.Info:
+    <script>toastr.info("@message")</script>
+    break;
+    }
+    }
 
-        var modal = ViewBag.Modal;
-        if (modal != null)
-        {
-            <script>$("@modal").modal('show')</script>
-        }
+    var modal = ViewBag.Modal;
+    if (modal != null)
+    {
+    <script>$("@modal").modal('show')</script>
+    }
     }
 </body>
 </html>

@@ -38,12 +38,12 @@
                         <td class="text-center">
                             @if (TempData["CreateExam"] != null && (bool)TempData["CreateExam"])
                             {
-                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary btn-spinner">Create Automated Exam</a>
-                                <a href="@Url.Action("CreateExamManually", "Examination", new { courseId = item.Id})" class="btn btn-primary btn-spinner mt-1">Create Manual Exam</a>
+                                <a href="@Url.Action("GenerateExam", "Examination", new { courseId = item.Id})" class="btn btn-primary spinner-loading">Create Automated Exam</a>
+                                <a href="@Url.Action("CreateExamManually", "Examination", new { courseId = item.Id})" class="btn btn-primary spinner-loading mt-1">Create Manual Exam</a>
                             }
                             @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
                             {
-                                <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right btn-spinner">View history</a>
+                                <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right spinner-loading">View history</a>
                             }
                         </td>
                     </tr>

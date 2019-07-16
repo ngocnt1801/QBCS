@@ -37,7 +37,7 @@
                             @Html.DisplayFor(course => item.Total)
                         </td>
                         <td>
-                            <a class="btn btn-primary btn-spinner" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
+                            <a class="btn btn-primary spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
                         </td>
                     </tr>
                 }

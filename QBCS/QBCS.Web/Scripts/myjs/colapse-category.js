@@ -232,9 +232,9 @@
             return categoryModel.listQuestionSelected;
         },
         loadQuestion: function (url) {
-            //$('#spinner').css("display", "block");
-            //$('#spinner').css("z-index", "1060");
-            //$('#pleaseWaitDialog').modal();
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $('#pleaseWaitDialog').modal();
             $.ajax({
                 url: url,
                 type: "GET",
@@ -257,11 +257,25 @@
                                     if (data.indexOf("[html]") >= 0) {
                                         data = data.split("&lt;cbr&gt;").join("<br/>");
                                         data = data.split("&lt;br&gt;").join("<br/>");
-                                        data = data.split("&lt;br&gt;").join("<br/>");
+                                        data = data.split("&lt;br/&gt;").join("<br/>");
                                         data = data.split("&lt;p&gt;").join("");
                                         data = data.split("&lt;/p&gt;").join("");
                                         data = data.split("&lt;span&gt;").join("");
                                         data = data.split("&lt;/span&gt;").join("");
+
+                                        
+                                        data = data.split("&lt;b&gt;").join("");
+                                        data = data.split("&lt;/b&gt;").join("");
+                                        data = data.split("&lt;span&gt;").join("");
+                                    
+                                        data = data.split("&lt;u&gt;").join("");
+                                        data = data.split("&lt;/u&gt;").join("");
+                                        data = data.split("&lt;i&gt;").join("");
+                                        data = data.split("&lt;/i&gt;").join("");
+                                        data = data.split("&lt;sub&gt;").join("<sub>");
+                                        data = data.split("&lt;/sub&gt;").join("</sub>");
+                                        data = data.split("&lt;sup&gt;").join("<sup>");
+                                        data = data.split("&lt;/sup&gt;").join("</sup>");
                                         data = data.split("[html]").join("");
                                     }
 
@@ -291,8 +305,8 @@
                             scrollTop: $(".dataTables_wrapper").offset().top
                         }, 'slow');
                     });
-                    //$('#spinner').css("display", "none");
-                    //$('#pleaseWaitDialog').modal('hide');
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
 
                 }
             });

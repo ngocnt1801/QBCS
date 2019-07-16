@@ -177,7 +177,8 @@ function customs_text() {
 
 
 $(document).ready(function () {
-    highlight($("#new"), $("#old"));
+   // highlight($("#new"), $("#old"));
+    $(".picadiff").picadiff();
     customs_text();
     customs_display_p();
     customs_display();

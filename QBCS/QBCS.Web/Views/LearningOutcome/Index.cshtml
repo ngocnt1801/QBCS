@@ -12,7 +12,7 @@
     @*@if (role == 3)
         {*@
     <div class="col mb-2">
-        <a href="@Url.Action("Add", "LearningOutcome")" class="btn btn-primary float-right btn-spinner">Add new Learning Outcome</a>
+        <a href="@Url.Action("Add", "LearningOutcome")" class="btn btn-primary float-right spinner-loading">Add new Learning Outcome</a>
     </div>
     @*}*@
 
@@ -62,8 +62,8 @@
                             @*@if (role == 3)
                                 {*@
                             <td width="20%">
-                                <a href="@Url.Action("Edit", "LearningOutcome", new { id = item.Id })" class="btn btn-primary btn-spinner">Edit</a>
-                                <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = item.Id })" class="btn btn-primary float-right btn-spinner">
+                                <a href="@Url.Action("Edit", "LearningOutcome", new { id = item.Id })" class="btn btn-primary spinner-loading">Edit</a>
+                                <a href="@Url.Action("UpdateDisable", "LearningOutcome", new { itemId = item.Id })" class="btn btn-primary float-right spinner-loading">
                                     Disable
                                 </a>
                             </td>

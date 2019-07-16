@@ -34,7 +34,7 @@
                 <p>Minimum grade of Excellent Student : @Model.ExcellentGradeCalculate / 100</p>
             </td>
             <td>
-                <a href="@Url.Action("ViewGeneratedExamination", "Examination", new { examGroup = Model.GroupExam })" class="btn btn-primary btn-spinner" role="button">Review Examination</a>
+                <a href="@Url.Action("ViewGeneratedExamination", "Examination", new { examGroup = Model.GroupExam })" class="btn btn-primary spinner-loading" role="button">Review Examination</a>
             </td>
         </tr>
     </table>
@@ -78,7 +78,7 @@ else
                 <p>Minimum grade of Excellent Student : @Model.ExcellentGradeCalculate / 100</p>
             </td>
             <td>
-                <a href="@Url.Action("GetAllExamination", "Examination")" class="btn btn-primary btn-spinner" role="button">Cancel</a>
+                <a href="@Url.Action("GetAllExamination", "Examination")" class="btn btn-primary spinner-loading" role="button">Cancel</a>
             </td>
         </tr>
     </table>
