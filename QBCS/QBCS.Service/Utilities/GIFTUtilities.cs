@@ -357,14 +357,14 @@ namespace QBCS.Service.Utilities
                     if (right != null)
                     {
                         optionModel = new OptionTemp();
-                        optionModel.OptionContent = right;
+                        optionModel.OptionContent = "[html]" +right;
                         optionModel.IsCorrect = true;
                         options.Add(optionModel);
                     }
                     if (wrong != null)
                     {
                         optionModel = new OptionTemp();
-                        optionModel.OptionContent = wrong;
+                        optionModel.OptionContent = "[html]" + wrong;
                         optionModel.IsCorrect = false;
                         options.Add(optionModel);
                     }

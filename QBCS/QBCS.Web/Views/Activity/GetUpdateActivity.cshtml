@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
-@Styles.Render("~/bundle/content/diff")
-<h2>Activities Detail</h2>
 
+
+@Styles.Render("~/bundle/content/diff")
 
 <div class="card shadow mb-4">
     <a href="#collapseUpdate" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h2>Update Question</h2>
+        <h4>Update Question Activity</h4>
     </a>
 
     <div class="card-body collapse show" id="collapseUpdate">
@@ -27,84 +27,98 @@
                 <p class="text-custom"> Question Code: @item.QuestionNew.QuestionCode</p>
 
 
-                <div class="table-responsive text-custom picadiff" id="customs-display-full">
+                <div class="table-responsive text-custom" id="customs-display-full">
                     <table class="table table-bordered table-hover text-custom question-custom">
                         <thead>
                             <tr>
                                 <th>New Question</th>
                                 <th>Old Question</th>
+                                <th>Diff</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="picadiff-content">
+                            <tr>
                                 <td>
-                                    <div class="left">
-                                        <div>Category: @item.QuestionNew.Category</div><br />
-                                        <div>LOC: @item.QuestionNew.LearningOutcomeName</div><br />
-                                        <div>Level: @item.QuestionNew.LevelName</div><br />
+                                   
+                                        Category: @item.QuestionNew.Category<br />
+
+                                        LOC: @item.QuestionNew.LearningOutcomeName<br />
+
+                                        Level: @item.QuestionNew.LevelName<br />
+
                                         Question:
                                         @if (item.QuestionNew.Image != null)
                                         {
-                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                    <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
                                         } <br />
-                                        <p id="new">@item.QuestionNew.QuestionContent</p>
+
+                                    <p id="new">@item.QuestionNew.QuestionContent</p>
                                         Answer:
                                         @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
                                         {
                                             if (item.QuestionNew.Options[i].IsCorrect == true)
                                             {
-                                                <div class="container-fluid text-right-answer">
+                                    <div class="container-fluid text-right-answer">
                                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
                                                 </div>
                                             }
                                             else
                                             {
-                                                <div class="container-fluid">
+                                    <div class="container-fluid">
                                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
                                                 </div>
                                             }
 
-                                            <br />
+                                    <br />
+
                                         }
-                                    </div>
+                               
 
                                 </td>
                                 <td>
-                                    <div class="right">
-                                        <div>Category: @item.QuestionOld.Category</div><br />
-                                        <div>LOC: @item.QuestionOld.LearningOutcomeName</div><br />
-                                        <div>Level: @item.QuestionOld.LevelName</div><br />
+                                   
+                                        Category: @item.QuestionOld.Category<br />
+
+                                        LOC: @item.QuestionOld.LearningOutcomeName<br />
+
+                                        Level: @item.QuestionOld.LevelName<br />
+
                                         Question:
                                         @if (item.QuestionOld.Image != null)
                                         {
-                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
+
                                         } <br />
-                                        <p id="old">@item.QuestionOld.QuestionContent</p>
+
+                                    <p id="old">@item.QuestionOld.QuestionContent</p>
                                         Answer:
                                         @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                         {
                                             if (item.QuestionOld.Options[i].IsCorrect == true)
                                             {
-                                                <div class="container-fluid text-right-answer">
+                                    <div class="container-fluid text-right-answer">
                                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
                                                 </div>
                                             }
                                             else
                                             {
-                                                <div class="container-fluid">
+                                    <div class="container-fluid">
                                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
                                                 </div>
                                             }
 
-                                            <br />
+                                    <br />
+
                                         }
-                                    </div>
+                                    
 
                                 </td>
+                                
                             </tr>
 
                         </tbody>
                     </table>
+                    
                 </div>
             }
             else
@@ -116,4 +130,6 @@
         }
     </div>
 </div>
-@Scripts.Render("~/bundle/scripts/diff")
+@Scripts.Render("~/bundle/scripts/processtext")
+@*@Scripts.Render("~/bundle/scripts/diff")*@
+

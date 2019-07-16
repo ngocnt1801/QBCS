@@ -15,6 +15,7 @@
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {
       if ($(window).width() < 768) { 
+          $(".sidebar-brand-icon").width('154%'); //Custom by Nhi
       $('.sidebar .collapse').collapse('hide');
     };
   });

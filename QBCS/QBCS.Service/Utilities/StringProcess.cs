@@ -87,6 +87,8 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 result = RemoveTag(source, @"<br>", @"\n");
+                result = RemoveTag(source, @"<br/>", @"\n");
+                result = RemoveTag(source, @"<br>", @"\n");
                 result = RemoveTag(result, @"</p>", @"</p>\n");
                 
             }
@@ -108,7 +110,7 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
                 result = RemoveTag(result, @"\n", @"<cbr>");
-                //result = RemoveTag(result, @"<br>", @"<cbr>");
+                result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
                // result = RemoveTag(result, @"#", "");
                 
@@ -133,7 +135,7 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
                 result = RemoveTag(result, @"\n", @"<cbr>");
-                //result = RemoveTag(result, @"<br>", @"<cbr>");
+                result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");          
                 //result = RemoveTag(result, @"#", "");
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
