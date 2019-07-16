@@ -375,18 +375,21 @@ namespace QBCS.Web.Controllers
                                 string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                                 writer.WriteLine(questionComment);
                                 string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.FormatStringExportGIFT(question.QuestionContent).Trim()) + "{";
-                                writer.WriteLine(questionTitle);
+                                writer.Write(questionTitle);
+                                writer.WriteLine();
                                 foreach (var option in question.Options)
                                 {
                                     if (option.IsCorrect == true)
                                     {
                                         string optionString = String.Format(OPTION_TRUE, StringUtilities.FormatStringExportGIFT(option.OptionContent).Trim());
-                                        writer.WriteLine(optionString);
+                                        writer.Write(optionString);
+                                        writer.WriteLine();
                                     }
                                     else
                                     {
                                         string optionString = String.Format(OPTION_FALSE, StringUtilities.FormatStringExportGIFT(option.OptionContent).Trim());
-                                        writer.WriteLine(optionString);
+                                        writer.Write(optionString);
+                                        writer.WriteLine();
                                     }
                                 }
                                 writer.WriteLine("}");
@@ -1033,18 +1036,21 @@ namespace QBCS.Web.Controllers
                         string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                         writer.WriteLine(questionComment);
                         string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.FormatStringExportGIFT(question.QuestionContent).Trim()) + "{";
-                        writer.WriteLine(questionTitle);
+                        writer.Write(questionTitle);
+                        writer.WriteLine();
                         foreach (var option in question.Options)
                         {
                             if (option.IsCorrect == true)
                             {
                                 string optionString = String.Format(OPTION_TRUE, StringUtilities.FormatStringExportGIFT(option.OptionContent).Trim());
-                                writer.WriteLine(optionString);
+                                writer.Write(optionString);
+                                writer.WriteLine();
                             }
                             else
                             {
                                 string optionString = String.Format(OPTION_FALSE, StringUtilities.FormatStringExportGIFT(option.OptionContent).Trim());
-                                writer.WriteLine(optionString);
+                                writer.Write(optionString);
+                                writer.WriteLine();
                             }
                         }
                         writer.WriteLine("}");

@@ -105,6 +105,9 @@ namespace QBCS.Service.Utilities
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
+                result = RemoveTag(result, "[moodle]", "");
+                result = RemoveTag(result, "[markdown]", "");
+                result = RemoveTag(result, "[plain]", "");
                 result = RemoveTag(result, @"\}", @"}");
                 result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
@@ -131,6 +134,9 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(source, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
                 result = RemoveTag(result, @"\}", @"}");
+                result = RemoveTag(result, "[moodle]", "");
+                result = RemoveTag(result, "[markdown]", "");
+                result = RemoveTag(result, "[plain]", "");
                 result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
