@@ -451,16 +451,29 @@
                     }
                 });
 
+                $('#dataTable').on('draw.dt', function () {
+                    if (categoryModel.isMoveQuestion) {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).removeClass("hidden");
+                        });
+                    } else {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).addClass("hidden");
+                        });
+                    }
+                    categoryView.setOnClickCkb();
+                });
+
                 dataTable.on('page.dt', function () {
                     $('html, body').animate({
                         scrollTop: $(".dataTables_wrapper").offset().top
                     }, 'slow');
                 });
-                
+
 
                 categoryView.setOnClickCkb();
                 categoryView.setOnClickDisableBtn();
-                
+
                 setTimeout(function () {
                     $('#spinner').css("display", "none");
                     $('#pleaseWaitDialog').modal('hide');
