@@ -16,6 +16,7 @@ namespace QBCS.Service.Utilities
                 return null;
 
             string result = textContent;
+            result = StringProcess.RemoveTag(result, @"[html]", "");
             result = StringProcess.RemoveTag(result, @"=", @"\=");
             result = StringProcess.RemoveTag(result, @"{", @"\{");
             result = StringProcess.RemoveTag(result, @"}", @"\}");
@@ -23,7 +24,10 @@ namespace QBCS.Service.Utilities
             result = StringProcess.RemoveTag(result, @"~", @"\~");
             result = StringProcess.RemoveTag(result, @":", @"\:");                        
             result = EncodeHTML(result);
-            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<br/>");
+            result = "<p>" + result;
+            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<p/><p>");
+            result = result + "<p/>";
+            result = "[html]" + result;
             return result;
         }
         public static string FormatStringExportXML(string textContent)
@@ -35,7 +39,9 @@ namespace QBCS.Service.Utilities
             string result = textContent;
             result = StringProcess.RemoveTag(result, @"[html]", "");
             result = EncodeHTML(result);
-            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<br/>");
+            result = "<p>" + result;
+            result = StringProcess.RemoveTag(result, @"&lt;cbr&gt;", @"<p/><p>");
+            result = result + "<p/>";
             return result;
         }
         public static string EncodeHTML(string source)
