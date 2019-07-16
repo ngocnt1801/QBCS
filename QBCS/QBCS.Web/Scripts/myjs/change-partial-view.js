@@ -137,6 +137,9 @@ function clickSection() {
                             var code = 'Question Code: ' + row.Code + '</p>';
                             var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
                             questionObj['QuestionContent'] = row.QuestionContent;
+                            var editButton = '<a href="" class="btn btn-primary float-md-right ml-1">Edit</a>';
+                            var acceptButton = '<button class="btn btn-success float-md-right ml-1 reload-partial">Accept</button>';
+                            var deleteButton = '<button class="btn btn-danger float-md-right reload-partial">Delete</button>';
                             var image = row.Image;
                             if (image != null && image != "") {
                                 image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
@@ -158,6 +161,7 @@ function clickSection() {
                                 result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
                             }
                             countTable++;
+                            result = result + editButton + acceptButton + deleteButton;
                             return result;
                         }
                     }
@@ -169,7 +173,14 @@ function clickSection() {
                             var questionObj = {};
                             var category = '<p> </p>';
                             var code = ' <p class="text-custom">' + data.CourseName + data.Code + '</p>';
+                            var status = "";
+                            //if (!data.IsBank) {
+                            status = '<span class="badge ml-2">' + data.Status + '</span>'
+                            //}
                             var questionContent = '<p id="dcontent_' + countDuplicate + '"></p>';
+                            var editButton = '<a href="" class="btn btn-primary float-md-right ml-1">Edit</a>';
+                            var acceptButton = '<button class="btn btn-success float-md-right ml-1 reload-partial">Accept</button>';
+                            var deleteButton = '<button class="btn btn-danger float-md-right reload-partial">Delete</button>';
                             questionObj['QuestionContent'] = row.QuestionContent;
                             var image = data.Image;
                             if (image != null && image != "") {
@@ -187,11 +198,12 @@ function clickSection() {
                             }
                             questionObj["Options"] = options;
                             duplicate.push(questionObj);
-                            var result = category + code + questionContent + image;
+                            var result = status + category + code + questionContent + image;
                             for (i = 0; i < options.length; i++) {
                                 result = result + '<div id="docontent_' + countDuplicate + '_' + i + '" class="container-fluid"></div>';
                             }
                             countDuplicate++;
+                            result = result + editButton + acceptButton + deleteButton;
                             return result;
                         }
                     }
@@ -952,6 +964,9 @@ function loadFirstTable() {
                         var code = 'Question Code: ' + row.Code + '</p>';
                         var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
                         questionObj['QuestionContent'] = row.QuestionContent;
+                        var editButton = '<a href="" class="btn btn-primary float-md-right ml-1">Edit</a>';
+                        var acceptButton = '<button class="btn btn-success float-md-right ml-1 reload-partial">Accept</button>';
+                        var deleteButton = '<button class="btn btn-danger float-md-right reload-partial">Delete</button>';
                         var image = row.Image;
                         if (image != null && image != "") {
                             image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
@@ -973,6 +988,7 @@ function loadFirstTable() {
                             result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
                         }
                         countTable++;
+                        result = result + editButton + acceptButton + deleteButton;
                         return result;
                     }
                 }
@@ -982,10 +998,17 @@ function loadFirstTable() {
                 render: function (data, type, row) {
                     if (data != null) {
                         var questionObj = {};
+                        var status = "";
+                        //if (!data.IsBank) {
+                            status = '<span class="badge ml-2">' + data.Status + '</span>'
+                        //}
                         var category = '<p> </p>';
                         var code = ' <p class="text-custom">' + data.CourseName + data.Code + '</p>';
                         var questionContent = '<p id="dcontent_' + countDuplicate + '"></p>';
                         questionObj['QuestionContent'] = row.QuestionContent;
+                        var editButton = '<a href="" class="btn btn-primary float-md-right ml-1">Edit</a>';
+                        var acceptButton = '<button class="btn btn-success float-md-right ml-1 reload-partial">Accept</button>';
+                        var deleteButton = '<button class="btn btn-danger float-md-right reload-partial">Delete</button>';
                         var image = data.Image;
                         if (image != null && image != "") {
                             image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
@@ -1002,11 +1025,12 @@ function loadFirstTable() {
                         }
                         questionObj["Options"] = options;
                         duplicate.push(questionObj);
-                        var result = category + code + questionContent + image;
+                        var result = status + category + code + questionContent + image;
                         for (i = 0; i < options.length; i++) {
                             result = result + '<div id="docontent_' + countDuplicate + '_' + i + '" class="container-fluid"></div>';
                         }
                         countDuplicate++;
+                        result = result + editButton + acceptButton + deleteButton;
                         return result;
                     }
                 }
