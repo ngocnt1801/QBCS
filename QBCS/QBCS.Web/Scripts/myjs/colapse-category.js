@@ -339,8 +339,6 @@
                             data: "QuestionViewModel",
                             render: function (data, type, row, meta) {
                                 var questionObj = {};
-                                var optionList = [];
-                                var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
                                 var code = '<p>Question Code: ' + row.Code + '</p>';
                                 var questionContent = '<p id="qcontent_' + countTable + '"></p>';
                                 questionObj['QuestionContent'] = row.QuestionContent;

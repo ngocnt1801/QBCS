@@ -13,5 +13,8 @@ namespace QBCS.Service.ViewModel
         public int editableNumber { get; set; }
         public int successNumber { get; set; }
         public int invalidNumber { get; set; }
+        public int deleteNumber { get; set; }
+        public int NotInsertNumber { get; set; }
+        public int RecheckNumber { get; set; }
     }
 }

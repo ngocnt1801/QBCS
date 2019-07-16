@@ -1100,17 +1100,17 @@ namespace QBCS.Service.Implement
             }).ToList();
             switch (type)
             {
-                case "editable1":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && q.IsInImportFile).ToList();
-                    break;
-                case "editable2":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable && !q.IsInImportFile).ToList();
+                case "editable":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable).ToList();
                     break;
                 case "success":
                     questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
                     break;
                 case "invalid":
                     questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
+                    break;
+                case "delete":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Delete).ToList();
                     break;
             }
             return questionTemp;

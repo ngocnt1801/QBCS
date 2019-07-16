@@ -70,7 +70,10 @@ namespace QBCS.Web.Controllers
                     totalNumber = result.Questions.Count(),
                     editableNumber = result.Questions.Where(q => q.Status == StatusEnum.Editable).Count(),
                     successNumber = result.Questions.Where(q => q.Status == StatusEnum.Success).Count(),
-                    invalidNumber = result.Questions.Where(q => q.Status == StatusEnum.Invalid).Count()
+                    invalidNumber = result.Questions.Where(q => q.Status == StatusEnum.Invalid).Count(),
+                    deleteNumber = result.Questions.Where(q => q.Status == StatusEnum.Delete).Count(),
+                    NotInsertNumber = result.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Delete || q.Status == StatusEnum.Invalid).Count(),
+                    RecheckNumber = result.Questions.Where(q => q.Status == StatusEnum.NotCheck).Count()
                 });
             }
             TempData["NewestCount"] = result.NumberOfSuccess;
