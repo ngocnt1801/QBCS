@@ -478,7 +478,15 @@ namespace QBCS.Service.Implement
 
                             //    question.QuestionContent = questionContent;
                             //}
-                            question.QuestionContent = "[html]" + questionContent;
+                            if (questionContent.Contains("[html]"))
+                            {
+                                question.QuestionContent = questionContent;
+                            }
+                            else
+                            {
+                                question.QuestionContent = "[html]" + questionContent;
+                            }
+                           
                             question.Code = questionXml.question[i].name.text.ToString();
                             if (category != null)
                             {
@@ -519,7 +527,7 @@ namespace QBCS.Service.Implement
                                         //    option.OptionContent = rightAnswer;
                                         //}
                                         //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
-                                        option.OptionContent = rightAnswer;
+                                        option.OptionContent = "[html]" + rightAnswer;
 
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
@@ -550,7 +558,7 @@ namespace QBCS.Service.Implement
                                         //{
                                         //    option.OptionContent = wrongAnswer;
                                         //}
-                                        option.OptionContent = wrongAnswer;
+                                        option.OptionContent = "[html]" + wrongAnswer;
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
                                         tempParser = "";

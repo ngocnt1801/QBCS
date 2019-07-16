@@ -339,7 +339,15 @@ namespace QBCS.Service.Utilities
                         else
                         {
                             question = stringProcess.UpperCaseKeyWord(question);
-                            quesModel.QuestionContent = "[html]" + question;
+                            if (question.Contains("[html]"))
+                            {
+                                quesModel.QuestionContent = question;
+                            }
+                            else
+                            {
+                                quesModel.QuestionContent = "[html]" + question;
+                            }
+                           
 
                         }
                         question = null;
@@ -349,14 +357,14 @@ namespace QBCS.Service.Utilities
                     if (right != null)
                     {
                         optionModel = new OptionTemp();
-                        optionModel.OptionContent = right;
+                        optionModel.OptionContent = "[html]" +right;
                         optionModel.IsCorrect = true;
                         options.Add(optionModel);
                     }
                     if (wrong != null)
                     {
                         optionModel = new OptionTemp();
-                        optionModel.OptionContent = wrong;
+                        optionModel.OptionContent = "[html]" + wrong;
                         optionModel.IsCorrect = false;
                         options.Add(optionModel);
                     }
