@@ -88,11 +88,20 @@
                                         if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
                                         {
                                             <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
-                                                    }
-                                                    //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
-                                                    if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question"))
-                                                    {
+                                        }
+                                        //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question"))
+                                        {
                                             <a href="@Url.Action("GetMoveActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                        }
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                        {
+                                            <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                        }
+                                        //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
+                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Rule"))
+                                        {
+                                            <a href="@Url.Action("Index", "Rule")" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
                                         }
                                     }
                                     else

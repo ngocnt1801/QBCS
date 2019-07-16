@@ -66,7 +66,7 @@ namespace QBCS.Web.Controllers
         
         public JsonResult UpdateAllRule(List<RuleAjaxHandleViewModel> rules)
         {
-            var result = ruleService.UpdateRule(rules);
+           
             string newValue = "";
             string oldValue = "";
             List<RuleViewModel> listRule = ruleService.getAllRule();
@@ -78,8 +78,8 @@ namespace QBCS.Web.Controllers
 
             oldValue = JsonConvert.SerializeObject(oldRules);
             newValue = JsonConvert.SerializeObject(rules);
-            
-           // logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
+            var result = ruleService.UpdateRule(rules);
+            // logService.LogManually("Update", "Rule", controller: "Rule", method: "UpdateAllRule", fullname: User.Get(u => u.FullName), usercode: User.Get(u => u.Code));
             logService.LogFullManually("Update", "Rule", controller: "Rule",
                         method: "UpdateAllRule", fullname: User.Get(u => u.FullName), 
                         usercode: User.Get(u => u.Code),
