@@ -80,6 +80,22 @@ namespace QBCS.Service.Utilities
             }
             return result;
         }
+        public string RemoveHtmlBrTagForUpdateQuestion(string source)
+        {
+            string result = null;
+
+            if (source != null)
+            {
+                result = RemoveTag(source, "\r\n", "<cbr>");
+                result = RemoveTag(result, "\n", "<cbr>");
+                result = RemoveTag(result, "\t\n", "");
+                result = RemoveTag(result, "\t", "");
+                result = RemoveTag(result, "\r", "");
+
+            }
+
+            return result;
+        }
         public string RemoveHtmlBrTag(string source)
         {
             string result = null;

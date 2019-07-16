@@ -184,9 +184,11 @@ namespace QBCS.Service.Implement
             string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
+            StringProcess stringProcess = new StringProcess();
             if (question.QuestionContent != null)
             {
-                quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
+                quesTemp = stringProcess.RemoveHtmlBrTagForUpdateQuestion(question.QuestionContent);
+                quesTemp = WebUtility.HtmlDecode(quesTemp);
             }
             entity.QuestionContent = quesTemp;
             entity.Type = (int) TypeEnum.Update;
@@ -196,7 +198,7 @@ namespace QBCS.Service.Implement
 
             entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                OptionContent = WebUtility.HtmlDecode(stringProcess.RemoveHtmlBrTagForUpdateQuestion(o.OptionContent)),
                 IsCorrect = o.IsCorrect,
                 UpdateOptionId = o.Id
             }).ToList();

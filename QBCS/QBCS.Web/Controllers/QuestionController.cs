@@ -123,16 +123,20 @@ namespace QBCS.Web.Controllers
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
-            if (ModelState.IsValid && !ques.QuestionContent.Trim().Equals("[html]"))
+            if (!ques.QuestionContent.Trim().Equals("[html]"))
             {
                 bool result = questionService.UpdateQuestion(ques);
                 // bool optionResult = optionService.UpdateOptions(ques.Options);
                 ViewBag.Modal = "#success-modal";
                 return RedirectToAction("CourseDetail", "Course", new { courseId = ques.CourseId });
             }
-
-            else
+            if (ques.QuestionContent.Trim().Equals("[html]"))
             {
+                ModelState.AddModelError(string.Empty, "Please enter Question Content");
+            }
+
+            
+          
                 foreach (var item in ques.Options)
                 {
                     if (item.OptionContent.Trim().Equals("[html]"))
@@ -152,7 +156,7 @@ namespace QBCS.Web.Controllers
                     LearningOutcomes = learningOutcomes
                 };
 
-            }
+            
             return View("EditQuestion", questionDetailViewModel);
             
         }
