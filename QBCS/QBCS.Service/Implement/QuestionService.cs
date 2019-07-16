@@ -825,11 +825,13 @@ namespace QBCS.Service.Implement
                 }
 
             }
-            //catch (Exception ex)
-            //{
-            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-            //    //Console.WriteLine(ex.Message);
-            //}
+            catch (Exception ex)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                check = false;
+                
+                //Console.WriteLine(ex.Message);
+            }
             finally
             {
                 reader.Close();

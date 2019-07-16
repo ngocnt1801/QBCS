@@ -188,12 +188,22 @@ namespace QBCS.Web.Controllers
                     if (ownerUser != null)
                     {
                         check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
+                        if (check == true)
+                        {
+                            ViewBag.Modal = "#success-modal";
+                            TempData["CourseId"] = courseId;
+                            TempData["OwnereName"] = ownerUser.Fullname;
+                            return Json("OK");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Cannot Import File!";
+                            ViewBag.Status = ToastrEnum.Error;
+                            return Json("Error");
+                        }
 
                         //notify 
-                        ViewBag.Modal = "#success-modal";
-                        TempData["CourseId"] = courseId;
-                        TempData["OwnereName"] = ownerUser.Fullname;
-                        return Json("OK");
+                       
                     }
                     else
                     {
