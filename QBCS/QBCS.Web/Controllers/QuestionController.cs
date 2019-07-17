@@ -179,7 +179,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
-        public JsonResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
         {
             var user = (UserViewModel)Session["user"];
 
@@ -197,13 +197,13 @@ namespace QBCS.Web.Controllers
                             ViewBag.Modal = "#success-modal";
                             TempData["CourseId"] = courseId;
                             TempData["OwnereName"] = ownerUser.Fullname;
-                            return Json("OK");
+                            //return Json("OK");
                         }
                         else
                         {
                             ViewBag.Message = "Cannot Import File!";
                             ViewBag.Status = ToastrEnum.Error;
-                            return Json("Error");
+                            //return Json("Error");
                         }
 
                         //notify 
@@ -213,7 +213,7 @@ namespace QBCS.Web.Controllers
                     {
                         ViewBag.Message = "Owner lecturer does not exists";
                         ViewBag.Status = ToastrEnum.Error;
-                        return Json("Error");
+                        //return Json("Error");
                     }
                 }
                 else
@@ -223,8 +223,8 @@ namespace QBCS.Web.Controllers
 
             }
 
-            return Json("OK");
-            //return RedirectToAction("Index", "Home");
+            //return Json("OK");
+            return RedirectToAction("Index", "Home");
         }
 
         //lecturer

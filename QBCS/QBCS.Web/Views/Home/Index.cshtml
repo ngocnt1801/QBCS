@@ -33,17 +33,17 @@
                             <a href="" class="btn btn-primary float-left">Import Question</a>
                         </div>*@
 
-                    @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
+                    @*@using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
+                        {
+                            OnSuccess = "turnon_modal",
+                            HttpMethod = "POST",
+
+
+                        }, new { enctype = "multipart/form-data" }))
+                        {*@
+
+                    @using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
-                        OnSuccess = "turnon_modal",
-                        HttpMethod = "POST",
-
-
-                    }, new { enctype = "multipart/form-data" }))
-                    {
-
-                        @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
