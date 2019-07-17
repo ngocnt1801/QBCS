@@ -223,8 +223,8 @@ namespace QBCS.Web.Controllers
 
             }
 
-            //return Json("OK");
-            return RedirectToAction("Index", "Home");
+            return Json("OK");
+            //return RedirectToAction("Index", "Home");
         }
 
         //lecturer

@@ -1,5 +1,6 @@
 ﻿
 using AuthLib.Module;
+using DuplicateQuestion.Entity;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
@@ -777,7 +778,7 @@ namespace QBCS.Web.Controllers
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, zipFileName + ".zip");
         }
 
-        public FileResult ExportBank(int[] loId, string extension, bool getCategory)
+        public FileResult ExportBank(int[] loId, string extension, bool? getCategory = false)
         {
             var result = new List<QuestionViewModel>();
             foreach (var id in loId)
@@ -800,6 +801,10 @@ namespace QBCS.Web.Controllers
                     xmlWriter.WriteStartDocument();
                     xmlWriter.WriteStartElement("quiz");
 
+                    //CATEGORY
+
+                    string switchCategory = "";
+
                     for (int i = 0; i < result.Count; i++)
                     {
                         QuestionInExamViewModel question = new QuestionInExamViewModel
@@ -809,9 +814,33 @@ namespace QBCS.Web.Controllers
                             QuestionContent = result[i].QuestionContent,
                             Image = result[i].Image,
                             Options = result[i].Options,
+                            Category = new CategoryViewModel
+                            {
+                                Id = result[i].CategoryId,
+                                Name = result[i].Category
+                            },
+                            LearningOutcomeName = result[i].LearningOutcomeName,
+                            Level = new LevelViewModel
+                            {
+                                Id = result[i].LevelId,
+                                Name = ((LevelEnum)result[i].LevelId).ToString()
+                            }
 
                         };
 
+                        #region category
+                        if ((i== 0 || (question.LevelId != result[i - 1].LevelId || !question.Category.Name.Equals(result[i - 1].Category))) && (getCategory.Value))
+                        {
+                            xmlWriter.WriteComment(XML_COMMENT_CATEGORY);
+                            xmlWriter.WriteStartElement(XML_QUESTION_TAG);
+                            xmlWriter.WriteAttributeString(XML_TYPE_ATTR_NAME, XML_CATEGORY_ATTR_VALUE);
+                            xmlWriter.WriteStartElement(XML_CATEGORY_TAG);
+                            switchCategory = String.Format(XML_SWITCH_CATEGORY, question.Category.Name, question.LearningOutcomeName, question.Level.Name);
+                            xmlWriter.WriteElementString(XML_TEXT_TAG, switchCategory);
+                            xmlWriter.WriteEndElement();
+                            xmlWriter.WriteEndElement();
+                        }
+                        #endregion
 
                         string questionComment = String.Format(XML_COMMENT_QUESTION, question.Id);
                         xmlWriter.WriteComment(questionComment);
@@ -995,18 +1024,9 @@ namespace QBCS.Web.Controllers
                     StreamWriter writer = new StreamWriter(stream);
 
                     //CATEGORY
+                    string switchCategoryLine = "";
+                    string categoryLine = "";
 
-                    //string switchCategoryLine = "";
-                    //string categoryLine = "";
-                    //if (getCategory)
-                    //{
-                    //    switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
-                    //    writer.WriteLine(switchCategoryLine);
-                    //    categoryLine = String.Format(CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, part.Question.First().Level.Name);
-                    //    writer.WriteLine(categoryLine);
-                    //    writer.WriteLine();
-                    //    writer.WriteLine();
-                    //}
                     for (int i = 0; i < result.Count; i++)
                     {
                         QuestionInExamViewModel question = new QuestionInExamViewModel
@@ -1016,23 +1036,33 @@ namespace QBCS.Web.Controllers
                             QuestionContent = result[i].QuestionContent,
                             Image = result[i].Image,
                             Options = result[i].Options,
+                            Category = new CategoryViewModel
+                            {
+                                Id = result[i].CategoryId,
+                                Name = result[i].Category
+                            },
+                            LearningOutcomeName =result[i].LearningOutcomeName,
+                            Level = new LevelViewModel
+                            {
+                                Id = result[i].LevelId,
+                                Name = ((LevelEnum)result[i].LevelId).ToString()
+                            }
 
                         };
 
                         //CATEGORY
 
-                        //if (i != 0)
-                        //{
-                        //    if ((question.LevelId != part.Question[i - 1].LevelId || !question.Category.Name.Equals(part.Question[i - 1].Category.Name)) && (getCategory))
-                        //    {
-                        //        switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, part.Question.First().Category.Name, part.LearningOutcome.Name, question.Level.Name);
-                        //        writer.WriteLine(switchCategoryLine);
-                        //        categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, part.LearningOutcome.Name, question.Level.Name);
-                        //        writer.WriteLine(categoryLine);
-                        //        writer.WriteLine();
-                        //        writer.WriteLine();
-                        //    }
-                        //}
+
+                        if ((i == 0 || (question.LevelId != result[i - 1].LevelId || !question.Category.Name.Equals(result[i - 1].Category))) && (getCategory.Value))
+                        {
+                            switchCategoryLine = String.Format(COMMENT_SWITCH_CATEGORY_LINE, question.Category.Name, question.LearningOutcomeName, question.Level.Name);
+                            writer.WriteLine(switchCategoryLine);
+                            categoryLine = String.Format(CATEGORY_LINE, question.Category.Name, question.LearningOutcomeName, question.Level.Name);
+                            writer.WriteLine(categoryLine);
+                            writer.WriteLine();
+                            writer.WriteLine();
+                        }
+
                         string questionComment = String.Format(QUESTION_COMMENT, question.Id, question.QuestionCode);
                         writer.WriteLine(questionComment);
                         string questionTitle = String.Format(QUESTION_TITLE, question.QuestionCode, StringUtilities.FormatStringExportGIFT(question.QuestionContent).Trim()) + "{";
