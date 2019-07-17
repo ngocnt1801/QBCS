@@ -257,6 +257,7 @@
     <Content Include="Content\checkbox.min.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.css" />
     <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Scripts\myjs\diff\diff-text.js" />
     <Content Include="Scripts\myjs\diff\compare.js" />
     <Content Include="Content\diff\jquery.picadiff.css" />
     <Content Include="Content\error\font-awesome.min.css" />
