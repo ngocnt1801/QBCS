@@ -51,6 +51,7 @@ namespace QBCS.Service.Utilities
                     bool isInLine = false;
                     bool isStart = false;
                     bool isEnd = false;
+                    bool keeping = false;
 
                     //bool isComma = false;
                     bool isMultipleChoice = false;
@@ -131,9 +132,9 @@ namespace QBCS.Service.Utilities
                             //}
                             if (let == ':' && !isStartQuestion)
                             {
-                                countCode++;
+                                countCode++;                              
                                 isStart = true;
-                                isInLine = true;
+                                isInLine = true;                              
                                 continue;
                             }
                             if (inLine == 1)
@@ -225,6 +226,11 @@ namespace QBCS.Service.Utilities
                                 if (inLine == 3)
                                 {
                                     question += '{';
+                                    if (countCode >= 5)
+                                    {
+                                        question += ':';
+                                        countCode = 4;
+                                    }
                                     question += let;
                                     inLine = 0;
                                     isStart = false;
@@ -232,6 +238,11 @@ namespace QBCS.Service.Utilities
                                 }
                                 if (inLine == 0)
                                 {
+                                    if (countCode >= 5)
+                                    {
+                                        question += ':';
+                                        countCode = 4;
+                                    }
                                     question += let;
                                     inLine = 0;
                                     isStart = false;
