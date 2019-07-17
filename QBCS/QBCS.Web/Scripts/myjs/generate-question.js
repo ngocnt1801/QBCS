@@ -6,20 +6,6 @@
         .attr('type', 'submit')
         .attr('id', 'btnFinish')
         .hide();
-    //.on('click', function () {
-
-    //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
-    //    $.ajax({
-    //        type: "GET",
-    //        url: link,
-    //        success: function (data) {
-    //            window.location.href = data.redirecturl;
-    //        },
-    //        error: function (httpRequest, textStatus, errorThrown) {
-    //            alert("Error: " + textStatus + " " + errorThrown + " " + httpRequest);
-    //        }
-    //    });
-    //});
     var btnCancel = $('<button></button>').text('Cancel')
         .addClass('btn btn-info')
         .on('click', function () { $('#smartwizard').smartWizard("reset"); });
@@ -93,8 +79,13 @@
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $("#fileExtension").find(":selected").text();
         window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
-
-    });    
+    });
+    $('#exportAllInReport').on('click', function (e) {
+        e.preventDefault();
+        var examGroup = $("input[name='examGroupExportAll']").val();
+        var fileExtension = $("#fileExtensionExportAll").find(":selected").text();
+        window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
+    });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
         var questionId = $(this).data('question-id');
