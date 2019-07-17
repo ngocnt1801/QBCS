@@ -31,43 +31,12 @@
                     <table class="table table-bordered text-custom question-custom">
                         <thead>
                             <tr>
-                                <th>Old Question</th>
                                 <th>New Question</th>
+                                <th>Old Question</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>
-
-                                    <p id="r-1">Category: @item.QuestionOld.Category</p>
-
-                                    <p id="r-2">LOC: @item.QuestionOld.LearningOutcomeName</p>
-
-                                    <p id="r-3">Level: @item.QuestionOld.LevelName</p>
-
-                                    Question:
-                                    @if (item.QuestionOld.Image != null)
-                                    {
-                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
-                                    } <br />
-                                    <p id="r-4">@item.QuestionOld.QuestionContent</p>
-                                    Answer:
-                                    @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
-                                    {
-                                        if (item.QuestionOld.Options[i].IsCorrect == true)
-                                        {
-                                            <div class="container-fluid text-right-answer">
-                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="container-fluid">
-                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
-                                            </div>
-                                        }
-                                    }
-                                </td>
                                 <td>
 
                                     <p class="compare-field" id="l-1" compare-to="#r-1">Category: @item.QuestionNew.Category</p>
@@ -96,6 +65,37 @@
                                         {
                                             <div class="container-fluid">
                                                 <p class="compare-field" id="l-@(5+i)" compare-to="#r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)</p>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                                <td>
+
+                                    <p id="r-1">Category: @item.QuestionOld.Category</p>
+
+                                    <p id="r-2">LOC: @item.QuestionOld.LearningOutcomeName</p>
+
+                                    <p id="r-3">Level: @item.QuestionOld.LevelName</p>
+
+                                    Question:
+                                    @if (item.QuestionOld.Image != null)
+                                    {
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    } <br />
+                                    <p id="r-4">@item.QuestionOld.QuestionContent</p>
+                                    Answer:
+                                    @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
+                                    {
+                                        if (item.QuestionOld.Options[i].IsCorrect == true)
+                                        {
+                                            <div class="container-fluid text-right-answer">
+                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
                                             </div>
                                         }
                                     }
