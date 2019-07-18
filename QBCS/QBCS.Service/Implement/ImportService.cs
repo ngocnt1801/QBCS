@@ -265,6 +265,8 @@ namespace QBCS.Service.Implement
                     unitOfWork.Repository<OptionTemp>().Delete(option);
                 }
 
+                question.Options = question.Options.Where(o => !String.IsNullOrWhiteSpace(o.OptionContent) && !o.OptionContent.Trim().ToLower().Equals("[html]")).ToList();
+
                 foreach (var option in question.Options)
                 {
                     unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp
