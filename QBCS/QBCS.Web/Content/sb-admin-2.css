@@ -2669,6 +2669,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #858796;
   border-color: #858796;
+  display : none;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active,
