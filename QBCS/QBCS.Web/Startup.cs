@@ -8,10 +8,8 @@ namespace QBCS.Web
 {
     public class Startup
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["QBCSContext"].ConnectionString;
         public void Configuration(IAppBuilder app)
         {
-            System.Data.SqlClient.SqlDependency.Start(connectionString);
             app.MapSignalR();
             app.UseStpmAuthentication(ConfigurationManager.AppSettings);
             app.UseStpmModuleManager(
