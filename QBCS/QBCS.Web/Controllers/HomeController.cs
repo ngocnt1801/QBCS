@@ -47,7 +47,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.SideBar
             , "Staff Home page"
             , "QBCS", protectType: ProtectType.Authorized
-            , ShortName = "Home"
+            , ShortName = "Staff"
             , InternalId = (int)SideBarEnum.Staff)]
         [LogAction(Action = "Navigation", Message = "Get Staff's Navigation Home", Method = "GET")]
         public ActionResult Staff()
@@ -67,7 +67,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.SideBar
             , "Admin Home page"
             , "QBCS", protectType: ProtectType.Authorized
-            , ShortName = "Home"
+            , ShortName = "Admin"
             , InternalId = (int)SideBarEnum.Admin)]
         [LogAction(Action = "Navigation", Message = "Get Admin's Navigation Home", Method = "GET")]
         public ActionResult Admin()
