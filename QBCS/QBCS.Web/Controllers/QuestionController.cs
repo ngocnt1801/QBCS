@@ -245,6 +245,17 @@ namespace QBCS.Web.Controllers
                 {
                     result.Add(q);
                 }
+                else if(q.Options != null)
+                {
+                    foreach(var o in q.Options)
+                    {
+                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
+                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
+                        {
+                            result.Add(q);
+                        }
+                    }
+                }
             }
             var recordFiltered = result.Count();
             if(length != null && length >= 0 )
@@ -295,6 +306,17 @@ namespace QBCS.Web.Controllers
                 if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
                 {
                     result.Add(q);
+                }
+                else if (q.Options != null)
+                {
+                    foreach (var o in q.Options)
+                    {
+                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
+                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
+                        {
+                            result.Add(q);
+                        }
+                    }
                 }
             }
             var recordFiltered = result.Count();
