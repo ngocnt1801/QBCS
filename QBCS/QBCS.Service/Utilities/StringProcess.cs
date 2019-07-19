@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace QBCS.Service.Utilities
@@ -117,6 +118,7 @@ namespace QBCS.Service.Utilities
           
             if (source != null)
             {
+              
                 //result = RemoveTag(source, "[html]", "");
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
@@ -128,12 +130,16 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
+               
                 result = RemoveTag(result, @"\n", @"<cbr>");
+                
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
                // result = RemoveTag(result, @"#", "");
                 
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                
+               
 
             }
 
@@ -145,6 +151,7 @@ namespace QBCS.Service.Utilities
 
             if (source != null)
             {
+                string partern = "(<cbr>){2,}";
                 //result = RemoveTag(source, "[html]", "");
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
@@ -156,12 +163,15 @@ namespace QBCS.Service.Utilities
                 //result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
+                
                 result = RemoveTag(result, @"\n", @"<cbr>");
+               
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
                 // result = RemoveTag(result, @"\#", "#");
                 result = RemoveUnExpectedTagGIFT(result);
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
+                result = Regex.Replace(result, partern, @"<cbr>");
 
             }
 
