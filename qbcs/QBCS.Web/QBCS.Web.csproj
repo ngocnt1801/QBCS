@@ -406,6 +406,8 @@
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\spinner.js" />
     <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\myjs\tableActivity.js" />
+    <Content Include="Scripts\myjs\tableLog.js" />
     <Content Include="Scripts\myjs\text-process.js" />
     <Content Include="Scripts\myjs\textWord\example.css" />
     <Content Include="Scripts\myjs\textWord\textboxio\resources\css\codemirror.css" />

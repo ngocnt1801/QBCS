@@ -201,6 +201,11 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/detailquestion").Include(
                       "~/Content/style-detail-question.css"
                       ));
+
+            //DataTable Log
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tableActivity").Include(
+                "~/Scripts/myjs/tableActivity.js"
+                ));
         }
     }
 }

@@ -2,6 +2,7 @@
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
@@ -32,24 +33,28 @@ namespace QBCS.Web.Controllers
         [LogAction(Action = "Activities", Message = "View All Activities", Method = "GET")]
         public ActionResult Index()
         {
-            List<LogViewModel> logViews = new List<LogViewModel>();
-            var user = (UserViewModel)Session["user"];
-            int userId = user != null ? user.Id : 0;
-            var model = logService.GetAllActivitiesByUserId(userId);
-            TempData["active"] = "Activity";
-            return View(model);
+            //List<LogViewModel> logViews = new List<LogViewModel>();
+            //var user = (UserViewModel)Session["user"];
+            //int userId = user != null ? user.Id : 0;
+            //var model = logService.GetAllActivitiesByUserId(userId);
+            //TempData["active"] = "Activity";
+            //return View(model);
+            ViewBag.isUser = true;
+            return View();
         }
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Activities", InternalId = (int)SideBarEnum.AllActivity)]
-        [LogAction(Action = "Activities", Message = "View All Activities", Method = "GET")]
+        //[Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Activities", InternalId = (int)SideBarEnum.AllActivity)]
+        //[LogAction(Action = "Activities", Message = "View All Activities", Method = "GET")]
         public ActionResult GetAllActivities()
         {
-            List<LogViewModel> logViews = new List<LogViewModel>();
-            var model = logService.GetAllActivities();
-            TempData["active"] = "Activity";
-            return View("Index", model);
+            //List<LogViewModel> logViews = new List<LogViewModel>();
+            //var model = logService.GetAllActivities();
+            //TempData["active"] = "Activity";
+            //return View("Index", model);
+
+            return View("Index");
         }
 
         //Lecturer
@@ -58,18 +63,118 @@ namespace QBCS.Web.Controllers
         [LogAction(Action = "Activities", Message = "View Activity Detail by Id", Method = "GET")]
         public ActionResult GetLogByQuestionID(int targetId, int importId)
         {
-            List<LogViewModel> logViews = new List<LogViewModel>();
-            LogViewModel logModel = new LogViewModel();
-            var user = (UserViewModel)Session["user"];
-            //var model = logService.GetAllActivities();
-           
-            logModel = logService.GetQuestionImportByTargetId(importId);
-            logViews = logService.GetAllActivitiesByTargetId(targetId);
-            logViews.Add(logModel);
-            //logViews = logService.GetAllActivitiesByUserId(user.Id, user);
-            TempData["active"] = "Activity";
-            return View("Index", logViews);
+            //List<LogViewModel> logViews = new List<LogViewModel>();
+            //LogViewModel logModel = new LogViewModel();
+            //var user = (UserViewModel)Session["user"];
+            ////var model = logService.GetAllActivities();
+
+            //logModel = logService.GetQuestionImportByTargetId(importId);
+            //logViews = logService.GetAllActivitiesByTargetId(targetId);
+            //logViews.Add(logModel);
+            ////logViews = logService.GetAllActivitiesByUserId(user.Id, user);
+            //TempData["active"] = "Activity";
+
+            //return View("Index", logViews);
+            ViewBag.targetId = targetId;
+            ViewBag.importId = importId;
+            return View("Index");
         }
+
+        public JsonResult GetActivityDatatable(int? importId, int? targetId, int? userId, int? draw, int? start, int? length)
+        {
+            var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
+            //Get all
+            if (importId == null && targetId == null && userId == null)
+            {
+                var entities = logService.GetAllActivities();
+                TempData["active"] = "Activity";
+                var recordTotal = entities.Count();
+                var result = new List<LogViewModel>();
+
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                foreach (var a in entities)
+                {
+                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
+                    if (user.Contains(search) || a.Fullname.Contains(search))
+                    {
+                        result.Add(a);
+                    }
+                }
+                var recordFiltered = result.Count();
+                if (length != null && length >= 0)
+                {
+                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
+                }
+                else
+                {
+                    result = result.ToList();
+                }
+                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            }
+            //Get Log by QuestionId
+            else if (importId != null && targetId != null)
+            {
+                var entities = logService.GetAllActivitiesByTargetId((int)targetId);
+                LogViewModel logModel = new LogViewModel();
+
+                logModel = logService.GetQuestionImportByTargetId((int)importId);
+                entities.Add(logModel);
+                TempData["active"] = "Activity";
+                var recordTotal = entities.Count();
+                var result = new List<LogViewModel>();
+
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                foreach (var a in entities)
+                {
+                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
+                    if (user.Contains(search) || a.Fullname.Contains(search))
+                    {
+                        result.Add(a);
+                    }
+                }
+                var recordFiltered = result.Count();
+                if (length != null && length >= 0)
+                {
+                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
+                }
+                else
+                {
+                    result = result.ToList();
+                }
+                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            } 
+            //Index/Get Activity by User
+            else if(userId != null)
+            {
+                var entities = logService.GetAllActivitiesByUserId((int)userId);
+                TempData["active"] = "Activity";
+                var recordTotal = entities.Count();
+                var result = new List<LogViewModel>();
+
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                foreach (var a in entities)
+                {
+                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
+                    if (user.Contains(search) || a.Fullname.Contains(search))
+                    {
+                        result.Add(a);
+                    }
+                }
+                var recordFiltered = result.Count();
+                if (length != null && length >= 0)
+                {
+                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
+                }
+                else
+                {
+                    result = result.ToList();
+                }
+                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            }
+
+            return null;
+        }
+
         //Lecturer
         //Staff
         //stpm: feature declare
