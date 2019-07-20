@@ -32,7 +32,7 @@ namespace QBCS.Service.Interface
         QuestionHistoryViewModel GetQuestionHistory(int id);
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
-
+        List<QuestionTempViewModel> GetQuestionTempByImportId(int importId, string type);
 
     }
 }

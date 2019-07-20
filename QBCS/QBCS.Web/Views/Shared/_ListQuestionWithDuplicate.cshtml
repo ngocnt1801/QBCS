@@ -7,34 +7,36 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 }
 
-@if (Model != null)
-{
-    <div class="card shadow mb-4" id="testhere">
+@*@if (Model != null)
+    {*@
+<div class="card shadow mb-4" id="testhere">
 
-        <div class="card-body text-custom">
-            <div class="table-responsive text-custom">
-                <table class="table table-bordered text-custom" id="@ViewBag.tableId" width="100%" cellspacing="0">
-                    @*  id="datatable"  *@
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Question</th>
-                            @if (ViewBag.tableId.Equals("tableEditable"))
-                            {
-                                <th>Duplicated With</th>
-                            }
-                            @if (ViewBag.tableId.Equals("tableInvalid"))
-                            {
-                                <th>Error</th>
-                            }
-                            @if (!ViewBag.tableId.Equals("tableEditable"))
-                            {
-                                <th>Action</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
+    <div class="card-body text-custom">
+        <div class="table-responsive text-custom" id="importTable">
+            <table class="table table-bordered text-custom" id="@ViewData["tableId"]" width="100%" cellspacing="0">
+                @*  id="datatable"  *@
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Question</th>
+                        @if (ViewBag.tableId.Equals("tableEditable"))
+                        {
+                            <th>Duplicated With</th>
+                        }
+                        @if (ViewBag.tableId.Equals("tableInvalid"))
+                        {
+                            <th>Error</th>
+                        }
+                        @if (!ViewBag.tableId.Equals("tableEditable"))
+                        {
+                            <th>Action</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
                         {
                             if (item.IsHide && item.Status == StatusEnum.Editable)
                             {
@@ -97,24 +99,22 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
-                                                <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl})"
+                                                <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl })"
                                                         class="btn btn-success float-md-right ml-1 reload-partial"
                                                         data-id="#@item.Id"
                                                         data-from="tableEditable"
                                                         data-to="tableSuccess"
                                                         data-container="#section-topline-1"
-                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
-                                                        >
+                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable })">
                                                     Accept
                                                 </button>
-                                                <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id, url = Request.RawUrl })"
                                                         class="btn btn-danger float-md-right reload-partial"
                                                         data-id="#@item.Id"
                                                         data-from="tableEditable"
                                                         data-to="tableDelete"
                                                         data-container="#section-topline-1"
-                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
-                                                        >
+                                                        data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable })">
                                                     Delete
                                                 </button>
                                             </div>
@@ -184,26 +184,24 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <a href="@Url.Action("GetQuestionTemp", "Import", new { tempId = item.DuplicatedQuestion.Id })" class="btn btn-primary float-md-right ml-1">Edit</a>
-                                                            <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl})"
+                                                            <button data-url="@Url.Action("Skip", "Import", new { questionId = item.Id, url = Request.RawUrl })"
                                                                     class="btn btn-success float-md-right ml-1 reload-partial"
                                                                     data-id="#@item.Id"
                                                                     data-from="tableEditable"
                                                                     data-update="Success"
                                                                     data-to="tableSuccess"
                                                                     data-container="#section-topline-1"
-                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable})"
-                                                                    >
+                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable })">
                                                                 Accept
                                                             </button>
-                                                            <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id,  url = Request.RawUrl})"
+                                                            <button data-url="@Url.Action("Delete", "Import", new { questionId = item.Id, url = Request.RawUrl })"
                                                                     class="btn btn-danger float-md-right reload-partial"
                                                                     data-id="#@item.Id"
                                                                     data-from="tableEditable"
                                                                     data-update="Deleted"
                                                                     data-to="tableDelete"
                                                                     data-container="#section-topline-1"
-                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status =(int) StatusEnum.Editable})"
-                                                                    >
+                                                                    data-url-reload="@Url.Action("GetPartialTable", "Import", new { importId = item.ImportId, status = (int)StatusEnum.Editable })">
                                                                 Delete
                                                             </button>
                                                         </div>
@@ -274,17 +272,18 @@
                                 }
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-}
-else
-{
-    <p class="text-custom">No record found here! PLease check again.</p>
-}
+@*}
+    else
+    {
+        <p class="text-custom">No record found here! PLease check again.</p>
+    }*@
 
 <button class="btn btn-primary float-right col-md-1 ml-1 mb-4" data-toggle="modal" data-target="#import-modal">Save</button>
 <button class="btn btn-outline-light float-right border-dark text-custom mr-2 col-md-1 mb-4" data-toggle="modal" data-target="#cancel-import-modal">Cancel</button>

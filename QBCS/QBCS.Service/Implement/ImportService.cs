@@ -252,7 +252,13 @@ namespace QBCS.Service.Implement
         public void UpdateQuestionTemp(QuestionTempViewModel question)
         {
             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
-            if (entity != null && (entity.Status == (int)StatusEnum.Editable
+
+            var checkedEntity = new List<QuestionTemp>();
+            checkedEntity.Add(entity);
+            checkedEntity = CheckRule(checkedEntity);
+            entity = checkedEntity.FirstOrDefault();
+
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable 
                                     || entity.Status == (int)StatusEnum.Invalid
                                     || entity.Status == (int)StatusEnum.Deleted
                                     || entity.Status == (int)StatusEnum.DeleteOrSkip))

@@ -309,6 +309,43 @@ namespace QBCS.Web.Controllers
             return PartialView("ListQuestion", result);
         }
 
+        public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int? draw, int? start, int? length)
+        {
+            var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
+            var entities = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
+            var recordTotal = entities.Count();
+            var result = new List<QuestionViewModel>();
+            foreach (var q in entities)
+            {
+                var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+                if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+                {
+                    result.Add(q);
+                }
+                else if(q.Options != null)
+                {
+                    foreach(var o in q.Options)
+                    {
+                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
+                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
+                        {
+                            result.Add(q);
+                        }
+                    }
+                }
+            }
+            var recordFiltered = result.Count();
+            if(length != null && length >= 0 )
+            {
+                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
+            }
+            else
+            {
+                result = result.ToList();
+            }
+            return Json(new { draw = draw != null? draw : 1, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+        }
+
         //Lecturer
         //stpm: feature declare
         [Feature(FeatureType.BusinessLogic, "Disable Question", "QBCS", protectType: ProtectType.Authorized)]
@@ -337,26 +374,42 @@ namespace QBCS.Web.Controllers
             QuestionViewModel qvm = questionService.GetQuestionById(4);
             return PartialView("EditQuestionWithTextbox", qvm);
         }
-
-        //public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
-        //{
-        //    var search = Request["search[value]"].ToLower();
-        //    var entities = questionService.GetQuestionTempByImportId(importId, type);
-        //    var recordTotal = entities.Count;
-        //    var result = new List<QuestionTempViewModel>();
-        //    foreach (var q in entities)
-        //    {
-        //        var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
-        //        if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
-        //        {
-        //            result.Add(q);
-        //        }
-        //    }
-        //    var recordFiltered = result.Count();
-        //    result = result.Skip(start).Take(length).ToList();
-        //    return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
-        //}
-
+        public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
+        {
+            var search = Request["search[value]"].ToLower();
+            var entities = questionService.GetQuestionTempByImportId(importId, type);
+            var recordTotal = entities.Count;
+            var result = new List<QuestionTempViewModel>();
+            foreach (var q in entities)
+            {
+                var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
+                if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
+                {
+                    result.Add(q);
+                }
+                else if (q.Options != null)
+                {
+                    foreach (var o in q.Options)
+                    {
+                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
+                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
+                        {
+                            result.Add(q);
+                        }
+                    }
+                }
+            }
+            var recordFiltered = result.Count();
+            if (length >= 0)
+            {
+                result = result.Skip(start).Take(length).ToList();
+            }
+            else
+            {
+                result = result.ToList();
+            }
+            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class Textarea

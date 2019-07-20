@@ -41,7 +41,30 @@
         @Html.Partial("_ListCategory", Model)
     </div>
     <div id="list-question" class="col-md-9" data-id="@Model.Id">
-        @* Render list question here *@
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">List of Questions</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-custom" id="divTable">
+                    @*<table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Question</th>
+                                    <th>Action</th>
+                                    <th>
+                                        <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
