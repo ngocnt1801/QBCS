@@ -202,10 +202,16 @@ namespace QBCS.Web
                       "~/Content/style-detail-question.css"
                       ));
 
-            //DataTable Log
+            //DataTable Activity
             bundles.Add(new ScriptBundle("~/bundle/scripts/tableActivity").Include(
                 "~/Scripts/myjs/tableActivity.js"
                 ));
+
+            //DataTable Log
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tableLog").Include(
+                "~/Scripts/myjs/tableLog.js"
+                ));
         }
+    }
     }
 }

@@ -7,6 +7,7 @@ using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -91,7 +92,7 @@ namespace QBCS.Web.Controllers
                 var recordTotal = entities.Count();
                 var result = new List<LogViewModel>();
 
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
                 foreach (var a in entities)
                 {
                     var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
@@ -123,7 +124,7 @@ namespace QBCS.Web.Controllers
                 var recordTotal = entities.Count();
                 var result = new List<LogViewModel>();
 
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
                 foreach (var a in entities)
                 {
                     var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
@@ -151,7 +152,7 @@ namespace QBCS.Web.Controllers
                 var recordTotal = entities.Count();
                 var result = new List<LogViewModel>();
 
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString().Contains(search)).ToList();
+                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
                 foreach (var a in entities)
                 {
                     var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();

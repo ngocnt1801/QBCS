@@ -99,10 +99,3 @@
         }, 'slow');
     });
 });
-function formatDate(timestamp) {
-    var x = new Date(timestamp);
-    var dd = x.getDate();
-    var mm = x.getMonth() + 1;
-    var yy = x.getFullYear();
-    return dd + "/" + mm + "/" + yy;
-}
