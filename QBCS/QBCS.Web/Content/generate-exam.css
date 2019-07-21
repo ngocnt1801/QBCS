@@ -156,3 +156,6 @@ h2 {
     max-width: 600px;*/
     max-width:100%;
 }
+.with-errors {
+    color: red;
+}

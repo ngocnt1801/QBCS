@@ -26,6 +26,37 @@
             $('#btnFinish').show();
         }
     });
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {        
+        if (stepDirection === 'forward') {
+            if (stepNumber === 0) {
+                var total = $('#totalExam').val();
+                if (total.length === 0) {
+                    $(".with-errors").html("Please input amount exam test!");
+                    return false;
+                } else if (total < 1 || total > 10) {
+                    $(".with-errors").html("Please input a number 1 - 10!");
+                    return false;
+                }
+            } else if (stepNumber === 1) {
+                var total = $('#totalQuestion').val();
+                if (total.length === 0) {
+                    $(".with-errors").html("Please input total question!");
+                    return false;
+                } else if (total < 1) {
+                    $(".with-errors").html("Please input a positive number!");
+                    return false;
+                }
+            } else if (stepNumber === 2) {
+                var selecttedTopic = $("input[name='Topic']:checked");
+                if (selecttedTopic.length === 0) {
+                    $(".with-errors").html("Please select Topic/LOC!");
+                    return false;
+                }
+            }
+        }
+        $(".with-errors").html("");
+        return true;
+    });
 
     $('#check-all').on('change', function (event) {
         event.preventDefault();
