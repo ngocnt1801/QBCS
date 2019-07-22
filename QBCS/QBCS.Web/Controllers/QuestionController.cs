@@ -343,7 +343,7 @@ namespace QBCS.Web.Controllers
             {
                 result = result.ToList();
             }
-            return Json(new { draw = draw != null? draw : 1, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw != null? draw : 1, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true}, JsonRequestBehavior.AllowGet);
         }
 
         //Lecturer

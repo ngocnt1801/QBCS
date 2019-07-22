@@ -391,6 +391,7 @@
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category-exam.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
+    <Content Include="Scripts\myjs\CourseStatisticsjs.js" />
     <Content Include="Scripts\myjs\diff\compare.js" />
     <Content Include="Scripts\myjs\diff\diff-text.js" />
     <Content Include="Scripts\myjs\diff\diff_match_patch.js" />

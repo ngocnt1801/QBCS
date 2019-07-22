@@ -71,7 +71,7 @@ namespace QBCS.Web
                 ));
 
             //Confirm box
-            bundles.Add(new ScriptBundle("~/bundle/scripts/confirmbox").Include ("~/Scripts/myjs/bootbox.min.js"));
+            bundles.Add(new ScriptBundle("~/bundle/scripts/confirmbox").Include("~/Scripts/myjs/bootbox.min.js"));
 
             //signalR
             bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(
@@ -211,7 +211,11 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/tableLog").Include(
                 "~/Scripts/myjs/tableLog.js"
                 ));
+
+            //CourseStatistic
+            bundles.Add(new ScriptBundle("~/bundle/scripts/CourseStatistic").Include(
+                "~/Scripts/myjs/CourseStatisticsjs.js"
+                ));
         }
-    }
     }
 }

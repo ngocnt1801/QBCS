@@ -287,6 +287,7 @@ namespace QBCS.Service.Implement
                     courseDetail = new CourseStatDetailViewModel()
                     {
                         Type = "Course",
+                        Null = courseQuestions.Where(q => q.LevelId == null).Count(),
                         Easy = courseQuestions.Where(q => q.LevelId == (int)LevelEnum.Easy).Count(),
                         Medium = courseQuestions.Where(q => q.LevelId == (int)LevelEnum.Medium).Count(),
                         Hard = courseQuestions.Where(q => q.LevelId == (int)LevelEnum.Hard).Count()
