@@ -75,6 +75,7 @@
     <Compile Include="Rule.cs" />
     <Compile Include="RuleKey.cs" />
     <Compile Include="Semester.cs" />
+    <Compile Include="SyllabusPartial.cs" />
     <Compile Include="sysdiagram.cs" />
     <Compile Include="Topic.cs" />
     <Compile Include="User.cs" />
