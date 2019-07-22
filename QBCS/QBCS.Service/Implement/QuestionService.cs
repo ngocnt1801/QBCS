@@ -647,8 +647,10 @@ namespace QBCS.Service.Implement
                 #region process gift
                 if (extensionFile.Equals(".txt"))
                 {
+                    int status = 0;
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
+                    
                     import.Status = (int)Enum.StatusEnum.NotCheck;
                     reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
                     listQuestion = ulti.StripTagsCharArray(reader, checkCate, checkHTML);
@@ -662,7 +664,8 @@ namespace QBCS.Service.Implement
                         {
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
-                            Status = (int)StatusEnum.NotCheck,
+                            Status = q.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : q.Status,
+                            Message = q.Status != (int)StatusEnum.Invalid ? "": "Matching question is not allowed",
                             Category = q.Category,
                             LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
