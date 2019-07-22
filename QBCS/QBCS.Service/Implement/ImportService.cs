@@ -258,7 +258,7 @@ namespace QBCS.Service.Implement
             checkedEntity = CheckRule(checkedEntity);
             entity = checkedEntity.FirstOrDefault();
 
-            if (entity != null && (entity.Status == (int)StatusEnum.Editable 
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable
                                     || entity.Status == (int)StatusEnum.Invalid
                                     || entity.Status == (int)StatusEnum.Deleted
                                     || entity.Status == (int)StatusEnum.DeleteOrSkip))
@@ -607,6 +607,8 @@ namespace QBCS.Service.Implement
                     }
                 }
             }
+
+
             return tempQuestions;
         }
 
@@ -823,5 +825,7 @@ namespace QBCS.Service.Implement
             return list;
 
         }
+
+        
     }
 }

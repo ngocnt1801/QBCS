@@ -33,6 +33,7 @@ namespace QBCS.Service.Interface
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
         List<QuestionTempViewModel> GetQuestionTempByImportId(int importId, string type);
+        void CheckImageInQuestion(List<QuestionTemp> tempQuestions);
 
     }
 }

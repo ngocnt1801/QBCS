@@ -899,6 +899,13 @@ function initTableEditable() {
                 data: "QuestionTempViewModel",
                 render: function (data, type, row, meta) {
                     if (row != null) {
+
+                        //notify if not image
+                        var result = "";
+                        if (row.IsNotImage) {
+                            result = "<p class='text-danger'>This question may be has an image</p>";
+                        }
+
                         var questionObj = {};
                         var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
                         var code = 'Question Code: ' + row.Code + '</p>';
@@ -923,12 +930,12 @@ function initTableEditable() {
                         }
                         questionObj["Options"] = options;
                         content.push(questionObj);
-                        var result = category + code + questionContent + image;
+                        result = result + category + code + questionContent + image;
                         for (i = 0; i < options.length; i++) {
                             result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
                         }
                         countTable++;
-                        if (row.DuplicatedQuestion != null) {
+                        if (row.DuplicatedQuestion != null || row.IsNotImage) {
                             result = result + '<div class="row"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                         }
                         return result;
@@ -939,6 +946,13 @@ function initTableEditable() {
                 render: function (data, type, row) {
                     if (row != null) {
                         if (row.DuplicatedQuestion != null) {
+
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p class='text-danger'>This question may be has an image</p>";
+                            }
+
                             var questionObj = {};
                             var category = '<p> </p>';
                             var code = ' <p class="text-custom">' + row.DuplicatedQuestion.CourseName + row.DuplicatedQuestion.Code + '</p>';
@@ -985,7 +999,7 @@ function initTableEditable() {
                             }
                             questionObj["Options"] = options;
                             duplicate.push(questionObj);
-                            var result = status + category + code + questionContent + image;
+                            result = result + status + category + code + questionContent + image;
                             for (i = 0; i < options.length; i++) {
                                 result = result + '<div id="docontent_' + countDuplicate + '_' + i + '" class="container-fluid"></div>';
                             }
@@ -997,7 +1011,14 @@ function initTableEditable() {
 
                         }
                         else {
-                            var result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
+
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p>There is no duplicate</p>";
+                            } else {
+                                result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
+                            }
                             return result;
                         }
 

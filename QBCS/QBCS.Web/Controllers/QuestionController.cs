@@ -408,6 +408,7 @@ namespace QBCS.Web.Controllers
             {
                 result = result.ToList();
             }
+
             return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
         }
     }

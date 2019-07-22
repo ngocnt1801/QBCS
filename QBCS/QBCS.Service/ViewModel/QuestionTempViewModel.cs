@@ -19,5 +19,6 @@ namespace QBCS.Service.ViewModel
         public string Category { get; set; }
         public List<DuplicatedQuestionViewModel> DuplicatedList { get; set; }
         public bool IsHide { get; set; }
+        public bool IsNotImage { get; set; }
     }
 }
