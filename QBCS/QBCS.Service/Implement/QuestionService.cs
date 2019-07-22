@@ -586,6 +586,7 @@ namespace QBCS.Service.Implement
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
                                     Image = question.Image,
+                                    IsNotImage = false,
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
@@ -646,8 +647,10 @@ namespace QBCS.Service.Implement
                 #region process gift
                 if (extensionFile.Equals(".txt"))
                 {
+                    int status = 0;
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
+                    
                     import.Status = (int)Enum.StatusEnum.NotCheck;
                     reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
                     listQuestion = ulti.StripTagsCharArray(reader, checkCate, checkHTML);
@@ -661,10 +664,12 @@ namespace QBCS.Service.Implement
                         {
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
-                            Status = (int)StatusEnum.NotCheck,
+                            Status = q.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : q.Status,
+                            Message = q.Status != (int)StatusEnum.Invalid ? "": "Matching question is not allowed",
                             Category = q.Category,
                             LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
+                            IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -740,6 +745,7 @@ namespace QBCS.Service.Implement
                             LearningOutcome = prefix + " " +q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
+                            IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -805,6 +811,7 @@ namespace QBCS.Service.Implement
                     import.ImportedDate = DateTime.Now;
                     //check formats
                     import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
+                    CheckImageInQuestion(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
@@ -1107,6 +1114,7 @@ namespace QBCS.Service.Implement
                 ImportId = importId,
                 Code = q.Code,
                 Image = q.Image,
+                IsNotImage = q.IsNotImage.HasValue && q.IsNotImage.Value,
                 IsInImportFile = q.DuplicateInImportId.HasValue,
                 Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
                 Options = q.OptionTemps.Select(o => new OptionViewModel
@@ -1409,6 +1417,52 @@ namespace QBCS.Service.Implement
             table = table.Replace("<p>&nbsp;</p>", "");
             table = table.Replace("&nbsp;", "");
             return table;
+        }
+
+        public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
+        {
+            string[] imageKeyWords =
+            {
+                "figure",
+                "showing",
+                "diagram",
+                "circuit",
+                "map",
+                "art",
+                "visual",
+                "image",
+                "picture"
+            };
+            string[] prepKeyWords =
+            {
+                "above",
+                "below",
+                "follow"
+            };
+            string imageKeyWord = String.Join("|", imageKeyWords);
+            string prepKeyWord = String.Join("|", prepKeyWords);
+            foreach (var question in tempQuestions)
+            {
+                if (!String.IsNullOrWhiteSpace(question.Image) && question.Status.Value == (int) StatusEnum.Invalid)
+                {
+                    continue;
+                }
+
+                if (String.IsNullOrWhiteSpace(question.QuestionContent.Trim()) || question.QuestionContent.Trim().ToLower().Equals("[html]"))
+                {
+                    question.IsNotImage = true;
+                }
+                else
+                {
+                    string patter = "^(?=.*?\\b(" + imageKeyWord + ")\\b)(?=.*?\\b(" + prepKeyWord + ")\\b).*$";
+                    Regex regex = new Regex(patter);
+                    if (regex.IsMatch(question.QuestionContent.ToLower().Trim()))
+                    {
+                        question.IsNotImage = true;
+                    }
+                }
+            }
+
         }
     }
 }
