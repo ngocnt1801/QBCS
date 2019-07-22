@@ -23,10 +23,16 @@
             <a href="@Url.Action("AddQuestion", "question")" class="btn btn-primary float-right">Add Question</a>
         </div>
     </div>*@
-<div class="row" id="move-btn-group">
-    <div class="col mb-2">
-        <button class="btn btn-primary float-right spinner-loading" id="move-btn">Move Questions</button>
+<div class="row">
+    <div class="col-md-3">
+        <button class="btn btn-info float-right " data-toggle="modal" data-target="#export-modal">Export Questions</button>
     </div>
+    <div class="col-md-9 mb-2" id="move-btn-group">
+        <div class="">
+            <button class="btn btn-primary float-right" id="move-btn">Move Questions</button>
+        </div>
+    </div>
+
 </div>
 
 
@@ -35,7 +41,30 @@
         @Html.Partial("_ListCategory", Model)
     </div>
     <div id="list-question" class="col-md-9" data-id="@Model.Id">
-        @* Render list question here *@
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">List of Questions</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-custom" id="divTable">
+                    @*<table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Question</th>
+                                    <th>Action</th>
+                                    <th>
+                                        <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -116,15 +145,47 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default spinner-loading" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary spinner-loading" id="move-question-btn">OK</button>
             </div>
 
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-@*<div class="spinner-grow" role="status" id="spinner" style="display:block;">
-        <span class="sr-only">Loading...</span>
-    </div>*@
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="export-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Choose category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form method="post" action="@Url.Action("ExportBank", "ExaminationAPI")">
+                <div class="modal-body form-group">
+                    @foreach (var lo in Model.LearningOutcome)
+                    {
+                        <div class="row mb-2 ml-2">
+                            <input type="checkbox" name="loId" class="checkbox mr-3" value="@lo.Id" id="@lo.Id" />
+                            <h6>@lo.Name</h6>
+                        </div>
+                    }
+                    <select name="extension" class="form-control">
+                        <option value="gift">GIFT</option>
+                        <option value="xml">XML</option>
+                    </select>
+                    <div class="row mb-2 ml-2">
+                        <input type="checkbox" name="getCategory" class="checkbox mr-3" value="true" />
+                        <h6>Get category</h6>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Export</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
 @Scripts.Render("~/bundles/script/datatables")
 @Scripts.Render("~/bundle/scripts/category")

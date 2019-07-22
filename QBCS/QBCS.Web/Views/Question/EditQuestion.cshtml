@@ -29,7 +29,7 @@
 
                 </div>
                 @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-                @Html.ValidationMessageFor(model => model.Question.QuestionContent, "Please enter question content", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.Question.QuestionContent, "", new { @class = "text-danger" })
                 <input type="hidden" name="QuestionContent" value="@Model.Question.QuestionContent" id="hidden-question-content" />
             </div>
             <span class="error-block">
@@ -120,6 +120,8 @@
 
     </div>
 }
+
+
 
 @Scripts.Render("~/bundle/scripts/editquestion")
 @Scripts.Render("~/bundle/scripts/processtext")

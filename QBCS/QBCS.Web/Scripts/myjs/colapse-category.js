@@ -223,7 +223,7 @@
             categoryView.init();
             if (categoryView.questionListContainter[0] != null) {
                 this.loadQuestion(
-                    "/Question/GetQuestions?courseId=" +
+                    "/Question/GetQuestionsDatatable?courseId=" +
                     categoryView.questionListContainter[0].attributes["data-id"].value
                 );
             }
@@ -235,6 +235,261 @@
             $('#spinner').css("display", "block");
             $('#spinner').css("z-index", "1060");
             $('#pleaseWaitDialog').modal();
+            if (url.includes("GetCourseDetailStat")) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (response) {
+                        categoryView.questionListContainter.html(response);
+                        {
+                            //var table = $("#dataTable").dataTable({
+                            //      ordering: false,
+                            //      columnDefs: [
+                            //          { targets: 0, width: "5%" },
+                            //          { targets: 1, width: "75%" },
+                            //          { targets: 2, width: "15%", className: "text-center" },
+                            //          { targets: 3, width: "5%", className: "text-center" }
+                            //      ],
+                            //      columns: [
+                            //          null,
+                            //          {
+                            //              width: "75%",
+                            //              render: function (data, type, row) {
+                            //                  if (data.indexOf("[html]") >= 0) {
+                            //                      data = data.split("&lt;cbr&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;p&gt;").join("");
+                            //                      data = data.split("&lt;/p&gt;").join("");
+                            //                      data = data.split("&lt;span&gt;").join("");
+                            //                      data = data.split("&lt;/span&gt;").join("");
+                            //                      data = data.split("[html]").join("");
+                            //                  }
+
+                            //                  return data;
+                            //              }
+                            //          },
+                            //          null,
+                            //          null,
+                            //      ]
+                            //  });
+                            //  $('#dataTable').on('draw.dt', function () {
+                            //      if (categoryModel.isMoveQuestion) {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).removeClass("hidden");
+                            //          });
+                            //      } else {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).addClass( "hidden");
+                            //          });
+                            //      }
+                            //      categoryView.setOnClickCkb();
+                            //  });
+                        }
+                        categoryView.setOnClickCkb();
+                        categoryView.setOnClickDisableBtn();
+                        table.on('page.dt', function () {
+                            $('html, body').animate({
+                                scrollTop: $(".dataTables_wrapper").offset().top
+                            }, 'slow');
+                        });
+                        setTimeout(function () {
+                            $('#spinner').css("display", "none");
+                            $('#pleaseWaitDialog').modal('hide');
+                        }, 500);
+
+                    }
+                });
+            } else {
+                $('#dataTable').DataTable().destroy();
+                $('#dataTable').remove();
+                var setTable = '<table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th>No.</th>' +
+                    '<th>Question</th>' +
+                    '<th>Action</th>' +
+                    '<th>' +
+                    '<input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />' +
+                    '</th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '</tbody>' +
+                    '</table>';
+                $('#divTable').append(setTable);
+
+
+
+                var content = [];
+                var countTable = 0;
+
+                var dataTable = $('#dataTable').DataTable({
+                    paging: true,
+                    ordering: false,
+                    filter: true,
+                    destroy: true,
+                    searching: true,
+                    serverSide: true,
+                    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    Processing: true,
+                    ajax:
+                    {
+                        async: false,
+                        url: url,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8"
+                    },
+                    columns: [
+                        {
+                            data: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: "QuestionViewModel",
+                            render: function (data, type, row, meta) {
+                                var questionObj = {};
+                                var code = '<p>Question Code: ' + row.Code + '</p>';
+                                var questionContent = '<p id="qcontent_' + countTable + '"></p>';
+                                questionObj['QuestionContent'] = row.QuestionContent;
+                                var image = row.Image;
+                                if (image != null && image != "") {
+                                    image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                                } else {
+                                    image = "";
+                                }
+                                var options = [];
+                                var i = 0;
+                                for (i = 0; i < row.Options.length; i++) {
+                                    var option = {};
+                                    option["content"] = changeHtml(row.Options[i].OptionContent);
+                                    option["correct"] = row.Options[i].IsCorrect;
+                                    options.push(option);
+                                }
+                                questionObj["Options"] = options;
+                                content.push(questionObj);
+                                var result = code + questionContent + image;
+                                for (i = 0; i < options.length; i++) {
+                                    result = result + '<div id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
+                                }
+                                countTable++;
+                                return result;
+                            }
+                        },
+                        {
+                            data: "Id",
+                            render: function (data) {
+                                var importId = $('#importId').val();
+                                var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                                var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                                var result = edit + deleteQ;
+                                return result;
+                            }
+                        },
+                        {
+                            render: function (data, type, row) {
+                                var id = row.Id;
+                                var code = row.Code;
+                                var result = '<input type="checkbox" class="checkbox hidden" data-id="' + id + '" data-code="' + code + '" />';
+                                return result;
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { targets: 0, width: "2%" },
+                        { targets: 1, width: "98%" }
+                    ],
+                    fnDrawCallback: function () {
+                        countTable = 0;
+                        for (var q = 0; q < content.length; q++) {
+                            var jq = "#qcontent_" + q;
+                            var changeContent = content[q]["QuestionContent"];
+                            var breakContent = [];
+                            var isHtml = false;
+                            if (changeContent.indexOf("[html]") >= 0) {
+                                isHtml = true;
+                            }
+                            if (isHtml) {
+                                changeContent = changeContent.split("&lt;p&gt;").join("");
+                                changeContent = changeContent.split("&lt;/p&gt;").join("");
+                                changeContent = changeContent.split("&lt;span&gt;").join("");
+                                changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("[html]").join("");
+                                breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                breakContent = breakContent.split("·");
+                            } else {
+                                breakContent.push(changeContent);
+                            }
+                            for (var w = 0; w < breakContent.length; w++) {
+                                $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
+                                var jqw = "#qcontent_" + q + '_' + w;
+                                $(jqw).text(breakContent[w]);
+                            }
+                            breakContent = [];
+                            for (var o = 0; o < content[q]["Options"].length; o++) {
+                                var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                                var jo = "#ocontent_" + q + "_" + o;
+                                var optionContent = content[q]["Options"][o]["content"];
+                                var optionCorrect = content[q]["Options"][o]["correct"];
+                                if (isHtml) {
+                                    optionContent = optionContent.split("&lt;p&gt;").join("");
+                                    optionContent = optionContent.split("&lt;/p&gt;").join("");
+                                    optionContent = optionContent.split("&lt;span&gt;").join("");
+                                    optionContent = optionContent.split("&lt;/span&gt;").join("");
+                                    optionContent = optionContent.split("[html]").join("");
+                                    breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                    breakContent = breakContent.split("·");
+                                } else {
+                                    breakContent.push(optionContent);
+                                }
+                                for (var b = 0; b < breakContent.length; b++) {
+                                    $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
+                                    var jow = "#ocontent_" + q + '_' + o + '_' + b;
+                                    if (b == 0) {
+                                        $(jow).text(letters[o] + '. ' + breakContent[b]);
+                                    } else {
+                                        $(jow).text(breakContent[b]);
+                                    }
+                                }
+                                if (optionCorrect) {
+                                    $(jo).addClass('text-right-answer');
+                                }
+                            }
+                        }
+                    }
+                });
+
+                $('#dataTable').on('draw.dt', function () {
+                    if (categoryModel.isMoveQuestion) {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).removeClass("hidden");
+                        });
+                    } else {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).addClass("hidden");
+                        });
+                    }
+                    categoryView.setOnClickCkb();
+                });
+
+                dataTable.on('page.dt', function () {
+                    $('html, body').animate({
+                        scrollTop: $(".dataTables_wrapper").offset().top
+                    }, 'slow');
+                });
+
+
+                categoryView.setOnClickCkb();
+                categoryView.setOnClickDisableBtn();
+
+                setTimeout(function () {
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
+                }, 500);
+
+            }
             $.ajax({
                 url: url,
                 type: "GET",
@@ -383,4 +638,162 @@
     };
 
     categoryOctopus.init();
+    search();
 });
+function search() {
+    $("#datatableTest").dataTable().on('search.dt', function () {
+        var dataString = $(this).attr('data');
+
+        alert(dataString);
+    });
+}
+//async function setDatatable(url) {
+
+//    var content = [];
+//    var countTable = 0;
+
+//    var dataTable = $('#dataTable').DataTable({
+//        paging: true,
+//        ordering: false,
+//        filter: true,
+//        destroy: true,
+//        searching: true,
+//        serverSide: true,
+//        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+//        Processing: true,
+//        ajax:
+//        {
+//            async: false,
+//            url: url,
+//            type: "GET",
+//            dataType: "json",
+//        },
+
+//        columns: [
+//            {
+//                data: function (data, type, row, meta) {
+//                    return meta.row + meta.settings._iDisplayStart + 1;
+//                }
+//            },
+//            {
+//                data: "QuestionViewModel",
+//                render: function (data, type, row, meta) {
+//                    var questionObj = {};
+//                    var optionList = [];
+//                    var alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+//                    var code = '<p>Question Code: ' + row.Code + '</p>';
+//                    var questionContent = '<p id="qcontent_' + countTable + '"></p>';
+//                    questionObj['QuestionContent'] = row.QuestionContent;
+//                    var image = row.Image;
+//                    if (image != null && image != "") {
+//                        image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+//                    } else {
+//                        image = "";
+//                    }
+//                    var options = [];
+//                    var i = 0;
+//                    for (i = 0; i < row.Options.length; i++) {
+//                        var option = {};
+//                        option["content"] = changeHtml(row.Options[i].OptionContent);
+//                        option["correct"] = row.Options[i].IsCorrect;
+//                        options.push(option);
+//                    }
+//                    questionObj["Options"] = options;
+//                    content.push(questionObj);
+//                    var result = code + questionContent + image;
+//                    for (i = 0; i < options.length; i++) {
+//                        result = result + '<div id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
+//                    }
+//                    countTable++;
+//                    return result;
+//                }
+//            },
+//            {
+//                data: "Id",
+//                render: function (data) {
+//                    var importId = $('#importId').val();
+//                    var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+//                    var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+//                    var result = edit + deleteQ;
+//                    return result;
+//                }
+//            },
+//            {
+//                render: function (data, type, row) {
+//                    var id = row.Id;
+//                    var code = row.Code;
+//                    var result = '<input type="checkbox" class="checkbox hidden" data-id="' + id + '" data-code="' + code + '" />';
+//                    return result;
+//                }
+//            }
+//        ],
+//        columnDefs: [
+//            { targets: 0, width: "2%" },
+//            { targets: 1, width: "98%" }
+//        ],
+//        fnDrawCallback: function () {
+//            countTable = 0;
+//            for (var q = 0; q < content.length; q++) {
+//                var jq = "#qcontent_" + q;
+//                var changeContent = content[q]["QuestionContent"];
+//                var breakContent = [];
+//                var isHtml = false;
+//                if (changeContent.indexOf("[html]") >= 0) {
+//                    isHtml = true;
+//                }
+//                if (isHtml) {
+//                    changeContent = changeContent.split("&lt;p&gt;").join("");
+//                    changeContent = changeContent.split("&lt;/p&gt;").join("");
+//                    changeContent = changeContent.split("&lt;span&gt;").join("");
+//                    changeContent = changeContent.split("&lt;/span&gt;").join("");
+//                    changeContent = changeContent.split("[html]").join("");
+//                    breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+//                    breakContent = breakContent.split("·");
+//                } else {
+//                    breakContent.push(changeContent);
+//                }
+//                for (var w = 0; w < breakContent.length; w++) {
+//                    $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
+//                    var jqw = "#qcontent_" + q + '_' + w;
+//                    $(jqw).text(breakContent[w]);
+//                }
+//                breakContent = [];
+//                for (var o = 0; o < content[q]["Options"].length; o++) {
+//                    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//                    var jo = "#ocontent_" + q + "_" + o;
+//                    var optionContent = content[q]["Options"][o]["content"];
+//                    var optionCorrect = content[q]["Options"][o]["correct"];
+//                    if (isHtml) {
+//                        optionContent = optionContent.split("&lt;p&gt;").join("");
+//                        optionContent = optionContent.split("&lt;/p&gt;").join("");
+//                        optionContent = optionContent.split("&lt;span&gt;").join("");
+//                        optionContent = optionContent.split("&lt;/span&gt;").join("");
+//                        optionContent = optionContent.split("[html]").join("");
+//                        breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+//                        breakContent = breakContent.split("·");
+//                    } else {
+//                        breakContent.push(optionContent);
+//                    }
+//                    for (var b = 0; b < breakContent.length; b++) {
+//                        $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
+//                        var jow = "#ocontent_" + q + '_' + o + '_' + b;
+//                        if (b == 0) {
+//                            $(jow).text(letters[o] + '. ' + breakContent[b]);
+//                        } else {
+//                            $(jow).text(breakContent[b]);
+//                        }
+//                    }
+//                    if (optionCorrect) {
+//                        $(jo).addClass('text-right-answer');
+//                    }
+//                }
+//            }
+//        }
+//    });
+
+//    dataTable.on('page.dt', function () {
+//        $('html, body').animate({
+//            scrollTop: $(".dataTables_wrapper").offset().top
+//        }, 'slow');
+//    });
+//}

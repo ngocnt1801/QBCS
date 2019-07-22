@@ -184,9 +184,11 @@ namespace QBCS.Service.Implement
             string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
+            StringProcess stringProcess = new StringProcess();
             if (question.QuestionContent != null)
             {
-                quesTemp = WebUtility.HtmlDecode(question.QuestionContent);
+                quesTemp = stringProcess.RemoveHtmlBrTagForUpdateQuestion(question.QuestionContent);
+                quesTemp = WebUtility.HtmlDecode(quesTemp);
             }
             entity.QuestionContent = quesTemp;
             entity.Type = (int) TypeEnum.Update;
@@ -196,7 +198,7 @@ namespace QBCS.Service.Implement
 
             entity.OptionTemps = question.Options.Select(o => new OptionTemp()
             {
-                OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                OptionContent = WebUtility.HtmlDecode(stringProcess.RemoveHtmlBrTagForUpdateQuestion(o.OptionContent)),
                 IsCorrect = o.IsCorrect,
                 UpdateOptionId = o.Id
             }).ToList();
@@ -825,11 +827,13 @@ namespace QBCS.Service.Implement
                 }
 
             }
-            //catch (Exception ex)
-            //{
-            //    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-            //    //Console.WriteLine(ex.Message);
-            //}
+            catch (Exception ex)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                check = false;
+                
+                //Console.WriteLine(ex.Message);
+            }
             finally
             {
                 reader.Close();
@@ -906,6 +910,7 @@ namespace QBCS.Service.Implement
                 Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                Category = q.Category != null ? q.Category.Name : "",
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
@@ -1091,6 +1096,138 @@ namespace QBCS.Service.Implement
             return check;
         }
 
+        public List<QuestionTempViewModel> GetQuestionTempByImportId(int importId, string type)
+        {
+            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).ToList();
+            var questionTemp = entities.Select(q => new QuestionTempViewModel()
+            {
+                Id = q.Id,
+                QuestionContent = q.QuestionContent,
+                Status = (StatusEnum)q.Status,
+                ImportId = importId,
+                Code = q.Code,
+                Image = q.Image,
+                IsInImportFile = q.DuplicateInImportId.HasValue,
+                Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
+                Options = q.OptionTemps.Select(o => new OptionViewModel
+                {
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(s.Split('-')[0]),
+                    IsBank = bool.Parse(s.Split('-')[1])
+                }).ToList(),
+                Message = q.Status == (int)StatusEnum.Invalid ? q.Message
+                        : (q.DuplicatedString != null && q.DuplicatedString.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedString.Split(',').Count()} questions" : ""),
+            }).ToList();
+            switch (type)
+            {
+                case "editable":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable).ToList();
+
+                    RemoveDuplicateGroup(questionTemp);
+                    questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
+
+                    foreach (var question in questionTemp.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                    {
+                        if (question.DuplicatedList[0].IsBank)
+                        {
+                            var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.QuestionCode,
+                                Image = entity.Image,
+                                CourseName = "Bank: " + entity.Course.Name,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.Options.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                IsBank = true,
+                                IsAnotherImport = false
+                            };
+
+                        }
+                        else
+                        {
+                            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.Code,
+                                CourseName = "Import file: ",
+                                Image = entity.Image,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                Status = (StatusEnum)entity.Status.Value,
+                                IsBank = false,
+                                IsAnotherImport = !(entity.ImportId == importId)
+                            };
+                        }
+                    }
+
+                    break;
+                case "success":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
+                    break;
+                case "invalid":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
+                    break;
+                case "delete":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Deleted).ToList();
+                    break;
+            }
+
+            
+
+            return questionTemp;
+        }
+
+        private void RemoveDuplicateGroup(List<QuestionTempViewModel> list)
+        {
+            List<string> duplicateGroup = new List<String>();
+            foreach (var question in list.Where(q => q.DuplicatedList != null))
+            {
+                bool isInGroup = false;
+                string duplicateString = ParseListDuplicateToString(question);
+                foreach (string item in duplicateGroup)
+                {
+                    if (item.Equals(duplicateString))
+                    {
+                        isInGroup = true;
+                        break;
+                    }
+                }
+
+                if (!isInGroup)
+                {
+                    duplicateGroup.Add(duplicateString);
+                }
+                else
+                {
+                    question.IsHide = true;
+                }
+            }
+        }
+
+        private string ParseListDuplicateToString(QuestionTempViewModel temp)
+        {
+            temp.DuplicatedList.Add(new DuplicatedQuestionViewModel
+            {
+                Id = temp.Id,
+                IsBank = false
+            });
+            return String.Join(",", temp.DuplicatedList.OrderBy(t => t.Id).Select(s => $"{s.Id}-{s.IsBank}").ToArray());
+        }
+
         public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)
         {
             var optionCheck = new DocViewModel();
@@ -1252,8 +1389,7 @@ namespace QBCS.Service.Implement
             }
             return listQuestion;
         }
-
-
+        
         private string TrimSpace(string trim)
         {
             RegexOptions options = RegexOptions.None;

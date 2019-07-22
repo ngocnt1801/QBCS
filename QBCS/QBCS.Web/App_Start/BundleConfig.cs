@@ -182,9 +182,10 @@ namespace QBCS.Web
 
             //Different highlight
             bundles.Add(new ScriptBundle("~/bundle/scripts/diff").Include(
-                "~/Scripts/myjs/diff/diff_match_patch.js",
-                "~/Scripts/myjs/diff/jquery.pretty-text-diff.min.js",
-                "~/Scripts/myjs/diff/compare.js"
+                //"~/Scripts/myjs/diff/diff_match_patch.js",
+                //"~/Scripts/myjs/diff/jquery.pretty-text-diff.min.js",
+                //"~/Scripts/myjs/diff/compare.js"
+                "~/Scripts/myjs/diff/diff-text.js"
                 ));
             bundles.Add(new StyleBundle("~/bundle/content/diff").Include(
                 "~/Content/diff/jquery.picadiff.css"

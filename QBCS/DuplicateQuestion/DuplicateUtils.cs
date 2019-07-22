@@ -726,7 +726,7 @@ namespace DuplicateQuestion
                     if (prev != (int)reader["Id"])
                     {
                         question = new QuestionModel();
-                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.QuestionContent = reader["QuestionContent"] != DBNull.Value ? (string)reader["QuestionContent"] : "";
                         if (reader["Image"] != DBNull.Value)
                         {
                             question.Image = (string)reader["Image"];

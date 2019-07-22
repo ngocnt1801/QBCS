@@ -34,16 +34,16 @@
                         </div>*@
 
                     @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
-                    {
-                        OnSuccess = "turnon_modal",
-                        HttpMethod = "POST",
+                        {
+                            OnSuccess = "turnon_modal",
+                            HttpMethod = "POST",
 
 
-                    }, new { enctype = "multipart/form-data" }))
-                    {
+                        }, new { enctype = "multipart/form-data" }))
+                        {
 
-                        @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {*@
+                    @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
@@ -123,7 +123,7 @@
                 <p>We will notifiy you when it has the result</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnSuccessOk">Ok</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

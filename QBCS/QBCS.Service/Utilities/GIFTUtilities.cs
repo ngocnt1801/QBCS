@@ -35,6 +35,7 @@ namespace QBCS.Service.Utilities
                 while ((line = reader.ReadLine()) != null)
                 {
                     string id = null;
+                    int colon = 0;
                     string question = null;
                     string right = null;
                     string wrong = null;
@@ -51,6 +52,7 @@ namespace QBCS.Service.Utilities
                     bool isInLine = false;
                     bool isStart = false;
                     bool isEnd = false;
+                    bool keeping = false;
 
                     //bool isComma = false;
                     bool isMultipleChoice = false;
@@ -132,8 +134,9 @@ namespace QBCS.Service.Utilities
                             if (let == ':' && !isStartQuestion)
                             {
                                 countCode++;
+                                colon = colon + 1;
                                 isStart = true;
-                                isInLine = true;
+                                isInLine = true;                              
                                 continue;
                             }
                             if (inLine == 1)
@@ -225,6 +228,11 @@ namespace QBCS.Service.Utilities
                                 if (inLine == 3)
                                 {
                                     question += '{';
+                                    if (colon >= 5)
+                                    {
+                                        question += ':';
+                                        colon = 4;
+                                    }
                                     question += let;
                                     inLine = 0;
                                     isStart = false;
@@ -232,6 +240,11 @@ namespace QBCS.Service.Utilities
                                 }
                                 if (inLine == 0)
                                 {
+                                    if (colon >= 5)
+                                    {
+                                        question += ':';
+                                        colon = 4;
+                                    }
                                     question += let;
                                     inLine = 0;
                                     isStart = false;

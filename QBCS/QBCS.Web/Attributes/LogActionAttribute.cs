@@ -44,9 +44,9 @@ namespace QBCS.Web.Attributes
             if (user != null)
             {
                 userId = user.Id;
-                fullname = filterContext.HttpContext.User.Get(u => u.FullName);
-                userCode = filterContext.HttpContext.User.Get(u => u.Code);
             }
+            fullname = filterContext.HttpContext.User.Get(u => u.FullName);
+            userCode = filterContext.HttpContext.User.Get(u => u.Code);
             //ip = System.Web.HttpContext.Current.Request.UserHostAddress;
             string strHostName = "";
             strHostName = Dns.GetHostName();

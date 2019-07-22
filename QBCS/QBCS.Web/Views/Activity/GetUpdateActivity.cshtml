@@ -28,108 +28,93 @@
 
 
                 <div class="table-responsive text-custom" id="customs-display-full">
-                    <table class="table table-bordered table-hover text-custom question-custom">
+                    <table class="table table-bordered text-custom question-custom">
                         <thead>
                             <tr>
                                 <th>New Question</th>
                                 <th>Old Question</th>
-                                <th>Diff</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                   
-                                        Category: @item.QuestionNew.Category<br />
 
-                                        LOC: @item.QuestionNew.LearningOutcomeName<br />
+                                    <p class="compare-field" id="l-1" compare-to="#r-1">Category: @item.QuestionNew.Category</p>
 
-                                        Level: @item.QuestionNew.LevelName<br />
+                                    <p class="compare-field" id="l-2" compare-to="#r-2">LOC: @item.QuestionNew.LearningOutcomeName </p>
 
-                                        Question:
-                                        @if (item.QuestionNew.Image != null)
+                                    <p class="compare-field" id="l-3" compare-to="#r-3">Level: @item.QuestionNew.LevelName</p>
+
+                                    Question:
+                                    @if (item.QuestionNew.Image != null)
+                                    {
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                    } <br />
+
+                                    <p class="compare-field" id="l-4" compare-to="#r-4">@item.QuestionNew.QuestionContent</p>
+                                    Answer:
+                                    @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
+                                    {
+                                        if (item.QuestionNew.Options[i].IsCorrect == true)
                                         {
-                                    <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
-                                        } <br />
-
-                                    <p id="new">@item.QuestionNew.QuestionContent</p>
-                                        Answer:
-                                        @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
-                                        {
-                                            if (item.QuestionNew.Options[i].IsCorrect == true)
-                                            {
-                                    <div class="container-fluid text-right-answer">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                    <div class="container-fluid">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)
-                                                </div>
-                                            }
-
-                                    <br />
-
+                                            <div class="container-fluid text-right-answer">
+                                                <p class="compare-field" id="l-@(5+i)" compare-to="#r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)</p>
+                                            </div>
                                         }
-                               
-
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                <p class="compare-field" id="l-@(5+i)" compare-to="#r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionNew.Options[i].OptionContent)</p>
+                                            </div>
+                                        }
+                                    }
                                 </td>
                                 <td>
-                                   
-                                        Category: @item.QuestionOld.Category<br />
 
-                                        LOC: @item.QuestionOld.LearningOutcomeName<br />
+                                    <p id="r-1">Category: @item.QuestionOld.Category</p>
 
-                                        Level: @item.QuestionOld.LevelName<br />
+                                    <p id="r-2">LOC: @item.QuestionOld.LearningOutcomeName</p>
 
-                                        Question:
-                                        @if (item.QuestionOld.Image != null)
+                                    <p id="r-3">Level: @item.QuestionOld.LevelName</p>
+
+                                    Question:
+                                    @if (item.QuestionOld.Image != null)
+                                    {
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    } <br />
+                                    <p id="r-4">@item.QuestionOld.QuestionContent</p>
+                                    Answer:
+                                    @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
+                                    {
+                                        if (item.QuestionOld.Options[i].IsCorrect == true)
                                         {
-                                    <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
-
-                                        } <br />
-
-                                    <p id="old">@item.QuestionOld.QuestionContent</p>
-                                        Answer:
-                                        @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
-                                        {
-                                            if (item.QuestionOld.Options[i].IsCorrect == true)
-                                            {
-                                    <div class="container-fluid text-right-answer">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                    <div class="container-fluid">
-                                                    @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)
-                                                </div>
-                                            }
-
-                                    <br />
-
+                                            <div class="container-fluid text-right-answer">
+                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
+                                            </div>
                                         }
-                                    
-
+                                        else
+                                        {
+                                            <div class="container-fluid">
+                                                <p id="r-@(5+i)">@(alpha[i] + ".") @Html.DisplayFor(optionItem => item.QuestionOld.Options[i].OptionContent)</p>
+                                            </div>
+                                        }
+                                    }
                                 </td>
-                                
                             </tr>
 
                         </tbody>
                     </table>
-                    
+
                 </div>
             }
             else
             {
                 <p>None of data available</p>
             }
-
-
         }
     </div>
 </div>
+
 @Scripts.Render("~/bundle/scripts/processtext")
-@*@Scripts.Render("~/bundle/scripts/diff")*@
+@Scripts.Render("~/bundle/scripts/diff")
 
