@@ -329,7 +329,6 @@
 
 
 
-                var countTable = 0;
                 var dataTable = $('#dataTable').DataTable({
                     paging: true,
                     ordering: false,
@@ -399,7 +398,6 @@
                     ],
                     drawCallback: function (data) {
                         var question = data.json.data;
-                        countTable = 0;
                         var q = 0;
                         for (q = 0; q < question.length; q++) {
                             var jq = '#' + question[q].Code + ' #Question';
@@ -422,7 +420,7 @@
                             }
                             for (var w = 0; w < breakContent.length; w++) {
                                 $(jq).append('<p id="qcontent_' + w + '"></p>');
-                                var jqw = '#' + question[q].Code + ' #qcontent_'+ w;
+                                var jqw = '#' + question[q].Code + ' #Question #qcontent_'+ w;
                                 $(jqw).text(breakContent[w]);
                             }
                             breakContent = [];
