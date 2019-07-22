@@ -219,6 +219,12 @@ namespace QBCS.Web.Controllers
                 else
                 {
                     check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                    if (check == false)
+                    {
+                        ViewBag.Message = "File is wrong format. PLease check again!";
+                        ViewBag.Status = ToastrEnum.Error;
+                        return Json("Error");
+                    }
                 }
 
             }
