@@ -175,6 +175,7 @@ namespace QBCS.Service.Utilities
                                 isStartQuestion = false;
                                 continue;
                             }
+                            
                             //if (let == '?')
                             //{
                             //    isComma = true;
@@ -382,11 +383,30 @@ namespace QBCS.Service.Utilities
 
                     if (quesModel.QuestionContent != null && isEnd && quesModel.Code != null)
                     {
+                        int countMatching = 0;
+                        bool isMatchingQues = false;
                         if (options.Count < 4)
                         {
                             quesModel.Error = "Number of option " + options.Count.ToString();
                         }
+                        
                         quesModel.Options = options;
+                        foreach (var item in quesModel.Options)
+                        {
+                            if (item.IsCorrect == true)
+                            {
+                                countMatching = countMatching + 1;
+                                isMatchingQues = true;
+                            }
+                            if (item.IsCorrect == false)
+                            {
+                                countMatching = 0;
+                            }
+                            if (countMatching >= 4 && isMatchingQues)
+                            {
+                                quesModel.Status = (int)Enum.StatusEnum.Invalid;
+                            }
+                        }
                         list.Add(quesModel);
                         quesModel = new QuestionTmpModel();
                         options = new List<OptionTemp>();
