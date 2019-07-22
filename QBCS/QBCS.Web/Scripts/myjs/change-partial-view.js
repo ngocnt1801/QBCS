@@ -864,11 +864,6 @@ function reloadTable(url, container) {
 
 function initTableEditable() {
 
-    content = [];
-    duplicate = [];
-    countTable = 0;
-    countDuplicate = 0;
-
     var table1 = $('#tableEditable').DataTable({
         paging: true,
         ordering: false,
@@ -896,38 +891,28 @@ function initTableEditable() {
                 }
             },
             {
-                data: "QuestionTempViewModel",
                 render: function (data, type, row, meta) {
                     if (row != null) {
                         var questionObj = {};
                         var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
-                        var code = 'Question Code: ' + row.Code + '</p>';
-                        var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
-                        questionObj['QuestionContent'] = row.QuestionContent;
-                        var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
-                        var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
-                        var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Import/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
+                        var code = '<p>Question Code: ' + row.Code + '</p>';
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                        }
                         var image = row.Image;
                         if (image != null && image != "") {
                             image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                         } else {
                             image = "";
                         }
-                        var options = [];
-                        var i = 0;
-                        for (i = 0; i < row.Options.length; i++) {
-                            var option = {};
-                            option["content"] = changeHtml(row.Options[i].OptionContent);
-                            option["correct"] = row.Options[i].IsCorrect;
-                            options.push(option);
-                        }
-                        questionObj["Options"] = options;
-                        content.push(questionObj);
-                        var result = category + code + questionContent + image;
-                        for (i = 0; i < options.length; i++) {
-                            result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
-                        }
-                        countTable++;
+                        var questionContent = '<div id="' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
+                        var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
+                        var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Import/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
+
+                        var result = category + code + questionContent;
+
                         if (row.DuplicatedQuestion != null) {
                             result = result + '<div class="row"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                         }
