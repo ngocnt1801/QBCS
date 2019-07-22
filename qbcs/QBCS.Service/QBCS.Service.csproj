@@ -149,6 +149,7 @@
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
+    <Compile Include="ViewModel\SyllabusPartialViewModel.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
     <Compile Include="ViewModel\RuleViewModel.cs" />

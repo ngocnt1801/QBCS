@@ -21,7 +21,7 @@
         }
     });
     $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
-        if (stepNumber === 3) {
+        if (stepNumber === 2) {
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
@@ -38,15 +38,6 @@
                     return false;
                 }
             } else if (stepNumber === 1) {
-                var total = $('#totalQuestion').val();
-                if (total.length === 0) {
-                    $(".with-errors").html("Please input total question!");
-                    return false;
-                } else if (total < 1) {
-                    $(".with-errors").html("Please input a positive number!");
-                    return false;
-                }
-            } else if (stepNumber === 2) {
                 var selecttedTopic = $("input[name='Topic']:checked");
                 if (selecttedTopic.length === 0) {
                     $(".with-errors").html("Please select Topic/LOC!");

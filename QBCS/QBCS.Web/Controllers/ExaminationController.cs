@@ -55,7 +55,8 @@ namespace QBCS.Web.Controllers
             {
                 LearningOutcomes = learningOutcomeViewModels,
                 Categories = categoryViewModels,
-                Semester = semester
+                Semester = semester, 
+                CourseId = courseId
             };
             TempData["active"] = "Examination";
             return View(listTopicLearningOutcomeViewModel);
