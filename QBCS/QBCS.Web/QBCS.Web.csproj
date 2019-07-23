@@ -391,6 +391,7 @@
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\colapse-category-exam.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
+    <Content Include="Scripts\myjs\CourseStatisticsjs.js" />
     <Content Include="Scripts\myjs\diff\compare.js" />
     <Content Include="Scripts\myjs\diff\diff-text.js" />
     <Content Include="Scripts\myjs\diff\diff_match_patch.js" />
@@ -407,6 +408,8 @@
     <Content Include="Scripts\myjs\spinner.js" />
     <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
     <Content Include="Scripts\myjs\syllabus-manage.js" />
+    <Content Include="Scripts\myjs\tableActivity.js" />
+    <Content Include="Scripts\myjs\tableLog.js" />
     <Content Include="Scripts\myjs\text-process.js" />
     <Content Include="Scripts\myjs\textWord\example.css" />
     <Content Include="Scripts\myjs\textWord\textboxio\resources\css\codemirror.css" />
