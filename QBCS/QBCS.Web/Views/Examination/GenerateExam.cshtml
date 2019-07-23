@@ -21,16 +21,7 @@
                         <div class="form-group">
                             <label for="totalExam" class="control-label col-xs-10">Total examination : </label>
                             <div class="col-xs-2 ml-2">
-                                <input class="form-control text-right" id="totalExam" type="number" value="1" min="1" max="10" name="TotalExam" required>                                
-                            </div>
-                            <label for="semester" class="control-label col-xs-10" style="margin-left:15px;">Semester : </label>
-                            <div class="col-xs-2 ml-2">
-                                <select id="semester" name="Semeter" class="form-control">
-                                    @foreach (var sem in Model.Semester)
-                                    {
-                                        <option value="@sem.Id">@sem.Name</option>
-                                    }
-                                </select>
+                                <input class="form-control text-right" id="totalExam" type="number" value="1" min="1" max="10" name="TotalExam" required>
                             </div>
                         </div>
                     </div>
@@ -100,7 +91,7 @@
                                         <label for="easy" class="control-label col-xs-10">Percent of easy question : </label>
                                         <input class="form-control ml-5 text-right" id="easy" min="0" max="100" type="number" style="margin-left:1.5em;" name="EasyPercent">
                                         <input type="hidden" name="FlagPercent" value="percent" id="flagPercent" />
-                                        <input type="hidden" name="CourseId" value="@Model.CourseId"/>
+                                        <input type="hidden" name="CourseId" value="@Model.CourseId" />
                                     </div>
                                 </div>
                                 <div class="form-inline" style="margin-top:15px;">

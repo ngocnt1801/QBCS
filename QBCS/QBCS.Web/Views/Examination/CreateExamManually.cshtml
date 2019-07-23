@@ -56,17 +56,6 @@
                     <div class="form-group-exam">
                         <input type="hidden" name="courseId" value="@Model.Id" />
                     </div>
-                    <div class="form-inline row">
-                        <label for="semester" class="control-label col-xs-10" style="margin-left:15px;">Semester : </label>
-                        <div class="col-xs-2 ml-2">
-                            <select id="semester" name="semeterId" class="form-control">
-                                @foreach (var sem in Model.Semester)
-                                {
-                                    <option value="@sem.Id">@sem.Name</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
                     <button id="btnSaveManually" type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 }
