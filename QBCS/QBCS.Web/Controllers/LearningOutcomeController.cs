@@ -41,11 +41,12 @@ namespace QBCS.Web.Controllers
         public ActionResult Add(LearningOutcomeViewModel learningOutcome)
         {
             var courseId = learningOutcomeService.AddLearningOutcome(learningOutcome);
-            if(courseId == 0)
-            {
-                return RedirectToAction("Index", "Error");
-            }
-            return RedirectToAction("Detail","Course", new { itemId = courseId });
+            //if(courseId == 0)
+            //{
+            //    return RedirectToAction("Index", "Error");
+            //}
+            //return RedirectToAction("Detail","Course", new { itemId = courseId });
+            return RedirectToAction("Category","Course", new { courseId = learningOutcome.CourseId });
         }
         [LogAction(Action = "LOC", Message = "Edit LOC", Method = "GET")]
         public ActionResult Edit(int id)
@@ -59,11 +60,12 @@ namespace QBCS.Web.Controllers
         {
             var courseId = learningOutcomeService.UpdateLearningOutcome(learningoutcome);
 
-            if (courseId == 0)
-            {
-                return RedirectToAction("Index", "Error");
-            }
-            return RedirectToAction("Detail", "Course", new { itemId = courseId });
+            //if (courseId == 0)
+            //{
+            //    return RedirectToAction("Index", "Error");
+            //}
+            //return RedirectToAction("Detail", "Course", new { itemId = courseId });
+            return RedirectToAction("Category", "Course", new { courseId = learningoutcome.CourseId });
         }
         [LogAction(Action = "LOC", Message = "Get LOC", Method = "GET")]
         public JsonResult LoadCourse()

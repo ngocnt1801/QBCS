@@ -221,6 +221,11 @@ namespace QBCS.Web
             bundles.Add(new ScriptBundle("~/bundle/scripts/syllabus").Include(
                 "~/Scripts/myjs/syllabus-manage.js"
                 ));
+
+            //manage syllabus
+            bundles.Add(new ScriptBundle("~/bundle/scripts/managecategory").Include(
+                "~/Scripts/myjs/manage-category.js"
+                ));
         }
     }
 }
