@@ -80,6 +80,7 @@ namespace QBCS.Service.Utilities
                     {
 
                         line = stringProcess.RemoveHtmlBrTag(line);
+                       
                         string resultTmp = "";
                         if (checkHTML == false)
                         {
@@ -420,7 +421,7 @@ namespace QBCS.Service.Utilities
             }
             catch (Exception ex)
             {
-                
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 quesModel.OtherError = "Other Error " + ex.Message.ToString();
                 
             }

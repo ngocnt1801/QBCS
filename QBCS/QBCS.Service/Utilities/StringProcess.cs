@@ -104,6 +104,7 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 result = RemoveTag(source, @"<br>", @"\n");
+                result = RemoveStringSharp(result);
                 result = RemoveTag(result, @"<br/>", @"\n");
                 result = RemoveTag(result, @"<br style", @"\n<br style");
                 result = RemoveTag(result, @"<br>", @"\n");      
@@ -177,6 +178,26 @@ namespace QBCS.Service.Utilities
 
             }
 
+            return result;
+        }
+        public string RemoveStringSharp (string source)
+        {
+            string result = "";
+            string UNEXPECTED_SHARP = "#<span lang";
+            string EXPECTED_SHARP = "<span lang";
+            string SPLASH_SHARP = @"\#<span lang";
+            if (source != null)
+            {
+                if (source.Contains(UNEXPECTED_SHARP) && !source.Contains(SPLASH_SHARP))
+                {
+                    result = RemoveTag(source, UNEXPECTED_SHARP, EXPECTED_SHARP);
+                }
+                else
+                {
+                    result = source;
+                }
+
+            }
             return result;
         }
         public string RemoveUnExpectedTagGIFT(string source)
