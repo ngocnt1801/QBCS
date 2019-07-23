@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {    
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-        .addClass('btn btn-info')
+        .addClass('btn btn-info spinner-loading')
         .attr('disabled', 'disabled')
         .attr('type', 'submit')
         .attr('id', 'btnFinish')

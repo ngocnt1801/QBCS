@@ -169,7 +169,7 @@ function clickSection() {
                         } else {
                             image = "";
                         }
-                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                         var result = category + code + questionContent;
                         return result;
                     }
@@ -191,7 +191,7 @@ function clickSection() {
                 var question = data.json.data;
                 var q = 0;
                 for (q = 0; q < question.length; q++) {
-                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var jq = '#q_' + question[q].Id + ' #Question';
                     var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
@@ -211,14 +211,14 @@ function clickSection() {
                     }
                     for (var w = 0; w < breakContent.length; w++) {
                         $(jq).append('<p id="qcontent_' + w + '"></p>');
-                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
+                        var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
@@ -235,7 +235,7 @@ function clickSection() {
                         for (var b = 0; b < breakContent.length; b++) {
                             $(jo).append('<p id="ocontent_' + b + '"></p>');
                             var ch = $(jo).length;
-                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                            var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -330,7 +330,7 @@ function clickSection() {
                         } else {
                             image = "";
                         }
-                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                         var result = category + code + questionContent;
                         return result;
                     }
@@ -360,7 +360,7 @@ function clickSection() {
                 var question = data.json.data;
                 var q = 0;
                 for (q = 0; q < question.length; q++) {
-                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var jq = '#q_' + question[q].Id + ' #Question';
                     var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
@@ -380,14 +380,14 @@ function clickSection() {
                     }
                     for (var w = 0; w < breakContent.length; w++) {
                         $(jq).append('<p id="qcontent_' + w + '"></p>');
-                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
+                        var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
@@ -404,7 +404,7 @@ function clickSection() {
                         for (var b = 0; b < breakContent.length; b++) {
                             $(jo).append('<p id="ocontent_' + b + '"></p>');
                             var ch = $(jo).length;
-                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                            var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -499,7 +499,7 @@ function clickSection() {
                         } else {
                             image = "";
                         }
-                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                         var result = category + code + questionContent;
                         return result;
                     }
@@ -520,7 +520,7 @@ function clickSection() {
                 var question = data.json.data;
                 var q = 0;
                 for (q = 0; q < question.length; q++) {
-                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var jq = '#q_' + question[q].Id + ' #Question';
                     var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
@@ -540,14 +540,14 @@ function clickSection() {
                     }
                     for (var w = 0; w < breakContent.length; w++) {
                         $(jq).append('<p id="qcontent_' + w + '"></p>');
-                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
+                        var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
@@ -564,7 +564,7 @@ function clickSection() {
                         for (var b = 0; b < breakContent.length; b++) {
                             $(jo).append('<p id="ocontent_' + b + '"></p>');
                             var ch = $(jo).length;
-                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                            var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -869,7 +869,7 @@ function initTableEditable() {
                         } else {
                             image = "";
                         }
-                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                         var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
                         var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
                         var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Import/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
@@ -929,7 +929,7 @@ function initTableEditable() {
                             } else {
                                 image = "";
                             }
-                            var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                            var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                             var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
                             var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
                             var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
@@ -968,7 +968,7 @@ function initTableEditable() {
             var question = data.json.data;
             var q = 0;
             for (q = 0; q < question.length; q++) {
-                var jq = '#q_' + question[q].Code + ' #Question';
+                var jq = '#q_' + question[q].Id + ' #Question';
                 var changeContent = question[q]["QuestionContent"];
                 var breakContent = [];
                 var isHtml = false;
@@ -988,14 +988,14 @@ function initTableEditable() {
                 }
                 for (var w = 0; w < breakContent.length; w++) {
                     $(jq).append('<p id="qcontent_' + w + '"></p>');
-                    var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
+                    var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
                 breakContent = [];
                 var o = 0;
                 for (o = 0; o < question[q]["Options"].length; o++) {
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    var jo = '#q_' + question[q].Code + ' #Option' + o;
+                    var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
                     var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                     if (isHtml) {
@@ -1012,7 +1012,7 @@ function initTableEditable() {
                     for (var b = 0; b < breakContent.length; b++) {
                         $(jo).append('<p id="ocontent_' + b + '"></p>');
                         var ch = $(jo).length;
-                        var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                        var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                         if (b == 0) {
                             $(jow).text(letters[o] + '. ' + breakContent[b]);
                         } else {
@@ -1026,58 +1026,61 @@ function initTableEditable() {
 
                 //duplicate question
                 var duplicate = question[q].DuplicatedQuestion;
-                var jd = '#d_' + question[q].Code + ' #Question';
-                var changeduplicateContent = duplicate["QuestionContent"];
-                breakContent = [];
-                isHtml = false;
-                if (changeduplicateContent.indexOf("[html]") >= 0) {
-                    isHtml = true;
-                }
-                if (isHtml) {
-                    changeduplicateContent = changeduplicateContent.split("&lt;p&gt;").join("");
-                    changeduplicateContent = changeduplicateContent.split("&lt;/p&gt;").join("");
-                    changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
-                    changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
-                    changeduplicateContent = changeduplicateContent.split("[html]").join("");
-                    breakContent = changeduplicateContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
-                    breakContent = breakContent.split("·");
-                } else {
-                    breakContent.push(changeduplicateContent);
-                }
-                for (var f = 0; f < breakContent.length; f++) {
-                    $(jd).append('<p id="dcontent_' + f + '"></p>');
-                    var jdf = '#d_' + question[q].Code + ' #Question #dcontent_' + f;
-                    $(jdf).text(breakContent[f]);
-                }
-                breakContent = [];
-                for (o = 0; o < duplicate["Options"].length; o++) {
-                    var jod = '#d_' + question[q].Code + ' #Option' + o;
-                    var dupOptionContent = duplicate["Options"][o]["OptionContent"];
-                    var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
+                var jd = '#d_' + question[q].Id + ' #Question';
+                if (duplicate != null) {
+                    var changeduplicateContent = duplicate.QuestionContent;
+                    breakContent = [];
+                    isHtml = false;
+                    if (changeduplicateContent.indexOf("[html]") >= 0) {
+                        isHtml = true;
+                    }
                     if (isHtml) {
-                        dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
-                        dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
-                        dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
-                        dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
-                        dupOptionContent = dupOptionContent.split("[html]").join("");
-                        breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        changeduplicateContent = changeduplicateContent.split("&lt;p&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/p&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("[html]").join("");
+                        breakContent = changeduplicateContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
                         breakContent = breakContent.split("·");
                     } else {
-                        breakContent.push(dupOptionContent);
+                        breakContent.push(changeduplicateContent);
                     }
-                    for (var c = 0; c < breakContent.length; c++) {
-                        $(jod).append('<p id="ocontent_' + c + '"></p>');
-                        var jodw = '#d_' + question[q].Code + ' #Option' + o + ' #ocontent_' + c;
-                        if (c == 0) {
-                            $(jodw).text(letters[o] + '. ' + breakContent[c]);
+                    for (var f = 0; f < breakContent.length; f++) {
+                        $(jd).append('<p id="dcontent_' + f + '"></p>');
+                        var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
+                        $(jdf).text(breakContent[f]);
+                    }
+                    breakContent = [];
+                    for (o = 0; o < duplicate["Options"].length; o++) {
+                        var jod = '#d_' + question[q].Id + ' #Option' + o;
+                        var dupOptionContent = duplicate["Options"][o]["OptionContent"];
+                        var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
+                        if (isHtml) {
+                            dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("[html]").join("");
+                            breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                            breakContent = breakContent.split("·");
                         } else {
-                            $(jodw).text(breakContent[c]);
+                            breakContent.push(dupOptionContent);
+                        }
+                        for (var c = 0; c < breakContent.length; c++) {
+                            $(jod).append('<p id="ocontent_' + c + '"></p>');
+                            var jodw = '#d_' + question[q].Id + ' #Option' + o + ' #ocontent_' + c;
+                            if (c == 0) {
+                                $(jodw).text(letters[o] + '. ' + breakContent[c]);
+                            } else {
+                                $(jodw).text(breakContent[c]);
+                            }
+                        }
+                        if (dupOptionCorrect) {
+                            $(jod).addClass('text-right-answer');
                         }
                     }
-                    if (dupOptionCorrect) {
-                        $(jod).addClass('text-right-answer');
-                    }
                 }
+                
             }
 
             $("#tableEditable .delete-question-dt").on('click', function () {

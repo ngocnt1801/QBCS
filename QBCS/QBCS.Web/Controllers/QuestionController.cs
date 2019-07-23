@@ -377,8 +377,9 @@ namespace QBCS.Web.Controllers
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {
             var search = Request["search[value]"].ToLower();
-            var entities = questionService.GetQuestionTempByImportId(importId, type);
-            var recordTotal = entities.Count;
+            var data = questionService.GetQuestionTempByImportId(importId, type, search);
+            var entities = data.Questions;
+            var recordTotal = data.totalCount;
             var result = new List<QuestionTempViewModel>();
             foreach (var q in entities)
             {
