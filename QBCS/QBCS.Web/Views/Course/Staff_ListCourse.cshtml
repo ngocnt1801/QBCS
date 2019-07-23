@@ -44,6 +44,7 @@
                             @if (TempData["ViewHistory"] != null && (bool)TempData["ViewHistory"])
                             {
                                 <a href="@Url.Action("GetHistoryCourse", "Examination", new { courseId = item.Id})" class="btn btn-primary float-right spinner-loading">View history</a>
+                                <a href="@Url.Action("Syllabus", "Course", new { courseId = item.Id})" class="btn btn-info float-right mr-2 spinner-loading">Syllabus</a>
                             }
                         </td>
                     </tr>

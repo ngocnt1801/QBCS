@@ -74,17 +74,8 @@ function customs_display_duplicate() {
 }
 
 function clickSection() {
-    var content = [];
-    var duplicate = [];
-    var countTable = 0;
-    var countDuplicate = 0;
     $('#section-editable').on('click', function () {
         startLoading();
-
-        content = [];
-        duplicate = [];
-        countTable = 0;
-        countDuplicate = 0;
         var templateEditable = '<table class="table table-bordered table-hover text-custom" id="tableEditable" width="100%" cellspacing="0">' +
             '<thead>' +
             '<tr>' +
@@ -164,37 +155,23 @@ function clickSection() {
                     }
                 },
                 {
-                    data: "QuestionTempViewModel",
                     render: function (data, type, row, meta) {
-                        if (row != null) {
-                            var questionObj = {};
-                            var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
-                            var code = 'Question Code: ' + row.Code + '</p>';
-                            var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
-                            questionObj['QuestionContent'] = row.QuestionContent;
-                            var image = row.Image;
-                            if (image != null && image != "") {
-                                image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
-                            } else {
-                                image = "";
-                            }
-                            var options = [];
-                            var i = 0;
-                            for (i = 0; i < row.Options.length; i++) {
-                                var option = {};
-                                option["content"] = changeHtml(row.Options[i].OptionContent);
-                                option["correct"] = row.Options[i].IsCorrect;
-                                options.push(option);
-                            }
-                            questionObj["Options"] = options;
-                            content.push(questionObj);
-                            var result = category + code + questionContent + image;
-                            for (i = 0; i < options.length; i++) {
-                                result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
-                            }
-                            countTable++;
-                            return result;
+                        var questionObj = {};
+                        var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
+                        var code = 'Question Code: ' + row.Code + '</p>';
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                         }
+                        var image = row.Image;
+                        if (image != null && image != "") {
+                            image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                        } else {
+                            image = "";
+                        }
+                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var result = category + code + questionContent;
+                        return result;
                     }
                 },
                 {
@@ -209,12 +186,13 @@ function clickSection() {
                 { targets: 1, width: "88%" },
                 { targets: 2, width: "10%" }
             ],
-            fnDrawCallback: function () {
+            fnDrawCallback: function (data) {
                 //original question
-                countTable = 0;
-                for (var q = 0; q < content.length; q++) {
-                    var jq = "#qcontent_" + q;
-                    var changeContent = content[q]["QuestionContent"];
+                var question = data.json.data;
+                var q = 0;
+                for (q = 0; q < question.length; q++) {
+                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
                     if (changeContent.indexOf("[html]") >= 0) {
@@ -232,16 +210,17 @@ function clickSection() {
                         breakContent.push(changeContent);
                     }
                     for (var w = 0; w < breakContent.length; w++) {
-                        $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
-                        var jqw = "#qcontent_" + q + '_' + w;
+                        $(jq).append('<p id="qcontent_' + w + '"></p>');
+                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
-                    for (var o = 0; o < content[q]["Options"].length; o++) {
+                    var o = 0;
+                    for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = "#ocontent_" + q + "_" + o;
-                        var optionContent = content[q]["Options"][o]["content"];
-                        var optionCorrect = content[q]["Options"][o]["correct"];
+                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var optionContent = question[q]["Options"][o]["OptionContent"];
+                        var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
                             optionContent = optionContent.split("&lt;p&gt;").join("");
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -254,8 +233,9 @@ function clickSection() {
                             breakContent.push(optionContent);
                         }
                         for (var b = 0; b < breakContent.length; b++) {
-                            $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
-                            var jow = "#ocontent_" + q + '_' + o + '_' + b;
+                            $(jo).append('<p id="ocontent_' + b + '"></p>');
+                            var ch = $(jo).length;
+                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -266,16 +246,16 @@ function clickSection() {
                             $(jo).addClass('text-right-answer');
                         }
                     }
+
+
+                    $("#tableSuccess .delete-question-dt").on('click', function () {
+                        minusTotal($("#total-success"));
+                        plusTotal($("#total-delete"));
+
+                        sendAjax($(this).attr('data-url'));
+                        $('#section-success').trigger('click');
+                    })
                 }
-
-                
-                $("#tableSuccess .delete-question-dt").on('click', function () {
-                    minusTotal($("#total-success"));
-                    plusTotal($("#total-delete"));
-
-                    sendAjax($(this).attr('data-url'));
-                    $('#section-success').trigger('click');
-                })
             }
         });
         table3.on('page.dt', function () {
@@ -336,37 +316,23 @@ function clickSection() {
                     }
                 },
                 {
-                    data: "QuestionTempViewModel",
                     render: function (data, type, row, meta) {
-                        if (row != null) {
-                            var questionObj = {};
-                            var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
-                            var code = 'Question Code: ' + row.Code + '</p>';
-                            var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
-                            questionObj['QuestionContent'] = row.QuestionContent;
-                            var image = row.Image;
-                            if (image != null && image != "") {
-                                image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
-                            } else {
-                                image = "";
-                            }
-                            var options = [];
-                            var i = 0;
-                            for (i = 0; i < row.Options.length; i++) {
-                                var option = {};
-                                option["content"] = changeHtml(row.Options[i].OptionContent);
-                                option["correct"] = row.Options[i].IsCorrect;
-                                options.push(option);
-                            }
-                            questionObj["Options"] = options;
-                            content.push(questionObj);
-                            var result = category + code + questionContent + image;
-                            for (i = 0; i < options.length; i++) {
-                                result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
-                            }
-                            countTable++;
-                            return result;
+                        var questionObj = {};
+                        var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
+                        var code = 'Question Code: ' + row.Code + '</p>';
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                         }
+                        var image = row.Image;
+                        if (image != null && image != "") {
+                            image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                        } else {
+                            image = "";
+                        }
+                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var result = category + code + questionContent;
+                        return result;
                     }
                 },
                 {
@@ -389,12 +355,13 @@ function clickSection() {
                 { targets: 2, width: "20%" },
                 { targets: 3, width: "10%" }
             ],
-            fnDrawCallback: function () {
+            fnDrawCallback: function (data) {
                 //original question
-                countTable = 0;
-                for (var q = 0; q < content.length; q++) {
-                    var jq = "#qcontent_" + q;
-                    var changeContent = content[q]["QuestionContent"];
+                var question = data.json.data;
+                var q = 0;
+                for (q = 0; q < question.length; q++) {
+                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
                     if (changeContent.indexOf("[html]") >= 0) {
@@ -412,16 +379,17 @@ function clickSection() {
                         breakContent.push(changeContent);
                     }
                     for (var w = 0; w < breakContent.length; w++) {
-                        $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
-                        var jqw = "#qcontent_" + q + '_' + w;
+                        $(jq).append('<p id="qcontent_' + w + '"></p>');
+                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
-                    for (var o = 0; o < content[q]["Options"].length; o++) {
+                    var o = 0;
+                    for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = "#ocontent_" + q + "_" + o;
-                        var optionContent = content[q]["Options"][o]["content"];
-                        var optionCorrect = content[q]["Options"][o]["correct"];
+                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var optionContent = question[q]["Options"][o]["OptionContent"];
+                        var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
                             optionContent = optionContent.split("&lt;p&gt;").join("");
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -434,8 +402,9 @@ function clickSection() {
                             breakContent.push(optionContent);
                         }
                         for (var b = 0; b < breakContent.length; b++) {
-                            $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
-                            var jow = "#ocontent_" + q + '_' + o + '_' + b;
+                            $(jo).append('<p id="ocontent_' + b + '"></p>');
+                            var ch = $(jo).length;
+                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -446,15 +415,15 @@ function clickSection() {
                             $(jo).addClass('text-right-answer');
                         }
                     }
+
+                    $("#tableInvalid .delete-question-dt").on('click', function () {
+                        minusTotal($("#total-invalid"));
+                        plusTotal($("#total-delete"));
+
+                        sendAjax($(this).attr('data-url'));
+                        $('#section-invalid').trigger('click');
+                    })
                 }
-
-                $("#tableInvalid .delete-question-dt").on('click', function () {
-                    minusTotal($("#total-invalid"));
-                    plusTotal($("#total-delete"));
-
-                    sendAjax($(this).attr('data-url'));
-                    $('#section-invalid').trigger('click');
-                })
             }
         });
         table4.on('page.dt', function () {
@@ -462,7 +431,7 @@ function clickSection() {
                 scrollTop: $(".dataTables_wrapper").offset().top
             }, 'slow');
         });
-        
+
         stopLoading();
     });
 
@@ -517,37 +486,22 @@ function clickSection() {
                     }
                 },
                 {
-                    data: "QuestionTempViewModel",
                     render: function (data, type, row, meta) {
-                        if (row != null) {
-                            var questionObj = {};
-                            var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
-                            var code = 'Question Code: ' + row.Code + '</p>';
-                            var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
-                            questionObj['QuestionContent'] = row.QuestionContent;
-                            var image = row.Image;
-                            if (image != null && image != "") {
-                                image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
-                            } else {
-                                image = "";
-                            }
-                            var options = [];
-                            var i = 0;
-                            for (i = 0; i < row.Options.length; i++) {
-                                var option = {};
-                                option["content"] = changeHtml(row.Options[i].OptionContent);
-                                option["correct"] = row.Options[i].IsCorrect;
-                                options.push(option);
-                            }
-                            questionObj["Options"] = options;
-                            content.push(questionObj);
-                            var result = category + code + questionContent + image;
-                            for (i = 0; i < options.length; i++) {
-                                result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
-                            }
-                            countTable++;
-                            return result;
+                        var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
+                        var code = 'Question Code: ' + row.Code + '</p>';
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                         }
+                        var image = row.Image;
+                        if (image != null && image != "") {
+                            image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                        } else {
+                            image = "";
+                        }
+                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var result = category + code + questionContent;
+                        return result;
                     }
                 },
                 {
@@ -562,12 +516,12 @@ function clickSection() {
                 { targets: 1, width: "88%" },
                 { targets: 2, width: "10%" }
             ],
-            fnDrawCallback: function () {
-                //original question
-                countTable = 0;
-                for (var q = 0; q < content.length; q++) {
-                    var jq = "#qcontent_" + q;
-                    var changeContent = content[q]["QuestionContent"];
+            fnDrawCallback: function (data) {
+                var question = data.json.data;
+                var q = 0;
+                for (q = 0; q < question.length; q++) {
+                    var jq = '#q_' + question[q].Code + ' #Question';
+                    var changeContent = question[q]["QuestionContent"];
                     var breakContent = [];
                     var isHtml = false;
                     if (changeContent.indexOf("[html]") >= 0) {
@@ -585,16 +539,17 @@ function clickSection() {
                         breakContent.push(changeContent);
                     }
                     for (var w = 0; w < breakContent.length; w++) {
-                        $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
-                        var jqw = "#qcontent_" + q + '_' + w;
+                        $(jq).append('<p id="qcontent_' + w + '"></p>');
+                        var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
                     breakContent = [];
-                    for (var o = 0; o < content[q]["Options"].length; o++) {
+                    var o = 0;
+                    for (o = 0; o < question[q]["Options"].length; o++) {
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var jo = "#ocontent_" + q + "_" + o;
-                        var optionContent = content[q]["Options"][o]["content"];
-                        var optionCorrect = content[q]["Options"][o]["correct"];
+                        var jo = '#q_' + question[q].Code + ' #Option' + o;
+                        var optionContent = question[q]["Options"][o]["OptionContent"];
+                        var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                         if (isHtml) {
                             optionContent = optionContent.split("&lt;p&gt;").join("");
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -607,8 +562,9 @@ function clickSection() {
                             breakContent.push(optionContent);
                         }
                         for (var b = 0; b < breakContent.length; b++) {
-                            $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
-                            var jow = "#ocontent_" + q + '_' + o + '_' + b;
+                            $(jo).append('<p id="ocontent_' + b + '"></p>');
+                            var ch = $(jo).length;
+                            var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
                             if (b == 0) {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
@@ -693,7 +649,7 @@ function clickSection() {
             scrollTop: $(".dataTables_wrapper").offset().top
         }, 'slow');
     });
-    
+
 }
 
 function minusTotal(totalSpan) {
@@ -864,11 +820,6 @@ function reloadTable(url, container) {
 
 function initTableEditable() {
 
-    content = [];
-    duplicate = [];
-    countTable = 0;
-    countDuplicate = 0;
-
     var table1 = $('#tableEditable').DataTable({
         paging: true,
         ordering: false,
@@ -896,40 +847,37 @@ function initTableEditable() {
                 }
             },
             {
-                data: "QuestionTempViewModel",
                 render: function (data, type, row, meta) {
                     if (row != null) {
+
+                        //notify if not image
+                        var result = "";
+                        if (row.IsNotImage) {
+                            result = "<p class='text-danger'>This question may be has an image</p>";
+                        }
+
                         var questionObj = {};
                         var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
-                        var code = 'Question Code: ' + row.Code + '</p>';
-                        var questionContent = '<p class="text-custom" id="qcontent_' + countTable + '"></p>';
-                        questionObj['QuestionContent'] = row.QuestionContent;
-                        var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
-                        var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
-                        var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Import/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
+                        var code = '<p>Question Code: ' + row.Code + '</p>';
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                        }
                         var image = row.Image;
                         if (image != null && image != "") {
                             image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                         } else {
                             image = "";
                         }
-                        var options = [];
-                        var i = 0;
-                        for (i = 0; i < row.Options.length; i++) {
-                            var option = {};
-                            option["content"] = changeHtml(row.Options[i].OptionContent);
-                            option["correct"] = row.Options[i].IsCorrect;
-                            options.push(option);
-                        }
-                        questionObj["Options"] = options;
-                        content.push(questionObj);
-                        var result = category + code + questionContent + image;
-                        for (i = 0; i < options.length; i++) {
-                            result = result + '<div class="text-custom" id="ocontent_' + countTable + '_' + i + '" class="container-fluid"></div>';
-                        }
-                        countTable++;
+                        var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                        var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
+                        var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
+                        var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Import/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
+
+                        result = result + category + code + questionContent;
+
                         if (row.DuplicatedQuestion != null) {
-                            result = result + '<div class="row"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
+                            result = result + '<div class="row mt-5"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                         }
                         return result;
                     }
@@ -939,6 +887,13 @@ function initTableEditable() {
                 render: function (data, type, row) {
                     if (row != null) {
                         if (row.DuplicatedQuestion != null) {
+
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p class='text-danger'>This question may be has an image</p>";
+                            }
+
                             var questionObj = {};
                             var category = '<p> </p>';
                             var code = ' <p class="text-custom">' + row.DuplicatedQuestion.CourseName + row.DuplicatedQuestion.Code + '</p>';
@@ -964,32 +919,23 @@ function initTableEditable() {
 
                                 status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>'
                             }
-                            var questionContent = '<p id="dcontent_' + countDuplicate + '"></p>';
-                            var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
-                            var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
-                            var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
-                            questionObj['QuestionContent'] = row.DuplicatedQuestion.QuestionContent;
-                            var image = row.DuplicatedQuestion.Image;
+                            var options = '';
+                            for (var i = 0; i < row.Options.length; i++) {
+                                options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                            }
+                            var image = row.Image;
                             if (image != null && image != "") {
                                 image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                             } else {
                                 image = "";
                             }
-                            var options = [];
-                            var i = 0;
-                            for (i = 0; i < row.DuplicatedQuestion.Options.length; i++) {
-                                var option = {};
-                                option["content"] = changeHtml(row.DuplicatedQuestion.Options[i].OptionContent);
-                                option["correct"] = row.DuplicatedQuestion.Options[i].IsCorrect;
-                                options.push(option);
-                            }
-                            questionObj["Options"] = options;
-                            duplicate.push(questionObj);
-                            var result = status + category + code + questionContent + image;
-                            for (i = 0; i < options.length; i++) {
-                                result = result + '<div id="docontent_' + countDuplicate + '_' + i + '" class="container-fluid"></div>';
-                            }
-                            countDuplicate++;
+                            var questionContent = '<div id="q_' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                            var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
+                            var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
+                            var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
+
+
+                            result = result + status + category + code + questionContent;
                             if (!row.DuplicatedQuestion.IsBank && !row.DuplicatedQuestion.IsAnotherImport && row.DuplicatedQuestion.Status == 2) {
                                 result = result + '<div class="row"><div class=" col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                             }
@@ -997,7 +943,13 @@ function initTableEditable() {
 
                         }
                         else {
-                            var result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p>There is no duplicate</p>";
+                            } else {
+                                result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
+                            }
                             return result;
                         }
 
@@ -1011,12 +963,13 @@ function initTableEditable() {
             { targets: 2, width: "49%" }
         ],
 
-        fnDrawCallback: function () {
+        fnDrawCallback: function (data) {
             //original question
-            countTable = 0;
-            for (var q = 0; q < content.length; q++) {
-                var jq = "#qcontent_" + q;
-                var changeContent = content[q]["QuestionContent"];
+            var question = data.json.data;
+            var q = 0;
+            for (q = 0; q < question.length; q++) {
+                var jq = '#q_' + question[q].Code + ' #Question';
+                var changeContent = question[q]["QuestionContent"];
                 var breakContent = [];
                 var isHtml = false;
                 if (changeContent.indexOf("[html]") >= 0) {
@@ -1034,16 +987,17 @@ function initTableEditable() {
                     breakContent.push(changeContent);
                 }
                 for (var w = 0; w < breakContent.length; w++) {
-                    $(jq).append('<p id="qcontent_' + q + '_' + w + '"></p>');
-                    var jqw = "#qcontent_" + q + '_' + w;
+                    $(jq).append('<p id="qcontent_' + w + '"></p>');
+                    var jqw = '#q_' + question[q].Code + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
                 breakContent = [];
-                for (var o = 0; o < content[q]["Options"].length; o++) {
+                var o = 0;
+                for (o = 0; o < question[q]["Options"].length; o++) {
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    var jo = "#ocontent_" + q + "_" + o;
-                    var optionContent = content[q]["Options"][o]["content"];
-                    var optionCorrect = content[q]["Options"][o]["correct"];
+                    var jo = '#q_' + question[q].Code + ' #Option' + o;
+                    var optionContent = question[q]["Options"][o]["OptionContent"];
+                    var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                     if (isHtml) {
                         optionContent = optionContent.split("&lt;p&gt;").join("");
                         optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -1056,8 +1010,9 @@ function initTableEditable() {
                         breakContent.push(optionContent);
                     }
                     for (var b = 0; b < breakContent.length; b++) {
-                        $(jo).append('<p id="ocontent_' + q + '_' + o + '_' + b + '"></p>');
-                        var jow = "#ocontent_" + q + '_' + o + '_' + b;
+                        $(jo).append('<p id="ocontent_' + b + '"></p>');
+                        var ch = $(jo).length;
+                        var jow = '#q_' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
                         if (b == 0) {
                             $(jow).text(letters[o] + '. ' + breakContent[b]);
                         } else {
@@ -1068,13 +1023,11 @@ function initTableEditable() {
                         $(jo).addClass('text-right-answer');
                     }
                 }
-            }
 
-            //duplicate question
-            countDuplicate = 0;
-            for (var d = 0; d < duplicate.length; d++) {
-                var jd = "#dcontent_" + d;
-                var changeduplicateContent = duplicate[d]["QuestionContent"];
+                //duplicate question
+                var duplicate = question[q].DuplicatedQuestion;
+                var jd = '#d_' + question[q].Code + ' #Question';
+                var changeduplicateContent = duplicate["QuestionContent"];
                 breakContent = [];
                 isHtml = false;
                 if (changeduplicateContent.indexOf("[html]") >= 0) {
@@ -1092,38 +1045,37 @@ function initTableEditable() {
                     breakContent.push(changeduplicateContent);
                 }
                 for (var f = 0; f < breakContent.length; f++) {
-                    $(jd).append('<p id="dcontent_' + d + '_' + f + '"></p>');
-                    var jdf = "#dcontent_" + d + '_' + f;
+                    $(jd).append('<p id="dcontent_' + f + '"></p>');
+                    var jdf = '#d_' + question[q].Code + ' #Question #dcontent_' + f;
                     $(jdf).text(breakContent[f]);
                 }
                 breakContent = [];
-                for (var dO = 0; dO < duplicate[d]["Options"].length; dO++) {
-                    //letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    var jdO = "#docontent_" + d + "_" + dO;
-                    var optionDContent = duplicate[d]["Options"][dO]["content"];
-                    var optionDCorrect = duplicate[d]["Options"][dO]["correct"];
+                for (o = 0; o < duplicate["Options"].length; o++) {
+                    var jod = '#d_' + question[q].Code + ' #Option' + o;
+                    var dupOptionContent = duplicate["Options"][o]["OptionContent"];
+                    var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
                     if (isHtml) {
-                        optionDContent = optionDContent.split("&lt;p&gt;").join("");
-                        optionDContent = optionDContent.split("&lt;/p&gt;").join("");
-                        optionDContent = optionDContent.split("&lt;span&gt;").join("");
-                        optionDContent = optionDContent.split("&lt;/span&gt;").join("");
-                        optionDContent = optionDContent.split("[html]").join("");
-                        breakContent = optionDContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
+                        dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
+                        dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
+                        dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                        dupOptionContent = dupOptionContent.split("[html]").join("");
+                        breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
                         breakContent = breakContent.split("·");
                     } else {
-                        breakContent.push(optionDContent);
+                        breakContent.push(dupOptionContent);
                     }
-                    for (b = 0; b < breakContent.length; b++) {
-                        $(jdO).append('<p id="docontent_' + d + '_' + dO + '_' + b + '"></p>');
-                        var jdOw = "#docontent_" + d + '_' + dO + '_' + b;
-                        if (b == 0) {
-                            $(jdOw).text(letters[dO] + '. ' + breakContent[b]);
+                    for (var c = 0; c < breakContent.length; c++) {
+                        $(jod).append('<p id="ocontent_' + c + '"></p>');
+                        var jodw = '#d_' + question[q].Code + ' #Option' + o + ' #ocontent_' + c;
+                        if (c == 0) {
+                            $(jodw).text(letters[o] + '. ' + breakContent[c]);
                         } else {
-                            $(jdOw).text(breakContent[b]);
+                            $(jodw).text(breakContent[c]);
                         }
                     }
-                    if (optionDCorrect) {
-                        $(jdO).addClass('text-right-answer');
+                    if (dupOptionCorrect) {
+                        $(jod).addClass('text-right-answer');
                     }
                 }
             }

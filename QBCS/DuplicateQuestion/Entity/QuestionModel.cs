@@ -27,6 +27,7 @@ namespace DuplicateQuestion.Entity
         public int? LevelId { get; set; }
         public int? UpdateQuestionId { get; set; }
         public string Image { get; set; }
+        public bool IsNotImage { get; set; }
 
         public override string ToString()
         {

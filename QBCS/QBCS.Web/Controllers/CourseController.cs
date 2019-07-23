@@ -16,11 +16,13 @@ namespace QBCS.Web.Controllers
         private ICourseService courseService;
         private ICategoryService categoryService;
         private ILearningOutcomeService learningOutcomeService;
+        private ISyllabusService syllabusService;
         public CourseController()
         {
             courseService = new CourseService();
             categoryService = new CategoryService();
             learningOutcomeService = new LearningOutcomeService();
+            syllabusService = new SyllabusService();
         }
 
         [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.CourseByUser)]
@@ -220,6 +222,64 @@ namespace QBCS.Web.Controllers
                 Categories = categories
             };
             return View(model);
+        }
+    
+        public ActionResult Syllabus(int courseId)
+        {
+            var model = syllabusService.GetSyllabusPartials(courseId);
+            var course = courseService.GetCourseById(courseId);
+            course.Syllabus = model;
+            return View(course);
+        }
+
+        public ActionResult CreateSyllabus(SyllabusPartialViewModel model)
+        {
+            syllabusService.AddSyllabusPartial(model);
+            return RedirectToAction("Syllabus", new { courseId = model.CourseId });
+        }
+
+        public ActionResult UpdateSyllabus(SyllabusPartialViewModel model)
+        {
+            syllabusService.UpdateSyllabusPartial(model);
+            return RedirectToAction("Syllabus", new { courseId = model.CourseId });
+        }
+
+        public ActionResult DeleteSyllabus(int id, int courseId)
+        {
+            syllabusService.DeleteSyllabusPartial(id);
+            return RedirectToAction("Syllabus", new { courseId = courseId });
+        }
+
+        public ActionResult GetLearningOutcomes(int syllabusId)
+        {
+            var model = syllabusService.GetLearningOutcomes(syllabusId);
+            model.AddRange(syllabusService.GetLearningOutcomes(null));
+            ViewBag.Syl = syllabusId;
+            return PartialView(model);
+        }
+
+        public ActionResult AddLOCtoSyllabus(int locId, int syllabusId)
+        {
+            syllabusService.ChangeSyllabusPartial(locId, syllabusId);
+            var model = syllabusService.GetLearningOutcomes(syllabusId);
+            model.AddRange(syllabusService.GetLearningOutcomes(null));
+            ViewBag.Syl = syllabusId;
+            return PartialView("GetLearningOutcomes", model);
+        }
+
+        public ActionResult DeleteLOC(int locId, int syllabusId)
+        {
+            syllabusService.ChangeSyllabusPartial(locId, null);
+            var model = syllabusService.GetLearningOutcomes(syllabusId);
+            model.AddRange(syllabusService.GetLearningOutcomes(null));
+            ViewBag.Syl = syllabusId;
+            return PartialView("GetLearningOutcomes", model);
+        }
+
+        public ActionResult UpdateTotalQuestion(int courseId, int total)
+        {
+            courseService.UpdateTotalQuesiton(courseId, total);
+            return RedirectToAction("Syllabus", new { courseId = courseId });
         }
     }
 }

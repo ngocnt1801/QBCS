@@ -110,8 +110,10 @@
     <Compile Include="Interface\IQuestionService.cs" />
     <Compile Include="Interface\IScriptService.cs" />
     <Compile Include="Interface\ISemesterService.cs" />
+    <Compile Include="Interface\ISyllabusService.cs" />
     <Compile Include="Interface\ITopicService.cs" />
     <Compile Include="Interface\IUserService.cs" />
+    <Compile Include="Interface\SyllabusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DateUltilities.cs" />
     <Compile Include="Utilities\DocUtilities.cs" />

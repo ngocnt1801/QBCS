@@ -10,9 +10,10 @@ namespace QBCS.Service.ViewModel
     {
         public string Type { get; set; }
         public string Name { get; set; }
+        public int Null { get; set; }
         public int Easy { get; set; }
         public int Medium { get; set; }
         public int Hard { get; set; }
-        public List<string> Warning { get; set; }
+        public List<string> Suggestion { get; set; }
     }
 }

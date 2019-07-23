@@ -11,6 +11,7 @@ namespace QBCS.Service.ViewModel
         public int Id { get; set; }
         public string Name { get; set; }
         public int AmountQuestion { get; set; }
-        public List<LearningOutcomeViewModel> LearingOutcomes;
+        public List<LearningOutcomeViewModel> LearingOutcomes { get; set; }
+        public int CourseId { get; set; }
     }
 }

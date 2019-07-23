@@ -19,17 +19,17 @@
                     <a id="course_@course.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = course.Id , type = "c" })" class="list-group-item" data-toggle="collapse" aria-expanded="true" data-target="#c-@course.Id" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = course.Id , type = "c" })">
                         <i class="fa fa-plus-circle"></i>@course.Name (@course.Code)
                     </a>
-                    <div class="list-group collapse" id="c-@course.Id">
-                        @if (course.LearningOutcome != null && course.LearningOutcome.Count > 0)
-                        {
-                            foreach (var lo in course.LearningOutcome)
+                    @*<div class="list-group collapse" id="c-@course.Id">
+                            @if (course.LearningOutcome != null && course.LearningOutcome.Count > 0)
                             {
-                                <a style="padding-left:30px" id="learningoutcome_@lo.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })" class="list-group list-group-item" data-toggle="collapse" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })">
-                                    <i class="fa fa-plus-circle"></i>@lo.Name
-                                </a>
+                                foreach (var lo in course.LearningOutcome)
+                                {
+                                    <a style="padding-left:30px" id="learningoutcome_@lo.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })" class="list-group list-group-item" data-toggle="collapse" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })">
+                                        <i class="fa fa-plus-circle"></i>@lo.Name
+                                    </a>
+                                }
                             }
-                        }
-                    </div>
+                        </div>*@
                 }
             }
             else
@@ -43,34 +43,6 @@
     </div>
 </div>
 
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var checkCourse = [];
-        var checkLO = [];
-        $('#listCourseStat a').each(function () {
-            var Obj = {};
-            Obj['Id'] = $(this).attr('id');
-            Obj['Value'] = $(this).text().trim();
-            if (Obj['Id'].includes("course")) {
-                checkCourse.push(Obj);
-            }
 
-        });
-        $('input').keyup(function (e) {
-            var input = this.value.toLowerCase();
-            for (var i = 0; i < checkCourse.length; i++) {
-                var value = checkCourse[i]['Value'].toLowerCase();
-                var jqCourse = "#" + checkCourse[i]['Id'];
-                var jqLO = jqCourse.replace("course_", "c-");
-                if (!value.includes(input)) {
-                    $(jqCourse).hide();
-                    $(jqLO).removeClass("show");
-                } else {
-                    $(jqCourse).show();
-                }
-            }
-        });
-    });
-</script>
+@Scripts.Render("~/bundle/scripts/CourseStatistic")
 @Scripts.Render("~/bundle/scripts/category")

@@ -54,6 +54,8 @@ namespace QBCS.Entity
 
         public int? OldStatus { get; set; }
 
+        public bool? IsNotImage { get; set; }
+
         public virtual Import Import { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

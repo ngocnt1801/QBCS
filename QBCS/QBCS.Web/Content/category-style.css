@@ -1,4 +1,7 @@
-﻿.list-group.list-group-root {
+﻿.dataTables_processing {
+    z-index: 1000;
+}
+.list-group.list-group-root {
     padding: 0;
     overflow: hidden;
     border-radius: 5px;
