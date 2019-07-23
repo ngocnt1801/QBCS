@@ -335,5 +335,13 @@ namespace QBCS.Service.Implement
                 return false;
             }
         }
+
+        public void UpdateTotalQuesiton(int courseId, int total)
+        {
+            var entity = unitOfWork.Repository<Course>().GetById(courseId);
+            entity.DefaultNumberOfQuestion = total;
+            unitOfWork.Repository<Course>().Update(entity);
+            unitOfWork.SaveChanges();
+        }
     }
 }

@@ -227,8 +227,9 @@ namespace QBCS.Web.Controllers
         public ActionResult Syllabus(int courseId)
         {
             var model = syllabusService.GetSyllabusPartials(courseId);
-            TempData["CourseId"] = courseId;
-            return View(model);
+            var course = courseService.GetCourseById(courseId);
+            course.SyllabusPartials = model;
+            return View(course);
         }
 
         public ActionResult CreateSyllabus(SyllabusPartialViewModel model)
@@ -273,6 +274,12 @@ namespace QBCS.Web.Controllers
             model.AddRange(syllabusService.GetLearningOutcomes(null));
             ViewBag.Syl = syllabusId;
             return PartialView("GetLearningOutcomes", model);
+        }
+
+        public ActionResult UpdateTotalQuestion(int courseId, int total)
+        {
+            courseService.UpdateTotalQuesiton(courseId, total);
+            return RedirectToAction("Syllabus", new { courseId = courseId });
         }
     }
 }

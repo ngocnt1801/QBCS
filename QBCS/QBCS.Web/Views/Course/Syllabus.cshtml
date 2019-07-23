@@ -1,16 +1,52 @@
-﻿@model IEnumerable<QBCS.Service.ViewModel.SyllabusPartialViewModel>
+﻿@model QBCS.Service.ViewModel.CourseViewModel
 
 @{
     ViewBag.Title = "Syllabus";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int count = 0;
+    int sumSylPartial = Model.SyllabusPartials.Sum(s => s.Amount);
+}
+
+<h4>@Model.Name (@Model.Code)</h4>
+
+<div class="row">
+    @using (Html.BeginForm("UpdateTotalQuestion", "Course", FormMethod.Post))
+    {
+    <div class="form-group col-md-12 form-inline mt-2">
+        <label class="control-label mr-2">
+            Total Question:
+        </label>
+        <input class="form-control mr-2 text-right" type="number" value="@Model.DefaultNumberOfQuestion" name="total" />
+        <input type="hidden" value="@Model.Id" name="courseId" />
+        <input type="submit" class="btn btn-primary float-right" value="Update" />
+
+    </div>
+    }
+
+</div>
+<hr/>
+@if(Model.DefaultNumberOfQuestion != sumSylPartial)
+{
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    @if (Model.DefaultNumberOfQuestion > sumSylPartial)
+    {
+    <span>There are <strong>missing @(Model.DefaultNumberOfQuestion - sumSylPartial) </strong> questions</span>
+    }
+    else
+    {
+    <span>There are <strong>exceeded @(Model.DefaultNumberOfQuestion - sumSylPartial) </strong> questions</span>
+    }
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 }
 
 <div class="row">
     <div class="col-md-6">
         <div class="row mb-2">
             <div class="col-md-12">
-                <button class="btn btn-primary float-right" data-toggle="modal" data-target="#create-syllabus-modal"><i class="fa fa-plus"></i> Add Syllabus</button>
+                <button class="btn btn-primary float-right" data-toggle="modal" data-target="#create-syllabus-modal"><i class="fa fa-plus"></i> New Syllabus</button>
             </div>
         </div>
         <div class="row">
@@ -32,11 +68,11 @@
                             <tbody>
                                 @if (Model != null)
                                 {
-                                    foreach (var item in Model)
+                                    foreach (var item in Model.SyllabusPartials)
                                     {
                                         count++;
 
-                                        <tr class="show-loc" data-url="@Url.Action("GetLearningOutcomes", "Course", new { syllabusId = item.Id})">
+                                        <tr class="show-loc" data-url="@Url.Action("GetLearningOutcomes", "Course", new { syllabusId = item.Id })">
                                             <td class="text-center">
                                                 @count
                                             </td>
@@ -48,12 +84,12 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary edit-syllabus" data-id="@item.Id" data-name="@item.Name" data-amount="@item.Amount"><i class="fa fa-pencil-alt"></i></button>
-                                                <a href="@Url.Action("DeleteSyllabus", "Course", new { id = item.Id, courseId = TempData["CourseId"]})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                <a href="@Url.Action("DeleteSyllabus", "Course", new { id = item.Id, courseId = Model.Id })" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
-                                    }
+                                        }
 
-                                }
+                                    }
                             </tbody>
                         </table>
                     </div>
@@ -83,7 +119,7 @@
                         <input type="number" class="form-control" name="Amount">
                     </div>
                 </div>
-                <input type="hidden" name="CourseId" value="@TempData["CourseId"]" />
+                <input type="hidden" name="CourseId" value="@Model.Id" />
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Create</button>
@@ -111,7 +147,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="Id" id="sylid" value="" />
-                <input type="hidden" name="CourseId" value="@TempData["CourseId"]" />
+                <input type="hidden" name="CourseId" value="@Model.Id" />
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
