@@ -17,11 +17,13 @@ namespace QBCS.Service.ViewModel
         public string IdValue { get; set; }
         public bool IsLearningOutcome { get; set; }
         public int QuestionCount { get; set; }
+        public int? SyllabusId { get; set; }
 
         public void UpdateIdValue()
         {
             IdValue = "LO_" + Id;
         }
         public List<LevelViewModel> Levels { get; set; }
+        public SyllabusPartialViewModel Syllabus { get; set; }
     }
 }

@@ -1,11 +1,14 @@
-﻿@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
-@using QBCS.Service.Enum
+﻿@*@model IEnumerable<QBCS.Service.ViewModel.LogViewModel>
+    @using QBCS.Service.Enum*@
+@using QBCS.Service.ViewModel
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "Index";
-                Layout = "~/Views/Shared/_Layout.cshtml";
-                int counter = 0;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 0;
+    var user = (UserViewModel)Session["user"];
+    int userId = user != null ? user.Id : 0;
 
 }
 
@@ -16,7 +19,19 @@
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive text-custom">
-            <table class="table table-bordered table-hover text-custom table-striped" id="dataTable" width="100%" cellspacing="0">
+            @if (ViewBag.targetId != null)
+            {
+                <input id="targetId" value="@ViewBag.targetId" />
+            }
+            @if (ViewBag.importId != null)
+            {
+                <input id="importId" value="@ViewBag.importId" />
+            }
+            @if (ViewBag.isUser != null && userId != 0)
+            {
+                <input id="userId" value="@userId" />
+            }
+            <table class="table table-bordered table-hover text-custom table-striped" id="tableActivity" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -30,87 +45,87 @@
 
                 <tbody>
 
-                    @foreach (var item in Model)
-                    {
-                        if (item.LogDate != DateTime.MinValue)
+                    @*@foreach (var item in Model)
                         {
-                            counter++;
+                            if (item.LogDate != DateTime.MinValue)
+                            {
+                                counter++;
 
-                            <tr>
-                                <td>
-                                    @counter
-                                </td>
-                                @*<td>
-                                        @if (item.Action.Equals("Update") && item.QuestionNew != null)
+                                <tr>
+                                    <td>
+                                        @counter
+                                    </td>
+                                    <td>
+                                            @if (item.Action.Equals("Update") && item.QuestionNew != null)
+                                            {
+                                                @item.QuestionNew.QuestionCode
+                                            }else{
+                                            <p>N/A</p>
+                                            }
+
+                                        </td>
+                                    <td>
+                                        @item.Fullname
+                                    </td>
+                                    <td>
+                                        @item.LogDate
+                                    </td>
+                                    <td>
+                                        @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)) || item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
                                         {
-                                            @item.QuestionNew.QuestionCode
-                                        }else{
-                                        <p>N/A</p>
+                                            @item.Action <text> Import File </text>@item.TargetId<text>st</text>
+                                        }
+                                        else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
+                                        {
+                                            @item.Action <text> File </text>@item.TargetId<text>st</text>
+                                        }
+                                        else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)))
+                                        {
+                                            @item.Action <text> Question </text>@item.TargetId<text>st</text>
+                                        }
+                                        else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)))
+                                        {
+                                            @item.Message
+                                        }
+                                        else
+                                        {
+                                            @item.Message @(item.TargetId.HasValue && item.TargetId.Value != 0 ? " " + item.TargetId.ToString() + "st" : "")
                                         }
 
-                                    </td>*@
-                                <td>
-                                    @item.Fullname
-                                </td>
-                                <td>
-                                    @item.LogDate
-                                </td>
-                                <td>
-                                    @if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Cancel)) || item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Save)))
-                                    {
-                                        @item.Action <text> Import File </text>@item.TargetId<text>st</text>
-                                    }
-                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)))
-                                    {
-                                        @item.Action <text> File </text>@item.TargetId<text>st</text>
-                                    }
-                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)))
-                                    {
-                                        @item.Action <text> Question </text>@item.TargetId<text>st</text>
-                                    }
-                                    else if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)))
-                                    {
-                                        @item.Message
-                                    }
-                                    else
-                                    {
-                                        @item.Message @(item.TargetId.HasValue && item.TargetId.Value != 0 ? " " + item.TargetId.ToString() + "st" : "")
-                                    }
+                                    </td>
+                                    <td>
+                                        @if (item.Action != null)
+                                        {
+                                            if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)) && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetListTargetByID)))
+                                            {
+                                                <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            }
+                                            if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                            {
+                                                <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            }
+                                            //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
+                                            if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question"))
+                                            {
+                                                <a href="@Url.Action("GetMoveActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            }
 
-                                </td>
-                                <td>
-                                    @if (item.Action != null)
-                                    {
-                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Import)) && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetListTargetByID)))
-                                        {
-                                            <a href="@Url.Action("GetListTargetByID", "Activity", new { id = item.Id, targetId = item.TargetId })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
+                                            if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Rule"))
+                                            {
+                                                <a href="@Url.Action("Index", "Rule")" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            }
                                         }
-                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Question") && User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetUpdateActivityById)))
+                                        else
                                         {
-                                            <a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
+                                            <p class="text-custom">N/A</p>
                                         }
-                                        //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
-                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Move)) && item.TargetName.Equals("Question"))
-                                        {
-                                            <a href="@Url.Action("GetMoveActivityById", "Activity", new { id = item.Id })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
-                                        }
-                
-                                        //&& User.CheckPermission(typeof(QBCS.Web.Controllers.ActivityController), nameof(QBCS.Web.Controllers.ActivityController.GetMoveActivityById))
-                                        if (item.Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && item.TargetName.Equals("Rule"))
-                                        {
-                                            <a href="@Url.Action("Index", "Rule")" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p class="text-custom">N/A</p>
-                                    }
 
 
-                                </td>
-                            </tr>
-                        }
-                    }
+                                    </td>
+                                </tr>
+                            }
+                        }*@
                 </tbody>
             </table>
         </div>
@@ -118,3 +133,4 @@
 </div>
 
 @Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/tableActivity")

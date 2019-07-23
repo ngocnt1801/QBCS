@@ -36,6 +36,7 @@ namespace QBCS.Service.Utilities
                 while ((line = reader.ReadLine()) != null)
                 {
                     string id = null;
+                    int colon = 0;
                     string question = null;
                     string right = null;
                     string wrong = null;
@@ -80,6 +81,7 @@ namespace QBCS.Service.Utilities
                     {
 
                         line = stringProcess.RemoveHtmlBrTag(line);
+                       
                         string resultTmp = "";
                         
                         if (line.Contains("[plain]"))
@@ -138,7 +140,8 @@ namespace QBCS.Service.Utilities
                             //}
                             if (let == ':' && !isStartQuestion)
                             {
-                                countCode++;                              
+                                countCode++;
+                                colon = colon + 1;
                                 isStart = true;
                                 isInLine = true;                              
                                 continue;
@@ -233,10 +236,10 @@ namespace QBCS.Service.Utilities
                                 if (inLine == 3)
                                 {
                                     question += '{';
-                                    if (countCode >= 5)
+                                    if (colon >= 5)
                                     {
                                         question += ':';
-                                        countCode = 4;
+                                        colon = 4;
                                     }
                                     question += let;
                                     inLine = 0;
@@ -245,10 +248,10 @@ namespace QBCS.Service.Utilities
                                 }
                                 if (inLine == 0)
                                 {
-                                    if (countCode >= 5)
+                                    if (colon >= 5)
                                     {
                                         question += ':';
-                                        countCode = 4;
+                                        colon = 4;
                                     }
                                     question += let;
                                     inLine = 0;
@@ -425,7 +428,7 @@ namespace QBCS.Service.Utilities
             }
             catch (Exception ex)
             {
-                
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 quesModel.OtherError = "Other Error " + ex.Message.ToString();
                 
             }

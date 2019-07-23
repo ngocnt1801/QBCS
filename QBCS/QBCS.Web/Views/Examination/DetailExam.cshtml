@@ -80,14 +80,14 @@
                                     }
                                 </td>
                             </tr>
-                        }
-                    }
+                                                }
+                                            }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<form id="exportExamination">
+<form id="exportDetailExamination">
     <div class="row form-group">
         <div>
             <h5>File extension :</h5>
@@ -100,14 +100,8 @@
                 <option value="xml">XML</option>
             </select>
         </div>
-        <input type="submit" name="Export" value="Export" class="btn btn-primary float-right spinner-loading" />
+        <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />
     </div>
-    <div class="row form-group">
-        <div class="el-checkbox text-center">
-            <span class="margin-r" style="font-size:1.3em;">Get category : </span>
-            <input type="checkbox" name="getCategory" id="getCategory">
-            <label class="el-checkbox-style" for="getCategory"></label>
-        </div>
-    </div>
-    @Scripts.Render("~/bundles/script/datatables")
-    @Scripts.Render("~/bundle/scripts/smartwizard")
+</form>
+@Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/smartwizard")

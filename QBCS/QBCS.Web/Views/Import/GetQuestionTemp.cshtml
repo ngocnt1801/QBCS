@@ -6,7 +6,7 @@
     string alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
     int counter = 0;
 }
-
+@Styles.Render("~/bundle/content/checkbox")
 @Styles.Render("~/bundle/content/detailquestion")
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -89,4 +89,5 @@
         </div>
     }*@
 
-@Scripts.Render("~/bundles/script/processtext")
+@Scripts.Render("~/bundle/scripts/editquestion")
+@Scripts.Render("~/bundle/scripts/processtext")

@@ -94,7 +94,7 @@ namespace QBCS.Service.Implement
                     };
                     optionViewModels.Add(optionViewModel);
                 }
-               
+
 
                 QuestionViewModel questionViewModel = ParseEntityToModel(ques, optionViewModels);
                 questionViewModels.Add(questionViewModel);
@@ -125,7 +125,7 @@ namespace QBCS.Service.Implement
         }
         public QuestionViewModel GetQuestionByQuestionCode(string questionCode)
         {
-            Question QuestionById = unitOfWork.Repository<Question>().GetAll().Where( q => q.QuestionCode.Equals(questionCode)).FirstOrDefault();
+            Question QuestionById = unitOfWork.Repository<Question>().GetAll().Where(q => q.QuestionCode.Equals(questionCode)).FirstOrDefault();
             List<OptionViewModel> optionViewModels = new List<OptionViewModel>();
             foreach (var option in QuestionById.Options)
             {
@@ -191,7 +191,7 @@ namespace QBCS.Service.Implement
                 quesTemp = WebUtility.HtmlDecode(quesTemp);
             }
             entity.QuestionContent = quesTemp;
-            entity.Type = (int) TypeEnum.Update;
+            entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
             entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
@@ -365,7 +365,7 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix = "")
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "")
         {
             string category = "";
             string level = "";
@@ -488,7 +488,7 @@ namespace QBCS.Service.Implement
                             {
                                 question.QuestionContent = "[html]" + questionContent;
                             }
-                           
+
                             question.Code = questionXml.question[i].name.text.ToString();
                             if (category != null)
                             {
@@ -598,7 +598,8 @@ namespace QBCS.Service.Implement
                                     Category = question.Category,
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
-                                    Image = question.Image,   
+                                    Image = question.Image,
+                                    IsNotImage = false,
                                     Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
@@ -663,7 +664,7 @@ namespace QBCS.Service.Implement
                     //int status = 0;
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
-                    
+
                     import.Status = (int)Enum.StatusEnum.NotCheck;
                     reader = new StreamReader(questionFile.InputStream, Encoding.UTF8);
                     listQuestion = ulti.StripTagsCharArray(reader, checkCate, checkHTML);
@@ -678,10 +679,11 @@ namespace QBCS.Service.Implement
                             QuestionContent = q.QuestionContent,
                             Code = q.Code,
                             Status = q.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : q.Status,
-                            Message = q.Status != (int)StatusEnum.Invalid ? "": "Matching question is not allowed",
+                            Message = q.Status != (int)StatusEnum.Invalid ? "" : "Matching question is not allowed",
                             Category = q.Category,
                             LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
+                            IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -725,9 +727,9 @@ namespace QBCS.Service.Implement
                                     tw.WriteLine();
                                 }
                                 tw.Close();
-                            }                          
-                           
-                        }    
+                            }
+
+                        }
                     }
 
                 }
@@ -741,7 +743,7 @@ namespace QBCS.Service.Implement
                     QuestionTemp quesTmp = new QuestionTemp();
                     reader = new StreamReader(questionFile.InputStream);
                     DateTime importTime = DateTime.Now;
-                    listQuestion = docUltil.ParseDoc(questionFile.InputStream,prefix);
+                    listQuestion = docUltil.ParseDoc(questionFile.InputStream, prefix);
 
                     import = new Import()
                     {
@@ -754,9 +756,10 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = prefix + " " +q.LearningOutcome,
+                            LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             Image = q.Image,
+                            IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
@@ -822,13 +825,14 @@ namespace QBCS.Service.Implement
                     import.ImportedDate = DateTime.Now;
                     //check formats
                     import.QuestionTemps = importService.CheckRule(import.QuestionTemps.ToList());
+                    CheckImageInQuestion(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
                     unitOfWork.SaveChanges();
 
                     //log imports
-                    
-                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question",method: "ImportFile", userId: userId);
+
+                    logService.LogManually("Import", "Question", targetId: entity.Id, controller: "Question", method: "ImportFile", userId: userId);
 
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
@@ -848,7 +852,7 @@ namespace QBCS.Service.Implement
             {
                 Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 check = false;
-                
+
                 //Console.WriteLine(ex.Message);
             }
             finally
@@ -859,7 +863,7 @@ namespace QBCS.Service.Implement
 
             return check;
         }
-        
+
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
@@ -887,7 +891,7 @@ namespace QBCS.Service.Implement
             {
                 result = result.Where(q => q.CourseId == courseId);
             }
-           
+
 
             if (categoryId != null && categoryId != 0)
             {
@@ -927,6 +931,7 @@ namespace QBCS.Service.Implement
                 Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                Category = q.Category != null ? q.Category.Name : "",
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
@@ -1006,14 +1011,14 @@ namespace QBCS.Service.Implement
                 Image = questionEntity.Image,
                 QuestionCode = questionEntity.QuestionCode,
                 CourseId = questionEntity.CourseId.Value,
-                Options = questionEntity.Options.Select( o => new OptionViewModel
+                Options = questionEntity.Options.Select(o => new OptionViewModel
                 {
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                     OptionContent = o.OptionContent,
                     Image = o.Image
                 }).ToList(),
-                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]") 
-                            + " / " 
+                Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]")
+                            + " / "
                             + (questionEntity.LearningOutcomeId.HasValue ? questionEntity.LearningOutcome.Name : "[None of learning outcome]"),
                 LevelId = questionEntity.LevelId.HasValue ? questionEntity.LevelId.Value : 0
             };
@@ -1033,7 +1038,7 @@ namespace QBCS.Service.Implement
                     },
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
-                    
+
                 };
                 examList.Add(exam);
             }
@@ -1110,6 +1115,141 @@ namespace QBCS.Service.Implement
             //}
 
             return check;
+        }
+
+        public GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search)
+        {
+            var result = new GetResultQuestionTempViewModel();
+            result.totalCount = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).Count();
+            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId && (qt.Code.Contains(search) || qt.QuestionContent.Contains(search))).ToList();
+            var questionTemp = entities.Select(q => new QuestionTempViewModel()
+            {
+                Id = q.Id,
+                QuestionContent = q.QuestionContent,
+                Status = (StatusEnum)q.Status,
+                ImportId = importId,
+                Code = q.Code,
+                Image = q.Image,
+                IsNotImage = q.IsNotImage.HasValue && q.IsNotImage.Value,
+                IsInImportFile = q.DuplicateInImportId.HasValue,
+                Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
+                Options = q.OptionTemps.Select(o => new OptionViewModel
+                {
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(s.Split('-')[0]),
+                    IsBank = bool.Parse(s.Split('-')[1])
+                }).ToList(),
+                Message = q.Status == (int)StatusEnum.Invalid ? q.Message
+                        : (q.DuplicatedString != null && q.DuplicatedString.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedString.Split(',').Count()} questions" : ""),
+            }).ToList();
+            switch (type)
+            {
+                case "editable":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable).ToList();
+
+                    RemoveDuplicateGroup(questionTemp);
+                    questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
+
+                    foreach (var question in questionTemp.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                    {
+                        if (question.DuplicatedList[0].IsBank)
+                        {
+                            var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.QuestionCode,
+                                Image = entity.Image,
+                                CourseName = "Bank: " + entity.Course.Name,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.Options.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                IsBank = true,
+                                IsAnotherImport = false
+                            };
+
+                        }
+                        else
+                        {
+                            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.Code,
+                                CourseName = "Import file: ",
+                                Image = entity.Image,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                Status = (StatusEnum)entity.Status.Value,
+                                IsBank = false,
+                                IsAnotherImport = !(entity.ImportId == importId)
+                            };
+                        }
+                    }
+
+                    break;
+                case "success":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
+                    break;
+                case "invalid":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
+                    break;
+                case "delete":
+                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Deleted).ToList();
+                    break;
+            }
+
+            result.Questions = questionTemp;
+
+            return result;
+        }
+
+        private void RemoveDuplicateGroup(List<QuestionTempViewModel> list)
+        {
+            List<string> duplicateGroup = new List<String>();
+            foreach (var question in list.Where(q => q.DuplicatedList != null))
+            {
+                bool isInGroup = false;
+                string duplicateString = ParseListDuplicateToString(question);
+                foreach (string item in duplicateGroup)
+                {
+                    if (item.Equals(duplicateString))
+                    {
+                        isInGroup = true;
+                        break;
+                    }
+                }
+
+                if (!isInGroup)
+                {
+                    duplicateGroup.Add(duplicateString);
+                }
+                else
+                {
+                    question.IsHide = true;
+                }
+            }
+        }
+
+        private string ParseListDuplicateToString(QuestionTempViewModel temp)
+        {
+            temp.DuplicatedList.Add(new DuplicatedQuestionViewModel
+            {
+                Id = temp.Id,
+                IsBank = false
+            });
+            return String.Join(",", temp.DuplicatedList.OrderBy(t => t.Id).Select(s => $"{s.Id}-{s.IsBank}").ToArray());
         }
 
         public List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix)
@@ -1273,8 +1413,7 @@ namespace QBCS.Service.Implement
             }
             return listQuestion;
         }
-
-
+        
         private string TrimSpace(string trim)
         {
             RegexOptions options = RegexOptions.None;
@@ -1294,6 +1433,52 @@ namespace QBCS.Service.Implement
             table = table.Replace("<p>&nbsp;</p>", "");
             table = table.Replace("&nbsp;", "");
             return table;
+        }
+
+        public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
+        {
+            string[] imageKeyWords =
+            {
+                "figure",
+                "showing",
+                "diagram",
+                "circuit",
+                "map",
+                "art",
+                "visual",
+                "image",
+                "picture"
+            };
+            string[] prepKeyWords =
+            {
+                "above",
+                "below",
+                "follow"
+            };
+            string imageKeyWord = String.Join("|", imageKeyWords);
+            string prepKeyWord = String.Join("|", prepKeyWords);
+            foreach (var question in tempQuestions)
+            {
+                if (!String.IsNullOrWhiteSpace(question.Image) && question.Status.Value == (int) StatusEnum.Invalid)
+                {
+                    continue;
+                }
+
+                if (String.IsNullOrWhiteSpace(question.QuestionContent.Trim()) || question.QuestionContent.Trim().ToLower().Equals("[html]"))
+                {
+                    question.IsNotImage = true;
+                }
+                else
+                {
+                    string patter = "^(?=.*?\\b(" + imageKeyWord + ")\\b)(?=.*?\\b(" + prepKeyWord + ")\\b).*$";
+                    Regex regex = new Regex(patter);
+                    if (regex.IsMatch(question.QuestionContent.ToLower().Trim()))
+                    {
+                        question.IsNotImage = true;
+                    }
+                }
+            }
+
         }
     }
 }

@@ -26,12 +26,18 @@
     }
 }
 
+<div class="row">
+    <div class="col-md-12">
+        <a class="float-left mb-2 ml-4" href="@Url.Action("GetResult", "Import", new { importId = Model.ImportId})"><i class="fa fa-arrow-circle-left fa-2x"></i></a>
+    </div>
+</div>
+
 <div class="container">
     <h6>Check to show question:</h6>
     <div class="form-group form-inline">
         <div class="custom-control custom-checkbox small mr-3">
             <input type="checkbox" class="custom-control-input" id="chk-main-question" checked>
-            <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
+            <label class="custom-control-label toggle-question" for="chk-main-question" toggle-for="#main-question" id="lb-main-question">@Model.Code<span class="badge ml-2 @statusClass">@Model.Status</span> </label>
         </div>
         @for (int i = 0; i < Model.DuplicatedList.Count; i++)
         {
@@ -52,12 +58,18 @@
                     break;
             }
 
+            if (Model.DuplicatedList[i].IsBank)
+            {
+                chkstatusClass = "badge-dark";
+            }
+
             <div class="custom-control custom-checkbox small mr-3">
                 <input type="checkbox" class="custom-control-input"
                        @(i > 0 ? "" : "checked")
                        id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
-                <label class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
-                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@Model.DuplicatedList[i].Status</span></label>
+                <label id="@(Model.DuplicatedList[i].IsBank ? "lb-bank-" + Model.DuplicatedList[i].Id : "lb-import-" + Model.DuplicatedList[i].Id)"
+                       class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
+                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@(!Model.DuplicatedList[i].IsBank ? Model.DuplicatedList[i].Status.ToString() : "Bank")</span></label>
                 </div>
             }
     </div>
@@ -65,8 +77,8 @@
 
 <table>
     <tr>
-        <td>
-            <div class="card shadow mb-4" id="main-question">
+        <td id="main-question" class="">
+            <div class="card shadow mb-4">
                 <a href="#cd-main-question" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
                     Import File: @Model.Code <span class="badge ml-2 @statusClass">@Model.Status</span>
                 </a>
@@ -134,7 +146,7 @@
             }
 
             <td class="@(j  > 0 ? "hidden":"")" id="@(duplicated.IsBank ? "bank-" + duplicated.Id : "import-" + duplicated.Id)">
-                <div class="card shadow mb-4 " >
+                <div class="card shadow mb-4 ">
                     <a href="#@(duplicated.IsBank ? "cd-bank-" + duplicated.Id : "cd-import-" + duplicated.Id)" class="d-block card-header py-3 text-custom" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
                         @(duplicated.IsBank ? "Bank: " : "Import File: ") @duplicated.Code
                         @if (!duplicated.IsBank)

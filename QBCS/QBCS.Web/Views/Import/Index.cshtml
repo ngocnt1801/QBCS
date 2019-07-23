@@ -69,7 +69,7 @@
                                     {
                                         if (User.CheckPermission(typeof(QBCS.Web.Controllers.ImportController), nameof(QBCS.Web.Controllers.ImportController.GetResult)))
                                         {
-                                        <a class="btn btn-primary" href="@Url.Action("GetResult", "Import", new { importId = item.Id })">View Result</a>
+                                        <a class="btn btn-primary spinner-loading" href="@Url.Action("GetResult", "Import", new { importId = item.Id })">View Result</a>
                                         }
                                     }
                                 </td>

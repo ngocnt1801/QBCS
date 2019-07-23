@@ -1,4 +1,7 @@
 ﻿$(function () {
+    $.ajaxSetup({
+        async: false
+    });
     categoryModel = {
         listQuestionSelected: [],
         categorySelected: {
@@ -29,6 +32,11 @@
                 this.className += " active";
                 categoryOctopus.loadQuestion(this.attributes["data-link"].value);
                 categoryView.removeButtonGroup();
+
+                setTimeout(function () {
+                    $('#spinner').css("display", "none");
+                    $('#pleaseWaitDialog').modal('hide');
+                }, 500);
             });
 
             this.modelCategoryItem = $(".modal-category .list-group-item");
@@ -223,7 +231,7 @@
             categoryView.init();
             if (categoryView.questionListContainter[0] != null) {
                 this.loadQuestion(
-                    "/Question/GetQuestions?courseId=" +
+                    "/Question/GetQuestionsDatatable?courseId=" +
                     categoryView.questionListContainter[0].attributes["data-id"].value
                 );
             }
@@ -235,81 +243,249 @@
             $('#spinner').css("display", "block");
             $('#spinner').css("z-index", "1060");
             $('#pleaseWaitDialog').modal();
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function (response) {
-                    categoryView.questionListContainter.html(response);
+            if (url.includes("GetCourseDetailStat")) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (response) {
+                        categoryView.questionListContainter.html(response);
+                        {
+                            //var table = $("#dataTable").dataTable({
+                            //      ordering: false,
+                            //      columnDefs: [
+                            //          { targets: 0, width: "5%" },
+                            //          { targets: 1, width: "75%" },
+                            //          { targets: 2, width: "15%", className: "text-center" },
+                            //          { targets: 3, width: "5%", className: "text-center" }
+                            //      ],
+                            //      columns: [
+                            //          null,
+                            //          {
+                            //              width: "75%",
+                            //              render: function (data, type, row) {
+                            //                  if (data.indexOf("[html]") >= 0) {
+                            //                      data = data.split("&lt;cbr&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;br&gt;").join("<br/>");
+                            //                      data = data.split("&lt;p&gt;").join("");
+                            //                      data = data.split("&lt;/p&gt;").join("");
+                            //                      data = data.split("&lt;span&gt;").join("");
+                            //                      data = data.split("&lt;/span&gt;").join("");
+                            //                      data = data.split("[html]").join("");
+                            //                  }
 
-                    var table = $("#dataTable").dataTable({
-                        ordering: false,
-                        columnDefs: [
-                            { targets: 0, width: "5%" },
-                            { targets: 1, width: "75%" },
-                            { targets: 2, width: "15%", className: "text-center" },
-                            { targets: 3, width: "5%", className: "text-center" }
-                        ],
-                        columns: [
-                            null,
-                            {
-                                width: "75%",
-                                render: function (data, type, row) {
-                                    if (data.indexOf("[html]") >= 0) {
-                                        data = data.split("&lt;cbr&gt;").join("<br/>");
-                                        data = data.split("&lt;br&gt;").join("<br/>");
-                                        data = data.split("&lt;br/&gt;").join("<br/>");
-                                        data = data.split("&lt;p&gt;").join("");
-                                        data = data.split("&lt;/p&gt;").join("");
-                                        data = data.split("&lt;span&gt;").join("");
-                                        data = data.split("&lt;/span&gt;").join("");
-
-                                        
-                                        data = data.split("&lt;b&gt;").join("");
-                                        data = data.split("&lt;/b&gt;").join("");
-                                        data = data.split("&lt;span&gt;").join("");
-                                    
-                                        data = data.split("&lt;u&gt;").join("");
-                                        data = data.split("&lt;/u&gt;").join("");
-                                        data = data.split("&lt;i&gt;").join("");
-                                        data = data.split("&lt;/i&gt;").join("");
-                                        data = data.split("&lt;sub&gt;").join("<sub>");
-                                        data = data.split("&lt;/sub&gt;").join("</sub>");
-                                        data = data.split("&lt;sup&gt;").join("<sup>");
-                                        data = data.split("&lt;/sup&gt;").join("</sup>");
-                                        data = data.split("[html]").join("");
-                                    }
-
-                                    return data;
-                                }
-                            },
-                            null,
-                            null,
-                        ]
-                    });
-                    $('#dataTable').on('draw.dt', function () {
-                        if (categoryModel.isMoveQuestion) {
-                            $.each($(".checkbox"), function (index, item) {
-                                $(item).removeClass("hidden");
-                            });
-                        } else {
-                            $.each($(".checkbox"), function (index, item) {
-                                $(item).addClass("hidden");
-                            });
+                            //                  return data;
+                            //              }
+                            //          },
+                            //          null,
+                            //          null,
+                            //      ]
+                            //  });
+                            //  $('#dataTable').on('draw.dt', function () {
+                            //      if (categoryModel.isMoveQuestion) {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).removeClass("hidden");
+                            //          });
+                            //      } else {
+                            //          $.each($(".checkbox"), function (index, item) {
+                            //              $(item).addClass( "hidden");
+                            //          });
+                            //      }
+                            //      categoryView.setOnClickCkb();
+                            //  });
                         }
                         categoryView.setOnClickCkb();
-                    });
+                        categoryView.setOnClickDisableBtn();
+                        table.on('page.dt', function () {
+                            $('html, body').animate({
+                                scrollTop: $(".dataTables_wrapper").offset().top
+                            }, 'slow');
+                        });
+                        setTimeout(function () {
+                            $('#spinner').css("display", "none");
+                            $('#pleaseWaitDialog').modal('hide');
+                        }, 500);
+
+                    }
+                });
+            } else {
+                $('#dataTable').DataTable().destroy();
+                $('#dataTable').remove();
+                var setTable = '<table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th>No.</th>' +
+                    '<th>Question</th>' +
+                    '<th>Action</th>' +
+                    '<th>' +
+                    '<input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />' +
+                    '</th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '</tbody>' +
+                    '</table>';
+                $('#divTable').append(setTable);
+
+
+
+                var dataTable = $('#dataTable').DataTable({
+                    paging: true,
+                    ordering: false,
+                    filter: true,
+                    destroy: true,
+                    searching: true,
+                    serverSide: true,
+                    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    processing: true,
+                    async: false,
+                    ajax:
+                    {
+                        processing: true,
+                        async: false,
+                        url: url,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8"
+                    },
+                    columns: [
+                        {
+                            data: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+
+                                var code = '<p>Question Code: ' + row.Code + '</p>';
+                                var options = '';
+                                for (var i = 0; i < row.Options.length; i++) {
+                                    options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                                }
+                                var image = row.Image;
+                                if (image != null && image != "") {
+                                    image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                                } else {
+                                    image = "";
+                                }
+                                var questionContent = '<div id="' + row.Code + '"><div id="Question"></div>' + image + options + '</div>';
+                                var result = code + questionContent;
+                                return result;
+                            }
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+                                var importId = $('#importId').val();
+                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading"><i class="fa fa-pencil-alt"></i></a>';
+                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId + '"><i class="fa fa-trash"></i></button>';
+                                var history = '<a href="/Activity/GetLogByQuestionID?targetId=' + row.Id + '&importId=' + row.ImportId + '" class="btn btn-info mr-1 col-12 mb-2 spinner-loading"><i class="fa fa-history"></i></a>';
+                                var result = edit + deleteQ + history;
+                                return result;
+                            }
+                        },
+                        {
+                            render: function (data, type, row) {
+                                var id = row.Id;
+                                var code = row.Code;
+                                var result = '<input type="checkbox" class="checkbox hidden" data-id="' + id + '" data-code="' + code + '" />';
+                                return result;
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        { targets: 0, width: "2%" },
+                        { targets: 1, width: "98%" }
+                    ],
+                    drawCallback: function (data) {
+                        var question = data.json.data;
+                        var q = 0;
+                        for (q = 0; q < question.length; q++) {
+                            var jq = '#' + question[q].Code + ' #Question';
+                            var changeContent = question[q]["QuestionContent"];
+                            var breakContent = [];
+                            var isHtml = false;
+                            if (changeContent.indexOf("[html]") >= 0) {
+                                isHtml = true;
+                            }
+                            if (isHtml) {
+                                changeContent = changeContent.split("&lt;p&gt;").join("");
+                                changeContent = changeContent.split("&lt;/p&gt;").join("");
+                                changeContent = changeContent.split("&lt;span&gt;").join("");
+                                changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("[html]").join("");
+                                breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                breakContent = breakContent.split("·");
+                            } else {
+                                breakContent.push(changeContent);
+                            }
+                            for (var w = 0; w < breakContent.length; w++) {
+                                $(jq).append('<p id="qcontent_' + w + '"></p>');
+                                var jqw = '#' + question[q].Code + ' #Question #qcontent_' + w;
+                                $(jqw).text(breakContent[w]);
+                            }
+                            breakContent = [];
+                            for (var o = 0; o < question[q]["Options"].length; o++) {
+                                var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                                var jo = '#' + question[q].Code + ' #Option' + o;
+                                var optionContent = question[q]["Options"][o]["OptionContent"];
+                                var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                                if (isHtml) {
+                                    optionContent = optionContent.split("&lt;p&gt;").join("");
+                                    optionContent = optionContent.split("&lt;/p&gt;").join("");
+                                    optionContent = optionContent.split("&lt;span&gt;").join("");
+                                    optionContent = optionContent.split("&lt;/span&gt;").join("");
+                                    optionContent = optionContent.split("[html]").join("");
+                                    breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                    breakContent = breakContent.split("·");
+                                } else {
+                                    breakContent.push(optionContent);
+                                }
+                                for (var b = 0; b < breakContent.length; b++) {
+                                    $(jo).append('<p id="ocontent_' + b + '"></p>');
+                                    var ch = $(jo).length;
+                                    var jow = '#' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                                    if (b == 0) {
+                                        $(jow).text(letters[o] + '. ' + breakContent[b]);
+                                    } else {
+                                        $(jow).text(breakContent[b]);
+                                    }
+                                }
+                                if (optionCorrect) {
+                                    $(jo).addClass('text-right-answer');
+                                }
+                            }
+                        }
+                    }
+                });
+                $('#dataTable').on('draw.dt', function () {
+                    if (categoryModel.isMoveQuestion) {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).removeClass("hidden");
+                        });
+                    } else {
+                        $.each($(".checkbox"), function (index, item) {
+                            $(item).addClass("hidden");
+                        });
+                    }
                     categoryView.setOnClickCkb();
-                    categoryView.setOnClickDisableBtn();
-                    table.on('page.dt', function () {
-                        $('html, body').animate({
-                            scrollTop: $(".dataTables_wrapper").offset().top
-                        }, 'slow');
-                    });
+                });
+
+                dataTable.on('page.dt', function () {
+                    $('html, body').animate({
+                        scrollTop: $(".dataTables_wrapper").offset().top
+                    }, 'slow');
+                });
+
+
+                categoryView.setOnClickCkb();
+                categoryView.setOnClickDisableBtn();
+
+                setTimeout(function () {
                     $('#spinner').css("display", "none");
                     $('#pleaseWaitDialog').modal('hide');
+                }, 500);
 
-                }
-            });
+            }
         },
         toggleDisable: function (url, item) {
             $.ajax({
@@ -383,4 +559,12 @@
     };
 
     categoryOctopus.init();
+    search();
 });
+function search() {
+    $("#datatableTest").dataTable().on('search.dt', function () {
+        var dataString = $(this).attr('data');
+
+        alert(dataString);
+    });
+}

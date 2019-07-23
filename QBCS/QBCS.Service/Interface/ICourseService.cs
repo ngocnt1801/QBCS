@@ -22,12 +22,11 @@ namespace QBCS.Service.Interface
         List<Course> GetCoursesByName(string name);
         bool UpdateCourse(CourseViewModel course);
         List<CourseViewModel> SearchCourseByNameOrCode(string searchContent);
-
         CourseViewModel GetDetailCourseById(int id);
-
         bool UpdateDisable(int id);
         List<CourseStatViewModel> GetAllCourseStat(int? id);
         CourseStatDetailViewModel GetCourseStatDetailByIdAndType(int id, string type);
         List<CourseViewModel> GetCourseByDisable();
+        void UpdateTotalQuesiton(int courseId, int total);
     }
 }

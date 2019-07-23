@@ -70,7 +70,17 @@ namespace QBCS.Web.Controllers
 
             if (result.Status != (int)StatusEnum.Done)
             {
-                return View(result);
+                //return View(result);
+                return View(new GetResultViewModel() {
+                    ImportId = result.Id,
+                    totalNumber = result.Questions.Count(),
+                    editableNumber = result.Questions.Where(q => q.Status == StatusEnum.Editable).Count(),
+                    successNumber = result.Questions.Where(q => q.Status == StatusEnum.Success).Count(),
+                    invalidNumber = result.Questions.Where(q => q.Status == StatusEnum.Invalid).Count(),
+                    deleteNumber = result.Questions.Where(q => q.Status == StatusEnum.Deleted).Count(),
+                    NotInsertNumber = result.Questions.Where(q => q.Status == StatusEnum.Editable || q.Status == StatusEnum.Deleted || q.Status == StatusEnum.Invalid).Count(),
+                    RecheckNumber = result.Questions.Where(q => q.Status == StatusEnum.NotCheck).Count()
+                });
             }
             TempData["NewestCount"] = result.NumberOfSuccess;
             return RedirectToAction("CourseDetail", "Course", new { courseId = result.CourseId});

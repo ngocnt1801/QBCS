@@ -11,7 +11,15 @@
     </div>
     <br />
     <div class="col-lg-2 text-custom">
-        Warning:
+        Suggestion:
+        @if (Model != null && Model.Suggestion != null)
+        {
+            foreach (var suggest in Model.Suggestion)
+            {
+                <text>suggest</text><br />
+            }
+        }
+
     </div>
     <script>
     var ctx = document.getElementById('myChart');
@@ -19,14 +27,16 @@
         type: 'pie',
         data: {
             labels: [
+                'No Level',
                 'Easy',
                 'Medium',
                 'Hard'
             ],
             datasets: [{
-                data: [@Model.Easy, @Model.Medium, @Model.Hard],
+                data: [@Model.Null,  @Model.Easy, @Model.Medium, @Model.Hard],
 
             backgroundColor: [
+                'rgb(211,211,211)',
                 'rgb(45,201,55)',
                 'rgb(231,180,22)',
                 'rgb(204,50,50)'

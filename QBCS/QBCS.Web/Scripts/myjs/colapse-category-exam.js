@@ -41,10 +41,10 @@
                     var tableExam = $('#listQuestionGenrate').DataTable({
                         columns: [
                             null,
-                            null,
                             {
                                 "render": function (data, type, row) {
                                     if (data.indexOf("[html]") >= 0) {
+                                        data = data.split("\n").join("<br/>");
                                         data = data.split("&lt;cbr&gt;").join("<br/>");
                                         data = data.split("&lt;br&gt;").join("<br/>");
                                         data = data.split("&lt;p&gt;").join("");

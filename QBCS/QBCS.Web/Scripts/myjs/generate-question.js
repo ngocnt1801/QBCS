@@ -1,25 +1,11 @@
 ﻿$(document).ready(function () {    
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-        .addClass('btn btn-info')
+        .addClass('btn btn-info spinner-loading')
         .attr('disabled', 'disabled')
         .attr('type', 'submit')
         .attr('id', 'btnFinish')
         .hide();
-    //.on('click', function () {
-
-    //    var link = "/QBCS.Web/Question/ViewGeneratedExamination";
-    //    $.ajax({
-    //        type: "GET",
-    //        url: link,
-    //        success: function (data) {
-    //            window.location.href = data.redirecturl;
-    //        },
-    //        error: function (httpRequest, textStatus, errorThrown) {
-    //            alert("Error: " + textStatus + " " + errorThrown + " " + httpRequest);
-    //        }
-    //    });
-    //});
     var btnCancel = $('<button></button>').text('Cancel')
         .addClass('btn btn-info')
         .on('click', function () { $('#smartwizard').smartWizard("reset"); });
@@ -35,10 +21,32 @@
         }
     });
     $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
-        if (stepNumber === 3) {
+        if (stepNumber === 2) {
             $('#btnFinish').removeAttr('disabled');
             $('#btnFinish').show();
         }
+    });
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {        
+        if (stepDirection === 'forward') {
+            if (stepNumber === 0) {
+                var total = $('#totalExam').val();
+                if (total.length === 0) {
+                    $(".with-errors").html("Please input amount exam test!");
+                    return false;
+                } else if (total < 1 || total > 10) {
+                    $(".with-errors").html("Please input a number 1 - 10!");
+                    return false;
+                }
+            } else if (stepNumber === 1) {
+                var selecttedTopic = $("input[name='Topic']:checked");
+                if (selecttedTopic.length === 0) {
+                    $(".with-errors").html("Please select Topic/LOC!");
+                    return false;
+                }
+            }
+        }
+        $(".with-errors").html("");
+        return true;
     });
 
     $('#check-all').on('change', function (event) {
@@ -80,14 +88,25 @@
         var examinationId = $("input[name='examinationId-" + counter + "']").val();
         var examGroup = $("input[name='examGroup-" + counter + "']").val();
         var fileExtension = $("#fileExtension-" + counter).find(":selected").text();
-        var getCategory = $("#getCategory-" + counter).prop('checked');
         var exportAll = $("#exportAll-" + counter).prop('checked');
         if (exportAll === true) {
-            window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+            window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
         } else {
-            window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension + "&getCategory=" + getCategory;
+            window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
         }
 
+    });
+    $('#exportDetailExamination').on('submit',function(e){
+        e.preventDefault();
+        var examinationId = $("input[name='examinationId']").val();
+        var fileExtension = $("#fileExtension").find(":selected").text();
+        window.location = "/ExaminationAPI/export?examinationId=" + examinationId + "&fileExtension=" + fileExtension;
+    });
+    $('#exportAllInReport').on('click', function (e) {
+        e.preventDefault();
+        var examGroup = $("input[name='examGroupExportAll']").val();
+        var fileExtension = $("#fileExtensionExportAll").find(":selected").text();
+        window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
     });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
@@ -168,6 +187,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -207,6 +227,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -246,6 +267,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -285,6 +307,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -324,6 +347,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -363,6 +387,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -402,6 +427,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -476,6 +502,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");

@@ -536,6 +536,11 @@ namespace DuplicateQuestion
                     CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, duplicatedList);
                     item.Test = String.Join(",", duplicatedList.ToArray());
 
+                    if (item.IsNotImage)
+                    {
+                        item.Status = (int)StatusEnum.Editable;
+                    }
+
                     //update database
                     SqlCommand command = new SqlCommand(
                        "UPDATE QuestionTemp " +
@@ -709,7 +714,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image, q.IsNotImage " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -726,7 +731,7 @@ namespace DuplicateQuestion
                     if (prev != (int)reader["Id"])
                     {
                         question = new QuestionModel();
-                        question.QuestionContent = (string)reader["QuestionContent"];
+                        question.QuestionContent = reader["QuestionContent"] != DBNull.Value ? (string)reader["QuestionContent"] : "";
                         if (reader["Image"] != DBNull.Value)
                         {
                             question.Image = (string)reader["Image"];
@@ -753,6 +758,16 @@ namespace DuplicateQuestion
                             OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
+
+                        if (reader["IsNotImage"] != DBNull.Value)
+                        {
+                            question.IsNotImage = (bool)reader["IsNotImage"];
+                        }
+                        else
+                        {
+                            question.IsNotImage = false;
+                        }
+
                         import.Add(question);
 
                         prev = question.Id;

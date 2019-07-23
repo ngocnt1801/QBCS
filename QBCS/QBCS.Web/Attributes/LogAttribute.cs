@@ -79,7 +79,10 @@ namespace QBCS.Web.Attributes
                 {
                     oldQuestionModel.Category = categoryService.GetCategoryById(oldQuestionModel.CategoryId).Name;
                 }
+               
                 oldQuestionModel.Category = oldQuestionModel.CategoryId != 0 ? oldQuestionModel.Category : "[None of Category]";
+                oldQuestionModel.LevelName = oldQuestionModel.LevelId != 0 ? oldQuestionModel.LevelName : "[None of Level]";
+                oldQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeId != 0 ? oldQuestionModel.LearningOutcomeName : "[None of LOC]";
                 for (int i = 0; i < oldQuestionModel.Options.Count; i++)
                 {
                     oldQuestionModel.Options[i].OptionContent = WebUtility.HtmlDecode(oldQuestionModel.Options[i].OptionContent);

@@ -184,3 +184,11 @@
 		margin-right: 0;
 	}
 }
+
+.bottom-right-cell{
+    position: absolute;
+    bottom: 2%;
+}
+#importTable td {
+    position: relative;
+}

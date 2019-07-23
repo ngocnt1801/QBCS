@@ -71,7 +71,7 @@ namespace QBCS.Web
                 ));
 
             //Confirm box
-            bundles.Add(new ScriptBundle("~/bundle/scripts/confirmbox").Include ("~/Scripts/myjs/bootbox.min.js"));
+            bundles.Add(new ScriptBundle("~/bundle/scripts/confirmbox").Include("~/Scripts/myjs/bootbox.min.js"));
 
             //signalR
             bundles.Add(new ScriptBundle("~/bundle/scripts/signalr").Include(
@@ -182,9 +182,10 @@ namespace QBCS.Web
 
             //Different highlight
             bundles.Add(new ScriptBundle("~/bundle/scripts/diff").Include(
-                "~/Scripts/myjs/diff/diff_match_patch.js",
-                "~/Scripts/myjs/diff/jquery.pretty-text-diff.min.js",
-                "~/Scripts/myjs/diff/compare.js"
+                //"~/Scripts/myjs/diff/diff_match_patch.js",
+                //"~/Scripts/myjs/diff/jquery.pretty-text-diff.min.js",
+                //"~/Scripts/myjs/diff/compare.js"
+                "~/Scripts/myjs/diff/diff-text.js"
                 ));
             bundles.Add(new StyleBundle("~/bundle/content/diff").Include(
                 "~/Content/diff/jquery.picadiff.css"
@@ -200,6 +201,26 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/detailquestion").Include(
                       "~/Content/style-detail-question.css"
                       ));
+
+            //DataTable Activity
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tableActivity").Include(
+                "~/Scripts/myjs/tableActivity.js"
+                ));
+
+            //DataTable Log
+            bundles.Add(new ScriptBundle("~/bundle/scripts/tableLog").Include(
+                "~/Scripts/myjs/tableLog.js"
+                ));
+
+            //CourseStatistic
+            bundles.Add(new ScriptBundle("~/bundle/scripts/CourseStatistic").Include(
+                "~/Scripts/myjs/CourseStatisticsjs.js"
+                ));
+
+            //manage syllabus
+            bundles.Add(new ScriptBundle("~/bundle/scripts/syllabus").Include(
+                "~/Scripts/myjs/syllabus-manage.js"
+                ));
         }
     }
 }

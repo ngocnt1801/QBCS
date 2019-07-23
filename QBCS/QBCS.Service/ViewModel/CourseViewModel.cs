@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace QBCS.Service.ViewModel
 {
@@ -17,6 +13,7 @@ namespace QBCS.Service.ViewModel
         public List<TopicViewModel> Topic { get; set; }
         public List<LearningOutcomeViewModel> LearningOutcome { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
+        public List<SyllabusPartialViewModel> Syllabus { get; set; }
         public bool IsDisable { get; set; }
         public int Total { get; set; }
         public List<SemesterViewModel> Semester { get; set; }

@@ -104,8 +104,9 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 result = RemoveTag(source, @"<br>", @"\n");
+                result = RemoveStringSharp(result);
                 result = RemoveTag(result, @"<br/>", @"\n");
-                result = RemoveTag(result, @"<br style=", @"\n<br style=");
+                result = RemoveTag(result, @"<br style", @"\n<br style");
                 result = RemoveTag(result, @"<br>", @"\n");      
                 result = RemoveTag(result, @"</p>", @"</p>\n");
                 
@@ -119,7 +120,7 @@ namespace QBCS.Service.Utilities
           
             if (source != null)
             {
-              
+                string partern = "(<cbr>){2,}";
                 //result = RemoveTag(source, "[html]", "");
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
@@ -139,8 +140,9 @@ namespace QBCS.Service.Utilities
                // result = RemoveTag(result, @"#", "");
                 
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
-                
-               
+                result = Regex.Replace(result, partern, @"<cbr>");
+
+
 
             }
 
@@ -176,6 +178,26 @@ namespace QBCS.Service.Utilities
 
             }
 
+            return result;
+        }
+        public string RemoveStringSharp (string source)
+        {
+            string result = "";
+            string UNEXPECTED_SHARP = "#<span lang";
+            string EXPECTED_SHARP = "<span lang";
+            string SPLASH_SHARP = @"\#<span lang";
+            if (source != null)
+            {
+                if (source.Contains(UNEXPECTED_SHARP) && !source.Contains(SPLASH_SHARP))
+                {
+                    result = RemoveTag(source, UNEXPECTED_SHARP, EXPECTED_SHARP);
+                }
+                else
+                {
+                    result = source;
+                }
+
+            }
             return result;
         }
         public string RemoveUnExpectedTagGIFT(string source)

@@ -31,10 +31,9 @@ namespace QBCS.Service.Interface
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId);
         QuestionHistoryViewModel GetQuestionHistory(int id);
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
-
-
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
-
+        GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search);
+        void CheckImageInQuestion(List<QuestionTemp> tempQuestions);
 
     }
 }
