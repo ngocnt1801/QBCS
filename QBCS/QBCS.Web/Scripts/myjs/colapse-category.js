@@ -374,11 +374,11 @@
                             }
                         },
                         {
-                            data: "Id",
-                            render: function (data) {
+                            render: function (data, type, row, meta) {
                                 var importId = $('#importId').val();
-                                var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
-                                var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                                //var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
+                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId+'">Disable</button>';
                                 var result = edit + deleteQ;
                                 return result;
                             }
