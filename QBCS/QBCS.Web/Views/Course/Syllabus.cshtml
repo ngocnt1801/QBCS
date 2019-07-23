@@ -4,7 +4,7 @@
     ViewBag.Title = "Syllabus";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int count = 0;
-    int sumSylPartial = Model.SyllabusPartials.Sum(s => s.Amount);
+    int sumSylPartial = Model.Syllabus.Sum(s => s.AmountQuestion);
 }
 
 <h4>@Model.Name (@Model.Code)</h4>
@@ -34,7 +34,7 @@
     }
     else
     {
-    <span>There are <strong>exceeded @(Model.DefaultNumberOfQuestion - sumSylPartial) </strong> questions</span>
+    <span>There are <strong>exceeded @(sumSylPartial - Model.DefaultNumberOfQuestion) </strong> questions</span>
     }
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -68,7 +68,7 @@
                             <tbody>
                                 @if (Model != null)
                                 {
-                                    foreach (var item in Model.SyllabusPartials)
+                                    foreach (var item in Model.Syllabus)
                                     {
                                         count++;
 
@@ -80,10 +80,10 @@
                                                 @Html.DisplayFor(course => item.Name)
                                             </td>
                                             <td class="text-center">
-                                                @Html.DisplayFor(course => item.Amount)
+                                                @Html.DisplayFor(course => item.AmountQuestion)
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary edit-syllabus" data-id="@item.Id" data-name="@item.Name" data-amount="@item.Amount"><i class="fa fa-pencil-alt"></i></button>
+                                                <button class="btn btn-primary edit-syllabus" data-id="@item.Id" data-name="@item.Name" data-amount="@item.AmountQuestion"><i class="fa fa-pencil-alt"></i></button>
                                                 <a href="@Url.Action("DeleteSyllabus", "Course", new { id = item.Id, courseId = Model.Id })" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
@@ -116,7 +116,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Amount">Amount Question:</label>
-                        <input type="number" class="form-control" name="Amount">
+                        <input type="number" class="form-control" name="AmountQuestion">
                     </div>
                 </div>
                 <input type="hidden" name="CourseId" value="@Model.Id" />
@@ -143,7 +143,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Amount">Amount Question:</label>
-                        <input type="number" class="form-control" id="sylamount" name="Amount" value="">
+                        <input type="number" class="form-control" id="sylamount" name="AmountQuestion" value="">
                     </div>
                 </div>
                 <input type="hidden" name="Id" id="sylid" value="" />

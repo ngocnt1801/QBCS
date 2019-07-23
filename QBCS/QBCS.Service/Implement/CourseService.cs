@@ -25,7 +25,18 @@ namespace QBCS.Service.Implement
                 Id = course.Id,
                 Name = course.Name,
                 Code = course.Code,
-                DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0
+                DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0,
+                Syllabus = course.SyllabusPartials.Select(s => new SyllabusPartialViewModel()
+                {
+                    Id = s.Id,
+                    AmountQuestion = s.AmountQuestion.HasValue ? (int)s.AmountQuestion.Value : 0,
+                    Name = s.Name,
+                    LearingOutcomes = s.LearningOutcomes.Select(l => new LearningOutcomeViewModel()
+                    {
+                        Id = l.Id,
+                        Name = l.Name
+                    }).ToList()
+                }).ToList()
             };
             return result;
         }

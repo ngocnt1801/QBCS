@@ -21,7 +21,7 @@ namespace QBCS.Service.Interface
             unitOfWork.Repository<SyllabusPartial>().Insert(new SyllabusPartial
             {
                 Name = model.Name,
-                AmountQuestion = model.Amount,
+                AmountQuestion = model.AmountQuestion,
                 CourseId = model.CourseId
             });
             unitOfWork.SaveChanges();
@@ -71,7 +71,7 @@ namespace QBCS.Service.Interface
                 .Select(s => new SyllabusPartialViewModel
                 {
                     Id = s.Id,
-                    Amount = s.AmountQuestion.Value,
+                    AmountQuestion = s.AmountQuestion.Value,
                     Name = s.Name,
                     CourseId= s.CourseId.Value
                 })
@@ -84,7 +84,7 @@ namespace QBCS.Service.Interface
             if (entity != null)
             {
                 entity.Name = model.Name;
-                entity.AmountQuestion = model.Amount;
+                entity.AmountQuestion = model.AmountQuestion;
                 unitOfWork.Repository<SyllabusPartial>().Update(entity);
                 unitOfWork.SaveChanges();
             }

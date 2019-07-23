@@ -228,7 +228,7 @@ namespace QBCS.Web.Controllers
         {
             var model = syllabusService.GetSyllabusPartials(courseId);
             var course = courseService.GetCourseById(courseId);
-            course.SyllabusPartials = model;
+            course.Syllabus = model;
             return View(course);
         }
 

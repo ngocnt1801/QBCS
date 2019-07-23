@@ -24,5 +24,6 @@ namespace QBCS.Service.ViewModel
             IdValue = "LO_" + Id;
         }
         public List<LevelViewModel> Levels { get; set; }
+        public SyllabusPartialViewModel Syllabus { get; set; }
     }
 }
