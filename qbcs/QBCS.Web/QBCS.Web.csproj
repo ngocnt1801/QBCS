@@ -406,6 +406,7 @@
     <Content Include="Scripts\myjs\notification.js" />
     <Content Include="Scripts\myjs\spinner.js" />
     <Content Include="Scripts\myjs\staffjs\edit-rule.js" />
+    <Content Include="Scripts\myjs\syllabus-manage.js" />
     <Content Include="Scripts\myjs\text-process.js" />
     <Content Include="Scripts\myjs\textWord\example.css" />
     <Content Include="Scripts\myjs\textWord\textboxio\resources\css\codemirror.css" />
@@ -2220,6 +2221,8 @@
     <Content Include="Views\Examination\ListQuestionCreateExamManually.cshtml" />
     <Content Include="Views\Examination\ListCategoryCreateExam.cshtml" />
     <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
+    <Content Include="Views\Course\Syllabus.cshtml" />
+    <Content Include="Views\Course\GetLearningOutcomes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

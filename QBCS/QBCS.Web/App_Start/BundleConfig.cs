@@ -201,6 +201,11 @@ namespace QBCS.Web
             bundles.Add(new StyleBundle("~/bundle/content/detailquestion").Include(
                       "~/Content/style-detail-question.css"
                       ));
+
+            //manage syllabus
+            bundles.Add(new ScriptBundle("~/bundle/scripts/syllabus").Include(
+                "~/Scripts/myjs/syllabus-manage.js"
+                ));
         }
     }
 }

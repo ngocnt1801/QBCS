@@ -1,0 +1,87 @@
+﻿@model IEnumerable<QBCS.Service.ViewModel.LearningOutcomeViewModel>
+
+@{
+    int count = 0;
+    var listSelect = Model.Where(m => m.SyllabusId == null);
+    var listTable = Model.Where(m => m.SyllabusId != null);
+}
+
+
+<div class="col-md-12">
+    <div class="row mb-2">
+        @if (Model == null || listSelect == null || listSelect.Count() == 0)
+        {
+            <div class="col-md-10">
+                <select class="form-control text-custom border-dark">
+                    <option selected>[None course available]</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" disabled>Add</button>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-10">
+                @Html.DropDownList("courseId", listSelect.Select(c => new SelectListItem
+           {
+               Value = c.Id + "",
+               Text = c.Name
+           }), new { @class = "form-control text-custom border-dark", id="selectedList"})
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary add-loc-btn"
+                        data-syl="@ViewBag.Syl" 
+                        data-url="@Url.Action("AddLOCtoSyllabus", "Course")">Add</button>
+            </div>
+
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5>Learning outcomes</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered text-custom table-hover" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr class="text-center">
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (listTable != null)
+                            {
+                                foreach (var item in listTable)
+                                {
+                                    count++;
+
+                                    <tr>
+                                        <td class="text-center">
+                                            @count
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(course => item.Name)
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-danger remove-loc" data-url="@Url.Action("DeleteLOC", "Course", new {locId = item.Id,syllabusId = ViewBag.Syl})"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
