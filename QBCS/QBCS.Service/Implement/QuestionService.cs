@@ -934,11 +934,10 @@ namespace QBCS.Service.Implement
             .ToList();
         }
 
-        public GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search)
+        public GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search, int start, int length)
         {
             var result = new GetQuestionsDatatableViewModel();
-            var entities = unitOfWork.Repository<Question>().GetAll().Where(q => (!q.IsDisable.HasValue || !q.IsDisable.Value) && (q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search))));
-            result.totalCount = entities.Count();
+            var entities = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);
             if (courseId != null && courseId != 0)
             {
                 entities = entities.Where(q => q.CourseId == courseId);
@@ -972,7 +971,12 @@ namespace QBCS.Service.Implement
             {
                 entities = entities.Where(q => q.LevelId == null);
             }
+            result.totalCount = entities.Count();
 
+            entities = entities.Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
+
+            result.filteredCount = entities.Count();
+            entities = entities.OrderBy(q => q.Id).Skip(start).Take(length);
             var list = entities.ToList();
             result.Questions = list.Select(q => new QuestionViewModel
             {
@@ -1170,12 +1174,31 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        public GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search)
+        public GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search, int start, int length)
         {
             var result = new GetResultQuestionTempViewModel();
-            result.totalCount = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).Count();
-            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId && (qt.Code.Contains(search) || qt.QuestionContent.Contains(search) || qt.OptionTemps.Any(o => o.OptionContent.Contains(search)))).ToList();
-            var questionTemp = entities.Select(q => new QuestionTempViewModel()
+            var all = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId);
+            switch (type)
+            {
+                case "editable":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Editable);
+                    break;
+                case "success":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Success);
+                    break;
+                case "invalid":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Invalid);
+                    break;
+                case "delete":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Deleted);
+                    break;
+            }
+            result.totalCount = all.Count();
+            var entities = all
+                .Where(qt => qt.Code.Contains(search) || qt.QuestionContent.Contains(search) || qt.OptionTemps.Any(o => o.OptionContent.Contains(search)));
+            result.filteredCount = entities.Count();
+            var questions = entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList();
+            var questionTemp = questions.Select(q => new QuestionTempViewModel()
             {
                 Id = q.Id,
                 QuestionContent = q.QuestionContent,
@@ -1202,8 +1225,6 @@ namespace QBCS.Service.Implement
             switch (type)
             {
                 case "editable":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable).ToList();
-
                     RemoveDuplicateGroup(questionTemp);
                     questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
 
@@ -1251,15 +1272,6 @@ namespace QBCS.Service.Implement
                         }
                     }
 
-                    break;
-                case "success":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
-                    break;
-                case "invalid":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
-                    break;
-                case "delete":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Deleted).ToList();
                     break;
             }
 

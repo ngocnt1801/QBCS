@@ -10,7 +10,7 @@
         Processing: true,
         ajax:
         {
-            url: "/Log/GetLogAction",
+            url: "/LogAction/GetLogAction",
             type: "GET",
             data: {
                 importId: $('#importId').val(),

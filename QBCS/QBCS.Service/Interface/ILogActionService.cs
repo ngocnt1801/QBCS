@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Entity;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace QBCS.Service.Interface
     public interface ILogActionService
     {
         void LogAction(LogViewModel model);
-        IEnumerable<LogViewModel> GetLogAction();
+        GetLogActionViewModel GetLogAction(string search, int start, int length);
     }
 }

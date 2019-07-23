@@ -309,22 +309,11 @@ namespace QBCS.Web.Controllers
             return PartialView("ListQuestion", result);
         }
 
-        public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int? draw, int? start, int? length)
+        public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int draw, int start, int length)
         {
             var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
-            var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search);
-            var recordTotal = data.totalCount;
-            var result = data.Questions;
-            var recordFiltered = result.Count();
-            if(length != null && length >= 0 )
-            {
-                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
-            }
-            else
-            {
-                result = result.ToList();
-            }
-            return Json(new { draw = draw != null? draw : 1, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true}, JsonRequestBehavior.AllowGet);
+            var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search, start, length);
+            return Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
         }
 
         //Lecturer
@@ -358,16 +347,8 @@ namespace QBCS.Web.Controllers
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
-            var data = questionService.GetQuestionTempByImportId(importId, type, search);
-            var entities = data.Questions;
-            var recordTotal = data.totalCount;
-            var recordFiltered = entities.Count();
-            if (length >= 0)
-            {
-                entities = entities.Skip(start).Take(length).ToList();
-            }
-
-            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = entities, success = true}, JsonRequestBehavior.AllowGet);
+            var data = questionService.GetQuestionTempByImportId(importId, type, search, start, length);
+            return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
         }
     }
 

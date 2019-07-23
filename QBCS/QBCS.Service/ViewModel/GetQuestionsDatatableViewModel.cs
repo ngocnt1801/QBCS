@@ -10,5 +10,6 @@ namespace QBCS.Service.ViewModel
     {
         public List<QuestionViewModel> Questions { get; set; }
         public int totalCount { get; set; }
+        public int filteredCount { get; set; }
     }
 }
