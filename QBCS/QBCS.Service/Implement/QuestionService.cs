@@ -934,6 +934,73 @@ namespace QBCS.Service.Implement
             .ToList();
         }
 
+        public GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search)
+        {
+            var result = new GetQuestionsDatatableViewModel();
+            var entities = unitOfWork.Repository<Question>().GetAll().Where(q => (!q.IsDisable.HasValue || !q.IsDisable.Value) && (q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search))));
+            result.totalCount = entities.Count();
+            if (courseId != null && courseId != 0)
+            {
+                entities = entities.Where(q => q.CourseId == courseId);
+            }
+
+
+            if (categoryId != null && categoryId != 0)
+            {
+                entities = entities.Where(q => q.CategoryId == categoryId);
+            }
+            else if (categoryId == 0)
+            {
+                entities = entities.Where(q => q.CategoryId == null);
+            }
+
+            if (learningoutcomeId != null && learningoutcomeId != 0)
+            {
+                entities = entities.Where(q => q.LearningOutcomeId == learningoutcomeId);
+            }
+            else if (learningoutcomeId == 0)
+            {
+                entities = entities.Where(q => q.LearningOutcomeId == null);
+            }
+
+
+            if (levelId != null && levelId != 0)
+            {
+                entities = entities.Where(q => q.LevelId == levelId);
+            }
+            else if (levelId == 0)
+            {
+                entities = entities.Where(q => q.LevelId == null);
+            }
+
+            var list = entities.ToList();
+            result.Questions = list.Select(q => new QuestionViewModel
+            {
+                Id = q.Id,
+                Code = q.QuestionCode,
+                QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
+                Image = q.Image != null ? q.Image.ToString() : "",
+                ImportId = (int)q.ImportId,
+                CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                Category = q.Category != null ? q.Category.Name : "",
+                LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
+                LevelName = q.Level != null ? q.Level.Name : "",
+                LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
+                Options = q.Options.ToList().Select(o => new OptionViewModel
+                {
+                    Id = o.Id,
+                    OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
+            })
+            .OrderByDescending(q => !q.IsDisable)
+            .ToList();
+
+            return result;
+        }
+
         public void ToggleDisable(int id)
         {
             var entity = unitOfWork.Repository<Question>().GetById(id);
@@ -1107,7 +1174,7 @@ namespace QBCS.Service.Implement
         {
             var result = new GetResultQuestionTempViewModel();
             result.totalCount = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).Count();
-            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId && (qt.Code.Contains(search) || qt.QuestionContent.Contains(search))).ToList();
+            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId && (qt.Code.Contains(search) || qt.QuestionContent.Contains(search) || qt.OptionTemps.Any(o => o.OptionContent.Contains(search)))).ToList();
             var questionTemp = entities.Select(q => new QuestionTempViewModel()
             {
                 Id = q.Id,

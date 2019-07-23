@@ -25,6 +25,7 @@ namespace QBCS.Service.Interface
         int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
         bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="");
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
+        GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search);
         void ToggleDisable(int id);
         void UpdateCategory(int[] questionIds, int? categoyrId, int? learningOutcomeId, int? levelId);
         bool InsertQuestionWithTableString(string table, int userId, int courseId,string prefix, string ownerName);

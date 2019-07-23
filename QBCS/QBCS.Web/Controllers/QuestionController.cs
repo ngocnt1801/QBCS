@@ -312,28 +312,9 @@ namespace QBCS.Web.Controllers
         public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int? draw, int? start, int? length)
         {
             var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
-            var entities = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
-            var recordTotal = entities.Count();
-            var result = new List<QuestionViewModel>();
-            foreach (var q in entities)
-            {
-                var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
-                if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
-                {
-                    result.Add(q);
-                }
-                else if(q.Options != null)
-                {
-                    foreach(var o in q.Options)
-                    {
-                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
-                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
-                        {
-                            result.Add(q);
-                        }
-                    }
-                }
-            }
+            var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search);
+            var recordTotal = data.totalCount;
+            var result = data.Questions;
             var recordFiltered = result.Count();
             if(length != null && length >= 0 )
             {
@@ -376,41 +357,17 @@ namespace QBCS.Web.Controllers
         }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {
-            var search = Request["search[value]"].ToLower();
+            var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionTempByImportId(importId, type, search);
             var entities = data.Questions;
             var recordTotal = data.totalCount;
-            var result = new List<QuestionTempViewModel>();
-            foreach (var q in entities)
-            {
-                var questionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(q.QuestionContent).ToLower();
-                if (questionContent.Contains(search) || q.QuestionContent.Contains(search) || q.Code.ToLower().Contains(search))
-                {
-                    result.Add(q);
-                }
-                else if (q.Options != null)
-                {
-                    foreach (var o in q.Options)
-                    {
-                        var optionContent = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(o.OptionContent).ToLower();
-                        if (optionContent.Contains(search) || o.OptionContent.Contains(search))
-                        {
-                            result.Add(q);
-                        }
-                    }
-                }
-            }
-            var recordFiltered = result.Count();
+            var recordFiltered = entities.Count();
             if (length >= 0)
             {
-                result = result.Skip(start).Take(length).ToList();
-            }
-            else
-            {
-                result = result.ToList();
+                entities = entities.Skip(start).Take(length).ToList();
             }
 
-            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result , success = true}, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = entities, success = true}, JsonRequestBehavior.AllowGet);
         }
     }
 

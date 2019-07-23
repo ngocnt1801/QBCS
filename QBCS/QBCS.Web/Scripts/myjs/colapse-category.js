@@ -368,7 +368,7 @@
                                 } else {
                                     image = "";
                                 }
-                                var questionContent = '<div id="' + row.Code + '"><div id="Question"></div>'+image+options+'</div>';
+                                var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
                                 var result = code + questionContent;
                                 return  result;
                             }
@@ -400,7 +400,7 @@
                         var question = data.json.data;
                         var q = 0;
                         for (q = 0; q < question.length; q++) {
-                            var jq = '#' + question[q].Code + ' #Question';
+                            var jq = '#' + question[q].Id + ' #Question';
                             var changeContent = question[q]["QuestionContent"];
                             var breakContent = [];
                             var isHtml = false;
@@ -408,25 +408,47 @@
                                 isHtml = true;
                             }
                             if (isHtml) {
+
                                 changeContent = changeContent.split("&lt;p&gt;").join("");
                                 changeContent = changeContent.split("&lt;/p&gt;").join("");
                                 changeContent = changeContent.split("&lt;span&gt;").join("");
                                 changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("&lt;b&gt;").join("");
+                                changeContent = changeContent.split("&lt;/b&gt;").join("");
+                                changeContent = changeContent.split("&lt;span&gt;").join("");
+                                changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("&lt;u&gt;").join("");
+                                changeContent = changeContent.split("&lt;/u&gt;").join("");
+                                changeContent = changeContent.split("&lt;i&gt;").join("");
+                                changeContent = changeContent.split("&lt;/i&gt;").join("");
+                                changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                                changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                                changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                                changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                                 changeContent = changeContent.split("[html]").join("");
-                                breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                                    .split("<cbr>").join("·")
+                                    .split("&lt;br&gt;").join("·")
+                                    .split("<br>").join("·")
+                                    .split("<br />").join("·")
+                                    .split("<br/>").join("·")
+                                    .split("&lt;br /&gt;").join("·")
+                                    .split("&lt;br/&gt;").join("·");
                                 breakContent = breakContent.split("·");
                             } else {
                                 breakContent.push(changeContent);
                             }
                             for (var w = 0; w < breakContent.length; w++) {
                                 $(jq).append('<p id="qcontent_' + w + '"></p>');
-                                var jqw = '#' + question[q].Code + ' #Question #qcontent_'+ w;
+                                var jqw = '#' + question[q].Id + ' #Question #qcontent_'+ w;
                                 $(jqw).text(breakContent[w]);
                             }
                             breakContent = [];
                             for (var o = 0; o < question[q]["Options"].length; o++) {
                                 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                                var jo = '#' + question[q].Code + ' #Option'+o;
+                                var jo = '#' + question[q].Id + ' #Option'+o;
                                 var optionContent = question[q]["Options"][o]["OptionContent"];
                                 var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                                 if (isHtml) {
@@ -443,7 +465,7 @@
                                 for (var b = 0; b < breakContent.length; b++) {
                                     $(jo).append('<p id="ocontent_' + b + '"></p>');
                                     var ch = $(jo).length;
-                                    var jow = '#' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                                    var jow = '#' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                                     if (b == 0) {
                                         $(jow).text(letters[o] + '. ' + breakContent[b]);
                                     } else {
