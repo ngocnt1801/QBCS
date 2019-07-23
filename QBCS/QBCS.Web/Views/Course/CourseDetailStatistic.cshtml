@@ -12,10 +12,14 @@
     <br />
     <div class="col-lg-2 text-custom">
         Suggestion:
-        @foreach (var suggest in Model.Suggestion)
+        @if (Model != null && Model.Suggestion != null)
         {
-            <text>suggest</text><br/>
+            foreach (var suggest in Model.Suggestion)
+            {
+                <text>suggest</text><br />
+            }
         }
+
     </div>
     <script>
     var ctx = document.getElementById('myChart');
