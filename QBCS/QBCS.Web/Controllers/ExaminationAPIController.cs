@@ -781,13 +781,17 @@ namespace QBCS.Web.Controllers
         public FileResult ExportBank(int[] loId, string extension, bool? getCategory = false)
         {
             var result = new List<QuestionViewModel>();
-            foreach (var id in loId)
+            if (loId != null)
             {
-                var questionsByLo = questionService.GetQuestionList(null, null, id, null, null);
-                if (questionsByLo != null && questionsByLo.Count > 0)
+                foreach (var id in loId)
                 {
-                    result.AddRange(questionsByLo);
+                    var questionsByLo = questionService.GetQuestionList(null, null, id, null, null);
+                    if (questionsByLo != null && questionsByLo.Count > 0)
+                    {
+                        result.AddRange(questionsByLo);
+                    }
                 }
+
             }
 
             int count = 0;

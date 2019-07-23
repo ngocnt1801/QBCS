@@ -162,10 +162,11 @@
             </div>
             <form method="post" action="@Url.Action("ExportBank", "ExaminationAPI")">
                 <div class="modal-body form-group">
+                   Select All: <input id="selectAll" type="checkbox" class="mr-3">
                     @foreach (var lo in Model.LearningOutcome)
                     {
                         <div class="row mb-2 ml-2">
-                            <input type="checkbox" name="loId" class="mr-3" value="@lo.Id" id="@lo.Id" />
+                            <input type="checkbox" name="loId" class="mr-3 cb-course" value="@lo.Id" id="@lo.Id" />
                             <h6>@lo.Name</h6>
                         </div>
                     }
@@ -188,4 +189,5 @@
 </div>
 
 @Scripts.Render("~/bundles/script/datatables")
+@Scripts.Render("~/bundle/scripts/checkbox")
 @Scripts.Render("~/bundle/scripts/category")
