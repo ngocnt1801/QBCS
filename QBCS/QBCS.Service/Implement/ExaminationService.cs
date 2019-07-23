@@ -487,6 +487,11 @@ namespace QBCS.Service.Implement
             }
             else
             {
+                exam.TotalQuestion = 0;
+                exam.EasyQuestion = 0;
+                exam.MediumQuestion = 0;
+                exam.HardQuestion = 0;
+
                 List<SyllabusPartialViewModel> syllabus = course.Syllabus.Select(s => new SyllabusPartialViewModel()
                 {
                     Id = s.Id,
@@ -521,6 +526,11 @@ namespace QBCS.Service.Implement
                     int questionEasyInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.EasyPercent * 1.0) / 100);
                     int questionMediumInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.MediumPercent * 1.0) / 100);
                     int questionHardInSyllabus = syl.AmountQuestion - questionEasyInSyllabus - questionMediumInSyllabus;
+
+                    exam.TotalQuestion += (questionEasyInSyllabus + questionMediumInSyllabus + questionHardInSyllabus);
+                    exam.EasyQuestion += questionEasyInSyllabus;
+                    exam.MediumQuestion += questionMediumInSyllabus;
+                    exam.HardQuestion += questionHardInSyllabus;
                     if (totalEasyQuestionInBank < questionEasyInSyllabus)
                     {
                         exam.IsEnough = false;
