@@ -654,7 +654,11 @@ function clickSection() {
 
 function minusTotal(totalSpan) {
     var value = parseInt(totalSpan.text());
-    totalSpan.text(value - 1);
+    if (value <= 0) {
+        totalSpan.text(0);
+    } else {
+        totalSpan.text(value - 1);
+    }
 }
 
 function plusTotal(totalSpan) {
