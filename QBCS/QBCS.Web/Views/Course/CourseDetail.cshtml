@@ -165,7 +165,7 @@
                     @foreach (var lo in Model.LearningOutcome)
                     {
                         <div class="row mb-2 ml-2">
-                            <input type="checkbox" name="loId" class="checkbox mr-3" value="@lo.Id" id="@lo.Id" />
+                            <input type="checkbox" name="loId" class="mr-3" value="@lo.Id" id="@lo.Id" />
                             <h6>@lo.Name</h6>
                         </div>
                     }
@@ -173,8 +173,8 @@
                         <option value="gift">GIFT</option>
                         <option value="xml">XML</option>
                     </select>
-                    <div class="row mb-2 ml-2">
-                        <input type="checkbox" name="getCategory" class="checkbox mr-3" value="true" />
+                    <div class="row mt-4 ml-2">
+                        <input type="checkbox" name="getCategory" class="mr-3" value="true" />
                         <h6>Get category</h6>
                     </div>
                 </div>

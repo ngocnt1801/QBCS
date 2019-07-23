@@ -105,7 +105,7 @@ namespace QBCS.Service.Utilities
             {
                 result = RemoveTag(source, @"<br>", @"\n");
                 result = RemoveTag(result, @"<br/>", @"\n");
-                result = RemoveTag(result, @"<br style=", @"\n<br style=");
+                result = RemoveTag(result, @"<br style", @"\n<br style");
                 result = RemoveTag(result, @"<br>", @"\n");      
                 result = RemoveTag(result, @"</p>", @"</p>\n");
                 
