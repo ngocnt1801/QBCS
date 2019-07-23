@@ -31,6 +31,7 @@ namespace QBCS.Service.Utilities
                 //string destination = "[html]";
                 int countCode = 0;
                 int inLine = 0;
+                bool isPlain = false;
                 StringProcess stringProcess = new StringProcess();
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -51,7 +52,7 @@ namespace QBCS.Service.Utilities
                     bool isInLine = false;
                     bool isStart = false;
                     bool isEnd = false;
-                    bool keeping = false;
+                    //bool keeping = false;
 
                     //bool isComma = false;
                     bool isMultipleChoice = false;
@@ -80,7 +81,12 @@ namespace QBCS.Service.Utilities
 
                         line = stringProcess.RemoveHtmlBrTag(line);
                         string resultTmp = "";
-                        if (checkHTML == false)
+                        
+                        if (line.Contains("[plain]"))
+                        {
+                            isPlain = true;
+                        }
+                        if (checkHTML == false && isPlain == false)
                         {
                             HtmlDocument htmlDoc = new HtmlDocument();
                             htmlDoc.LoadHtml(line);
@@ -413,6 +419,7 @@ namespace QBCS.Service.Utilities
                         countCode = 0;
                         inLine = 0;
                         isMultipleChoice = false;
+                        isPlain = false;
                     }
                 }
             }
