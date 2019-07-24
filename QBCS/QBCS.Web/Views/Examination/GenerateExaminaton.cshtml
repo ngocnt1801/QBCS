@@ -39,20 +39,84 @@
             </td>
         </tr>
     </table>
-        <div class="row form-group">
-            <div>
-                <h5>File extension :</h5>
-            </div>
-            <input type="hidden" name="examGroupExportAll" value="@Model.GroupExam" />
+    if (Model.Syllabus != null || Model.LearningOutcomeInExam != null)
+    {
+        <div class="row mt-3">
+            @if (Model.Syllabus.Count != 0)
+            {
+                <table class="table text-custom table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Symllabus</th>
+                            <th>Topic/LO</th>
+                            <th>Easy</th>
+                            <th>Medium</th>
+                            <th>Hard</th>
+                        <tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var syl in Model.Syllabus)
+                        {
+                            <tr>
+                                <td rowspan="@syl.LearingOutcomesInExam.Count">@syl.Name</td>
+                                <td>@syl.LearingOutcomesInExam[0].Name</td>
+                                <td>@syl.LearingOutcomesInExam[0].EasyQuestion</td>
+                                <td>@syl.LearingOutcomesInExam[0].MediumQuestion</td>
+                                <td>@syl.LearingOutcomesInExam[0].HardQuestion</td>
+                            </tr>
+                            for (int i = 1; i < syl.LearingOutcomesInExam.Count; i++)
+                            {
+                                <tr>
+                                    <td>@syl.LearingOutcomesInExam[i].Name</td>
+                                    <td>@syl.LearingOutcomesInExam[i].EasyQuestion</td>
+                                    <td>@syl.LearingOutcomesInExam[i].MediumQuestion</td>
+                                    <td>@syl.LearingOutcomesInExam[i].HardQuestion</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            } else
+            {
+                <table class="table text-custom table-striped">
+                    <thead>
+                        <tr>
+                            <th>Topic/LO</th>
+                            <th>Easy</th>
+                            <th>Medium</th>
+                            <th>Hard</th>
+                        <tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var lo in Model.LearningOutcomeInExam)
+                        {
+                            <tr>
+                                <td>@lo.Name</td>
+                                <td>@lo.EasyQuestion</td>
+                                <td>@lo.MediumQuestion</td>
+                                <td>@lo.HardQuestion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <div class="col-lg-2">
-                <select id="fileExtensionExportAll" class="form-control">
-                    <option value="gift">GIFT</option>
-                    <option value="xml">XML</option>
-                </select>
-            </div>
-            <input type="button" id="exportAllInReport" name="Export" value="Export All" class="btn btn-primary float-right btnExport" />
         </div>
+    }
+    <div class="row form-group">
+        <div>
+            <h5>File extension :</h5>
+        </div>
+        <input type="hidden" name="examGroupExportAll" value="@Model.GroupExam" />
+
+        <div class="col-lg-2">
+            <select id="fileExtensionExportAll" class="form-control">
+                <option value="gift">GIFT</option>
+                <option value="xml">XML</option>
+            </select>
+        </div>
+        <input type="button" id="exportAllInReport" name="Export" value="Export All" class="btn btn-primary float-right btnExport" />
+    </div>
 }
 else
 {

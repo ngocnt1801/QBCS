@@ -21,15 +21,15 @@
         <div class="table-responsive text-custom">
             @if (ViewBag.targetId != null)
             {
-                <input id="targetId" value="@ViewBag.targetId" />
+                <input id="targetId" value="@ViewBag.targetId" type="hidden"/>
             }
             @if (ViewBag.importId != null)
             {
-                <input id="importId" value="@ViewBag.importId" />
+                <input id="importId" value="@ViewBag.importId" type="hidden"/>
             }
             @if (ViewBag.isUser != null && userId != 0)
             {
-                <input id="userId" value="@userId" />
+                <input id="userId" value="@userId" type="hidden"/>
             }
             <table class="table table-bordered table-hover text-custom table-striped" id="tableActivity" width="100%" cellspacing="0">
                 <thead>

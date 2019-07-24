@@ -341,22 +341,10 @@ namespace QBCS.Service.Implement
                 courseDetail.Suggestion.Add("We shouldn't have no level questions !!!");
             }
 
-            return WarnCourse(courseDetail);
+            return courseDetail;
         }
-        private CourseStatDetailViewModel WarnCourse(CourseStatDetailViewModel detail)
-        {
 
-            switch (detail.Type)
-            {
-                case "Course":
 
-                    break;
-                case "Learning Outcome":
-
-                    break;
-            }
-            return detail;
-        }
         public bool UpdateCourse(CourseViewModel course)
         {
             try

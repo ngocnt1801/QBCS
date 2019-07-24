@@ -10,7 +10,7 @@
         Processing: true,
         ajax:
         {
-            url: "/Log/GetLogAction",
+            url: "/LogAction/GetLogAction",
             type: "GET",
             data: {
                 importId: $('#importId').val(),
@@ -46,7 +46,20 @@
                 data: "Ip"
             },
             {
-                data: "LogDate"
+                data: "LogDate",
+                render: function (data) {
+                    var date = new Date(+data.replace(/\D/g, ''));
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1;
+                    var year = date.getFullYear();
+                    var hour = date.getHours();
+                    var minute = date.getMinutes();
+                    var sec = date.getSeconds();
+                    if (month < 10) {
+                        return year + '-0' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec;
+                    }
+                    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec;
+                }
             }
         ]
         //columnDefs: [
