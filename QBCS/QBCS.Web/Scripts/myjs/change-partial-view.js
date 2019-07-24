@@ -1076,7 +1076,7 @@ function initTableEditable() {
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                             }
-                            var image = row.Image;
+                            var image = row.DuplicatedQuestion.Image;
                             if (image != null && image != "") {
                                 image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                             } else {

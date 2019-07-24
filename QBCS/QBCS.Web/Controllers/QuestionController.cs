@@ -330,7 +330,9 @@ namespace QBCS.Web.Controllers
         {
             var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search, start, length);
-            return Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            var result = Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
         }
 
         //Lecturer
