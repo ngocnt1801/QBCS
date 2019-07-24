@@ -68,6 +68,7 @@ namespace QBCS.Web.Controllers
         private const string XML_ENCODING_ATTR_VALUE = "base64";
         private const string XML_PATH_ATTR_VALUE = "/";
         private const string XML_NAME_ATTR_VALUE = "Image00613.bmp";
+        private const string HTML_IMAGE_TAG = "<img src='@@PLUGINFILE@@/{0}' alt='' role='presentation' style=''>";
 
         private IPartOfExamService partOfExamService;
         private IExaminationService examinationService;
@@ -283,24 +284,43 @@ namespace QBCS.Web.Controllers
                     xmlWriter.WriteElementString(XML_TEXT_TAG, question.QuestionCode);
                     xmlWriter.WriteEndElement();
                     //questiontext tag
-                    xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
-                    xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                    xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                    string questionContentEncode = StringUtilities.FormatStringExportXML(question.QuestionContent).Trim();
-                    if (questionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                    if (string.IsNullOrEmpty(question.Image))
                     {
-                        xmlWriter.WriteCData(questionContentEncode);
+                        xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
+                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                        string questionContentEncode = StringUtilities.FormatStringExportXML(question.QuestionContent).Trim();
+                        if (questionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                        {
+                            xmlWriter.WriteCData(questionContentEncode);
+                        }
+                        else
+                        {
+                            xmlWriter.WriteString(questionContentEncode);
+                        }
+                        xmlWriter.WriteEndElement();
                     }
                     else
                     {
-                        xmlWriter.WriteString(questionContentEncode);
-                    }
-                    xmlWriter.WriteEndElement();
-                    //Image tag
-                    if (!string.IsNullOrEmpty(question.Image))
-                    {
+                        //questiontext tag
+                        xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
+                        xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
+                        xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                        string imageName = "Image" + count++ + ".png";
+                        string questionContentEncode = StringUtilities.FormatStringExportXML(question.QuestionContent).Trim() + String.Format(HTML_IMAGE_TAG, imageName);
+                        if (questionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                        {
+                            xmlWriter.WriteCData(questionContentEncode);
+                        }
+                        else
+                        {
+                            xmlWriter.WriteString(questionContentEncode);
+                        }
+                        xmlWriter.WriteEndElement();
+
+                        //Image tag
                         xmlWriter.WriteStartElement(XML_FILE_TAG);
-                        xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
+                        xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, imageName);
                         xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                         xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
                         xmlWriter.WriteString(question.Image);
@@ -364,29 +384,46 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                             xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
                             xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            //Image tag
-                            if (!string.IsNullOrEmpty(option.Image))
+
+                            if (string.IsNullOrEmpty(option.Image))
                             {
+                                //text atg
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim();
+                                if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                {
+                                    xmlWriter.WriteCData(optionContentEncode);
+                                }
+                                else
+                                {
+                                    xmlWriter.WriteString(optionContentEncode);
+                                }
+                                xmlWriter.WriteEndElement();
+                            }
+                            else
+                            {
+                                string imageName = "Image" + count++ + ".png";
+                                // text atg
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim() + String.Format(HTML_IMAGE_TAG, imageName);
+                                if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                {
+                                    xmlWriter.WriteCData(optionContentEncode);
+                                }
+                                else
+                                {
+                                    xmlWriter.WriteString(optionContentEncode);
+                                }
+                                xmlWriter.WriteEndElement();
+
+                                //Image tag
                                 xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
+                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, imageName);
                                 xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                                 xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
                                 xmlWriter.WriteString(option.Image);
                                 xmlWriter.WriteEndElement();
                             }
-                            //t
-                            //text atg
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim();
-                            if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
-                            {
-                                xmlWriter.WriteCData(optionContentEncode);
-                            }
-                            else
-                            {
-                                xmlWriter.WriteString(optionContentEncode);
-                            }
-                            xmlWriter.WriteEndElement();
                             //feedback tag
                             xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
                             xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
@@ -401,28 +438,45 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                             xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_INCORRECT_FRACTION_ATTR_VALUE.ToString());
                             xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-                            //Image tag
-                            if (!string.IsNullOrEmpty(option.Image))
+                            if (string.IsNullOrEmpty(option.Image))
                             {
+                                //text atg
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim();
+                                if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                {
+                                    xmlWriter.WriteCData(optionContentEncode);
+                                }
+                                else
+                                {
+                                    xmlWriter.WriteString(optionContentEncode);
+                                }
+                                xmlWriter.WriteEndElement();
+                            }
+                            else
+                            {
+                                string imageName = "Image" + count++ + ".png";
+                                // text atg
+                                xmlWriter.WriteStartElement(XML_TEXT_TAG);
+                                string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim() + String.Format(HTML_IMAGE_TAG, imageName);
+                                if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
+                                {
+                                    xmlWriter.WriteCData(optionContentEncode);
+                                }
+                                else
+                                {
+                                    xmlWriter.WriteString(optionContentEncode);
+                                }
+                                xmlWriter.WriteEndElement();
+
+                                //Image tag
                                 xmlWriter.WriteStartElement(XML_FILE_TAG);
-                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, "Image" + count++ + ".png");
+                                xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, imageName);
                                 xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
                                 xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
                                 xmlWriter.WriteString(option.Image);
                                 xmlWriter.WriteEndElement();
                             }
-                            //text atg
-                            xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                            string optionContentEncode = StringUtilities.FormatStringExportXML(option.OptionContent).Trim();
-                            if (optionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
-                            {
-                                xmlWriter.WriteCData(optionContentEncode);
-                            }
-                            else
-                            {
-                                xmlWriter.WriteString(optionContentEncode);
-                            }
-                            xmlWriter.WriteEndElement();
                             //feedback tag
                             xmlWriter.WriteStartElement(XML_FEEDBACK_TAG);
                             xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);

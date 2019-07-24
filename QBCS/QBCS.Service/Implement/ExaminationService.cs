@@ -446,6 +446,7 @@ namespace QBCS.Service.Implement
                             else
                             {
                                 topics[i].EasyQuestion = topics[i].EasyQuestion + 1;
+                                topics[i].TotalQuestionInExam = topics[i].TotalQuestionInExam + 1;
                                 questionEasy--;
                             }
                         }
@@ -458,6 +459,7 @@ namespace QBCS.Service.Implement
                             else
                             {
                                 topics[i].MediumQuestion = topics[i].MediumQuestion + 1;
+                                topics[i].TotalQuestionInExam = topics[i].TotalQuestionInExam + 1;
                                 questionMedium--;
                             }
 
@@ -471,6 +473,7 @@ namespace QBCS.Service.Implement
                             else
                             {
                                 topics[i].HardQuestion = topics[i].HardQuestion + 1;
+                                topics[i].TotalQuestionInExam = topics[i].TotalQuestionInExam + 1;
                                 questionHard--;
                             }
                         }
@@ -569,6 +572,7 @@ namespace QBCS.Service.Implement
                                     else
                                     {
                                         temp[i].EasyQuestion = temp[i].EasyQuestion + 1;
+                                        temp[i].TotalQuestionInExam = temp[i].TotalQuestionInExam + 1;
                                         questionEasyInSyllabus--;
                                     }
                                 }
@@ -581,6 +585,7 @@ namespace QBCS.Service.Implement
                                     else
                                     {
                                         temp[i].MediumQuestion = temp[i].MediumQuestion + 1;
+                                        temp[i].TotalQuestionInExam = temp[i].TotalQuestionInExam + 1;
                                         questionMediumInSyllabus--;
                                     }
 
@@ -594,6 +599,7 @@ namespace QBCS.Service.Implement
                                     else
                                     {
                                         temp[i].HardQuestion = temp[i].HardQuestion + 1;
+                                        temp[i].TotalQuestionInExam = temp[i].TotalQuestionInExam + 1;
                                         questionHardInSyllabus--;
                                     }
                                 }
