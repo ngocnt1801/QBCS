@@ -38,32 +38,11 @@ namespace QBCS.Web.Controllers
             //return View(list);
             return View();
         }
-        public JsonResult GetLogAction(int? draw, int? start, int? length)
+        public JsonResult GetLogAction(int draw, int start, int length)
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
-            var entities = logActionService.GetLogAction();
-            var recordTotal = entities.Count();
-            var result = new List<LogViewModel>();
-
-            result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search) || a.Ip.Contains(search)).ToList();
-            foreach (var a in entities)
-            {
-                var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                if (user.Contains(search) || a.Fullname.Contains(search))
-                {
-                    result.Add(a);
-                }
-            }
-            var recordFiltered = result.Count();
-            if (length != null && length >= 0)
-            {
-                result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
-            }
-            else
-            {
-                result = result.ToList();
-            }
-            return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+            var data = logActionService.GetLogAction(search,start,length);
+            return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Logs, success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }
