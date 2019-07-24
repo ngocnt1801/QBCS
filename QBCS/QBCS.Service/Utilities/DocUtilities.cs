@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using QBCS.Entity;
 using QBCS.Service.ViewModel;
@@ -279,7 +280,15 @@ namespace QBCS.Service.Utilities
                     WParagraph paragraph = bodyItemEntity as WParagraph;
                     if (!paragraph.Text.Equals(""))
                     {
-                        quesModel.LearningOutcome = globalPrefix + paragraph.Text;
+                        var number = Regex.Match(paragraph.Text, @"\d+$").ToString();
+                        if (globalPrefix == "")
+                        {
+                            quesModel.LearningOutcome = paragraph.Text;
+                        }
+                        else
+                        {
+                            quesModel.LearningOutcome = globalPrefix + number;
+                        }
                     }
                 }
                 else if (key.Contains("MARK:"))
