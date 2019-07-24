@@ -109,18 +109,50 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@levelId", question.LevelId);
                 command.Parameters.AddWithValue("@id", question.UpdateQuestionId);
                 command.ExecuteNonQuery();
+            }
 
-                foreach (var option in question.Options)
+            DeleteOptions(question.UpdateQuestionId.Value);
+            AddOptions(question.Options, question.UpdateQuestionId.Value);
+        }
+
+        private static void DeleteOptions(int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE [Option] " +
+                    "WHERE QuestionId=@questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@questionId", questionId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void AddOptions(List<OptionModel> options, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                foreach (var option in options)
                 {
                     SqlCommand optionCmd = new SqlCommand(
-                          "UPDATE [Option] " +
-                          "SET OptionContent=@content, IsCorrect=@correct " +
-                          "WHERE Id=@id",
+                          "INSERT INTO [dbo].[Option] " +
+                          "([QuestionId] " +
+                          ",[OptionContent] " +
+                          ",[IsCorrect] " +
+                          ",[Image])" +
+                          "VALUES (@questionId, @content, @correct, @image)",
                           connection
                           );
                     optionCmd.Parameters.AddWithValue("@content", option.OptionContent);
                     optionCmd.Parameters.AddWithValue("@correct", option.IsCorrect);
-                    optionCmd.Parameters.AddWithValue("@id", option.Id);
+                    optionCmd.Parameters.AddWithValue("@questionId", questionId);
+                    optionCmd.Parameters.AddWithValue("@image", option.Image);
                     optionCmd.ExecuteNonQuery();
                 }
 
@@ -194,6 +226,7 @@ namespace DuplicateQuestion
                         "o.OptionContent, " +
                         "o.IsCorrect, " +
                         "o.UpdateOptionId, " +
+                        "o.Image, " +
                         "q.Category, " +
                         "q.LearningOutcome, " +
                         "q.LevelName, " +

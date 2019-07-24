@@ -51,43 +51,5 @@
         </div>
     </div>
 </div>
-@*@if (Model.Status == QBCS.Service.Enum.StatusEnum.Editable
-        || Model.Status == QBCS.Service.Enum.StatusEnum.Deleted
-        || Model.Status == QBCS.Service.Enum.StatusEnum.DeleteOrSkip)
-    {
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-custom">Duplicated Question</h6>
-            </div>
-
-            <div class="card-body text-custom custom-display-p" id="customs-display-duplicate">
-
-                @Html.DisplayFor(modeItem => Model.DuplicatedQuestion.QuestionContent)
-                @if (Model.DuplicatedQuestion.Image != null)
-                {
-                <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.DuplicatedQuestion.Image" /></p>
-                }
-                @for (var i = 0; i < Model.DuplicatedQuestion.Options.Count; i++)
-                {
-                    if (Model.DuplicatedQuestion.Options[i].IsCorrect == true)
-                    {
-                        <div class="container-fluid text-right-answer">
-                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="container-fluid">
-                            @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.DuplicatedQuestion.Options[i].OptionContent)
-                        </div>
-                    }
-
-                    <br />
-                }
-
-            </div>
-        </div>
-    }*@
-
 @Scripts.Render("~/bundle/scripts/editquestion")
 @Scripts.Render("~/bundle/scripts/processtext")

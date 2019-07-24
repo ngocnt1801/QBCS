@@ -5,6 +5,7 @@ using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -244,6 +245,11 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
+                if (String.IsNullOrWhiteSpace(textarea.OwnerName))
+                {
+                    textarea.OwnerName = user != null ? user.Fullname : User.Get(u => u.FullName);
+                }
+
                 check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))

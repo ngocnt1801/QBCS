@@ -9,6 +9,7 @@ namespace DuplicateQuestion.Entity
     public class OptionModel
     {
         public string OptionContent { get; set; }
+        public string Image { get; set; }
         public bool IsCorrect { get; set; }
         public int QuestionId { get; set; }
         public int Id { get; set; }
