@@ -309,7 +309,7 @@ function clickSection() {
                         }
                     }
 
-
+                    $("#tableSuccess .delete-question-dt").off('click');
                     $("#tableSuccess .delete-question-dt").on('click', function () {
                         minusTotal($("#total-success"));
                         plusTotal($("#total-delete"));
@@ -521,6 +521,7 @@ function clickSection() {
                         }
                     }
 
+                    $("#tableInvalid .delete-question-dt").off('click');
                     $("#tableInvalid .delete-question-dt").on('click', function () {
                         minusTotal($("#total-invalid"));
                         plusTotal($("#total-delete"));
@@ -1321,6 +1322,7 @@ function initTableEditable() {
                 
             }
 
+            $("#tableEditable .delete-question-dt").off('click');
             $("#tableEditable .delete-question-dt").on('click', function () {
                 minusTotal($("#total-editable"));
                 plusTotal($("#total-delete"));
