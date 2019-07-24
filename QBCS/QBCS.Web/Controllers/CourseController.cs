@@ -295,5 +295,31 @@ namespace QBCS.Web.Controllers
             courseService.UpdateTotalQuesiton(courseId, total);
             return RedirectToAction("Syllabus", new { courseId = courseId });
         }
+
+        public ActionResult Category(int courseId)
+        {
+            var categories = categoryService.GetCategoriesByCourseId(courseId);
+            var course = courseService.GetDetailCourseById(courseId);
+            course.Categories = categories;
+            return View(course);
+        }
+
+        public ActionResult CreateCategory(CategoryViewModel model)
+        {
+            categoryService.AddCategory(model);
+            return RedirectToAction("Category", new { courseId = model.CourseId });
+        }
+
+        public ActionResult DeleteCategory(int categoryId, int courseId)
+        {
+            categoryService.DeleteCategory(categoryId);
+            return RedirectToAction("Category", new { courseId = courseId });
+        }
+
+        public ActionResult UpdateCategory(CategoryViewModel model)
+        {
+            categoryService.UpdateCategory(model);
+            return RedirectToAction("Category", new { courseId = model.CourseId });
+        }
     }
 }

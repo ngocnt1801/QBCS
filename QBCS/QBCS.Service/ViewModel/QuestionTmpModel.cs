@@ -22,5 +22,6 @@ namespace QBCS.Service.ViewModel
         public string Image { get; set; }
         public string Error { get; set; }
         public string OtherError { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace QBCS.Service.Implement
         private ILearningOutcomeService learningOutcomeService;
         private ICourseService courseService;
         private ITopicService topicService;
-        private ISemesterService semesterService;
         private IPartOfExamService partOfExamService;
         private ILogService logService;
         private IQuestionInExamService questionInExamService;
@@ -40,7 +39,6 @@ namespace QBCS.Service.Implement
             topicService = new TopicService();
             courseService = new CourseService();
             partOfExamService = new PartOfExamService();
-            semesterService = new SemesterService();
             logService = new LogService();
             questionInExamService = new QuestionInExamService();
         }
@@ -74,8 +72,6 @@ namespace QBCS.Service.Implement
                 ExamGroup = e.GroupExam,
                 CourseId = e.CourseId.HasValue ? (int)e.CourseId : 0,
                 GeneratedDate = (DateTime)e.GeneratedDate,
-                SemesterId = e.SemesterId.HasValue ? (int)e.SemesterId : 0,
-                Semester = semesterService.GetById(e.SemesterId.HasValue ? (int)e.SemesterId : 0),
                 NumberOfEasy = e.NumberOfEasy.HasValue ? (int)e.NumberOfEasy : 0,
                 NumberOfMedium = e.NumberOfMedium.HasValue ? (int)e.NumberOfMedium : 0,
                 NumberOfHard = e.NumberOfHard.HasValue ? (int)e.NumberOfHard : 0,
@@ -98,8 +94,6 @@ namespace QBCS.Service.Implement
                     IsDisable = (bool)exam.IsDisable,
                     CourseId = exam.CourseId.HasValue ? (int)exam.CourseId : 0,
                     GeneratedDate = (DateTime)exam.GeneratedDate,
-                    SemesterId = exam.SemesterId.HasValue ? (int)exam.SemesterId : 0,
-                    Semester = semesterService.GetById(exam.SemesterId.HasValue ? (int)exam.SemesterId : 0),
                     NumberOfEasy = exam.NumberOfEasy.HasValue ? (int)exam.NumberOfEasy : 0,
                     NumberOfMedium = exam.NumberOfMedium.HasValue ? (int)exam.NumberOfMedium : 0,
                     NumberOfHard = exam.NumberOfHard.HasValue ? (int)exam.NumberOfHard : 0,
@@ -180,7 +174,7 @@ namespace QBCS.Service.Implement
                 unitOfWork.SaveChanges();
             }
         }
-        public GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId, int semeterId)
+        public GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId)
         {
             int questionEasy = 0;
             int questionMedium = 0;
@@ -195,7 +189,6 @@ namespace QBCS.Service.Implement
                 ExamCode = examCode,
                 GroupExam = groupExam,
                 CourseId = courseId,
-                SemesterId = semeterId,
                 IsDisable = false,
                 GeneratedDate = DateTime.Now
             };
@@ -391,9 +384,12 @@ namespace QBCS.Service.Implement
                     totalHardQuestionInTopic = questionService.GetCountOfListQuestionByLearningOutcomeAndId(id, idOfLevel);
                     totalHardQuestionInTopicCategory += totalHardQuestionInTopic;
                 }
+                LearningOutcomeViewModel learningOutcomeById = learningOutcomeService.GetLearingOutcomeById(id);
+                string LOName = learningOutcomeById != null ? learningOutcomeById.Name : "";
                 LearingOutcomeInExamination learningOutcomeInExam = new LearingOutcomeInExamination()
                 {
                     Id = id,
+                    Name = LOName,
                     TotalEasyQuestionInTopic = totalEasyQuestionInTopic,
                     TotalMediumQuestionInTopic = totalMediumQuestionInTopic,
                     TotalHardQuestionInTopic = totalHardQuestionInTopic
@@ -484,6 +480,7 @@ namespace QBCS.Service.Implement
                         }
                     }
                 }
+                exam.LearningOutcomeInExam = topics;
             }
             else
             {
@@ -556,6 +553,9 @@ namespace QBCS.Service.Implement
                     }
                     else
                     {
+                        exam.EasyQuestionGenerrate = exam.EasyQuestion;
+                        exam.MediumQuestionGenerrate = exam.MediumQuestion;
+                        exam.HardQuestionGenerrate = exam.HardQuestion;
                         while (questionEasyInSyllabus != 0 || questionMediumInSyllabus != 0 || questionHardInSyllabus != 0)
                         {
                             for (int i = 0; i < temp.Count; i++)
@@ -603,7 +603,12 @@ namespace QBCS.Service.Implement
                                 }
                             }
                         }// end while
-
+                        syl.LearingOutcomesInExam = temp;
+                        if(exam.Syllabus == null)
+                        {
+                            exam.Syllabus = new List<SyllabusPartialViewModel>();
+                        }
+                        exam.Syllabus.Add(syl);
                         foreach (var tmp in temp)
                         {
                             topics[topics.FindIndex(t => t.Id == tmp.Id)] = tmp;
@@ -626,13 +631,8 @@ namespace QBCS.Service.Implement
                     ExamCode = GetExamCode(),
                     GroupExam = examGroup
                 };
-                if (exam.Semeter != 0)
-                {
-                    examination.SemesterId = exam.Semeter;
-                }
                 unitOfWork.Repository<Examination>().Insert(examination);
                 unitOfWork.SaveChanges();
-
                 //log generate exam
                 logService.LogManually("Generate", "Examination", examination.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
 

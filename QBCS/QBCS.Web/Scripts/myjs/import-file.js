@@ -62,13 +62,23 @@
                     });
                     $(this)
                         .find("button.btn-choose")
-                        .click(function () {
+                        .click(function () {                         
                             element.click();
+                            element //Nhi add
+                                .next(element)
+                                .find("input")
+                                .val(
+                                    element
+                                        .val()
+                                        .split("\\")
+                                        .pop()
+                                );
                         });
                     $(this)
                         .find("button.btn-reset")
                         .click(function () {
                             element.val(null);
+                           
                             $(this)
                                 .parents(".input-file")
                                 .find("input")

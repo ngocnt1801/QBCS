@@ -1,4 +1,23 @@
-﻿function bt_change_partial(url, btn) {
+﻿function insert_number_modal() {
+    var notInsert;
+    var checkAgain;
+    var editable = parseInt($("#total-editable").text());
+    var invalid = parseInt($("#total-invalid").text());
+    var deleteQ = parseInt($("#total-delete").text());
+    var success = parseInt($("#total-success").text());
+    var totalQues = parseInt($("#total-question").text());
+  
+    notInsert = editable + invalid + deleteQ;
+    checkAgain = totalQues - (editable + invalid + deleteQ + success);
+
+    $("#txtNotInsert").val(notInsert);
+    $("#txtCheckAgain").val(checkAgain);
+}
+
+//$("#btnSaveQuestion").click(function () {
+   
+//});
+function bt_change_partial(url, btn) {
 
     $.get(url, {}, function (response) {
         $("#question-import").html(response);
@@ -290,7 +309,7 @@ function clickSection() {
                         }
                     }
 
-
+                    $("#tableSuccess .delete-question-dt").off('click');
                     $("#tableSuccess .delete-question-dt").on('click', function () {
                         minusTotal($("#total-success"));
                         plusTotal($("#total-delete"));
@@ -502,6 +521,7 @@ function clickSection() {
                         }
                     }
 
+                    $("#tableInvalid .delete-question-dt").off('click');
                     $("#tableInvalid .delete-question-dt").on('click', function () {
                         minusTotal($("#total-invalid"));
                         plusTotal($("#total-delete"));
@@ -783,7 +803,11 @@ function clickSection() {
 
 function minusTotal(totalSpan) {
     var value = parseInt(totalSpan.text());
-    totalSpan.text(value - 1);
+    if (value <= 0) {
+        totalSpan.text(0);
+    } else {
+        totalSpan.text(value - 1);
+    }
 }
 
 function plusTotal(totalSpan) {
@@ -1052,7 +1076,7 @@ function initTableEditable() {
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                             }
-                            var image = row.Image;
+                            var image = row.DuplicatedQuestion.Image;
                             if (image != null && image != "") {
                                 image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                             } else {
@@ -1298,6 +1322,7 @@ function initTableEditable() {
                 
             }
 
+            $("#tableEditable .delete-question-dt").off('click');
             $("#tableEditable .delete-question-dt").on('click', function () {
                 minusTotal($("#total-editable"));
                 plusTotal($("#total-delete"));

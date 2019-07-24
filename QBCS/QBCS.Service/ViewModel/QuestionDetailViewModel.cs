@@ -10,10 +10,10 @@ namespace QBCS.Service.ViewModel
     {
         public QuestionViewModel Question { get; set; }
 
-        public List<TopicViewModel> Topics { get; set; }
-
         public List<LevelViewModel> Levels { get; set; }
 
         public List<LearningOutcomeViewModel> LearningOutcomes { get; set; }
+
+        public List<CategoryViewModel> Categories { get; set; }
     }
 }

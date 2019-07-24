@@ -5,6 +5,7 @@ using QBCS.Service.Interface;
 using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,6 +25,7 @@ namespace QBCS.Web.Controllers
         private IImportService importService;
         private ICourseService courseService;
         private IUserService userService;
+        private ICategoryService categoryService;
 
         public QuestionController()
         {
@@ -36,6 +38,7 @@ namespace QBCS.Web.Controllers
             importService = new ImportService();
             courseService = new CourseService();
             userService = new UserService();
+            categoryService = new CategoryService();
         }
 
         // GET: Question
@@ -103,11 +106,14 @@ namespace QBCS.Web.Controllers
 
             List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
 
+            List<CategoryViewModel> categories = categoryService.GetCategoriesByCourseId(qvm.CourseId);
+
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
                 Question = qvm,
                 Levels = levels,
-                LearningOutcomes = learningOutcomes
+                LearningOutcomes = learningOutcomes,
+                Categories = categories
             };
             TempData["active"] = "Course";
             return View("EditQuestion", qdvm);
@@ -219,6 +225,12 @@ namespace QBCS.Web.Controllers
                 else
                 {
                     check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                    if (check == false)
+                    {
+                        ViewBag.Message = "File is wrong format. PLease check again!";
+                        ViewBag.Status = ToastrEnum.Error;
+                        return Json("Error");
+                    }
                 }
 
             }
@@ -238,6 +250,11 @@ namespace QBCS.Web.Controllers
             bool check = true;
             if (textarea.Table != null && !textarea.Table.Equals(""))
             {
+                if (String.IsNullOrWhiteSpace(textarea.OwnerName))
+                {
+                    textarea.OwnerName = user != null ? user.Fullname : User.Get(u => u.FullName);
+                }
+
                 check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
             }
             //if (table != null && !table.Equals(""))
@@ -313,7 +330,9 @@ namespace QBCS.Web.Controllers
         {
             var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search, start, length);
-            return Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            var result = Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
         }
 
         //Lecturer
@@ -348,7 +367,9 @@ namespace QBCS.Web.Controllers
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionTempByImportId(importId, type, search, start, length);
-            return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
         }
     }
 

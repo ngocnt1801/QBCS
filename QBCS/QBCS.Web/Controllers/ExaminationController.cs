@@ -49,13 +49,9 @@ namespace QBCS.Web.Controllers
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
-            List<CategoryViewModel> categoryViewModels = categoryService.GetCategoriesByCourseId(courseId);
-            List<SemesterViewModel> semester = semesterService.GetAllSemester();
             ListLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListLearningOutcomeViewModel()
             {
                 LearningOutcomes = learningOutcomeViewModels,
-                Categories = categoryViewModels,
-                Semester = semester, 
                 CourseId = courseId
             };
             TempData["active"] = "Examination";
@@ -153,9 +149,9 @@ namespace QBCS.Web.Controllers
             var result = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId);
             return PartialView("ListQuestionCreateExamManually", result);
         }
-        public ActionResult SaveQuestionToExam(List<string> questionCode, int courseId, int semeterId)
+        public ActionResult SaveQuestionToExam(List<string> questionCode, int courseId)
         {
-            GenerateExamViewModel exam = examinationService.SaveQuestionsToExam(questionCode, courseId, semeterId);
+            GenerateExamViewModel exam = examinationService.SaveQuestionsToExam(questionCode, courseId);
             return View("GenerateExaminaton", exam);
         }
 

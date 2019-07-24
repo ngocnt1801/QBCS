@@ -1,6 +1,6 @@
 ﻿$(function () {
     $.ajaxSetup({
-        async:false
+        async: false
     });
     categoryModel = {
         listQuestionSelected: [],
@@ -345,16 +345,16 @@
                                 }
                                 var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
                                 var result = code + questionContent;
-                                return  result;
+                                return result;
                             }
                         },
                         {
                             render: function (data, type, row, meta) {
                                 var importId = $('#importId').val();
-                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12"><i class="fa fa-pencil-alt"></i></a>';
-                                //var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
-                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId +'"><i class="fa fa-trash"></i></button>';
-                                var result = edit + deleteQ;
+                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading"><i class="fa fa-pencil-alt"></i></a>';
+                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId + '"><i class="fa fa-trash"></i></button>';
+                                var history = '<a href="/Activity/GetLogByQuestionID?targetId=' + row.Id + '&importId=' + row.ImportId + '" class="btn btn-info mr-1 col-12 mb-2 spinner-loading"><i class="fa fa-history"></i></a>';
+                                var result = edit + deleteQ + history;
                                 return result;
                             }
                         },

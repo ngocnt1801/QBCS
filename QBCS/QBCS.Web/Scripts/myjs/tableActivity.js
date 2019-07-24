@@ -34,11 +34,15 @@
             {
                 data: "LogDate",
                 render: function (data) {
+                   
                     var date = new Date(+data.replace(/\D/g, ''));
+                    var hour = date.getHours();
+                    var minutes = date.getMinutes();
+                    var second = date.getSeconds();
                     var day = date.getDate();
                     var month = date.getMonth()+1;
                     var year = date.getFullYear();
-                    return day + '/' + month + '/' + year;
+                    return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes + ':' + second;
                 }
             },
             {
@@ -67,19 +71,19 @@
                     var action = row.Action;
                     if (action == 'Import') {
                         result =
-                            '<a href="@Url.Action("GetListTargetByID", "Activity", new { id = ' + row.Id + ', targetId = ' + row.TargetId + ' })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
+                            '<a href="/Activity/GetListTargetByID/'+ row.Id + '?targetId=' + row.TargetId + '" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
                     }
                     if (action == "Update" && row.TargetName == "Question") {
                         result =
-                            '<a href="@Url.Action("GetUpdateActivityById", "Activity", new { id = ' + row.Id + ' })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
+                            '<a href="/Activity/GetUpdateActivityById/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
                     }
                     if (action == "Move" && row.TargetName == "Question") {
                         result =
-                            '<a href="@Url.Action("GetMoveActivityById", "Activity", new { id = ' + row.Id + ' })" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
+                            '<a href="/Activity/GetMoveActivityById/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
                     }
                     if (action == "Update" && row.TargetName == "Rule") {
                         result =
-                            '<a href="@Url.Action("Index", "Rule")" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
+                            '<a href="/Rule/Index" class="btn btn-primary mb-2 col-md-12 spinner-loading">Detail</a>';
                     }
                     return result;
                 }

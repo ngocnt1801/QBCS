@@ -100,7 +100,7 @@ namespace DuplicateQuestion
 
                 SqlCommand command = new SqlCommand(
                           "UPDATE Question " +
-                          "SET QuestionContent=@content, LearningOutcomeId=@loId, LevelId=@levelId " +
+                          "SET QuestionContent=@content, LearningOutcomeId=@loId, LevelId=@levelId, CategoryId=@categoryId, Image=@image " +
                           "WHERE Id=@id",
                           connection
                           );
@@ -108,19 +108,53 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@loId", question.LearningOutcomeId);
                 command.Parameters.AddWithValue("@levelId", question.LevelId);
                 command.Parameters.AddWithValue("@id", question.UpdateQuestionId);
+                command.Parameters.AddWithValue("@categoryId", question.CategoryId);
+                command.Parameters.AddWithValue("@image", question.Image);
                 command.ExecuteNonQuery();
+            }
 
-                foreach (var option in question.Options)
+            DeleteOptions(question.UpdateQuestionId.Value);
+            AddOptions(question.Options, question.UpdateQuestionId.Value);
+        }
+
+        private static void DeleteOptions(int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE [Option] " +
+                    "WHERE QuestionId=@questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@questionId", questionId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void AddOptions(List<OptionModel> options, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                foreach (var option in options)
                 {
                     SqlCommand optionCmd = new SqlCommand(
-                          "UPDATE [Option] " +
-                          "SET OptionContent=@content, IsCorrect=@correct " +
-                          "WHERE Id=@id",
+                          "INSERT INTO [dbo].[Option] " +
+                          "([QuestionId] " +
+                          ",[OptionContent] " +
+                          ",[IsCorrect] " +
+                          ",[Image])" +
+                          "VALUES (@questionId, @content, @correct, @image)",
                           connection
                           );
                     optionCmd.Parameters.AddWithValue("@content", option.OptionContent);
                     optionCmd.Parameters.AddWithValue("@correct", option.IsCorrect);
-                    optionCmd.Parameters.AddWithValue("@id", option.Id);
+                    optionCmd.Parameters.AddWithValue("@questionId", questionId);
+                    optionCmd.Parameters.AddWithValue("@image", option.Image);
                     optionCmd.ExecuteNonQuery();
                 }
 
@@ -194,9 +228,11 @@ namespace DuplicateQuestion
                         "o.OptionContent, " +
                         "o.IsCorrect, " +
                         "o.UpdateOptionId, " +
+                        "o.Image, " +
                         "q.Category, " +
                         "q.LearningOutcome, " +
                         "q.LevelName, " +
+                        "q.Image AS 'QuestionImage', " +
                         "q.UpdateQuestionId " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.Id = @tempId",
@@ -232,10 +268,18 @@ namespace DuplicateQuestion
                         {
                             question.Id = (int)reader["Id"];
                         }
-
+                        if (reader["QuestionImage"] != DBNull.Value)
+                        {
+                            question.Image = (string)reader["QuestionImage"];
+                        }
                         if (reader["Category"] != DBNull.Value)
                         {
-                            question.Category = (string)reader["Category"];
+                            int tmp = 0;
+                            Int32.TryParse((string)reader["Category"], out tmp);
+                            if (tmp != 0)
+                            {
+                                question.CategoryId = tmp;
+                            }
                         }
                         if (reader["LearningOutcome"] != DBNull.Value)
                         {

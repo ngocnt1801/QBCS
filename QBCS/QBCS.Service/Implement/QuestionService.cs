@@ -191,6 +191,7 @@ namespace QBCS.Service.Implement
                 quesTemp = WebUtility.HtmlDecode(quesTemp);
             }
             entity.QuestionContent = quesTemp;
+            entity.Image = question.Image;
             entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
@@ -401,7 +402,7 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-                        int status = (int)StatusEnum.NotCheck;
+                        
                         #region get category
                         if (questionXml.question[i].category != null && checkCate == true)
                         {
@@ -455,7 +456,7 @@ namespace QBCS.Service.Implement
                                 {
                                     file = questionXml.question[i].questiontext.file.Value.ToString();
                                     question.Image = file;
-                                    status = (int)Enum.StatusEnum.NotCheck;
+                                    question.Status = (int)Enum.StatusEnum.NotCheck;
                                 }
 
                             }
@@ -565,6 +566,7 @@ namespace QBCS.Service.Implement
                                         tempAns.Add(option);
                                         tempParser = "";
                                     }
+                                  
 
                                 }
                             }
@@ -573,24 +575,37 @@ namespace QBCS.Service.Implement
 
                         if (question.QuestionContent != null)
                         {
+                            if (tempAns.Count() == 0)
+                            {
+                                question.Status = (int)StatusEnum.Invalid;                     
+                                question.Error = "Options is empty";
+                            }
+                            else
+                            {
+                                question.Status = (int)StatusEnum.NotCheck;
+                            }
+                            
                             listQuestionXml.Add(question);
-                            if (listQuestionXml.Count() > 0 && tempAns.Count() > 0)
+                            if (listQuestionXml.Count() > 0 /*&& tempAns.Count() > 0*/)
                             {
                                 DateTime importTime = DateTime.Now;
+                                
                                 import.QuestionTemps.Add(new QuestionTemp()
                                 {
-                                    QuestionContent = question.QuestionContent,
-                                    Status = status,
-                                    Code = question.Code,
+                                    
+                                    QuestionContent = question.QuestionContent,                                    
+                                    Status = question.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : question.Status,
+                                    Code = question.Code,                                   
                                     Category = question.Category,
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
                                     Image = question.Image,
                                     IsNotImage = false,
+                                    Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
-                                        IsCorrect = o.IsCorrect
+                                        IsCorrect = o.IsCorrect                                      
                                     }).ToList()
 
                                 });
@@ -647,7 +662,7 @@ namespace QBCS.Service.Implement
                 #region process gift
                 if (extensionFile.Equals(".txt"))
                 {
-                    int status = 0;
+                    //int status = 0;
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
 
