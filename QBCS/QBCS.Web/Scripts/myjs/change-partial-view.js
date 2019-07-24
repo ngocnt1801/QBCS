@@ -1058,7 +1058,7 @@ function initTableEditable() {
                             } else {
                                 image = "";
                             }
-                            var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
+                            var questionContent = '<div id="d_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                             var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
                             var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
                             var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
