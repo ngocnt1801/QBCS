@@ -88,11 +88,11 @@
                             @*<i class="text-dark text-custom">Or Choose a File:</i>*@
                             <div class="input-group input-file text-custom" name="questionFile" id="drop_file_zone" ondrop="upload_file(event)" ondragover="addClassDrop(event)" ondragleave="removeClassDrop(event)">
                                 <div class="col-12">
-                                    <input type="text" class="form-control border-0 col-10" id="inFile" required />
+                                    <input type="text" class="form-control border-0 col-12" id="inFile" required />
                                     <input type="file" id="selectfile" name="questionFile" class="hidden">
                                     <span class="input-group-btn col-2">
                                         <i class="fa fa-2x fa-cloud-upload-alt text-primary mr-2"></i>
-                                        <span class="text-gray-500">Drag and Drop file here or</span>
+                                        <span class="text-gray-500">Drag and Drop or Click to Import file</span>
                                         <button class="btn btn-import-file btn-choose" type="button">Choose</button>
                                     </span>
                                 </div>
@@ -123,7 +123,7 @@
                 <p>We will notifiy you when it has the result</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnSuccessOk">Ok</button>
+                <button type="button" class="btn btn-primary btn-reset" data-dismiss="modal" id="btnSuccessOk">Ok</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

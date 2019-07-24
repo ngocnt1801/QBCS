@@ -389,6 +389,7 @@
     <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
     <Content Include="Scripts\myjs\check-form.js" />
+    <Content Include="Scripts\myjs\checkbox\checkbox-process.js" />
     <Content Include="Scripts\myjs\colapse-category-exam.js" />
     <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\CourseStatisticsjs.js" />
