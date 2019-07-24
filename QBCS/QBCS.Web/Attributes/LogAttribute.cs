@@ -93,7 +93,7 @@ namespace QBCS.Web.Attributes
                 {
                     newQuestionModel.QuestionCode = oldQuestionModel.QuestionCode != null ? oldQuestionModel.QuestionCode.ToString() : "";
                    newQuestionModel.CourseId = oldQuestionModel.CourseId;
-                   newQuestionModel.CategoryId = oldQuestionModel.CategoryId;
+                   //newQuestionModel.CategoryId = oldQuestionModel.CategoryId;
                     if (newQuestionModel.CategoryId != 0)
                     {
                         newQuestionModel.Category = categoryService.GetCategoryById(newQuestionModel.CategoryId).Name;

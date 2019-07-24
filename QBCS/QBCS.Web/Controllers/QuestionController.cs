@@ -25,6 +25,7 @@ namespace QBCS.Web.Controllers
         private IImportService importService;
         private ICourseService courseService;
         private IUserService userService;
+        private ICategoryService categoryService;
 
         public QuestionController()
         {
@@ -37,6 +38,7 @@ namespace QBCS.Web.Controllers
             importService = new ImportService();
             courseService = new CourseService();
             userService = new UserService();
+            categoryService = new CategoryService();
         }
 
         // GET: Question
@@ -104,11 +106,14 @@ namespace QBCS.Web.Controllers
 
             List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(qvm.CourseId);
 
+            List<CategoryViewModel> categories = categoryService.GetCategoriesByCourseId(qvm.CourseId);
+
             QuestionDetailViewModel qdvm = new QuestionDetailViewModel()
             {
                 Question = qvm,
                 Levels = levels,
-                LearningOutcomes = learningOutcomes
+                LearningOutcomes = learningOutcomes,
+                Categories = categories
             };
             TempData["active"] = "Course";
             return View("EditQuestion", qdvm);
