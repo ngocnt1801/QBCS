@@ -1,4 +1,23 @@
-﻿function bt_change_partial(url, btn) {
+﻿function insert_number_modal() {
+    var notInsert;
+    var checkAgain;
+    var editable = parseInt($("#total-editable").text());
+    var invalid = parseInt($("#total-invalid").text());
+    var deleteQ = parseInt($("#total-delete").text());
+    var success = parseInt($("#total-success").text());
+    var totalQues = parseInt($("#total-question").text());
+  
+    notInsert = editable + invalid + deleteQ;
+    checkAgain = totalQues - (editable + invalid + deleteQ + success);
+
+    $("#txtNotInsert").val(notInsert);
+    $("#txtCheckAgain").val(checkAgain);
+}
+
+//$("#btnSaveQuestion").click(function () {
+   
+//});
+function bt_change_partial(url, btn) {
 
     $.get(url, {}, function (response) {
         $("#question-import").html(response);

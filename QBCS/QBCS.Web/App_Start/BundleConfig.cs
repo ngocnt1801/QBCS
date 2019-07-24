@@ -104,6 +104,11 @@ namespace QBCS.Web
                 "~/Content/tab/tabstyles.css"
                 ));
 
+            //checkbox
+            bundles.Add(new ScriptBundle("~/bundle/scripts/checkbox").Include(
+                "~/Scripts/myjs/checkbox/checkbox-process.js"
+                ));
+
             //categories tree
             bundles.Add(new ScriptBundle("~/bundle/scripts/category").Include(
                 "~/Scripts/myjs/colapse-category.js",
