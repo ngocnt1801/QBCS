@@ -265,6 +265,7 @@ namespace QBCS.Service.Implement
             {
                 entity.QuestionContent = question.QuestionContent;
                 entity.Status = (int)StatusEnum.NotCheck;
+                entity.Image = question.Image;
                 var listOptionEntity = entity.OptionTemps.ToList();
                 foreach (var option in listOptionEntity)
                 {

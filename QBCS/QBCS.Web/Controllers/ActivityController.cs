@@ -92,15 +92,15 @@ namespace QBCS.Web.Controllers
                 var recordTotal = entities.Count();
                 var result = new List<LogViewModel>();
 
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
-                foreach (var a in entities)
-                {
-                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                    if (user.Contains(search) || a.Fullname.Contains(search))
-                    {
-                        result.Add(a);
-                    }
-                }
+                result = entities.Where(a => a.Fullname.Contains(search) || a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
+                //foreach (var a in entities)
+                //{
+                //    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
+                //    if (user.Contains(search) || a.Fullname.Contains(search))
+                //    {
+                //        result.Add(a);
+                //    }
+                //}
                 var recordFiltered = result.Count();
                 if (length != null && length >= 0)
                 {
@@ -116,23 +116,24 @@ namespace QBCS.Web.Controllers
             else if (importId != null && targetId != null)
             {
                 var entities = logService.GetAllActivitiesByTargetId((int)targetId);
-                LogViewModel logModel = new LogViewModel();
-
-                logModel = logService.GetQuestionImportByTargetId((int)importId);
-                entities.Add(logModel);
+                LogViewModel logModel = new LogViewModel();               
+                //logModel = logService.GetQuestionImportByTargetId((int)importId);               
+                //entities.Add(logModel);
                 TempData["active"] = "Activity";
                 var recordTotal = entities.Count();
                 var result = new List<LogViewModel>();
 
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
-                foreach (var a in entities)
-                {
-                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                    if (user.Contains(search) || a.Fullname.Contains(search))
-                    {
-                        result.Add(a);
-                    }
-                }
+                result = entities.Where(a => a.Fullname.Contains(search) || a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
+                
+                //foreach (var a in entities)
+                //{
+                //    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
+                //    if (user.Contains(search) || a.Fullname.Contains(search))
+                //    {
+                //        result.Add(a);
+                //    }
+                //}
+              
                 var recordFiltered = result.Count();
                 if (length != null && length >= 0)
                 {
