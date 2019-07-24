@@ -42,9 +42,9 @@
     if (Model.Syllabus != null || Model.LearningOutcomeInExam != null)
     {
         <div class="row mt-3">
-            if (Model.Syllabus.Count != 0)
+            @if (Model.Syllabus.Count != 0)
             {
-                <table class="table text-custom table-striped">
+                <table class="table text-custom table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Symllabus</th>
@@ -76,8 +76,7 @@
                         }
                     </tbody>
                 </table>
-            }
-            else
+            } else
             {
                 <table class="table text-custom table-striped">
                     <thead>
