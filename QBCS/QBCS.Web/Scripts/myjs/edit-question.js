@@ -7,6 +7,7 @@
             $(".add-option").on("click", function () {
                 questionView.addNewOption();
             });
+            questionView.uploadImg();
         },
 
         getOptionTemplate: function () {
@@ -36,6 +37,39 @@
                     .parent()
                     .empty();
                 questionView.resetIndexParamName();
+            });
+        },
+
+        uploadImg: function () {
+
+            var tempate = ` <label>Image in Question</label>
+                    <p>
+                        <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, {{imageSrc}}" />
+                    </p>
+                    <input type="hidden" name="Image" value="{{imageSrc}}" id="hidden-img" />`;
+
+            $("#uploadImage").change(function (e) {
+
+                for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+                    var file = e.originalEvent.srcElement.files[i];
+
+                    var img = $("#ques-img");
+                    var reader = new FileReader();
+                    reader.onloadend = function () {
+                        if (img != undefined && img != null && img.length > 0) {
+                            img[0].src = reader.result;
+                            var realData = img[0].src.split(",")[1];
+                            $('#hidden-img').val(realData);
+                        } else {
+                            var realData = reader.result.split(",")[1];
+                            tempate = tempate.replace(new RegExp("{{imageSrc}}", 'g'), realData);
+                            $("#question-image-container").append(tempate);
+                        }
+                        
+                    }
+                    reader.readAsDataURL(file);
+                }
             });
         },
 

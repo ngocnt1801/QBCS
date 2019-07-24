@@ -100,7 +100,7 @@ namespace DuplicateQuestion
 
                 SqlCommand command = new SqlCommand(
                           "UPDATE Question " +
-                          "SET QuestionContent=@content, LearningOutcomeId=@loId, LevelId=@levelId, CategoryId=@categoryId " +
+                          "SET QuestionContent=@content, LearningOutcomeId=@loId, LevelId=@levelId, CategoryId=@categoryId, Image=@image " +
                           "WHERE Id=@id",
                           connection
                           );
@@ -109,6 +109,7 @@ namespace DuplicateQuestion
                 command.Parameters.AddWithValue("@levelId", question.LevelId);
                 command.Parameters.AddWithValue("@id", question.UpdateQuestionId);
                 command.Parameters.AddWithValue("@categoryId", question.CategoryId);
+                command.Parameters.AddWithValue("@image", question.Image);
                 command.ExecuteNonQuery();
             }
 
@@ -231,6 +232,7 @@ namespace DuplicateQuestion
                         "q.Category, " +
                         "q.LearningOutcome, " +
                         "q.LevelName, " +
+                        "q.Image AS 'QuestionImage', " +
                         "q.UpdateQuestionId " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.Id = @tempId",
@@ -266,7 +268,10 @@ namespace DuplicateQuestion
                         {
                             question.Id = (int)reader["Id"];
                         }
-
+                        if (reader["QuestionImage"] != DBNull.Value)
+                        {
+                            question.Image = (string)reader["QuestionImage"];
+                        }
                         if (reader["Category"] != DBNull.Value)
                         {
                             int tmp = 0;

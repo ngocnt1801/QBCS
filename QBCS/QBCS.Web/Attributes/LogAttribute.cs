@@ -109,7 +109,7 @@ namespace QBCS.Web.Attributes
                         newQuestionModel.LearningOutcomeName = learningOutcomeService.GetLearingOutcomeById(newQuestionModel.LearningOutcomeId).Name;
                     }
                     newQuestionModel.LearningOutcomeName = newQuestionModel.LearningOutcomeId != 0 ? newQuestionModel.LearningOutcomeName : "[None of LOC]";
-                    newQuestionModel.Image = oldQuestionModel.Image;
+                    //newQuestionModel.Image = oldQuestionModel.Image;
                     newQuestionModel.CourseName = oldQuestionModel.CourseName;
                     //newQuestionModel.LearningOutcomeName = oldQuestionModel.LearningOutcomeName;
                     //newQuestionModel.LevelName = oldQuestionModel.LevelName;

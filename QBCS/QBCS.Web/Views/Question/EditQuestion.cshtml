@@ -24,16 +24,23 @@
                     @Html.DisplayFor(model => model.Question.QuestionContent)
 
                 </div>
-                @if (Model.Question.Image != null)
-                {
-                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" /></p>
-                }
-
-                    <span class="btn btn-primary btn-img mt-2">
-                        Add Image <input id="uploadImage" type="file" accept="image/*" name="image" />
-                    </span>            
+                <div id="question-image-container">
+                    @if (Model.Question.Image != null)
+                    {
+                        <label>Image in Question</label>
+                        <p>
+                            <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" />
+                        </p>
+                        <input type="hidden" name="Image" value="@Model.Question.Image" id="hidden-img" />
+                    }
+                </div>
                 
-           
+
+                <span class="btn btn-primary btn-img mt-2">
+                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" />
+                </span>
+
+
                 @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                 @Html.ValidationMessageFor(model => model.Question.QuestionContent, "", new { @class = "text-danger" })
                 <input type="hidden" name="QuestionContent" value="@Model.Question.QuestionContent" id="hidden-question-content" />
