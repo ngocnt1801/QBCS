@@ -33,7 +33,7 @@ namespace QBCS.Web.Attributes
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             logService = new LogService();
-
+            bool isChange = false;
             LogViewModel logModel = new LogViewModel();
 
 
@@ -134,6 +134,7 @@ namespace QBCS.Web.Attributes
                 logModel.Fullname = Fullname;
                 logModel.UserCode = UserCode;
                 logger.Log(logModel);
+                isChange = true;
             }
 
             if (Action.Equals(Enum.GetName(typeof(LogEnum), LogEnum.Update)) && TargetName.ToLower().Equals("rule"))
@@ -220,6 +221,7 @@ namespace QBCS.Web.Attributes
                                 logger.Log(logModel);
 
                                 logModel = new LogViewModel();
+                                isChange = true;
                                 #endregion
                             }
 
@@ -231,7 +233,7 @@ namespace QBCS.Web.Attributes
 
             #endregion
 
-            else
+            else if (isChange == false)
             {
                 logModel.OldValue = OldValue;
                 logModel.NewValue = NewValue;
