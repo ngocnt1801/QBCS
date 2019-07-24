@@ -53,12 +53,18 @@
                     var month = date.getMonth() + 1;
                     var year = date.getFullYear();
                     var hour = date.getHours();
-                    var minute = date.getMinutes();
-                    var sec = date.getSeconds();
-                    if (month < 10) {
-                        return year + '-0' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec;
+                    if (hour < 10) {
+                        hour = '0' + hour;
                     }
-                    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + sec;
+                    var minute = date.getMinutes();
+                    if (minute < 10) {
+                        minute = '0' + minute;
+                    }
+                    var sec = date.getSeconds();
+                    if (sec < 10) {
+                        sec = '0' + sec;
+                    }
+                    return day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + sec;
                 }
             }
         ]

@@ -224,8 +224,7 @@ namespace QBCS.Web.Controllers
 
         public ActionResult GetStaffCourseDetailStat(int id)
         {
-            var result
-            return PartialView("Staff_CourseDetailStatistic",);
+            return PartialView("Staff_CourseDetailStatistic");
         }
 
         public ActionResult CourseDetailWithoutId()

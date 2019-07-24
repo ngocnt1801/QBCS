@@ -34,15 +34,23 @@
             {
                 data: "LogDate",
                 render: function (data) {
-                   
                     var date = new Date(+data.replace(/\D/g, ''));
-                    var hour = date.getHours();
-                    var minutes = date.getMinutes();
-                    var second = date.getSeconds();
                     var day = date.getDate();
-                    var month = date.getMonth()+1;
+                    var month = date.getMonth() + 1;
                     var year = date.getFullYear();
-                    return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes + ':' + second;
+                    var hour = date.getHours();
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    }
+                    var minute = date.getMinutes();
+                    if (minute < 10) {
+                        minute = '0' + minute;
+                    }
+                    var sec = date.getSeconds();
+                    if (sec < 10) {
+                        sec = '0' + sec;
+                    }
+                    return day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + sec;
                 }
             },
             {
