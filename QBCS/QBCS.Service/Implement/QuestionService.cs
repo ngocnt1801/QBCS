@@ -1027,7 +1027,10 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
-                Image = q.Image != null ? q.Image.ToString() : "",
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 Category = q.Category != null ? q.Category.Name : "",
