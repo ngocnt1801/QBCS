@@ -17,6 +17,7 @@ namespace QBCS.Service.Utilities
     public class DocUtilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
+        static List<ImageViewModel> images = new List<ImageViewModel>();
         static OptionTemp optionModel = new OptionTemp();
         static string category = "";
         static string topic = "";
@@ -133,6 +134,7 @@ namespace QBCS.Service.Utilities
                                             else if (!wParagraph.Text.Equals(""))
                                             {
                                                 quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                                inputWholeParagraph = true;
                                             }
                                         }
                                         break;
@@ -144,7 +146,9 @@ namespace QBCS.Service.Utilities
                                         iImage.Save(m, iImage.RawFormat);
                                         byte[] imageBytes = m.ToArray();
 
-                                        //quesModel.Image = Convert.ToBase64String(imageBytes);
+                                        ImageViewModel image = new ImageViewModel();
+                                        image.Source = Convert.ToBase64String(imageBytes);
+                                        images.Add(image);
                                         break;
                                 }
                             }
@@ -321,9 +325,14 @@ namespace QBCS.Service.Utilities
                     }
                 }
             }
+            if(images != null)
+            {
+                quesModel.Images = images;
+            }
             quesModel.Options = options;
             listQuestion.Add(quesModel);
             quesModel = new QuestionTmpModel();
+            images = new List<ImageViewModel>();
             options = new List<OptionTemp>();
             optionCheckList = new List<DocViewModel>();
         }

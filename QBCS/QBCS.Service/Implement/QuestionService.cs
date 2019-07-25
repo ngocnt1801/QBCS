@@ -1404,6 +1404,8 @@ namespace QBCS.Service.Implement
             foreach (XElement eTable in parseTable.Elements("table"))
             {
                 QuestionTmpModel questionTmp = new QuestionTmpModel();
+                List<ImageViewModel> images = new List<ImageViewModel>();
+                //List<ImageViewModel> Images = 
                 foreach (XElement tbody in eTable.Elements("tbody"))
                 {
                     foreach (XElement tr in tbody.Elements("tr"))
@@ -1421,6 +1423,9 @@ namespace QBCS.Service.Implement
                                     var getImage1 = contentQ.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
                                     var getImage2 = getImage1[1].Split('"');
                                     //questionTmp.Image = getImage2[0];
+                                    var image = new ImageViewModel();
+                                    image.Source = getImage2[0];
+                                    images.Add(image);
                                 }
                                 else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
@@ -1551,6 +1556,10 @@ namespace QBCS.Service.Implement
                                 questionTmp.Category = value;
                             }
                         }
+                    }
+                    if(images != null)
+                    {
+                        questionTmp.Images = images;
                     }
                     questionTmp.Options = optionList;
                     listQuestion.Add(questionTmp);
