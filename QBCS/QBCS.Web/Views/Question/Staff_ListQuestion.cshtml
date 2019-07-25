@@ -31,7 +31,7 @@
                             <th>Question</th>
                             <th>Action</th>
                             <th>
-                                <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()"/>
+                                <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />
                             </th>
                         </tr>
                     </thead>
@@ -40,17 +40,16 @@
                         @foreach (var item in Model)
                         {
                             <tr id="@item.Id">
-                                
+
                                 <td></td>
                                 <td>
-                                    @if (item.Image != null && !item.Image.Equals(""))
-                                    {
-                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" />
-                                    }
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
-                                    @if (item.Image != null)
+                                    @if (item.Images != null)
                                     {
-                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
+                                        foreach (var image in item.Images)
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                        }
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
@@ -58,12 +57,14 @@
                                         {
                                             <div class="container-fluid text-right-answer">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="container-fluid">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
                                             </div>
                                         }
 
@@ -73,7 +74,7 @@
                                 <td>
                                     <a href="@Url.Action("GetExaminationHistory", "Activity", new { id = item.Id})" class="btn btn-info mr-1 col-12 mb-2 spinner-loading">History</a>
                                 </td>
-                                <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code"/></td>
+                                <td><input type="checkbox" class="checkbox hidden" data-id="@item.Id" data-code="@item.Code" /></td>
 
                             </tr>
                         }
