@@ -1524,8 +1524,14 @@ namespace QBCS.Service.Implement
         }
         private string TrimTagsForManual(string content)
         {
-            content = content.Replace("<p>", " ");
-            content = content.Replace("</p>", " ");
+            content = content.Replace("<p>", "");
+            content = content.Replace("</p>", "");
+            content = content.Replace("<b>", "");
+            content = content.Replace("</b>", "");
+            content = content.Replace("<u>", "");
+            content = content.Replace("</u>", "");
+            content = content.Replace("<i>", "");
+            content = content.Replace("</i>", "");
             return content;
         }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
