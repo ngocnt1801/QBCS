@@ -10,7 +10,6 @@ namespace QBCS.Entity
         public QBCSContext()
             : base("name=QBCSContext")
         {
-            Database.CommandTimeout = 9000;
         }
 
         public virtual DbSet<Category> Categories { get; set; }
@@ -18,6 +17,7 @@ namespace QBCS.Entity
         public virtual DbSet<CourseDepartment> CourseDepartments { get; set; }
         public virtual DbSet<CourseOfUser> CourseOfUsers { get; set; }
         public virtual DbSet<Examination> Examinations { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Import> Imports { get; set; }
         public virtual DbSet<LearningOutcome> LearningOutcomes { get; set; }
         public virtual DbSet<Level> Levels { get; set; }
@@ -62,6 +62,10 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<Examination>()
                 .Property(e => e.ExamCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Image>()
+                .Property(e => e.Source)
                 .IsUnicode(false);
 
             modelBuilder.Entity<LearningOutcome>()

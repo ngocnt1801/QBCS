@@ -214,6 +214,19 @@ namespace QBCS.Web.Controllers
             return PartialView("CourseDetailStatistic", result);
         }
 
+        public ActionResult Staff_CourseStatistic()
+        {
+
+            var result = courseService.GetAllCoursesWithDetail();
+            TempData["active"] = "Staff_Statistic";
+            return View(result);
+        }
+
+        public ActionResult GetStaffCourseDetailStat(int id)
+        {
+            return PartialView("Staff_CourseDetailStatistic");
+        }
+
         public ActionResult CourseDetailWithoutId()
         {
             List<CategoryViewModel> categories = categoryService.GetAllCategories();
@@ -280,6 +293,32 @@ namespace QBCS.Web.Controllers
         {
             courseService.UpdateTotalQuesiton(courseId, total);
             return RedirectToAction("Syllabus", new { courseId = courseId });
+        }
+
+        public ActionResult Category(int courseId)
+        {
+            var categories = categoryService.GetCategoriesByCourseId(courseId);
+            var course = courseService.GetDetailCourseById(courseId);
+            course.Categories = categories;
+            return View(course);
+        }
+
+        public ActionResult CreateCategory(CategoryViewModel model)
+        {
+            categoryService.AddCategory(model);
+            return RedirectToAction("Category", new { courseId = model.CourseId });
+        }
+
+        public ActionResult DeleteCategory(int categoryId, int courseId)
+        {
+            categoryService.DeleteCategory(categoryId);
+            return RedirectToAction("Category", new { courseId = courseId });
+        }
+
+        public ActionResult UpdateCategory(CategoryViewModel model)
+        {
+            categoryService.UpdateCategory(model);
+            return RedirectToAction("Category", new { courseId = model.CourseId });
         }
     }
 }

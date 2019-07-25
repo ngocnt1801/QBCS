@@ -38,6 +38,7 @@
                         </td>
                         <td>
                             <a class="btn btn-primary spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
+                            <a class="btn btn-info spinner-loading" href="@Url.Action("Category", "Course", new { courseId = item.CourseId })">Categories</a>
                         </td>
                     </tr>
                 }

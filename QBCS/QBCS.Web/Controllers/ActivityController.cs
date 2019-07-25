@@ -81,96 +81,32 @@ namespace QBCS.Web.Controllers
             return View("Index");
         }
 
-        public JsonResult GetActivityDatatable(int? importId, int? targetId, int? userId, int? draw, int? start, int? length)
+        public JsonResult GetActivityDatatable(int? importId, int? targetId, int? userId, int draw, int start, int length)
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
             //Get all
             if (importId == null && targetId == null && userId == null)
             {
-                var entities = logService.GetAllActivities();
+                var data = logService.GetAllActivities(search, start, length);
                 TempData["active"] = "Activity";
-                var recordTotal = entities.Count();
-                var result = new List<LogViewModel>();
-
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
-                foreach (var a in entities)
-                {
-                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                    if (user.Contains(search) || a.Fullname.Contains(search))
-                    {
-                        result.Add(a);
-                    }
-                }
-                var recordFiltered = result.Count();
-                if (length != null && length >= 0)
-                {
-                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
-                }
-                else
-                {
-                    result = result.ToList();
-                }
-                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Logs, success = true }, JsonRequestBehavior.AllowGet);
             }
             //Get Log by QuestionId
-            else if (importId != null && targetId != null)
+            else if (targetId != null)
             {
-                var entities = logService.GetAllActivitiesByTargetId((int)targetId);
-                LogViewModel logModel = new LogViewModel();
-
-                logModel = logService.GetQuestionImportByTargetId((int)importId);
-                entities.Add(logModel);
+                var data = logService.GetAllActivitiesByTargetId((int)targetId, search, start, length);
+                //LogViewModel logModel = new LogViewModel();               
+                //logModel = logService.GetQuestionImportByTargetId((int)importId);               
+                //entities.Add(logModel);
                 TempData["active"] = "Activity";
-                var recordTotal = entities.Count();
-                var result = new List<LogViewModel>();
-
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
-                foreach (var a in entities)
-                {
-                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                    if (user.Contains(search) || a.Fullname.Contains(search))
-                    {
-                        result.Add(a);
-                    }
-                }
-                var recordFiltered = result.Count();
-                if (length != null && length >= 0)
-                {
-                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
-                }
-                else
-                {
-                    result = result.ToList();
-                }
-                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Logs, success = true }, JsonRequestBehavior.AllowGet);
             } 
             //Index/Get Activity by User
             else if(userId != null)
             {
-                var entities = logService.GetAllActivitiesByUserId((int)userId);
+                var data = logService.GetAllActivitiesByUserId((int)userId, search, start, length);
                 TempData["active"] = "Activity";
-                var recordTotal = entities.Count();
-                var result = new List<LogViewModel>();
-
-                result = entities.Where(a => a.Action.Contains(search) || a.LogDate.ToString("dd/M/yyyy", CultureInfo.InvariantCulture).Contains(search)).ToList();
-                foreach (var a in entities)
-                {
-                    var user = VietnameseToEnglish.SwitchCharFromVietnameseToEnglish(a.Fullname).ToLower();
-                    if (user.Contains(search) || a.Fullname.Contains(search))
-                    {
-                        result.Add(a);
-                    }
-                }
-                var recordFiltered = result.Count();
-                if (length != null && length >= 0)
-                {
-                    result = result.Skip(start != null ? (int)start : 0).Take((int)length).ToList();
-                }
-                else
-                {
-                    result = result.ToList();
-                }
-                return Json(new { draw = draw, recordsFiltered = recordFiltered, recordsTotal = recordTotal, data = result, success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Logs, success = true }, JsonRequestBehavior.AllowGet);
             }
 
             return null;

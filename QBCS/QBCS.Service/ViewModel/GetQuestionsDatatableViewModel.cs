@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.ViewModel
 {
-    public class GetResultQuestionTempViewModel
+    public class GetQuestionsDatatableViewModel
     {
-        public List<QuestionTempViewModel> Questions { get; set; }
+        public List<QuestionViewModel> Questions { get; set; }
         public int totalCount { get; set; }
         public int filteredCount { get; set; }
     }

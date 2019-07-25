@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace QBCS.Service.ViewModel
 {
-    public class GetResultQuestionTempViewModel
+    public class GetActivityViewModel
     {
-        public List<QuestionTempViewModel> Questions { get; set; }
         public int totalCount { get; set; }
         public int filteredCount { get; set; }
+        public List<LogViewModel> Logs { get; set; }
     }
 }

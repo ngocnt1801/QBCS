@@ -383,14 +383,16 @@
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\myjs\colapse-category.js" />
+    <Content Include="Scripts\myjs\manage-category.js" />
     <Content Include="Scripts\myjs\autocompleteCourse.js" />
     <Content Include="Scripts\myjs\autocompleteLecturer.js" />
     <Content Include="Scripts\myjs\bootbox.min.js" />
     <Content Include="Scripts\myjs\change-partial-view.js" />
     <Content Include="Scripts\myjs\chartjs\Chart.min.js" />
     <Content Include="Scripts\myjs\check-form.js" />
+    <Content Include="Scripts\myjs\checkbox\checkbox-process.js" />
     <Content Include="Scripts\myjs\colapse-category-exam.js" />
-    <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\CourseStatisticsjs.js" />
     <Content Include="Scripts\myjs\diff\compare.js" />
     <Content Include="Scripts\myjs\diff\diff-text.js" />
@@ -2226,6 +2228,8 @@
     <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
     <Content Include="Views\Course\Syllabus.cshtml" />
     <Content Include="Views\Course\GetLearningOutcomes.cshtml" />
+    <Content Include="Views\Course\Category.cshtml" />
+    <Content Include="Views\Course\Staff_CourseStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

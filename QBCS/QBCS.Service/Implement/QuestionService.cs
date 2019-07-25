@@ -191,6 +191,7 @@ namespace QBCS.Service.Implement
                 quesTemp = WebUtility.HtmlDecode(quesTemp);
             }
             entity.QuestionContent = quesTemp;
+            entity.Image = question.Image;
             entity.Type = (int)TypeEnum.Update;
             entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
             entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
@@ -401,7 +402,7 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-                        int status = (int)StatusEnum.NotCheck;
+                        
                         #region get category
                         if (questionXml.question[i].category != null && checkCate == true)
                         {
@@ -455,7 +456,7 @@ namespace QBCS.Service.Implement
                                 {
                                     file = questionXml.question[i].questiontext.file.Value.ToString();
                                     question.Image = file;
-                                    status = (int)Enum.StatusEnum.NotCheck;
+                                    question.Status = (int)Enum.StatusEnum.NotCheck;
                                 }
 
                             }
@@ -565,6 +566,7 @@ namespace QBCS.Service.Implement
                                         tempAns.Add(option);
                                         tempParser = "";
                                     }
+                                  
 
                                 }
                             }
@@ -573,24 +575,37 @@ namespace QBCS.Service.Implement
 
                         if (question.QuestionContent != null)
                         {
+                            if (tempAns.Count() == 0)
+                            {
+                                question.Status = (int)StatusEnum.Invalid;                     
+                                question.Error = "Options is empty";
+                            }
+                            else
+                            {
+                                question.Status = (int)StatusEnum.NotCheck;
+                            }
+                            
                             listQuestionXml.Add(question);
-                            if (listQuestionXml.Count() > 0 && tempAns.Count() > 0)
+                            if (listQuestionXml.Count() > 0 /*&& tempAns.Count() > 0*/)
                             {
                                 DateTime importTime = DateTime.Now;
+                                
                                 import.QuestionTemps.Add(new QuestionTemp()
                                 {
-                                    QuestionContent = question.QuestionContent,
-                                    Status = status,
-                                    Code = question.Code,
+                                    
+                                    QuestionContent = question.QuestionContent,                                    
+                                    Status = question.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : question.Status,
+                                    Code = question.Code,                                   
                                     Category = question.Category,
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
                                     Image = question.Image,
                                     IsNotImage = false,
+                                    Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
-                                        IsCorrect = o.IsCorrect
+                                        IsCorrect = o.IsCorrect                                      
                                     }).ToList()
 
                                 });
@@ -647,7 +662,7 @@ namespace QBCS.Service.Implement
                 #region process gift
                 if (extensionFile.Equals(".txt"))
                 {
-                    int status = 0;
+                    //int status = 0;
                     GIFTUtilities ulti = new GIFTUtilities();
                     QuestionTemp quesTmp = new QuestionTemp();
 
@@ -934,6 +949,77 @@ namespace QBCS.Service.Implement
             .ToList();
         }
 
+        public GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search, int start, int length)
+        {
+            var result = new GetQuestionsDatatableViewModel();
+            var entities = unitOfWork.Repository<Question>().GetAll().Where(q => !q.IsDisable.HasValue || !q.IsDisable.Value);
+            if (courseId != null && courseId != 0)
+            {
+                entities = entities.Where(q => q.CourseId == courseId);
+            }
+
+
+            if (categoryId != null && categoryId != 0)
+            {
+                entities = entities.Where(q => q.CategoryId == categoryId);
+            }
+            else if (categoryId == 0)
+            {
+                entities = entities.Where(q => q.CategoryId == null);
+            }
+
+            if (learningoutcomeId != null && learningoutcomeId != 0)
+            {
+                entities = entities.Where(q => q.LearningOutcomeId == learningoutcomeId);
+            }
+            else if (learningoutcomeId == 0)
+            {
+                entities = entities.Where(q => q.LearningOutcomeId == null);
+            }
+
+
+            if (levelId != null && levelId != 0)
+            {
+                entities = entities.Where(q => q.LevelId == levelId);
+            }
+            else if (levelId == 0)
+            {
+                entities = entities.Where(q => q.LevelId == null);
+            }
+            result.totalCount = entities.Count();
+
+            entities = entities.Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
+
+            result.filteredCount = entities.Count();
+            entities = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length) : entities;
+            var list = entities.ToList();
+            result.Questions = list.Select(q => new QuestionViewModel
+            {
+                Id = q.Id,
+                Code = q.QuestionCode,
+                QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
+                Image = q.Image != null ? q.Image.ToString() : "",
+                ImportId = (int)q.ImportId,
+                CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
+                Category = q.Category != null ? q.Category.Name : "",
+                LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
+                LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
+                LevelName = q.Level != null ? q.Level.Name : "",
+                LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
+                Options = q.Options.ToList().Select(o => new OptionViewModel
+                {
+                    Id = o.Id,
+                    OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
+            })
+            .OrderByDescending(q => !q.IsDisable)
+            .ToList();
+
+            return result;
+        }
+
         public void ToggleDisable(int id)
         {
             var entity = unitOfWork.Repository<Question>().GetById(id);
@@ -1103,12 +1189,31 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        public GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search)
+        public GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search, int start, int length)
         {
             var result = new GetResultQuestionTempViewModel();
-            result.totalCount = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId).Count();
-            var entities = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId && (qt.Code.Contains(search) || qt.QuestionContent.Contains(search))).ToList();
-            var questionTemp = entities.Select(q => new QuestionTempViewModel()
+            var all = unitOfWork.Repository<QuestionTemp>().GetAll().Where(qt => qt.ImportId == importId);
+            switch (type)
+            {
+                case "editable":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Editable);
+                    break;
+                case "success":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Success);
+                    break;
+                case "invalid":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Invalid);
+                    break;
+                case "delete":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Deleted);
+                    break;
+            }
+            result.totalCount = all.Count();
+            var entities = all
+                .Where(qt => qt.Code.Contains(search) || qt.QuestionContent.Contains(search) || qt.OptionTemps.Any(o => o.OptionContent.Contains(search)));
+            result.filteredCount = entities.Count();
+            var questions = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList() : entities.ToList();
+            var questionTemp = questions.Select(q => new QuestionTempViewModel()
             {
                 Id = q.Id,
                 QuestionContent = q.QuestionContent,
@@ -1135,8 +1240,6 @@ namespace QBCS.Service.Implement
             switch (type)
             {
                 case "editable":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Editable).ToList();
-
                     RemoveDuplicateGroup(questionTemp);
                     questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
 
@@ -1184,15 +1287,6 @@ namespace QBCS.Service.Implement
                         }
                     }
 
-                    break;
-                case "success":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Success).ToList();
-                    break;
-                case "invalid":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Invalid).ToList();
-                    break;
-                case "delete":
-                    questionTemp = questionTemp.Where(q => q.Status == StatusEnum.Deleted).ToList();
                     break;
             }
 
@@ -1271,12 +1365,12 @@ namespace QBCS.Service.Implement
                                 else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
-                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString())));
                                     questionTmp.QuestionContent = "[html]" + stringToValue.Replace("<br />", "<cbr>");
                                 }
                                 else if (!(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
-                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString())));
                                     questionTmp.QuestionContent = questionTmp.QuestionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
                                 }
                                 //switch (i)
@@ -1312,12 +1406,12 @@ namespace QBCS.Service.Implement
                                     }
                                     else if (optionModel.OptionContent == null)
                                     {
-                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString())));
                                         optionModel.OptionContent = stringToValue.Replace("<br/>", "<cbr>");
                                     }
                                     else
                                     {
-                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString())));
                                         optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
                                     }
                                 }
@@ -1358,7 +1452,15 @@ namespace QBCS.Service.Implement
                         {
                             if (value != null && !value.Equals(""))
                             {
-                                questionTmp.LearningOutcome = prefix + value;
+                                var number = Regex.Match(value, @"\d+$").ToString();
+                                if (prefix == "")
+                                {
+                                    questionTmp.LearningOutcome = value;
+                                }
+                                else
+                                {
+                                    questionTmp.LearningOutcome = prefix + number;
+                                }
                             }
                         }
                         else if (key.Contains("MARK:"))
@@ -1420,7 +1522,12 @@ namespace QBCS.Service.Implement
             table = table.Replace("&nbsp;", "");
             return table;
         }
-
+        private string TrimTagsForManual(string content)
+        {
+            content = content.Replace("<p>", " ");
+            content = content.Replace("</p>", " ");
+            return content;
+        }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
         {
             string[] imageKeyWords =

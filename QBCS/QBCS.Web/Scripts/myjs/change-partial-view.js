@@ -1,4 +1,23 @@
-﻿function bt_change_partial(url, btn) {
+﻿function insert_number_modal() {
+    var notInsert;
+    var checkAgain;
+    var editable = parseInt($("#total-editable").text());
+    var invalid = parseInt($("#total-invalid").text());
+    var deleteQ = parseInt($("#total-delete").text());
+    var success = parseInt($("#total-success").text());
+    var totalQues = parseInt($("#total-question").text());
+  
+    notInsert = editable + invalid + deleteQ;
+    checkAgain = totalQues - (editable + invalid + deleteQ + success);
+
+    $("#txtNotInsert").val(notInsert);
+    $("#txtCheckAgain").val(checkAgain);
+}
+
+//$("#btnSaveQuestion").click(function () {
+   
+//});
+function bt_change_partial(url, btn) {
 
     $.get(url, {}, function (response) {
         $("#question-import").html(response);
@@ -199,12 +218,34 @@ function clickSection() {
                         isHtml = true;
                     }
                     if (isHtml) {
+
                         changeContent = changeContent.split("&lt;p&gt;").join("");
                         changeContent = changeContent.split("&lt;/p&gt;").join("");
                         changeContent = changeContent.split("&lt;span&gt;").join("");
                         changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;b&gt;").join("");
+                        changeContent = changeContent.split("&lt;/b&gt;").join("");
+                        changeContent = changeContent.split("&lt;span&gt;").join("");
+                        changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;u&gt;").join("");
+                        changeContent = changeContent.split("&lt;/u&gt;").join("");
+                        changeContent = changeContent.split("&lt;i&gt;").join("");
+                        changeContent = changeContent.split("&lt;/i&gt;").join("");
+                        changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                        changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                        changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                        changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                         changeContent = changeContent.split("[html]").join("");
-                        breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                                                    .split("<cbr>").join("·")
+                                                    .split("&lt;br&gt;").join("·")
+                                                    .split("<br>").join("·")
+                                                    .split("<br />").join("·")
+                                                    .split("<br/>").join("·")
+                                                    .split("&lt;br /&gt;").join("·")
+                                                    .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(changeContent);
@@ -226,8 +267,29 @@ function clickSection() {
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
                             optionContent = optionContent.split("&lt;span&gt;").join("");
                             optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;b&gt;").join("");
+                            optionContent = optionContent.split("&lt;/b&gt;").join("");
+                            optionContent = optionContent.split("&lt;span&gt;").join("");
+                            optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;u&gt;").join("");
+                            optionContent = optionContent.split("&lt;/u&gt;").join("");
+                            optionContent = optionContent.split("&lt;i&gt;").join("");
+                            optionContent = optionContent.split("&lt;/i&gt;").join("");
+                            optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                            optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                            optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                            optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                             optionContent = optionContent.split("[html]").join("");
-                            breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                            breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                                .split("<cbr>").join("·")
+                                .split("&lt;br&gt;").join("·")
+                                .split("<br>").join("·")
+                                .split("<br />").join("·")
+                                .split("<br/>").join("·")
+                                .split("&lt;br /&gt;").join("·")
+                                .split("&lt;br/&gt;").join("·");
                             breakContent = breakContent.split("·");
                         } else {
                             breakContent.push(optionContent);
@@ -247,7 +309,7 @@ function clickSection() {
                         }
                     }
 
-
+                    $("#tableSuccess .delete-question-dt").off('click');
                     $("#tableSuccess .delete-question-dt").on('click', function () {
                         minusTotal($("#total-success"));
                         plusTotal($("#total-delete"));
@@ -368,12 +430,34 @@ function clickSection() {
                         isHtml = true;
                     }
                     if (isHtml) {
+
                         changeContent = changeContent.split("&lt;p&gt;").join("");
                         changeContent = changeContent.split("&lt;/p&gt;").join("");
                         changeContent = changeContent.split("&lt;span&gt;").join("");
                         changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;b&gt;").join("");
+                        changeContent = changeContent.split("&lt;/b&gt;").join("");
+                        changeContent = changeContent.split("&lt;span&gt;").join("");
+                        changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;u&gt;").join("");
+                        changeContent = changeContent.split("&lt;/u&gt;").join("");
+                        changeContent = changeContent.split("&lt;i&gt;").join("");
+                        changeContent = changeContent.split("&lt;/i&gt;").join("");
+                        changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                        changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                        changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                        changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                         changeContent = changeContent.split("[html]").join("");
-                        breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(changeContent);
@@ -395,8 +479,29 @@ function clickSection() {
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
                             optionContent = optionContent.split("&lt;span&gt;").join("");
                             optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;b&gt;").join("");
+                            optionContent = optionContent.split("&lt;/b&gt;").join("");
+                            optionContent = optionContent.split("&lt;span&gt;").join("");
+                            optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;u&gt;").join("");
+                            optionContent = optionContent.split("&lt;/u&gt;").join("");
+                            optionContent = optionContent.split("&lt;i&gt;").join("");
+                            optionContent = optionContent.split("&lt;/i&gt;").join("");
+                            optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                            optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                            optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                            optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                             optionContent = optionContent.split("[html]").join("");
-                            breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                            breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                                .split("<cbr>").join("·")
+                                .split("&lt;br&gt;").join("·")
+                                .split("<br>").join("·")
+                                .split("<br />").join("·")
+                                .split("<br/>").join("·")
+                                .split("&lt;br /&gt;").join("·")
+                                .split("&lt;br/&gt;").join("·");
                             breakContent = breakContent.split("·");
                         } else {
                             breakContent.push(optionContent);
@@ -416,6 +521,7 @@ function clickSection() {
                         }
                     }
 
+                    $("#tableInvalid .delete-question-dt").off('click');
                     $("#tableInvalid .delete-question-dt").on('click', function () {
                         minusTotal($("#total-invalid"));
                         plusTotal($("#total-delete"));
@@ -528,12 +634,34 @@ function clickSection() {
                         isHtml = true;
                     }
                     if (isHtml) {
+
                         changeContent = changeContent.split("&lt;p&gt;").join("");
                         changeContent = changeContent.split("&lt;/p&gt;").join("");
                         changeContent = changeContent.split("&lt;span&gt;").join("");
                         changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;b&gt;").join("");
+                        changeContent = changeContent.split("&lt;/b&gt;").join("");
+                        changeContent = changeContent.split("&lt;span&gt;").join("");
+                        changeContent = changeContent.split("&lt;/span&gt;").join("");
+                        changeContent = changeContent.split("&lt;u&gt;").join("");
+                        changeContent = changeContent.split("&lt;/u&gt;").join("");
+                        changeContent = changeContent.split("&lt;i&gt;").join("");
+                        changeContent = changeContent.split("&lt;/i&gt;").join("");
+                        changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                        changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                        changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                        changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                         changeContent = changeContent.split("[html]").join("");
-                        breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(changeContent);
@@ -555,8 +683,29 @@ function clickSection() {
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
                             optionContent = optionContent.split("&lt;span&gt;").join("");
                             optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;b&gt;").join("");
+                            optionContent = optionContent.split("&lt;/b&gt;").join("");
+                            optionContent = optionContent.split("&lt;span&gt;").join("");
+                            optionContent = optionContent.split("&lt;/span&gt;").join("");
+                            optionContent = optionContent.split("&lt;u&gt;").join("");
+                            optionContent = optionContent.split("&lt;/u&gt;").join("");
+                            optionContent = optionContent.split("&lt;i&gt;").join("");
+                            optionContent = optionContent.split("&lt;/i&gt;").join("");
+                            optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                            optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                            optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                            optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                             optionContent = optionContent.split("[html]").join("");
-                            breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                            breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                                .split("<cbr>").join("·")
+                                .split("&lt;br&gt;").join("·")
+                                .split("<br>").join("·")
+                                .split("<br />").join("·")
+                                .split("<br/>").join("·")
+                                .split("&lt;br /&gt;").join("·")
+                                .split("&lt;br/&gt;").join("·");
                             breakContent = breakContent.split("·");
                         } else {
                             breakContent.push(optionContent);
@@ -654,7 +803,11 @@ function clickSection() {
 
 function minusTotal(totalSpan) {
     var value = parseInt(totalSpan.text());
-    totalSpan.text(value - 1);
+    if (value <= 0) {
+        totalSpan.text(0);
+    } else {
+        totalSpan.text(value - 1);
+    }
 }
 
 function plusTotal(totalSpan) {
@@ -923,13 +1076,13 @@ function initTableEditable() {
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                             }
-                            var image = row.Image;
+                            var image = row.DuplicatedQuestion.Image;
                             if (image != null && image != "") {
                                 image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                             } else {
                                 image = "";
                             }
-                            var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
+                            var questionContent = '<div id="d_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                             var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
                             var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
                             var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
@@ -976,12 +1129,34 @@ function initTableEditable() {
                     isHtml = true;
                 }
                 if (isHtml) {
+
                     changeContent = changeContent.split("&lt;p&gt;").join("");
                     changeContent = changeContent.split("&lt;/p&gt;").join("");
                     changeContent = changeContent.split("&lt;span&gt;").join("");
                     changeContent = changeContent.split("&lt;/span&gt;").join("");
+                    changeContent = changeContent.split("&lt;b&gt;").join("");
+                    changeContent = changeContent.split("&lt;/b&gt;").join("");
+                    changeContent = changeContent.split("&lt;span&gt;").join("");
+                    changeContent = changeContent.split("&lt;/span&gt;").join("");
+                    changeContent = changeContent.split("&lt;u&gt;").join("");
+                    changeContent = changeContent.split("&lt;/u&gt;").join("");
+                    changeContent = changeContent.split("&lt;i&gt;").join("");
+                    changeContent = changeContent.split("&lt;/i&gt;").join("");
+                    changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                    changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                    changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                    changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                     changeContent = changeContent.split("[html]").join("");
-                    breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                    breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                        .split("<cbr>").join("·")
+                        .split("&lt;br&gt;").join("·")
+                        .split("<br>").join("·")
+                        .split("<br />").join("·")
+                        .split("<br/>").join("·")
+                        .split("&lt;br /&gt;").join("·")
+                        .split("&lt;br/&gt;").join("·");
                     breakContent = breakContent.split("·");
                 } else {
                     breakContent.push(changeContent);
@@ -1003,8 +1178,29 @@ function initTableEditable() {
                         optionContent = optionContent.split("&lt;/p&gt;").join("");
                         optionContent = optionContent.split("&lt;span&gt;").join("");
                         optionContent = optionContent.split("&lt;/span&gt;").join("");
+                        optionContent = optionContent.split("&lt;b&gt;").join("");
+                        optionContent = optionContent.split("&lt;/b&gt;").join("");
+                        optionContent = optionContent.split("&lt;span&gt;").join("");
+                        optionContent = optionContent.split("&lt;/span&gt;").join("");
+                        optionContent = optionContent.split("&lt;u&gt;").join("");
+                        optionContent = optionContent.split("&lt;/u&gt;").join("");
+                        optionContent = optionContent.split("&lt;i&gt;").join("");
+                        optionContent = optionContent.split("&lt;/i&gt;").join("");
+                        optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                        optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                        optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                        optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                         optionContent = optionContent.split("[html]").join("");
-                        breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(optionContent);
@@ -1035,12 +1231,34 @@ function initTableEditable() {
                         isHtml = true;
                     }
                     if (isHtml) {
+
                         changeduplicateContent = changeduplicateContent.split("&lt;p&gt;").join("");
                         changeduplicateContent = changeduplicateContent.split("&lt;/p&gt;").join("");
                         changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
                         changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;b&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/b&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;u&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/u&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;i&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/i&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;sub&gt;").join("<sub>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/sub&gt;").join("</sub>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;sup&gt;").join("<sup>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                         changeduplicateContent = changeduplicateContent.split("[html]").join("");
-                        breakContent = changeduplicateContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                        breakContent = changeduplicateContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(changeduplicateContent);
@@ -1060,8 +1278,29 @@ function initTableEditable() {
                             dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
                             dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
                             dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;b&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/b&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;u&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/u&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;i&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/i&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;sub&gt;").join("<sub>");
+                            dupOptionContent = dupOptionContent.split("&lt;/sub&gt;").join("</sub>");
+                            dupOptionContent = dupOptionContent.split("&lt;sup&gt;").join("<sup>");
+                            dupOptionContent = dupOptionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                             dupOptionContent = dupOptionContent.split("[html]").join("");
-                            breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                            breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·")
+                                .split("<cbr>").join("·")
+                                .split("&lt;br&gt;").join("·")
+                                .split("<br>").join("·")
+                                .split("<br />").join("·")
+                                .split("<br/>").join("·")
+                                .split("&lt;br /&gt;").join("·")
+                                .split("&lt;br/&gt;").join("·");
                             breakContent = breakContent.split("·");
                         } else {
                             breakContent.push(dupOptionContent);
@@ -1083,6 +1322,7 @@ function initTableEditable() {
                 
             }
 
+            $("#tableEditable .delete-question-dt").off('click');
             $("#tableEditable .delete-question-dt").on('click', function () {
                 minusTotal($("#total-editable"));
                 plusTotal($("#total-delete"));

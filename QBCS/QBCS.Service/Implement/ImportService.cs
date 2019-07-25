@@ -265,6 +265,7 @@ namespace QBCS.Service.Implement
             {
                 entity.QuestionContent = question.QuestionContent;
                 entity.Status = (int)StatusEnum.NotCheck;
+                entity.Image = question.Image;
                 var listOptionEntity = entity.OptionTemps.ToList();
                 foreach (var option in listOptionEntity)
                 {
@@ -646,14 +647,16 @@ namespace QBCS.Service.Implement
         {
             var questionTemp = unitOfWork.Repository<QuestionTemp>().GetById(questionTempId);
 
-            if (status == (int)StatusEnum.Deleted)
+            if (questionTemp.Status != status)
             {
-                questionTemp.OldStatus = questionTemp.Status;
+                if (status == (int)StatusEnum.Deleted)
+                {
+                    questionTemp.OldStatus = questionTemp.Status;
+                }
+                questionTemp.Status = status;
+                unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
+                unitOfWork.SaveChanges();
             }
-            questionTemp.Status = status;
-            unitOfWork.Repository<QuestionTemp>().Update(questionTemp);
-            unitOfWork.SaveChanges();
-
         }
 
         public QuestionTempViewModel GetDuplicatedDetail(int questionTempId)

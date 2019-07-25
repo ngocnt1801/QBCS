@@ -1,6 +1,6 @@
 ﻿$(function () {
     $.ajaxSetup({
-        async:false
+        async: false
     });
     categoryModel = {
         listQuestionSelected: [],
@@ -249,51 +249,26 @@
                     type: "GET",
                     success: function (response) {
                         categoryView.questionListContainter.html(response);
-                        {
-                            //var table = $("#dataTable").dataTable({
-                            //      ordering: false,
-                            //      columnDefs: [
-                            //          { targets: 0, width: "5%" },
-                            //          { targets: 1, width: "75%" },
-                            //          { targets: 2, width: "15%", className: "text-center" },
-                            //          { targets: 3, width: "5%", className: "text-center" }
-                            //      ],
-                            //      columns: [
-                            //          null,
-                            //          {
-                            //              width: "75%",
-                            //              render: function (data, type, row) {
-                            //                  if (data.indexOf("[html]") >= 0) {
-                            //                      data = data.split("&lt;cbr&gt;").join("<br/>");
-                            //                      data = data.split("&lt;br&gt;").join("<br/>");
-                            //                      data = data.split("&lt;br&gt;").join("<br/>");
-                            //                      data = data.split("&lt;p&gt;").join("");
-                            //                      data = data.split("&lt;/p&gt;").join("");
-                            //                      data = data.split("&lt;span&gt;").join("");
-                            //                      data = data.split("&lt;/span&gt;").join("");
-                            //                      data = data.split("[html]").join("");
-                            //                  }
+                        categoryView.setOnClickCkb();
+                        categoryView.setOnClickDisableBtn();
+                        table.on('page.dt', function () {
+                            $('html, body').animate({
+                                scrollTop: $(".dataTables_wrapper").offset().top
+                            }, 'slow');
+                        });
+                        setTimeout(function () {
+                            $('#spinner').css("display", "none");
+                            $('#pleaseWaitDialog').modal('hide');
+                        }, 500);
 
-                            //                  return data;
-                            //              }
-                            //          },
-                            //          null,
-                            //          null,
-                            //      ]
-                            //  });
-                            //  $('#dataTable').on('draw.dt', function () {
-                            //      if (categoryModel.isMoveQuestion) {
-                            //          $.each($(".checkbox"), function (index, item) {
-                            //              $(item).removeClass("hidden");
-                            //          });
-                            //      } else {
-                            //          $.each($(".checkbox"), function (index, item) {
-                            //              $(item).addClass( "hidden");
-                            //          });
-                            //      }
-                            //      categoryView.setOnClickCkb();
-                            //  });
-                        }
+                    }
+                });
+            } else if (url.includes("GetStaffCourseDetailStat")) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (response) {
+                        categoryView.questionListContainter.html(response);
                         categoryView.setOnClickCkb();
                         categoryView.setOnClickDisableBtn();
                         table.on('page.dt', function () {
@@ -368,18 +343,18 @@
                                 } else {
                                     image = "";
                                 }
-                                var questionContent = '<div id="' + row.Code + '"><div id="Question"></div>'+image+options+'</div>';
+                                var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
                                 var result = code + questionContent;
-                                return  result;
+                                return result;
                             }
                         },
                         {
                             render: function (data, type, row, meta) {
                                 var importId = $('#importId').val();
-                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12"><i class="fa fa-pencil-alt"></i></a>';
-                                //var deleteQ = '<a href="/Import/Delete?questionId=' + data + '&importId=' + importId + '" class="btn btn-danger col-md-12">Delete</a>';
-                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId +'"><i class="fa fa-trash"></i></button>';
-                                var result = edit + deleteQ;
+                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading"><i class="fa fa-pencil-alt"></i></a>';
+                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId + '"><i class="fa fa-trash"></i></button>';
+                                var history = '<a href="/Activity/GetLogByQuestionID?targetId=' + row.Id + '&importId=' + row.ImportId + '" class="btn btn-info mr-1 col-12 mb-2 spinner-loading"><i class="fa fa-history"></i></a>';
+                                var result = edit + deleteQ + history;
                                 return result;
                             }
                         },
@@ -400,7 +375,7 @@
                         var question = data.json.data;
                         var q = 0;
                         for (q = 0; q < question.length; q++) {
-                            var jq = '#' + question[q].Code + ' #Question';
+                            var jq = '#' + question[q].Id + ' #Question';
                             var changeContent = question[q]["QuestionContent"];
                             var breakContent = [];
                             var isHtml = false;
@@ -408,25 +383,47 @@
                                 isHtml = true;
                             }
                             if (isHtml) {
+
                                 changeContent = changeContent.split("&lt;p&gt;").join("");
                                 changeContent = changeContent.split("&lt;/p&gt;").join("");
                                 changeContent = changeContent.split("&lt;span&gt;").join("");
                                 changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("&lt;b&gt;").join("");
+                                changeContent = changeContent.split("&lt;/b&gt;").join("");
+                                changeContent = changeContent.split("&lt;span&gt;").join("");
+                                changeContent = changeContent.split("&lt;/span&gt;").join("");
+                                changeContent = changeContent.split("&lt;u&gt;").join("");
+                                changeContent = changeContent.split("&lt;/u&gt;").join("");
+                                changeContent = changeContent.split("&lt;i&gt;").join("");
+                                changeContent = changeContent.split("&lt;/i&gt;").join("");
+                                changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                                changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                                changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                                changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
                                 changeContent = changeContent.split("[html]").join("");
-                                breakContent = changeContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                                    .split("<cbr>").join("·")
+                                    .split("&lt;br&gt;").join("·")
+                                    .split("<br>").join("·")
+                                    .split("<br />").join("·")
+                                    .split("<br/>").join("·")
+                                    .split("&lt;br /&gt;").join("·")
+                                    .split("&lt;br/&gt;").join("·");
                                 breakContent = breakContent.split("·");
                             } else {
                                 breakContent.push(changeContent);
                             }
                             for (var w = 0; w < breakContent.length; w++) {
                                 $(jq).append('<p id="qcontent_' + w + '"></p>');
-                                var jqw = '#' + question[q].Code + ' #Question #qcontent_'+ w;
+                                var jqw = '#' + question[q].Id + ' #Question #qcontent_'+ w;
                                 $(jqw).text(breakContent[w]);
                             }
                             breakContent = [];
                             for (var o = 0; o < question[q]["Options"].length; o++) {
                                 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                                var jo = '#' + question[q].Code + ' #Option'+o;
+                                var jo = '#' + question[q].Id + ' #Option'+o;
                                 var optionContent = question[q]["Options"][o]["OptionContent"];
                                 var optionCorrect = question[q]["Options"][o]["IsCorrect"];
                                 if (isHtml) {
@@ -443,7 +440,7 @@
                                 for (var b = 0; b < breakContent.length; b++) {
                                     $(jo).append('<p id="ocontent_' + b + '"></p>');
                                     var ch = $(jo).length;
-                                    var jow = '#' + question[q].Code + ' #Option' + o + ' #ocontent_' + b;
+                                    var jow = '#' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
                                     if (b == 0) {
                                         $(jow).text(letters[o] + '. ' + breakContent[b]);
                                     } else {

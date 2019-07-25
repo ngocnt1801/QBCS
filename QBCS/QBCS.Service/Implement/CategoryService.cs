@@ -189,5 +189,36 @@ namespace QBCS.Service.Implement
             }
             return categories;
         }
+
+        public void AddCategory(CategoryViewModel model)
+        {
+            unitOfWork.Repository<Category>().Insert(new Category
+            {
+                Name = model.Name,
+                CourseId = model.CourseId
+            });
+            unitOfWork.SaveChanges();
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            var entity = unitOfWork.Repository<Category>().GetById(categoryId);
+            if (entity != null)
+            {
+                unitOfWork.Repository<Category>().Delete(entity);
+                unitOfWork.SaveChanges();
+            }
+        }
+
+        public void UpdateCategory(CategoryViewModel model)
+        {
+            var entity = unitOfWork.Repository<Category>().GetById(model.Id);
+            if (entity != null)
+            {
+                entity.Name = model.Name;
+                unitOfWork.Repository<Category>().Update(entity);
+                unitOfWork.SaveChanges();
+            }
+        }
     }
 }
