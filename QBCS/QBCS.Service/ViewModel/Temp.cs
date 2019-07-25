@@ -63,7 +63,7 @@ namespace QBCS.Service.ViewModel
 
         private string singleField;
 
-       // private bool singleFieldSpecified;
+        // private bool singleFieldSpecified;
 
         private string shuffleanswersField;
 
@@ -173,7 +173,7 @@ namespace QBCS.Service.ViewModel
         {
             get
             {
-            
+
                 return this.penaltyField.ToString();
             }
             set
@@ -535,7 +535,7 @@ namespace QBCS.Service.ViewModel
 
         private string textField;
 
-        private quizQuestionQuestiontextFile fileField;
+        private quizQuestionQuestiontextFile[] fileField;
 
         private string formatField;
 
@@ -553,7 +553,8 @@ namespace QBCS.Service.ViewModel
         }
 
         /// <remarks/>
-        public quizQuestionQuestiontextFile file
+        [System.Xml.Serialization.XmlElementAttribute("file")]
+        public quizQuestionQuestiontextFile[] file
         {
             get
             {
@@ -641,7 +642,7 @@ namespace QBCS.Service.ViewModel
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
         {
-            
+
             get
             {
                 return this.valueField;
@@ -857,7 +858,7 @@ namespace QBCS.Service.ViewModel
             get
             {
                 return this.fractionField.ToString();
-               // return Byte.Parse(this.fractionField);
+                // return Byte.Parse(this.fractionField);
             }
             set
             {
