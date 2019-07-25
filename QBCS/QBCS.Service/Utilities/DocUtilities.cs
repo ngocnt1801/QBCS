@@ -138,7 +138,7 @@ namespace QBCS.Service.Utilities
                                         break;
                                     case EntityType.Picture:
                                         WPicture wPicture = pItem as WPicture;
-                                        Image iImage = wPicture.Image;
+                                        System.Drawing.Image iImage = wPicture.Image;
 
                                         MemoryStream m = new MemoryStream();
                                         iImage.Save(m, iImage.RawFormat);
@@ -225,7 +225,7 @@ namespace QBCS.Service.Utilities
                                         break;
                                     case EntityType.Picture:
                                         WPicture wPicture = pItem as WPicture;
-                                        Image iImage = wPicture.Image;
+                                        System.Drawing.Image iImage = wPicture.Image;
 
                                         MemoryStream m = new MemoryStream();
                                         iImage.Save(m, iImage.RawFormat);
