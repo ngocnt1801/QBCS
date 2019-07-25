@@ -12,6 +12,7 @@ namespace QBCS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public QuestionTemp()
         {
+            Images = new HashSet<Image>();
             OptionTemps = new HashSet<OptionTemp>();
         }
 
@@ -55,6 +56,9 @@ namespace QBCS.Entity
         public int? OldStatus { get; set; }
 
         public bool? IsNotImage { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Image> Images { get; set; }
 
         public virtual Import Import { get; set; }
 
