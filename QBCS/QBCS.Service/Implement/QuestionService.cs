@@ -1537,7 +1537,10 @@ namespace QBCS.Service.Implement
                             }
                         }
                     }
-                    questionTmp.Images = images;
+                    if(images != null)
+                    {
+                        questionTmp.Images = images;
+                    }
                     questionTmp.Options = optionList;
                     listQuestion.Add(questionTmp);
                     questionTmp = new QuestionTmpModel();

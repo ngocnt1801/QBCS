@@ -134,6 +134,7 @@ namespace QBCS.Service.Utilities
                                             else if (!wParagraph.Text.Equals(""))
                                             {
                                                 quesModel.QuestionContent = quesModel.QuestionContent + "<cbr>" + wParagraph.Text.Split(new string[] { "[file" }, StringSplitOptions.None)[0];
+                                                inputWholeParagraph = true;
                                             }
                                         }
                                         break;
@@ -324,7 +325,10 @@ namespace QBCS.Service.Utilities
                     }
                 }
             }
-            quesModel.Images = images;
+            if(images != null)
+            {
+                quesModel.Images = images;
+            }
             quesModel.Options = options;
             listQuestion.Add(quesModel);
             quesModel = new QuestionTmpModel();
