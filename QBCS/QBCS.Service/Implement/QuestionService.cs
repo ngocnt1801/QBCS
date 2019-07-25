@@ -785,6 +785,10 @@ namespace QBCS.Service.Implement
                             LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             //Image = q.Image,
+                            Images = q.Images.Select(i => new Image()
+                            {
+                                Source = i.Source
+                            }).ToList(),
                             IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
@@ -1174,6 +1178,10 @@ namespace QBCS.Service.Implement
                     LearningOutcome = q.LearningOutcome,
                     LevelName = q.Level,
                     //Image = q.Image,
+                    Images = q.Images.Select(i => new Image()
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
