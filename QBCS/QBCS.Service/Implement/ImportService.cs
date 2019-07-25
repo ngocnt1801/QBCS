@@ -195,6 +195,10 @@ namespace QBCS.Service.Implement
                     QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
+                    Images = questionTemp.Images.Select(im => new ImageViewModel
+                    {
+                        Source = im.Source
+                    }).ToList(),
                     //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
                     //{
                     //    Id = questionTemp.DuplicatedWithBank.Id,
@@ -265,14 +269,26 @@ namespace QBCS.Service.Implement
             {
                 entity.QuestionContent = question.QuestionContent;
                 entity.Status = (int)StatusEnum.NotCheck;
-                entity.Image = question.Image;
+                //entity.Image = question.Image;
+                
                 var listOptionEntity = entity.OptionTemps.ToList();
                 foreach (var option in listOptionEntity)
                 {
                     unitOfWork.Repository<OptionTemp>().Delete(option);
                 }
+                if (entity.Images != null && entity.Images.Count > 0)
+                {
+                    foreach(var img in entity.Images)
+                    {
+                        unitOfWork.Repository<Image>().Delete(img);
+                    }
+                }
 
                 question.Options = question.Options.Where(o => !String.IsNullOrWhiteSpace(o.OptionContent) && !o.OptionContent.Trim().ToLower().Equals("[html]")).ToList();
+                entity.Images = question.ImagesInput.Select(im => new Image
+                {
+                    Source = im
+                }).ToList();
 
                 foreach (var option in question.Options)
                 {
