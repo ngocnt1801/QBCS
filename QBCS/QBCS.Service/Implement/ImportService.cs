@@ -673,7 +673,10 @@ namespace QBCS.Service.Implement
                     Status = (StatusEnum)entity.Status,
                     ImportId = entity.ImportId.Value,
                     Code = entity.Code,
-                    Image = entity.Image,
+                    Images = entity.Images.Select(i => new ImageViewModel
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     Category = entity.Category + " / " + entity.LearningOutcome + " / " + entity.LevelName,
                     Options = entity.OptionTemps.Select(o => new OptionViewModel
                     {
@@ -703,7 +706,10 @@ namespace QBCS.Service.Implement
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                             Image = o.Image
                         }).ToList();
-                        duplicated.Image = questionEntity.Image;
+                        duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                        {
+                            Source = i.Source
+                        }).ToList();
                         duplicated.IsAnotherImport = false;
                     }
                     else
@@ -717,7 +723,10 @@ namespace QBCS.Service.Implement
                             IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                             Image = o.Image
                         }).ToList();
-                        duplicated.Image = questionEntity.Image;
+                        duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                        {
+                            Source = i.Source
+                        }).ToList();
                         duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
                         duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
                     }

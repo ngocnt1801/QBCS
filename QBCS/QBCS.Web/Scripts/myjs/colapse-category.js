@@ -342,7 +342,7 @@
                                     image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
                                 } else {
                                     image = "";
-                                }
+                                } 
                                 var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
                                 var result = code + questionContent;
                                 return result;
