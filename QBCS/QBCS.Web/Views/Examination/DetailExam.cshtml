@@ -35,7 +35,7 @@
                                     <div>
                                         <p>@question.QuestionContent</p>
                                         @if (question.Images != null)
-                                        {
+                                        { 
                                             foreach (var image in question.Images)
                                             {
                                                 <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
