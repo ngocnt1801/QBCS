@@ -1291,7 +1291,10 @@ namespace QBCS.Service.Implement
                             {
                                 Id = entity.Id,
                                 Code = entity.QuestionCode,
-                                Image = entity.Image,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
                                 CourseName = "Bank: " + entity.Course.Name,
                                 QuestionContent = entity.QuestionContent,
                                 Options = entity.Options.Select(o => new OptionViewModel
@@ -1312,7 +1315,10 @@ namespace QBCS.Service.Implement
                                 Id = entity.Id,
                                 Code = entity.Code,
                                 CourseName = "Import file: ",
-                                Image = entity.Image,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
                                 QuestionContent = entity.QuestionContent,
                                 Options = entity.OptionTemps.Select(o => new OptionViewModel
                                 {
