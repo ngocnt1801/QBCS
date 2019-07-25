@@ -26,6 +26,7 @@ namespace QBCS.Service.ViewModel
         public string CourseName { get; set; }
         public string CourseCode { get; set; }
         public string Image { get; set; }
+        public List<ImageViewModel> Images { get; set; }
         public bool IsDuplicated { get; set; }
         public bool IsDisable { get; set; }
         public DuplicatedQuestionViewModel DuplicatedQuestion { get; set; }

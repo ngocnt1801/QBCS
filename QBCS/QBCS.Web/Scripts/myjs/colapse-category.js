@@ -337,9 +337,12 @@
                                 for (var i = 0; i < row.Options.length; i++) {
                                     options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                                 }
-                                var image = row.Image;
-                                if (image != null && image != "") {
-                                    image = '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + image + '" /></p>';
+                                var images = row.Images;
+                                var image = "";
+                                if (images != null) {
+                                    for (var im = 0; im < images.length; im++) {
+                                        image = image + '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + images[im].Source + '" /></p>';
+                                    }
                                 } else {
                                     image = "";
                                 }

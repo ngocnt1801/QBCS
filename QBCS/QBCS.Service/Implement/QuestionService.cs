@@ -998,7 +998,10 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
-                Image = q.Image != null ? q.Image.ToString() : "",
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 Category = q.Category != null ? q.Category.Name : "",
@@ -1006,7 +1009,7 @@ namespace QBCS.Service.Implement
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
-                Options = q.Options.ToList().Select(o => new OptionViewModel
+                Options = q.Options.Select(o => new OptionViewModel
                 {
                     Id = o.Id,
                     OptionContent = WebUtility.HtmlDecode(o.OptionContent),
@@ -1221,6 +1224,10 @@ namespace QBCS.Service.Implement
                 ImportId = importId,
                 Code = q.Code,
                 Image = q.Image,
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
                 IsNotImage = q.IsNotImage.HasValue && q.IsNotImage.Value,
                 IsInImportFile = q.DuplicateInImportId.HasValue,
                 Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
@@ -1344,6 +1351,7 @@ namespace QBCS.Service.Implement
             foreach (XElement eTable in parseTable.Elements("table"))
             {
                 QuestionTmpModel questionTmp = new QuestionTmpModel();
+                //List<ImageViewModel> Images = 
                 foreach (XElement tbody in eTable.Elements("tbody"))
                 {
                     foreach (XElement tr in tbody.Elements("tr"))
