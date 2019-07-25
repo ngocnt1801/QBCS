@@ -966,6 +966,13 @@ namespace QBCS.Service.Implement
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
+                Images = q.Images.ToList().Select(i => new ImageViewModel {
+                    Id = i.Id,
+                    Source = i.Source,
+                    QuestionId = i.QuestionId,
+                    QuestionInExamId = i.QuestionInExamId,
+                    QuestionTempId = i.QuestionTempId
+                }).ToList(),
                 Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
                     Id = o.Id,

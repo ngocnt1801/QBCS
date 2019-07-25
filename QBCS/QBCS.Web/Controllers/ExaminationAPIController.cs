@@ -68,7 +68,7 @@ namespace QBCS.Web.Controllers
         private const string XML_ENCODING_ATTR_VALUE = "base64";
         private const string XML_PATH_ATTR_VALUE = "/";
         private const string XML_NAME_ATTR_VALUE = "Image00613.bmp";
-        private const string HTML_IMAGE_TAG = "<img src='@@PLUGINFILE@@/{0}' alt='' role='presentation' style=''>";
+        private const string HTML_IMAGE_TAG = "<img src='@@PLUGINFILE@@/{0}' alt='' class='img-responsive' role='presentation' style=''>";
 
         private IPartOfExamService partOfExamService;
         private IExaminationService examinationService;
@@ -222,6 +222,7 @@ namespace QBCS.Web.Controllers
                         Name = result[i].Category
                     },
                     LearningOutcomeName = result[i].LearningOutcomeName,
+                    Images = result[i].Images,
                     Level = new LevelViewModel
                     {
                         Id = result[i].LevelId,
@@ -288,7 +289,7 @@ namespace QBCS.Web.Controllers
                     xmlWriter.WriteElementString(XML_TEXT_TAG, question.QuestionCode);
                     xmlWriter.WriteEndElement();
                     //questiontext tag
-                    if (string.IsNullOrEmpty(question.Image))
+                    if (question.Images == null || question.Images.Count == 0)
                     {
                         xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
                         xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
@@ -307,11 +308,17 @@ namespace QBCS.Web.Controllers
                     else
                     {
                         //questiontext tag
+                        List<string> imageNames = new List<string>();
+                        string questionContentEncode = StringUtilities.FormatStringExportXML(question.QuestionContent).Trim();
+                        foreach (var image in question.Images)
+                        {
+                            string imageName = "Image" + count++ + ".png";
+                            imageNames.Add(imageName);
+                            questionContentEncode = questionContentEncode + String.Format(HTML_IMAGE_TAG, imageName);
+                        }
                         xmlWriter.WriteStartElement(XML_QUESTIONTEXT_TAG);
                         xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
                         xmlWriter.WriteStartElement(XML_TEXT_TAG);
-                        string imageName = "Image" + count++ + ".png";
-                        string questionContentEncode = StringUtilities.FormatStringExportXML(question.QuestionContent).Trim() + String.Format(HTML_IMAGE_TAG, imageName);
                         if (questionContentEncode.IndexOfAny(SpecialChars.ToCharArray()) != -1)
                         {
                             xmlWriter.WriteCData(questionContentEncode);
@@ -323,12 +330,15 @@ namespace QBCS.Web.Controllers
                         xmlWriter.WriteEndElement();
 
                         //Image tag
-                        xmlWriter.WriteStartElement(XML_FILE_TAG);
-                        xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, imageName);
-                        xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
-                        xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
-                        xmlWriter.WriteString(question.Image);
-                        xmlWriter.WriteEndElement();
+                        for (int j = 0; j < question.Images.Count; j++)
+                        {
+                            xmlWriter.WriteStartElement(XML_FILE_TAG);
+                            xmlWriter.WriteAttributeString(XML_NAME_ATTR_NAME, imageNames[j]);
+                            xmlWriter.WriteAttributeString(XML_PATH_ATTR_NAME, XML_PATH_ATTR_VALUE);
+                            xmlWriter.WriteAttributeString(XML_ENCODING_ATTR_NAME, XML_ENCODING_ATTR_VALUE);
+                            xmlWriter.WriteString(question.Images[j].Source);
+                            xmlWriter.WriteEndElement();
+                        }
                     }
 
                     xmlWriter.WriteEndElement();
@@ -388,7 +398,6 @@ namespace QBCS.Web.Controllers
                             xmlWriter.WriteStartElement(XML_ANSWER_TAG);
                             xmlWriter.WriteAttributeString(XML_FRACTION_ATTR_NAME, XML_CORRECT_FRACTION_ATTR_VALUE.ToString());
                             xmlWriter.WriteAttributeString(XML_FORMAT_ATTR_NAME, XML_HTML_ATTR_VALUE);
-
                             if (string.IsNullOrEmpty(option.Image))
                             {
                                 //text atg

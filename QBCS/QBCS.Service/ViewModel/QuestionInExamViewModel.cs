@@ -26,5 +26,6 @@ namespace QBCS.Service.ViewModel
         public List<OptionViewModel> Options { get; set; }
         public CategoryViewModel Category { get; set; }
         public ExaminationViewModel Examination { get; set; }
+        public List<ImageViewModel> Images{ get; set; }
     }
 }
