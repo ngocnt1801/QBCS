@@ -278,7 +278,7 @@ namespace QBCS.Service.Implement
                 }
                 if (entity.Images != null && entity.Images.Count > 0)
                 {
-                    foreach(var img in entity.Images)
+                    foreach(var img in entity.Images.ToList())
                     {
                         unitOfWork.Repository<Image>().Delete(img);
                     }
