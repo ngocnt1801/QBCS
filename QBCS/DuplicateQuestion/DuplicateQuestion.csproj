@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DuplicateUtils.cs" />
+    <Compile Include="Entity\ImageModel.cs" />
     <Compile Include="Entity\ImportModel.cs" />
     <Compile Include="Entity\LevelEnum.cs" />
     <Compile Include="Entity\OptionModel.cs" />
