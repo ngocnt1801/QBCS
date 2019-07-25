@@ -383,6 +383,7 @@
     <Content Include="Scripts\js\sb-admin-2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\manage-category.js" />
     <Content Include="Scripts\myjs\autocompleteCourse.js" />
     <Content Include="Scripts\myjs\autocompleteLecturer.js" />
@@ -392,7 +393,6 @@
     <Content Include="Scripts\myjs\check-form.js" />
     <Content Include="Scripts\myjs\checkbox\checkbox-process.js" />
     <Content Include="Scripts\myjs\colapse-category-exam.js" />
-    <Content Include="Scripts\myjs\colapse-category.js" />
     <Content Include="Scripts\myjs\CourseStatisticsjs.js" />
     <Content Include="Scripts\myjs\diff\compare.js" />
     <Content Include="Scripts\myjs\diff\diff-text.js" />

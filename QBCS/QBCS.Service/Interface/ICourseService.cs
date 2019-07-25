@@ -28,5 +28,6 @@ namespace QBCS.Service.Interface
         CourseStatDetailViewModel GetCourseStatDetailByIdAndType(int id, string type);
         List<CourseViewModel> GetCourseByDisable();
         void UpdateTotalQuesiton(int courseId, int total);
+        StaffCourseDetailStatViewModel GetStaffDetailStat(int id);
     }
 }

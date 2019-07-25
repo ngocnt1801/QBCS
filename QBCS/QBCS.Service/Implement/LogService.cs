@@ -36,13 +36,19 @@ namespace QBCS.Service.Implement
             return check;
         }
 
-        public IEnumerable<LogViewModel> GetAllActivities()
+        public GetActivityViewModel GetAllActivities(string search, int start, int length)
         {
             //comment
+            var result = new GetActivityViewModel();
             var listLog = unitOfWork.Repository<Log>()
-                .GetAll()
-                .OrderByDescending(l => l.Date.Value)
-                .ToList()
+                .GetAll();
+            result.totalCount = listLog.Count();
+            var searchResult = listLog.Where(a => a.Fullname.Contains(search) || 
+            a.Action.Contains(search) || 
+            (a.Date.Value.Day + "/" + a.Date.Value.Month + "/" + a.Date.Value.Year + " " + a.Date.Value.Hour + ":" + a.Date.Value.Minute).Contains(search));
+            result.filteredCount = searchResult.Count();
+            result.Logs = length >= 0 ? 
+                searchResult.OrderByDescending(l => l.Date.Value).Skip(start).Take(length).ToList()
                 .Select(l => new LogViewModel()
                 {
                     Id = l.Id,
@@ -55,9 +61,23 @@ namespace QBCS.Service.Implement
                     Message = (l.Action + " " + l.TargetName),
                     LogDate = l.Date.Value
 
-                });
+                }).ToList()
+                :
+                searchResult.OrderByDescending(l => l.Date.Value).ToList()
+                .Select(l => new LogViewModel()
+                {
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName),
+                    LogDate = l.Date.Value
 
-            return listLog;
+                }).ToList();
+            return result;
         }
         public LogViewModel GetQuestionImportByTargetId(int targetId)
         {
@@ -171,67 +191,128 @@ namespace QBCS.Service.Implement
             }
             return list;
         }
-        public List<LogViewModel> GetAllActivitiesByTargetId(int targetId)
+        public GetActivityViewModel GetAllActivitiesByTargetId(int targetId, string search, int start, int length)
         {
-            List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll().Where(t => t.TargetId == targetId).OrderByDescending(t => t.Date).ToList(); 
-            foreach (var item in listLog)
-            {
-                LogViewModel logViewModel = new LogViewModel()
+            var result = new GetActivityViewModel();
+            var listLog = unitOfWork.Repository<Log>()
+                .GetAll().Where(a => a.TargetId == targetId);
+            result.totalCount = listLog.Count();
+            var searchResult = listLog.Where(a => a.Fullname.Contains(search) ||
+                        a.Action.Contains(search) ||
+                        (a.Date.Value.Day + "/" + a.Date.Value.Month + "/" + a.Date.Value.Year + " " + a.Date.Value.Hour + ":" + a.Date.Value.Minute).Contains(search));
+            result.filteredCount = searchResult.Count();
+            result.Logs = length >= 0 ?
+                searchResult.OrderByDescending(l => l.Date.Value).Skip(start).Take(length).ToList()
+                .Select(l => new LogViewModel()
                 {
-                    Id = item.Id,
-                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,
-                    TargetId = item.TargetId,
-                    TargetName = item.TargetName,
-                    Action = item.Action,
-                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
-                    Message = (item.Action + " " + item.TargetName).ToLowerInvariant(),
-                    LogDate = item.Date.Value
-                };
-                list.Add(logViewModel);
-            }
-            return list;
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName),
+                    LogDate = l.Date.Value
+
+                }).ToList()
+                :
+                searchResult.OrderByDescending(l => l.Date.Value).ToList()
+                .Select(l => new LogViewModel()
+                {
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName),
+                    LogDate = l.Date.Value
+
+                }).ToList();
+
+            return result;
         }
 
-        public List<LogViewModel> GetAllActivitiesByUserId(int id)
+        public GetActivityViewModel GetAllActivitiesByUserId(int id, string search, int start, int length)
         {
-            List<LogViewModel> list = new List<LogViewModel>();
-            List<Log> listLog = unitOfWork.Repository<Log>().GetAll()
-                .Where(t => t.UserId == id)
-                .OrderByDescending(t => t.Date)
-                .ToList();
+            //List<LogViewModel> list = new List<LogViewModel>();
+            //List<Log> listLog = unitOfWork.Repository<Log>().GetAll()
+            //    .Where(t => t.UserId == id)
+            //    .OrderByDescending(t => t.Date)
+            //    .ToList();
 
-            //string role = "";
-            //if (user.Role == RoleEnum.Lecturer)
+            ////string role = "";
+            ////if (user.Role == RoleEnum.Lecturer)
+            ////{
+            ////    role = "Lecturer";
+            ////}
+
+            //foreach (var item in listLog)
             //{
-            //    role = "Lecturer";
+            //    string tempId = "";
+            //    if (item.NewValue != null && (item.Action == "Update" || item.Action == "Import"))
+            //    {
+            //        var temp = JsonConvert.DeserializeObject<QuestionViewModel>(item.NewValue);
+            //        tempId = temp.QuestionCode;
+            //    }
+
+            //    LogViewModel logViewModel = new LogViewModel()
+            //    {
+            //        Id = item.Id,
+            //        UserId = item.UserId.HasValue ? item.UserId.Value : 0,
+            //        //UserRole = role,
+            //        TargetId = item.TargetId,
+            //        TargetName = item.TargetName,
+            //        Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
+            //        Action = item.Action,
+            //        Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
+            //        LogDate = item.Date.Value
+
+            //    };
+            //    list.Add(logViewModel);
             //}
-
-            foreach (var item in listLog)
-            {
-                string tempId = "";
-                if (item.NewValue != null && (item.Action == "Update" || item.Action == "Import"))
+            //return list;
+            var result = new GetActivityViewModel();
+            var listLog = unitOfWork.Repository<Log>()
+                .GetAll().Where(a => a.UserId == id);
+            result.totalCount = listLog.Count();
+            var searchResult = listLog.Where(a => a.Fullname.Contains(search) ||
+            a.Action.Contains(search) ||
+            (a.Date.Value.Day + "/" + a.Date.Value.Month + "/" + a.Date.Value.Year + " " + a.Date.Value.Hour + ":" + a.Date.Value.Minute).Contains(search));
+            result.filteredCount = searchResult.Count();
+            result.Logs = length >= 0 ?
+                searchResult.OrderByDescending(l => l.Date.Value).Skip(start).Take(length).ToList()
+                .Select(l => new LogViewModel()
                 {
-                    var temp = JsonConvert.DeserializeObject<QuestionViewModel>(item.NewValue);
-                    tempId = temp.QuestionCode;
-                }
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName),
+                    LogDate = l.Date.Value
 
-                LogViewModel logViewModel = new LogViewModel()
+                }).ToList()
+                :
+                searchResult.OrderByDescending(l => l.Date.Value).ToList()
+                .Select(l => new LogViewModel()
                 {
-                    Id = item.Id,
-                    UserId = item.UserId.HasValue ? item.UserId.Value : 0,
-                    //UserRole = role,
-                    TargetId = item.TargetId,
-                    TargetName = item.TargetName,
-                    Fullname = item.UserId.HasValue && item.UserId != 0 ? unitOfWork.Repository<User>().GetById(item.UserId.Value).Fullname : item.Fullname,
-                    Action = item.Action,
-                    Message = (item.Action + " " + item.TargetName + " " + tempId).ToLowerInvariant(),
-                    LogDate = item.Date.Value
+                    Id = l.Id,
+                    UserId = l.UserId.HasValue ? l.UserId.Value : 0,
+                    TargetId = l.TargetId.HasValue ? l.TargetId.Value : 0,
+                    TargetName = l.TargetName,
+                    Fullname = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Fullname : l.Fullname,
+                    UserCode = l.UserId.HasValue && l.UserId.Value != 0 ? unitOfWork.Repository<User>().GetById(l.UserId.Value).Code : l.UserCode,
+                    Action = l.Action,
+                    Message = (l.Action + " " + l.TargetName),
+                    LogDate = l.Date.Value
 
-                };
-                list.Add(logViewModel);
-            }
-            return list;
+                }).ToList();
+            return result;
         }
         public IEnumerable<LogViewModel> GetActivitiesById(int id)
         {

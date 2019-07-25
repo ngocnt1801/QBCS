@@ -249,51 +249,26 @@
                     type: "GET",
                     success: function (response) {
                         categoryView.questionListContainter.html(response);
-                        {
-                            //var table = $("#dataTable").dataTable({
-                            //      ordering: false,
-                            //      columnDefs: [
-                            //          { targets: 0, width: "5%" },
-                            //          { targets: 1, width: "75%" },
-                            //          { targets: 2, width: "15%", className: "text-center" },
-                            //          { targets: 3, width: "5%", className: "text-center" }
-                            //      ],
-                            //      columns: [
-                            //          null,
-                            //          {
-                            //              width: "75%",
-                            //              render: function (data, type, row) {
-                            //                  if (data.indexOf("[html]") >= 0) {
-                            //                      data = data.split("&lt;cbr&gt;").join("<br/>");
-                            //                      data = data.split("&lt;br&gt;").join("<br/>");
-                            //                      data = data.split("&lt;br&gt;").join("<br/>");
-                            //                      data = data.split("&lt;p&gt;").join("");
-                            //                      data = data.split("&lt;/p&gt;").join("");
-                            //                      data = data.split("&lt;span&gt;").join("");
-                            //                      data = data.split("&lt;/span&gt;").join("");
-                            //                      data = data.split("[html]").join("");
-                            //                  }
+                        categoryView.setOnClickCkb();
+                        categoryView.setOnClickDisableBtn();
+                        table.on('page.dt', function () {
+                            $('html, body').animate({
+                                scrollTop: $(".dataTables_wrapper").offset().top
+                            }, 'slow');
+                        });
+                        setTimeout(function () {
+                            $('#spinner').css("display", "none");
+                            $('#pleaseWaitDialog').modal('hide');
+                        }, 500);
 
-                            //                  return data;
-                            //              }
-                            //          },
-                            //          null,
-                            //          null,
-                            //      ]
-                            //  });
-                            //  $('#dataTable').on('draw.dt', function () {
-                            //      if (categoryModel.isMoveQuestion) {
-                            //          $.each($(".checkbox"), function (index, item) {
-                            //              $(item).removeClass("hidden");
-                            //          });
-                            //      } else {
-                            //          $.each($(".checkbox"), function (index, item) {
-                            //              $(item).addClass( "hidden");
-                            //          });
-                            //      }
-                            //      categoryView.setOnClickCkb();
-                            //  });
-                        }
+                    }
+                });
+            } else if (url.includes("GetStaffCourseDetailStat")) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (response) {
+                        categoryView.questionListContainter.html(response);
                         categoryView.setOnClickCkb();
                         categoryView.setOnClickDisableBtn();
                         table.on('page.dt', function () {

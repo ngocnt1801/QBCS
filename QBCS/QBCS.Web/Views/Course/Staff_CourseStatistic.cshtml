@@ -1,0 +1,47 @@
+﻿@model  List<QBCS.Service.ViewModel.CourseViewModel>
+@{
+    ViewBag.Title = "Staff_CourseStatistic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@Styles.Render("~/bundle/content/category")
+
+
+<div class="row">
+    <div style="max-height: 100vh; overflow-y: auto; margin-bottom: 30px" class="list-group list-group-root well col-md-3 text-custom show-category">
+        <input type="text" class="form-control text-custom" placeholder="Search..." />
+        <div id="listCourseStat">
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var course in Model)
+                {
+                    <a id="course_@course.Id" href="@Url.Action("GetStaffCourseDetailStat", "Course", new { id = course.Id , type = "c" })" class="list-group-item" data-toggle="collapse" aria-expanded="true" data-target="#c-@course.Id" data-link="@Url.Action("GetStaffCourseDetailStat", "Course", new { id = course.Id , type = "c" })">
+                        <i class="fa fa-plus-circle"></i>@course.Name (@course.Code)
+                    </a>
+                    @*<div class="list-group collapse" id="c-@course.Id">
+                            @if (course.LearningOutcome != null && course.LearningOutcome.Count > 0)
+                            {
+                                foreach (var lo in course.LearningOutcome)
+                                {
+                                    <a style="padding-left:30px" id="learningoutcome_@lo.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })" class="list-group list-group-item" data-toggle="collapse" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = lo.Id , type = "lo" })">
+                                        <i class="fa fa-plus-circle"></i>@lo.Name
+                                    </a>
+                                }
+                            }
+                        </div>*@
+                }
+            }
+            else
+            {
+                <p>There are no course</p>
+            }
+        </div>
+    </div>
+    <div id="list-question" class="col-md-9">
+        @* Render list question here *@
+    </div>
+</div>
+
+
+@Scripts.Render("~/bundle/scripts/category")

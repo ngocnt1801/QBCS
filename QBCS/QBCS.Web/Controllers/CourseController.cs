@@ -214,6 +214,19 @@ namespace QBCS.Web.Controllers
             return PartialView("CourseDetailStatistic", result);
         }
 
+        public ActionResult Staff_CourseStatistic()
+        {
+
+            var result = courseService.GetAllCoursesWithDetail();
+            TempData["active"] = "Staff_Statistic";
+            return View(result);
+        }
+
+        public ActionResult GetStaffCourseDetailStat(int id)
+        {
+            return PartialView("Staff_CourseDetailStatistic");
+        }
+
         public ActionResult CourseDetailWithoutId()
         {
             List<CategoryViewModel> categories = categoryService.GetAllCategories();

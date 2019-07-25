@@ -53,9 +53,12 @@ namespace QBCS.Service.Implement
                 .OrderByDescending(l => l.Date.Value);
             result.totalCount = listLog.Count();
             var query = listLog
-                .Where(a => a.Action.Contains(search) || ((DateTime)a.Date).ToString().Contains(search) || a.Ip.Contains(search) || a.Fullname.Contains(search));
+                .Where(a => a.Action.Contains(search) ||
+                (a.Date.Value.Day + "/" + a.Date.Value.Month + "/" + a.Date.Value.Year + " " + a.Date.Value.Hour + ":" + a.Date.Value.Minute).Contains(search) ||
+                a.Ip.Contains(search) || 
+                a.Fullname.Contains(search));
             result.filteredCount = query.Count();
-            var logs = query.Skip(start).Take(length).ToList();
+            var logs = length >= 0 ? query.Skip(start).Take(length).ToList() : query.ToList();
             result.Logs = logs
                 .Select(l => new LogViewModel()
                 {

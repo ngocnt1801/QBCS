@@ -130,6 +130,7 @@
     <Compile Include="ViewModel\CourseStatDetailViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\DuplicatedQuestionViewModel.cs" />
+    <Compile Include="ViewModel\GetActivityViewModel.cs" />
     <Compile Include="ViewModel\GetLogActionViewModel.cs" />
     <Compile Include="ViewModel\GetQuestionsDatatableViewModel.cs" />
     <Compile Include="ViewModel\GetResultQuestionTempViewModel.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
+    <Compile Include="ViewModel\StaffCourseDetailStatViewModel.cs" />
     <Compile Include="ViewModel\SyllabusPartialViewModel.cs" />
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
