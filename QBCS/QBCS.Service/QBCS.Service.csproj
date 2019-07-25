@@ -135,6 +135,7 @@
     <Compile Include="ViewModel\GetQuestionsDatatableViewModel.cs" />
     <Compile Include="ViewModel\GetResultQuestionTempViewModel.cs" />
     <Compile Include="ViewModel\GetResultViewModel.cs" />
+    <Compile Include="ViewModel\ImageViewModel.cs" />
     <Compile Include="ViewModel\ImportResultViewModel.cs" />
     <Compile Include="ViewModel\ExaminationViewModel.cs" />
     <Compile Include="ViewModel\GenerateExamViewModel.cs" />

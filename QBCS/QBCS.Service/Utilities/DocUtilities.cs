@@ -144,7 +144,7 @@ namespace QBCS.Service.Utilities
                                         iImage.Save(m, iImage.RawFormat);
                                         byte[] imageBytes = m.ToArray();
 
-                                        quesModel.Image = Convert.ToBase64String(imageBytes);
+                                        //quesModel.Image = Convert.ToBase64String(imageBytes);
                                         break;
                                 }
                             }
