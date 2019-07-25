@@ -394,6 +394,8 @@ namespace QBCS.Service.Implement
                     quiz questionXml = (quiz)xmlSer.Deserialize(reader);
                     List<OptionTemp> tempAns = new List<OptionTemp>();
                     QuestionTmpModel question = new QuestionTmpModel();
+                    Image imageViewModel = new Image();
+                    List<Image> images = new List<Image>();
                     OptionTemp option = new OptionTemp();
 
                     for (int i = 0; i < questionXml.question.Count(); i++)
@@ -446,18 +448,36 @@ namespace QBCS.Service.Implement
                         {
 
                             string tempParser = "";
-                            string file = "";
+                            
                             checkHTMLTemp = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
 
                             if (questionXml.question[i].questiontext.file != null)
                             {
-                                if (questionXml.question[i].questiontext.file.Value != null)
+                                foreach (var item in questionXml.question[i].questiontext.file)
                                 {
-                                    file = questionXml.question[i].questiontext.file.Value.ToString();
-                                    question.Image = file;
-                                    question.Status = (int)Enum.StatusEnum.NotCheck;
+                                    if (item.Value != null)
+                                    {
+                                        //files.Add(item.Value.ToString());
+
+                                        //question.Image = file;
+                                        imageViewModel.Source = item.Value.ToString();
+                                        if (imageViewModel.Source != null)
+                                        {
+                                            images.Add(imageViewModel);
+                                            imageViewModel = new Image();
+                                        }
+                                       
+                                    }
                                 }
+                               
+                                question.Status = (int)Enum.StatusEnum.NotCheck;
+                                //if (questionXml.question[i].questiontext.file.Value != null)
+                                //{
+                                //    file = questionXml.question[i].questiontext.file.Value.ToString();
+                                //    question.Image = file;
+                                //    question.Status = (int)Enum.StatusEnum.NotCheck;
+                                //}
 
                             }
 
@@ -599,18 +619,23 @@ namespace QBCS.Service.Implement
                                     Category = question.Category,
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
-                                    Image = question.Image,
+                                   // Image = question.Image,
                                     IsNotImage = false,
                                     Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
                                         IsCorrect = o.IsCorrect                                      
+                                    }).ToList(),
+                                    Images = images.Select(im => new Image()
+                                    {
+                                         Source = im.Source
                                     }).ToList()
 
                                 });
                                 import.UpdatedDate = DateTime.Now;
                                 import.UserId = userId;
+                                images = new List<Image>();
 
 
                             }
@@ -759,7 +784,7 @@ namespace QBCS.Service.Implement
                             Category = q.Category,
                             LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
-                            Image = q.Image,
+                            //Image = q.Image,
                             IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
@@ -1145,7 +1170,7 @@ namespace QBCS.Service.Implement
                     Category = q.Category,
                     LearningOutcome = q.LearningOutcome,
                     LevelName = q.Level,
-                    Image = q.Image,
+                    //Image = q.Image,
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
@@ -1360,7 +1385,7 @@ namespace QBCS.Service.Implement
                                 {
                                     var getImage1 = contentQ.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
                                     var getImage2 = getImage1[1].Split('"');
-                                    questionTmp.Image = getImage2[0];
+                                    //questionTmp.Image = getImage2[0];
                                 }
                                 else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
