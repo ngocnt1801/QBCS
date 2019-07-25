@@ -204,6 +204,11 @@ namespace QBCS.Service.Implement
                 UpdateOptionId = o.Id
             }).ToList();
 
+            entity.Images = question.ImagesInput.Select(im => new Image
+            {
+                Source = im
+            }).ToList();
+
             var listEntity = new List<QuestionTemp>();
             listEntity.Add(entity);
             listEntity = importService.CheckRule(listEntity);
@@ -235,7 +240,10 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
-                Image = question.Image,
+                Images = question.Images.Select(im => new ImageViewModel
+                {
+                    Source = im.Source
+                }).ToList(),
                 ImportId = (int)question.ImportId
             };
             if (question.Image != null)

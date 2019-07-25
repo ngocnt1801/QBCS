@@ -25,21 +25,28 @@
 
                 </div>
                 <div id="question-image-container">
-                    @if (Model.Question.Image != null)
+                    @if (Model.Question.Images != null)
                     {
                         <label>Image in Question</label>
-                        <p>
-                            <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" />
-                        </p>
-                        <input type="hidden" name="Image" value="@Model.Question.Image" id="hidden-img" />
+                        foreach (var img in Model.Question.Images)
+                        {
+                            <p>
+                                <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @img.Source" />
+                            </p>
+                            <input type="hidden" name="ImagesInput" value="@img.Source" id="hidden-img" />
+                        }
+
                     }
                 </div>
-                
+
 
                 <span class="btn btn-primary btn-img mt-2">
-                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" />
+                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" multiple />
                 </span>
-
+                <div id="question-upload" class="row">
+                    <output id="result" />
+                </div>
+                
 
                 @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                 @Html.ValidationMessageFor(model => model.Question.QuestionContent, "", new { @class = "text-danger" })
