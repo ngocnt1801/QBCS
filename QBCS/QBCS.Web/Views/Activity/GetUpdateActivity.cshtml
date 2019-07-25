@@ -52,6 +52,14 @@
                                     } <br />
 
                                     <p class="compare-field" id="l-4" compare-to="#r-4">@item.QuestionNew.QuestionContent</p>
+                                    <br />
+                                    @if (item.QuestionNew.Images != null) 
+                                    {
+                                        foreach (var image in item.QuestionNew.Images)
+                                        {
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                        }
+                                    }
                                     Answer:
                                     @for (var i = 0; i < item.QuestionNew.Options.Count; i++)
                                     {
