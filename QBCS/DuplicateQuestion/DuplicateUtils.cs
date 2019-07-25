@@ -937,10 +937,11 @@ namespace DuplicateQuestion
                     {
                         option.QuestionId = id;
                     }
+                    question.QuestionId = id;
                 }
             }
 
-            //add option
+            #region add option
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -964,6 +965,31 @@ namespace DuplicateQuestion
 
                 }
             }
+            #endregion
+
+            #region update image
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in importSuccessList)
+                {
+                    SqlCommand optionCommand = new SqlCommand(
+                                                "UPDATE Image " +
+                                                "SET QuestionId=@questionId " +
+                                                "WHERE QuestionTempId=@tempId"
+                                                , connection);
+
+                    optionCommand.Parameters.AddWithValue("@questionId", question.QuestionId);
+                    optionCommand.Parameters.AddWithValue("@tempId", question.Id);
+                    optionCommand.ExecuteNonQuery();
+
+
+
+                }
+            }
+
+            #endregion
 
             return totalSuccess;
         }

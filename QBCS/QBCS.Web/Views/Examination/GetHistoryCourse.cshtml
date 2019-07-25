@@ -46,7 +46,7 @@
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
                                         if (item.Options[i].IsCorrect == true)
-                                        {
+                                        { 
                                             <div class="container-fluid text-right-answer">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                             </div>

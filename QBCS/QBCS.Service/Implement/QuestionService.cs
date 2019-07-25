@@ -785,6 +785,10 @@ namespace QBCS.Service.Implement
                             LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             //Image = q.Image,
+                            Images = q.Images.Select(i => new Image()
+                            {
+                                Source = i.Source
+                            }).ToList(),
                             IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
@@ -1171,6 +1175,10 @@ namespace QBCS.Service.Implement
                     LearningOutcome = q.LearningOutcome,
                     LevelName = q.Level,
                     //Image = q.Image,
+                    Images = q.Images.Select(i => new Image()
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
@@ -1245,7 +1253,10 @@ namespace QBCS.Service.Implement
                 Status = (StatusEnum)q.Status,
                 ImportId = importId,
                 Code = q.Code,
-                Image = q.Image,
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
                 IsNotImage = q.IsNotImage.HasValue && q.IsNotImage.Value,
                 IsInImportFile = q.DuplicateInImportId.HasValue,
                 Category = q.Category + " / " + q.LearningOutcome + " / " + q.LevelName,
@@ -1577,7 +1588,7 @@ namespace QBCS.Service.Implement
             string prepKeyWord = String.Join("|", prepKeyWords);
             foreach (var question in tempQuestions)
             {
-                if (!String.IsNullOrWhiteSpace(question.Image) && question.Status.Value == (int) StatusEnum.Invalid)
+                if (question.Images != null && question.Images.Count > 0 && question.Status.Value == (int) StatusEnum.Invalid)
                 {
                     continue;
                 }
