@@ -22,6 +22,7 @@ namespace QBCS.Service.ViewModel
         //may delete
         public string Image { get; set; }
         public List<ImageViewModel> Images { get; set; }
+        
         public string Error { get; set; }
         public string OtherError { get; set; }
         public string Message { get; set; }

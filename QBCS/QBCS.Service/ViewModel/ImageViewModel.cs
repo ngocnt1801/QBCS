@@ -9,9 +9,13 @@ namespace QBCS.Service.ViewModel
     public class ImageViewModel
     {
         public int Id { get; set; }
+
         public string Source { get; set; }
-        public int QuestionId { get; set; }
-        public int QuestionTempId { get; set; }
-        public int QuestionInExamId { get; set; }
+
+        public int? QuestionId { get; set; }
+
+        public int? QuestionTempId { get; set; }
+
+        public int? QuestionInExamId { get; set; }
     }
 }
