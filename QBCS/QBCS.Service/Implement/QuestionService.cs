@@ -991,7 +991,7 @@ namespace QBCS.Service.Implement
             entities = entities.Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
 
             result.filteredCount = entities.Count();
-            entities = entities.OrderBy(q => q.Id).Skip(start).Take(length);
+            entities = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length) : entities;
             var list = entities.ToList();
             result.Questions = list.Select(q => new QuestionViewModel
             {
@@ -1212,7 +1212,7 @@ namespace QBCS.Service.Implement
             var entities = all
                 .Where(qt => qt.Code.Contains(search) || qt.QuestionContent.Contains(search) || qt.OptionTemps.Any(o => o.OptionContent.Contains(search)));
             result.filteredCount = entities.Count();
-            var questions = entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList();
+            var questions = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList() : entities.ToList();
             var questionTemp = questions.Select(q => new QuestionTempViewModel()
             {
                 Id = q.Id,
@@ -1365,12 +1365,12 @@ namespace QBCS.Service.Implement
                                 else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
-                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString())));
                                     questionTmp.QuestionContent = "[html]" + stringToValue.Replace("<br />", "<cbr>");
                                 }
                                 else if (!(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
                                 {
-                                    var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString()));
+                                    var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentQ.ElementAt(i).ToString())));
                                     questionTmp.QuestionContent = questionTmp.QuestionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
                                 }
                                 //switch (i)
@@ -1406,12 +1406,12 @@ namespace QBCS.Service.Implement
                                     }
                                     else if (optionModel.OptionContent == null)
                                     {
-                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString())));
                                         optionModel.OptionContent = stringToValue.Replace("<br/>", "<cbr>");
                                     }
                                     else
                                     {
-                                        var stringToValue = HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString()));
+                                        var stringToValue = TrimTagsForManual(HttpUtility.HtmlDecode(TrimSpace(contentO.ElementAt(i).ToString())));
                                         optionModel.OptionContent = optionModel.OptionContent + "<cbr>" + stringToValue.Replace("<br />", "<cbr>");
                                     }
                                 }
@@ -1452,7 +1452,15 @@ namespace QBCS.Service.Implement
                         {
                             if (value != null && !value.Equals(""))
                             {
-                                questionTmp.LearningOutcome = prefix + value;
+                                var number = Regex.Match(value, @"\d+$").ToString();
+                                if (prefix == "")
+                                {
+                                    questionTmp.LearningOutcome = value;
+                                }
+                                else
+                                {
+                                    questionTmp.LearningOutcome = prefix + number;
+                                }
                             }
                         }
                         else if (key.Contains("MARK:"))
@@ -1514,7 +1522,12 @@ namespace QBCS.Service.Implement
             table = table.Replace("&nbsp;", "");
             return table;
         }
-
+        private string TrimTagsForManual(string content)
+        {
+            content = content.Replace("<p>", " ");
+            content = content.Replace("</p>", " ");
+            return content;
+        }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
         {
             string[] imageKeyWords =

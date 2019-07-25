@@ -49,6 +49,7 @@
                         <tr>
                             <th>Symllabus</th>
                             <th>Topic/LO</th>
+                            <th>Total</th>
                             <th>Easy</th>
                             <th>Medium</th>
                             <th>Hard</th>
@@ -60,6 +61,7 @@
                             <tr>
                                 <td rowspan="@syl.LearingOutcomesInExam.Count">@syl.Name</td>
                                 <td>@syl.LearingOutcomesInExam[0].Name</td>
+                                <td>@syl.LearingOutcomesInExam[0].TotalQuestionInExam</td>
                                 <td>@syl.LearingOutcomesInExam[0].EasyQuestion</td>
                                 <td>@syl.LearingOutcomesInExam[0].MediumQuestion</td>
                                 <td>@syl.LearingOutcomesInExam[0].HardQuestion</td>
@@ -68,6 +70,7 @@
                             {
                                 <tr>
                                     <td>@syl.LearingOutcomesInExam[i].Name</td>
+                                    <td>@syl.LearingOutcomesInExam[i].TotalQuestionInExam</td>
                                     <td>@syl.LearingOutcomesInExam[i].EasyQuestion</td>
                                     <td>@syl.LearingOutcomesInExam[i].MediumQuestion</td>
                                     <td>@syl.LearingOutcomesInExam[i].HardQuestion</td>
@@ -82,6 +85,7 @@
                     <thead>
                         <tr>
                             <th>Topic/LO</th>
+                            <th>Total</th>
                             <th>Easy</th>
                             <th>Medium</th>
                             <th>Hard</th>
@@ -92,6 +96,7 @@
                         {
                             <tr>
                                 <td>@lo.Name</td>
+                                <td>@lo.TotalQuestionInExam</td>
                                 <td>@lo.EasyQuestion</td>
                                 <td>@lo.MediumQuestion</td>
                                 <td>@lo.HardQuestion</td>

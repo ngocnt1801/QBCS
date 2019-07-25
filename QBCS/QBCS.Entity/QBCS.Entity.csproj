@@ -55,6 +55,7 @@
     <Compile Include="CourseDepartment.cs" />
     <Compile Include="CourseOfUser.cs" />
     <Compile Include="Examination.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="LearningOutcome.cs" />
     <Compile Include="Level.cs" />

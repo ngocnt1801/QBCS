@@ -11,11 +11,11 @@ namespace QBCS.Service.Interface
     public interface ILogService
     {
         void Log(LogViewModel model);
-        IEnumerable<LogViewModel> GetAllActivities();
-        List<LogViewModel> GetAllActivitiesByTargetId(int targetId);
+        GetActivityViewModel GetAllActivities(string search, int start, int length);
+        GetActivityViewModel GetAllActivitiesByTargetId(int targetId, string search, int start, int length);
         List<LogViewModel> GetListQuestionImportByTargetId(int targetId);
         LogViewModel GetQuestionImportByTargetId(int targetId);
-        List<LogViewModel> GetAllActivitiesByUserId(int id);
+        GetActivityViewModel GetAllActivitiesByUserId(int id, string search, int start, int length);
         IEnumerable<LogViewModel> GetActivitiesById(int id);
         QuestionViewModel ParseEntityToModel(Question question);
         bool UpdateLogStatus(int importId);

@@ -12,6 +12,7 @@ namespace QBCS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Question()
         {
+            Images = new HashSet<Image>();
             Options = new HashSet<Option>();
             QuestionInExams = new HashSet<QuestionInExam>();
         }
@@ -50,6 +51,9 @@ namespace QBCS.Entity
         public virtual Category Category { get; set; }
 
         public virtual Course Course { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Image> Images { get; set; }
 
         public virtual Import Import { get; set; }
 
