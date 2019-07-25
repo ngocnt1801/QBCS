@@ -1024,7 +1024,7 @@ function initTableEditable() {
                         var options = '';
                         for (var i = 0; i < row.Options.length; i++) {
                             options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
-                        }
+                        } 
                         var images = row.Images;
                         var image = "";
                         if (images != null) {
@@ -1088,7 +1088,6 @@ function initTableEditable() {
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                             }
-
                             var images = row.DuplicatedQuestion.Images;
                             var image = "";
                             if (images != null) {

@@ -18,7 +18,6 @@ namespace QBCS.Service.ViewModel
         public int Priority { get; set; }
         public string QuestionCode { get; set; }
         public string Image { get; set; }
-        public List<ImageViewModel> Images { get; set; }
         public int Frequency { get; set; }
         public bool IsDisable { get; set; }
         public LevelViewModel Level { get; set; }

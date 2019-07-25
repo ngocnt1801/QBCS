@@ -63,9 +63,12 @@
                                                 <td>
                                                     <div>
                                                         <p>@question.QuestionContent</p>
-                                                        @if (question.Image != null)
+                                                        @if (question.Images != null)
                                                         {
-                                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @question.Image" /></p>
+                                                            foreach (var image in question.Images)
+                                                            { 
+                                                                <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                                            }
                                                         }
                                                         @{int charater = 0; }
                                                         @foreach (var option in question.Options)

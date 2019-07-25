@@ -785,6 +785,10 @@ namespace QBCS.Service.Implement
                             LearningOutcome = prefix + " " + q.LearningOutcome,
                             LevelName = q.Level,
                             //Image = q.Image,
+                            Images = q.Images.Select(i => new Image()
+                            {
+                                Source = i.Source
+                            }).ToList(),
                             IsNotImage = false,
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
@@ -1023,10 +1027,7 @@ namespace QBCS.Service.Implement
                 Id = q.Id,
                 Code = q.QuestionCode,
                 QuestionContent = WebUtility.HtmlDecode(q.QuestionContent),
-                Images = q.Images.Select(i => new ImageViewModel
-                {
-                    Source = i.Source
-                }).ToList(),
+                Image = q.Image != null ? q.Image.ToString() : "",
                 ImportId = (int)q.ImportId,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 Category = q.Category != null ? q.Category.Name : "",
@@ -1034,7 +1035,7 @@ namespace QBCS.Service.Implement
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
-                Options = q.Options.Select(o => new OptionViewModel
+                Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
                     Id = o.Id,
                     OptionContent = WebUtility.HtmlDecode(o.OptionContent),
@@ -1174,6 +1175,10 @@ namespace QBCS.Service.Implement
                     LearningOutcome = q.LearningOutcome,
                     LevelName = q.Level,
                     //Image = q.Image,
+                    Images = q.Images.Select(i => new Image()
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
@@ -1248,7 +1253,6 @@ namespace QBCS.Service.Implement
                 Status = (StatusEnum)q.Status,
                 ImportId = importId,
                 Code = q.Code,
-                Image = q.Image,
                 Images = q.Images.Select(i => new ImageViewModel
                 {
                     Source = i.Source
@@ -1376,7 +1380,6 @@ namespace QBCS.Service.Implement
             foreach (XElement eTable in parseTable.Elements("table"))
             {
                 QuestionTmpModel questionTmp = new QuestionTmpModel();
-                //List<ImageViewModel> Images = 
                 foreach (XElement tbody in eTable.Elements("tbody"))
                 {
                     foreach (XElement tr in tbody.Elements("tr"))
@@ -1557,14 +1560,8 @@ namespace QBCS.Service.Implement
         }
         private string TrimTagsForManual(string content)
         {
-            content = content.Replace("<p>", "");
-            content = content.Replace("</p>", "");
-            content = content.Replace("<b>", "");
-            content = content.Replace("</b>", "");
-            content = content.Replace("<u>", "");
-            content = content.Replace("</u>", "");
-            content = content.Replace("<i>", "");
-            content = content.Replace("</i>", "");
+            content = content.Replace("<p>", " ");
+            content = content.Replace("</p>", " ");
             return content;
         }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
@@ -1591,7 +1588,7 @@ namespace QBCS.Service.Implement
             string prepKeyWord = String.Join("|", prepKeyWords);
             foreach (var question in tempQuestions)
             {
-                if (!String.IsNullOrWhiteSpace(question.Image) && question.Status.Value == (int) StatusEnum.Invalid)
+                if (question.Images != null && question.Images.Count > 0 && question.Status.Value == (int) StatusEnum.Invalid)
                 {
                     continue;
                 }

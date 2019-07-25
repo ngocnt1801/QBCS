@@ -46,10 +46,14 @@
                                     <p class="compare-field" id="l-3" compare-to="#r-3">Level: @item.QuestionNew.LevelName</p>
 
                                     Question:
+                                    @if (item.QuestionNew.Image != null)
+                                    {
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
+                                    } <br />
 
                                     <p class="compare-field" id="l-4" compare-to="#r-4">@item.QuestionNew.QuestionContent</p>
                                     <br />
-                                    @if (item.QuestionNew.Images != null)
+                                    @if (item.QuestionNew.Images != null) 
                                     {
                                         foreach (var image in item.QuestionNew.Images)
                                         {
@@ -82,15 +86,11 @@
                                     <p id="r-3">Level: @item.QuestionOld.LevelName</p>
 
                                     Question:
-                                    <p id="r-4">@item.QuestionOld.QuestionContent</p>
-                                    <br />
-                                    @if (item.QuestionOld.Images != null)
+                                    @if (item.QuestionOld.Image != null)
                                     {
-                                        foreach (var image in item.QuestionNew.Images)
-                                        {
-                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
-                                        }
-                                    }
+                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
+                                    } <br />
+                                    <p id="r-4">@item.QuestionOld.QuestionContent</p>
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {
