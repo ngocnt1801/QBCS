@@ -107,3 +107,15 @@
         cursor: inherit;
         display: block;
     }
+#question-image-container {
+    width: 75%;
+    height: 25%;
+}
+#question-upload{
+    width: 75%;
+    height: 25%;
+}
+.thumbnail {
+    height: 100px;
+    margin: 10px;
+}

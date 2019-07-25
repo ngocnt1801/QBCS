@@ -29,6 +29,7 @@ namespace DuplicateQuestion.Entity
         public string Image { get; set; }
         public bool IsNotImage { get; set; }
         public int QuestionId { get; set; }
+        public List<ImageModel> Images { get; set; }
 
         public override string ToString()
         {

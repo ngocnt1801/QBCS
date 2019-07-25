@@ -115,6 +115,9 @@ namespace DuplicateQuestion
 
             DeleteOptions(question.UpdateQuestionId.Value);
             AddOptions(question.Options, question.UpdateQuestionId.Value);
+
+            DeleteImages(question.Id, question.UpdateQuestionId.Value);
+            AddImages(question.Images, question.UpdateQuestionId.Value);
         }
 
         private static void DeleteOptions(int questionId)
@@ -155,6 +158,47 @@ namespace DuplicateQuestion
                     optionCmd.Parameters.AddWithValue("@correct", option.IsCorrect);
                     optionCmd.Parameters.AddWithValue("@questionId", questionId);
                     optionCmd.Parameters.AddWithValue("@image", option.Image);
+                    optionCmd.ExecuteNonQuery();
+                }
+
+            }
+        }
+
+        private static void DeleteImages(int tempId, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE Image " +
+                    "WHERE QuestionTempId=@tempId OR QuestionId=@questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@tempId", tempId);
+                command.Parameters.AddWithValue("@questionId", questionId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void AddImages(List<ImageModel> images, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                foreach (var img in images)
+                {
+                    SqlCommand optionCmd = new SqlCommand(
+                          "INSERT INTO [dbo].[Image] " +
+                          "([Source] " +
+                          ",[QuestionId]) " +
+                          "VALUES (@source, @questionId)",
+                          connection
+                          );
+                    optionCmd.Parameters.AddWithValue("@source", img.Source);
+                    optionCmd.Parameters.AddWithValue("@questionId", questionId);
                     optionCmd.ExecuteNonQuery();
                 }
 
@@ -217,6 +261,7 @@ namespace DuplicateQuestion
 
         private static QuestionModel GetQuestion(int id)
         {
+            QuestionModel question = null;
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -243,7 +288,7 @@ namespace DuplicateQuestion
                 SqlDataReader reader = command.ExecuteReader();
 
                 int prev = 0;
-                QuestionModel question = null;
+                
                 while (reader.Read())
                 {
                     if (prev != (int)reader["Id"])
@@ -342,9 +387,51 @@ namespace DuplicateQuestion
                     }
                 }
 
-                return question;
 
             }
+
+            question.Images = GetImages(question.Id);
+
+            return question;
+
+        }
+
+        private static List<ImageModel> GetImages(int tempId)
+        {
+            List<ImageModel> images = new List<ImageModel>();
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT " +
+                        "Source " +
+                    "FROM Image " +
+                    "WHERE QuestionTempId=@tempId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@tempId", tempId);
+                SqlDataReader reader = command.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    if (reader["Source"] != DBNull.Value)
+                    {
+                        images.Add(new ImageModel
+                        {
+                            Source = (string)reader["Source"]
+                        });
+                    }
+
+                }
+                reader.Close();
+                
+            }
+
+            return images;
         }
 
         private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate, List<string> duplicatedList)
