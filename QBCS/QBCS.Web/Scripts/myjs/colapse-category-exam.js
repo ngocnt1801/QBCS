@@ -59,6 +59,7 @@
                                     return data
                                 }
                             },
+                            null,
                             null
                         ],
                         columnDefs: [

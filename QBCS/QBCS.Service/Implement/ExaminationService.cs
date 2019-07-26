@@ -238,6 +238,10 @@ namespace QBCS.Service.Implement
                     LevelId = questionViewModel.LevelId,
                     CategoryId = questionViewModel.CategoryId,
                     IsDisable = false,
+                    Images = questionViewModel.Images.Select(i => new Image
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     OptionInExams = questionViewModel.Options.Select(o => new OptionInExam()
                     {
                         IsCorrect = o.IsCorrect,
@@ -354,9 +358,29 @@ namespace QBCS.Service.Implement
                 exam.MediumPercent = exam.GoodGrade - exam.OrdinaryGrade;
                 exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
             }
-            int questionEasy = (int)Math.Ceiling((exam.TotalQuestion * exam.EasyPercent * 1.0) / 100);
-            int questionMedium = (int)Math.Ceiling((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100);
+            int questionEasy = 0;
+            if ((int)Math.Ceiling((exam.TotalQuestion * exam.EasyPercent * 1.0) / 100) <= exam.TotalQuestion)
+            {
+                questionEasy = (int)Math.Ceiling((exam.TotalQuestion * exam.EasyPercent * 1.0) / 100);
+            }
+            else
+            {
+                questionEasy = (int)Math.Floor((exam.TotalQuestion * exam.EasyPercent * 1.0) / 100);
+            }
+            int questionMedium = 0;
+            if (((int)Math.Ceiling((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100) + questionEasy) <= exam.TotalQuestion)
+            {
+                questionMedium = (int)Math.Ceiling((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100);
+            } else
+            {
+                questionMedium = (int)Math.Floor((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100);
+            }
             int questionHard = exam.TotalQuestion - questionEasy - questionMedium;
+            if (questionEasy == exam.TotalQuestion)
+            {
+                questionMedium = 0;
+                questionHard = 0;
+            }
             exam.EasyQuestion = questionEasy;
             exam.MediumQuestion = questionMedium;
             exam.HardQuestion = questionHard;
@@ -433,6 +457,7 @@ namespace QBCS.Service.Implement
             }
             if (course.Syllabus.Count == 0)
             {
+                exam.IsSyllabusHaveLO = false;
                 while (questionEasy != 0 || questionMedium != 0 || questionHard != 0)
                 {
                     for (int i = 0; i < topics.Count; i++)
@@ -513,6 +538,7 @@ namespace QBCS.Service.Implement
                     {
                         if (syl.LearingOutcomes.Any(t => t.Id == topic.Id))
                         {
+                            exam.IsSyllabusHaveLO = true;
                             temp.Add(topic);
                             totalEasyQuestionInBank += topic.TotalEasyQuestionInTopic;
                             totalHardQuestionInBank += topic.TotalHardQuestionInTopic;
@@ -523,11 +549,27 @@ namespace QBCS.Service.Implement
                     {
                         continue;
                     }
-                    int questionEasyInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.EasyPercent * 1.0) / 100);
-                    int questionMediumInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.MediumPercent * 1.0) / 100);
+                    int questionEasyInSyllabus = 0;
+                    if (((int)Math.Ceiling((syl.AmountQuestion * exam.EasyPercent * 1.0) / 100)) <= syl.AmountQuestion)
+                    {
+                        questionEasyInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.EasyPercent * 1.0) / 100);
+                    }
+                    else
+                    {
+                        questionEasyInSyllabus = (int)Math.Floor((syl.AmountQuestion * exam.EasyPercent * 1.0) / 100);
+                    }
+                    int questionMediumInSyllabus = 0;
+                    if (((int)Math.Ceiling((syl.AmountQuestion * exam.MediumPercent * 1.0) / 100) + questionEasyInSyllabus) <= syl.AmountQuestion)
+                    {
+                        questionMediumInSyllabus = (int)Math.Ceiling((syl.AmountQuestion * exam.MediumPercent * 1.0) / 100);
+                    }
+                    else
+                    {
+                        questionMediumInSyllabus = (int)Math.Floor((syl.AmountQuestion * exam.MediumPercent * 1.0) / 100);
+                    }
                     int questionHardInSyllabus = syl.AmountQuestion - questionEasyInSyllabus - questionMediumInSyllabus;
-
-                    exam.TotalQuestion += (questionEasyInSyllabus + questionMediumInSyllabus + questionHardInSyllabus);
+                    if (questionEasyInSyllabus == syl.AmountQuestion)
+                        exam.TotalQuestion += (questionEasyInSyllabus + questionMediumInSyllabus + questionHardInSyllabus);
                     exam.EasyQuestion += questionEasyInSyllabus;
                     exam.MediumQuestion += questionMediumInSyllabus;
                     exam.HardQuestion += questionHardInSyllabus;
@@ -610,7 +652,7 @@ namespace QBCS.Service.Implement
                             }
                         }// end while
                         syl.LearingOutcomesInExam = temp;
-                        if(exam.Syllabus == null)
+                        if (exam.Syllabus == null)
                         {
                             exam.Syllabus = new List<SyllabusPartialViewModel>();
                         }
@@ -620,6 +662,37 @@ namespace QBCS.Service.Implement
                             topics[topics.FindIndex(t => t.Id == tmp.Id)] = tmp;
                         }
                     }
+                }
+                if (exam.IsEnough == false)
+                {
+                    return exam;
+                }
+                else
+                {
+                    exam.EasyQuestionGenerrate = exam.EasyQuestion;
+                    exam.MediumQuestionGenerrate = exam.MediumQuestion;
+                    exam.HardQuestionGenerrate = exam.HardQuestion;
+                    exam.TotalQuestion = exam.EasyQuestion + exam.MediumQuestion + exam.HardQuestion;
+                    exam.TotalQuestionGenerrate = exam.EasyQuestion + exam.MediumQuestion + exam.HardQuestion;
+                }
+                    if (exam.IsSyllabusHaveLO == false)
+                {
+                    exam.EasyQuestionGenerrate = 0;
+                    exam.EasyQuestion = 0;
+                    exam.MediumQuestionGenerrate = 0;
+                    exam.MediumQuestion = 0;
+                    exam.HardQuestionGenerrate = 0;
+                    exam.HardQuestion = 0;
+                    exam.TotalQuestionGenerrate = 0;
+                    exam.TotalQuestion = 0;
+                    exam.TotalExam = 0;
+                    exam.OrdinaryGrade = 0;
+                    exam.OrdinaryGradeCalculate = 0;
+                    exam.GoodGrade = 0;
+                    exam.GoodGradeCalculate = 0;
+                    exam.ExcellentGrade = 0;
+                    exam.ExcellentGradeCalculate = 0;
+                    return exam;
                 }
             }
             string examGroup = GetExamGroup();
@@ -670,6 +743,10 @@ namespace QBCS.Service.Implement
                             LevelId = ques.LevelId,
                             CategoryId = ques.CategoryId,
                             IsDisable = false,
+                            Images = ques.Images.Select(im => new Image
+                            {
+                                Source = im.Source
+                            }).ToList(),
                             OptionInExams = ques.Options.Select(o => new OptionInExam()
                             {
                                 IsCorrect = o.IsCorrect,
@@ -724,6 +801,14 @@ namespace QBCS.Service.Implement
                     Image = c.Image,
                     QuestionCode = c.QuestionCode,
                     CategoryId = c.CategoryId.HasValue ? (int)c.CategoryId : 0,
+                    Images = c.Images.Select(im => new ImageViewModel
+                    {
+                        Source = im.Source,
+                        Id = im.Id,
+                        QuestionId = im.QuestionId,
+                        QuestionInExamId = im.QuestionInExamId,
+                        QuestionTempId = im.QuestionTempId
+                    }).ToList(),
                     Options = c.Options.Select(d => new OptionViewModel
                     {
                         Id = d.Id,
@@ -817,6 +902,14 @@ namespace QBCS.Service.Implement
                                             LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
                                             LearningOutcomeName = q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "",
                                             Image = q.Image,
+                                            Images = q.Images.Select(i => new ImageViewModel
+                                            {
+                                                Source = i.Source,
+                                                QuestionTempId = i.QuestionTempId,
+                                                Id = i.Id,
+                                                QuestionId = i.QuestionId,
+                                                QuestionInExamId = i.QuestionInExamId
+                                            }).ToList(),
                                             QuestionCode = q.QuestionCode,
                                             Options = q.Options.ToList().Select(o => new OptionViewModel
                                             {
@@ -872,6 +965,10 @@ namespace QBCS.Service.Implement
                     LevelId = ques.LevelId,
                     CategoryId = ques.CategoryId,
                     IsDisable = false,
+                    Images = ques.Images.Select(i => new Image
+                    {
+                        Source = i.Source
+                    }).ToList(),
                     OptionInExams = ques.Options.Select(o => new OptionInExam()
                     {
                         IsCorrect = o.IsCorrect,

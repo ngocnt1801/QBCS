@@ -236,6 +236,13 @@ namespace QBCS.Service.Implement
                 QuestionContent = question.QuestionContent,
                 Options = options,
                 Image = question.Image,
+                Images = question.Images.Select(s => new ImageViewModel {
+                    Id = s.Id,
+                    QuestionId = s.QuestionId,
+                    QuestionInExamId = s.QuestionInExamId,
+                    QuestionTempId = s.QuestionTempId,
+                    Source = s.Source
+                }).ToList(),
                 ImportId = (int)question.ImportId
             };
             if (question.Image != null)

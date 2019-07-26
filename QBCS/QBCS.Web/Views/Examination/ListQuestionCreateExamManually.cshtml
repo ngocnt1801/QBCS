@@ -34,13 +34,11 @@
                                 <td>
 
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
-                                    @if (item.Images != null && !String.IsNullOrWhiteSpace(item.Image))
+                                    @if (item.Images != null)
                                     {
                                         foreach (var image in item.Images)
-                                        { 
-                                            <p>
-                                                <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64,@image.Source" />
-                                            </p>
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
                                         }
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
