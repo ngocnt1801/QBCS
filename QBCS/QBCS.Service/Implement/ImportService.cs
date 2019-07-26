@@ -92,42 +92,50 @@ namespace QBCS.Service.Implement
                     if (question.DuplicatedList[0].IsBank)
                     {
                         var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
-                        question.DuplicatedQuestion = new QuestionViewModel
+                        if (entity != null)
                         {
-                            Id = entity.Id,
-                            Code = entity.QuestionCode,
-                            Image = entity.Image,
-                            CourseName = "Bank: " + entity.Course.Name,
-                            QuestionContent = entity.QuestionContent,
-                            Options = entity.Options.Select(o => new OptionViewModel
+                            question.DuplicatedQuestion = new QuestionViewModel
                             {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList(),
-                            IsBank = true,
-                            IsAnotherImport = false
-                        };
+                                Id = entity.Id,
+                                Code = entity.QuestionCode,
+                                Image = entity.Image,
+                                CourseName = "Bank: " + entity.Course.Name,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.Options.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                IsBank = true,
+                                IsAnotherImport = false
+                            };
+                        }
+
 
                     }
                     else
                     {
                         var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
-                        question.DuplicatedQuestion = new QuestionViewModel
+                        if (entity != null)
                         {
-                            Id = entity.Id,
-                            Code = entity.Code,
-                            CourseName = "Import file: ",
-                            Image = entity.Image,
-                            QuestionContent = entity.QuestionContent,
-                            Options = entity.OptionTemps.Select(o => new OptionViewModel
+                            question.DuplicatedQuestion = new QuestionViewModel
                             {
-                                OptionContent = o.OptionContent,
-                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
-                            }).ToList(),
-                            Status = (StatusEnum)entity.Status.Value,
-                            IsBank = false,
-                            IsAnotherImport = !(entity.ImportId == importId)
-                        };
+                                Id = entity.Id,
+                                Code = entity.Code,
+                                CourseName = "Import file: ",
+                                Image = entity.Image,
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                Status = (StatusEnum)entity.Status.Value,
+                                IsBank = false,
+                                IsAnotherImport = !(entity.ImportId == importId)
+                            };
+                        }
+
                     }
                 }
 
@@ -270,7 +278,7 @@ namespace QBCS.Service.Implement
                 entity.QuestionContent = question.QuestionContent;
                 entity.Status = (int)StatusEnum.NotCheck;
                 //entity.Image = question.Image;
-                
+
                 var listOptionEntity = entity.OptionTemps.ToList();
                 foreach (var option in listOptionEntity)
                 {
@@ -278,7 +286,7 @@ namespace QBCS.Service.Implement
                 }
                 if (entity.Images != null && entity.Images.Count > 0)
                 {
-                    foreach(var img in entity.Images.ToList())
+                    foreach (var img in entity.Images.ToList())
                     {
                         unitOfWork.Repository<Image>().Delete(img);
                     }
@@ -717,41 +725,49 @@ namespace QBCS.Service.Implement
                     if (duplicated.IsBank)
                     {
                         var questionEntity = unitOfWork.Repository<Question>().GetById(duplicated.Id);
-                        duplicated.Code = questionEntity.QuestionCode;
-                        duplicated.QuestionContent = questionEntity.QuestionContent;
-                        duplicated.Options = questionEntity.Options.Select(o => new OptionViewModel
+                        if (questionEntity != null)
                         {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                            Image = o.Image
-                        }).ToList();
-                        duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
-                        {
-                            Source = i.Source
-                        }).ToList();
-                        duplicated.IsAnotherImport = false;
+                            duplicated.Code = questionEntity.QuestionCode;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Options = questionEntity.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.IsAnotherImport = false;
+                        }
+                        
                     }
                     else
                     {
                         var questionEntity = unitOfWork.Repository<QuestionTemp>().GetById(duplicated.Id);
-                        duplicated.Code = questionEntity.Code;
-                        duplicated.QuestionContent = questionEntity.QuestionContent;
-                        duplicated.Options = questionEntity.OptionTemps.Select(o => new OptionViewModel
+                        if (questionEntity != null)
                         {
-                            OptionContent = o.OptionContent,
-                            IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                            Image = o.Image
-                        }).ToList();
-                        duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
-                        {
-                            Source = i.Source
-                        }).ToList();
-                        duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
-                        duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
+                            duplicated.Code = questionEntity.Code;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Options = questionEntity.OptionTemps.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                            duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
+                        }
+                        
                     }
                 }
 
-                model.DuplicatedList = listDuplicated;
+                model.DuplicatedList = listDuplicated.Where(q => q.Options != null).ToList();
 
                 return model;
 
@@ -857,6 +873,6 @@ namespace QBCS.Service.Implement
 
         }
 
-        
+
     }
 }
