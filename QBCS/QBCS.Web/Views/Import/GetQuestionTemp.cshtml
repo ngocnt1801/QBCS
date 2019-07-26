@@ -29,9 +29,10 @@
                         foreach (var img in Model.Images)
                         {
                             <p>
-                                <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @img.Source" />
+                                <span class="float-right delete-image" data-delete="#ques-img-@img.Id"><i class="fa fa-times-circle text-danger"></i></span>
+                                <img class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @img.Source" />
+                                <input type="hidden" name="ImagesInput" value="@img.Source" />
                             </p>
-                            <input type="hidden" name="ImagesInput" value="@img.Source" id="hidden-img" />
                         }
 
                     }

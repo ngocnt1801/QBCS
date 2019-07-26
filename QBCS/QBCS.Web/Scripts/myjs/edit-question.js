@@ -9,6 +9,7 @@
             });
            // questionView.uploadImg();
             questionView.uploadMulImg();
+            questionView.initDeleteImage();
         },
 
         getOptionTemplate: function () {
@@ -77,7 +78,11 @@
         },
         uploadMulImg: function () {
 
-            var img = ` <input type="hidden" name="ImagesInput" value="{{imageSrc}}" id="hidden-img" />`;
+            var img = `<p>
+                                <span class="float-right delete-image" data-delete="#ques-img-@img.Id"><i class="fa fa-times-circle text-danger"></i></span>
+                                <img class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, {{imageSrc}}" />
+                                <input type="hidden" name="ImagesInput" value="{{imageSrc}}" />
+                            </p>`;
 
             window.onload = function () {
 
@@ -102,7 +107,7 @@
                             picReader.addEventListener("load", function (event) {
 
                                 var picFile = event.target;
-                                var div = document.createElement("div");
+                                //var div = document.createElement("div");
                                 if (picFile.result.length > 0) {
                                     var realData = picFile.result.split(",")[1];
                                     //img = img.replace(new RegExp("{{imageSrc}}", 'g'), realData);
@@ -110,10 +115,10 @@
                                     $("#question-image-container").append(img.replace(new RegExp("{{imageSrc}}", 'g'), realData));
                                 }
                                
-                                div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
-                                    "title='" + picFile.name + "'/>";
+                                //div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+                                //    "title='" + picFile.name + "'/>";
 
-                                output.insertBefore(div, null);
+                                //output.insertBefore(div, null);
 
                             });
 
@@ -149,6 +154,13 @@
             this.optionListContainer.append(template);
             this.resetIndexParamName();
             this.setEventRemoveOption();
+        },
+
+        initDeleteImage: function () {
+            $(document).off('click', '.delete-image');
+            $(document).on('click', '.delete-image', function () {
+                $(this).parent().empty();
+            });
         }
     };
 
