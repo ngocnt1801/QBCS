@@ -1569,6 +1569,8 @@ namespace QBCS.Service.Implement
             table = table.Replace("</st1:place>", " ");
             table = table.Replace("<p>&nbsp;</p>", "");
             table = table.Replace("&nbsp;", "");
+            table = table.Replace("<pre>", "<p>");
+            table = table.Replace("</pre>", "</p>");
             return table;
         }
         private string TrimTagsForManual(string content)
