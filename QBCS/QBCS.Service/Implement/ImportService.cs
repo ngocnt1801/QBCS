@@ -285,10 +285,13 @@ namespace QBCS.Service.Implement
                 }
 
                 question.Options = question.Options.Where(o => !String.IsNullOrWhiteSpace(o.OptionContent) && !o.OptionContent.Trim().ToLower().Equals("[html]")).ToList();
-                entity.Images = question.ImagesInput.Select(im => new Image
+                if (question.ImagesInput != null && question.ImagesInput.Count() > 0)
                 {
-                    Source = im
-                }).ToList();
+                    entity.Images = question.ImagesInput.Select(im => new Image
+                    {
+                        Source = im
+                    }).ToList();
+                }
 
                 foreach (var option in question.Options)
                 {

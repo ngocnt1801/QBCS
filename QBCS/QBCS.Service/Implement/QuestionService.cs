@@ -204,10 +204,14 @@ namespace QBCS.Service.Implement
                 UpdateOptionId = o.Id
             }).ToList();
 
-            entity.Images = question.ImagesInput.Select(im => new Image
+            if (question.ImagesInput != null && question.ImagesInput.Count() >0)
             {
-                Source = im
-            }).ToList();
+                entity.Images = question.ImagesInput.Select(im => new Image
+                {
+                    Source = im
+                }).ToList();
+            }
+            
 
             var listEntity = new List<QuestionTemp>();
             listEntity.Add(entity);
