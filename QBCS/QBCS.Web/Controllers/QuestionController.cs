@@ -129,7 +129,7 @@ namespace QBCS.Web.Controllers
         public ActionResult UpdateQuestion(QuestionViewModel ques)
         {
             QuestionDetailViewModel questionDetailViewModel = new QuestionDetailViewModel();
-            if (!ques.QuestionContent.Trim().Equals("[html]"))
+            if (!ques.QuestionContent.Trim().Equals("[html]") || (ques.ImagesInput != null && ques.ImagesInput.Count() > 0))
             {
                 bool result = questionService.UpdateQuestion(ques);
                 // bool optionResult = optionService.UpdateOptions(ques.Options);
