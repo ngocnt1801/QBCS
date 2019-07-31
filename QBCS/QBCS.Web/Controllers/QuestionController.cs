@@ -176,9 +176,9 @@ namespace QBCS.Web.Controllers
                 var conversion = questionService.TableStringToListQuestion(vm.table, "");
                 if (conversion.Count > 0)
                 {
-                    if(conversion.FirstOrDefault().QuestionContent == null || conversion.FirstOrDefault().Options.Count == 0)
+                    if((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
                     {
-
+                        return Json(new { error = true }, JsonRequestBehavior.AllowGet);
                     }
                     var questionTemp = new QuestionTempViewModel()
                     {
