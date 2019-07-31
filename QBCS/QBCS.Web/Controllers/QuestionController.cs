@@ -167,17 +167,48 @@ namespace QBCS.Web.Controllers
             
         }
 
-        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
-        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        [HttpPost]
+        
+        public JsonResult UpdateQuestionWithTextBox(EditQuestionTextboxViewModel vm)
         {
-            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
-            //var question = new QuestionViewModel()
-            //{
-            //    Id
-            //}
-            // bool optionResult = optionService.UpdateOptions(ques.Options);
-            TempData["Modal"] = "#success-modal";
-            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
+            try
+            {
+                var conversion = questionService.TableStringToListQuestion(vm.table, "");
+                if (conversion.Count > 0)
+                {
+                    if(conversion.FirstOrDefault().QuestionContent == null || conversion.FirstOrDefault().Options.Count == 0)
+                    {
+
+                    }
+                    var questionTemp = new QuestionTempViewModel()
+                    {
+                        Id = vm.questionId,
+                        ImportId = vm.importId,
+                        QuestionContent = conversion.FirstOrDefault().QuestionContent.Replace("\r", ""),
+                        Images = conversion.FirstOrDefault().Images.Select(i => new ImageViewModel()
+                        {
+                            Source = i.Source
+                        }).ToList(),
+                        Options = conversion.FirstOrDefault().Options.Select(o => new OptionViewModel()
+                        {
+                            OptionContent = o.OptionContent,
+                            Image = o.Image != null ? o.Image : "",
+                            IsCorrect = o.IsCorrect != null ? (bool)o.IsCorrect : false
+                        }).ToList(),
+                    };
+                    importService.UpdateQuestionTemp(questionTemp);
+                    TempData["Modal"] = "#success-modal";
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         //lecturer
@@ -358,10 +389,10 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditQuestionWithTextbox()
+        public ActionResult EditQuestionWithTextbox(int id)
         {
-            QuestionViewModel qvm = questionService.GetQuestionById(4);
-            return PartialView("EditQuestionWithTextbox", qvm);
+            var questiontemp = importService.GetQuestionTemp(id);
+            return View("EditQuestionWithTextbox", questiontemp);
         }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {

@@ -100,7 +100,7 @@
             objectTable['Prefix'] = $("input[name='prefix']:checked").val();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ImportTextarea","Question")',
+                url: '/Question/ImportTextarea',
                 data: JSON.stringify(objectTable),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

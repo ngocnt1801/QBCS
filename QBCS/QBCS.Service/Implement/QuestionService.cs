@@ -1583,6 +1583,8 @@ namespace QBCS.Service.Implement
             content = content.Replace("</u>", "");
             content = content.Replace("<i>", "");
             content = content.Replace("</i>", "");
+            content = content.Replace('\n', ' ');
+            content = content.Replace('\r', ' ');
             return content;
         }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)

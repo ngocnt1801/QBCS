@@ -18,6 +18,8 @@ namespace QBCS.Service.ViewModel
         public List<ImageViewModel> Images { get; set; }
         public List<OptionViewModel> Options { get; set; }
         public string Category { get; set; }
+        public string LearningOutcome { get; set; }
+        public string Level { get; set; }
         public List<DuplicatedQuestionViewModel> DuplicatedList { get; set; }
         public bool IsHide { get; set; }
         public bool IsNotImage { get; set; }

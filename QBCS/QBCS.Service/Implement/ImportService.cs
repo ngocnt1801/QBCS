@@ -192,9 +192,16 @@ namespace QBCS.Service.Implement
                 return new QuestionTempViewModel
                 {
                     Id = questionTemp.Id,
+                    Code = questionTemp.Code,
                     QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
+                    Category = questionTemp.Category,
+                    LearningOutcome = questionTemp.LearningOutcome,
+                    Level = questionTemp.LevelName,
+                    Images = questionTemp.Images.Select(i => new ImageViewModel {
+                        Source = i.Source
+                    }).ToList(),
                     //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
                     //{
                     //    Id = questionTemp.DuplicatedWithBank.Id,
