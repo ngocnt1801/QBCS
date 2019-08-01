@@ -1,11 +1,7 @@
 ﻿using AForge.Imaging;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuplicateQuestion
 {
@@ -23,7 +19,7 @@ namespace DuplicateQuestion
 
             // Comparison level is initially set to 0.95
             // Increment loop in steps of .01
-            for (var compareLevel = 0.8; compareLevel <= 1.00; compareLevel += 0.01)
+            for (var compareLevel = 0.98; compareLevel <= 1.00; compareLevel += 0.01)
             {
                 var isDuplicated = CompareImages(image1, image2, compareLevel,similarityThreshold);              
                 return isDuplicated;
@@ -33,7 +29,7 @@ namespace DuplicateQuestion
            
         }
 
-        public static Bitmap ScaleImage(Bitmap image, int maxWidth, int maxHeight)
+        private static Bitmap ScaleImage(Bitmap image, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / image.Width;
             var ratioY = (double)maxHeight / image.Height;
@@ -49,7 +45,7 @@ namespace DuplicateQuestion
 
             return newImage;
         }
-        public static Bitmap Base64StringToBitmap(this string
+        private static Bitmap Base64StringToBitmap(this string
                                             base64String)
         {
             Bitmap bmpReturn = null;
@@ -72,7 +68,7 @@ namespace DuplicateQuestion
 
             return bmpReturn;
         }
-        public static bool CompareImages(string base1, string base2, double compareLevel, float similarityThreshold)
+        private static bool CompareImages(string base1, string base2, double compareLevel, float similarityThreshold)
         {
            
             var imageOne = Base64StringToBitmap(base1);
