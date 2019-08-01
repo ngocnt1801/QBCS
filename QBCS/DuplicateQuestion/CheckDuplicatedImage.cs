@@ -14,18 +14,19 @@ namespace DuplicateQuestion
             // Min (loose) is 0.0 Max (strict) is 1.0
             const float similarityThreshold = 0.50f;
 
-           
+
             //const string testImageThree = @"E:\NhiUlti\demo_ASIFT_src\demo_ASIFT_src\adam2.png";
 
             // Comparison level is initially set to 0.95
             // Increment loop in steps of .01
-            for (var compareLevel = 0.98; compareLevel <= 1.00; compareLevel += 0.01)
-            {
+            var compareLevel = 0.98;
+            //for (var compareLevel = 0.98; compareLevel <= 1.00; compareLevel += 0.01)
+            //{
                 var isDuplicated = CompareImages(image1, image2, compareLevel,similarityThreshold);              
                 return isDuplicated;
                
-            }
-            return false;
+            //}
+            //return false;
            
         }
 
