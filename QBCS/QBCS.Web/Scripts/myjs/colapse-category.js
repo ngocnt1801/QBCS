@@ -345,7 +345,7 @@
                                     }
                                 } else {
                                     image = "";
-                                } 
+                                }
                                 var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
                                 var result = code + questionContent;
                                 return result;

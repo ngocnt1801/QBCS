@@ -12,13 +12,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using System.Xml.Serialization;
-using Syncfusion.DocIO;
-using Syncfusion.DocIO.DLS;
 using System.Xml.Linq;
-using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace QBCS.Service.Implement
 {
@@ -204,6 +202,15 @@ namespace QBCS.Service.Implement
                 UpdateOptionId = o.Id
             }).ToList();
 
+            if (question.ImagesInput != null && question.ImagesInput.Count() > 0)
+            {
+                entity.Images = question.ImagesInput.Select(im => new Image
+                {
+                    Source = im
+                }).ToList();
+            }
+
+
             var listEntity = new List<QuestionTemp>();
             listEntity.Add(entity);
             listEntity = importService.CheckRule(listEntity);
@@ -235,7 +242,11 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
-                Image = question.Image,
+                Images = question.Images.Select(im => new ImageViewModel
+                {
+                    Id = im.Id,
+                    Source = im.Source
+                }).ToList(),
                 ImportId = (int)question.ImportId
             };
             if (question.Image != null)
@@ -404,7 +415,7 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-                        
+
                         #region get category
                         if (questionXml.question[i].category != null && checkCate == true)
                         {
@@ -448,7 +459,7 @@ namespace QBCS.Service.Implement
                         {
 
                             string tempParser = "";
-                            
+
                             checkHTMLTemp = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
 
@@ -467,10 +478,10 @@ namespace QBCS.Service.Implement
                                             images.Add(imageViewModel);
                                             imageViewModel = new Image();
                                         }
-                                       
+
                                     }
                                 }
-                               
+
                                 question.Status = (int)Enum.StatusEnum.NotCheck;
                                 //if (questionXml.question[i].questiontext.file.Value != null)
                                 //{
@@ -586,7 +597,7 @@ namespace QBCS.Service.Implement
                                         tempAns.Add(option);
                                         tempParser = "";
                                     }
-                                  
+
 
                                 }
                             }
@@ -597,39 +608,39 @@ namespace QBCS.Service.Implement
                         {
                             if (tempAns.Count() == 0)
                             {
-                                question.Status = (int)StatusEnum.Invalid;                     
+                                question.Status = (int)StatusEnum.Invalid;
                                 question.Error = "Options is empty";
                             }
                             else
                             {
                                 question.Status = (int)StatusEnum.NotCheck;
                             }
-                            
+
                             listQuestionXml.Add(question);
                             if (listQuestionXml.Count() > 0 /*&& tempAns.Count() > 0*/)
                             {
                                 DateTime importTime = DateTime.Now;
-                                
+
                                 import.QuestionTemps.Add(new QuestionTemp()
                                 {
-                                    
-                                    QuestionContent = question.QuestionContent,                                    
+
+                                    QuestionContent = question.QuestionContent,
                                     Status = question.Status != (int)StatusEnum.Invalid ? (int)StatusEnum.NotCheck : question.Status,
-                                    Code = question.Code,                                   
+                                    Code = question.Code,
                                     Category = question.Category,
                                     LearningOutcome = question.LearningOutcome,
                                     LevelName = question.Level,
-                                   // Image = question.Image,
+                                    // Image = question.Image,
                                     IsNotImage = false,
                                     Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
-                                        IsCorrect = o.IsCorrect                                      
+                                        IsCorrect = o.IsCorrect
                                     }).ToList(),
                                     Images = images.Select(im => new Image()
                                     {
-                                         Source = im.Source
+                                        Source = im.Source
                                     }).ToList()
 
                                 });
@@ -966,6 +977,14 @@ namespace QBCS.Service.Implement
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
+                Images = q.Images.ToList().Select(i => new ImageViewModel
+                {
+                    Id = i.Id,
+                    Source = i.Source,
+                    QuestionId = i.QuestionId,
+                    QuestionInExamId = i.QuestionInExamId,
+                    QuestionTempId = i.QuestionTempId
+                }).ToList(),
                 Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
                     Id = o.Id,
@@ -1038,7 +1057,7 @@ namespace QBCS.Service.Implement
                 LearningOutcomeName = q.LearningOutcome != null ? q.LearningOutcome.Name : "",
                 LevelName = q.Level != null ? q.Level.Name : "",
                 LevelId = q.LevelId.HasValue ? q.LevelId.Value : 0,
-                Options = q.Options.Select(o => new OptionViewModel
+                Options = q.Options.ToList().Select(o => new OptionViewModel
                 {
                     Id = o.Id,
                     OptionContent = WebUtility.HtmlDecode(o.OptionContent),
@@ -1256,7 +1275,6 @@ namespace QBCS.Service.Implement
                 Status = (StatusEnum)q.Status,
                 ImportId = importId,
                 Code = q.Code,
-                Image = q.Image,
                 Images = q.Images.Select(i => new ImageViewModel
                 {
                     Source = i.Source
@@ -1292,7 +1310,10 @@ namespace QBCS.Service.Implement
                             {
                                 Id = entity.Id,
                                 Code = entity.QuestionCode,
-                                Image = entity.Image,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
                                 CourseName = "Bank: " + entity.Course.Name,
                                 QuestionContent = entity.QuestionContent,
                                 Options = entity.Options.Select(o => new OptionViewModel
@@ -1313,7 +1334,10 @@ namespace QBCS.Service.Implement
                                 Id = entity.Id,
                                 Code = entity.Code,
                                 CourseName = "Import file: ",
-                                Image = entity.Image,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
                                 QuestionContent = entity.QuestionContent,
                                 Options = entity.OptionTemps.Select(o => new OptionViewModel
                                 {
@@ -1537,7 +1561,7 @@ namespace QBCS.Service.Implement
                             }
                         }
                     }
-                    if(images != null)
+                    if (images != null)
                     {
                         questionTmp.Images = images;
                     }
@@ -1550,7 +1574,7 @@ namespace QBCS.Service.Implement
             }
             return listQuestion;
         }
-        
+
         private string TrimSpace(string trim)
         {
             RegexOptions options = RegexOptions.None;
@@ -1611,7 +1635,7 @@ namespace QBCS.Service.Implement
             string prepKeyWord = String.Join("|", prepKeyWords);
             foreach (var question in tempQuestions)
             {
-                if (!String.IsNullOrWhiteSpace(question.Image) && question.Status.Value == (int) StatusEnum.Invalid)
+                if (question.Images != null && question.Images.Count > 0 && question.Status.Value == (int)StatusEnum.Invalid)
                 {
                     continue;
                 }

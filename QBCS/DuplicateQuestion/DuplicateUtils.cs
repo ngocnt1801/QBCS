@@ -115,6 +115,9 @@ namespace DuplicateQuestion
 
             DeleteOptions(question.UpdateQuestionId.Value);
             AddOptions(question.Options, question.UpdateQuestionId.Value);
+
+            DeleteImages(question.Id, question.UpdateQuestionId.Value);
+            AddImages(question.Images, question.UpdateQuestionId.Value);
         }
 
         private static void DeleteOptions(int questionId)
@@ -155,6 +158,47 @@ namespace DuplicateQuestion
                     optionCmd.Parameters.AddWithValue("@correct", option.IsCorrect);
                     optionCmd.Parameters.AddWithValue("@questionId", questionId);
                     optionCmd.Parameters.AddWithValue("@image", option.Image);
+                    optionCmd.ExecuteNonQuery();
+                }
+
+            }
+        }
+
+        private static void DeleteImages(int tempId, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "DELETE Image " +
+                    "WHERE QuestionTempId=@tempId OR QuestionId=@questionId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@tempId", tempId);
+                command.Parameters.AddWithValue("@questionId", questionId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void AddImages(List<ImageModel> images, int questionId)
+        {
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                foreach (var img in images)
+                {
+                    SqlCommand optionCmd = new SqlCommand(
+                          "INSERT INTO [dbo].[Image] " +
+                          "([Source] " +
+                          ",[QuestionId]) " +
+                          "VALUES (@source, @questionId)",
+                          connection
+                          );
+                    optionCmd.Parameters.AddWithValue("@source", img.Source);
+                    optionCmd.Parameters.AddWithValue("@questionId", questionId);
                     optionCmd.ExecuteNonQuery();
                 }
 
@@ -217,6 +261,7 @@ namespace DuplicateQuestion
 
         private static QuestionModel GetQuestion(int id)
         {
+            QuestionModel question = null;
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -243,7 +288,7 @@ namespace DuplicateQuestion
                 SqlDataReader reader = command.ExecuteReader();
 
                 int prev = 0;
-                QuestionModel question = null;
+
                 while (reader.Read())
                 {
                     if (prev != (int)reader["Id"])
@@ -342,9 +387,51 @@ namespace DuplicateQuestion
                     }
                 }
 
-                return question;
 
             }
+
+            question.Images = GetImages(question.Id);
+
+            return question;
+
+        }
+
+        private static List<ImageModel> GetImages(int tempId)
+        {
+            List<ImageModel> images = new List<ImageModel>();
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT " +
+                        "Source " +
+                    "FROM Image " +
+                    "WHERE QuestionTempId=@tempId",
+                    connection
+                    );
+
+                command.Parameters.AddWithValue("@tempId", tempId);
+                SqlDataReader reader = command.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    if (reader["Source"] != DBNull.Value)
+                    {
+                        images.Add(new ImageModel
+                        {
+                            Source = (string)reader["Source"]
+                        });
+                    }
+
+                }
+                reader.Close();
+
+            }
+
+            return images;
         }
 
         private static void CheckDuplicateAQuestionWithBank(QuestionModel item, List<QuestionModel> bank, ref bool isUpdate, List<string> duplicatedList)
@@ -356,7 +443,6 @@ namespace DuplicateQuestion
             {
                 firstIsContent = false;
             }
-
             foreach (var question in bank)
             {
                 if (!question.IsBank && item.Id == question.Id)
@@ -380,13 +466,37 @@ namespace DuplicateQuestion
 
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
-                            AssignDuplicated(question, item, StatusEnum.Editable);
-                            isUpdate = true;
-
-                            if (duplicatedList != null)
+                            #region check image
+                            if (item.Images != null && item.Images.Count > 0)
                             {
-                                duplicatedList.Add(question.ToString());
+                                if (question.Images != null && question.Images.Count > 0)
+                                {
+                                    if (CheckImageQuestion(item, question))
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+                                }
                             }
+
+                            if ((item.Images == null || item.Images.Count ==0 ) 
+                                && (question.Images == null || question.Images.Count == 0))
+                            {
+                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                isUpdate = true;
+
+                                if (duplicatedList != null)
+                                {
+                                    duplicatedList.Add(question.ToString());
+                                }
+                            }
+
+                            #endregion
 
                         }
 
@@ -408,13 +518,37 @@ namespace DuplicateQuestion
 
                             if (optionWrongResult >= OPTION_DUPLICATE)
                             {
-                                AssignDuplicated(question, item, StatusEnum.Editable);
-                                isUpdate = true;
-
-                                if (duplicatedList != null)
+                                #region check image
+                                if (item.Images != null && item.Images.Count > 0)
                                 {
-                                    duplicatedList.Add(question.ToString());
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item, question))
+                                        {
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+                                    }
                                 }
+
+                                if ((item.Images == null || item.Images.Count == 0)
+                                    && (question.Images == null || question.Images.Count == 0))
+                                {
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+
+                                    if (duplicatedList != null)
+                                    {
+                                        duplicatedList.Add(question.ToString());
+                                    }
+                                }
+
+                                #endregion
                             }
                             #endregion
                         }
@@ -433,13 +567,37 @@ namespace DuplicateQuestion
 
                             if (checkOptionWrong >= OPTION_DUPLICATE)
                             {
-                                AssignDuplicated(question, item, StatusEnum.Editable);
-                                isUpdate = true;
-
-                                if (duplicatedList != null)
+                                #region check image
+                                if (item.Images != null && item.Images.Count > 0)
                                 {
-                                    duplicatedList.Add(question.ToString());
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item, question))
+                                        {
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+                                    }
                                 }
+
+                                if ((item.Images == null || item.Images.Count == 0)
+                                    && (question.Images == null || question.Images.Count == 0))
+                                {
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+
+                                    if (duplicatedList != null)
+                                    {
+                                        duplicatedList.Add(question.ToString());
+                                    }
+                                }
+
+                                #endregion
                             }
                             #endregion
                         }
@@ -461,13 +619,37 @@ namespace DuplicateQuestion
 
                         if (questionResult >= HIGH_DUPLICATE) //same question content
                         {
-                            AssignDuplicated(question, item, StatusEnum.Editable);
-                            isUpdate = true;
-
-                            if (duplicatedList != null)
+                            #region check image
+                            if (item.Images != null && item.Images.Count > 0)
                             {
-                                duplicatedList.Add(question.ToString());
+                                if (question.Images != null && question.Images.Count > 0)
+                                {
+                                    if (CheckImageQuestion(item, question))
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+                                }
                             }
+
+                            if ((item.Images == null || item.Images.Count == 0)
+                                && (question.Images == null || question.Images.Count == 0))
+                            {
+                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                isUpdate = true;
+
+                                if (duplicatedList != null)
+                                {
+                                    duplicatedList.Add(question.ToString());
+                                }
+                            }
+
+                            #endregion
 
                         } // end if > HIGH_Duplicate
                         else if (questionResult >= MINIMUM_DUPLICATE)
@@ -479,13 +661,37 @@ namespace DuplicateQuestion
 
                             if (optionWrongResult >= OPTION_DUPLICATE)
                             {
-                                AssignDuplicated(question, item, StatusEnum.Editable);
-                                isUpdate = true;
-
-                                if (duplicatedList != null)
+                                #region check image
+                                if (item.Images != null && item.Images.Count > 0)
                                 {
-                                    duplicatedList.Add(question.ToString());
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item, question))
+                                        {
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+                                    }
                                 }
+
+                                if ((item.Images == null || item.Images.Count == 0)
+                                    && (question.Images == null || question.Images.Count == 0))
+                                {
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+
+                                    if (duplicatedList != null)
+                                    {
+                                        duplicatedList.Add(question.ToString());
+                                    }
+                                }
+
+                                #endregion
                             }
                             #endregion
 
@@ -503,13 +709,37 @@ namespace DuplicateQuestion
 
                                 if (checkOptionWrong >= OPTION_DUPLICATE)
                                 {
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-
-                                    if (duplicatedList != null)
+                                    #region check image
+                                    if (item.Images != null && item.Images.Count > 0)
                                     {
-                                        duplicatedList.Add(question.ToString());
+                                        if (question.Images != null && question.Images.Count > 0)
+                                        {
+                                            if (CheckImageQuestion(item, question))
+                                            {
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
+                                            }
+                                        }
                                     }
+
+                                    if ((item.Images == null || item.Images.Count == 0)
+                                        && (question.Images == null || question.Images.Count == 0))
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+
+                                    #endregion
                                 }
                                 #endregion
                             }
@@ -525,6 +755,23 @@ namespace DuplicateQuestion
             }
         }
 
+        private static bool CheckImageQuestion(QuestionModel temp, QuestionModel question)
+        {
+            int countDuplicate = 0;
+            foreach (var tmpImage in temp.Images)
+            {
+                foreach (var image in question.Images)
+                {
+                    if (CheckDuplicatedImage.CheckDuplicateImage(tmpImage.Source, image.Source))
+                    {
+                        countDuplicate = countDuplicate + 1;
+                        break;
+                    }
+                }
+            }
+            return ((float)countDuplicate / temp.Images.Count) >= 0.7;
+        }
+
         #endregion
 
         #region check duplicate import
@@ -537,8 +784,16 @@ namespace DuplicateQuestion
                 var bank = GetBank(importModel.CourseId);
                 var import = GetImportedQuestion(importModel.ImportId, (int)StatusEnum.NotCheck);
                 var otherImpor = GetOtherImportQuestion(importId.Value, importModel.CourseId);
+
+                GetImages(bank, true);
+                GetImages(import, false);
+                GetImages(otherImpor, false);
+
                 bank.AddRange(import);
                 bank.AddRange(otherImpor);
+
+                
+
                 CheckDuplicateAndUpdateDb(bank, import);
 
                 #region move temp to bank
@@ -828,7 +1083,43 @@ namespace DuplicateQuestion
                 }
 
             }
+
             return import;
+        }
+
+        private static void GetImages(List<QuestionModel> questions, bool isBank)
+        {
+            string idCol = isBank ? "QuestionId" : "QuestionTempId";
+
+            foreach (var question in questions)
+            {
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(
+                        "SELECT Source " +
+                        "FROM Image " +
+                        "WHERE " + idCol + " = @id",
+                        connection
+                        );
+
+                    command.Parameters.AddWithValue("@id", question.Id);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        if (question.Images == null)
+                        {
+                            question.Images = new List<ImageModel>();
+                        }
+                        question.Images.Add(new ImageModel {
+                            Source = (string)reader["Source"],
+                        });
+                    }
+
+                }
+            }
         }
 
         private static void UpdateImport(ImportModel model)
@@ -937,10 +1228,11 @@ namespace DuplicateQuestion
                     {
                         option.QuestionId = id;
                     }
+                    question.QuestionId = id;
                 }
             }
 
-            //add option
+            #region add option
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -964,6 +1256,31 @@ namespace DuplicateQuestion
 
                 }
             }
+            #endregion
+
+            #region update image
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in importSuccessList)
+                {
+                    SqlCommand optionCommand = new SqlCommand(
+                                                "UPDATE Image " +
+                                                "SET QuestionId=@questionId " +
+                                                "WHERE QuestionTempId=@tempId"
+                                                , connection);
+
+                    optionCommand.Parameters.AddWithValue("@questionId", question.QuestionId);
+                    optionCommand.Parameters.AddWithValue("@tempId", question.Id);
+                    optionCommand.ExecuteNonQuery();
+
+
+
+                }
+            }
+
+            #endregion
 
             return totalSuccess;
         }

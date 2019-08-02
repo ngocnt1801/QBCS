@@ -24,20 +24,26 @@
                     @Html.DisplayFor(m => m.QuestionContent)
                 </div>
                 <div id="question-image-container">
-                    @if (Model.Image != null)
+                    @if (Model.Images != null)
                     {
                         <label>Image in Question</label>
-                        <p>
-                            <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Image" />
-                        </p>
-                        <input type="hidden" name="Image" value="@Model.Image" id="hidden-img" />
+                        foreach (var img in Model.Images)
+                        {
+                            <p>
+                                <span class="float-right delete-image" data-delete="#ques-img-@img.Id"><i class="fa fa-times-circle text-danger"></i></span>
+                                <img class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @img.Source" />
+                                <input type="hidden" name="ImagesInput" value="@img.Source" />
+                            </p>
+                        }
+
                     }
                 </div>
-
-
                 <span class="btn btn-primary btn-img mt-2">
-                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" />
+                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" multiple />
                 </span>
+                <div id="question-upload" class="row">
+                    <output id="result" />
+                </div>
                 <input type="hidden" name="QuestionContent" value="" id="hidden-question-content" />
 
                 <h5>Options</h5>

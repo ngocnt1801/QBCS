@@ -25,3 +25,11 @@
     border: 2px solid #ccc;
     padding: 5px;
 }
+
+.delete-image{
+    margin-bottom: -15px;
+    margin-right: -15px;
+}
+.delete-image:hover{
+    cursor:pointer;
+}

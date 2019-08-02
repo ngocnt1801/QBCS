@@ -410,7 +410,7 @@ function clickSection() {
                     data: "Id",
                     render: function (data) {
                         var importId = $('#importId').val();
-                        var edit = '<a href="/Import/GetQuestionTemp/' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
+                        var edit = '<a href="/Import/GetQuestionTemp?tempId=' + data + '" class="btn btn-primary mb-2 col-md-12">Edit</a>';
                         var deleteQ = '<button data-url="/Import/Delete?questionId=' + data + '&url=' + window.location.href + '" class="btn btn-danger col-md-12 delete-question-dt" data-from="tableInvalid" data-to="tableDelete" data-id="#' + data + '">Delete</button>';
                         var result = edit + deleteQ;
                         return result;
@@ -1088,7 +1088,6 @@ function initTableEditable() {
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
                             }
-
                             var images = row.DuplicatedQuestion.Images;
                             var image = "";
                             if (images != null) {

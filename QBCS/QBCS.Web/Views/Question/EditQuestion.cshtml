@@ -25,19 +25,26 @@
 
                 </div>
                 <div id="question-image-container">
-                    @if (Model.Question.Image != null)
+                    @if (Model.Question.Images != null)
                     {
                         <label>Image in Question</label>
-                        <p>
-                            <img id="ques-img" class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @Model.Question.Image" />
-                        </p>
-                        <input type="hidden" name="Image" value="@Model.Question.Image" id="hidden-img" />
+                        foreach (var img in Model.Question.Images)
+                        {
+                            <p>
+                                <span class="float-right delete-image" data-delete="#ques-img-@img.Id"><i class="fa fa-times-circle text-danger"></i></span>
+                                <img class="exam-image mt-2" onclick="img_zoom(this)" src="data:image/png;base64, @img.Source" />
+                                <input type="hidden" name="ImagesInput" value="@img.Source" />
+                            </p>
+                        }
                     }
                 </div>
-                
+                <div id="question-upload" class="row">
+                    <output id="result" />
+                </div>
+
 
                 <span class="btn btn-primary btn-img mt-2">
-                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" />
+                    Add Image <input id="uploadImage" type="file" accept="image/*" name="image" multiple />
                 </span>
 
 
@@ -49,50 +56,50 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger mr-7" })
             </span>
             @*<label>Options</label>
-        @foreach (var option in Model.Question.Options)
-        {
-            <div class="row">
-                <div class="form-group">
-                    <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
+                @foreach (var option in Model.Question.Options)
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            <input type="hidden" name="Options[@counter].Id" value="@option.Id" />
 
-                </div>
+                        </div>
 
 
-                <div class="col-lg-10">
-                    <div class="customs-display customs-display-input option-customs" contenteditable="true" data-for="#o-@counter">
-                        @Html.DisplayFor(m => option.OptionContent)
+                        <div class="col-lg-10">
+                            <div class="customs-display customs-display-input option-customs" contenteditable="true" data-for="#o-@counter">
+                                @Html.DisplayFor(m => option.OptionContent)
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control hidden-option" name="Options[@counter].OptionContent" type="hidden" value="@option.OptionContent" id="o-@counter" />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label class="el-switch el-switch-green">
+                                    @if (option.IsCorrect == true)
+                                    {
+                                        <input name="Options[@counter].IsCorrect" value="true" type="checkbox" checked />
+                                    }
+                                    else
+                                    {
+                                        <input name="Options[@counter].IsCorrect" value="true" type="checkbox" />
+                                    }
+
+                                    <span class="el-switch-style"></span>
+                                </label>
+                            </div>
+                            @{ counter++; }
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input class="form-control hidden-option" name="Options[@counter].OptionContent" type="hidden" value="@option.OptionContent" id="o-@counter" />
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="el-switch el-switch-green">
-                            @if (option.IsCorrect == true)
-                            {
-                                <input name="Options[@counter].IsCorrect" value="true" type="checkbox" checked />
-                            }
-                            else
-                            {
-                                <input name="Options[@counter].IsCorrect" value="true" type="checkbox" />
-                            }
-
-                            <span class="el-switch-style"></span>
-                        </label>
-                    </div>
-                    @{ counter++; }
-                </div>
-            </div>
-            <br />
-        }*@
+                    <br />
+                }*@
             <h5>Options</h5>
             <div id="option-list-container">
 
                 @for (var i = 0; i < Model.Question.Options.Count; i++)
                 {
-                
+
                     @Html.EditorFor(m => m.Question.Options[i], new { index = i + 1 })
 
                 }
@@ -105,17 +112,21 @@
                 <label>Category</label>
                 <select name="CategoryId" class="form-control">
                     <option>---Select an Option---</option>
-                    @foreach (var c in Model.Categories)
+                    @if (Model.Categories != null)
                     {
-                        if (c.Id == Model.Question.CategoryId)
+                        foreach (var c in Model.Categories)
                         {
-                            <option selected value="@c.Id">@c.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@c.Id">@c.Name</option>
+                            if (c.Id == Model.Question.CategoryId)
+                            {
+                                <option selected value="@c.Id">@c.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id">@c.Name</option>
+                            }
                         }
                     }
+
                 </select>
             </div>
 
@@ -123,17 +134,21 @@
                 <label>Learning Outcome</label>
                 <select name="LearningOutcomeId" class="form-control">
                     <option>---Select an Option---</option>
-                    @foreach (var lo in Model.LearningOutcomes)
+                    @if (Model.LearningOutcomes != null)
                     {
-                        if (lo.Id == Model.Question.LearningOutcomeId)
+                        foreach (var lo in Model.LearningOutcomes)
                         {
-                            <option selected value="@lo.Id">@lo.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@lo.Id">@lo.Name</option>
+                            if (lo.Id == Model.Question.LearningOutcomeId)
+                            {
+                                <option selected value="@lo.Id">@lo.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@lo.Id">@lo.Name</option>
+                            }
                         }
                     }
+
                 </select>
             </div>
 
@@ -141,15 +156,18 @@
                 <label>Level</label>
                 <select name="LevelId" class="form-control">
                     <option>---Select an Option---</option>
-                    @foreach (var l in Model.Levels)
+                    @if (Model.Levels != null)
                     {
-                        if (l.Id == Model.Question.LevelId)
+                        foreach (var l in Model.Levels)
                         {
-                            <option selected value="@l.Id">@l.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@l.Id">@l.Name</option>
+                            if (l.Id == Model.Question.LevelId)
+                            {
+                                <option selected value="@l.Id">@l.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@l.Id">@l.Name</option>
+                            }
                         }
                     }
                 </select>
