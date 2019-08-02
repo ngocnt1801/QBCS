@@ -1385,6 +1385,24 @@ namespace QBCS.Service.Implement
                 }
             }
         }
+        public QuestionTempViewModel GetQuestionTempById(int id)
+        {
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(id);
+            return new QuestionTempViewModel()
+            {
+                QuestionContent = entity.QuestionContent,
+                Options = entity.OptionTemps.Select(o => new OptionViewModel()
+                {
+                    OptionContent = o.OptionContent,
+                    Image = o.Image,
+                    IsCorrect = (bool)o.IsCorrect
+                }).ToList(),
+                Images = entity.Images.Select(i => new ImageViewModel()
+                {
+                    Source = i.Source
+                }).ToList()
+            };
+        }
 
         private string ParseListDuplicateToString(QuestionTempViewModel temp)
         {

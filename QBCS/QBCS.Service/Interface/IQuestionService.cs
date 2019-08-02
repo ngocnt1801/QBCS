@@ -35,6 +35,7 @@ namespace QBCS.Service.Interface
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
         GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search, int start, int length);
         void CheckImageInQuestion(List<QuestionTemp> tempQuestions);
+        QuestionTempViewModel GetQuestionTempById(int id);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using Newtonsoft.Json;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
@@ -26,6 +27,7 @@ namespace QBCS.Web.Controllers
         private ICourseService courseService;
         private IUserService userService;
         private ICategoryService categoryService;
+        private ILogService logService;
 
         public QuestionController()
         {
@@ -39,6 +41,7 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
             userService = new UserService();
             categoryService = new CategoryService();
+            logService = new LogService();
         }
 
         // GET: Question
@@ -196,6 +199,11 @@ namespace QBCS.Web.Controllers
                             IsCorrect = o.IsCorrect != null ? (bool)o.IsCorrect : false
                         }).ToList(),
                     };
+                    var oldQuestionTemp = questionService.GetQuestionTempById(vm.questionId);
+                    var user = (UserViewModel)Session["user"];
+                    logService.LogFullManually("UpdateQuestionWithTextBox","Question",
+                                                vm.questionId, null, "QuestionController", "POST", user.Fullname, "", 
+                                                JsonConvert.SerializeObject(questionTemp), JsonConvert.SerializeObject(oldQuestionTemp));
                     importService.UpdateQuestionTemp(questionTemp);
                     TempData["Modal"] = "#success-modal";
                     return Json(new { success = true }, JsonRequestBehavior.AllowGet);
