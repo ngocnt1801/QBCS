@@ -755,6 +755,9 @@ namespace DuplicateQuestion
 
         private static bool CheckImageQuestion(QuestionModel temp, QuestionModel question)
         {
+
+            int maxCount = temp.Images.Count > question.Images.Count ? temp.Images.Count : question.Images.Count;
+          
             int countDuplicate = 0;
             foreach (var tmpImage in temp.Images)
             {
@@ -767,7 +770,7 @@ namespace DuplicateQuestion
                     }
                 }
             }
-            return ((float)countDuplicate / temp.Images.Count) >= 0.7;
+            return ((float)countDuplicate / maxCount) >= 0.7;
         }
 
         #endregion
