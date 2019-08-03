@@ -1631,7 +1631,7 @@ namespace QBCS.Service.Implement
             string prepKeyWord = String.Join("|", prepKeyWords);
             foreach (var question in tempQuestions)
             {
-                if (question.Images != null && question.Images.Count > 0 && question.Status.Value == (int)StatusEnum.Invalid)
+                if ((question.Images != null && question.Images.Count > 0) || question.Status.Value == (int)StatusEnum.Invalid)
                 {
                     continue;
                 }
