@@ -48,6 +48,8 @@ namespace QBCS.Entity
 
         public int? Status { get; set; }
 
+        public string DuplicatedQuestion { get; set; }
+
         public virtual Category Category { get; set; }
 
         public virtual Course Course { get; set; }

@@ -371,6 +371,36 @@ namespace QBCS.Web.Controllers
             result.MaxJsonLength = int.MaxValue;
             return result;
         }
+        
+        public ActionResult CheckBankResult(int courseId)
+        {
+            return View(courseId);
+        }
+
+        public JsonResult GetQuestionByCourseIdAndType(int courseId, string type, int draw, int start, int length)
+        {
+            var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
+            var data = questionService.GetQuestionByCourseId(courseId, type, search, start, length);
+            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
+        }
+
+        public JsonResult Delete(int questionId)
+        {
+            questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Deleted);
+            return Json("OK", JsonRequestBehavior.AllowGet);
+
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public JsonResult Skip(int questionId)
+        {
+            questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Success);
+            return Json("OK", JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
     }
 
     public class Textarea

@@ -152,7 +152,8 @@ namespace QBCS.Service.Implement
                         Name = c.Course.Name,
                         Code = c.Course.Code,
                         Total = c.Course.Questions.Count,
-                        IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value
+                        IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value,
+                        WarningTotal = c.Course.Questions.Where(q => q.Status == (int)StatusEnum.Editable).Count()
                     }).Where(c => c.IsDisable == false).ToList();
                     return courses;
                 }
@@ -169,7 +170,8 @@ namespace QBCS.Service.Implement
                     CourseId = c.Id,
                     Name = c.Name,
                     Code = c.Code,
-                    IsDisable = c.IsDisable.HasValue && c.IsDisable.Value
+                    IsDisable = c.IsDisable.HasValue && c.IsDisable.Value,
+                    WarningTotal = c.Questions.Where(q => q.Status == (int)StatusEnum.Editable).Count()
                 }).Where(c => c.IsDisable == false).ToList();
                 return courses;
             }

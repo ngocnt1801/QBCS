@@ -31,6 +31,7 @@ namespace DuplicateQuestion.Entity
         public int QuestionId { get; set; }
         public double Result { get; set; }
         public List<ImageModel> Images { get; set; }
+        public string SkipQuestions { get; set; }
 
         public override string ToString()
         {

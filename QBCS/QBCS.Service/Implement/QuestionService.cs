@@ -1652,5 +1652,122 @@ namespace QBCS.Service.Implement
             }
 
         }
+
+        public GetResultQuestionTempViewModel GetQuestionByCourseId(int courseId, string type, string search, int start, int length)
+        {
+            var result = new GetResultQuestionTempViewModel();
+            var all = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId.Value == courseId);
+            switch (type)
+            {
+                case "editable":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Editable);
+                    break;
+            }
+            result.totalCount = all.Count();
+            var entities = all
+                .Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
+            result.filteredCount = entities.Count();
+            var questions = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList() : entities.ToList();
+            var questionTemp = questions.Select(q => new QuestionTempViewModel()
+            {
+                Id = q.Id,
+                QuestionContent = q.QuestionContent,
+                Status = (StatusEnum)q.Status,
+                Code = q.QuestionCode,
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
+                IsInImportFile = false,
+                Category = q.Category.Name + " / " + q.LearningOutcome.Name + " / " + ((LevelEnum)q.LevelId).ToString(),
+                Options = q.Options.Select(o => new OptionViewModel
+                {
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedQuestion) ? null : q.DuplicatedQuestion.Split(',').Select(s => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(s.Split('-')[0]),
+                    IsBank = bool.Parse(s.Split('-')[1])
+                }).ToList(),
+                Message = q.Status == (int)StatusEnum.Invalid ? "Invalid message"
+                        : (q.DuplicatedQuestion != null && q.DuplicatedQuestion.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedQuestion.Split(',').Count()} questions" : ""),
+            }).ToList();
+            switch (type)
+            {
+                case "editable":
+                    RemoveDuplicateGroup(questionTemp);
+                    questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
+
+                    foreach (var question in questionTemp.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                    {
+                        if (question.DuplicatedList[0].IsBank)
+                        {
+                            var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.QuestionCode,
+                                Status = (StatusEnum)entity.Status.Value,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
+                                CourseName = entity.Category.Name + " / " + entity.LearningOutcome.Name + " / " + ((LevelEnum)entity.LevelId).ToString(),
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.Options.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                IsBank = true,
+                                IsAnotherImport = false
+                            };
+
+                        }
+                        else
+                        {
+                            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.Code,
+                                CourseName = "Import file: ",
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                Status = (StatusEnum)entity.Status.Value,
+                                IsBank = false,
+                                IsAnotherImport = false
+                            };
+                        }
+                    }
+
+                    break;
+            }
+
+            result.Questions = questionTemp;
+
+            return result;
+        }
+
+        public void UpdateQuestionStatus(int questionId, int status)
+        {
+            var question = unitOfWork.Repository<Question>().GetById(questionId);
+
+            if (question.Status != status)
+            {
+                question.Status = status;
+                unitOfWork.Repository<Question>().Update(question);
+                unitOfWork.SaveChanges();
+            }
+        }
     }
 }

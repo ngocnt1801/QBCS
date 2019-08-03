@@ -445,7 +445,7 @@ namespace DuplicateQuestion
             }
             foreach (var question in bank)
             {
-                if (!question.IsBank && item.Id == question.Id)
+                if ((!question.IsBank && !item.IsBank && item.Id == question.Id) || (question.IsBank && item.IsBank && question.Id == item.Id))
                 {
                     continue;
                 }
@@ -482,7 +482,7 @@ namespace DuplicateQuestion
                                 }
                             }
 
-                            if ((item.Images == null || item.Images.Count ==0 ) 
+                            if ((item.Images == null || item.Images.Count == 0)
                                 && (question.Images == null || question.Images.Count == 0))
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
@@ -757,7 +757,7 @@ namespace DuplicateQuestion
         {
 
             int maxCount = temp.Images.Count > question.Images.Count ? temp.Images.Count : question.Images.Count;
-          
+
             int countDuplicate = 0;
             foreach (var tmpImage in temp.Images)
             {
@@ -793,7 +793,7 @@ namespace DuplicateQuestion
                 bank.AddRange(import);
                 bank.AddRange(otherImpor);
 
-                
+
 
                 CheckDuplicateAndUpdateDb(bank, import);
 
@@ -891,7 +891,7 @@ namespace DuplicateQuestion
                     }
                 }
             }
-            
+
             return result;
         }
 
@@ -1131,7 +1131,8 @@ namespace DuplicateQuestion
                         {
                             question.Images = new List<ImageModel>();
                         }
-                        question.Images.Add(new ImageModel {
+                        question.Images.Add(new ImageModel
+                        {
                             Source = (string)reader["Source"],
                         });
                     }
@@ -1569,6 +1570,81 @@ namespace DuplicateQuestion
 
             }
             return import;
+        }
+
+        #endregion
+
+        #region check duplicate bank
+
+        [SqlProcedure]
+        public static void CheckBank()
+        {
+            var courseIds = GetCourseIds();
+
+            foreach (var courseId in courseIds)
+            {
+                var questions = GetBank(courseId);
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
+                {
+                    connection.Open();
+                    foreach (var question in questions)
+                    {
+                        bool isUpdate = false;
+
+                        List<string> duplicatedList = new List<string>();
+                        CheckDuplicateAQuestionWithBank(question, questions, ref isUpdate, duplicatedList);
+                        question.Test = String.Join(",", duplicatedList.ToArray());
+
+                        if (question.IsNotImage)
+                        {
+                            question.Status = (int)StatusEnum.Editable;
+                        }
+
+
+                        //update database
+                        SqlCommand command = new SqlCommand(
+                       "UPDATE Question " +
+                       "SET Status=@status, DuplicatedQuestion=@test " +
+                       "WHERE Id=@id",
+                       connection
+                       );
+
+                        command.Parameters.AddWithValue("@status", question.Status != 0 ? question.Status : (int)StatusEnum.Success);
+                        command.Parameters.AddWithValue("@test", question.Test);
+                        command.Parameters.AddWithValue("@id", question.Id);
+
+                        command.ExecuteNonQuery();
+
+                    }
+                }
+            }
+
+        }
+
+        private static List<int> GetCourseIds()
+        {
+            List<int> ids = new List<int>();
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT Id " +
+                    "FROM Course " +
+                    "WHERE IsDisable = 0",
+                    connection
+                    );
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ids.Add((int)reader["Id"]);
+                }
+
+            }
+
+            return ids;
         }
 
         #endregion
