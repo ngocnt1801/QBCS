@@ -456,14 +456,12 @@ namespace DuplicateQuestion
 
                     //Check question content
                     var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
-
+                    question.Result = questionResult;
                     if (questionResult >= HIGH_DUPLICATE) //same question content
                     {
                         #region check correct option
                         double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
-
-
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check image
@@ -509,7 +507,7 @@ namespace DuplicateQuestion
                         #region check correct option
                         double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
-
+                        question.Result = optionRightResult;
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check wrong options
@@ -558,7 +556,7 @@ namespace DuplicateQuestion
                     {
                         double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
                                                                                 item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
-
+                        question.Result = questionAndOptionResult;
                         if (questionAndOptionResult > MINIMUM_DUPLICATE)
                         {
                             #region check wrong options
@@ -868,12 +866,29 @@ namespace DuplicateQuestion
 
         private static double CaculateStringSimilar(string source, string target)
         {
+
             double result = LevenshteinDistance.CalculateSimilarity(source, target);
             if (result < 70)
             {
                 result = TFAlgorithm.CaculateSimilar(source, target);
+                if (result < 70)
+                {
+                    result = NLPAlgorithm.CaculateSimilar(source, target);
+                    if (result > 95)
+                    {
+                        result = HIGH_DUPLICATE;
+                    }
+                    else if (result > 80)
+                    {
+                        result = MINIMUM_DUPLICATE;
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+                }
             }
-
+            
             return result;
         }
 
@@ -897,7 +912,7 @@ namespace DuplicateQuestion
             {
                 foreach (var s in source)
                 {
-                    if (LevenshteinDistance.CalculateSimilarity(s, t) >= 70)
+                    if (CaculateStringSimilar(s, t) >= 70)
                     {
                         countDuplicate = countDuplicate + 1;
                         break;

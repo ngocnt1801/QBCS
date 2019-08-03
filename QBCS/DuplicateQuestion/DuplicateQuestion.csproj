@@ -49,6 +49,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WordNetClasses">
+      <HintPath>..\..\..\wordnetdotnet-master\wordnetdotnet-master\Library\cs\bin\Debug\WordNetClasses.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckDuplicatedImage.cs" />
@@ -61,6 +64,21 @@
     <Compile Include="Entity\StatusEnum.cs" />
     <Compile Include="Entity\TypeEnum.cs" />
     <Compile Include="LevenshteinDistance.cs" />
+    <Compile Include="NLPAlgorithm.cs" />
+    <Compile Include="NLP\DemoTest.cs" />
+    <Compile Include="NLP\ISimilarity.cs" />
+    <Compile Include="NLP\Matcher\BipartiteMatcher.cs" />
+    <Compile Include="NLP\Matcher\HeuristicMatcher.cs" />
+    <Compile Include="NLP\Relatedness.cs" />
+    <Compile Include="NLP\SentenceSimilarity.cs" />
+    <Compile Include="NLP\SimilarGenerator.cs" />
+    <Compile Include="NLP\TextHelper\Acronym.cs" />
+    <Compile Include="NLP\TextHelper\ExtOverlapCounter.cs" />
+    <Compile Include="NLP\TextHelper\SimpleOverlapCounter.cs" />
+    <Compile Include="NLP\TextHelper\StopWordsHandler.cs" />
+    <Compile Include="NLP\TextHelper\Tokeniser.cs" />
+    <Compile Include="NLP\WordSenseDisambiguator.cs" />
+    <Compile Include="NLP\WordSimilarity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TFAlgorithm.cs" />
@@ -68,5 +86,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
