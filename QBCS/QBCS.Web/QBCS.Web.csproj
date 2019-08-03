@@ -2230,6 +2230,7 @@
     <Content Include="Views\Course\GetLearningOutcomes.cshtml" />
     <Content Include="Views\Course\Category.cshtml" />
     <Content Include="Views\Course\Staff_CourseStatistic.cshtml" />
+    <Content Include="Views\Question\CheckBankResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
