@@ -1041,7 +1041,7 @@ function initTableEditable() {
 
                         result = result + category + code + questionContent;
 
-                        if (row.DuplicatedQuestion != null) {
+                        if (row.DuplicatedQuestion != null || row.Message.length == 0) {
                             result = result + '<div class="row mt-5"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                         }
                         return result;
@@ -1099,9 +1099,8 @@ function initTableEditable() {
                             }
                             var questionContent = '<div id="d_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                             var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
-                            var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
+                            var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Accept</button>';
                             var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
-
 
                             result = result + status + category + code + questionContent;
                             if (!row.DuplicatedQuestion.IsBank && !row.DuplicatedQuestion.IsAnotherImport && row.DuplicatedQuestion.Status == 2) {
