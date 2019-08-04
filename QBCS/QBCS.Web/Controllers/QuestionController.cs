@@ -190,6 +190,15 @@ namespace QBCS.Web.Controllers
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             if (questionFile.ContentLength > 0)
             {
                 if (owner != null && owner != 0)
@@ -217,7 +226,7 @@ namespace QBCS.Web.Controllers
                     }
                     else
                     {
-                        ViewBag.Message = "Owner lecturer does not exists";
+                        ViewBag.Message = "Cannot Import File!";
                         ViewBag.Status = ToastrEnum.Error;
                         //return Json("Error");
                     }

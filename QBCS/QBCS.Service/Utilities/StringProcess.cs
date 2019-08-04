@@ -106,6 +106,7 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(source, @"<br>", @"\n");
                 result = RemoveStringSharp(result);
                 result = RemoveTag(result, @"<br/>", @"\n");
+                result = RemoveTag(result, @"<br />", @"\n");
                 result = RemoveTag(result, @"<br style", @"\n<br style");
                 result = RemoveTag(result, @"<br>", @"\n");      
                 result = RemoveTag(result, @"</p>", @"</p>\n");
@@ -114,6 +115,20 @@ namespace QBCS.Service.Utilities
 
             return result;
         }
+        public string CleanInvalidXmlChars(string strInput)
+        {
+            //Returns same value if the value is empty.
+            if (string.IsNullOrWhiteSpace(strInput))
+            {
+                return strInput;
+            }
+            // From xml spec valid chars:
+            // #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]    
+            // any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
+            string RegularExp = @"[^\x09\x0A\x0D\x20-\xD7FF\xE000-\xFFFD\x10000-x10FFFF]";
+            return Regex.Replace(strInput, RegularExp, String.Empty);
+        }
+
         public string RemoveHtmlTagXML(string source)
         {
             string result = null;
@@ -121,9 +136,10 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 string partern = "(<cbr>){2,}";
-                //result = RemoveTag(source, "[html]", "");
-                //result = RemoveTag(source, "[html]", "");
-                result = RemoveTag(source, @"\=", @"=");
+                string parternRemoveFirstHtml = "^(<cbr>)"; //Remove <br> start of the line
+               
+                result = CleanInvalidXmlChars(source);             
+                result = RemoveTag(result, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
                 result = RemoveTag(result, "[moodle]", "");
                 result = RemoveTag(result, "[markdown]", "");
@@ -134,13 +150,14 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\:", @":");
                
                 result = RemoveTag(result, @"\n", @"<cbr>");
-                
+                result = RemoveTag(result, @"<br />", @"<cbr>");
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
                // result = RemoveTag(result, @"#", "");
                 
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                 result = Regex.Replace(result, partern, @"<cbr>");
+                result = Regex.Replace(result, parternRemoveFirstHtml, "");
 
 
 
@@ -155,6 +172,7 @@ namespace QBCS.Service.Utilities
             if (source != null)
             {
                 string partern = "(<cbr>){2,}";
+                string parternRemoveFirstHtml = "^(<cbr>)"; //Remove <br> start of the line
                 //result = RemoveTag(source, "[html]", "");
                 //result = RemoveTag(source, "[html]", "");
                 result = RemoveTag(source, @"\=", @"=");
@@ -168,13 +186,14 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\:", @":");
                 
                 result = RemoveTag(result, @"\n", @"<cbr>");
-               
+                result = RemoveTag(result, @"<br />", @"<cbr>");
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
                 // result = RemoveTag(result, @"\#", "#");
                 result = RemoveUnExpectedTagGIFT(result);
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                 result = Regex.Replace(result, partern, @"<cbr>");
+                result = Regex.Replace(result, parternRemoveFirstHtml, "");
 
             }
 
