@@ -456,7 +456,7 @@ namespace DuplicateQuestion
 
                     //Check question content
                     var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
-                    question.Result = questionResult;
+                    question.Result = item.Images != null ? item.Images.Count : 0;
                     if (questionResult >= HIGH_DUPLICATE) //same question content
                     {
                         #region check correct option
@@ -507,7 +507,6 @@ namespace DuplicateQuestion
                         #region check correct option
                         double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
-                        question.Result = optionRightResult;
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check wrong options
@@ -556,7 +555,6 @@ namespace DuplicateQuestion
                     {
                         double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
                                                                                 item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
-                        question.Result = questionAndOptionResult;
                         if (questionAndOptionResult > MINIMUM_DUPLICATE)
                         {
                             #region check wrong options
@@ -1584,6 +1582,7 @@ namespace DuplicateQuestion
             foreach (var courseId in courseIds)
             {
                 var questions = GetBank(courseId);
+                GetImages(questions, true);
                 using (SqlConnection connection = new SqlConnection("context connection=true"))
                 {
                     connection.Open();
@@ -1595,10 +1594,10 @@ namespace DuplicateQuestion
                         CheckDuplicateAQuestionWithBank(question, questions, ref isUpdate, duplicatedList);
                         question.Test = String.Join(",", duplicatedList.ToArray());
 
-                        if (question.IsNotImage)
-                        {
-                            question.Status = (int)StatusEnum.Editable;
-                        }
+                        //if (question.IsNotImage)
+                        //{
+                        //    question.Status = (int)StatusEnum.Editable;
+                        //}
 
 
                         //update database
