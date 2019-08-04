@@ -1663,7 +1663,7 @@ namespace QBCS.Service.Implement
                     all = all.Where(q => q.Status == (int)StatusEnum.Editable);
                     break;
             }
-            result.totalCount = all.Count();
+            //result.totalCount = all.Count();
             var entities = all
                 .Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
             result.filteredCount = entities.Count();
@@ -1679,7 +1679,11 @@ namespace QBCS.Service.Implement
                     Source = i.Source
                 }).ToList(),
                 IsInImportFile = false,
-                Category = q.Category.Name + " / " + q.LearningOutcome.Name + " / " + ((LevelEnum)q.LevelId).ToString(),
+                Category = (q.CategoryId.HasValue ? q.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (q.LevelId.HasValue ? ((LevelEnum)q.LevelId).ToString() : "[None of Level]"),
                 Options = q.Options.Select(o => new OptionViewModel
                 {
                     OptionContent = o.OptionContent,
@@ -1713,7 +1717,11 @@ namespace QBCS.Service.Implement
                                 {
                                     Source = i.Source
                                 }).ToList(),
-                                CourseName = entity.Category.Name + " / " + entity.LearningOutcome.Name + " / " + ((LevelEnum)entity.LevelId).ToString(),
+                                CourseName = (entity.CategoryId.HasValue ? entity.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (entity.LearningOutcomeId.HasValue ? entity.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (entity.LevelId.HasValue ? ((LevelEnum)entity.LevelId).ToString() : "[None of Level]"),
                                 QuestionContent = entity.QuestionContent,
                                 Options = entity.Options.Select(o => new OptionViewModel
                                 {
@@ -1768,6 +1776,104 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<Question>().Update(question);
                 unitOfWork.SaveChanges();
             }
+        }
+
+        public QuestionTempViewModel GetDuplicatedDetail(int questionId)
+        {
+            var entity = unitOfWork.Repository<Question>().GetById(questionId);
+            if (entity != null)
+            {
+
+                QuestionTempViewModel model = new QuestionTempViewModel()
+                {
+                    Id = entity.Id,
+                    QuestionContent = entity.QuestionContent,
+                    ImportId = entity.ImportId.Value,
+                    Code = entity.QuestionCode,
+                    Images = entity.Images.Select(i => new ImageViewModel
+                    {
+                        Source = i.Source
+                    }).ToList(),
+                    Category = (entity.CategoryId.HasValue ? entity.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (entity.LearningOutcomeId.HasValue ? entity.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (entity.LevelId.HasValue ? ((LevelEnum)entity.LevelId).ToString() : "[None of Level]"),
+                    Options = entity.Options.Select(o => new OptionViewModel
+                    {
+                        Id = o.Id,
+                        OptionContent = o.OptionContent,
+                        Image = o.Image,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
+                };
+
+                if (entity.Status != 0)
+                {
+                    model.Status = (StatusEnum)entity.Status;
+                }
+
+                var listDuplicated = entity.DuplicatedQuestion.Split(',').Select(d => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(d.Split('-')[0]),
+                    IsBank = bool.Parse(d.Split('-')[1])
+                }).ToList();
+
+                foreach (var duplicated in listDuplicated)
+                {
+                    if (duplicated.IsBank)
+                    {
+                        var questionEntity = unitOfWork.Repository<Question>().GetById(duplicated.Id);
+                        if (questionEntity != null)
+                        {
+                            duplicated.Code = questionEntity.QuestionCode;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                            duplicated.Options = questionEntity.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.IsAnotherImport = false;
+                        }
+
+                    }
+                    else
+                    {
+                        var questionEntity = unitOfWork.Repository<QuestionTemp>().GetById(duplicated.Id);
+                        if (questionEntity != null)
+                        {
+                            duplicated.Code = questionEntity.Code;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Options = questionEntity.OptionTemps.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                            duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
+                        }
+
+                    }
+                }
+
+                model.DuplicatedList = listDuplicated.Where(q => q.Options != null).ToList();
+
+                return model;
+
+            }
+
+            return null;
         }
     }
 }

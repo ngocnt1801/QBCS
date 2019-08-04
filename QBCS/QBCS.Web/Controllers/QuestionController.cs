@@ -386,21 +386,41 @@ namespace QBCS.Web.Controllers
             return result;
         }
 
-        public JsonResult Delete(int questionId)
+        public ActionResult Delete(int questionId, string url)
         {
             questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Deleted);
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            if (String.IsNullOrWhiteSpace(url))
+            {
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Redirect(url);
+            }
 
             //return RedirectToAction("GetResult", new { importId = importId });
         }
 
-        public JsonResult Skip(int questionId)
+        public ActionResult Skip(int questionId, string url)
         {
             questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Success);
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            if (String.IsNullOrWhiteSpace(url))
+            {
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Redirect(url);
+            }
             //return RedirectToAction("GetResult", new { importId = importId });
         }
 
+        public ActionResult GetDuplicatedDetail(int id)
+        {
+            var model = questionService.GetDuplicatedDetail(id);
+
+            return View(model);
+        }
     }
 
     public class Textarea

@@ -2220,7 +2220,7 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\Script\Index.cshtml" />
-    <Content Include="Views\Import\GetDuplicatedDetail.cshtml" />
+    <Content Include="Views\Question\GetDuplicatedDetail.cshtml" />
     <Content Include="Views\LogAction\Index.cshtml" />
     <Content Include="Views\Examination\CreateExamManually.cshtml" />
     <Content Include="Views\Examination\ListQuestionCreateExamManually.cshtml" />
@@ -2231,6 +2231,7 @@
     <Content Include="Views\Course\Category.cshtml" />
     <Content Include="Views\Course\Staff_CourseStatistic.cshtml" />
     <Content Include="Views\Question\CheckBankResult.cshtml" />
+    <Content Include="Views\Import\GetDuplicatedDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

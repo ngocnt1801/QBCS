@@ -37,5 +37,8 @@ namespace QBCS.Service.Interface
         GetResultQuestionTempViewModel GetQuestionByCourseId(int courseId, string type, string search, int start, int length);
         void CheckImageInQuestion(List<QuestionTemp> tempQuestions);
         void UpdateQuestionStatus(int questionId, int status);
+        QuestionTempViewModel GetDuplicatedDetail(int questionId);
+
+
     }
 }
