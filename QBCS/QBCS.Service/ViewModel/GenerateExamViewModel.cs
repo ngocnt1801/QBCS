@@ -38,37 +38,32 @@ namespace QBCS.Service.ViewModel
         public List<SyllabusPartialViewModel> Syllabus { get; set; }
         public void CalculateGrade()
         {
-            if(TotalQuestion == 0)
+            if (TotalQuestion == 0)
             {
                 OrdinaryGradeCalculate = 0;
                 OrdinaryGrade = 0;
                 ExcellentGradeCalculate = 0;
                 return;
             }
-            if(EasyQuestionGenerrate == 0)
+            if (EasyQuestionGenerrate == 0)
             {
                 OrdinaryGradeCalculate = 0;
-            } else
+            }
+            else
             {
                 OrdinaryGradeCalculate = (int)Math.Round(((EasyQuestionGenerrate * 1.0) / TotalQuestion) * 100);
             }
 
-            if(MediumQuestionGenerrate == 0)
+            if (MediumQuestionGenerrate == 0)
             {
                 GoodGradeCalculate = 0 + OrdinaryGradeCalculate;
-            } else
-            {
-                GoodGradeCalculate = (int)Math.Round(((MediumQuestionGenerrate * 1.0) / TotalQuestion) * 100) + OrdinaryGradeCalculate;
             }
+            else
+            {
+                GoodGradeCalculate = (int)Math.Round(((MediumQuestionGenerrate * 0.6) / TotalQuestion) * 100) + OrdinaryGradeCalculate;
+            }
+            ExcellentGradeCalculate = (int)Math.Round(((MediumQuestionGenerrate * 1.0) / TotalQuestion) * 100) + OrdinaryGradeCalculate;
 
-            if(HardQuestion == 0)
-            {
-                ExcellentGradeCalculate = 0 + GoodGradeCalculate;
-            } else
-            {
-                ExcellentGradeCalculate = (int)Math.Round(((HardQuestionGenerrate * 0.4) / TotalQuestion) * 100) + GoodGradeCalculate;
-            }
-            
         }
     }
 }

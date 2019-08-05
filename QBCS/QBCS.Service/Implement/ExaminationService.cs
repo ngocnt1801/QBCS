@@ -355,7 +355,7 @@ namespace QBCS.Service.Implement
             if (exam.FlagPercent.Equals("grade"))
             {
                 exam.EasyPercent = exam.OrdinaryGrade;
-                exam.MediumPercent = exam.GoodGrade - exam.OrdinaryGrade;
+                exam.MediumPercent = exam.GoodGrade - exam.HardPercent;
                 exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
             }
             int questionEasy = 0;
@@ -371,7 +371,8 @@ namespace QBCS.Service.Implement
             if (((int)Math.Ceiling((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100) + questionEasy) <= exam.TotalQuestion)
             {
                 questionMedium = (int)Math.Ceiling((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100);
-            } else
+            }
+            else
             {
                 questionMedium = (int)Math.Floor((exam.TotalQuestion * exam.MediumPercent * 1.0) / 100);
             }
@@ -457,7 +458,7 @@ namespace QBCS.Service.Implement
             }
             if (course.Syllabus.Count == 0)
             {
-                exam.IsSyllabusHaveLO = false;
+                exam.IsSyllabusHaveLO = true;
                 while (questionEasy != 0 || questionMedium != 0 || questionHard != 0)
                 {
                     for (int i = 0; i < topics.Count; i++)
@@ -512,6 +513,7 @@ namespace QBCS.Service.Implement
             }
             else
             {
+                exam.IsSyllabusHaveLO = false;
                 exam.TotalQuestion = 0;
                 exam.EasyQuestion = 0;
                 exam.MediumQuestion = 0;
@@ -675,7 +677,7 @@ namespace QBCS.Service.Implement
                     exam.TotalQuestion = exam.EasyQuestion + exam.MediumQuestion + exam.HardQuestion;
                     exam.TotalQuestionGenerrate = exam.EasyQuestion + exam.MediumQuestion + exam.HardQuestion;
                 }
-                    if (exam.IsSyllabusHaveLO == false)
+                if (exam.IsSyllabusHaveLO == false)
                 {
                     exam.EasyQuestionGenerrate = 0;
                     exam.EasyQuestion = 0;
