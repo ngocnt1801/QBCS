@@ -172,7 +172,7 @@ namespace QBCS.Web.Controllers
 
         [HttpPost]
         
-        public JsonResult UpdateQuestionWithTextBox(EditQuestionTextboxViewModel vm)
+        public JsonResult UpdateQuestionTempWithTextBox(EditQuestionTextboxViewModel vm)
         {
             try
             {
@@ -397,10 +397,10 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditQuestionWithTextbox(int id)
+        public ActionResult EditQuestionTempWithTextbox(int id)
         {
             var questiontemp = importService.GetQuestionTemp(id);
-            return View("EditQuestionWithTextbox", questiontemp);
+            return View("EditQuestionTempWithTextbox", questiontemp);
         }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {

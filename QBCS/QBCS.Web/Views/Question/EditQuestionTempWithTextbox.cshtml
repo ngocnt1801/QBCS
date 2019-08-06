@@ -124,7 +124,7 @@
             Obj["questionId"] = $('#questionId').val();
             $.ajax({
                 type: "POST",
-                url: '/Question/UpdateQuestionWithTextBox',
+                url: '/Question/UpdateQuestionTempWithTextBox',
                 data: JSON.stringify(Obj),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

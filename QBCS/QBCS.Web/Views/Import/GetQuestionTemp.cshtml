@@ -15,7 +15,7 @@
 
     <div class="card-body">
         <div class="container text-custom">
-            <a href="@Url.Action("EditQuestionWithTextbox","Question", new { id = Model.Id})">Edit Question with textbox</a>
+            <a href="@Url.Action("EditQuestionTempWithTextbox","Question", new { id = Model.Id})">Edit Question with textbox</a>
             @using (Html.BeginForm("EditQuestion", "Import", FormMethod.Post, new { @class = "form-group" }))
             {
 
