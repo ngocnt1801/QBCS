@@ -242,10 +242,13 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
-                Images = question.Images.Select(im => new ImageViewModel
-                {
-                    Id = im.Id,
-                    Source = im.Source
+                Image = question.Image,
+                Images = question.Images.Select(s => new ImageViewModel {
+                    Id = s.Id,
+                    QuestionId = s.QuestionId,
+                    QuestionInExamId = s.QuestionInExamId,
+                    QuestionTempId = s.QuestionTempId,
+                    Source = s.Source
                 }).ToList(),
                 ImportId = (int)question.ImportId
             };

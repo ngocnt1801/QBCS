@@ -7,7 +7,7 @@
 
 <h2>Examinaton Report</h2>
 
-@if (Model.IsEnough)
+@if (Model.IsEnough && Model.IsSyllabusHaveLO)
 {
     <h5>Total examinations : @Model.TotalExam</h5>
     <table class="table table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">
@@ -24,10 +24,10 @@
                 <p>Percent of Hard Question : @Model.HardPercent</p>
             </td>
             <td>
-                <p>Easy Question : @Model.EasyQuestionGenerrate</p>
-                <p>Medium Question : @Model.MediumQuestionGenerrate</p>
-                <p>Hard Question : @Model.HardQuestionGenerrate</p>
-                <b>Total Question : @Model.TotalQuestionGenerrate</b>
+                <p>Easy Question : @Model.EasyQuestion</p>
+                <p>Medium Question : @Model.MediumQuestion</p>
+                <p>Hard Question : @Model.HardQuestion</p>
+                <b>Total Question : @Model.TotalQuestion</b>
             </td>
             <td>
                 <p>Minimum grade of Ordinary Student : @Model.OrdinaryGradeCalculate / 100</p>
@@ -42,7 +42,7 @@
     if (Model.Syllabus != null || Model.LearningOutcomeInExam != null)
     {
         <div class="row mt-3">
-            @if (Model.Syllabus.Count != 0)
+            @if (Model.Syllabus != null && Model.Syllabus.Count != 0)
             {
                 <table class="table text-custom table-striped table-bordered">
                     <thead>
@@ -154,6 +154,10 @@ else
                 @if (Model.HardQuestion != Model.HardQuestionGenerrate)
                 {
                     <p style="color:red">Insufficient number of hard questions in question bank</p>
+                }
+                @if (Model.IsSyllabusHaveLO == false)
+                {
+                    <p style="color:red">Syllabus don't contain any LOC</p>
                 }
             </td>
             <td>

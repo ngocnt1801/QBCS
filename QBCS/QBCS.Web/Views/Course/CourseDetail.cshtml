@@ -6,6 +6,7 @@
 }
 @Styles.Render("~/bundles/content/datatables")
 @Styles.Render("~/bundle/content/category")
+@Styles.Render("~/bundle/content/checkbox")
 
 @if (TempData["NewestCount"] != null)
 {
@@ -162,7 +163,7 @@
             </div>
             <form method="post" action="@Url.Action("ExportBank", "ExaminationAPI")">
                 <div class="modal-body form-group">
-                   Select All: <input id="selectAll" type="checkbox" class="mr-3">
+                    Select All: <input id="check-all" type="checkbox" class="mr-3">
                     @foreach (var lo in Model.LearningOutcome)
                     {
                         <div class="row mb-2 ml-2">
