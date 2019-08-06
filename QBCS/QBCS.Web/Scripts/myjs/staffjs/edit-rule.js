@@ -2,6 +2,17 @@
 
 
 $(document).ready(function () {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    if (month < 10) {
+        month = "0" + month;
+    }
+    var day = date.getDate();
+    if (day < 10) {
+        day = "0" + day;
+    }
+    var dateString = date.getFullYear() + "-" + month + "-" + day;
+    $("#default_datetime").val(dateString);
     $('#save').on('click', function () {
         var check = true;
         var qlMin = 0;
