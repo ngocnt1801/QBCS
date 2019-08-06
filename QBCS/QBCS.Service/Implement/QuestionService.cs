@@ -415,7 +415,7 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-
+                        int mark = 0;
                         #region get category
                         if (questionXml.question[i].category != null && checkCate == true)
                         {
@@ -536,6 +536,7 @@ namespace QBCS.Service.Implement
                                 for (int j = 0; j < questionXml.question[i].answer.Count(); j++)
                                 {
                                     checkHTMLTemp = questionXml.question[i].answer[j].format;
+                                   
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
                                     {
 
@@ -597,6 +598,50 @@ namespace QBCS.Service.Implement
                                         tempAns.Add(option);
                                         tempParser = "";
                                     }
+                                    else
+                                    if (questionXml.question[i].answer[j].fraction.ToString().Contains("-"))
+                                    {
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+
+                                        if (checkHTML == false)
+                                        {
+                                            htmlDoc.LoadHtml(tempParser);
+                                            tempParser = htmlDoc.DocumentNode.InnerText;
+                                        }
+
+                                        wrongAnswer = WebUtility.HtmlDecode(tempParser);
+                                        wrongAnswer = stringProcess.RemoveHtmlTagXML(wrongAnswer);
+                                        option = new OptionTemp();                                       
+                                        option.OptionContent = "[html]" + wrongAnswer;
+                                        option.IsCorrect = false;
+                                        tempAns.Add(option);
+                                        tempParser = "";
+                                    }
+                                    else
+                                    {
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+
+                                        if (checkHTML == false)
+                                        {
+                                            htmlDoc.LoadHtml(tempParser);
+                                            tempParser = htmlDoc.DocumentNode.InnerText;
+                                        }
+
+                                        rightAnswer = WebUtility.HtmlDecode(tempParser);
+                                        rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
+
+                                        option = new OptionTemp();
+                                    
+                                        option.OptionContent = "[html]" + rightAnswer;
+
+                                        option.IsCorrect = true;
+                                        tempAns.Add(option);
+                                        tempParser = "";
+
+                                    }
+
 
 
                                 }
