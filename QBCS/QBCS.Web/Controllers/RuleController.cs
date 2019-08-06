@@ -69,12 +69,7 @@ namespace QBCS.Web.Controllers
            
             string newValue = "";
             string oldValue = "";
-            List<RuleViewModel> listRule = ruleService.getAllRule();
-            List<List<RuleViewModel>> oldRules = new List<List<RuleViewModel>>();
-            oldRules.Add(listRule.Where(r => r.GroupType == 1).ToList());
-            oldRules.Add(listRule.Where(r => r.GroupType == 2).ToList());
-            oldRules.Add(listRule.Where(r => r.GroupType == 3).ToList());
-            oldRules.Add(listRule.Where(r => r.GroupType == 4).ToList());
+            List<RuleViewModel> oldRules = ruleService.getAllRule();
 
             oldValue = JsonConvert.SerializeObject(oldRules);
             newValue = JsonConvert.SerializeObject(rules);

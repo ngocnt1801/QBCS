@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using Newtonsoft.Json;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
@@ -26,6 +27,7 @@ namespace QBCS.Web.Controllers
         private ICourseService courseService;
         private IUserService userService;
         private ICategoryService categoryService;
+        private ILogService logService;
 
         public QuestionController()
         {
@@ -39,6 +41,7 @@ namespace QBCS.Web.Controllers
             courseService = new CourseService();
             userService = new UserService();
             categoryService = new CategoryService();
+            logService = new LogService();
         }
 
         // GET: Question
@@ -167,17 +170,53 @@ namespace QBCS.Web.Controllers
             
         }
 
-        [Log(Action = "Update", TargetName = "Question", ObjectParamName = "ques", IdParamName = "Id")]
-        public ActionResult UpdateQuestionWithTextBox(string questionTextBox, int questionId, int courseId)
+        [HttpPost]
+        
+        public JsonResult UpdateQuestionTempWithTextBox(EditQuestionTextboxViewModel vm)
         {
-            var conversion = questionService.TableStringToListQuestion(questionTextBox, "");
-            //var question = new QuestionViewModel()
-            //{
-            //    Id
-            //}
-            // bool optionResult = optionService.UpdateOptions(ques.Options);
-            TempData["Modal"] = "#success-modal";
-            return RedirectToAction("CourseDetail", "Course", new { courseId = courseId });
+            try
+            {
+                var conversion = questionService.TableStringToListQuestion(vm.table, "");
+                if (conversion.Count > 0)
+                {
+                    if((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
+                    {
+                        return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    var questionTemp = new QuestionTempViewModel()
+                    {
+                        Id = vm.questionId,
+                        ImportId = vm.importId,
+                        QuestionContent = conversion.FirstOrDefault().QuestionContent.Replace("\r", ""),
+                        Images = conversion.FirstOrDefault().Images.Select(i => new ImageViewModel()
+                        {
+                            Source = i.Source
+                        }).ToList(),
+                        Options = conversion.FirstOrDefault().Options.Select(o => new OptionViewModel()
+                        {
+                            OptionContent = o.OptionContent,
+                            Image = o.Image != null ? o.Image : "",
+                            IsCorrect = o.IsCorrect != null ? (bool)o.IsCorrect : false
+                        }).ToList(),
+                    };
+                    var oldQuestionTemp = questionService.GetQuestionTempById(vm.questionId);
+                    var user = (UserViewModel)Session["user"];
+                    logService.LogFullManually("UpdateQuestionWithTextBox","Question",
+                                                vm.questionId, null, "QuestionController", "POST", user.Fullname, "", 
+                                                JsonConvert.SerializeObject(questionTemp), JsonConvert.SerializeObject(oldQuestionTemp));
+                    importService.UpdateQuestionTemp(questionTemp);
+                    TempData["Modal"] = "#success-modal";
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         //lecturer
@@ -367,10 +406,10 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditQuestionWithTextbox()
+        public ActionResult EditQuestionTempWithTextbox(int id)
         {
-            QuestionViewModel qvm = questionService.GetQuestionById(4);
-            return PartialView("EditQuestionWithTextbox", qvm);
+            var questiontemp = importService.GetQuestionTemp(id);
+            return View("EditQuestionTempWithTextbox", questiontemp);
         }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {

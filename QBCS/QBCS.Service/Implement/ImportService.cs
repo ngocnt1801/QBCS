@@ -200,12 +200,15 @@ namespace QBCS.Service.Implement
                 return new QuestionTempViewModel
                 {
                     Id = questionTemp.Id,
+                    Code = questionTemp.Code,
                     QuestionContent = questionTemp.QuestionContent,
                     Status = (StatusEnum)questionTemp.Status,
                     ImportId = questionTemp.ImportId.Value,
-                    Images = questionTemp.Images.Select(im => new ImageViewModel
-                    {
-                        Source = im.Source
+                    Category = questionTemp.Category,
+                    LearningOutcome = questionTemp.LearningOutcome,
+                    Level = questionTemp.LevelName,
+                    Images = questionTemp.Images.Select(i => new ImageViewModel {
+                        Source = i.Source
                     }).ToList(),
                     //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
                     //{
@@ -310,8 +313,10 @@ namespace QBCS.Service.Implement
                         TempId = question.Id
                     });
                 }
-
-                unitOfWork.Repository<QuestionTemp>().Update(entity);
+                var list = new List<QuestionTemp>();
+                list.Add(entity);
+                list = CheckRule(list);
+                unitOfWork.Repository<QuestionTemp>().Update(list.FirstOrDefault());
                 unitOfWork.SaveChanges();
             }
         }
@@ -407,7 +412,7 @@ namespace QBCS.Service.Implement
                                 {
                                     var varRule = rule.Value.Replace("·case_sensitive·", "");
                                     var culture = CultureInfo.GetCultureInfo("en-GB");
-                                    if (culture.CompareInfo.IndexOf(rule.Value, varRule, CompareOptions.IgnoreCase) >= 0)
+                                    if (culture.CompareInfo.IndexOf(tempQuestion.QuestionContent, varRule, CompareOptions.IgnoreCase) >= 0)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
                                         tempQuestion.Message = "Question can not contain '" + (varRule) + "'";
@@ -607,7 +612,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct Option must not be a longest option";
+                                        tempQuestion.Message = "Correct Option must not be the longest option";
                                     }
                                 }
                                 break;
@@ -622,7 +627,7 @@ namespace QBCS.Service.Implement
                                     if ((bool)varOption.IsCorrect)
                                     {
                                         tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct Option must not be a shortest option";
+                                        tempQuestion.Message = "Correct Option must not be the shortest option";
                                     }
                                 }
                                 break;

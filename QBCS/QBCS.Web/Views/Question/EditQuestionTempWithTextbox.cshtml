@@ -1,0 +1,146 @@
+﻿@model QBCS.Service.ViewModel.QuestionTempViewModel
+
+@{
+    ViewBag.Title = "EditQuestionWithTextbox";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var optionLetter = "abcdefghijklmnopqrstuvwxyz".ToArray();
+    string option = "";
+    string question = "";
+    string answer = "<tr> <td> <p>ANSWER:</p> </td>" + "<td> <p>";
+    string image = "";
+    if (Model.Images != null)
+    {
+        foreach (var img in Model.Images)
+        {
+            image = image + "<p><img src='data:image/png;base64," + img.Source + "' /></p>";
+        }
+    }
+    string category = "";
+    string unit = "";
+    string mark = "";
+    if (Model.Level != null)
+    {
+        switch (Model.Level)
+        {
+            case "Easy":
+                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 1 + "</p> </td> </tr>";
+                break;
+            case "Medium":
+                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 2 + "</p> </td> </tr>"; ;
+                break;
+            case "Hard":
+                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 3 + "</p> </td> </tr>"; ;
+                break;
+
+        }
+    }
+    string table = "";
+
+    for (int i = 0; i < Model.Options.Count; i++)
+    {
+        option = option + "<tr> <td> <p>" + optionLetter[i] + ".</p> </td>" + "<td> <p>" + Model.Options[i].OptionContent
+                                        .Replace("<", "&lt;")
+                                        .Replace(">", "&gt;")
+                                        .Replace("&lt;cbr&gt;", "<br/>")
+                                        .Replace("[html]", "") 
+                                        + "</p> </td> </tr>";
+        if (Model.Options[i].IsCorrect)
+        {
+            answer = answer + optionLetter[i];
+        }
+        else if (Model.Options[i].IsCorrect && i == Model.Options.Count - 1)
+        {
+            answer = answer + optionLetter[i] + "</p> </td> </tr>";
+        }
+    }
+    if (Model.LearningOutcome != null)
+    {
+        unit = "<tr> <td> <p>UNIT: </p> </td>" + "<td> <p>" + Model.LearningOutcome + "</p> </td> </tr>";
+    }
+    if (Model.Category != null)
+    {
+        category = "<tr> <td> <p>CATEGORY: </p> </td>" + "<td> <p>" + Model.Category + "</p> </td> </tr>";
+    }
+    var code = "";
+    if(Model.Code != null)
+    {
+        code = Model.Code;
+    }
+    var questionContent = Model.QuestionContent
+                                        .Replace("<", "&lt;")
+                                        .Replace(">", "&gt;")
+                                        .Replace("&lt;cbr&gt;", "<br/>")
+                                        .Replace("[html]", "");
+    question = "<tr> <td width='138' valign='top'> <p>QN=" + code + "</p> </td>" + "<td width='495' valign='top'><p>" + questionContent+"</p> <p>" + image + "</p> </td> </tr>";
+    
+    table = "<table border='1' cellspacing='0' cellpadding='0' width='0'> <tbody>" + question + option + answer + mark + category + unit
+            + "</tbody> </table>";
+    var test = table;
+}
+
+<head>
+    <script type='text/javascript' src='~/Scripts/myjs/textWord/textboxio/textboxio.js'></script>
+    <link rel="stylesheet" type="text/css" href="~/Scripts/myjs/textWord/example.css" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+
+</head>
+<body onload="instantiateTextbox();">
+    <h2>Edit Question with textbox</h2>
+    <a href="@Url.Action("GetQuestionTemp","Import", new { tempId = Model.Id})">Edit Question with form</a>
+        <div class="row">
+            <div class="col-md-12" style="height:35em">
+                <textarea id="textbox" name="questionTextBox" style="height:100% !important">
+
+                </textarea>
+                <input id="questionId" value="@Model.Id" hidden />
+                <input id="importId" value="@Model.ImportId" hidden />
+                <div class="form-group" style="margin-top:5px">
+                    <button type="submit" class="btn btn-primary float-right" id="editSave">Submit</button>
+                    <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+    $('#textbox').html('@table');
+        var instantiateTextbox = function () {
+            textboxio.replaceAll('textarea', {
+                paste: {
+                    style: 'clean',
+                }
+            });
+    };
+    
+    $(document).ready(function () {
+        $('#editSave').on('click', function (event) {
+            event.preventDefault();
+            var editors = textboxio.get('#textbox');
+            var editor = "";
+            editor = editors[0].content.get();
+            editor = '<body>' + editor + '</body>';
+            var Obj = {};
+            Obj["table"] = editor;
+            Obj["importId"] = $('#importId').val();
+            Obj["questionId"] = $('#questionId').val();
+            $.ajax({
+                type: "POST",
+                url: '/Question/UpdateQuestionTempWithTextBox',
+                data: JSON.stringify(Obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success == true) {
+                        document.location.href = "/Import/GetResult?importId=" + Obj["importId"];
+                    } else {
+                        toastr.error("Edit error. Please try again!");
+                        setTimeout(location.reload.bind(location), 1000);
+                    }
+                    
+                },
+                error: function (response) {
+                    toastr.error("Edit error. Please try again!");
+                }
+            });
+        });
+    });
+</script>

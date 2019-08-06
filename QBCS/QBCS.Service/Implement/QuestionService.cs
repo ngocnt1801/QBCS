@@ -1433,6 +1433,24 @@ namespace QBCS.Service.Implement
                 }
             }
         }
+        public QuestionTempViewModel GetQuestionTempById(int id)
+        {
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(id);
+            return new QuestionTempViewModel()
+            {
+                QuestionContent = entity.QuestionContent,
+                Options = entity.OptionTemps.Select(o => new OptionViewModel()
+                {
+                    OptionContent = o.OptionContent,
+                    Image = o.Image,
+                    IsCorrect = (bool)o.IsCorrect
+                }).ToList(),
+                Images = entity.Images.Select(i => new ImageViewModel()
+                {
+                    Source = i.Source
+                }).ToList()
+            };
+        }
 
         private string ParseListDuplicateToString(QuestionTempViewModel temp)
         {
@@ -1641,6 +1659,8 @@ namespace QBCS.Service.Implement
             table = table.Replace("</st1:place>", " ");
             table = table.Replace("<p>&nbsp;</p>", "");
             table = table.Replace("&nbsp;", "");
+            table = table.Replace("<pre>", "<p>");
+            table = table.Replace("</pre>", "</p>");
             return table;
         }
         private string TrimTagsForManual(string content)
@@ -1653,6 +1673,8 @@ namespace QBCS.Service.Implement
             content = content.Replace("</u>", "");
             content = content.Replace("<i>", "");
             content = content.Replace("</i>", "");
+            content = content.Replace('\n', ' ');
+            content = content.Replace('\r', ' ');
             return content;
         }
         public void CheckImageInQuestion(List<QuestionTemp> tempQuestions)
