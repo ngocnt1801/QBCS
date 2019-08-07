@@ -10,7 +10,6 @@ namespace QBCS.Entity
         public QBCSContext()
             : base("name=QBCSContext")
         {
-            Database.CommandTimeout = 9000;
         }
 
         public virtual DbSet<Category> Categories { get; set; }
@@ -132,6 +131,14 @@ namespace QBCS.Entity
 
             modelBuilder.Entity<Question>()
                 .Property(e => e.Image)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Question>()
+                .Property(e => e.SkipQuestions)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Question>()
+                .Property(e => e.DuplicatedQuestion)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Question>()

@@ -9,6 +9,12 @@ namespace QBCS.Entity
     [Table("OptionTemp")]
     public partial class OptionTemp
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public OptionTemp()
+        {
+            Images = new HashSet<Image>();
+        }
+
         public int Id { get; set; }
 
         public int? TempId { get; set; }
@@ -20,6 +26,9 @@ namespace QBCS.Entity
         public int? UpdateOptionId { get; set; }
 
         public string Image { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Image> Images { get; set; }
 
         public virtual QuestionTemp QuestionTemp { get; set; }
     }
