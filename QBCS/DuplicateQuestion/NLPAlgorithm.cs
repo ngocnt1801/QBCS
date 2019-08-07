@@ -6,7 +6,7 @@ namespace DuplicateQuestion
     {
         public static double CaculateSimilar(string s1, string s2)
         {
-            Wnlib.WNCommon.path = @"C:\WordNet\dict\";
+            Wnlib.WNCommon.path = @"E:\WordNet\dict\";
 
             s1 = StringUtils.NormalizeString(s1);
             s2 = StringUtils.NormalizeString(s2);
