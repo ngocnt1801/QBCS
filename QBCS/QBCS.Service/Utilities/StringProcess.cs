@@ -138,8 +138,8 @@ namespace QBCS.Service.Utilities
                 string partern = "(<cbr>){2,}";
                 string parternRemoveFirstHtml = "^(<cbr>)"; //Remove <br> start of the line
                
-                result = CleanInvalidXmlChars(source);             
-                result = RemoveTag(result, @"\=", @"=");
+                //result = CleanInvalidXmlChars(source);             
+                result = RemoveTag(source, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
                 result = RemoveTag(result, "[moodle]", "");
                 result = RemoveTag(result, "[markdown]", "");
@@ -163,6 +163,16 @@ namespace QBCS.Service.Utilities
 
             }
 
+            return result;
+        }
+        public string RemoveWordStyle(string source)
+        {
+            string result = null;
+            if (source != null)
+            {
+                string partern = "<style([\\s\\S]+?)</style>";
+                result = Regex.Replace(source, partern, "");
+            }
             return result;
         }
         public string RemoveHtmlTagGIFT(string source)

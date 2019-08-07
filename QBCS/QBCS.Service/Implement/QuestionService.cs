@@ -497,6 +497,7 @@ namespace QBCS.Service.Implement
 
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                            tempParser = stringProcess.RemoveWordStyle(tempParser);
 
                             if (checkHTML == false)
                             {
@@ -545,6 +546,7 @@ namespace QBCS.Service.Implement
 
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        tempParser = stringProcess.RemoveWordStyle(tempParser);
 
                                         if (checkHTML == false)
                                         {
@@ -576,6 +578,7 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        tempParser = stringProcess.RemoveWordStyle(tempParser);
 
                                         if (checkHTML == false)
                                         {
