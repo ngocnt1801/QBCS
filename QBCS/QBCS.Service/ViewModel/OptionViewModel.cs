@@ -12,5 +12,6 @@ namespace QBCS.Service.ViewModel
         public string OptionContent { get; set; }
         public bool IsCorrect { get; set; }
         public string Image { get; set; }
+        public List<ImageViewModel> Images { get; set; }
     }
 }
