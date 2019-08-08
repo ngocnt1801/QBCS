@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace QBCS.Service.Utilities
 {
     public class StringProcess
     {
-        public static string RemoveTag (string source, string oldString, string newString)
+        public static string RemoveTag(string source, string oldString, string newString)
         {
             string result = null;
             if (source != null)
@@ -21,7 +22,7 @@ namespace QBCS.Service.Utilities
         public string UpperCaseKeyWord(string source)
         {
             string result = "";
-           
+
             //string tempResult = "";
             string INCORRECT = "incorrect";
             string FALSE = "false";
@@ -33,13 +34,13 @@ namespace QBCS.Service.Utilities
             //bool isContinute = false;
             if (source != null)
             {
-                
+
                 result = RemoveTag(source, INCORRECT, INCORRECT.ToUpper());
                 result = RemoveTag(result, FALSE, FALSE.ToUpper());
                 //string[] temp = result.Split(' ');
                 //for (int i = 0; i < temp.Length; i++)
                 //{
-                   
+
                 //    if (temp[i].Equals(NOT))
                 //    {
                 //        //tempResult = RemoveTag(result, temp[i].ToString(), NOT.ToUpper());
@@ -64,20 +65,20 @@ namespace QBCS.Service.Utilities
                 //            isContinute = false;
                 //            result = String.Join(" ", temp).ToString();
                 //        }
-                        
+
                 //        isContinute = false;
                 //    }
-                    
+
 
                 //}
-                
+
                 //result = RemoveTag(result, NOT, NOT.ToUpper());
 
                 result = RemoveTag(result, NOT_TRUE, NOT_TRUE.ToUpper());
                 result = RemoveTag(result, NOT_CORRECT, NOT_CORRECT.ToUpper());
                 result = RemoveTag(result, TRUE, TRUE.ToUpper());
                 result = RemoveTag(result, CORRECT, CORRECT.ToUpper());
-               
+
             }
             return result;
         }
@@ -100,7 +101,7 @@ namespace QBCS.Service.Utilities
         public string RemoveHtmlBrTag(string source)
         {
             string result = null;
-            
+
             if (source != null)
             {
                 result = RemoveTag(source, @"<br>", @"\n");
@@ -108,9 +109,9 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"<br/>", @"\n");
                 result = RemoveTag(result, @"<br />", @"\n");
                 result = RemoveTag(result, @"<br style", @"\n<br style");
-                result = RemoveTag(result, @"<br>", @"\n");      
+                result = RemoveTag(result, @"<br>", @"\n");
                 result = RemoveTag(result, @"</p>", @"</p>\n");
-                
+
             }
 
             return result;
@@ -132,12 +133,12 @@ namespace QBCS.Service.Utilities
         public string RemoveHtmlTagXML(string source)
         {
             string result = null;
-          
+
             if (source != null)
             {
                 string partern = "(<cbr>){2,}";
                 string parternRemoveFirstHtml = "^(<cbr>)"; //Remove <br> start of the line
-               
+
                 //result = CleanInvalidXmlChars(source);             
                 result = RemoveTag(source, @"\=", @"=");
                 result = RemoveTag(result, @"\{", @"{");
@@ -148,13 +149,13 @@ namespace QBCS.Service.Utilities
                 result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
-               
+
                 result = RemoveTag(result, @"\n", @"<cbr>");
                 result = RemoveTag(result, @"<br />", @"<cbr>");
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
                 result = RemoveTag(result, @"\:", @":");
-               // result = RemoveTag(result, @"#", "");
-                
+                // result = RemoveTag(result, @"#", "");
+
                 result = RemoveTag(result, @"<span lang=" + '"' + "EN" + '"' + ">", "");
                 result = Regex.Replace(result, partern, @"<cbr>");
                 result = Regex.Replace(result, parternRemoveFirstHtml, "");
@@ -194,7 +195,7 @@ namespace QBCS.Service.Utilities
                 //result = RemoveTag(result, @"\#", @"#");
                 result = RemoveTag(result, @"\~", @"~");
                 result = RemoveTag(result, @"\:", @":");
-                
+
                 result = RemoveTag(result, @"\n", @"<cbr>");
                 result = RemoveTag(result, @"<br />", @"<cbr>");
                 result = RemoveTag(result, @"<br/>", @"<cbr>");
@@ -209,7 +210,7 @@ namespace QBCS.Service.Utilities
 
             return result;
         }
-        public string RemoveStringSharp (string source)
+        public string RemoveStringSharp(string source)
         {
             string result = "";
             string UNEXPECTED_SHARP = "#<span lang";
@@ -229,23 +230,59 @@ namespace QBCS.Service.Utilities
             }
             return result;
         }
+        public string GetImageNameXML(string source)
+        {
+            string result = "";
+            string FLAG_IMAGE = "@@PLUGINFILE@@";
+            if (source != null && source.Contains(FLAG_IMAGE))
+            {
+                StringBuilder imageName = new StringBuilder();
+                string matchString = Regex.Match(source, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
+                StringBuilder sb = new StringBuilder();
+                sb.Append(matchString);
+                bool isImage = false;
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    if (sb[i].Equals('/')) //start read Image name
+                    {
+                        isImage = true;
+                        continue;
+                    }
+                    if (sb[i].Equals('"'))
+                    { //end read Image name
+                        isImage = false;
+                        continue;
+                    }
+                    if (isImage == true)
+                    {
+                        imageName.Append(sb[i]);
+                    }
+                }
+
+                if (imageName != null)
+                {
+                    result = imageName.ToString();
+                }
+            }
+            return result;
+        }
         public string RemoveUnExpectedTagGIFT(string source)
         {
             string result = null;
-           
+
             if (source != null)
             {
-               if (source.Contains("#") && !source.Contains(@"\#"))
+                if (source.Contains("#") && !source.Contains(@"\#"))
                 {
                     result = RemoveTag(source, "#", "");
                     return result;
                 }
-               if (source.Contains(@"\#") && !source.Contains("#"))
+                if (source.Contains(@"\#") && !source.Contains("#"))
                 {
                     result = RemoveTag(source, @"\#", "#");
                     return result;
                 }
-               if (source.Contains(@"\#") && source.Contains("#"))
+                if (source.Contains(@"\#") && source.Contains("#"))
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.Append(source);
@@ -254,7 +291,7 @@ namespace QBCS.Service.Utilities
                     bool isFlag = false;
                     for (int i = 0; i < sb.Length; i++)
                     {
-                        
+
                         if (sb[i].Equals(@"\"))
                         {
                             isFlag = true;
@@ -284,11 +321,11 @@ namespace QBCS.Service.Utilities
                 {
                     result = source;
                 }
-                
+
             }
-            
+
             return result;
         }
     }
-   
+
 }

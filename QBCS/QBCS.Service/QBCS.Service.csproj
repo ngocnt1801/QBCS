@@ -162,6 +162,7 @@
     <Compile Include="ViewModel\Temp.cs" />
     <Compile Include="ViewModel\RuleValueViewModel.cs" />
     <Compile Include="ViewModel\RuleViewModel.cs" />
+    <Compile Include="ViewModel\Test.cs" />
     <Compile Include="ViewModel\TopicViewModel.cs" />
     <Compile Include="ViewModel\UserDetailViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
