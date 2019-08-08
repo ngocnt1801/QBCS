@@ -15,7 +15,7 @@ namespace QBCS.Service.Utilities
     public class GIFTUtilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
-        static OptionTemp optionModel = new OptionTemp();
+        static OptionViewModel optionModel = new OptionViewModel();
         string category = "";
         string learningOutcome = "";
         string level = "";
@@ -26,7 +26,7 @@ namespace QBCS.Service.Utilities
             {
                 
                 string line = null;
-                List<OptionTemp> options = new List<OptionTemp>();
+                List<OptionViewModel> options = new List<OptionViewModel>();
                 bool isStartQuestion = false;
                 //string destination = "[html]";
                 int countCode = 0;
@@ -377,14 +377,14 @@ namespace QBCS.Service.Utilities
 
                     if (right != null)
                     {
-                        optionModel = new OptionTemp();
+                        optionModel = new OptionViewModel();
                         optionModel.OptionContent = "[html]" +right;
                         optionModel.IsCorrect = true;
                         options.Add(optionModel);
                     }
                     if (wrong != null)
                     {
-                        optionModel = new OptionTemp();
+                        optionModel = new OptionViewModel();
                         optionModel.OptionContent = "[html]" + wrong;
                         optionModel.IsCorrect = false;
                         options.Add(optionModel);
@@ -418,7 +418,7 @@ namespace QBCS.Service.Utilities
                         }
                         list.Add(quesModel);
                         quesModel = new QuestionTmpModel();
-                        options = new List<OptionTemp>();
+                        options = new List<OptionViewModel>();
                         countCode = 0;
                         inLine = 0;
                         isMultipleChoice = false;

@@ -66,7 +66,7 @@
                                                         @if (question.Images != null)
                                                         {
                                                             foreach (var image in question.Images)
-                                                            { 
+                                                            {
                                                                 <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
                                                             }
                                                         }
@@ -80,9 +80,13 @@
                                                                     <div class="container-fluid text-green-success">
                                                                         @prefixOption.ToString(). @option.OptionContent
                                                                     </div>
-                                                                    @if (option.Image != null)
+                                                                    @if (option.Images != null)
                                                                     {
-                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        foreach (var image in option.Images)
+                                                                        {
+                                                                            <br />
+                                                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                                        }
                                                                     }
                                                                 </div>
                                                             }
@@ -92,9 +96,13 @@
                                                                     <div class="container-fluid">
                                                                         @prefixOption.ToString(). @option.OptionContent
                                                                     </div>
-                                                                    @if (option.Image != null)
+                                                                    @if (option.Images != null)
                                                                     {
-                                                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @option.Image" /></p>
+                                                                        foreach (var image in option.Images)
+                                                                        {
+                                                                            <br />
+                                                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                                        }
                                                                     }
                                                                 </div>
                                                             }

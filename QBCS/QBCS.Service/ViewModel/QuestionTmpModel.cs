@@ -12,7 +12,7 @@ namespace QBCS.Service.ViewModel
         public string Code { get; set; }
         public string QuestionContent { get; set; }
         public string QuestionContentError { get; set; }
-        public List<OptionTemp> Options { get; set; }
+        public List<OptionViewModel> Options { get; set; }
         public int Status { get; set; }
         public int DuplicatedId { get; set; }
         public string Category { get; set; }

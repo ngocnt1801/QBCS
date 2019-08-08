@@ -18,12 +18,12 @@ namespace QBCS.Service.Utilities
     {
         static QuestionTmpModel quesModel = new QuestionTmpModel();
         static List<ImageViewModel> images = new List<ImageViewModel>();
-        static OptionTemp optionModel = new OptionTemp();
+        static OptionViewModel optionModel = new OptionViewModel();
         static string category = "";
         static string topic = "";
         static string level = "";
         static List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
-        static List<OptionTemp> options = new List<OptionTemp>();
+        static List<OptionViewModel> options = new List<OptionViewModel>();
         static string globalPrefix = "";
 
         public List<QuestionTmpModel> ParseDoc(Stream inputStream, string prefix)
@@ -69,6 +69,7 @@ namespace QBCS.Service.Utilities
                 string key = (titleEntity as WParagraph).Text;
 
                 #endregion
+                
                 #region question content
                 if (key.Contains("QN=") || key.Contains("QN ="))
                 {
@@ -153,15 +154,13 @@ namespace QBCS.Service.Utilities
                                 }
                             }
                         }
-                        if (quesModel.Image != null)
-                        {
-                            break;
-                        }
                     }
                 }
                 #endregion
+                #region option content
                 else if (key.Contains("."))
                 {
+                    var optionImages = new List<ImageViewModel>();
                     var optionCheck = new DocViewModel();
                     optionCheck.Code = key.Replace(".", "").ToLower();
                     //for (int i = 0; i < row.Cells[1].ChildEntities.Count; i++)
@@ -205,7 +204,7 @@ namespace QBCS.Service.Utilities
                         bool inputWholeParagraph = false;
                         IEntity bodyItemEntity = row.Cells[1].ChildEntities[i];
                         WParagraph wParagraph = bodyItemEntity as WParagraph;
-                        if (wParagraph.Text != "" && wParagraph.ChildEntities.Count != 0)
+                        if (wParagraph.ChildEntities.Count != 0)
                         {
                             foreach (var pChild in wParagraph.ChildEntities)
                             {
@@ -228,6 +227,7 @@ namespace QBCS.Service.Utilities
                                         }
                                         break;
                                     case EntityType.Picture:
+
                                         WPicture wPicture = pItem as WPicture;
                                         System.Drawing.Image iImage = wPicture.Image;
 
@@ -235,7 +235,9 @@ namespace QBCS.Service.Utilities
                                         iImage.Save(m, iImage.RawFormat);
                                         byte[] imageBytes = m.ToArray();
 
-                                        optionModel.Image = Convert.ToBase64String(imageBytes);
+                                        ImageViewModel image = new ImageViewModel();
+                                        image.Source = Convert.ToBase64String(imageBytes);
+                                        optionImages.Add(image);
                                         break;
                                 }
                             }
@@ -243,12 +245,14 @@ namespace QBCS.Service.Utilities
                     }
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
-                    if (optionModel.OptionContent != null)
+                    optionModel.Images = optionImages;
+                    if (optionModel.OptionContent != null || optionModel.Images != null)
                     {
                         options.Add(optionModel);
                     }
-                    optionModel = new OptionTemp();
+                    optionModel = new OptionViewModel();
                 }
+                #endregion
                 else if (key.Contains("ANSWER:"))
                 {
                     IEntity bodyItemEntity = row.Cells[1].ChildEntities[0];
@@ -333,7 +337,7 @@ namespace QBCS.Service.Utilities
             listQuestion.Add(quesModel);
             quesModel = new QuestionTmpModel();
             images = new List<ImageViewModel>();
-            options = new List<OptionTemp>();
+            options = new List<OptionViewModel>();
             optionCheckList = new List<DocViewModel>();
         }
     }

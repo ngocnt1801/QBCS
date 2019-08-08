@@ -50,9 +50,13 @@
                                                 <div class="container-fluid text-green-success">
                                                     @prefixOption.ToString(). @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
                                                 </div>
-                                                @if (item.Options[i].Image != null)
+                                                @if (item.Options[i].Images != null)
                                                 {
-                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
+                                                    foreach (var image in item.Options[i].Images)
+                                                    {
+                                                        <br />
+                                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                    }
                                                 }
                                             </div>
                                         }
@@ -62,9 +66,13 @@
                                                 <div class="container-fluid">
                                                     @prefixOption.ToString(). @item.Options[i].OptionContent
                                                 </div>
-                                                @if (item.Options[i].Image != null)
+                                                @if (item.Options[i].Images != null)
                                                 {
-                                                    <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Options[i].Image" /></p>
+                                                    foreach (var image in item.Options[i].Images)
+                                                    {
+                                                        <br />
+                                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                    }
                                                 }
                                             </div>
                                         }

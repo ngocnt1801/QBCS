@@ -64,7 +64,7 @@
                        id="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)">
                 <label id="@(Model.DuplicatedList[i].IsBank ? "lb-bank-" + Model.DuplicatedList[i].Id : "lb-import-" + Model.DuplicatedList[i].Id)"
                        class="custom-control-label toggle-question" for="@(Model.DuplicatedList[i].IsBank ? "chk-bank-" + Model.DuplicatedList[i].Id : "chk-import-" + Model.DuplicatedList[i].Id)"
-                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@( Model.DuplicatedList[i].Status.ToString())</span></label>
+                       toggle-for="#@(Model.DuplicatedList[i].IsBank ? "bank-" + Model.DuplicatedList[i].Id : "import-" + Model.DuplicatedList[i].Id)">@Model.DuplicatedList[i].Code<span class="badge ml-2 @chkstatusClass">@(Model.DuplicatedList[i].Status.ToString())</span></label>
                 </div>
             }
     </div>
@@ -92,12 +92,26 @@
                         {
                             <div class="container-fluid text-right-answer">
                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                                @if (Model.Options[i].Images != null)
+                                {
+                                    foreach (var image in Model.Options[i].Images)
+                                    {
+                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                    }
+                                }
                             </div>
                         }
                         else
                         {
                             <div class="container-fluid">
                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                                @if (Model.Options[i].Images != null)
+                                {
+                                    foreach (var image in Model.Options[i].Images)
+                                    {
+                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                    }
+                                }
                             </div>
                         }
 
@@ -165,12 +179,26 @@
                             {
                                 <div class="container-fluid text-right-answer">
                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                    @if (duplicated.Options[i].Images != null)
+                                    {
+                                        foreach (var image in duplicated.Options[i].Images)
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                        }
+                                    }
                                 </div>
                             }
                             else
                             {
                                 <div class="container-fluid">
                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                    @if (duplicated.Options[i].Images != null)
+                                    {
+                                        foreach (var image in duplicated.Options[i].Images)
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                        }
+                                    }
                                 </div>
                             }
 

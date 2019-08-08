@@ -265,6 +265,7 @@ function clickSection() {
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                        var optionImages = question[q]["Options"][o]["Images"];
                         if (isHtml) {
                             optionContent = optionContent.split("&lt;p&gt;").join("");
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -305,6 +306,11 @@ function clickSection() {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
                                 $(jow).text(breakContent[b]);
+                            }
+                        }
+                        if (optionImages != null) {
+                            for (var i = 0; i < optionImages.length; i++) {
+                                $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                             }
                         }
                         if (optionCorrect) {
@@ -480,46 +486,54 @@ function clickSection() {
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
-                        if (isHtml) {
-                            optionContent = optionContent.split("&lt;p&gt;").join("");
-                            optionContent = optionContent.split("&lt;/p&gt;").join("");
-                            optionContent = optionContent.split("&lt;span&gt;").join("");
-                            optionContent = optionContent.split("&lt;/span&gt;").join("");
-                            optionContent = optionContent.split("&lt;b&gt;").join("");
-                            optionContent = optionContent.split("&lt;/b&gt;").join("");
-                            optionContent = optionContent.split("&lt;span&gt;").join("");
-                            optionContent = optionContent.split("&lt;/span&gt;").join("");
-                            optionContent = optionContent.split("&lt;u&gt;").join("");
-                            optionContent = optionContent.split("&lt;/u&gt;").join("");
-                            optionContent = optionContent.split("&lt;i&gt;").join("");
-                            optionContent = optionContent.split("&lt;/i&gt;").join("");
-                            optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
-                            optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
-                            optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
-                            optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+                        var optionImages = question[q]["Options"][o]["Images"];
+                        if (optionContent != null) {
+                            if (isHtml) {
+                                optionContent = optionContent.split("&lt;p&gt;").join("");
+                                optionContent = optionContent.split("&lt;/p&gt;").join("");
+                                optionContent = optionContent.split("&lt;span&gt;").join("");
+                                optionContent = optionContent.split("&lt;/span&gt;").join("");
+                                optionContent = optionContent.split("&lt;b&gt;").join("");
+                                optionContent = optionContent.split("&lt;/b&gt;").join("");
+                                optionContent = optionContent.split("&lt;span&gt;").join("");
+                                optionContent = optionContent.split("&lt;/span&gt;").join("");
+                                optionContent = optionContent.split("&lt;u&gt;").join("");
+                                optionContent = optionContent.split("&lt;/u&gt;").join("");
+                                optionContent = optionContent.split("&lt;i&gt;").join("");
+                                optionContent = optionContent.split("&lt;/i&gt;").join("");
+                                optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                                optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                                optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                                optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
 
 
-                            optionContent = optionContent.split("[html]").join("");
-                            breakContent = optionContent.split("&lt;cbr&gt;").join("·")
-                                .split("<cbr>").join("·")
-                                .split("&lt;br&gt;").join("·")
-                                .split("<br>").join("·")
-                                .split("<br />").join("·")
-                                .split("<br/>").join("·")
-                                .split("&lt;br /&gt;").join("·")
-                                .split("&lt;br/&gt;").join("·");
-                            breakContent = breakContent.split("·");
-                        } else {
-                            breakContent.push(optionContent);
-                        }
-                        for (var b = 0; b < breakContent.length; b++) {
-                            $(jo).append('<p id="ocontent_' + b + '"></p>');
-                            var ch = $(jo).length;
-                            var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
-                            if (b == 0) {
-                                $(jow).text(letters[o] + '. ' + breakContent[b]);
+                                optionContent = optionContent.split("[html]").join("");
+                                breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                                    .split("<cbr>").join("·")
+                                    .split("&lt;br&gt;").join("·")
+                                    .split("<br>").join("·")
+                                    .split("<br />").join("·")
+                                    .split("<br/>").join("·")
+                                    .split("&lt;br /&gt;").join("·")
+                                    .split("&lt;br/&gt;").join("·");
+                                breakContent = breakContent.split("·");
                             } else {
-                                $(jow).text(breakContent[b]);
+                                breakContent.push(optionContent);
+                            }
+                            for (var b = 0; b < breakContent.length; b++) {
+                                $(jo).append('<p id="ocontent_' + b + '"></p>');
+                                var ch = $(jo).length;
+                                var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
+                                if (b == 0) {
+                                    $(jow).text(letters[o] + '. ' + breakContent[b]);
+                                } else {
+                                    $(jow).text(breakContent[b]);
+                                }
+                            }
+                        }
+                        if (optionImages != null) {
+                            for (var i = 0; i < optionImages.length; i++) {
+                                $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                             }
                         }
                         if (optionCorrect) {
@@ -687,6 +701,7 @@ function clickSection() {
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
                         var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                        var optionImages = question[q]["Options"][o]["Images"];
                         if (isHtml) {
                             optionContent = optionContent.split("&lt;p&gt;").join("");
                             optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -727,6 +742,11 @@ function clickSection() {
                                 $(jow).text(letters[o] + '. ' + breakContent[b]);
                             } else {
                                 $(jow).text(breakContent[b]);
+                            }
+                        }
+                        if (optionImages != null) {
+                            for (var i = 0; i < optionImages.length; i++) {
+                                $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                             }
                         }
                         if (optionCorrect) {
@@ -1216,6 +1236,7 @@ function initTableEditable() {
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
                     var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                    var optionImages = question[q]["Options"][o]["Images"];
                     if (isHtml) {
                         optionContent = optionContent.split("&lt;p&gt;").join("");
                         optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -1256,6 +1277,11 @@ function initTableEditable() {
                             $(jow).text(letters[o] + '. ' + breakContent[b]);
                         } else {
                             $(jow).text(breakContent[b]);
+                        }
+                    }
+                    if (optionImages != null) {
+                        for (var i = 0; i < optionImages.length; i++) {
+                            $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                         }
                     }
                     if (optionCorrect) {
@@ -1316,6 +1342,7 @@ function initTableEditable() {
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
+                        var dupOptionImages = duplicate["Options"][o]["Images"];
                         if (isHtml) {
                             dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
                             dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
@@ -1355,6 +1382,11 @@ function initTableEditable() {
                                 $(jodw).text(letters[o] + '. ' + breakContent[c]);
                             } else {
                                 $(jodw).text(breakContent[c]);
+                            }
+                        }
+                        if (dupOptionImages != null) {
+                            for (var i = 0; i < dupOptionImages.length; i++) {
+                                $(jod).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                             }
                         }
                         if (dupOptionCorrect) {
@@ -1609,6 +1641,7 @@ function initTableBankEditable() {
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
                     var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                    var optionImages = question[q]["Options"][o]["Images"];
                     if (isHtml) {
                         optionContent = optionContent.split("&lt;p&gt;").join("");
                         optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -1649,6 +1682,11 @@ function initTableBankEditable() {
                             $(jow).text(letters[o] + '. ' + breakContent[b]);
                         } else {
                             $(jow).text(breakContent[b]);
+                        }
+                    }
+                    if (optionImages != null) {
+                        for (var i = 0; i < optionImages.length; i++) {
+                            $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                         }
                     }
                     if (optionCorrect) {
@@ -1709,6 +1747,7 @@ function initTableBankEditable() {
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
+                        var dupOptionImages = duplicate["Options"][o]["Images"];
                         if (isHtml) {
                             dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
                             dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
@@ -1750,6 +1789,11 @@ function initTableBankEditable() {
                                 $(jodw).text(breakContent[c]);
                             }
                         }
+                        if (dupOptionImages != null) {
+                            for (var i = 0; i < dupOptionImages.length; i++) {
+                                $(jod).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
+                            }
+                        }
                         if (dupOptionCorrect) {
                             $(jod).addClass('text-right-answer');
                         }
@@ -1758,18 +1802,21 @@ function initTableBankEditable() {
 
             }
 
-            $("#tableBankEditable .delete-question-dt").off('click');
-            $("#tableBankEditable .delete-question-dt").on('click', function () {
+            $("#tableEditable .delete-question-dt").off('click');
+            $("#tableEditable .delete-question-dt").on('click', function () {
+                minusTotal($("#total-editable"));
+                plusTotal($("#total-delete"));
 
                 sendAjax($(this).attr('data-url'));
-                $('#section-bank-editable').trigger('click');
+                $('#section-editable').trigger('click');
             })
 
-            $("#tableBankEditable .accept-question-dt").off('click');
-            $("#tableBankEditable .accept-question-dt").on('click', function () {
+            $("#tableEditable .accept-question-dt").on('click', function () {
+                minusTotal($("#total-editable"));
+                plusTotal($("#total-success"));
 
                 sendAjax($(this).attr('data-url'));
-                $('#section-bank-editable').trigger('click');
+                $('#section-editable').trigger('click');
             })
         }
     });
