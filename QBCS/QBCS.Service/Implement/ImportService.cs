@@ -26,9 +26,17 @@ namespace QBCS.Service.Implement
         public void Cancel(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetById(importId);
-            var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
             if (import != null)
             {
+
+                var listImage = import.QuestionTemps.SelectMany(q => q.OptionTemps.SelectMany(o => o.Images)).Distinct();
+
+                foreach(var image in listImage)
+                {
+                    unitOfWork.Repository<Image>().Delete(image);
+                }
+
+                var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
                 foreach (var question in listQuestion)
                 {
                     unitOfWork.Repository<QuestionTemp>().Delete(question);
