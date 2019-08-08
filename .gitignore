@@ -330,3 +330,7 @@ ASALocalRun/
 .mfractor/
 /QBCS/QBCS.Web/ElmahLog
 /QBCS/QBCS.Web/ErrorLog
+
+qbcs/QBCS\.Web/QBCS\.Web\.csproj
+
+qbcs/QBCS\.Entity/QBCS\.Entity\.csproj
