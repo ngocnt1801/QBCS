@@ -2225,11 +2225,12 @@
     <Content Include="Views\Examination\CreateExamManually.cshtml" />
     <Content Include="Views\Examination\ListQuestionCreateExamManually.cshtml" />
     <Content Include="Views\Examination\ListCategoryCreateExam.cshtml" />
-    <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
+    <Content Include="Views\Question\EditQuestionTempWithTextbox.cshtml" />
     <Content Include="Views\Course\Syllabus.cshtml" />
     <Content Include="Views\Course\GetLearningOutcomes.cshtml" />
     <Content Include="Views\Course\Category.cshtml" />
     <Content Include="Views\Course\Staff_CourseStatistic.cshtml" />
+    <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
