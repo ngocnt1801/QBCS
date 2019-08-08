@@ -230,6 +230,25 @@ namespace QBCS.Service.Utilities
             }
             return result;
         }
+        public List<string> GetImageMultilpleNameXML(string source)
+        {
+            string result = "";
+            string FLAG_IMAGE = "@@PLUGINFILE@@";
+            List<string> imgScrs = new List<string>();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(source);//or doc.Load(htmlFileStream)
+            var nodes = doc.DocumentNode.SelectNodes(@"//img[@src]");
+            if (nodes != null)
+            {
+                foreach (var img in nodes)
+                {
+                    HtmlAttribute att = img.Attributes["src"];
+                    imgScrs.Add(att.Value);
+                }
+            }
+            
+            return imgScrs;
+        }
         public string GetImageNameXML(string source)
         {
             string result = "";

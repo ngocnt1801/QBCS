@@ -396,7 +396,7 @@ namespace QBCS.Service.Implement
             HtmlDocument htmlDoc = new HtmlDocument();
             var userName = (UserViewModel)HttpContext.Current.Session["user"];
             string user = userName.Fullname.ToString();
-            string FLAG_IMAGE = "@@PLUGINFILE@@";
+            string FLAG_IMAGE = "@@PLUGINFILE@@/";
             try
             {
                 StringProcess stringProcess = new StringProcess();
@@ -422,8 +422,7 @@ namespace QBCS.Service.Implement
                         string rightAnswer = null;
                         string wrongAnswer = null;
                         string temp = null;
-                        int mark = 0;
-                        bool isGetImageByName = false;
+
                         #region get category
                         if (questionXml.question[i].category != null && checkCate == true)
                         {
@@ -467,30 +466,33 @@ namespace QBCS.Service.Implement
                         {
 
                             string tempParser = "";
-                            string imageNameQuestion = "";
-                            string imageNameOption = "";
+                            List<string> imageNameQuestion = new List<string>();
+                            List<string> imageNameOps = new List<string>();
+                            string tempName = "";
+                            string tempQuesName = "";
                             checkHTMLTemp = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
-                            imageNameQuestion = stringProcess.GetImageNameXML(tempParser);
+                            imageNameQuestion = stringProcess.GetImageMultilpleNameXML(tempParser);
                             if (questionXml.question[i].questiontext.file != null)
                             {
 
                                 foreach (var item in questionXml.question[i].questiontext.file)
                                 {
-                                    if (!imageNameQuestion.Equals(""))
-                                    {
-                                        isGetImageByName = true;
-                                    }
+
                                     #region Get image by Name
-                                    if (isGetImageByName)
+                                    if (imageNameQuestion.Count() > 0)
                                     {
-                                        if (item.Value != null && item.name == imageNameQuestion)
+                                        foreach (var imgName in imageNameQuestion)
                                         {
-                                            imageViewModel.Source = item.Value.ToString();
-                                            if (imageViewModel.Source != null)
+                                            tempQuesName = FLAG_IMAGE + item.name;
+                                            if (item.Value != null && imgName.Equals(tempQuesName.Trim()))
                                             {
-                                                images.Add(imageViewModel);
-                                                imageViewModel = new Image();
+                                                imageViewModel.Source = item.Value.ToString();
+                                                if (imageViewModel.Source != null)
+                                                {
+                                                    images.Add(imageViewModel);
+                                                    imageViewModel = new Image();
+                                                }
                                             }
                                         }
                                     }
@@ -508,7 +510,7 @@ namespace QBCS.Service.Implement
                                             {
                                                 images.Add(imageViewModel);
                                                 imageViewModel = new Image();
-                                                isGetImageByName = false;
+
                                             }
 
                                         }
@@ -565,7 +567,9 @@ namespace QBCS.Service.Implement
                                 question.LearningOutcome = learningOutcome.Trim();
                             }
                             tempParser = "";
-                            isGetImageByName = false;
+                            tempName = "";
+                            tempQuesName = "";
+                            imageNameQuestion = new List<string>();
 
                             #region get question, option
                             if (questionXml.question[i].answer != null)
@@ -573,35 +577,38 @@ namespace QBCS.Service.Implement
 
                                 for (int j = 0; j < questionXml.question[i].answer.Count(); j++)
                                 {
+
                                     checkHTMLTemp = questionXml.question[i].answer[j].format;
                                     tempParser = questionXml.question[i].answer[j].text;
                                     tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
                                     tempParser = stringProcess.RemoveWordStyle(tempParser);
-                                   
+
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
                                     {
-                                        imageNameOption = stringProcess.GetImageNameXML(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
                                         //Get Image Option right
                                         if (questionXml.question[i].answer[j].file != null)
                                         {
                                             foreach (var item in questionXml.question[i].answer[j].file)
                                             {
-                                                if (!imageNameOption.Equals(""))
-                                                {
-                                                    isGetImageByName = true;
-                                                }
+
                                                 #region Get image option right by Name
-                                                if (isGetImageByName)
+                                                if (imageNameOps.Count() > 0)
                                                 {
-                                                    if (item.Value != null && item.name == imageNameOption)
+                                                    foreach (var it in imageNameOps)
                                                     {
-                                                        imageViewOptionModel.Source = item.Value.ToString();
-                                                        if (imageViewOptionModel.Source != null)
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+                                                        if (item.Value != null && tempName == it)
                                                         {
-                                                            imagesOption.Add(imageViewOptionModel);
-                                                            imageViewOptionModel = new Image();
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
                                                         }
                                                     }
+
                                                 }
                                                 #endregion
                                                 #region Get image option right normal
@@ -617,7 +624,7 @@ namespace QBCS.Service.Implement
                                                         {
                                                             imagesOption.Add(imageViewOptionModel);
                                                             imageViewOptionModel = new Image();
-                                                            isGetImageByName = false;
+
                                                         }
 
                                                     }
@@ -645,37 +652,41 @@ namespace QBCS.Service.Implement
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
                                         tempParser = "";
-                                        imageNameOption = "";
-                                        isGetImageByName = false;
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
                                         imagesOption = new List<Image>();
 
                                     }
                                     else
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("0"))
                                     {
+
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
                                         tempParser = stringProcess.RemoveWordStyle(tempParser);
-                                        imageNameOption = stringProcess.GetImageNameXML(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
                                         //Get Image Option wrong
                                         if (questionXml.question[i].answer[j].file != null)
                                         {
                                             foreach (var item in questionXml.question[i].answer[j].file)
                                             {
-                                                if (!imageNameOption.Equals(""))
-                                                {
-                                                    isGetImageByName = true;
-                                                }
+
                                                 #region Get image option right by Name
-                                                if (isGetImageByName)
+                                                if (imageNameOps.Count() > 0)
                                                 {
-                                                    if (item.Value != null && item.name == imageNameOption)
+                                                    foreach (var it in imageNameOps)
                                                     {
-                                                        imageViewOptionModel.Source = item.Value.ToString();
-                                                        if (imageViewOptionModel.Source != null)
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
                                                         {
-                                                            imagesOption.Add(imageViewOptionModel);
-                                                            imageViewOptionModel = new Image();
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -693,7 +704,6 @@ namespace QBCS.Service.Implement
                                                         {
                                                             imagesOption.Add(imageViewOptionModel);
                                                             imageViewOptionModel = new Image();
-                                                            isGetImageByName = false;
                                                         }
 
                                                     }
@@ -718,8 +728,9 @@ namespace QBCS.Service.Implement
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
                                         tempParser = "";
-                                        imageNameOption = "";
-                                        isGetImageByName = false;
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
                                         imagesOption = new List<Image>();
                                     }
                                     else
@@ -727,26 +738,28 @@ namespace QBCS.Service.Implement
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
-                                        imageNameOption = stringProcess.GetImageNameXML(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
                                         //Get Image Option wrong
                                         if (questionXml.question[i].answer[j].file != null)
                                         {
                                             foreach (var item in questionXml.question[i].answer[j].file)
                                             {
-                                                if (!imageNameOption.Equals(""))
-                                                {
-                                                    isGetImageByName = true;
-                                                }
+
                                                 #region Get image option wrong by Name
-                                                if (isGetImageByName)
+                                                if (imageNameOps.Count() > 0)
                                                 {
-                                                    if (item.Value != null && item.name == imageNameOption)
+                                                    foreach (var it in imageNameOps)
                                                     {
-                                                        imageViewOptionModel.Source = item.Value.ToString();
-                                                        if (imageViewOptionModel.Source != null)
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
                                                         {
-                                                            imagesOption.Add(imageViewOptionModel);
-                                                            imageViewOptionModel = new Image();
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -761,7 +774,6 @@ namespace QBCS.Service.Implement
                                                         {
                                                             imagesOption.Add(imageViewOptionModel);
                                                             imageViewOptionModel = new Image();
-                                                            isGetImageByName = false;
                                                         }
 
                                                     }
@@ -786,34 +798,37 @@ namespace QBCS.Service.Implement
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
                                         tempParser = "";
-                                        imageNameOption = "";
-                                        isGetImageByName = false;
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
                                         imagesOption = new List<Image>();
                                     }
                                     else
                                     {
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
-                                        imageNameOption = stringProcess.GetImageNameXML(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
                                         //Get Image Option wrong
                                         if (questionXml.question[i].answer[j].file != null)
                                         {
                                             foreach (var item in questionXml.question[i].answer[j].file)
                                             {
-                                                if (!imageNameOption.Equals(""))
-                                                {
-                                                    isGetImageByName = true;
-                                                }
+
                                                 #region Get image option wrong by Name
-                                                if (isGetImageByName)
+                                                if (imageNameOps.Count() > 0)
                                                 {
-                                                    if (item.Value != null && item.name == imageNameOption)
+                                                    foreach (var it in imageNameOps)
                                                     {
-                                                        imageViewOptionModel.Source = item.Value.ToString();
-                                                        if (imageViewOptionModel.Source != null)
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
                                                         {
-                                                            imagesOption.Add(imageViewOptionModel);
-                                                            imageViewOptionModel = new Image();
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -828,7 +843,6 @@ namespace QBCS.Service.Implement
                                                         {
                                                             imagesOption.Add(imageViewOptionModel);
                                                             imageViewOptionModel = new Image();
-                                                            isGetImageByName = false;
                                                         }
 
                                                     }
@@ -855,9 +869,10 @@ namespace QBCS.Service.Implement
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
                                         tempParser = "";
-                                        imageNameOption = "";
-                                        isGetImageByName = false;
+                                        // imageNameOption = "";
+                                        imageNameOps = new List<string>();
                                         imagesOption = new List<Image>();
+                                        tempName = "";
                                     }
 
 
@@ -897,10 +912,10 @@ namespace QBCS.Service.Implement
                                     IsNotImage = false,
                                     Message = question.Status != (int)StatusEnum.Invalid ? "" : "Option content is empty",
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
-                                    {                                       
+                                    {
                                         OptionContent = o.OptionContent,
                                         Images = o.Images,
-                                        IsCorrect = o.IsCorrect,   
+                                        IsCorrect = o.IsCorrect,
                                     }).ToList(),
                                     Images = images.Select(im => new Image()
                                     {
