@@ -6,7 +6,7 @@
     var deleteQ = parseInt($("#total-delete").text());
     var success = parseInt($("#total-success").text());
     var totalQues = parseInt($("#total-question").text());
-  
+
     notInsert = editable + invalid + deleteQ;
     checkAgain = totalQues - (editable + invalid + deleteQ + success);
 
@@ -15,7 +15,7 @@
 }
 
 //$("#btnSaveQuestion").click(function () {
-   
+
 //});
 function bt_change_partial(url, btn) {
 
@@ -242,13 +242,13 @@ function clickSection() {
 
                         changeContent = changeContent.split("[html]").join("");
                         breakContent = changeContent.split("&lt;cbr&gt;").join("·")
-                                                    .split("<cbr>").join("·")
-                                                    .split("&lt;br&gt;").join("·")
-                                                    .split("<br>").join("·")
-                                                    .split("<br />").join("·")
-                                                    .split("<br/>").join("·")
-                                                    .split("&lt;br /&gt;").join("·")
-                                                    .split("&lt;br/&gt;").join("·");
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
                         breakContent = breakContent.split("·");
                     } else {
                         breakContent.push(changeContent);
@@ -743,6 +743,34 @@ function clickSection() {
         });
     });
 
+    $('#section-bank-editable').on('click', function () {
+        startLoading();
+        var templateEditable = '<table class="table table-bordered table-hover text-custom" id="tableBankEditable" width="100%" cellspacing="0">' +
+            '<thead>' +
+            '<tr>' +
+            '<th>No.</th>' +
+            '<th>Question</th>' +
+            '<th>Duplicated With</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>';
+        $('#tableBankEditable').DataTable().destroy();
+        $('#tableBankEditable').remove();
+        $('#editable #importTable').append(templateEditable);
+        $('#editable').show();
+        this.table1 = initTableBankEditable();
+
+        this.table1.on('page.dt', function () {
+            $('html, body').animate({
+                scrollTop: $(".dataTables_wrapper").offset().top
+            }, 'slow');
+        });
+
+        stopLoading();
+    });
+
     var tableCustoms = $('#table-customs').DataTable({
         columns: [
             {
@@ -871,6 +899,7 @@ function loadFirstTable() {
     startLoading();
     $('#editable').show();
     initTableEditable();
+    initTableBankEditable();
     stopLoading();
 }
 $(document).ready(function () {
@@ -1024,7 +1053,7 @@ function initTableEditable() {
                         var options = '';
                         for (var i = 0; i < row.Options.length; i++) {
                             options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
-                        } 
+                        }
                         var images = row.Images;
                         var image = "";
                         if (images != null) {
@@ -1041,7 +1070,7 @@ function initTableEditable() {
 
                         result = result + category + code + questionContent;
 
-                        if (row.DuplicatedQuestion != null) {
+                        if (row.DuplicatedQuestion != null || row.Message.length == 0) {
                             result = result + '<div class="row mt-5"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
                         }
                         return result;
@@ -1099,9 +1128,8 @@ function initTableEditable() {
                             }
                             var questionContent = '<div id="d_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                             var editButton = '<a href="/Import/GetQuestionTemp?tempId=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
-                            var acceptButton = '<button class="btn btn-success float-right ml-1 accept-question-dt">Accept</button>';
+                            var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Import/Skip?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Accept</button>';
                             var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Import/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
-
 
                             result = result + status + category + code + questionContent;
                             if (!row.DuplicatedQuestion.IsBank && !row.DuplicatedQuestion.IsAnotherImport && row.DuplicatedQuestion.Status == 2) {
@@ -1334,7 +1362,7 @@ function initTableEditable() {
                         }
                     }
                 }
-                
+
             }
 
             $("#tableEditable .delete-question-dt").off('click');
@@ -1352,6 +1380,396 @@ function initTableEditable() {
 
                 sendAjax($(this).attr('data-url'));
                 $('#section-editable').trigger('click');
+            })
+        }
+    });
+    return table1;
+}
+
+function initTableBankEditable() {
+
+    var table1 = $('#tableBankEditable').DataTable({
+        paging: true,
+        ordering: false,
+        filter: true,
+        destroy: true,
+        searching: true,
+        serverSide: true,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+        Processing: true,
+        ajax:
+        {
+            url: "/Question/GetQuestionByCourseIdAndType",
+            type: "GET",
+            data: {
+                courseId: $('#courseId').val(),
+                type: "editable"
+            },
+            dataType: "json"
+        },
+        rowId: 'Id',
+        columns: [
+            {
+                data: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                render: function (data, type, row, meta) {
+                    if (row != null) {
+
+                        //notify if not image
+                        var result = "";
+                        if (row.IsNotImage) {
+                            result = "<p class='text-danger'>This question may be has an image</p>";
+                        }
+
+                        var questionObj = {};
+                        var category = '<p class="text-custom">Category: ' + row.Category + '<br/>';
+                        var code = '<p>Question Code: ' + row.Code + '</p>';
+
+                        var status = "";
+                        var statusClass = "";
+                        var statusName = "";
+                        switch (row.Status) {
+                            case 2:
+                                statusClass = "badge-warning";
+                                statusName = "Editable";
+                                break;
+                            case 3:
+                                statusClass = "badge-danger";
+                                statusName = "Deleted";
+                                break;
+                            case 4:
+                                statusClass = "badge-success";
+                                statusName = "Success";
+                                break;
+                        }
+                        status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>';
+
+                        var options = '';
+                        for (var i = 0; i < row.Options.length; i++) {
+                            options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                        }
+                        var images = row.Images;
+                        var image = "";
+                        if (images != null) {
+                            for (var im = 0; im < images.length; im++) {
+                                image = image + '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + images[im].Source + '" /></p>';
+                            }
+                        } else {
+                            image = "";
+                        }
+                        var questionContent = '<div id="q_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
+                        var editButton = '<a href="/Question/GetQuestionDetail?id=' + row.Id + '" class="btn btn-primary ml-1 float-right">Edit</a>';
+                        var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Question/Skip?questionId=' + row.Id + '&url=' + window.location.href + '">Accept</button>';
+                        var deleteButton = '<button class="btn btn-danger delete-question-dt float-right" data-url="/Question/Delete?questionId=' + row.Id + '&url=' + window.location.href + '">Delete</button>';
+
+                        result = result + status + category + code + questionContent;
+
+                        if (row.DuplicatedQuestion != null || row.Message.length == 0) {
+                            result = result + '<div class="row mt-5"><div class="col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
+                        }
+                        return result;
+                    }
+                }
+            },
+            {
+                render: function (data, type, row) {
+                    if (row != null) {
+                        if (row.DuplicatedQuestion != null) {
+
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p class='text-danger'>This question may be has an image</p>";
+                            }
+
+                            var questionObj = {};
+                            var category = '<p class="text-custom">Category: ' + row.DuplicatedQuestion.CourseName + '<br/>';
+                            var code = ' <p class="text-custom">Question Code: ' + row.DuplicatedQuestion.Code + '</p>';
+
+                            var status = "";
+                            var statusClass = "";
+                            var statusName = "";
+                            switch (row.DuplicatedQuestion.Status) {
+                                case 2:
+                                    statusClass = "badge-warning";
+                                    statusName = "Editable";
+                                    break;
+                                case 3:
+                                    statusClass = "badge-danger";
+                                    statusName = "Deleted";
+                                    break;
+                                case 4:
+                                    statusClass = "badge-success";
+                                    statusName = "Success";
+                                    break;
+                            }
+                            status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>';
+
+                            var options = '';
+                            for (var i = 0; i < row.Options.length; i++) {
+                                options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
+                            }
+                            var images = row.DuplicatedQuestion.Images;
+                            var image = "";
+                            if (images != null) {
+                                for (var im = 0; im < images.length; im++) {
+                                    image = image + '<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + images[im].Source + '" /></p>';
+                                }
+                            } else {
+                                image = "";
+                            }
+                            var questionContent = '<div id="d_' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
+                            var editButton = '<a href="/Question/GetQuestionDetail?id=' + row.DuplicatedQuestion.Id + '" class="btn btn-primary float-right ml-1">Edit</a>';
+                            var acceptButton = '<button class="btn btn-success ml-1 accept-question-dt float-right" data-url="/Question/Skip?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Accept</button>';
+                            var deleteButton = '<button class="btn btn-danger float-right delete-question-dt"  data-url="/Question/Delete?questionId=' + row.DuplicatedQuestion.Id + '&url=' + window.location.href + '">Delete</button>';
+
+                            result = result + status + category + code + questionContent;
+                            result = result + '<div class="row"><div class=" col-md-12 bottom-right-cell">' + editButton + acceptButton + deleteButton + '</div></div>';
+                            return result;
+
+                        }
+                        else {
+                            //notify if not image
+                            var result = "";
+                            if (row.IsNotImage) {
+                                result = "<p>There is no duplicate</p>";
+                            } else {
+                                result = row.Message + '<br/> <a href="/Question/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
+                            }
+                            return result;
+                        }
+
+                    }
+                }
+            }
+        ],
+        columnDefs: [
+            { targets: 0, width: "2%" },
+            { targets: 1, width: "49%" },
+            { targets: 2, width: "49%" }
+        ],
+
+        fnDrawCallback: function (data) {
+            //original question
+            var question = data.json.data;
+            var q = 0;
+            for (q = 0; q < question.length; q++) {
+                var jq = '#q_' + question[q].Id + ' #Question';
+                var changeContent = question[q]["QuestionContent"];
+                var breakContent = [];
+                var isHtml = false;
+                if (changeContent.indexOf("[html]") >= 0) {
+                    isHtml = true;
+                }
+                if (isHtml) {
+
+                    changeContent = changeContent.split("&lt;p&gt;").join("");
+                    changeContent = changeContent.split("&lt;/p&gt;").join("");
+                    changeContent = changeContent.split("&lt;span&gt;").join("");
+                    changeContent = changeContent.split("&lt;/span&gt;").join("");
+                    changeContent = changeContent.split("&lt;b&gt;").join("");
+                    changeContent = changeContent.split("&lt;/b&gt;").join("");
+                    changeContent = changeContent.split("&lt;span&gt;").join("");
+                    changeContent = changeContent.split("&lt;/span&gt;").join("");
+                    changeContent = changeContent.split("&lt;u&gt;").join("");
+                    changeContent = changeContent.split("&lt;/u&gt;").join("");
+                    changeContent = changeContent.split("&lt;i&gt;").join("");
+                    changeContent = changeContent.split("&lt;/i&gt;").join("");
+                    changeContent = changeContent.split("&lt;sub&gt;").join("<sub>");
+                    changeContent = changeContent.split("&lt;/sub&gt;").join("</sub>");
+                    changeContent = changeContent.split("&lt;sup&gt;").join("<sup>");
+                    changeContent = changeContent.split("&lt;/sup&gt;").join("</sup>");
+
+
+                    changeContent = changeContent.split("[html]").join("");
+                    breakContent = changeContent.split("&lt;cbr&gt;").join("·")
+                        .split("<cbr>").join("·")
+                        .split("&lt;br&gt;").join("·")
+                        .split("<br>").join("·")
+                        .split("<br />").join("·")
+                        .split("<br/>").join("·")
+                        .split("&lt;br /&gt;").join("·")
+                        .split("&lt;br/&gt;").join("·");
+                    breakContent = breakContent.split("·");
+                } else {
+                    breakContent.push(changeContent);
+                }
+                for (var w = 0; w < breakContent.length; w++) {
+                    $(jq).append('<p id="qcontent_' + w + '"></p>');
+                    var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
+                    $(jqw).text(breakContent[w]);
+                }
+                breakContent = [];
+                var o = 0;
+                for (o = 0; o < question[q]["Options"].length; o++) {
+                    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    var jo = '#q_' + question[q].Id + ' #Option' + o;
+                    var optionContent = question[q]["Options"][o]["OptionContent"];
+                    var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                    if (isHtml) {
+                        optionContent = optionContent.split("&lt;p&gt;").join("");
+                        optionContent = optionContent.split("&lt;/p&gt;").join("");
+                        optionContent = optionContent.split("&lt;span&gt;").join("");
+                        optionContent = optionContent.split("&lt;/span&gt;").join("");
+                        optionContent = optionContent.split("&lt;b&gt;").join("");
+                        optionContent = optionContent.split("&lt;/b&gt;").join("");
+                        optionContent = optionContent.split("&lt;span&gt;").join("");
+                        optionContent = optionContent.split("&lt;/span&gt;").join("");
+                        optionContent = optionContent.split("&lt;u&gt;").join("");
+                        optionContent = optionContent.split("&lt;/u&gt;").join("");
+                        optionContent = optionContent.split("&lt;i&gt;").join("");
+                        optionContent = optionContent.split("&lt;/i&gt;").join("");
+                        optionContent = optionContent.split("&lt;sub&gt;").join("<sub>");
+                        optionContent = optionContent.split("&lt;/sub&gt;").join("</sub>");
+                        optionContent = optionContent.split("&lt;sup&gt;").join("<sup>");
+                        optionContent = optionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
+                        optionContent = optionContent.split("[html]").join("");
+                        breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
+                        breakContent = breakContent.split("·");
+                    } else {
+                        breakContent.push(optionContent);
+                    }
+                    for (var b = 0; b < breakContent.length; b++) {
+                        $(jo).append('<p id="ocontent_' + b + '"></p>');
+                        var ch = $(jo).length;
+                        var jow = '#q_' + question[q].Id + ' #Option' + o + ' #ocontent_' + b;
+                        if (b == 0) {
+                            $(jow).text(letters[o] + '. ' + breakContent[b]);
+                        } else {
+                            $(jow).text(breakContent[b]);
+                        }
+                    }
+                    if (optionCorrect) {
+                        $(jo).addClass('text-right-answer');
+                    }
+                }
+
+                //duplicate question
+                var duplicate = question[q].DuplicatedQuestion;
+                var jd = '#d_' + question[q].Id + ' #Question';
+                if (duplicate != null) {
+                    var changeduplicateContent = duplicate.QuestionContent;
+                    breakContent = [];
+                    isHtml = false;
+                    if (changeduplicateContent.indexOf("[html]") >= 0) {
+                        isHtml = true;
+                    }
+                    if (isHtml) {
+
+                        changeduplicateContent = changeduplicateContent.split("&lt;p&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/p&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;b&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/b&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/span&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;u&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/u&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;i&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/i&gt;").join("");
+                        changeduplicateContent = changeduplicateContent.split("&lt;sub&gt;").join("<sub>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/sub&gt;").join("</sub>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;sup&gt;").join("<sup>");
+                        changeduplicateContent = changeduplicateContent.split("&lt;/sup&gt;").join("</sup>");
+
+
+                        changeduplicateContent = changeduplicateContent.split("[html]").join("");
+                        breakContent = changeduplicateContent.split("&lt;cbr&gt;").join("·")
+                            .split("<cbr>").join("·")
+                            .split("&lt;br&gt;").join("·")
+                            .split("<br>").join("·")
+                            .split("<br />").join("·")
+                            .split("<br/>").join("·")
+                            .split("&lt;br /&gt;").join("·")
+                            .split("&lt;br/&gt;").join("·");
+                        breakContent = breakContent.split("·");
+                    } else {
+                        breakContent.push(changeduplicateContent);
+                    }
+                    for (var f = 0; f < breakContent.length; f++) {
+                        $(jd).append('<p id="dcontent_' + f + '"></p>');
+                        var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
+                        $(jdf).text(breakContent[f]);
+                    }
+                    breakContent = [];
+                    for (o = 0; o < duplicate["Options"].length; o++) {
+                        var jod = '#d_' + question[q].Id + ' #Option' + o;
+                        var dupOptionContent = duplicate["Options"][o]["OptionContent"];
+                        var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
+                        if (isHtml) {
+                            dupOptionContent = dupOptionContent.split("&lt;p&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/p&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;b&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/b&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/span&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;u&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/u&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;i&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;/i&gt;").join("");
+                            dupOptionContent = dupOptionContent.split("&lt;sub&gt;").join("<sub>");
+                            dupOptionContent = dupOptionContent.split("&lt;/sub&gt;").join("</sub>");
+                            dupOptionContent = dupOptionContent.split("&lt;sup&gt;").join("<sup>");
+                            dupOptionContent = dupOptionContent.split("&lt;/sup&gt;").join("</sup>");
+
+
+                            dupOptionContent = dupOptionContent.split("[html]").join("");
+                            breakContent = dupOptionContent.split("&lt;cbr&gt;").join("·")
+                                .split("<cbr>").join("·")
+                                .split("&lt;br&gt;").join("·")
+                                .split("<br>").join("·")
+                                .split("<br />").join("·")
+                                .split("<br/>").join("·")
+                                .split("&lt;br /&gt;").join("·")
+                                .split("&lt;br/&gt;").join("·");
+                            breakContent = breakContent.split("·");
+                        } else {
+                            breakContent.push(dupOptionContent);
+                        }
+                        for (var c = 0; c < breakContent.length; c++) {
+                            $(jod).append('<p id="ocontent_' + c + '"></p>');
+                            var jodw = '#d_' + question[q].Id + ' #Option' + o + ' #ocontent_' + c;
+                            if (c == 0) {
+                                $(jodw).text(letters[o] + '. ' + breakContent[c]);
+                            } else {
+                                $(jodw).text(breakContent[c]);
+                            }
+                        }
+                        if (dupOptionCorrect) {
+                            $(jod).addClass('text-right-answer');
+                        }
+                    }
+                }
+
+            }
+
+            $("#tableBankEditable .delete-question-dt").off('click');
+            $("#tableBankEditable .delete-question-dt").on('click', function () {
+
+                sendAjax($(this).attr('data-url'));
+                $('#section-bank-editable').trigger('click');
+            })
+
+            $("#tableBankEditable .accept-question-dt").off('click');
+            $("#tableBankEditable .accept-question-dt").on('click', function () {
+
+                sendAjax($(this).attr('data-url'));
+                $('#section-bank-editable').trigger('click');
             })
         }
     });

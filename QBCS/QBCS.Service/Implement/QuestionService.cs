@@ -242,10 +242,14 @@ namespace QBCS.Service.Implement
                 QuestionCode = question.QuestionCode,
                 QuestionContent = question.QuestionContent,
                 Options = options,
-                Images = question.Images.Select(im => new ImageViewModel
+                Image = question.Image,
+                Images = question.Images.Select(s => new ImageViewModel
                 {
-                    Id = im.Id,
-                    Source = im.Source
+                    Id = s.Id,
+                    QuestionId = s.QuestionId,
+                    QuestionInExamId = s.QuestionInExamId,
+                    QuestionTempId = s.QuestionTempId,
+                    Source = s.Source
                 }).ToList(),
                 ImportId = (int)question.ImportId
             };
@@ -392,6 +396,7 @@ namespace QBCS.Service.Implement
             HtmlDocument htmlDoc = new HtmlDocument();
             var userName = (UserViewModel)HttpContext.Current.Session["user"];
             string user = userName.Fullname.ToString();
+            string FLAG_IMAGE = "@@PLUGINFILE@@/";
             try
             {
                 StringProcess stringProcess = new StringProcess();
@@ -406,7 +411,9 @@ namespace QBCS.Service.Implement
                     List<OptionTemp> tempAns = new List<OptionTemp>();
                     QuestionTmpModel question = new QuestionTmpModel();
                     Image imageViewModel = new Image();
+                    Image imageViewOptionModel = new Image();
                     List<Image> images = new List<Image>();
+                    List<Image> imagesOption = new List<Image>();
                     OptionTemp option = new OptionTemp();
 
                     for (int i = 0; i < questionXml.question.Count(); i++)
@@ -459,27 +466,57 @@ namespace QBCS.Service.Implement
                         {
 
                             string tempParser = "";
-
+                            List<string> imageNameQuestion = new List<string>();
+                            List<string> imageNameOps = new List<string>();
+                            string tempName = "";
+                            string tempQuesName = "";
                             checkHTMLTemp = questionXml.question[i].questiontext.format.ToString();
                             tempParser = questionXml.question[i].questiontext.text;
-
+                            imageNameQuestion = stringProcess.GetImageMultilpleNameXML(tempParser);
                             if (questionXml.question[i].questiontext.file != null)
                             {
+
                                 foreach (var item in questionXml.question[i].questiontext.file)
                                 {
-                                    if (item.Value != null)
+
+                                    #region Get image by Name
+                                    if (imageNameQuestion.Count() > 0)
                                     {
-                                        //files.Add(item.Value.ToString());
-
-                                        //question.Image = file;
-                                        imageViewModel.Source = item.Value.ToString();
-                                        if (imageViewModel.Source != null)
+                                        foreach (var imgName in imageNameQuestion)
                                         {
-                                            images.Add(imageViewModel);
-                                            imageViewModel = new Image();
+                                            tempQuesName = FLAG_IMAGE + item.name;
+                                            if (item.Value != null && imgName.Equals(tempQuesName.Trim()))
+                                            {
+                                                imageViewModel.Source = item.Value.ToString();
+                                                if (imageViewModel.Source != null)
+                                                {
+                                                    images.Add(imageViewModel);
+                                                    imageViewModel = new Image();
+                                                }
+                                            }
                                         }
-
                                     }
+                                    #endregion
+                                    #region Get image normal
+                                    else
+                                    {
+                                        if (item.Value != null)
+                                        {
+                                            //files.Add(item.Value.ToString());
+
+                                            //question.Image = file;
+                                            imageViewModel.Source = item.Value.ToString();
+                                            if (imageViewModel.Source != null)
+                                            {
+                                                images.Add(imageViewModel);
+                                                imageViewModel = new Image();
+
+                                            }
+
+                                        }
+                                    }
+                                    #endregion
+
                                 }
 
                                 question.Status = (int)Enum.StatusEnum.NotCheck;
@@ -494,6 +531,7 @@ namespace QBCS.Service.Implement
 
                             // sb.Append("Question " + questionXml.question[i].questiontext.text);
                             tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                            tempParser = stringProcess.RemoveWordStyle(tempParser);
 
                             if (checkHTML == false)
                             {
@@ -529,19 +567,73 @@ namespace QBCS.Service.Implement
                                 question.LearningOutcome = learningOutcome.Trim();
                             }
                             tempParser = "";
+                            tempName = "";
+                            tempQuesName = "";
+                            imageNameQuestion = new List<string>();
 
                             #region get question, option
                             if (questionXml.question[i].answer != null)
                             {
+
                                 for (int j = 0; j < questionXml.question[i].answer.Count(); j++)
                                 {
+
                                     checkHTMLTemp = questionXml.question[i].answer[j].format;
+                                    tempParser = questionXml.question[i].answer[j].text;
+                                    tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                    tempParser = stringProcess.RemoveWordStyle(tempParser);
+
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("100"))
                                     {
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
+                                        //Get Image Option right
+                                        if (questionXml.question[i].answer[j].file != null)
+                                        {
+                                            foreach (var item in questionXml.question[i].answer[j].file)
+                                            {
 
-                                        tempParser = questionXml.question[i].answer[j].text;
-                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                                #region Get image option right by Name
+                                                if (imageNameOps.Count() > 0)
+                                                {
+                                                    foreach (var it in imageNameOps)
+                                                    {
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+                                                        if (item.Value != null && tempName == it)
+                                                        {
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
+                                                        }
+                                                    }
 
+                                                }
+                                                #endregion
+                                                #region Get image option right normal
+                                                else
+                                                {
+                                                    if (item.Value != null)
+                                                    {
+                                                        //files.Add(item.Value.ToString());
+
+                                                        //question.Image = file;
+                                                        imageViewOptionModel.Source = item.Value.ToString();
+                                                        if (imageViewOptionModel.Source != null)
+                                                        {
+                                                            imagesOption.Add(imageViewOptionModel);
+                                                            imageViewOptionModel = new Image();
+
+                                                        }
+
+                                                    }
+                                                }
+                                                #endregion
+                                            }
+                                        }
+
+                                        //Get Option Content                         
                                         if (checkHTML == false)
                                         {
                                             htmlDoc.LoadHtml(tempParser);
@@ -552,27 +644,143 @@ namespace QBCS.Service.Implement
                                         rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
 
                                         option = new OptionTemp();
-                                        //if (checkHTML)
-                                        //{
-                                        //    option.OptionContent = "[html]" + rightAnswer;
-                                        //}
-                                        //else
-                                        //{
-                                        //    option.OptionContent = rightAnswer;
-                                        //}
-                                        //rightAnswer = StringProcess.RemoveTag(rightAnswer, @"\n", @"<cbr>");
                                         option.OptionContent = "[html]" + rightAnswer;
-
+                                        option.Images = imagesOption.Select(io => new Image()
+                                        {
+                                            Source = io.Source
+                                        }).ToList();
                                         option.IsCorrect = true;
                                         tempAns.Add(option);
                                         tempParser = "";
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
+                                        imagesOption = new List<Image>();
+
                                     }
                                     else
                                     if (questionXml.question[i].answer[j].fraction.ToString().Equals("0"))
                                     {
+
                                         tempParser = questionXml.question[i].answer[j].text;
                                         tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        tempParser = stringProcess.RemoveWordStyle(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
+                                        //Get Image Option wrong
+                                        if (questionXml.question[i].answer[j].file != null)
+                                        {
+                                            foreach (var item in questionXml.question[i].answer[j].file)
+                                            {
 
+                                                #region Get image option right by Name
+                                                if (imageNameOps.Count() > 0)
+                                                {
+                                                    foreach (var it in imageNameOps)
+                                                    {
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
+                                                        {
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                #endregion
+                                                #region Get image option right normal
+                                                else
+                                                {
+                                                    if (item.Value != null)
+                                                    {
+                                                        //files.Add(item.Value.ToString());
+
+                                                        //question.Image = file;
+                                                        imageViewOptionModel.Source = item.Value.ToString();
+                                                        if (imageViewOptionModel.Source != null)
+                                                        {
+                                                            imagesOption.Add(imageViewOptionModel);
+                                                            imageViewOptionModel = new Image();
+                                                        }
+
+                                                    }
+                                                }
+                                                #endregion
+                                            }
+                                        }
+
+                                        if (checkHTML == false)
+                                        {
+                                            htmlDoc.LoadHtml(tempParser);
+                                            tempParser = htmlDoc.DocumentNode.InnerText;
+                                        }
+                                        wrongAnswer = WebUtility.HtmlDecode(tempParser);
+                                        wrongAnswer = stringProcess.RemoveHtmlTagXML(wrongAnswer);
+                                        option = new OptionTemp();
+                                        option.OptionContent = "[html]" + wrongAnswer;
+                                        option.Images = imagesOption.Select(io => new Image()
+                                        {
+                                            Source = io.Source
+                                        }).ToList();
+                                        option.IsCorrect = false;
+                                        tempAns.Add(option);
+                                        tempParser = "";
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
+                                        imagesOption = new List<Image>();
+                                    }
+                                    else
+                                    if (questionXml.question[i].answer[j].fraction.ToString().Contains("-"))
+                                    {
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
+                                        //Get Image Option wrong
+                                        if (questionXml.question[i].answer[j].file != null)
+                                        {
+                                            foreach (var item in questionXml.question[i].answer[j].file)
+                                            {
+
+                                                #region Get image option wrong by Name
+                                                if (imageNameOps.Count() > 0)
+                                                {
+                                                    foreach (var it in imageNameOps)
+                                                    {
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
+                                                        {
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                #endregion
+                                                #region Get image option wrong normal
+                                                else
+                                                {
+                                                    if (item.Value != null)
+                                                    {
+                                                        imageViewOptionModel.Source = item.Value.ToString();
+                                                        if (imageViewOptionModel.Source != null)
+                                                        {
+                                                            imagesOption.Add(imageViewOptionModel);
+                                                            imageViewOptionModel = new Image();
+                                                        }
+
+                                                    }
+                                                }
+                                                #endregion
+                                            }
+                                        }
                                         if (checkHTML == false)
                                         {
                                             htmlDoc.LoadHtml(tempParser);
@@ -581,22 +789,92 @@ namespace QBCS.Service.Implement
 
                                         wrongAnswer = WebUtility.HtmlDecode(tempParser);
                                         wrongAnswer = stringProcess.RemoveHtmlTagXML(wrongAnswer);
-
-                                        //wrongAnswer = StringProcess.RemoveTag(wrongAnswer, @"\n", @"<cbr>");
                                         option = new OptionTemp();
-                                        //if (!checkHTML)
-                                        //{
-                                        //    option.OptionContent = "[html]" + wrongAnswer;
-                                        //}
-                                        //else
-                                        //{
-                                        //    option.OptionContent = wrongAnswer;
-                                        //}
                                         option.OptionContent = "[html]" + wrongAnswer;
+                                        option.Images = imagesOption.Select(io => new Image()
+                                        {
+                                            Source = io.Source
+                                        }).ToList();
                                         option.IsCorrect = false;
                                         tempAns.Add(option);
                                         tempParser = "";
+                                        //imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        tempName = "";
+                                        imagesOption = new List<Image>();
                                     }
+                                    else
+                                    {
+                                        tempParser = questionXml.question[i].answer[j].text;
+                                        tempParser = stringProcess.RemoveHtmlBrTag(tempParser);
+                                        imageNameOps = stringProcess.GetImageMultilpleNameXML(tempParser);
+                                        //Get Image Option wrong
+                                        if (questionXml.question[i].answer[j].file != null)
+                                        {
+                                            foreach (var item in questionXml.question[i].answer[j].file)
+                                            {
+
+                                                #region Get image option wrong by Name
+                                                if (imageNameOps.Count() > 0)
+                                                {
+                                                    foreach (var it in imageNameOps)
+                                                    {
+                                                        tempName = FLAG_IMAGE + item.name; // get @@PLUGINFILE@@ + name File
+
+                                                        if (item.Value != null && it == tempName)
+                                                        {
+                                                            imageViewOptionModel.Source = item.Value.ToString();
+                                                            if (imageViewOptionModel.Source != null)
+                                                            {
+                                                                imagesOption.Add(imageViewOptionModel);
+                                                                imageViewOptionModel = new Image();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                #endregion
+                                                #region Get image option wrong normal
+                                                else
+                                                {
+                                                    if (item.Value != null)
+                                                    {
+                                                        imageViewOptionModel.Source = item.Value.ToString();
+                                                        if (imageViewOptionModel.Source != null)
+                                                        {
+                                                            imagesOption.Add(imageViewOptionModel);
+                                                            imageViewOptionModel = new Image();
+                                                        }
+
+                                                    }
+                                                }
+                                                #endregion
+                                            }
+                                        }
+                                        if (checkHTML == false)
+                                        {
+                                            htmlDoc.LoadHtml(tempParser);
+                                            tempParser = htmlDoc.DocumentNode.InnerText;
+                                        }
+
+                                        rightAnswer = WebUtility.HtmlDecode(tempParser);
+                                        rightAnswer = stringProcess.RemoveHtmlTagXML(rightAnswer);
+
+                                        option = new OptionTemp();
+
+                                        option.OptionContent = "[html]" + rightAnswer;
+                                        option.Images = imagesOption.Select(io => new Image()
+                                        {
+                                            Source = io.Source
+                                        }).ToList();
+                                        option.IsCorrect = true;
+                                        tempAns.Add(option);
+                                        tempParser = "";
+                                        // imageNameOption = "";
+                                        imageNameOps = new List<string>();
+                                        imagesOption = new List<Image>();
+                                        tempName = "";
+                                    }
+
 
 
                                 }
@@ -636,7 +914,8 @@ namespace QBCS.Service.Implement
                                     OptionTemps = tempAns.Select(o => new OptionTemp()
                                     {
                                         OptionContent = o.OptionContent,
-                                        IsCorrect = o.IsCorrect
+                                        Images = o.Images,
+                                        IsCorrect = o.IsCorrect,
                                     }).ToList(),
                                     Images = images.Select(im => new Image()
                                     {
@@ -647,6 +926,7 @@ namespace QBCS.Service.Implement
                                 import.UpdatedDate = DateTime.Now;
                                 import.UserId = userId;
                                 images = new List<Image>();
+                                imagesOption = new List<Image>();
 
 
                             }
@@ -1653,7 +1933,7 @@ namespace QBCS.Service.Implement
             string prepKeyWord = String.Join("|", prepKeyWords);
             foreach (var question in tempQuestions)
             {
-                if (question.Images != null && question.Images.Count > 0 && question.Status.Value == (int)StatusEnum.Invalid)
+                if ((question.Images != null && question.Images.Count > 0) || question.Status.Value == (int)StatusEnum.Invalid)
                 {
                     continue;
                 }
@@ -1673,6 +1953,229 @@ namespace QBCS.Service.Implement
                 }
             }
 
+        }
+
+        public GetResultQuestionTempViewModel GetQuestionByCourseId(int courseId, string type, string search, int start, int length)
+        {
+            var result = new GetResultQuestionTempViewModel();
+            var all = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId.Value == courseId);
+            switch (type)
+            {
+                case "editable":
+                    all = all.Where(q => q.Status == (int)StatusEnum.Editable);
+                    break;
+            }
+            //result.totalCount = all.Count();
+            var entities = all
+                .Where(q => q.QuestionCode.Contains(search) || q.QuestionContent.Contains(search) || q.Options.Any(o => o.OptionContent.Contains(search)));
+            result.filteredCount = entities.Count();
+            var questions = length >= 0 ? entities.OrderBy(q => q.Id).Skip(start).Take(length).ToList() : entities.ToList();
+            var questionTemp = questions.Select(q => new QuestionTempViewModel()
+            {
+                Id = q.Id,
+                QuestionContent = q.QuestionContent,
+                Status = (StatusEnum)q.Status,
+                Code = q.QuestionCode,
+                Images = q.Images.Select(i => new ImageViewModel
+                {
+                    Source = i.Source
+                }).ToList(),
+                IsInImportFile = false,
+                Category = (q.CategoryId.HasValue ? q.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (q.LevelId.HasValue ? ((LevelEnum)q.LevelId).ToString() : "[None of Level]"),
+                Options = q.Options.Select(o => new OptionViewModel
+                {
+                    OptionContent = o.OptionContent,
+                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                }).ToList(),
+                DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedQuestion) ? null : q.DuplicatedQuestion.Split(',').Select(s => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(s.Split('-')[0]),
+                    IsBank = bool.Parse(s.Split('-')[1])
+                }).ToList(),
+                Message = q.Status == (int)StatusEnum.Invalid ? "Invalid message"
+                        : (q.DuplicatedQuestion != null && q.DuplicatedQuestion.Split(',').Count() > 1 ? $"It was duplicated with {q.DuplicatedQuestion.Split(',').Count()} questions" : ""),
+            }).ToList();
+            switch (type)
+            {
+                case "editable":
+                    RemoveDuplicateGroup(questionTemp);
+                    questionTemp = questionTemp.Where(q => !q.IsHide).ToList();
+
+                    foreach (var question in questionTemp.Where(q => q.DuplicatedList != null && q.DuplicatedList.Count == 2))
+                    {
+                        if (question.DuplicatedList[0].IsBank)
+                        {
+                            var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.QuestionCode,
+                                Status = (StatusEnum)entity.Status.Value,
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
+                                CourseName = (entity.CategoryId.HasValue ? entity.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (entity.LearningOutcomeId.HasValue ? entity.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (entity.LevelId.HasValue ? ((LevelEnum)entity.LevelId).ToString() : "[None of Level]"),
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.Options.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                IsBank = true,
+                                IsAnotherImport = false
+                            };
+
+                        }
+                        else
+                        {
+                            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
+                            question.DuplicatedQuestion = new QuestionViewModel
+                            {
+                                Id = entity.Id,
+                                Code = entity.Code,
+                                CourseName = "Import file: ",
+                                Images = entity.Images.Select(i => new ImageViewModel
+                                {
+                                    Source = i.Source
+                                }).ToList(),
+                                QuestionContent = entity.QuestionContent,
+                                Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                {
+                                    OptionContent = o.OptionContent,
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                }).ToList(),
+                                Status = (StatusEnum)entity.Status.Value,
+                                IsBank = false,
+                                IsAnotherImport = false
+                            };
+                        }
+                    }
+
+                    break;
+            }
+
+            result.Questions = questionTemp;
+
+            return result;
+        }
+
+        public void UpdateQuestionStatus(int questionId, int status)
+        {
+            var question = unitOfWork.Repository<Question>().GetById(questionId);
+
+            if (question.Status != status)
+            {
+                question.Status = status;
+                unitOfWork.Repository<Question>().Update(question);
+                unitOfWork.SaveChanges();
+            }
+        }
+
+        public QuestionTempViewModel GetDuplicatedDetail(int questionId)
+        {
+            var entity = unitOfWork.Repository<Question>().GetById(questionId);
+            if (entity != null)
+            {
+
+                QuestionTempViewModel model = new QuestionTempViewModel()
+                {
+                    Id = entity.Id,
+                    QuestionContent = entity.QuestionContent,
+                    ImportId = entity.ImportId.Value,
+                    Code = entity.QuestionCode,
+                    Images = entity.Images.Select(i => new ImageViewModel
+                    {
+                        Source = i.Source
+                    }).ToList(),
+                    Category = (entity.CategoryId.HasValue ? entity.Category.Name : "[None of Cateogry]") +
+                " / " +
+                (entity.LearningOutcomeId.HasValue ? entity.LearningOutcome.Name : "[None of LOC]") +
+                " / " +
+                (entity.LevelId.HasValue ? ((LevelEnum)entity.LevelId).ToString() : "[None of Level]"),
+                    Options = entity.Options.Select(o => new OptionViewModel
+                    {
+                        Id = o.Id,
+                        OptionContent = o.OptionContent,
+                        Image = o.Image,
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                    }).ToList()
+                };
+
+                if (entity.Status != 0)
+                {
+                    model.Status = (StatusEnum)entity.Status;
+                }
+
+                var listDuplicated = entity.DuplicatedQuestion.Split(',').Select(d => new DuplicatedQuestionViewModel
+                {
+                    Id = int.Parse(d.Split('-')[0]),
+                    IsBank = bool.Parse(d.Split('-')[1])
+                }).ToList();
+
+                foreach (var duplicated in listDuplicated)
+                {
+                    if (duplicated.IsBank)
+                    {
+                        var questionEntity = unitOfWork.Repository<Question>().GetById(duplicated.Id);
+                        if (questionEntity != null)
+                        {
+                            duplicated.Code = questionEntity.QuestionCode;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                            duplicated.Options = questionEntity.Options.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.IsAnotherImport = false;
+                        }
+
+                    }
+                    else
+                    {
+                        var questionEntity = unitOfWork.Repository<QuestionTemp>().GetById(duplicated.Id);
+                        if (questionEntity != null)
+                        {
+                            duplicated.Code = questionEntity.Code;
+                            duplicated.QuestionContent = questionEntity.QuestionContent;
+                            duplicated.Options = questionEntity.OptionTemps.Select(o => new OptionViewModel
+                            {
+                                OptionContent = o.OptionContent,
+                                IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                Image = o.Image
+                            }).ToList();
+                            duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
+                            {
+                                Source = i.Source
+                            }).ToList();
+                            duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
+                            duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
+                        }
+
+                    }
+                }
+
+                model.DuplicatedList = listDuplicated.Where(q => q.Options != null).ToList();
+
+                return model;
+
+            }
+
+            return null;
         }
     }
 }

@@ -819,6 +819,8 @@ namespace QBCS.Service.ViewModel
 
         private string textField;
 
+        private quizQuestionAnswerFile[] fileField;
+
         private quizQuestionAnswerFeedback feedbackField;
 
         private string fractionField;
@@ -835,6 +837,20 @@ namespace QBCS.Service.ViewModel
             set
             {
                 this.textField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("file")]
+        public quizQuestionAnswerFile[] file
+        {
+            get
+            {
+                return this.fileField;
+            }
+            set
+            {
+                this.fileField = value;
             }
         }
 
@@ -884,6 +900,78 @@ namespace QBCS.Service.ViewModel
             set
             {
                 this.formatField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class quizQuestionAnswerFile
+    {
+
+        private string nameField;
+
+        private string pathField;
+
+        private string encodingField;
+
+        private string valueField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string path
+        {
+            get
+            {
+                return this.pathField;
+            }
+            set
+            {
+                this.pathField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string encoding
+        {
+            get
+            {
+                return this.encodingField;
+            }
+            set
+            {
+                this.encodingField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlTextAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.valueField;
+            }
+            set
+            {
+                this.valueField = value;
             }
         }
     }

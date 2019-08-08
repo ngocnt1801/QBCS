@@ -19,6 +19,18 @@ namespace QBCS.Entity
 
         public int? QuestionInExamId { get; set; }
 
+        public int? OptionId { get; set; }
+
+        public int? OptionTempId { get; set; }
+
+        public int? OptionInExamId { get; set; }
+
+        public virtual Option Option { get; set; }
+
+        public virtual OptionInExam OptionInExam { get; set; }
+
+        public virtual OptionTemp OptionTemp { get; set; }
+
         public virtual Question Question { get; set; }
 
         public virtual QuestionInExam QuestionInExam { get; set; }

@@ -28,7 +28,7 @@ namespace QBCS.Entity
 
         public int? DuplicatedId { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public string Code { get; set; }
 
         public int? DuplicateInImportId { get; set; }

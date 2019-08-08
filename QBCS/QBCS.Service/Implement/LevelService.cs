@@ -24,11 +24,12 @@ namespace QBCS.Service.Implement
         public int GetIdByName(string levelName)
         {
             IQueryable<Level> levels = unitOfWork.Repository<Level>().GetAll();
-            Level level =levels.Where(l => (l.Name.ToLower()).Equals(levelName.ToLower())).FirstOrDefault();
+            Level level = levels.Where(l => (l.Name.ToLower()).Equals(levelName.ToLower())).FirstOrDefault();
             if (level == null)
             {
                 return 0;
-            } else
+            }
+            else
             {
                 return (int)level.Id;
             }
@@ -36,10 +37,10 @@ namespace QBCS.Service.Implement
 
         public List<LevelViewModel> GetLevel()
         {
-            
+
             IQueryable<Level> levels = unitOfWork.Repository<Level>().GetAll();
             List<LevelViewModel> levelViewModels = new List<LevelViewModel>();
-            foreach(Level leval in levels)
+            foreach (Level leval in levels)
             {
                 LevelViewModel levelViewModel = new LevelViewModel()
                 {
@@ -55,12 +56,22 @@ namespace QBCS.Service.Implement
         public LevelViewModel GetLevelById(int levelId)
         {
             Level levelById = unitOfWork.Repository<Level>().GetById(levelId);
-            LevelViewModel levelViewModel = new LevelViewModel()
+            LevelViewModel result = new LevelViewModel();
+            if (levelById == null)
+            {
+                result = new LevelViewModel()
+                {
+                    Id = 0,
+                    Name = ""
+                };
+                return result;
+            }
+            result = new LevelViewModel()
             {
                 Id = levelById.Id,
                 Name = levelById.Name
             };
-            return levelViewModel;
+            return result;
         }
     }
 }

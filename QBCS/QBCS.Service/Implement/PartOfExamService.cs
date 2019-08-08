@@ -42,6 +42,13 @@ namespace QBCS.Service.Implement
                     Frequency = c.Frequency.HasValue ? (int)c.Frequency : 0,
                     Priority = c.Priority.HasValue ? (int)c.Priority : 0,
                     Image = c.Image,
+                    Images = c.Images.Select(i => new ImageViewModel {
+                        Source = i.Source,
+                        Id = i.Id,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId
+                    }).ToList(),
                     Options = c.OptionInExams.Select(d => new OptionViewModel
                     {
                         Id = d.Id,

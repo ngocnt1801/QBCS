@@ -229,6 +229,15 @@ namespace QBCS.Web.Controllers
             var user = (UserViewModel)Session["user"];
 
             bool check = true;
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             if (questionFile.ContentLength > 0)
             {
                 if (owner != null && owner != 0)
@@ -256,7 +265,7 @@ namespace QBCS.Web.Controllers
                     }
                     else
                     {
-                        ViewBag.Message = "Owner lecturer does not exists";
+                        ViewBag.Message = "Cannot Import File!";
                         ViewBag.Status = ToastrEnum.Error;
                         //return Json("Error");
                     }
@@ -409,6 +418,56 @@ namespace QBCS.Web.Controllers
             var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = int.MaxValue;
             return result;
+        }
+        
+        public ActionResult CheckBankResult(int courseId)
+        {
+            return View(courseId);
+        }
+
+        public JsonResult GetQuestionByCourseIdAndType(int courseId, string type, int draw, int start, int length)
+        {
+            var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
+            var data = questionService.GetQuestionByCourseId(courseId, type, search, start, length);
+            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
+        }
+
+        public ActionResult Delete(int questionId, string url)
+        {
+            questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Deleted);
+            if (String.IsNullOrWhiteSpace(url))
+            {
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Redirect(url);
+            }
+
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public ActionResult Skip(int questionId, string url)
+        {
+            questionService.UpdateQuestionStatus(questionId, (int)StatusEnum.Success);
+            if (String.IsNullOrWhiteSpace(url))
+            {
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Redirect(url);
+            }
+            //return RedirectToAction("GetResult", new { importId = importId });
+        }
+
+        public ActionResult GetDuplicatedDetail(int id)
+        {
+            var model = questionService.GetDuplicatedDetail(id);
+
+            return View(model);
         }
     }
 

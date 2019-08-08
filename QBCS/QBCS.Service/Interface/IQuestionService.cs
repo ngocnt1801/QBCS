@@ -34,8 +34,12 @@ namespace QBCS.Service.Interface
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);
         QuestionViewModel GetQuestionByQuestionCode(string questionCode);
         GetResultQuestionTempViewModel GetQuestionTempByImportId(int importId, string type, string search, int start, int length);
+        GetResultQuestionTempViewModel GetQuestionByCourseId(int courseId, string type, string search, int start, int length);
         void CheckImageInQuestion(List<QuestionTemp> tempQuestions);
         QuestionTempViewModel GetQuestionTempById(int id);
+        void UpdateQuestionStatus(int questionId, int status);
+        QuestionTempViewModel GetDuplicatedDetail(int questionId);
+
 
     }
 }

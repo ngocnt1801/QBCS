@@ -445,7 +445,7 @@ namespace DuplicateQuestion
             }
             foreach (var question in bank)
             {
-                if (!question.IsBank && item.Id == question.Id)
+                if ((!question.IsBank && !item.IsBank && item.Id == question.Id) || (question.IsBank && item.IsBank && question.Id == item.Id))
                 {
                     continue;
                 }
@@ -456,14 +456,12 @@ namespace DuplicateQuestion
 
                     //Check question content
                     var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent);
-
+                    question.Result = item.Images != null ? item.Images.Count : 0;
                     if (questionResult >= HIGH_DUPLICATE) //same question content
                     {
                         #region check correct option
                         double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
-
-
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check image
@@ -484,7 +482,7 @@ namespace DuplicateQuestion
                                 }
                             }
 
-                            if ((item.Images == null || item.Images.Count ==0 ) 
+                            if ((item.Images == null || item.Images.Count == 0)
                                 && (question.Images == null || question.Images.Count == 0))
                             {
                                 AssignDuplicated(question, item, StatusEnum.Editable);
@@ -509,7 +507,6 @@ namespace DuplicateQuestion
                         #region check correct option
                         double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
-
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check wrong options
@@ -558,7 +555,6 @@ namespace DuplicateQuestion
                     {
                         double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(question.Options, CORRECT)),
                                                                                 item.QuestionContent + " " + String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)));
-
                         if (questionAndOptionResult > MINIMUM_DUPLICATE)
                         {
                             #region check wrong options
@@ -757,6 +753,9 @@ namespace DuplicateQuestion
 
         private static bool CheckImageQuestion(QuestionModel temp, QuestionModel question)
         {
+
+            int maxCount = temp.Images.Count > question.Images.Count ? temp.Images.Count : question.Images.Count;
+
             int countDuplicate = 0;
             foreach (var tmpImage in temp.Images)
             {
@@ -769,7 +768,7 @@ namespace DuplicateQuestion
                     }
                 }
             }
-            return ((float)countDuplicate / temp.Images.Count) >= 0.7;
+            return ((float)countDuplicate / maxCount) >= 0.7;
         }
 
         #endregion
@@ -792,7 +791,7 @@ namespace DuplicateQuestion
                 bank.AddRange(import);
                 bank.AddRange(otherImpor);
 
-                
+
 
                 CheckDuplicateAndUpdateDb(bank, import);
 
@@ -868,10 +867,27 @@ namespace DuplicateQuestion
 
         private static double CaculateStringSimilar(string source, string target)
         {
+
             double result = LevenshteinDistance.CalculateSimilarity(source, target);
             if (result < 70)
             {
                 result = TFAlgorithm.CaculateSimilar(source, target);
+                if (result < 70)
+                {
+                    result = NLPAlgorithm.CaculateSimilar(source, target);
+                    if (result > 95)
+                    {
+                        result = HIGH_DUPLICATE;
+                    }
+                    else if (result > 80)
+                    {
+                        result = MINIMUM_DUPLICATE;
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+                }
             }
 
             return result;
@@ -897,7 +913,7 @@ namespace DuplicateQuestion
             {
                 foreach (var s in source)
                 {
-                    if (LevenshteinDistance.CalculateSimilarity(s, t) >= 70)
+                    if (CaculateStringSimilar(s, t) >= 70)
                     {
                         countDuplicate = countDuplicate + 1;
                         break;
@@ -1113,7 +1129,8 @@ namespace DuplicateQuestion
                         {
                             question.Images = new List<ImageModel>();
                         }
-                        question.Images.Add(new ImageModel {
+                        question.Images.Add(new ImageModel
+                        {
                             Source = (string)reader["Source"],
                         });
                     }
@@ -1551,6 +1568,82 @@ namespace DuplicateQuestion
 
             }
             return import;
+        }
+
+        #endregion
+
+        #region check duplicate bank
+
+        [SqlProcedure]
+        public static void CheckBank()
+        {
+            var courseIds = GetCourseIds();
+
+            foreach (var courseId in courseIds)
+            {
+                var questions = GetBank(courseId);
+                GetImages(questions, true);
+                using (SqlConnection connection = new SqlConnection("context connection=true"))
+                {
+                    connection.Open();
+                    foreach (var question in questions)
+                    {
+                        bool isUpdate = false;
+
+                        List<string> duplicatedList = new List<string>();
+                        CheckDuplicateAQuestionWithBank(question, questions, ref isUpdate, duplicatedList);
+                        question.Test = String.Join(",", duplicatedList.ToArray());
+
+                        //if (question.IsNotImage)
+                        //{
+                        //    question.Status = (int)StatusEnum.Editable;
+                        //}
+
+
+                        //update database
+                        SqlCommand command = new SqlCommand(
+                       "UPDATE Question " +
+                       "SET Status=@status, DuplicatedQuestion=@test " +
+                       "WHERE Id=@id",
+                       connection
+                       );
+
+                        command.Parameters.AddWithValue("@status", question.Status != 0 ? question.Status : (int)StatusEnum.Success);
+                        command.Parameters.AddWithValue("@test", question.Test);
+                        command.Parameters.AddWithValue("@id", question.Id);
+
+                        command.ExecuteNonQuery();
+
+                    }
+                }
+            }
+
+        }
+
+        private static List<int> GetCourseIds()
+        {
+            List<int> ids = new List<int>();
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(
+                    "SELECT Id " +
+                    "FROM Course " +
+                    "WHERE IsDisable = 0",
+                    connection
+                    );
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ids.Add((int)reader["Id"]);
+                }
+
+            }
+
+            return ids;
         }
 
         #endregion

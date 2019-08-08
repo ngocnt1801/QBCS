@@ -39,6 +39,11 @@
                         <td>
                             <a class="btn btn-primary spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
                             <a class="btn btn-info spinner-loading" href="@Url.Action("Category", "Course", new { courseId = item.CourseId })">Categories</a>
+
+                            @if (item.WarningTotal > 0)
+                            {
+                            <a href="@Url.Action("CheckBankResult", "Question", new { courseId = item.CourseId})" class="btn btn-warning">Duplicate Warning <span class="badge badge-danger">@item.WarningTotal</span></a>
+                            }
                         </td>
                     </tr>
                 }

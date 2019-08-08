@@ -436,6 +436,7 @@ namespace QBCS.Service.Implement
             unitOfWork.SaveChanges();
         }
 
+
         public void LogManually(string action, string targetName, int? targetId = null, int? userId = null, string controller = "", string method = "", string fullname = "", string usercode = "")
         {
             LogViewModel model = new LogViewModel

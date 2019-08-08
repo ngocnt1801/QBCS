@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {    
+﻿$(document).ready(function () {
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
         .addClass('btn btn-info spinner-loading')
@@ -26,7 +26,7 @@
             $('#btnFinish').show();
         }
     });
-    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {        
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
         if (stepDirection === 'forward') {
             if (stepNumber === 0) {
                 var total = $('#totalExam').val();
@@ -96,7 +96,7 @@
         }
 
     });
-    $('#exportDetailExamination').on('submit',function(e){
+    $('#exportDetailExamination').on('submit', function (e) {
         e.preventDefault();
         var examinationId = $("input[name='examinationId']").val();
         var fileExtension = $("#fileExtension").find(":selected").text();
@@ -420,6 +420,206 @@
             }
         ]
     });
+    var tableExam6 = $('#dataTableExam-6').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
+    });
+    var tableExam7 = $('#dataTableExam-7').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
+    });
+    var tableExam8 = $('#dataTableExam-8').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
+    });
+    var tableExam9 = $('#dataTableExam-9').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
+    });
+    var tableExam10 = $('#dataTableExam-10').DataTable({
+        columns: [
+            null,
+            null,
+            {
+                "render": function (data, type, row) {
+                    if (data.indexOf("[html]") >= 0) {
+                        data = data.split("\n").join("<br/>");
+                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                        data = data.split("&lt;br&gt;").join("<br/>");
+                        data = data.split("&lt;p&gt;").join("");
+                        data = data.split("&lt;/p&gt;").join("");
+                        data = data.split("&lt;b&gt;").join("");
+                        data = data.split("&lt;/b&gt;").join("");
+                        data = data.split("&lt;span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("&lt;/span&gt;").join("");
+                        data = data.split("[html]").join("");
+                    }
+                    return data
+                }
+            },
+            null,
+            null
+        ],
+        columnDefs: [
+            {
+                type: 'formatted-num',
+                targets: 4
+            },
+            {
+                type: 'formatted-level',
+                targets: 3
+            },
+            {
+                'targets': [0, 1, 2, 5],
+                'orderable': false,
+            }
+        ]
+    });
     var tableHistoryExam = $("#datatable-history-exam").DataTable({
         columns: [
             null,
@@ -618,9 +818,31 @@ function countNumberOfQuestion() {
             questionHard++;
         }
     }
-    $('#numberEasyQuestion').html("Number of easy question : " + questionEasy);
-    $('#numberMediumQuestion').html("Number of medium question : " + questionMedium);
-    $('#numberHardQuestion').html("Number of hard question : " + questionHard);
+    var totalQuestion = questionEasy + questionHard + questionMedium;
+    var ordinaryGrade = 0;
+    var goodGrade = 0;
+    var exellenceGrade = 0;
+    if (totalQuestion !== 0) {
+        if (questionEasy === 0) {
+            ordinaryGrade = 0;
+        } else {
+            ordinaryGrade = Math.round(((questionEasy * 1.0) / totalQuestion) * 100);
+        }
+        if (questionMedium === 0) {
+            goodGrade = ordinaryGrade;
+        } else {
+            goodGrade = Math.round(((questionMedium * 0.6) / totalQuestion) * 100) + ordinaryGrade;
+        }
+        exellenceGrade = Math.round(((questionMedium * 1.0) / totalQuestion) * 100) + ordinaryGrade;
+    }
+
+    $('#numberEasyQuestion').html("Minimum grade of Ordinary Student: " + ordinaryGrade + "/100");
+    $('#numberMediumQuestion').html("Minimum grade of Good Student: " + goodGrade + "/100");
+    $('#numberHardQuestion').html("Minimum grade of Excellent Student: " + exellenceGrade + "/100");
+    $('#easyQuestion').html("Number of Easy Question: " + questionEasy);
+    $('#mediumQuestion').html("Number of Medium Question: " + questionMedium);
+    $('#hardQuestion').html("Number of Hard Question: " + questionHard);
+    $('#totalQuestion').html("Total Question: " + totalQuestion);
 };
 
 
