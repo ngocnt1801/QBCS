@@ -460,7 +460,7 @@ namespace DuplicateQuestion
                     if (questionResult >= HIGH_DUPLICATE) //same question content
                     {
                         #region check correct option
-                        double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                        double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
@@ -469,7 +469,7 @@ namespace DuplicateQuestion
                             {
                                 if (question.Images != null && question.Images.Count > 0)
                                 {
-                                    if (CheckImageQuestion(item, question))
+                                    if (CheckImageQuestion(item.Images, question.Images))
                                     {
                                         AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
@@ -505,12 +505,12 @@ namespace DuplicateQuestion
                     {
 
                         #region check correct option
-                        double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                        double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                             GetOptionsByStatus(item.Options, CORRECT));
                         if (optionRightResult > OPTION_DUPLICATE) //same correct option
                         {
                             #region check wrong options
-                            double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                            double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                             GetOptionsByStatus(item.Options, INCORRECT));
 
                             if (optionWrongResult >= OPTION_DUPLICATE)
@@ -520,7 +520,7 @@ namespace DuplicateQuestion
                                 {
                                     if (question.Images != null && question.Images.Count > 0)
                                     {
-                                        if (CheckImageQuestion(item, question))
+                                        if (CheckImageQuestion(item.Images, question.Images))
                                         {
                                             AssignDuplicated(question, item, StatusEnum.Editable);
                                             isUpdate = true;
@@ -558,7 +558,7 @@ namespace DuplicateQuestion
                         if (questionAndOptionResult > MINIMUM_DUPLICATE)
                         {
                             #region check wrong options
-                            double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                            double checkOptionWrong = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                             GetOptionsByStatus(item.Options, INCORRECT));
 
                             if (checkOptionWrong >= OPTION_DUPLICATE)
@@ -568,7 +568,7 @@ namespace DuplicateQuestion
                                 {
                                     if (question.Images != null && question.Images.Count > 0)
                                     {
-                                        if (CheckImageQuestion(item, question))
+                                        if (CheckImageQuestion(item.Images, question.Images))
                                         {
                                             AssignDuplicated(question, item, StatusEnum.Editable);
                                             isUpdate = true;
@@ -606,7 +606,7 @@ namespace DuplicateQuestion
                 {
                     #region main is options
 
-                    double optionRightResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                    double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                         GetOptionsByStatus(item.Options, CORRECT));
 
                     if (optionRightResult > OPTION_DUPLICATE) //same correct option
@@ -620,7 +620,7 @@ namespace DuplicateQuestion
                             {
                                 if (question.Images != null && question.Images.Count > 0)
                                 {
-                                    if (CheckImageQuestion(item, question))
+                                    if (CheckImageQuestion(item.Images, question.Images))
                                     {
                                         AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
@@ -652,7 +652,7 @@ namespace DuplicateQuestion
                         {
 
                             #region check wrong options
-                            double optionWrongResult = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                            double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                             GetOptionsByStatus(item.Options, INCORRECT));
 
                             if (optionWrongResult >= OPTION_DUPLICATE)
@@ -662,7 +662,7 @@ namespace DuplicateQuestion
                                 {
                                     if (question.Images != null && question.Images.Count > 0)
                                     {
-                                        if (CheckImageQuestion(item, question))
+                                        if (CheckImageQuestion(item.Images, question.Images))
                                         {
                                             AssignDuplicated(question, item, StatusEnum.Editable);
                                             isUpdate = true;
@@ -700,7 +700,7 @@ namespace DuplicateQuestion
                             if (questionAndOptionResult > MINIMUM_DUPLICATE)
                             {
                                 #region check wrong options
-                                double checkOptionWrong = CaculateListStringSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                double checkOptionWrong = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                                 GetOptionsByStatus(item.Options, INCORRECT));
 
                                 if (checkOptionWrong >= OPTION_DUPLICATE)
@@ -710,7 +710,7 @@ namespace DuplicateQuestion
                                     {
                                         if (question.Images != null && question.Images.Count > 0)
                                         {
-                                            if (CheckImageQuestion(item, question))
+                                            if (CheckImageQuestion(item.Images, question.Images))
                                             {
                                                 AssignDuplicated(question, item, StatusEnum.Editable);
                                                 isUpdate = true;
@@ -751,15 +751,15 @@ namespace DuplicateQuestion
             }
         }
 
-        private static bool CheckImageQuestion(QuestionModel temp, QuestionModel question)
+        private static bool CheckImageQuestion(List<ImageModel> temp, List<ImageModel> question)
         {
 
-            int maxCount = temp.Images.Count > question.Images.Count ? temp.Images.Count : question.Images.Count;
+            int maxCount = temp.Count > question.Count ? temp.Count : question.Count;
 
             int countDuplicate = 0;
-            foreach (var tmpImage in temp.Images)
+            foreach (var tmpImage in temp)
             {
-                foreach (var image in question.Images)
+                foreach (var image in question)
                 {
                     if (CheckDuplicatedImage.CheckDuplicateImage(tmpImage.Source, image.Source))
                     {
@@ -787,6 +787,8 @@ namespace DuplicateQuestion
                 GetImages(bank, true);
                 GetImages(import, false);
                 GetImages(otherImpor, false);
+
+                //GetOptionImageTemp(import);
 
                 bank.AddRange(import);
                 bank.AddRange(otherImpor);
@@ -906,14 +908,25 @@ namespace DuplicateQuestion
             }
         }
 
-        private static double CaculateListStringSimilar(List<string> source, List<string> target)
+        private static double CalculateListOptionSimilar(List<OptionModel> source, List<OptionModel> target)
         {
             int countDuplicate = 0;
             foreach (var t in target)
             {
                 foreach (var s in source)
                 {
-                    if (CaculateStringSimilar(s, t) >= 70)
+
+                    if ((t.Images != null && t.Images.Count > 0)
+                        && (s.Images != null && s.Images.Count > 0))
+                    {
+                        if (CheckImageQuestion(t.Images, s.Images))
+                        {
+                            countDuplicate = countDuplicate + 1;
+                            break;
+                        }
+                    }
+
+                    if (CaculateStringSimilar(s.OptionContent, t.OptionContent) >= 70)
                     {
                         countDuplicate = countDuplicate + 1;
                         break;
@@ -925,14 +938,14 @@ namespace DuplicateQuestion
             return ((float)countDuplicate) / target.Count;
         }
 
-        private static List<string> GetOptionsByStatus(List<OptionModel> options, bool isCorrect)
+        private static List<OptionModel> GetOptionsByStatus(List<OptionModel> options, bool isCorrect)
         {
-            List<string> result = new List<string>();
+            List<OptionModel> result = new List<OptionModel>();
             foreach (var o in options)
             {
                 if (o.IsCorrect == isCorrect)
                 {
-                    result.Add(o.OptionContent);
+                    result.Add(o);
                 }
             }
 
@@ -977,7 +990,7 @@ namespace DuplicateQuestion
                 connection.Open();
 
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.QuestionContent, o.IsCorrect, o.OptionContent " +
+                    "SELECT q.Id, q.QuestionContent, o.Id AS 'OptionId', o.IsCorrect, o.OptionContent " +
                     "FROM Question q inner join [Option] o on q.Id = o.QuestionId " +
                     "WHERE q.CourseId = @courseId",
                     connection
@@ -999,6 +1012,7 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = (string)reader["OptionContent"],
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
@@ -1010,6 +1024,7 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = (string)reader["OptionContent"],
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
@@ -1029,7 +1044,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image, q.IsNotImage " +
+                    "SELECT q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, o.Id AS 'OptionId', q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image, q.IsNotImage " +
                     "FROM QuestionTemp q inner join OptionTemp o on q.Id = o.TempId " +
                     "WHERE q.ImportId = @importId AND q.Status= @status",
                     connection
@@ -1070,6 +1085,7 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
@@ -1091,6 +1107,7 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
@@ -1106,6 +1123,7 @@ namespace DuplicateQuestion
         private static void GetImages(List<QuestionModel> questions, bool isBank)
         {
             string idCol = isBank ? "QuestionId" : "QuestionTempId";
+            string idOptionCol = isBank ? "OptionId" : "OptionTempId";
 
             foreach (var question in questions)
             {
@@ -1134,8 +1152,75 @@ namespace DuplicateQuestion
                             Source = (string)reader["Source"],
                         });
                     }
+                    reader.Close();
+                    foreach (var option in question.Options)
+                    {
+                        SqlCommand opCmd = new SqlCommand(
+                       "SELECT Id, Source " +
+                       "FROM Image " +
+                       "WHERE " + idOptionCol + " = @id",
+                       connection
+                       );
+
+                        opCmd.Parameters.AddWithValue("@id", option.Id);
+                        SqlDataReader opReader = opCmd.ExecuteReader();
+
+                        while (opReader.Read())
+                        {
+                            if (option.Images == null)
+                            {
+                                option.Images = new List<ImageModel>();
+                            }
+                            option.Images.Add(new ImageModel
+                            {
+                                Id = (int)opReader["Id"],
+                                Source = (string)opReader["Source"]
+                            });
+                        }
+                        opReader.Close();
+                    }
 
                 }
+            }
+        }
+
+        private static void GetOptionImageTemp(List<QuestionModel> questions)
+        {
+
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+
+                foreach (var question in questions)
+                {
+                    foreach (var option in question.Options)
+                    {
+                        SqlCommand command = new SqlCommand(
+                       "SELECT Id, Source " +
+                       "FROM Image " +
+                       "WHERE OptionTempId = @id",
+                       connection
+                       );
+
+                        command.Parameters.AddWithValue("@id", option.Id);
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            if (option.Images == null)
+                            {
+                                option.Images = new List<ImageModel>();
+                            }
+                            option.Images.Add(new ImageModel
+                            {
+                                Id = (int)reader["Id"],
+                                Source = (string)reader["Source"]
+                            });
+                        }
+                        reader.Close();
+                    }
+                }
+
             }
         }
 
@@ -1172,6 +1257,31 @@ namespace DuplicateQuestion
 
         private static void RemoveTemp(int importId)
         {
+            #region remove image
+
+            var listDelete = GetImportedQuestion(importId, (int)StatusEnum.Delete);
+            listDelete.AddRange(GetImportedQuestion(importId, (int)StatusEnum.Editable));
+            listDelete.AddRange(GetImportedQuestion(importId, (int)StatusEnum.Invalid));
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in listDelete)
+                {
+                    foreach (var option in question.Options)
+                    {
+                        SqlCommand optionCommand = new SqlCommand(
+                                                    "DELETE Image " +
+                                                    "WHERE OptionTempId=@id"
+                                                    , connection);
+
+                        optionCommand.Parameters.AddWithValue("@id", option.Id);
+                        optionCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            #endregion
+
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
                 connection.Open();
@@ -1258,7 +1368,8 @@ namespace DuplicateQuestion
                     foreach (var option in question.Options)
                     {
                         SqlCommand optionCommand = new SqlCommand(
-                                                    "INSERT [Option](QuestionId, OptionContent, IsCorrect)" +
+                                                    "INSERT [Option](QuestionId, OptionContent, IsCorrect) " +
+                                                    "OUTPUT INSERTED.Id AS 'Id' " +
                                                     "VALUES ( " +
                                                         "@questionId, " +
                                                         "@content, " +
@@ -1268,7 +1379,12 @@ namespace DuplicateQuestion
                         optionCommand.Parameters.AddWithValue("@questionId", option.QuestionId);
                         optionCommand.Parameters.AddWithValue("@content", option.OptionContent);
                         optionCommand.Parameters.AddWithValue("@isCorrect", option.IsCorrect);
-                        optionCommand.ExecuteNonQuery();
+                        var rOp = optionCommand.ExecuteReader();
+                        if (rOp.Read())
+                        {
+                            option.OptionId = (int)rOp["Id"];
+                        }
+                        rOp.Close();
                     }
 
                 }
@@ -1292,7 +1408,29 @@ namespace DuplicateQuestion
                     optionCommand.Parameters.AddWithValue("@tempId", question.Id);
                     optionCommand.ExecuteNonQuery();
 
+                }
+            }
 
+            using (SqlConnection connection = new SqlConnection("context connection=true"))
+            {
+                connection.Open();
+                foreach (var question in importSuccessList)
+                {
+
+                    foreach (var option in question.Options)
+                    {
+
+                        SqlCommand optionCommand = new SqlCommand(
+                                                "UPDATE Image " +
+                                                "SET OptionTempId= NULL, OptionId = @optionId " +
+                                                "WHERE OptionTempId=@id"
+                                                , connection);
+
+                        optionCommand.Parameters.AddWithValue("@id", option.Id);
+                        optionCommand.Parameters.AddWithValue("@optionId", option.OptionId);
+                        optionCommand.ExecuteNonQuery();
+
+                    }
 
                 }
             }
@@ -1505,7 +1643,7 @@ namespace DuplicateQuestion
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(
-                    "select q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image " +
+                    "select q.Id, q.Code, q.QuestionContent, o.OptionContent, o.IsCorrect, o.Id AS 'OptionId', q.Status, q.Category, q.LearningOutcome, q.LevelName, q.Image " +
                     "from Import i inner join QuestionTemp q on i.Id = q.ImportId inner join OptionTemp o on q.Id = o.TempId " +
                     "where i.CourseId = @courseId and i.Id != @importId and (i.Status = @checked or i.Status= @fixing)",
                     connection
@@ -1548,6 +1686,7 @@ namespace DuplicateQuestion
                         question.Options = new List<OptionModel>();
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
@@ -1559,6 +1698,7 @@ namespace DuplicateQuestion
                     {
                         question.Options.Add(new OptionModel
                         {
+                            Id = (int)reader["OptionId"],
                             OptionContent = reader["OptionContent"] != DBNull.Value ? (string)reader["OptionContent"] : "",
                             IsCorrect = (bool)reader["IsCorrect"]
                         });
