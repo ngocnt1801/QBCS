@@ -29,22 +29,30 @@ namespace QBCS.Service.Implement
             if (import != null)
             {
 
-                var listImage = import.QuestionTemps.SelectMany(q => q.OptionTemps.SelectMany(o => o.Images)).Distinct();
+                var listImage = import.QuestionTemps.SelectMany(q => q.OptionTemps.SelectMany(o => o.Images)).Distinct().ToList();
 
-                foreach(var image in listImage)
+                foreach (var image in listImage)
                 {
                     unitOfWork.Repository<Image>().Delete(image);
                 }
-
                 var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
                 foreach (var question in listQuestion)
                 {
                     unitOfWork.Repository<QuestionTemp>().Delete(question);
                 }
 
+                
                 import.Status = (int)StatusEnum.Canceled;
                 unitOfWork.Repository<Import>().Update(import);
                 unitOfWork.SaveChanges();
+
+                var listOption = unitOfWork.Repository<OptionTemp>().GetAll().Where(o => o.TempId == null).ToList();
+                foreach (var option in listOption)
+                {
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+                unitOfWork.SaveChanges();
+
             }
         }
 
