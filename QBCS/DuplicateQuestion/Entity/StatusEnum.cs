@@ -10,6 +10,7 @@
         Editing = 6,
         Done = 7,
         Canceled = 8,
-        DeleteOrSkip = 9
+        DeleteOrSkip = 9,
+        Invalid = 10
     }
 }
