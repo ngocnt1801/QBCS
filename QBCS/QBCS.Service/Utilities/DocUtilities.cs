@@ -246,7 +246,7 @@ namespace QBCS.Service.Utilities
                     optionCheck.Content = optionModel.OptionContent;
                     optionCheckList.Add(optionCheck);
                     optionModel.Images = optionImages;
-                    if (optionModel.OptionContent != null || optionModel.Images != null)
+                    if (optionModel.OptionContent != null || (optionModel.Images != null && optionModel.Images.Count() != 0))
                     {
                         options.Add(optionModel);
                     }

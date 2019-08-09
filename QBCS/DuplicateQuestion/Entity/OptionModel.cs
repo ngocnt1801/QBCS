@@ -13,5 +13,7 @@ namespace DuplicateQuestion.Entity
         public bool IsCorrect { get; set; }
         public int QuestionId { get; set; }
         public int Id { get; set; }
+        public List<ImageModel> Images { get; set; }
+        public  int OptionId { get; set; }
     }
 }

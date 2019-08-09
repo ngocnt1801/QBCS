@@ -54,6 +54,17 @@ namespace QBCS.Service.Implement
                         Id = d.Id,
                         OptionContent = d.OptionContent,
                         IsCorrect = (bool)d.IsCorrect,
+                        Images = d.Images.Select(i => new ImageViewModel
+                        {
+                            Id = i.Id,
+                            OptionId = i.OptionId,
+                            OptionInExamId = i.OptionInExamId,
+                            OptionTempId = i.OptionTempId,
+                            QuestionId = i.QuestionId,
+                            QuestionInExamId = i.QuestionInExamId,
+                            QuestionTempId = i.QuestionTempId,
+                            Source = i.Source
+                        }).ToList(),
                         Image = d.Image
                     }).ToList()
                 }).ToList();

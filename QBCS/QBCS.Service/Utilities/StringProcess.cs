@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -243,7 +244,16 @@ namespace QBCS.Service.Utilities
                 foreach (var img in nodes)
                 {
                     HtmlAttribute att = img.Attributes["src"];
-                    imgScrs.Add(att.Value);
+                    if (att.Value.Contains("%"))
+                    {
+                        result = WebUtility.UrlDecode(att.Value);
+                    }
+                    else
+                    {
+                        result = att.Value;
+                    }
+                   
+                    imgScrs.Add(result);
                 }
             }
             

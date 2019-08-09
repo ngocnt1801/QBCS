@@ -1386,7 +1386,7 @@ function initTableEditable() {
                         }
                         if (dupOptionImages != null) {
                             for (var i = 0; i < dupOptionImages.length; i++) {
-                                $(jod).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
+                                $(jod).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + dupOptionImages[i].Source + '" /></p>');
                             }
                         }
                         if (dupOptionCorrect) {

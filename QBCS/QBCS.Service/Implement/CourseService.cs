@@ -153,8 +153,13 @@ namespace QBCS.Service.Implement
                         Code = c.Course.Code,
                         Total = c.Course.Questions.Count,
                         IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value,
-                        WarningTotal = c.Course.Questions.Where(q => q.Status == (int)StatusEnum.Editable).Count()
+                        //WarningTotal = c.Course.Questions.Where(q => q.Status == (int)StatusEnum.Editable).Count()
                     }).Where(c => c.IsDisable == false).ToList();
+                    foreach(var course in courses)
+                    {
+                        var iquery = unitOfWork.Repository<Question>().GetAll().Where(q => q.Status == (int)StatusEnum.Editable && q.CourseId == course.Id);
+                        course.WarningTotal = iquery.Count();
+                    }
                     return courses;
                 }
                 else

@@ -12,5 +12,7 @@ namespace DuplicateQuestion.Entity
         public string Source { get; set; }
         public int QuestionId { get; set; }
         public int QuestionTempId { get; set; }
+        public int OptionTempId { get; set; }
+        public int OptionId { get; set; }
     }
 }
