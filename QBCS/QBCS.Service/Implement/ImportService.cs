@@ -362,11 +362,18 @@ namespace QBCS.Service.Implement
                 var checkCorrectOption = false;
                 foreach (var option in tempQuestion.OptionTemps)
                 {
-                    if (option.OptionContent.Equals(""))
+                    if (option.OptionContent.Equals("") && (option.Images == null || option.Images.Count() == 0))
                     {
                         tempQuestion.Status = (int)StatusEnum.Invalid;
                         tempQuestion.Message = "Option must not be empty";
                         break;
+                    }
+                    for(int i = 0; i < option.Images.Count -1;i++)
+                    {
+                        for(int j = i + 1; j < option.Images.Count(); j++)
+                        {
+                            //checkDuplicateImage
+                        }
                     }
                     if ((bool)option.IsCorrect)
                     {
@@ -390,11 +397,28 @@ namespace QBCS.Service.Implement
                             //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
                             var trimOption1 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(i).OptionContent);
                             var trimOption2 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(j).OptionContent);
-                            if (trimOption1.Equals(trimOption2))
+                            if (!trimOption1.Equals("") && !trimOption2.Equals("") && trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
                                 tempQuestion.Message = "All options must different from each others";
                                 break;
+                            }
+                            else if (
+                                (tempQuestion.OptionTemps.ElementAtOrDefault(i).Images != null && tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count() > 0)
+                                && (tempQuestion.OptionTemps.ElementAtOrDefault(j).Images != null && tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.Count() > 0)
+                            )
+                            {
+                                if (tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count() == tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.Count())
+                                {
+                                    int totalImage = tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count();
+                                    for (int k = 0; k < totalImage; k++)
+                                    {
+                                        for(int l = 0; l < totalImage; l++)
+                                        {
+                                            //checkDuplicateImage
+                                        }
+                                    }
+                                }
                             }
                         }
                         if (tempQuestion.Status == (int)StatusEnum.Invalid)
