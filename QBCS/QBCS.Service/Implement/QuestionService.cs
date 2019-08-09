@@ -88,6 +88,16 @@ namespace QBCS.Service.Implement
                     {
                         Id = option.Id,
                         OptionContent = option.OptionContent,
+                        Images = option.Images.Select(i => new ImageViewModel {
+                            Id = i.Id,
+                            OptionId = i.OptionId,
+                            OptionInExamId = i.OptionInExamId,
+                            OptionTempId = i.OptionTempId,
+                            QuestionId = i.QuestionId,
+                            QuestionInExamId = i.QuestionInExamId,
+                            QuestionTempId = i.QuestionTempId,
+                            Source = i.Source
+                        }).ToList(),
                         IsCorrect = (bool)option.IsCorrect
                     };
                     optionViewModels.Add(optionViewModel);
@@ -112,7 +122,18 @@ namespace QBCS.Service.Implement
                 {
                     Id = option.Id,
                     OptionContent = option.OptionContent,
-                    IsCorrect = (bool)option.IsCorrect
+                    IsCorrect = (bool)option.IsCorrect,
+                    Images = option.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList()
                 };
                 optionViewModels.Add(optionViewModel);
             }
@@ -132,7 +153,18 @@ namespace QBCS.Service.Implement
                     Id = option.Id,
                     OptionContent = option.OptionContent,
                     Image = option.Image,
-                    IsCorrect = (bool)option.IsCorrect
+                    IsCorrect = (bool)option.IsCorrect,
+                    Images = option.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList()
                 };
                 optionViewModels.Add(optionViewModel);
             }
@@ -155,6 +187,17 @@ namespace QBCS.Service.Implement
                 {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
+                    Images = d.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList(),
                     IsCorrect = (bool)d.IsCorrect
                 }).ToList()
             }).ToList();
@@ -318,6 +361,17 @@ namespace QBCS.Service.Implement
                 {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
+                    Images = d.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList(),
                     IsCorrect = (bool)d.IsCorrect
                 }).ToList()
             }).ToList();
@@ -337,6 +391,17 @@ namespace QBCS.Service.Implement
                 {
                     Id = d.Id,
                     OptionContent = d.OptionContent,
+                    Images = d.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList(),
                     IsCorrect = (bool)d.IsCorrect
                 }).ToList()
             }).ToList();
@@ -1269,6 +1334,17 @@ namespace QBCS.Service.Implement
                 {
                     Id = o.Id,
                     OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                    Images = o.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList(),
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                 }).ToList(),
                 IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
@@ -1341,6 +1417,17 @@ namespace QBCS.Service.Implement
                 {
                     Id = o.Id,
                     OptionContent = WebUtility.HtmlDecode(o.OptionContent),
+                    Images = o.Images.Select(i => new ImageViewModel
+                    {
+                        Id = i.Id,
+                        OptionId = i.OptionId,
+                        OptionInExamId = i.OptionInExamId,
+                        OptionTempId = i.OptionTempId,
+                        QuestionId = i.QuestionId,
+                        QuestionInExamId = i.QuestionInExamId,
+                        QuestionTempId = i.QuestionTempId,
+                        Source = i.Source
+                    }).ToList(),
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                 }).ToList(),
                 IsDisable = q.IsDisable.HasValue && q.IsDisable.Value
