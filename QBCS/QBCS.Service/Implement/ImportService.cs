@@ -730,7 +730,10 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
-                        Image = o.Image,
+                        Images = o.Images.Select(oi => new ImageViewModel()
+                        {
+                            Source = oi.Source
+                        }).ToList(),
                         IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                     }).ToList()
                 };
@@ -754,7 +757,10 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList()
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {
@@ -775,7 +781,10 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList(),
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {

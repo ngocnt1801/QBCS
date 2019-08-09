@@ -346,7 +346,7 @@
                                 } else {
                                     image = "";
                                 }
-                                var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>'+image+options+'</div>';
+                                var questionContent = '<div id="' + row.Id + '"><div id="Question"></div>' + image + options + '</div>';
                                 var result = code + questionContent;
                                 return result;
                             }
@@ -420,15 +420,16 @@
                             }
                             for (var w = 0; w < breakContent.length; w++) {
                                 $(jq).append('<p id="qcontent_' + w + '"></p>');
-                                var jqw = '#' + question[q].Id + ' #Question #qcontent_'+ w;
+                                var jqw = '#' + question[q].Id + ' #Question #qcontent_' + w;
                                 $(jqw).text(breakContent[w]);
                             }
                             breakContent = [];
                             for (var o = 0; o < question[q]["Options"].length; o++) {
                                 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                                var jo = '#' + question[q].Id + ' #Option'+o;
+                                var jo = '#' + question[q].Id + ' #Option' + o;
                                 var optionContent = question[q]["Options"][o]["OptionContent"];
                                 var optionCorrect = question[q]["Options"][o]["IsCorrect"];
+                                var optionImages = question[q]["Options"][o]["Images"];
                                 if (isHtml) {
                                     optionContent = optionContent.split("&lt;p&gt;").join("");
                                     optionContent = optionContent.split("&lt;/p&gt;").join("");
@@ -448,6 +449,11 @@
                                         $(jow).text(letters[o] + '. ' + breakContent[b]);
                                     } else {
                                         $(jow).text(breakContent[b]);
+                                    }
+                                }
+                                if (optionImages != null) {
+                                    for (var i = 0; i < optionImages.length; i++) {
+                                        $(jo).append('<p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, ' + optionImages[i].Source + '" /></p>');
                                     }
                                 }
                                 if (optionCorrect) {
