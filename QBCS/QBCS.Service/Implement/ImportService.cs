@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -373,6 +374,16 @@ namespace QBCS.Service.Implement
                         for(int j = i + 1; j < option.Images.Count(); j++)
                         {
                             //checkDuplicateImage
+                            if (CheckDuplicatedImage.CheckDuplicateImage(option.Images.ElementAtOrDefault(i).Source, option.Images.ElementAtOrDefault(i).Source))
+                            {
+                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                tempQuestion.Message = "Image in option must not be duplicate";
+                                break;
+                            }
+                        }
+                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
+                        {
+                            break;
                         }
                     }
                     if ((bool)option.IsCorrect)
@@ -397,7 +408,7 @@ namespace QBCS.Service.Implement
                             //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
                             var trimOption1 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(i).OptionContent);
                             var trimOption2 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(j).OptionContent);
-                            if (!trimOption1.Equals("") && !trimOption2.Equals("") && trimOption1.Equals(trimOption2))
+                            if ((!trimOption1.Equals("[html]") || !trimOption2.Equals("[html]")) && trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
                                 tempQuestion.Message = "All options must different from each others";
@@ -416,6 +427,19 @@ namespace QBCS.Service.Implement
                                         for(int l = 0; l < totalImage; l++)
                                         {
                                             //checkDuplicateImage
+                                            if (CheckDuplicatedImage.CheckDuplicateImage(
+                                                tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.ElementAtOrDefault(k).Source
+                                                , tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.ElementAtOrDefault(l).Source
+                                            ))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "All images in options must different from each others";
+                                                break;
+                                            }
+                                        }
+                                        if(tempQuestion.Status == (int)StatusEnum.Invalid)
+                                        {
+                                            break;
                                         }
                                     }
                                 }
