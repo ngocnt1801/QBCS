@@ -299,8 +299,21 @@ namespace QBCS.Service.Implement
                 //entity.Image = question.Image;
 
                 var listOptionEntity = entity.OptionTemps.ToList();
+
                 foreach (var option in listOptionEntity)
                 {
+                    #region must fix
+                    if(option.Images != null)
+                    {
+                        foreach (var image in option.Images.ToList())
+                        {
+                            unitOfWork.Repository<Image>().Delete(image);
+                        }
+                        unitOfWork.SaveChanges();
+
+                    }
+                    #endregion
+
                     unitOfWork.Repository<OptionTemp>().Delete(option);
                 }
                 if (entity.Images != null && entity.Images.Count > 0)

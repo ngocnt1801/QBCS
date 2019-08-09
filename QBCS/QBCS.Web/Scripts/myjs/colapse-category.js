@@ -436,7 +436,14 @@
                                     optionContent = optionContent.split("&lt;span&gt;").join("");
                                     optionContent = optionContent.split("&lt;/span&gt;").join("");
                                     optionContent = optionContent.split("[html]").join("");
-                                    breakContent = optionContent.split("&lt;cbr&gt;").join("·").split("<cbr>").join("·").split("&lt;br&gt;").join("·").split("<br>").join("·");
+                                    breakContent = optionContent.split("&lt;cbr&gt;").join("·")
+                                        .split("<cbr>").join("·")
+                                        .split("&lt;br&gt;").join("·")
+                                        .split("<br>").join("·")
+                                        .split("<br />").join("·")
+                                        .split("<br/>").join("·")
+                                        .split("&lt;br /&gt;").join("·")
+                                        .split("&lt;br/&gt;").join("·");
                                     breakContent = breakContent.split("·");
                                 } else {
                                     breakContent.push(optionContent);
