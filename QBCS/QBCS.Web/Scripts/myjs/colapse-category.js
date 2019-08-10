@@ -423,8 +423,8 @@
                                 var jqw = '#' + question[q].Id + ' #Question #qcontent_' + w;
                                 $(jqw).text(breakContent[w]);
                             }
-                            breakContent = [];
                             for (var o = 0; o < question[q]["Options"].length; o++) {
+                                breakContent = [];
                                 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                                 var jo = '#' + question[q].Id + ' #Option' + o;
                                 var optionContent = question[q]["Options"][o]["OptionContent"];

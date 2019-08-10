@@ -8,8 +8,11 @@ namespace QBCS.Service.ViewModel
 {
     public class EditQuestionTextboxViewModel
     {
-        public string table { get; set; }
-        public int importId { get; set; }
-        public int questionId { get; set; }
+        public string Table { get; set; }
+        public int? ImportId { get; set; }
+        public int? QuestionId { get; set; }
+        public int? CategoryId { get; set; }
+        public int? LevelId { get; set; }
+        public int? LearningOutcomeId { get; set; }
     }
 }

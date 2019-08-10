@@ -1,4 +1,4 @@
-﻿@model QBCS.Service.ViewModel.QuestionTempViewModel
+﻿@model QBCS.Service.ViewModel.QuestionViewModel
 
 @{
     ViewBag.Title = "EditQuestionWithTextbox";
@@ -15,35 +15,28 @@
             image = image + "<p><img src='data:image/png;base64," + img.Source + "' /></p>";
         }
     }
-    string category = "";
-    string unit = "";
-    string mark = "";
-    if (Model.Level != null)
-    {
-        switch (Model.Level)
-        {
-            case "Easy":
-                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 1 + "</p> </td> </tr>";
-                break;
-            case "Medium":
-                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 2 + "</p> </td> </tr>"; ;
-                break;
-            case "Hard":
-                mark = "<tr> <td> <p>MARK: </p> </td>" + "<td> <p>" + 3 + "</p> </td> </tr>"; ;
-                break;
-
-        }
-    }
     string table = "";
+    int category = Model.CategoryId;
+    int level = Model.LevelId;
+    int learningoutcome = Model.LearningOutcomeId;
 
     for (int i = 0; i < Model.Options.Count; i++)
     {
+        var optionImg = "";
+        if (Model.Options[i].Images != null && Model.Options[i].Images.Count() != 0)
+        {
+            foreach (var optionImage in Model.Options[i].Images)
+            {
+                optionImg = optionImg + "<p><img src='data:image/png;base64," + optionImage.Source + "' /></p>";
+            }
+        }
+
         option = option + "<tr> <td> <p>" + optionLetter[i] + ".</p> </td>" + "<td> <p>" + Model.Options[i].OptionContent
                                         .Replace("<", "&lt;")
                                         .Replace(">", "&gt;")
                                         .Replace("&lt;cbr&gt;", "<br/>")
                                         .Replace("[html]", "")
-                                        + "</p> </td> </tr>";
+                                        + "</p>" + optionImg + " </td> </tr>";
         if (Model.Options[i].IsCorrect)
         {
             answer = answer + optionLetter[i];
@@ -52,14 +45,6 @@
         {
             answer = answer + optionLetter[i] + "</p> </td> </tr>";
         }
-    }
-    if (Model.LearningOutcome != null)
-    {
-        unit = "<tr> <td> <p>UNIT: </p> </td>" + "<td> <p>" + Model.LearningOutcome + "</p> </td> </tr>";
-    }
-    if (Model.Category != null)
-    {
-        category = "<tr> <td> <p>CATEGORY: </p> </td>" + "<td> <p>" + Model.Category + "</p> </td> </tr>";
     }
     var code = "";
     if (Model.Code != null)
@@ -92,8 +77,21 @@
             <textarea id="textbox" name="questionTextBox" style="height:100% !important">
 
                 </textarea>
-            <input id="questionId" value="@Model.Id" hidden />
-            <input id="importId" value="@Model.ImportId" hidden />
+            <div class="col-md-12">
+                <input id="questionId" value="@Model.Id" hidden />
+                <input id="categoryname" value="@category" hidden/>
+                <input id="levelname" value="@level"  hidden/>
+                <input id="learningoutcomename" value="@learningoutcome" hidden/>
+                <select class="form-control" id="Categories" >\
+                    <option>---Select a Category---</option>
+                </select>
+                <select class="form-control" id="LearningOutcomes">
+                    <option>---Select a Learning Outcome---</option>
+                </select>
+                <select class="form-control" id="Levels">
+                    <option>---Select a Level---</option>
+                </select>
+            </div>
             <div class="form-group" style="margin-top:5px">
                 <button type="submit" class="btn btn-primary float-right" id="editSave">Submit</button>
                 <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
@@ -112,6 +110,79 @@
     };
 
     $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data:
+            {
+                id : @Model.CourseId
+            },
+            url: "@Url.Action("GetCategoriesInCourse","Question")",
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    var category = $("#categoryname").val();
+                    if (result[i].Id == category) {
+                        $("#Categories").append('<option id="' + result[i].Id + '" selected>' +
+                            result[i].Name + '</option>');
+                    } else {
+                        $("#Categories").append('<option id="' + result[i].Id + '">' +
+                            result[i].Name + '</option>');
+                    }           
+                }
+            },
+            error: function (result) {
+                alert("Error");
+            }
+        });
+        
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "@Url.Action("GetLevels","Question")",
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].Id == "@level") {
+                        $("#Levels").append('<option id="' + result[i].Id + '" selected>' +
+                            result[i].Name + '</option>');
+                    } else {
+                        $("#Levels").append('<option id="' + result[i].Id + '">' +
+                            result[i].Name + '</option>');
+                    }
+                }
+            },
+            error: function (result) {
+                alert("Error");
+            }
+        });
+        
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data:
+            {
+                id : @Model.CourseId
+            },
+            url: "@Url.Action("GetLearningOutcomesInCourse","Question")",
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].Id == "@learningoutcome") {
+                        $("#LearningOutcomes").append('<option id="' + result[i].Id + '" selected>' +
+                            result[i].Name + '</option>');
+                    } else {
+                        $("#LearningOutcomes").append('<option id="' + result[i].Id + '">' +
+                            result[i].Name + '</option>');
+                    }
+                }
+            },
+            error: function (result) {
+                alert("Error");
+            }
+        });
+
         $('#editSave').on('click', function (event) {
             event.preventDefault();
             var editors = textboxio.get('#textbox');
@@ -119,18 +190,20 @@
             editor = editors[0].content.get();
             editor = '<body>' + editor + '</body>';
             var Obj = {};
-            Obj["table"] = editor;
-            Obj["importId"] = $('#importId').val();
-            Obj["questionId"] = $('#questionId').val();
+            Obj["Table"] = editor;
+            Obj["CategoryId"] = $("#Categories option:selected").attr("id");
+            Obj["LevelId"] = $("#Levels option:selected").attr("id");
+            Obj["LearningOutcomeId"] = $("#LearningOutcomes option:selected").attr("id");
+            Obj["QuestionId"] = $("#questionId").val();
             $.ajax({
                 type: "POST",
-                url: '/Question/UpdateQuestionTempWithTextBox',
+                url: '/Question/UpdateQuestionWithTextBox',
                 data: JSON.stringify(Obj),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
                     if (response.success == true) {
-                        document.location.href = "/Import/GetResult?importId=" + Obj["importId"];
+                        document.location.href = "/Course/CourseDetail?courseId=" + @Model.CourseId;
                     } else {
                         toastr.error("Edit error. Please try again!");
                         setTimeout(location.reload.bind(location), 1000);

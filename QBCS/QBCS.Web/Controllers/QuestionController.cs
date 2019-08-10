@@ -171,22 +171,21 @@ namespace QBCS.Web.Controllers
         }
 
         [HttpPost]
-        
-        public JsonResult UpdateQuestionTempWithTextBox(EditQuestionTextboxViewModel vm)
+        public JsonResult UpdateQuestionWithTextBox(EditQuestionTextboxViewModel vm)
         {
             try
             {
-                var conversion = questionService.TableStringToListQuestion(vm.table, "");
+                var conversion = questionService.TableStringToListQuestion(vm.Table, "");
                 if (conversion.Count > 0)
                 {
-                    if((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
+                    if ((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
                     {
                         return Json(new { error = true }, JsonRequestBehavior.AllowGet);
                     }
-                    var questionTemp = new QuestionTempViewModel()
+                    var question = new QuestionViewModel()
                     {
-                        Id = vm.questionId,
-                        ImportId = vm.importId,
+                        Id = (int)vm.QuestionId,
+                        //ImportId = (int)vm.ImportId,
                         QuestionContent = conversion.FirstOrDefault().QuestionContent.Replace("\r", ""),
                         Images = conversion.FirstOrDefault().Images.Select(i => new ImageViewModel()
                         {
@@ -198,13 +197,17 @@ namespace QBCS.Web.Controllers
                             Images = o.Images,
                             IsCorrect = o.IsCorrect
                         }).ToList(),
+                        LearningOutcomeId = vm.LearningOutcomeId != null ? (int)vm.LearningOutcomeId : 0,
+                        CategoryId = vm.CategoryId != null ? (int)vm.CategoryId : 0,
+                        LevelId = vm.LevelId != null ? (int)vm.LevelId : 0,
+
                     };
-                    var oldQuestionTemp = questionService.GetQuestionTempById(vm.questionId);
+                    var oldQuestion = questionService.GetQuestionById((int)vm.QuestionId);
                     var user = (UserViewModel)Session["user"];
-                    logService.LogFullManually("UpdateQuestionWithTextBox","Question",
-                                                vm.questionId, null, "QuestionController", "POST", user.Fullname, "", 
-                                                JsonConvert.SerializeObject(questionTemp), JsonConvert.SerializeObject(oldQuestionTemp));
-                    importService.UpdateQuestionTemp(questionTemp);
+                    logService.LogFullManually("UpdateQuestionWithTextBox", "Question",
+                                                vm.QuestionId, null, "QuestionController", "POST", user.Fullname, "",
+                                                JsonConvert.SerializeObject(question), JsonConvert.SerializeObject(oldQuestion));
+                    questionService.UpdateQuestionWithTextbox(question);
                     TempData["Modal"] = "#success-modal";
                     return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
@@ -217,6 +220,26 @@ namespace QBCS.Web.Controllers
             {
                 return Json(new { error = true }, JsonRequestBehavior.AllowGet);
             }
+        }
+        public JsonResult GetCategoriesInCourse(int id)
+        {
+            List<CategoryViewModel> categories = categoryService.GetCategoriesByCourseId(id);
+            return Json(categories, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLevels()
+        {
+            List<LevelViewModel> levels = levelService.GetLevel();
+            return Json(levels, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLearningOutcomesInCourse(int id)
+        {
+            List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(id);
+            return Json(learningOutcomes, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult EditQuestionWithTextbox(int id)
+        {
+            var question = questionService.GetQuestionById(id);
+            return View("EditQuestionWithTextbox", question);
         }
 
         //lecturer
@@ -406,11 +429,6 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditQuestionTempWithTextbox(int id)
-        {
-            var questiontemp = importService.GetQuestionTemp(id);
-            return View("EditQuestionTempWithTextbox", questiontemp);
-        }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";

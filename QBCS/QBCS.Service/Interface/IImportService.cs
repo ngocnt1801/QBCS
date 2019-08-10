@@ -11,6 +11,7 @@ namespace QBCS.Service.Interface
     public interface IImportService
     {
         ImportResultViewModel GetImportResult(int importId);
+        void UpdateQuestionTempWithTextarea(QuestionTempViewModel question);
         void UpdateQuestionTemp(QuestionTempViewModel question);
         QuestionTempViewModel GetQuestionTemp(int questionTempId);
         Task ImportToBank(int importId);

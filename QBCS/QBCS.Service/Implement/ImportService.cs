@@ -254,6 +254,10 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
+                        Images = o.Images.Select(im => new ImageViewModel()
+                        {
+                            Source = im.Source
+                        }).ToList(),
                         IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                     }).ToList()
                 };
@@ -278,6 +282,88 @@ namespace QBCS.Service.Implement
                 string command = "EXEC CheckDuplicateQuestion @questionId=@qid, @logId=@lid";
                 await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@qid", questionId)
                                                                      , new SqlParameter("@lid", logId));
+            }
+        }
+
+        public void UpdateQuestionTempWithTextarea(QuestionTempViewModel question)
+        {
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
+
+            var checkedEntity = new List<QuestionTemp>();
+            checkedEntity.Add(entity);
+            checkedEntity = CheckRule(checkedEntity);
+            entity = checkedEntity.FirstOrDefault();
+
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable
+                                    || entity.Status == (int)StatusEnum.Invalid
+                                    || entity.Status == (int)StatusEnum.Deleted
+                                    || entity.Status == (int)StatusEnum.DeleteOrSkip))
+            {
+                entity.QuestionContent = question.QuestionContent;
+                entity.Status = (int)StatusEnum.NotCheck;
+                //entity.Image = question.Image;
+
+                var listOptionEntity = entity.OptionTemps.ToList();
+
+                foreach (var option in listOptionEntity)
+                {
+                    #region must fix
+                    if (option.Images != null)
+                    {
+                        foreach (var image in option.Images.ToList())
+                        {
+                            unitOfWork.Repository<Image>().Delete(image);
+                        }
+                        unitOfWork.SaveChanges();
+
+                    }
+                    #endregion
+
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+                if (entity.Images != null && entity.Images.Count > 0)
+                {
+                    foreach (var img in entity.Images.ToList())
+                    {
+                        unitOfWork.Repository<Image>().Delete(img);
+                    }
+                }
+
+                question.Options = question.Options.Where(o => !String.IsNullOrWhiteSpace(o.OptionContent) && !o.OptionContent.Trim().ToLower().Equals("[html]")).ToList();
+                //if (question.ImagesInput != null && question.ImagesInput.Count() > 0)
+                //{
+                //    entity.Images = question.ImagesInput.Select(im => new Image
+                //    {
+                //        Source = im
+                //    }).ToList();
+                //}
+
+                foreach (var option in question.Options)
+                {
+                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp
+                    {
+                        IsCorrect = option.IsCorrect,
+                        OptionContent = option.OptionContent,
+                        TempId = question.Id,
+                        Images = option.Images.Select(i => new Image()
+                        {
+                            Source = i.Source
+                        }).ToList()
+                    });
+                }
+                foreach (var image in question.Images)
+                {
+                    unitOfWork.Repository<Image>().Insert(new Image
+                    {
+                        Source = image.Source,
+                        QuestionTempId = question.Id
+                    });
+                }
+                var list = new List<QuestionTemp>();
+                list.Add(entity);
+                list = CheckRule(list);
+                unitOfWork.Repository<QuestionTemp>().Update(list.FirstOrDefault());
+                unitOfWork.SaveChanges();
             }
         }
 

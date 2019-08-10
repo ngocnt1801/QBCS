@@ -38,12 +38,21 @@
 
     for (int i = 0; i < Model.Options.Count; i++)
     {
+        var optionImg = "";
+        if (Model.Options[i].Images != null && Model.Options[i].Images.Count() != 0)
+        {
+            foreach (var optionImage in Model.Options[i].Images)
+            {
+                optionImg = optionImg + "<p><img src='data:image/png;base64," + optionImage.Source + "' /></p>";
+            }
+        }
+
         option = option + "<tr> <td> <p>" + optionLetter[i] + ".</p> </td>" + "<td> <p>" + Model.Options[i].OptionContent
                                         .Replace("<", "&lt;")
                                         .Replace(">", "&gt;")
                                         .Replace("&lt;cbr&gt;", "<br/>")
-                                        .Replace("[html]", "") 
-                                        + "</p> </td> </tr>";
+                                        .Replace("[html]", "")
+                                        + "</p>" + optionImg + " </td> </tr>";
         if (Model.Options[i].IsCorrect)
         {
             answer = answer + optionLetter[i];
@@ -62,7 +71,7 @@
         category = "<tr> <td> <p>CATEGORY: </p> </td>" + "<td> <p>" + Model.Category + "</p> </td> </tr>";
     }
     var code = "";
-    if(Model.Code != null)
+    if (Model.Code != null)
     {
         code = Model.Code;
     }
@@ -71,9 +80,9 @@
                                         .Replace(">", "&gt;")
                                         .Replace("&lt;cbr&gt;", "<br/>")
                                         .Replace("[html]", "");
-    question = "<tr> <td width='138' valign='top'> <p>QN=" + code + "</p> </td>" + "<td width='495' valign='top'><p>" + questionContent+"</p> <p>" + image + "</p> </td> </tr>";
-    
-    table = "<table border='1' cellspacing='0' cellpadding='0' width='0'> <tbody>" + question + option + answer + mark + category + unit
+    question = "<tr> <td width='138' valign='top'> <p>QN=" + code + "</p> </td>" + "<td width='495' valign='top'><p>" + questionContent + "</p> <p>" + image + "</p> </td> </tr>";
+
+    table = "<table border='1' cellspacing='0' cellpadding='0' width='0'> <tbody>" + question + option + answer
             + "</tbody> </table>";
     var test = table;
 }
@@ -87,19 +96,19 @@
 <body onload="instantiateTextbox();">
     <h2>Edit Question with textbox</h2>
     <a href="@Url.Action("GetQuestionTemp","Import", new { tempId = Model.Id})">Edit Question with form</a>
-        <div class="row">
-            <div class="col-md-12" style="height:35em">
-                <textarea id="textbox" name="questionTextBox" style="height:100% !important">
+    <div class="row">
+        <div class="col-md-12" style="height:35em">
+            <textarea id="textbox" name="questionTextBox" style="height:100% !important">
 
                 </textarea>
-                <input id="questionId" value="@Model.Id" hidden />
-                <input id="importId" value="@Model.ImportId" hidden />
-                <div class="form-group" style="margin-top:5px">
-                    <button type="submit" class="btn btn-primary float-right" id="editSave">Submit</button>
-                    <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
-                </div>
+            <input id="questionId" value="@Model.Id" hidden />
+            <input id="importId" value="@Model.ImportId" hidden />
+            <div class="form-group" style="margin-top:5px">
+                <button type="submit" class="btn btn-primary float-right" id="editSave">Submit</button>
+                <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
             </div>
         </div>
+    </div>
 </body>
 <script>
     $('#textbox').html('@table');
@@ -110,7 +119,7 @@
                 }
             });
     };
-    
+
     $(document).ready(function () {
         $('#editSave').on('click', function (event) {
             event.preventDefault();
@@ -119,12 +128,12 @@
             editor = editors[0].content.get();
             editor = '<body>' + editor + '</body>';
             var Obj = {};
-            Obj["table"] = editor;
-            Obj["importId"] = $('#importId').val();
-            Obj["questionId"] = $('#questionId').val();
+            Obj["Table"] = editor;
+            Obj["ImportId"] = $('#importId').val();
+            Obj["QuestionId"] = $('#questionId').val();
             $.ajax({
                 type: "POST",
-                url: '/Question/UpdateQuestionTempWithTextBox',
+                url: '/Import/UpdateQuestionTempWithTextBox',
                 data: JSON.stringify(Obj),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -135,7 +144,7 @@
                         toastr.error("Edit error. Please try again!");
                         setTimeout(location.reload.bind(location), 1000);
                     }
-                    
+
                 },
                 error: function (response) {
                     toastr.error("Edit error. Please try again!");
