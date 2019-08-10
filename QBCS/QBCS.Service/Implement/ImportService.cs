@@ -768,8 +768,14 @@ namespace QBCS.Service.Implement
                             case 16:
                                 if (!rule.Value.Equals("True"))
                                 {
-                                    var testOption = tempQuestion.OptionTemps.
-                                                                OrderByDescending(o => o.OptionContent.Length).
+                                    var compareOptions = new List<OptionTemp>();
+                                    compareOptions = tempQuestion.OptionTemps.Select(o => new OptionTemp()
+                                    {
+                                        OptionContent = TrimTag(o.OptionContent),
+                                        IsCorrect = o.IsCorrect
+                                    }).ToList();
+                                    var testOption = compareOptions.
+                                                                OrderByDescending(o => o.OptionContent.Split(' ').Length).
                                                                 ThenBy(o => o.IsCorrect).ToList();
                                     var varOption = testOption.First();
                                     if ((bool)varOption.IsCorrect)
@@ -809,19 +815,6 @@ namespace QBCS.Service.Implement
         }
 
         #region validate rule stuff
-        private string Uppercase(string content)
-        {
-            string[] uppercase = { "invalid", "incorrect", "not true" };
-            for (int i = 0; i < uppercase.Length; i++)
-            {
-                var culture = CultureInfo.GetCultureInfo("en-GB");
-                if (culture.CompareInfo.IndexOf(content, uppercase[i], CompareOptions.IgnoreCase) >= 0)
-                {
-                    content = Regex.Replace(content, uppercase[i], uppercase[i].ToUpper(), RegexOptions.IgnoreCase);
-                }
-            }
-            return content;
-        }
         private string TrimOption(string option)
         {
             if (option != null && !String.IsNullOrWhiteSpace(option))
@@ -835,6 +828,31 @@ namespace QBCS.Service.Implement
 
             //option = option.Replace(",", "");
             return option;
+        }
+
+        private string TrimTag(string str)
+        {
+            str = str.Replace("<cbr>", " ");
+            str = str.Replace("<br>", " ");
+            str = str.Replace("<br/>", " ");
+            str = str.Replace("<br />", " ");
+            str = str.Replace("<br>", " ");
+            str = str.Replace("<sub>", " ");
+            str = str.Replace("</sub>", " ");
+            str = str.Replace("<p>", " ");
+            str = str.Replace("</p>", " ");
+            str = str.Replace("</sup>", " ");
+            str = str.Replace("<sup>", " ");
+            str = str.Replace("<span>", " ");
+            str = str.Replace("</span>", " ");
+            str = str.Replace("</b>", " ");
+            str = str.Replace("<b>", " ");
+            str = str.Replace("</u>", " ");
+            str = str.Replace("<u>", " ");
+            str = str.Replace("</i>", " ");
+            str = str.Replace("<i>", " ");
+            str = Regex.Replace(str, @"\s{2,}", " ");
+            return str;
         }
 
         #endregion
