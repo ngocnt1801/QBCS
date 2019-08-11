@@ -28,30 +28,44 @@
 
             @if (Model.Question.Images != null)
             {
-            foreach (var image in Model.Question.Images)
+                foreach (var image in Model.Question.Images)
+                {
+                <p><img src="data:image/png;base64, @image.Source" /></p>
+            }
+        }
+            </p>
+            @for (int i = 0; i < Model.Question.Options.Count; i++)
             {
-        <p><img src="data:image/png;base64, @image.Source" /></p>
-        }
-        }
-        </p>
-        @for (int i = 0; i < Model.Question.Options.Count; i++)
-        {
-        if (Model.Question.Options[i].IsCorrect)
-        {
-        <p class="text-right-answer customs-display-p">
-            @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
-        </p>
-        }
-        else
-        {
-        <p class="text-custom customs-display-p">
-            @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
-        </p>
-        }
+                if (Model.Question.Options[i].IsCorrect)
+                {
+                    <p class="text-right-answer customs-display-p">
+                        @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
+                    </p>
+                    if (Model.Question.Options[i].Images != null)
+                    {
+                        foreach (var image in Model.Question.Options[i].Images)
+                        {
+                            <p><img src="data:image/png;base64, @image.Source" /></p>
+                        }
+                    }
+                }
+                else
+                {
+                    <p class="text-custom customs-display-p">
+                        @(alpha[i] + "." )   @Html.DisplayFor(o => Model.Question.Options[i].OptionContent)
+                    </p>
+                    if (Model.Question.Options[i].Images != null)
+                    {
+                        foreach (var image in Model.Question.Options[i].Images)
+                        {
+                            <p><img src="data:image/png;base64, @image.Source" /></p>
+                        }
+                    }
+                }
 
-        }
+            }
 
-    </div>
+        </div>
     </div>
 
 
@@ -70,7 +84,6 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Code</th>
-                                <th>Semester</th>
                                 <th>
                                     Generated Date
                                 </th>
@@ -90,9 +103,6 @@
                                     <td>@counter</td>
                                     <td>
                                         @item.ExamCode
-                                    </td>
-                                    <td>
-                                        @item.Semester.Name @item.GeneratedDate.Year
                                     </td>
                                     <td>
                                         @item.GeneratedDate

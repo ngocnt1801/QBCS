@@ -246,7 +246,11 @@ namespace QBCS.Service.Implement
                     {
                         IsCorrect = o.IsCorrect,
                         OptionContent = o.OptionContent,
-                        Image = o.Image
+                        Image = o.Image,
+                        Images = o.Images.Select(i => new Image
+                        {
+                            Source = i.Source
+                        }).ToList()
                     }).ToList()
                 };
                 part.NumberOfQuestion = part.NumberOfQuestion + 1;
@@ -321,8 +325,8 @@ namespace QBCS.Service.Implement
             unitOfWork.Repository<Examination>().Update(exam);
             unitOfWork.SaveChanges();
             int totalQuestion = questionEasy + questionMedium + questionHard;
-            int percentQuestionEasy = questionEasy / totalQuestion;
-            int percentQuestionMedium = questionMedium / totalQuestion;
+            int percentQuestionEasy = (int)Math.Round(((questionEasy * 1.0) / totalQuestion) * 100);
+            int percentQuestionMedium = (int)Math.Round(((questionMedium * 1.0) / totalQuestion) * 100);
             int percentQuestionHard = 100 - percentQuestionEasy - percentQuestionMedium;
             GenerateExamViewModel result = new GenerateExamViewModel()
             {
@@ -340,7 +344,8 @@ namespace QBCS.Service.Implement
                 HardPercent = percentQuestionHard,
                 TotalQuestionGenerrate = totalQuestion,
                 TotalExam = 1,
-                IsEnough = true
+                IsEnough = true,
+                IsManually = true
             };
             result.CalculateGrade();
             return result;
@@ -349,13 +354,14 @@ namespace QBCS.Service.Implement
         public GenerateExamViewModel GenerateExamination(GenerateExamViewModel exam, string fullname = "", string usercode = "")
         {
             exam.IsEnough = true;
+            exam.IsManually = false;
             int courseId = exam.CourseId;
             CourseViewModel course = courseService.GetCourseById(courseId);
             exam.TotalQuestion = course.DefaultNumberOfQuestion;
             if (exam.FlagPercent.Equals("grade"))
             {
                 exam.EasyPercent = exam.OrdinaryGrade;
-                exam.MediumPercent = exam.GoodGrade - exam.HardPercent;
+                exam.MediumPercent = exam.ExcellentGrade - exam.OrdinaryGrade;
                 exam.HardPercent = 100 - exam.EasyPercent - exam.MediumPercent;
             }
             int questionEasy = 0;
@@ -753,7 +759,11 @@ namespace QBCS.Service.Implement
                             {
                                 IsCorrect = o.IsCorrect,
                                 OptionContent = o.OptionContent,
-                                Image = o.Image
+                                Image = o.Image,
+                                Images = o.Images.Select(im => new Image
+                                {
+                                    Source = im.Source
+                                }).ToList()
                             }).ToList()
                         };
                         unitOfWork.Repository<QuestionInExam>().Insert(question);
@@ -761,9 +771,6 @@ namespace QBCS.Service.Implement
                     unitOfWork.SaveChanges();
                 }
             }
-
-
-
             exam.GroupExam = examGroup;
             exam.CalculateGrade();
             return exam;
@@ -816,7 +823,18 @@ namespace QBCS.Service.Implement
                         Id = d.Id,
                         OptionContent = d.OptionContent,
                         IsCorrect = (bool)d.IsCorrect,
-                        Image = d.Image
+                        Image = d.Image,
+                        Images = d.Images.Select(i => new ImageViewModel
+                        {
+                            Source = i.Source,
+                            QuestionTempId = i.QuestionTempId,
+                            Id = i.Id,
+                            QuestionId = i.QuestionId,
+                            QuestionInExamId = i.QuestionInExamId,
+                            OptionId = i.OptionId,
+                            OptionInExamId = i.OptionInExamId,
+                            OptionTempId = i.OptionTempId
+                        }).ToList()
                     }).ToList()
                 }).ToList();
                 var listQuestionRemoveRecent = questionsByLevelAndLearningOutcome
@@ -910,13 +928,27 @@ namespace QBCS.Service.Implement
                                                 QuestionTempId = i.QuestionTempId,
                                                 Id = i.Id,
                                                 QuestionId = i.QuestionId,
-                                                QuestionInExamId = i.QuestionInExamId
+                                                QuestionInExamId = i.QuestionInExamId,
+                                                OptionId = i.OptionId,
+                                                OptionInExamId = i.OptionInExamId,
+                                                OptionTempId = i.OptionTempId
                                             }).ToList(),
                                             QuestionCode = q.QuestionCode,
                                             Options = q.Options.ToList().Select(o => new OptionViewModel
                                             {
                                                 Id = o.Id,
                                                 Image = o.Image,
+                                                Images = o.Images.Select(i => new ImageViewModel
+                                                {
+                                                    Source = i.Source,
+                                                    QuestionTempId = i.QuestionTempId,
+                                                    Id = i.Id,
+                                                    QuestionId = i.QuestionId,
+                                                    QuestionInExamId = i.QuestionInExamId,
+                                                    OptionId = i.OptionId,
+                                                    OptionInExamId = i.OptionInExamId,
+                                                    OptionTempId = i.OptionTempId
+                                                }).ToList(),
                                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                                                 OptionContent = WebUtility.HtmlDecode(o.OptionContent)
                                             }).ToList()
@@ -975,7 +1007,11 @@ namespace QBCS.Service.Implement
                     {
                         IsCorrect = o.IsCorrect,
                         OptionContent = o.OptionContent,
-                        Image = o.Image
+                        Image = o.Image,
+                        Images = o.Images.Select(i => new Image
+                        {
+                            Source = i.Source
+                        }).ToList(),
                     }).ToList()
                 };
                 unitOfWork.Repository<QuestionInExam>().Insert(question);

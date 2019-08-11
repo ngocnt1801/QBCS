@@ -7,7 +7,7 @@
 
 <h2>Examinaton Report</h2>
 
-@if (Model.IsEnough && Model.IsSyllabusHaveLO)
+@if (Model.IsEnough && Model.IsSyllabusHaveLO || Model.IsManually)
 {
     <h5>Total examinations : @Model.TotalExam</h5>
     <table class="table table-bordered text-custom" id="dataTable" width="100%" cellspacing="0">

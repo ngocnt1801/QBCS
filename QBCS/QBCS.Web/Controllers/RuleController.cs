@@ -30,7 +30,7 @@ namespace QBCS.Web.Controllers
         [LogAction(Action = "Rule", Message = "Get All Rules", Method = "GET")]
         public ActionResult Index()
         {
-            List<RuleViewModel> listRule = ruleService.getAllRule();
+            List<RuleViewModel> listRule = ruleService.GetAllRule();
             List<List<RuleViewModel>> result = new List<List<RuleViewModel>>();
             result.Add(listRule.Where(r => r.GroupType == 1).ToList());
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
@@ -47,7 +47,7 @@ namespace QBCS.Web.Controllers
         [LogAction(Action = "Rule", Message = "Edit Rule", Method = "GET")]
         public ActionResult Edit()
         {
-            List<RuleViewModel> listRule = ruleService.getAllRule();
+            List<RuleViewModel> listRule = ruleService.GetAllRule();
             List<List<RuleViewModel>> result = new List<List<RuleViewModel>>();
             result.Add(listRule.Where(r => r.GroupType == 1).ToList());
             result.Add(listRule.Where(r => r.GroupType == 2).ToList());
@@ -69,7 +69,7 @@ namespace QBCS.Web.Controllers
            
             string newValue = "";
             string oldValue = "";
-            List<RuleViewModel> oldRules = ruleService.getAllRule();
+            List<RuleViewModel> oldRules = ruleService.GetAllRule();
 
             oldValue = JsonConvert.SerializeObject(oldRules);
             newValue = JsonConvert.SerializeObject(rules);

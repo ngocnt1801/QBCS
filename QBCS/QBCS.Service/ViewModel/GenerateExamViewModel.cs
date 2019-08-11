@@ -32,6 +32,7 @@ namespace QBCS.Service.ViewModel
         public int ExcellentGradeCalculate { get; set; }
         public int TotalExam { get; set; }
         public bool IsEnough { get; set; }
+        public bool IsManually { get; set; }
         public bool IsSyllabusHaveLO { get; set; }
         public string GroupExam { get; set; }
         public List<LearingOutcomeInExamination> LearningOutcomeInExam { get; set; }

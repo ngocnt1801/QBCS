@@ -23,7 +23,7 @@ namespace QBCS.Service.Utilities
 
             // Comparison level is initially set to 0.95
             // Increment loop in steps of .01
-            var compareLevel = 0.1;
+            var compareLevel = 1;
             //for (var compareLevel = 0.98; compareLevel <= 1.00; compareLevel += 0.01)
             //{
             var isDuplicated = CompareImages(image1, image2, compareLevel, similarityThreshold);

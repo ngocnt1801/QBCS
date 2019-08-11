@@ -3,6 +3,7 @@ using QBCS.Repository.Implement;
 using QBCS.Repository.Interface;
 using QBCS.Service.Enum;
 using QBCS.Service.Interface;
+using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -26,17 +27,33 @@ namespace QBCS.Service.Implement
         public void Cancel(int importId)
         {
             var import = unitOfWork.Repository<Import>().GetById(importId);
-            var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
             if (import != null)
             {
+
+                var listImage = import.QuestionTemps.SelectMany(q => q.OptionTemps.SelectMany(o => o.Images)).Distinct().ToList();
+
+                foreach (var image in listImage)
+                {
+                    unitOfWork.Repository<Image>().Delete(image);
+                }
+                var listQuestion = import.QuestionTemps.OrderByDescending(q => q.Id).ToList();
                 foreach (var question in listQuestion)
                 {
                     unitOfWork.Repository<QuestionTemp>().Delete(question);
                 }
 
+                
                 import.Status = (int)StatusEnum.Canceled;
                 unitOfWork.Repository<Import>().Update(import);
                 unitOfWork.SaveChanges();
+
+                var listOption = unitOfWork.Repository<OptionTemp>().GetAll().Where(o => o.TempId == null).ToList();
+                foreach (var option in listOption)
+                {
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+                unitOfWork.SaveChanges();
+
             }
         }
 
@@ -283,8 +300,21 @@ namespace QBCS.Service.Implement
                 //entity.Image = question.Image;
 
                 var listOptionEntity = entity.OptionTemps.ToList();
+
                 foreach (var option in listOptionEntity)
                 {
+                    #region must fix
+                    if(option.Images != null)
+                    {
+                        foreach (var image in option.Images.ToList())
+                        {
+                            unitOfWork.Repository<Image>().Delete(image);
+                        }
+                        unitOfWork.SaveChanges();
+
+                    }
+                    #endregion
+
                     unitOfWork.Repository<OptionTemp>().Delete(option);
                 }
                 if (entity.Images != null && entity.Images.Count > 0)
@@ -333,11 +363,28 @@ namespace QBCS.Service.Implement
                 var checkCorrectOption = false;
                 foreach (var option in tempQuestion.OptionTemps)
                 {
-                    if (option.OptionContent.Equals(""))
+                    if (option.OptionContent.Equals("") && (option.Images == null || option.Images.Count() == 0))
                     {
                         tempQuestion.Status = (int)StatusEnum.Invalid;
                         tempQuestion.Message = "Option must not be empty";
                         break;
+                    }
+                    for(int i = 0; i < option.Images.Count -1;i++)
+                    {
+                        for(int j = i + 1; j < option.Images.Count(); j++)
+                        {
+                            //checkDuplicateImage
+                            if (CheckDuplicatedImage.CheckDuplicateImage(option.Images.ElementAtOrDefault(i).Source, option.Images.ElementAtOrDefault(i).Source))
+                            {
+                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                tempQuestion.Message = "Image in option must not be duplicate";
+                                break;
+                            }
+                        }
+                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
+                        {
+                            break;
+                        }
                     }
                     if ((bool)option.IsCorrect)
                     {
@@ -361,11 +408,41 @@ namespace QBCS.Service.Implement
                             //var option2 = tempQuestion.OptionTemps.ElementAtOrDefault(j);
                             var trimOption1 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(i).OptionContent);
                             var trimOption2 = TrimOption(tempQuestion.OptionTemps.ElementAtOrDefault(j).OptionContent);
-                            if (trimOption1.Equals(trimOption2))
+                            if ((!trimOption1.Equals("[html]") || !trimOption2.Equals("[html]")) && trimOption1.Equals(trimOption2))
                             {
                                 tempQuestion.Status = (int)StatusEnum.Invalid;
                                 tempQuestion.Message = "All options must different from each others";
                                 break;
+                            }
+                            else if (
+                                (tempQuestion.OptionTemps.ElementAtOrDefault(i).Images != null && tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count() > 0)
+                                && (tempQuestion.OptionTemps.ElementAtOrDefault(j).Images != null && tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.Count() > 0)
+                            )
+                            {
+                                if (tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count() == tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.Count())
+                                {
+                                    int totalImage = tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count();
+                                    for (int k = 0; k < totalImage; k++)
+                                    {
+                                        for(int l = 0; l < totalImage; l++)
+                                        {
+                                            //checkDuplicateImage
+                                            if (CheckDuplicatedImage.CheckDuplicateImage(
+                                                tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.ElementAtOrDefault(k).Source
+                                                , tempQuestion.OptionTemps.ElementAtOrDefault(j).Images.ElementAtOrDefault(l).Source
+                                            ))
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "All images in options must different from each others";
+                                                break;
+                                            }
+                                        }
+                                        if(tempQuestion.Status == (int)StatusEnum.Invalid)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                         if (tempQuestion.Status == (int)StatusEnum.Invalid)
@@ -714,7 +791,10 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
-                        Image = o.Image,
+                        Images = o.Images.Select(oi => new ImageViewModel()
+                        {
+                            Source = oi.Source
+                        }).ToList(),
                         IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                     }).ToList()
                 };
@@ -738,7 +818,10 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList()
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {
@@ -759,7 +842,10 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList(),
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {
