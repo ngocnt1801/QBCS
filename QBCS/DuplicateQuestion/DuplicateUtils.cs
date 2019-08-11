@@ -31,7 +31,7 @@ namespace DuplicateQuestion
             {
 
                 List<string> duplicatedList = new List<string>();
-                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, duplicatedList);
+                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, duplicatedList, false);
                 item.Test = String.Join(",", duplicatedList.ToArray());
 
                 if (isUpdate)
