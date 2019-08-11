@@ -224,7 +224,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "", bool checkSemantic = false)
         {
             var user = (UserViewModel)Session["user"];
 
@@ -245,7 +245,7 @@ namespace QBCS.Web.Controllers
                     var ownerUser = userService.GetUserById(owner.Value);
                     if (ownerUser != null)
                     {
-                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
+                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix, checkSemantic);
                         if (check == true)
                         {
                             ViewBag.Modal = "#success-modal";
@@ -272,7 +272,7 @@ namespace QBCS.Web.Controllers
                 }
                 else
                 {
-                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix, checkSemantic);
                     if (check == false)
                     {
                         ViewBag.Message = "File is wrong format. PLease check again!";

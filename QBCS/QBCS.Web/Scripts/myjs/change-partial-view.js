@@ -1161,7 +1161,7 @@ function initTableEditable() {
                         else {
                             //notify if not image
                             var result = "";
-                            if (row.IsNotImage) {
+                            if (row.IsNotImage || row.Message.length == 0) {
                                 result = "<p>There is no duplicate</p>";
                             } else {
                                 result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';

@@ -262,12 +262,12 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public async Task ImportToBank(int importId)
+        public async Task ImportToBank(int importId, bool checkSemantic = true)
         {
             using (var context = new QBCSContext())
             {
-                string command = "EXEC CheckDuplicateImport @importId= @id";
-                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", importId));
+                string command = "EXEC CheckDuplicateImport @importId= @id, @checkSemantic=@semantic";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", importId), new SqlParameter("@semantic", checkSemantic ? 1 : 0));
             }
         }
 
