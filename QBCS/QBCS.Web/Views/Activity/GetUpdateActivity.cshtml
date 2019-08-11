@@ -46,10 +46,10 @@
                                     <p class="compare-field" id="l-3" compare-to="#r-3">Level: @item.QuestionNew.LevelName</p>
 
                                     Question:
-                                    @if (item.QuestionNew.Image != null)
+                                    @*@if (item.QuestionNew.Image != null)
                                     {
                                         <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
-                                    } <br />
+                                    } <br />*@
 
                                     <p class="compare-field" id="l-4" compare-to="#r-4">@item.QuestionNew.QuestionContent</p>
                                     <br />
@@ -57,7 +57,7 @@
                                     {
                                         foreach (var image in item.QuestionNew.Images)
                                         {
-                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /> <br />
                                         }
                                     }
                                     Answer:
@@ -86,11 +86,20 @@
                                     <p id="r-3">Level: @item.QuestionOld.LevelName</p>
 
                                     Question:
-                                    @if (item.QuestionOld.Image != null)
+                                    @*@if (item.QuestionOld.Image != null)
                                     {
                                         <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionOld.Image" />
-                                    } <br />
+                                    } <br />*@
                                     <p id="r-4">@item.QuestionOld.QuestionContent</p>
+
+                                    @if (item.QuestionOld.Images != null)
+                                    {
+                                        foreach (var image in item.QuestionOld.Images)
+                                        {
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /> <br />
+                                        }
+                                    }
+
                                     Answer:
                                     @for (var i = 0; i < item.QuestionOld.Options.Count; i++)
                                     {

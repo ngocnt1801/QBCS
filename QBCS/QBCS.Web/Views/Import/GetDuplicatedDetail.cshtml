@@ -97,12 +97,27 @@
                         {
                             <div class="container-fluid text-right-answer">
                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                                @if (Model.Options[i].Images != null)
+                                {
+                                    foreach (var image in Model.Options[i].Images)
+                                    {
+                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                    }
+                                }
                             </div>
+
                         }
                         else
                         {
                             <div class="container-fluid">
                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => Model.Options[i].OptionContent)
+                                @if (Model.Options[i].Images != null)
+                                {
+                                    foreach (var image in Model.Options[i].Images)
+                                    {
+                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                    }
+                                }
                             </div>
                         }
 
@@ -172,12 +187,26 @@
                             {
                                 <div class="container-fluid text-right-answer">
                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                    @if (duplicated.Options[i].Images != null)
+                                    {
+                                        foreach (var image in duplicated.Options[i].Images)
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                        }
+                                    }
                                 </div>
                             }
                             else
                             {
                                 <div class="container-fluid">
                                     @(alpha[i] + ".") @Html.DisplayFor(optionItem => duplicated.Options[i].OptionContent)
+                                    @if (duplicated.Options[i].Images != null)
+                                    {
+                                        foreach (var image in duplicated.Options[i].Images)
+                                        {
+                                            <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /></p>
+                                        }
+                                    }
                                 </div>
                             }
 

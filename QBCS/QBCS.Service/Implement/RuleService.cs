@@ -38,7 +38,7 @@ namespace QBCS.Service.Implement
             };
             return ruleValueViewModel;
         }
-        public List<RuleViewModel> getAllRule()
+        public List<RuleViewModel> GetAllRule()
         {
             List<RuleViewModel> result = new List<RuleViewModel>();
             List<RuleValueViewModel> rvvm = new List<RuleValueViewModel>();

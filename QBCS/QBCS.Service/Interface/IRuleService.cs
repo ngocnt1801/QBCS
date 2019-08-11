@@ -9,7 +9,7 @@ namespace QBCS.Service.Interface
 {
     public interface IRuleService
     {
-        List<RuleViewModel> getAllRule();
+        List<RuleViewModel> GetAllRule();
         bool UpdateRule(List<RuleAjaxHandleViewModel> rule);
         RuleValueViewModel GetRuleById(int id);
     }

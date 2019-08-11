@@ -39,22 +39,41 @@
                                 <td>@item.QuestionCode</td>
                                 <td>
                                     @Html.DisplayFor(modeItem => item.QuestionContent)
-                                    @if (item.Image != null)
+                                    @if (item.Images != null)
                                     {
-                                        <p><img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.Image" /></p>
+                                        foreach (var image in item.Images)
+                                        {
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                        }
                                     }
                                     @for (var i = 0; i < item.Options.Count; i++)
                                     {
                                         if (item.Options[i].IsCorrect == true)
-                                        { 
+                                        {
                                             <div class="container-fluid text-right-answer">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                @if (item.Options[i].Images != null)
+                                                {
+                                                    foreach (var image in item.Options[i].Images)
+                                                    {
+                                                        <br />
+                                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                    }
+                                                }
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="container-fluid">
                                                 @(alpha[i] + ".") @Html.DisplayFor(optionItem => item.Options[i].OptionContent)
+                                                @if (item.Options[i].Images != null)
+                                                {
+                                                    foreach (var image in item.Options[i].Images)
+                                                    {
+                                                        <br />
+                                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" />
+                                                    }
+                                                }
                                             </div>
                                         }
 

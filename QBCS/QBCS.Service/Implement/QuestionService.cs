@@ -1149,55 +1149,52 @@ namespace QBCS.Service.Implement
                             OptionTemps = q.Options.Select(o => new OptionTemp()
                             {
                                 OptionContent = o.OptionContent,
+                                Images = o.Images.Select(oi => new Image()
+                                {
+                                    Source = oi.Source
+                                }).ToList(),
                                 IsCorrect = o.IsCorrect
                             }).ToList(),
                         }).ToList(),
                         ImportedDate = DateTime.Now
                     };
 
-                    //int g = 0;
-                    //string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
-                    //string fileName = "unknownFile-" + user + @"-" + time.ToString() + ".txt";
-                    //if (extensionFile.Equals(".doc"))
-                    //{
-                    //    fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
-                    //}
-                    //else if (extensionFile.Equals(".docx"))
-                    //{
-                    //    fileName = "DOCXFile-" + user + @"-" + time.ToString() + ".txt";
-                    //}
-                    //string filePath = "ErrorLog\\";
-                    //string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
-                    //string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
-                    //if (!File.Exists(fullPath))
-                    //{
-                    //    var myFile = File.Create(fullPath);
-                    //    myFile.Close();
-                    //    using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
-                    //    {
-                    //        if (listQuestion != null)
-                    //        {
-                    //            foreach (var item in listQuestion)
-                    //            {
-                    //                g++;
-                    //                tw.WriteLine(g + "");
-                    //                tw.WriteLine("Question: " + item.QuestionContent);
-                    //                tw.WriteLine("Code: " + item.Code + "\n");
-                    //                if (item.Options != null)
-                    //                {
-                    //                    foreach (var itemOp in item.Options)
-                    //                    {
-                    //                        tw.WriteLine("Option: " + item.Options + "\n");
-                    //                    }
-                    //                }
-                    //                tw.WriteLine("Error: " + item.Error + "\n");
-                    //                tw.WriteLine();
-                    //            }
-                    //            tw.Close();
-                    //        }
+                    int g = 0;
+                    string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+                    string fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
+                    string filePath = "ErrorLog\\";
+                    string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+                    string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+                    if (!File.Exists(fullPath))
+                    {
+                        var myFile = File.Create(fullPath);
+                        myFile.Close();
+                        using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                        {
+                            if (listQuestion != null)
+                            {
+                                foreach (var item in listQuestion)
+                                {
+                                    g++;
+                                    tw.WriteLine(g + "");
+                                    //tw.WriteLine("Question: " + item.QuestionContent);
+                                    tw.WriteLine("Code: " + item.Code + "\n");
+                                    //if (item.Options != null)
+                                    //{
+                                    //    foreach (var itemOp in item.Options)
+                                    //    {
+                                    //        tw.WriteLine("Option: " + item.Options + "\n");
+                                    //    }
+                                    //}
+                                    tw.WriteLine("Error: " + item.Error + "\n");
+                                    tw.WriteLine("Other Error: " + item.OtherError + "\n");
+                                    tw.WriteLine();
+                                }
+                                tw.Close();
+                            }
 
-                    //    }
-                    //}
+                        }
+                    }
                 }
 
                 #endregion
@@ -1505,7 +1502,10 @@ namespace QBCS.Service.Implement
                 {
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
                     OptionContent = o.OptionContent,
-                    Image = o.Image
+                    Images = o.Images.Select(oi => new ImageViewModel()
+                    {
+                        Source = oi.Source
+                    }).ToList(),
                 }).ToList(),
                 Category = (questionEntity.CategoryId.HasValue ? questionEntity.Category.Name : "[None of category]")
                             + " / "
@@ -1522,10 +1522,10 @@ namespace QBCS.Service.Implement
                 {
                     Id = entity.Id,
                     GeneratedDate = (DateTime)entity.GeneratedDate,
-                    Semester = new SemesterViewModel
-                    {
-                        Name = entity.Semester.Name,
-                    },
+                    //Semester = new SemesterViewModel
+                    //{
+                    //    Name = entity.Semester.Name,
+                    //},
                     ExamCode = entity.ExamCode,
                     IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value
 
@@ -1571,6 +1571,10 @@ namespace QBCS.Service.Implement
                     OptionTemps = q.Options.Select(o => new OptionTemp()
                     {
                         OptionContent = o.OptionContent,
+                        Images = o.Images.Select(oi => new Image()
+                        {
+                            Source = oi.Source
+                        }).ToList(),
                         IsCorrect = o.IsCorrect
                     }).ToList(),
                 }).ToList(),
@@ -1652,6 +1656,10 @@ namespace QBCS.Service.Implement
                 Options = q.OptionTemps.Select(o => new OptionViewModel
                 {
                     OptionContent = o.OptionContent,
+                    Images = o.Images.Select(oi => new ImageViewModel()
+                    {
+                        Source = oi.Source
+                    }).ToList(),
                     IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                 }).ToList(),
                 DuplicatedList = String.IsNullOrWhiteSpace(q.DuplicatedString) ? null : q.DuplicatedString.Split(',').Select(s => new DuplicatedQuestionViewModel
@@ -1686,7 +1694,11 @@ namespace QBCS.Service.Implement
                                 Options = entity.Options.Select(o => new OptionViewModel
                                 {
                                     OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    {
+                                        Source = oi.Source
+                                    }).ToList(),
                                 }).ToList(),
                                 IsBank = true,
                                 IsAnotherImport = false
@@ -1709,7 +1721,11 @@ namespace QBCS.Service.Implement
                                 Options = entity.OptionTemps.Select(o => new OptionViewModel
                                 {
                                     OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    {
+                                        Source = oi.Source
+                                    }).ToList(),
                                 }).ToList(),
                                 Status = (StatusEnum)entity.Status.Value,
                                 IsBank = false,
@@ -1786,8 +1802,8 @@ namespace QBCS.Service.Implement
             var optionCheck = new DocViewModel();
             var optionCheckList = new List<DocViewModel>();
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
-            List<OptionTemp> optionList = new List<OptionTemp>();
-            var optionModel = new OptionTemp();
+            List<OptionViewModel> optionList = new List<OptionViewModel>();
+            var optionModel = new OptionViewModel();
             table = TrimTags(table);
             XElement parseTable = XElement.Parse(table);
             foreach (XElement eTable in parseTable.Elements("table"))
@@ -1846,6 +1862,7 @@ namespace QBCS.Service.Implement
                         else if (key.Contains("."))
                         {
                             optionCheck.Code = key.Replace(".", "");
+                            List<ImageViewModel> optionImages = new List<ImageViewModel>();
                             var contentO = tr.Elements("td").Elements("p").ToList();
                             if (value != null && !value.Equals(""))
                             {
@@ -1856,7 +1873,13 @@ namespace QBCS.Service.Implement
                                     {
                                         var getImage1 = contentO.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
                                         var getImage2 = getImage1[1].Split('"');
-                                        optionModel.Image = getImage2[0];
+                                        //optionModel.Image = getImage2[0];
+                                        var image = new ImageViewModel();
+                                        image.Source = getImage2[0];
+                                        if(image != null)
+                                        {
+                                            optionImages.Add(image);
+                                        }   
                                     }
                                     else if (optionModel.OptionContent == null)
                                     {
@@ -1870,14 +1893,16 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                             }
-                            if (optionModel.OptionContent != null)
+                            if (optionModel.OptionContent != null || (images != null && images.Count() != 0))
                             {
                                 optionCheck.Content = optionModel.OptionContent;
+                                optionModel.Images = optionImages;
                                 optionCheckList.Add(optionCheck);
                                 optionList.Add(optionModel);
                             }
-                            optionModel = new OptionTemp();
+                            optionModel = new OptionViewModel();
                             optionCheck = new DocViewModel();
+                            optionImages = new List<ImageViewModel>();
                         }
                         else if (key.Contains("ANSWER:"))
                         {
@@ -1953,7 +1978,7 @@ namespace QBCS.Service.Implement
                     questionTmp.Options = optionList;
                     listQuestion.Add(questionTmp);
                     questionTmp = new QuestionTmpModel();
-                    optionList = new List<OptionTemp>();
+                    optionList = new List<OptionViewModel>();
                     optionCheckList = new List<DocViewModel>();
                 }
             }
@@ -2192,8 +2217,12 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
-                        Image = o.Image,
-                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
+                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                        Images = o.Images.Select(oi => new ImageViewModel()
+                        {
+                            Source = oi.Source
+                        }).ToList(),
+
                     }).ToList()
                 };
 
@@ -2222,7 +2251,10 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList()
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {
@@ -2243,7 +2275,11 @@ namespace QBCS.Service.Implement
                             {
                                 OptionContent = o.OptionContent,
                                 IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                Image = o.Image
+                                Images = o.Images.Select(oi => new ImageViewModel()
+                                {
+                                    Source = oi.Source
+                                }).ToList()
+
                             }).ToList();
                             duplicated.Images = questionEntity.Images.Select(i => new ImageViewModel
                             {

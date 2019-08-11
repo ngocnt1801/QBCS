@@ -195,8 +195,8 @@ namespace QBCS.Web.Controllers
                         Options = conversion.FirstOrDefault().Options.Select(o => new OptionViewModel()
                         {
                             OptionContent = o.OptionContent,
-                            Image = o.Image != null ? o.Image : "",
-                            IsCorrect = o.IsCorrect != null ? (bool)o.IsCorrect : false
+                            Images = o.Images,
+                            IsCorrect = o.IsCorrect
                         }).ToList(),
                     };
                     var oldQuestionTemp = questionService.GetQuestionTempById(vm.questionId);
