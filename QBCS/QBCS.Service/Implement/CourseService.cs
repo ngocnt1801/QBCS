@@ -41,6 +41,7 @@ namespace QBCS.Service.Implement
                     }).ToList()
                 }).ToList()
             };
+            result.Total = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == id && (!q.IsDisable.HasValue || !q.IsDisable.Value)).Count();
             return result;
         }
         public List<CourseViewModel> GetAllCourses()
@@ -151,7 +152,6 @@ namespace QBCS.Service.Implement
                         CourseId = c.CourseId.Value,
                         Name = c.Course.Name,
                         Code = c.Course.Code,
-                        Total = c.Course.Questions.Count,
                         IsDisable = c.Course.IsDisable.HasValue && c.Course.IsDisable.Value,
                         //WarningTotal = c.Course.Questions.Where(q => q.Status == (int)StatusEnum.Editable).Count()
                     }).Where(c => c.IsDisable == false).ToList();
@@ -159,6 +159,7 @@ namespace QBCS.Service.Implement
                     {
                         var iquery = unitOfWork.Repository<Question>().GetAll().Where(q => q.Status == (int)StatusEnum.Editable && q.CourseId == course.Id);
                         course.WarningTotal = iquery.Count();
+                        course.Total = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == course.CourseId && (!q.IsDisable.HasValue || !q.IsDisable.Value)).Count();
                     }
                     return courses;
                 }

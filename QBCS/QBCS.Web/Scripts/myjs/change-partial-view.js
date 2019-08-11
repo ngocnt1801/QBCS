@@ -892,7 +892,10 @@ function sendAjax(url) {
         url: url,
         type: 'GET',
         success: function (response) {
-
+            toastr.success("Successful")
+        },
+        error: function () {
+            toastr.error("Error. Please try again!");
         }
     });
 }

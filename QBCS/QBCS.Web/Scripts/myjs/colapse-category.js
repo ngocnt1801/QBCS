@@ -101,6 +101,7 @@
             this.downCount($(disableBtn.attr("data-category")));
             this.downCount($(disableBtn.attr("data-lo")));
             this.downCount($(disableBtn.attr("data-lv")));
+            this.downCount($("#count-all"));
             disableBtn.parent().parent().remove();
         },
         addCheckbox: function () {
