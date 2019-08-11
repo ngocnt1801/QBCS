@@ -207,21 +207,6 @@ namespace QBCS.Service.Implement
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
-            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            //questionById.QuestionContent = question.QuestionContent;
-
-            //if (question.LevelId != 0)
-            //{
-            //    questionById.LevelId = question.LevelId;
-            //}
-            //if (question.LearningOutcomeId != 0)
-            //{
-            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
-            //}
-
-            //unitOfWork.Repository<Question>().Update(questionById);
-            //unitOfWork.SaveChanges();
-
             string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;

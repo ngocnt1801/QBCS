@@ -24,11 +24,15 @@ namespace DuplicateQuestion
         {
             var item = GetQuestion(questionId.Value);
             var bank = GetBank(item.CourseId, item.UpdateQuestionId.Value);
+            GetImages(bank, true);
             bool isUpdate = false;
 
             if (item != null)
             {
-                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, null);
+
+                List<string> duplicatedList = new List<string>();
+                CheckDuplicateAQuestionWithBank(item, bank, ref isUpdate, duplicatedList);
+                item.Test = String.Join(",", duplicatedList.ToArray());
 
                 if (isUpdate)
                 {
@@ -37,12 +41,12 @@ namespace DuplicateQuestion
                         connection.Open();
                         SqlCommand command = new SqlCommand(
                           "UPDATE QuestionTemp " +
-                          "SET Status=@status, DuplicatedId=@duplicatedId " +
+                          "SET Status=@status, DuplicatedString=@test " +
                           "WHERE Id=@id",
                           connection
                           );
                         command.Parameters.AddWithValue("@status", item.Status);
-                        command.Parameters.AddWithValue("@duplicatedId", item.DuplicatedQuestionId);
+                        command.Parameters.AddWithValue("@test", item.Test);
                         command.Parameters.AddWithValue("@id", item.Id);
 
                         command.ExecuteNonQuery();
@@ -441,14 +445,16 @@ namespace DuplicateQuestion
             bool firstIsContent = true;
 
             //define main compare
-            if (item.QuestionContent.Length < String.Join(" ", GetOptionsByStatus(item.Options, CORRECT)).Length)
+            if (item.QuestionContent.Length < ConvertListOptionsToString(GetOptionsByStatus(item.Options, CORRECT)).Length)
             {
                 firstIsContent = false;
             }
             foreach (var question in bank)
             {
                 question.Result = "";
-                if ((!question.IsBank && !item.IsBank && item.Id == question.Id) || (question.IsBank && item.IsBank && question.Id == item.Id))
+                if ((!question.IsBank && !item.IsBank && item.Id == question.Id)
+                    || (question.IsBank && item.IsBank && question.Id == item.Id)
+                    || (item.UpdateQuestionId.HasValue && item.UpdateQuestionId.Value == question.Id))
                 {
                     continue;
                 }
@@ -462,10 +468,8 @@ namespace DuplicateQuestion
                     question.Result += "q_" + questionResult + "_";
                     if (questionResult >= HIGH_DUPLICATE) //same question content
                     {
-
                         var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
                         question.Result += "ao_" + allOptionResult + "_";
-
                         if (allOptionResult > OPTION_MAX_DUPLICATE)
                         {
                             #region check image
@@ -683,6 +687,7 @@ namespace DuplicateQuestion
 
                         if (questionResult >= HIGH_DUPLICATE) //same question content
                         {
+
                             #region check image
                             if (item.Images != null && item.Images.Count > 0)
                             {
@@ -690,6 +695,7 @@ namespace DuplicateQuestion
                                 {
                                     if (CheckImageQuestion(item.Images, question.Images))
                                     {
+
                                         question.Result += "i_true" + "_";
 
                                         AssignDuplicated(question, item, StatusEnum.Editable);
@@ -722,7 +728,6 @@ namespace DuplicateQuestion
                         } // end if > HIGH_Duplicate
                         else if (questionResult >= MINIMUM_DUPLICATE)
                         {
-
                             #region check wrong options
                             double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                             GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
