@@ -487,6 +487,17 @@ namespace QBCS.Web.Controllers
 
             return View(model);
         }
+
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Examination", Message = "View Examination History Activity", Method = "GET")]
+        public ActionResult GetExaminationHistory(int id)
+        {
+            var result = questionService.GetQuestionHistory(id);
+            TempData["active"] = "Course";
+            return View(result);
+        }
     }
 
     public class Textarea
