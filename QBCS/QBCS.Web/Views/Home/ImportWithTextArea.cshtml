@@ -105,8 +105,13 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    $("iframe").get(0).contentWindow.document.body.innerHTML = "";
-                    toastr.info("Your question are processing. It will notify when done.");
+                    if (response == true) {
+                        $("iframe").get(0).contentWindow.document.body.innerHTML = "";
+                        toastr.info("Your question are processing. It will notify when done.");
+                    } else {
+                        toastr.error("Import error. Please try again!");
+                    }
+                    
                 },
                 failure: function(response) {
                     toastr.error("Import error. Please try again!");

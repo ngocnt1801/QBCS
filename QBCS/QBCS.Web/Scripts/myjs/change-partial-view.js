@@ -258,9 +258,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -479,9 +479,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -694,9 +694,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -1232,9 +1232,9 @@ function initTableEditable() {
                     var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
-                breakContent = [];
                 var o = 0;
                 for (o = 0; o < question[q]["Options"].length; o++) {
+                    breakContent = [];
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -1340,8 +1340,8 @@ function initTableEditable() {
                         var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
                         $(jdf).text(breakContent[f]);
                     }
-                    breakContent = [];
                     for (o = 0; o < duplicate["Options"].length; o++) {
+                        breakContent = [];
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
@@ -1637,9 +1637,9 @@ function initTableBankEditable() {
                     var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
-                breakContent = [];
                 var o = 0;
                 for (o = 0; o < question[q]["Options"].length; o++) {
+                    breakContent = [];
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -1745,8 +1745,8 @@ function initTableBankEditable() {
                         var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
                         $(jdf).text(breakContent[f]);
                     }
-                    breakContent = [];
                     for (o = 0; o < duplicate["Options"].length; o++) {
+                        breakContent = [];
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];

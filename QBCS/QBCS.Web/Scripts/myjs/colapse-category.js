@@ -355,9 +355,9 @@
                         {
                             render: function (data, type, row, meta) {
                                 var importId = $('#importId').val();
-                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading"><i class="fa fa-pencil-alt"></i></a>';
-                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId + '"><i class="fa fa-trash"></i></button>';
-                                var history = '<a href="/Activity/GetLogByQuestionID?targetId=' + row.Id + '&importId=' + row.ImportId + '" class="btn btn-info mr-1 col-12 mb-2 spinner-loading"><i class="fa fa-history"></i></a>';
+                                var edit = '<a href="/Question/GetQuestionDetail/' + row.Id + '" class="btn btn-primary mb-2 col-md-12 spinner-loading" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fa fa-pencil-alt"></i></a>';
+                                var deleteQ = '<button data-id="' + row.Id + '" data-url="/Question/ToggleDisable/' + row.Id + '" class="btn btn-danger toggleDisable col-12 mb-2" data-category="#count-c-' + row.CategoryId + '" data-lo="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '" data-lv="#count-c-' + row.CategoryId + '-l-' + row.LearningOutcomeId + '-lv-' + row.LevelId + '" data-toggle="tooltip" data-placement="right" title="Disable"><i class="fa fa-trash"></i></button>';
+                                var history = '<a href="/Activity/GetLogByQuestionID?targetId=' + row.Id + '&importId=' + row.ImportId + '" class="btn btn-info mr-1 col-12 mb-2 spinner-loading" data-toggle="tooltip" data-placement="right" title="History"><i class="fa fa-history"></i></a>';
                                 var result = edit + deleteQ + history;
                                 return result;
                             }
@@ -424,8 +424,8 @@
                                 var jqw = '#' + question[q].Id + ' #Question #qcontent_' + w;
                                 $(jqw).text(breakContent[w]);
                             }
-                            breakContent = [];
                             for (var o = 0; o < question[q]["Options"].length; o++) {
+                                breakContent = [];
                                 var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                                 var jo = '#' + question[q].Id + ' #Option' + o;
                                 var optionContent = question[q]["Options"][o]["OptionContent"];
