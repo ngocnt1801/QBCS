@@ -56,5 +56,12 @@ namespace DuplicateQuestion
             RemoveSpecialCharacter(ref s);
         }
 
+        public static string RemoveSignals(string s)
+        {
+            RemoveHtmlSignal(ref s);
+            RemoveNoContent(ref s);
+            return s;
+        }
+
     }
 }

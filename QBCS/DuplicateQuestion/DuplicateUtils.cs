@@ -459,27 +459,138 @@ namespace DuplicateQuestion
                     continue;
                 }
 
-                if (firstIsContent)
+                if (String.IsNullOrWhiteSpace(item.QuestionContent)
+                    || String.IsNullOrWhiteSpace(StringUtils.RemoveSignals(item.QuestionContent))
+                    || String.IsNullOrWhiteSpace(question.QuestionContent)
+                    || String.IsNullOrWhiteSpace(StringUtils.RemoveSignals(question.QuestionContent))
+                    )
                 {
-                    #region main is question content
-
-                    //Check question content
-                    var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
-                    question.Result += "q_" + questionResult + "_";
-                    if (questionResult >= HIGH_DUPLICATE) //same question content
+                    if (item.Images != null && item.Images.Count > 0)
                     {
-                        var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
-                        question.Result += "ao_" + allOptionResult + "_";
-                        if (allOptionResult > OPTION_MAX_DUPLICATE)
+                        if (question.Images != null && question.Images.Count > 0)
                         {
-                            #region check image
-                            if (item.Images != null && item.Images.Count > 0)
+                            if (CheckImageQuestion(item.Images, question.Images))
                             {
-                                if (question.Images != null && question.Images.Count > 0)
+                                question.Result += "i_true" + "_";
+
+                                var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
+                                question.Result += "ao_" + allOptionResult + "_";
+                                if (allOptionResult > OPTION_MAX_DUPLICATE)
                                 {
-                                    if (CheckImageQuestion(item.Images, question.Images))
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+
+                                    if (duplicatedList != null)
                                     {
-                                        question.Result += "i_true" + "_";
+                                        duplicatedList.Add(question.ToString());
+                                    }
+                                }
+                                else
+                                {
+                                    double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                               GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
+                                    question.Result += "or_" + optionRightResult + "_";
+
+                                    if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                                    {
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (firstIsContent)
+                    {
+                        #region main is question content
+
+                        //Check question content
+                        var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
+                        question.Result += "q_" + questionResult + "_";
+                        if (questionResult >= HIGH_DUPLICATE) //same question content
+                        {
+                            var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
+                            question.Result += "ao_" + allOptionResult + "_";
+                            if (allOptionResult > OPTION_MAX_DUPLICATE)
+                            {
+                                #region check image
+                                if (item.Images != null && item.Images.Count > 0)
+                                {
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item.Images, question.Images))
+                                        {
+                                            question.Result += "i_true" + "_";
+
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if ((item.Images == null || item.Images.Count == 0)
+                                    && (question.Images == null || question.Images.Count == 0))
+                                {
+                                    question.Result += "ni_true" + "_";
+
+                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                    isUpdate = true;
+
+                                    if (duplicatedList != null)
+                                    {
+                                        duplicatedList.Add(question.ToString());
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region check correct option
+                                double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                    GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
+                                question.Result += "or_" + optionRightResult + "_";
+
+                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                                {
+                                    #region check image
+                                    if (item.Images != null && item.Images.Count > 0)
+                                    {
+                                        if (question.Images != null && question.Images.Count > 0)
+                                        {
+                                            if (CheckImageQuestion(item.Images, question.Images))
+                                            {
+                                                question.Result += "i_true" + "_";
+
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ((item.Images == null || item.Images.Count == 0)
+                                        && (question.Images == null || question.Images.Count == 0))
+                                    {
+                                        question.Result += "ni_true" + "_";
 
                                         AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
@@ -489,26 +600,18 @@ namespace DuplicateQuestion
                                             duplicatedList.Add(question.ToString());
                                         }
                                     }
+
+                                    #endregion
+
                                 }
+
+                                #endregion
                             }
 
-                            if ((item.Images == null || item.Images.Count == 0)
-                                && (question.Images == null || question.Images.Count == 0))
-                            {
-                                question.Result += "ni_true" + "_";
-
-                                AssignDuplicated(question, item, StatusEnum.Editable);
-                                isUpdate = true;
-
-                                if (duplicatedList != null)
-                                {
-                                    duplicatedList.Add(question.ToString());
-                                }
-                            }
-                            #endregion
-                        }
-                        else
+                        } // end if > HIGH_Duplicate
+                        else if (questionResult >= MINIMUM_DUPLICATE)
                         {
+
                             #region check correct option
                             double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
                                                                                 GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
@@ -516,187 +619,36 @@ namespace DuplicateQuestion
 
                             if (optionRightResult > OPTION_DUPLICATE) //same correct option
                             {
-                                #region check image
-                                if (item.Images != null && item.Images.Count > 0)
+                                #region check wrong options
+                                double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
+                                question.Result += "ow_" + optionWrongResult + "_";
+                                if (optionWrongResult >= OPTION_DUPLICATE)
                                 {
-                                    if (question.Images != null && question.Images.Count > 0)
+                                    #region check image
+                                    if (item.Images != null && item.Images.Count > 0)
                                     {
-                                        if (CheckImageQuestion(item.Images, question.Images))
+                                        if (question.Images != null && question.Images.Count > 0)
                                         {
-                                            question.Result += "i_true" + "_";
-
-                                            AssignDuplicated(question, item, StatusEnum.Editable);
-                                            isUpdate = true;
-
-                                            if (duplicatedList != null)
+                                            if (CheckImageQuestion(item.Images, question.Images))
                                             {
-                                                duplicatedList.Add(question.ToString());
+                                                question.Result += "i_true" + "_";
+
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                if ((item.Images == null || item.Images.Count == 0)
-                                    && (question.Images == null || question.Images.Count == 0))
-                                {
-                                    question.Result += "ni_true" + "_";
-
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-
-                                    if (duplicatedList != null)
+                                    if ((item.Images == null || item.Images.Count == 0)
+                                        && (question.Images == null || question.Images.Count == 0))
                                     {
-                                        duplicatedList.Add(question.ToString());
-                                    }
-                                }
-
-                                #endregion
-
-                            }
-
-                            #endregion
-                        }
-
-                    } // end if > HIGH_Duplicate
-                    else if (questionResult >= MINIMUM_DUPLICATE)
-                    {
-
-                        #region check correct option
-                        double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                            GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
-                        question.Result += "or_" + optionRightResult + "_";
-
-                        if (optionRightResult > OPTION_DUPLICATE) //same correct option
-                        {
-                            #region check wrong options
-                            double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                            GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
-                            question.Result += "ow_" + optionWrongResult + "_";
-                            if (optionWrongResult >= OPTION_DUPLICATE)
-                            {
-                                #region check image
-                                if (item.Images != null && item.Images.Count > 0)
-                                {
-                                    if (question.Images != null && question.Images.Count > 0)
-                                    {
-                                        if (CheckImageQuestion(item.Images, question.Images))
-                                        {
-                                            question.Result += "i_true" + "_";
-
-                                            AssignDuplicated(question, item, StatusEnum.Editable);
-                                            isUpdate = true;
-
-                                            if (duplicatedList != null)
-                                            {
-                                                duplicatedList.Add(question.ToString());
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if ((item.Images == null || item.Images.Count == 0)
-                                    && (question.Images == null || question.Images.Count == 0))
-                                {
-                                    question.Result += "ni_true" + "_";
-
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-
-                                    if (duplicatedList != null)
-                                    {
-                                        duplicatedList.Add(question.ToString());
-                                    }
-                                }
-
-                                #endregion
-                            }
-                            #endregion
-                        }
-                        #endregion
-                    } // end if > MINIMUM_DUPLICATE
-                    else
-                    {
-                        double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(question.Options, CORRECT)),
-                                                                                item.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(item.Options, CORRECT)), checkSemantic);
-                        question.Result += "qo_" + questionAndOptionResult + "_";
-
-                        if (questionAndOptionResult > MINIMUM_DUPLICATE)
-                        {
-                            #region check wrong options
-                            double checkOptionWrong = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                            GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
-                            question.Result += "ow_" + checkOptionWrong + "_";
-
-                            if (checkOptionWrong >= OPTION_DUPLICATE)
-                            {
-                                #region check image
-                                if (item.Images != null && item.Images.Count > 0)
-                                {
-                                    if (question.Images != null && question.Images.Count > 0)
-                                    {
-                                        if (CheckImageQuestion(item.Images, question.Images))
-                                        {
-                                            question.Result += "i_true" + "_";
-
-                                            AssignDuplicated(question, item, StatusEnum.Editable);
-                                            isUpdate = true;
-
-                                            if (duplicatedList != null)
-                                            {
-                                                duplicatedList.Add(question.ToString());
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if ((item.Images == null || item.Images.Count == 0)
-                                    && (question.Images == null || question.Images.Count == 0))
-                                {
-                                    question.Result += "ni_true" + "_";
-
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-
-                                    if (duplicatedList != null)
-                                    {
-                                        duplicatedList.Add(question.ToString());
-                                    }
-                                }
-
-                                #endregion
-                            }
-                            #endregion
-                        }
-
-                    }
-
-                    #endregion
-                }
-                else
-                {
-                    #region main is options
-
-                    double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
-                                                                        GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
-                    question.Result += "or_" + optionRightResult + "_";
-
-                    if (optionRightResult > OPTION_DUPLICATE) //same correct option
-                    {
-                        var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
-                        question.Result += "q_" + questionResult + "_";
-
-                        if (questionResult >= HIGH_DUPLICATE) //same question content
-                        {
-
-                            #region check image
-                            if (item.Images != null && item.Images.Count > 0)
-                            {
-                                if (question.Images != null && question.Images.Count > 0)
-                                {
-                                    if (CheckImageQuestion(item.Images, question.Images))
-                                    {
-
-                                        question.Result += "i_true" + "_";
+                                        question.Result += "ni_true" + "_";
 
                                         AssignDuplicated(question, item, StatusEnum.Editable);
                                         isUpdate = true;
@@ -706,81 +658,24 @@ namespace DuplicateQuestion
                                             duplicatedList.Add(question.ToString());
                                         }
                                     }
+
+                                    #endregion
                                 }
-                            }
-
-                            if ((item.Images == null || item.Images.Count == 0)
-                                && (question.Images == null || question.Images.Count == 0))
-                            {
-                                question.Result += "ni_true" + "_";
-
-                                AssignDuplicated(question, item, StatusEnum.Editable);
-                                isUpdate = true;
-
-                                if (duplicatedList != null)
-                                {
-                                    duplicatedList.Add(question.ToString());
-                                }
-                            }
-
-                            #endregion
-
-                        } // end if > HIGH_Duplicate
-                        else if (questionResult >= MINIMUM_DUPLICATE)
-                        {
-                            #region check wrong options
-                            double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
-                                                                            GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
-                            question.Result += "ow_" + optionWrongResult + "_";
-
-                            if (optionWrongResult >= OPTION_DUPLICATE)
-                            {
-                                #region check image
-                                if (item.Images != null && item.Images.Count > 0)
-                                {
-                                    if (question.Images != null && question.Images.Count > 0)
-                                    {
-                                        if (CheckImageQuestion(item.Images, question.Images))
-                                        {
-                                            question.Result += "i_true" + "_";
-
-                                            AssignDuplicated(question, item, StatusEnum.Editable);
-                                            isUpdate = true;
-
-                                            if (duplicatedList != null)
-                                            {
-                                                duplicatedList.Add(question.ToString());
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if ((item.Images == null || item.Images.Count == 0)
-                                    && (question.Images == null || question.Images.Count == 0))
-                                {
-                                    question.Result += "ni_true" + "_";
-                                    AssignDuplicated(question, item, StatusEnum.Editable);
-                                    isUpdate = true;
-
-                                    if (duplicatedList != null)
-                                    {
-                                        duplicatedList.Add(question.ToString());
-                                    }
-                                }
-
                                 #endregion
                             }
                             #endregion
-
                         } // end if > MINIMUM_DUPLICATE
                         else
                         {
                             double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(question.Options, CORRECT)),
-                                                                                item.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(item.Options, CORRECT)), checkSemantic);
+                                                                                    item.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(item.Options, CORRECT)), checkSemantic);
                             question.Result += "qo_" + questionAndOptionResult + "_";
+
                             if (questionAndOptionResult > MINIMUM_DUPLICATE)
                             {
+                                
                                 #region check wrong options
+                                
                                 double checkOptionWrong = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
                                                                                 GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
                                 question.Result += "ow_" + checkOptionWrong + "_";
@@ -823,21 +718,74 @@ namespace DuplicateQuestion
 
                                     #endregion
                                 }
+                                
                                 #endregion
+    
                             }
+                            else
+                            {
+                                if (item.Images != null && item.Images.Count > 0)
+                                {
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item.Images, question.Images))
+                                        {
+                                            question.Result += "i_true" + "_";
+
+                                            var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
+                                            question.Result += "ao_" + allOptionResult + "_";
+                                            if (allOptionResult > OPTION_MAX_DUPLICATE)
+                                            {
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
+                                            }
+                                            else
+                                            {
+                                                double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                                    GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
+                                                question.Result += "or_" + optionRightResult + "_";
+
+                                                if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                                                {
+                                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                                    isUpdate = true;
+
+                                                    if (duplicatedList != null)
+                                                    {
+                                                        duplicatedList.Add(question.ToString());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                         }
+
+                        #endregion
                     }
                     else
                     {
-                        var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
-                        question.Result += "q_" + questionResult + "_";
-                        if (questionResult >= HIGH_DUPLICATE)
-                        {
-                            var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
-                            question.Result += "ao_" + allOptionResult + "_";
+                        #region main is options
 
-                            if (allOptionResult > OPTION_MAX_DUPLICATE)
+                        double optionRightResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, CORRECT),
+                                                                            GetOptionsByStatus(item.Options, CORRECT), checkSemantic);
+                        question.Result += "or_" + optionRightResult + "_";
+
+                        if (optionRightResult > OPTION_DUPLICATE) //same correct option
+                        {
+                            var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
+                            question.Result += "q_" + questionResult + "_";
+
+                            if (questionResult >= HIGH_DUPLICATE) //same question content
                             {
+
                                 #region check image
                                 if (item.Images != null && item.Images.Count > 0)
                                 {
@@ -845,6 +793,7 @@ namespace DuplicateQuestion
                                     {
                                         if (CheckImageQuestion(item.Images, question.Images))
                                         {
+
                                             question.Result += "i_true" + "_";
 
                                             AssignDuplicated(question, item, StatusEnum.Editable);
@@ -871,12 +820,185 @@ namespace DuplicateQuestion
                                         duplicatedList.Add(question.ToString());
                                     }
                                 }
+
                                 #endregion
+
+                            } // end if > HIGH_Duplicate
+                            else if (questionResult >= MINIMUM_DUPLICATE)
+                            {
+                                #region check wrong options
+                                double optionWrongResult = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
+                                question.Result += "ow_" + optionWrongResult + "_";
+
+                                if (optionWrongResult >= OPTION_DUPLICATE)
+                                {
+                                    #region check image
+                                    if (item.Images != null && item.Images.Count > 0)
+                                    {
+                                        if (question.Images != null && question.Images.Count > 0)
+                                        {
+                                            if (CheckImageQuestion(item.Images, question.Images))
+                                            {
+                                                question.Result += "i_true" + "_";
+
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ((item.Images == null || item.Images.Count == 0)
+                                        && (question.Images == null || question.Images.Count == 0))
+                                    {
+                                        question.Result += "ni_true" + "_";
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+                                #endregion
+
+                            } // end if > MINIMUM_DUPLICATE
+                            else
+                            {
+
+                                if (item.Images != null && item.Images.Count > 0)
+                                {
+                                    if (question.Images != null && question.Images.Count > 0)
+                                    {
+                                        if (CheckImageQuestion(item.Images, question.Images))
+                                        {
+                                            question.Result += "i_true" + "_";
+
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+
+                                /*
+                                double questionAndOptionResult = CaculateStringSimilar(question.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(question.Options, CORRECT)),
+                                                                                    item.QuestionContent + " " + ConvertListOptionsToString(GetOptionsByStatus(item.Options, CORRECT)), checkSemantic);
+                                question.Result += "qo_" + questionAndOptionResult + "_";
+                                if (questionAndOptionResult > MINIMUM_DUPLICATE)
+                                {
+                                    #region check wrong options
+                                    double checkOptionWrong = CalculateListOptionSimilar(GetOptionsByStatus(question.Options, INCORRECT),
+                                                                                    GetOptionsByStatus(item.Options, INCORRECT), checkSemantic);
+                                    question.Result += "ow_" + checkOptionWrong + "_";
+
+                                    if (checkOptionWrong >= OPTION_DUPLICATE)
+                                    {
+                                        #region check image
+                                        if (item.Images != null && item.Images.Count > 0)
+                                        {
+                                            if (question.Images != null && question.Images.Count > 0)
+                                            {
+                                                if (CheckImageQuestion(item.Images, question.Images))
+                                                {
+                                                    question.Result += "i_true" + "_";
+
+                                                    AssignDuplicated(question, item, StatusEnum.Editable);
+                                                    isUpdate = true;
+
+                                                    if (duplicatedList != null)
+                                                    {
+                                                        duplicatedList.Add(question.ToString());
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if ((item.Images == null || item.Images.Count == 0)
+                                            && (question.Images == null || question.Images.Count == 0))
+                                        {
+                                            question.Result += "ni_true" + "_";
+
+                                            AssignDuplicated(question, item, StatusEnum.Editable);
+                                            isUpdate = true;
+
+                                            if (duplicatedList != null)
+                                            {
+                                                duplicatedList.Add(question.ToString());
+                                            }
+                                        }
+
+                                        #endregion
+                                    }
+                                    #endregion
+                                }
+                                */
                             }
                         }
+                        else
+                        {
+                            var questionResult = CaculateStringSimilar(question.QuestionContent, item.QuestionContent, checkSemantic);
+                            question.Result += "q_" + questionResult + "_";
+                            if (questionResult >= HIGH_DUPLICATE)
+                            {
+                                var allOptionResult = CalculateListOptionSimilar(question.Options, item.Options, checkSemantic);
+                                question.Result += "ao_" + allOptionResult + "_";
+
+                                if (allOptionResult > OPTION_MAX_DUPLICATE)
+                                {
+                                    #region check image
+                                    if (item.Images != null && item.Images.Count > 0)
+                                    {
+                                        if (question.Images != null && question.Images.Count > 0)
+                                        {
+                                            if (CheckImageQuestion(item.Images, question.Images))
+                                            {
+                                                question.Result += "i_true" + "_";
+
+                                                AssignDuplicated(question, item, StatusEnum.Editable);
+                                                isUpdate = true;
+
+                                                if (duplicatedList != null)
+                                                {
+                                                    duplicatedList.Add(question.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ((item.Images == null || item.Images.Count == 0)
+                                        && (question.Images == null || question.Images.Count == 0))
+                                    {
+                                        question.Result += "ni_true" + "_";
+
+                                        AssignDuplicated(question, item, StatusEnum.Editable);
+                                        isUpdate = true;
+
+                                        if (duplicatedList != null)
+                                        {
+                                            duplicatedList.Add(question.ToString());
+                                        }
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                        #endregion
                     }
-                    #endregion
                 }
+
 
                 //if (isUpdate)
                 //{
