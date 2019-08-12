@@ -295,7 +295,7 @@ namespace QBCS.Service.Utilities
                         }
                         else
                         {
-                            quesModel.LearningOutcome = globalPrefix + number;
+                            quesModel.LearningOutcome = globalPrefix + " " + number;
                         }
                     }
                 }

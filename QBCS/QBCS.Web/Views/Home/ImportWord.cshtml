@@ -34,7 +34,7 @@
                     {
 
                         @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {*@
+            {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
@@ -59,7 +59,7 @@
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                             @*<input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                                <input id="autocompleteCourseId" name="courseId" hidden />*@
+                <input id="autocompleteCourseId" name="courseId" hidden />*@
                         </div>
 
                         <i class="text-dark text-custom">Choose unit type:</i>
@@ -80,15 +80,31 @@
                                 <input type="radio" name="prefix" autocomplete="off" value=""> [None Prefix]
                             </label>
                         </div>
-
+                        <div class="custom-control custom-checkbox text-custom">
+                            <input type="checkbox" name="checkSemantic" value="true" class="custom-control-input" id="defaultChecked3" checked>
+                            <label class="custom-control-label" for="defaultChecked3">Check Semantic</label>
+                        </div>
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom mt-3">
-                            <i class="text-dark text-custom">Choose a file:</i>
-                            <div class="input-group input-file text-custom" name="questionFile">
-                                <input type="text" class="form-control border-dark" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-import-file btn-choose" type="button">Choose</button>
-                                </span>
+                            @*<i class="text-dark text-custom">Choose a file:</i>
+                                <div class="input-group input-file text-custom" name="questionFile">
+                                    <input type="text" class="form-control border-dark" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                                    </span>
+                                </div>*@
+                            <div class="input-group input-file text-custom" name="questionFile" id="drop_file_zone" ondrop="upload_file(event)" ondragover="addClassDrop(event)" ondragleave="removeClassDrop(event)">
+                                <div class="col-12">
+                                    <input type="text" class="form-control border-0 col-12" id="inFile" required />
+                                    <input type="file" id="selectfile" name="questionFile" class="hidden">
+                                    <span class="input-group-btn col-2">
+                                        <i class="fa fa-2x fa-cloud-upload-alt text-primary mr-2"></i>
+                                        <span class="text-gray-500">Drag and Drop or Click to Import file</span>
+                                        <button class="btn btn-import-file btn-choose" type="button">Choose</button>
+                                    </span>
+                                </div>
+
+
                             </div>
                         </div>
 

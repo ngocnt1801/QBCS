@@ -1,4 +1,5 @@
 ﻿using AuthLib.Module;
+using Newtonsoft.Json;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
@@ -18,10 +19,14 @@ namespace QBCS.Web.Controllers
     public class ImportController : Controller
     {
         private IImportService importService;
+        private IQuestionService questionService;
+        private ILogService logService;
 
         public ImportController()
         {
             importService = new ImportService();
+            questionService = new QuestionService();
+            logService = new LogService();
         }
 
         //Lecturer
@@ -96,6 +101,60 @@ namespace QBCS.Web.Controllers
             importService.UpdateQuestionTemp(model);
             TempData["active"] = "All Imports";
             return RedirectToAction("GetResult", new { importId = model.ImportId });
+        }
+
+
+        [HttpPost]
+        public JsonResult UpdateQuestionTempWithTextBox(EditQuestionTextboxViewModel vm)
+        {
+            try
+            {
+                var conversion = questionService.TableStringToListQuestion(vm.Table, "");
+                if (conversion.Count > 0)
+                {
+                    if ((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
+                    {
+                        return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    var questionTemp = new QuestionTempViewModel()
+                    {
+                        Id = (int)vm.QuestionId,
+                        ImportId = (int)vm.ImportId,
+                        QuestionContent = conversion.FirstOrDefault().QuestionContent.Replace("\r", ""),
+                        Images = conversion.FirstOrDefault().Images.Select(i => new ImageViewModel()
+                        {
+                            Source = i.Source
+                        }).ToList(),
+                        Options = conversion.FirstOrDefault().Options.Select(o => new OptionViewModel()
+                        {
+                            OptionContent = o.OptionContent,
+                            Images = o.Images,
+                            IsCorrect = o.IsCorrect
+                        }).ToList(),
+                    };
+                    var oldQuestionTemp = questionService.GetQuestionTempById((int)vm.QuestionId);
+                    var user = (UserViewModel)Session["user"];
+                    logService.LogFullManually("UpdateQuestionTempWithTextBox", "Question",
+                                                vm.QuestionId, null, "QuestionController", "POST", user.Fullname, "",
+                                                JsonConvert.SerializeObject(questionTemp), JsonConvert.SerializeObject(oldQuestionTemp));
+                    importService.UpdateQuestionTempWithTextarea(questionTemp);
+                    TempData["Modal"] = "#success-modal";
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult EditQuestionTempWithTextbox(int id)
+        {
+            var questiontemp = importService.GetQuestionTemp(id);
+            return View("EditQuestionTempWithTextbox", questiontemp);
         }
 
         //Lecturer

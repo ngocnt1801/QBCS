@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using QBCS.Service.Enum;
 using QBCS.Service.Implement;
 using QBCS.Service.Interface;
-using QBCS.Service.Utilities;
 using QBCS.Service.ViewModel;
 using QBCS.Web.Attributes;
 using System;
@@ -144,49 +143,46 @@ namespace QBCS.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Please enter Question Content");
             }
 
-            
-          
-                foreach (var item in ques.Options)
+            foreach (var item in ques.Options)
+            {
+                if (item.OptionContent.Trim().Equals("[html]"))
                 {
-                    if (item.OptionContent.Trim().Equals("[html]"))
-                    {
-                        ModelState.AddModelError(string.Empty, "Please enter Option Content");
-                    }
+                    ModelState.AddModelError(string.Empty, "Please enter Option Content");
                 }
-                
-                //ModelState.AddModelError(string.Empty, "Question Content is required");
-                //ModelState.AddModelError(string.Empty, "Option Content is required");
-                List<LevelViewModel> levels = levelService.GetLevel();
-                List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(ques.CourseId);
-                questionDetailViewModel = new QuestionDetailViewModel()
-                {
-                    Question = ques,
-                    Levels = levels,
-                    LearningOutcomes = learningOutcomes
-                };
+            }
 
-            
+            //ModelState.AddModelError(string.Empty, "Question Content is required");
+            //ModelState.AddModelError(string.Empty, "Option Content is required");
+            List<LevelViewModel> levels = levelService.GetLevel();
+            List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(ques.CourseId);
+            questionDetailViewModel = new QuestionDetailViewModel()
+            {
+                Question = ques,
+                Levels = levels,
+                LearningOutcomes = learningOutcomes
+            };
+
+
             return View("EditQuestion", questionDetailViewModel);
-            
+
         }
 
         [HttpPost]
-        
-        public JsonResult UpdateQuestionTempWithTextBox(EditQuestionTextboxViewModel vm)
+        public JsonResult UpdateQuestionWithTextBox(EditQuestionTextboxViewModel vm)
         {
             try
             {
-                var conversion = questionService.TableStringToListQuestion(vm.table, "");
+                var conversion = questionService.TableStringToListQuestion(vm.Table, "");
                 if (conversion.Count > 0)
                 {
-                    if((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
+                    if ((conversion.FirstOrDefault().QuestionContent == null && conversion.FirstOrDefault().Images.Count == 0) || conversion.FirstOrDefault().Options.Count == 0)
                     {
                         return Json(new { error = true }, JsonRequestBehavior.AllowGet);
                     }
-                    var questionTemp = new QuestionTempViewModel()
+                    var question = new QuestionViewModel()
                     {
-                        Id = vm.questionId,
-                        ImportId = vm.importId,
+                        Id = (int)vm.QuestionId,
+                        //ImportId = (int)vm.ImportId,
                         QuestionContent = conversion.FirstOrDefault().QuestionContent.Replace("\r", ""),
                         Images = conversion.FirstOrDefault().Images.Select(i => new ImageViewModel()
                         {
@@ -198,13 +194,17 @@ namespace QBCS.Web.Controllers
                             Images = o.Images,
                             IsCorrect = o.IsCorrect
                         }).ToList(),
+                        LearningOutcomeId = vm.LearningOutcomeId != null ? (int)vm.LearningOutcomeId : 0,
+                        CategoryId = vm.CategoryId != null ? (int)vm.CategoryId : 0,
+                        LevelId = vm.LevelId != null ? (int)vm.LevelId : 0,
+
                     };
-                    var oldQuestionTemp = questionService.GetQuestionTempById(vm.questionId);
+                    var oldQuestion = questionService.GetQuestionById((int)vm.QuestionId);
                     var user = (UserViewModel)Session["user"];
-                    logService.LogFullManually("UpdateQuestionWithTextBox","Question",
-                                                vm.questionId, null, "QuestionController", "POST", user.Fullname, "", 
-                                                JsonConvert.SerializeObject(questionTemp), JsonConvert.SerializeObject(oldQuestionTemp));
-                    importService.UpdateQuestionTemp(questionTemp);
+                    logService.LogFullManually("UpdateQuestionWithTextBox", "Question",
+                                                vm.QuestionId, null, "QuestionController", "POST", user.Fullname, "",
+                                                JsonConvert.SerializeObject(question), JsonConvert.SerializeObject(oldQuestion));
+                    questionService.UpdateQuestionWithTextbox(question);
                     TempData["Modal"] = "#success-modal";
                     return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
@@ -218,13 +218,33 @@ namespace QBCS.Web.Controllers
                 return Json(new { error = true }, JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult GetCategoriesInCourse(int id)
+        {
+            List<CategoryViewModel> categories = categoryService.GetCategoriesByCourseId(id);
+            return Json(categories, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLevels()
+        {
+            List<LevelViewModel> levels = levelService.GetLevel();
+            return Json(levels, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetLearningOutcomesInCourse(int id)
+        {
+            List<LearningOutcomeViewModel> learningOutcomes = learningOutcomeService.GetLearningOutcomeByCourseId(id);
+            return Json(learningOutcomes, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult EditQuestionWithTextbox(int id)
+        {
+            var question = questionService.GetQuestionById(id);
+            return View("EditQuestionWithTextbox", question);
+        }
 
         //lecturer
         //stpm: feature declare
         [Feature(FeatureType.Page, "Import File", "QBCS", protectType: ProtectType.Authorized)]
         [HttpPost]
         [LogAction(Action = "Question", Message = "Import File", Method = "POST")]
-        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "")
+        public ActionResult ImportFile(HttpPostedFileBase questionFile, int courseId, int? owner = null, bool checkCate = false, bool checkHTML = false, string prefix = "", bool checkSemantic = false)
         {
             var user = (UserViewModel)Session["user"];
 
@@ -245,7 +265,7 @@ namespace QBCS.Web.Controllers
                     var ownerUser = userService.GetUserById(owner.Value);
                     if (ownerUser != null)
                     {
-                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML,ownerUser.Id, ownerUser.Fullname, prefix);
+                        check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerUser.Id, ownerUser.Fullname, prefix, checkSemantic);
                         if (check == true)
                         {
                             ViewBag.Modal = "#success-modal";
@@ -261,7 +281,7 @@ namespace QBCS.Web.Controllers
                         }
 
                         //notify 
-                       
+
                     }
                     else
                     {
@@ -272,7 +292,7 @@ namespace QBCS.Web.Controllers
                 }
                 else
                 {
-                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
+                    check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix, checkSemantic);
                     if (check == false)
                     {
                         ViewBag.Message = "File is wrong format. PLease check again!";
@@ -376,9 +396,9 @@ namespace QBCS.Web.Controllers
 
         public JsonResult GetQuestionsDatatable(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, int draw, int start, int length)
         {
-            var search = Request["search[value]"] != null? Request["search[value]"].ToLower() : "";
+            var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionList(courseId, categoryId, learningoutcomeId, topicId, levelId, search, start, length);
-            var result = Json(new { draw = draw , recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = int.MaxValue;
             return result;
         }
@@ -406,20 +426,15 @@ namespace QBCS.Web.Controllers
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditQuestionTempWithTextbox(int id)
-        {
-            var questiontemp = importService.GetQuestionTemp(id);
-            return View("EditQuestionTempWithTextbox", questiontemp);
-        }
         public JsonResult GetQuestionByImportIdAndType(int importId, string type, int draw, int start, int length)
         {
             var search = Request["search[value]"] != null ? Request["search[value]"].ToLower() : "";
             var data = questionService.GetQuestionTempByImportId(importId, type, search, start, length);
-            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true}, JsonRequestBehavior.AllowGet);
+            var result = Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Questions, success = true }, JsonRequestBehavior.AllowGet);
             result.MaxJsonLength = int.MaxValue;
             return result;
         }
-        
+
         public ActionResult CheckBankResult(int courseId)
         {
             return View(courseId);

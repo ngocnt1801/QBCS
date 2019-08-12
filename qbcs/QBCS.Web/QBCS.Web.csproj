@@ -2231,7 +2231,8 @@
     <Content Include="Scripts\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Scripts\vendor\jquery\jquery.min.map" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.map" />
-    <Content Include="Views\Question\EditQuestionTempWithTextbox.cshtml" />
+    <Content Include="Views\Import\EditQuestionTempWithTextbox.cshtml" />
+    <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

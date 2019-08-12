@@ -12,10 +12,8 @@ namespace QBCS.Service.Interface
     public interface IQuestionService
     {
         bool Add(QuestionViewModel question);
-        //List<Question> GetQuestionsByContent(string questionContent);
-        //List<QuestionViewModel> GetQuestionPaging(string searchInput, int take, int skip);
-        //List<Question> GetQuestionSearchBar(string searchInput, int take, int skip);
         bool UpdateQuestion(QuestionViewModel question);
+        void UpdateQuestionWithTextbox(QuestionViewModel question);
         QuestionViewModel GetQuestionById(int id);//Return the QuestionViewModel
         List<QuestionViewModel> GetQuestionByQuestionId(int questionId); //Return the list of QuestionViewModel
         List<QuestionViewModel> GetQuestionsByCourse(int CourseId);
@@ -23,7 +21,7 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();        
         int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
-        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="");
+        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="", bool ccheckSemantic = true);
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
         GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search, int start, int length);
         void ToggleDisable(int id);

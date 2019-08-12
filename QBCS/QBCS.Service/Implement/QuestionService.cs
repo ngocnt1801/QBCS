@@ -207,21 +207,6 @@ namespace QBCS.Service.Implement
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
-            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            //questionById.QuestionContent = question.QuestionContent;
-
-            //if (question.LevelId != 0)
-            //{
-            //    questionById.LevelId = question.LevelId;
-            //}
-            //if (question.LearningOutcomeId != 0)
-            //{
-            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
-            //}
-
-            //unitOfWork.Repository<Question>().Update(questionById);
-            //unitOfWork.SaveChanges();
-
             string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
@@ -275,6 +260,78 @@ namespace QBCS.Service.Implement
             }
 
             return true;
+        }
+
+        public void UpdateQuestionWithTextbox(QuestionViewModel question)
+        {
+            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
+            //questionById.QuestionContent = question.QuestionContent;
+
+            //if (question.LevelId != 0)
+            //{
+            //    questionById.LevelId = question.LevelId;
+            //}
+            //if (question.LearningOutcomeId != 0)
+            //{
+            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
+            //}
+
+            //unitOfWork.Repository<Question>().Update(questionById);
+            //unitOfWork.SaveChanges();
+
+            string quesTemp = "";
+            QuestionTemp entity = new QuestionTemp();
+            entity.UpdateQuestionId = question.Id;
+            StringProcess stringProcess = new StringProcess();
+            if (question.QuestionContent != null)
+            {
+                quesTemp = stringProcess.RemoveHtmlBrTagForUpdateQuestion(question.QuestionContent);
+                quesTemp = WebUtility.HtmlDecode(quesTemp);
+            }
+            entity.QuestionContent = quesTemp;
+            entity.Type = (int)TypeEnum.Update;
+            entity.LearningOutcome = question.LearningOutcomeId != 0 ? question.LearningOutcomeId.ToString() : "";
+            entity.LevelName = question.LevelId != 0 ? question.LevelId.ToString() : "";
+            entity.Category = question.CategoryId != 0 ? question.CategoryId.ToString() : "";
+            entity.Images = question.Images.Select(i => new Image()
+            {
+                Source = i.Source,
+                QuestionTempId = question.Id
+            }).ToList();
+
+            entity.OptionTemps = question.Options.Select(o => new OptionTemp()
+            {
+                OptionContent = WebUtility.HtmlDecode(stringProcess.RemoveHtmlBrTagForUpdateQuestion(o.OptionContent)),
+                IsCorrect = o.IsCorrect,
+                UpdateOptionId = o.Id,
+                Images = o.Images.Select(i => new Image()
+                {
+                    Source = i.Source,
+                    OptionTempId = o.Id
+                }).ToList()
+            }).ToList();
+
+
+            var listEntity = new List<QuestionTemp>();
+            listEntity.Add(entity);
+            listEntity = importService.CheckRule(listEntity);
+
+            var tmp = unitOfWork.Repository<QuestionTemp>().InsertAndReturn(listEntity.FirstOrDefault());
+            unitOfWork.SaveChanges();
+
+            //get log id
+            var logEntity = unitOfWork.Repository<Log>().GetAll()
+                                    .Where(l => l.TargetId == entity.UpdateQuestionId)// add check disable here after merge with Nhi
+                                    .OrderByDescending(l => l.Date).FirstOrDefault();
+            if (logEntity != null)
+            {
+                //call store check duplicate
+                Task.Factory.StartNew(() =>
+                {
+                    importService.CheckDuplicateQuestion(tmp.Id, logEntity.Id);
+                });
+            }
+
         }
 
         private QuestionViewModel ParseEntityToModel(Question question, List<OptionViewModel> options)
@@ -446,7 +503,7 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "")
+        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "", bool checkSemantic = true)
         {
             string category = "";
             string level = "";
@@ -1138,7 +1195,7 @@ namespace QBCS.Service.Implement
                             Code = q.Code,
                             Status = (int)StatusEnum.NotCheck,
                             Category = q.Category,
-                            LearningOutcome = prefix + " " + q.LearningOutcome,
+                            LearningOutcome = q.LearningOutcome,
                             LevelName = q.Level,
                             //Image = q.Image,
                             Images = q.Images.Select(i => new Image()
@@ -1159,42 +1216,42 @@ namespace QBCS.Service.Implement
                         ImportedDate = DateTime.Now
                     };
 
-                    int g = 0;
-                    string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
-                    string fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
-                    string filePath = "ErrorLog\\";
-                    string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
-                    string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
-                    if (!File.Exists(fullPath))
-                    {
-                        var myFile = File.Create(fullPath);
-                        myFile.Close();
-                        using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
-                        {
-                            if (listQuestion != null)
-                            {
-                                foreach (var item in listQuestion)
-                                {
-                                    g++;
-                                    tw.WriteLine(g + "");
-                                    //tw.WriteLine("Question: " + item.QuestionContent);
-                                    tw.WriteLine("Code: " + item.Code + "\n");
-                                    //if (item.Options != null)
-                                    //{
-                                    //    foreach (var itemOp in item.Options)
-                                    //    {
-                                    //        tw.WriteLine("Option: " + item.Options + "\n");
-                                    //    }
-                                    //}
-                                    tw.WriteLine("Error: " + item.Error + "\n");
-                                    tw.WriteLine("Other Error: " + item.OtherError + "\n");
-                                    tw.WriteLine();
-                                }
-                                tw.Close();
-                            }
+                    //int g = 0;
+                    //string time = string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now);
+                    //string fileName = "DOCFile-" + user + @"-" + time.ToString() + ".txt";
+                    //string filePath = "ErrorLog\\";
+                    //string fullPath = AppDomain.CurrentDomain.BaseDirectory + filePath + fileName;
+                    //string path = AppDomain.CurrentDomain.BaseDirectory + filePath;
+                    //if (!File.Exists(fullPath))
+                    //{
+                    //    var myFile = File.Create(fullPath);
+                    //    myFile.Close();
+                    //    using (StreamWriter tw = new StreamWriter(Path.Combine(path, fileName)))
+                    //    {
+                    //        if (listQuestion != null)
+                    //        {
+                    //            foreach (var item in listQuestion)
+                    //            {
+                    //                g++;
+                    //                tw.WriteLine(g + "");
+                    //                //tw.WriteLine("Question: " + item.QuestionContent);
+                    //                tw.WriteLine("Code: " + item.Code + "\n");
+                    //                //if (item.Options != null)
+                    //                //{
+                    //                //    foreach (var itemOp in item.Options)
+                    //                //    {
+                    //                //        tw.WriteLine("Option: " + item.Options + "\n");
+                    //                //    }
+                    //                //}
+                    //                tw.WriteLine("Error: " + item.Error + "\n");
+                    //                tw.WriteLine("Other Error: " + item.OtherError + "\n");
+                    //                tw.WriteLine();
+                    //            }
+                    //            tw.Close();
+                    //        }
 
-                        }
-                    }
+                    //    }
+                    //}
                 }
 
                 #endregion
@@ -1220,7 +1277,7 @@ namespace QBCS.Service.Implement
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
                     {
-                        importService.ImportToBank(entity.Id);
+                        importService.ImportToBank(entity.Id, checkSemantic);
                     });
                     check = true;
                 }
@@ -1403,7 +1460,7 @@ namespace QBCS.Service.Implement
                 {
                     Source = i.Source
                 }).ToList(),
-                ImportId = (int)q.ImportId,
+                ImportId = q.ImportId.HasValue ? q.ImportId.Value : 0,
                 CategoryId = q.CategoryId.HasValue ? q.CategoryId.Value : 0,
                 Category = q.Category != null ? q.Category.Name : "",
                 LearningOutcomeId = q.LearningOutcomeId.HasValue ? q.LearningOutcomeId.Value : 0,
@@ -1681,56 +1738,64 @@ namespace QBCS.Service.Implement
                         if (question.DuplicatedList[0].IsBank)
                         {
                             var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
-                            question.DuplicatedQuestion = new QuestionViewModel
+                            if (entity != null)
                             {
-                                Id = entity.Id,
-                                Code = entity.QuestionCode,
-                                Images = entity.Images.Select(i => new ImageViewModel
+                                question.DuplicatedQuestion = new QuestionViewModel
                                 {
-                                    Source = i.Source
-                                }).ToList(),
-                                CourseName = "Bank: " + entity.Course.Name,
-                                QuestionContent = entity.QuestionContent,
-                                Options = entity.Options.Select(o => new OptionViewModel
-                                {
-                                    OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    Id = entity.Id,
+                                    Code = entity.QuestionCode,
+                                    Images = entity.Images.Select(i => new ImageViewModel
                                     {
-                                        Source = oi.Source
+                                        Source = i.Source
                                     }).ToList(),
-                                }).ToList(),
-                                IsBank = true,
-                                IsAnotherImport = false
-                            };
+                                    CourseName = "Bank: " + entity.Course.Name,
+                                    QuestionContent = entity.QuestionContent,
+                                    Options = entity.Options.Select(o => new OptionViewModel
+                                    {
+                                        OptionContent = o.OptionContent,
+                                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                        Images = o.Images.Select(oi => new ImageViewModel()
+                                        {
+                                            Source = oi.Source
+                                        }).ToList(),
+                                    }).ToList(),
+                                    IsBank = true,
+                                    IsAnotherImport = false
+                                };
+                            }
+                            
 
                         }
                         else
                         {
                             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
-                            question.DuplicatedQuestion = new QuestionViewModel
+                            if (entity != null)
                             {
-                                Id = entity.Id,
-                                Code = entity.Code,
-                                CourseName = "Import file: ",
-                                Images = entity.Images.Select(i => new ImageViewModel
+                                question.DuplicatedQuestion = new QuestionViewModel
                                 {
-                                    Source = i.Source
-                                }).ToList(),
-                                QuestionContent = entity.QuestionContent,
-                                Options = entity.OptionTemps.Select(o => new OptionViewModel
-                                {
-                                    OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    Id = entity.Id,
+                                    Code = entity.Code,
+                                    CourseName = "Import file: ",
+                                    Images = entity.Images.Select(i => new ImageViewModel
                                     {
-                                        Source = oi.Source
+                                        Source = i.Source
                                     }).ToList(),
-                                }).ToList(),
-                                Status = (StatusEnum)entity.Status.Value,
-                                IsBank = false,
-                                IsAnotherImport = !(entity.ImportId == importId)
-                            };
+                                    QuestionContent = entity.QuestionContent,
+                                    Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                    {
+                                        OptionContent = o.OptionContent,
+                                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                        Images = o.Images.Select(oi => new ImageViewModel()
+                                        {
+                                            Source = oi.Source
+                                        }).ToList(),
+                                    }).ToList(),
+                                    Status = (StatusEnum)entity.Status.Value,
+                                    IsBank = false,
+                                    IsAnotherImport = !(entity.ImportId == importId)
+                                };
+                            }
+                            
                         }
                     }
 
@@ -1826,11 +1891,14 @@ namespace QBCS.Service.Implement
                                 if (contentQ.ElementAt(i).ToString().Contains("base64,"))
                                 {
                                     var getImage1 = contentQ.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
-                                    var getImage2 = getImage1[1].Split('"');
-                                    //questionTmp.Image = getImage2[0];
-                                    var image = new ImageViewModel();
-                                    image.Source = getImage2[0];
-                                    images.Add(image);
+                                    for(int j = 1; j < getImage1.Length; j++)
+                                    {
+                                        var getImage2 = getImage1[j].Split('"');
+                                        //questionTmp.Image = getImage2[0];
+                                        var image = new ImageViewModel();
+                                        image.Source = getImage2[0];
+                                        images.Add(image);
+                                    }
                                 }
                                 else if (questionTmp.QuestionContent == null &&
                                     !(contentQ.ElementAt(i).ToString().Contains("[file") || contentQ.ElementAt(i).ToString().Equals("")))
@@ -1872,14 +1940,14 @@ namespace QBCS.Service.Implement
                                     if (contentO.ElementAt(i).ToString().Contains("base64,"))
                                     {
                                         var getImage1 = contentO.ElementAt(i).ToString().Split(new string[] { "base64," }, StringSplitOptions.None);
-                                        var getImage2 = getImage1[1].Split('"');
-                                        //optionModel.Image = getImage2[0];
-                                        var image = new ImageViewModel();
-                                        image.Source = getImage2[0];
-                                        if(image != null)
+                                        for (int j = 1; j < getImage1.Length; j++)
                                         {
+                                            var getImage2 = getImage1[j].Split('"');
+                                            //questionTmp.Image = getImage2[0];
+                                            var image = new ImageViewModel();
+                                            image.Source = getImage2[0];
                                             optionImages.Add(image);
-                                        }   
+                                        }
                                     }
                                     else if (optionModel.OptionContent == null)
                                     {
@@ -1893,7 +1961,7 @@ namespace QBCS.Service.Implement
                                     }
                                 }
                             }
-                            if (optionModel.OptionContent != null || (images != null && images.Count() != 0))
+                            if (optionModel.OptionContent != null || (optionImages != null && optionImages.Count() != 0))
                             {
                                 optionCheck.Content = optionModel.OptionContent;
                                 optionModel.Images = optionImages;
@@ -1938,7 +2006,7 @@ namespace QBCS.Service.Implement
                                 }
                                 else
                                 {
-                                    questionTmp.LearningOutcome = prefix + number;
+                                    questionTmp.LearningOutcome = prefix + " " + number;
                                 }
                             }
                         }
