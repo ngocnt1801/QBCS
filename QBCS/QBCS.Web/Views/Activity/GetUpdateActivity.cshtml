@@ -47,17 +47,17 @@
 
                                     Question:
                                     @*@if (item.QuestionNew.Image != null)
-                                    {
-                                        <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
-                                    } <br />*@
+        {
+            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.Image" />
+        } <br />*@
 
                                     <p class="compare-field" id="l-4" compare-to="#r-4">@item.QuestionNew.QuestionContent</p>
                                     <br />
-                                    @if (item.QuestionNew.Images != null) 
+                                    @if (item.QuestionNew.ImagesInput != null)
                                     {
-                                        foreach (var image in item.QuestionNew.Images)
+                                        for (var i = 0; i < item.QuestionNew.ImagesInput.Count(); i++)
                                         {
-                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @image.Source" /> <br />
+                                            <img class="exam-image" onclick="img_zoom(this)" src="data:image/png;base64, @item.QuestionNew.ImagesInput[i]" /> <br />
                                         }
                                     }
                                     Answer:
