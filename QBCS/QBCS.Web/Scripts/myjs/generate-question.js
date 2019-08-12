@@ -761,23 +761,28 @@ $(document).on('click', '.add-question', function (e) {
     var questionLO = data[2];
     var questionLevel = data[3];
     var tableQuestionAdded = $('#listQuestionExam').dataTable();
-    if (!checkQuestionCode(questionCode)) {
-        tableQuestionAdded.fnAddData([
-            null,
-            questionCode,
-            questionContent,
-            questionLO,
-            questionLevel,
-            '<button class="delete-question btn-danger btn delete-question-exam"><i class="fas fa-trash-alt"></i></button>'
-        ]);
-        $(".form-group-exam").append("<input type='hidden' class='input-question-code' name='questionCode' value='" + questionCode + "'/>");
-        $('#btnSaveManually').removeAttr('disabled');
-        countNumberOfQuestion();
+    if (questionLO === "") {
         toastr.options.timeOut = 500;
-        toastr.success("Question " + questionCode + " has been added to exam!");
+        toastr.error("Question " + questionCode + " does not belong to any topic.");
     } else {
-        toastr.options.timeOut = 500;
-        toastr.warning("Question " + questionCode + " already exists in the exam");
+        if (!checkQuestionCode(questionCode)) {
+            tableQuestionAdded.fnAddData([
+                null,
+                questionCode,
+                questionContent,
+                questionLO,
+                questionLevel,
+                '<button class="delete-question btn-danger btn delete-question-exam"><i class="fas fa-trash-alt"></i></button>'
+            ]);
+            $(".form-group-exam").append("<input type='hidden' class='input-question-code' name='questionCode' value='" + questionCode + "'/>");
+            $('#btnSaveManually').removeAttr('disabled');
+            countNumberOfQuestion();
+            toastr.options.timeOut = 500;
+            toastr.success("Question " + questionCode + " has been added to exam!");
+        } else {
+            toastr.options.timeOut = 500;
+            toastr.warning("Question " + questionCode + " already exists in the exam");
+        }
     }
 });
 $(document).on('click', '.delete-question-exam', function (e) {
@@ -818,7 +823,7 @@ function countNumberOfQuestion() {
             questionHard++;
         }
     }
-    var totalQuestion = questionEasy + questionHard + questionMedium;
+    var totalQuestion = data.length;
     var ordinaryGrade = 0;
     var goodGrade = 0;
     var exellenceGrade = 0;
