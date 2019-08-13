@@ -2001,7 +2001,7 @@
     <Content Include="Scripts\vendor\jquery\jquery.min.js" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.js" />
     <Content Include="Scripts\vendor\jquery\jquery.slim.min.js" />
-    <Content Include="Views\Activity\GetExaminationHistory.cshtml" />
+    <Content Include="Views\Question\GetExaminationHistory.cshtml" />
     <Content Include="Views\Activity\GetListActivity.cshtml" />
     <Content Include="Views\Activity\GetUpdateActivity.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
