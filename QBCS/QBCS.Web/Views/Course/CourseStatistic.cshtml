@@ -17,7 +17,7 @@
                 foreach (var course in Model)
                 {
                     <a id="course_@course.Id" href="@Url.Action("GetCourseDetailStat", "Course", new { id = course.Id , type = "c" })" class="list-group-item" data-toggle="collapse" aria-expanded="true" data-target="#c-@course.Id" data-link="@Url.Action("GetCourseDetailStat", "Course", new { id = course.Id , type = "c" })">
-                        <i class="fa fa-plus-circle"></i>@course.Name (@course.Code)
+                        @course.Name (@course.Code)
                     </a>
                     @*<div class="list-group collapse" id="c-@course.Id">
                             @if (course.LearningOutcome != null && course.LearningOutcome.Count > 0)
