@@ -6,6 +6,7 @@
 @Styles.Render("~/bundle/content/smartwizard")
 @Styles.Render("~/bundle/content/checkbox")
 <h2>Generate Exam</h2>
+<h5>@Model.Course.Code - @Model.Course.Name</h5>
 @using (Html.BeginForm("GenerateExaminaton", "Examination", new { @class = "form-group" }))
 {
     <div id="smartwizard">
@@ -110,6 +111,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <p style="color:red" id="errorPercent"></p>
                             </div>
                             <div id="tab2" class="tab-slider--body">
                                 <h2>Enter by grade</h2>
@@ -135,6 +137,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <p style="color:red" id="errorGrade"></p>
                             </div>
                         </div>
                     </div>

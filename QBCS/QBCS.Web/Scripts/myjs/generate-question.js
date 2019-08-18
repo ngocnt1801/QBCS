@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-        .addClass('btn btn-info spinner-loading')
+        .addClass('btn btn-info')
         .attr('disabled', 'disabled')
         .attr('type', 'submit')
         .attr('id', 'btnFinish')
@@ -108,6 +108,60 @@
         var fileExtension = $("#fileExtensionExportAll").find(":selected").text();
         window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
     });
+    $('#btnFinish').on('click', function (e) {
+        var flag = $('#flagPercent').val();
+        if (flag === "percent") {
+            var easyPercentString = $("#easy").val();
+            var normalPercentString = $("#normal").val();
+            var hardPercentString = $('#hard').val();
+            if (easyPercentString === "" || normalPercentString === "" || hardPercentString === "") {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure all fields are filled out.");
+                return;
+            } else {
+                $('#errorPercent').html("");
+            }
+
+            var easyPercent = parseInt($("#easy").val());
+            var normalPercent = parseInt($("#normal").val());
+            var hardPercent = parseInt($('#hard').val());
+            var total = easyPercent + normalPercent + hardPercent;
+            if (total !== 100) {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure numbers total 100.");
+            } else {
+                $('#errorPercent').html("");
+                $('#spinner').css("display", "block");
+                $('#spinner').css("z-index", "1060");
+                $('#pleaseWaitDialog').modal();
+            }
+        } else {
+            var ordinaryGradeString = $("#ordinary").val();
+            var goodGradeString = $("#good").val();
+            var excellentGradeString = $('#excellent').val();
+            if (ordinaryGradeString === "" || goodGradeString === "" || excellentGradeString === "") {
+                e.preventDefault();
+                $('#errorGrade').html("Please make sure all fields are filled out.");
+                return;
+            } else {
+                $('#errorGrade').html("");
+            }
+            var ordinaryGrade = parseInt($('#ordinary').val());
+            var goodGrade = parseInt($('#good').val());
+            var excellentGrade = parseInt($('#excellent').val());
+            if (goodGrade <= ordinaryGrade) {
+                e.preventDefault();
+                $('#errorGrade').html("The grade of good student must be greater than that of ordinary student.");
+            } else if (excellentGrade <= goodGrade) {
+                e.preventDefault();
+                $('#errorGrade').html("The grade of excellent student must be greater than that of good student.");
+            } else {
+                $('#spinner').css("display", "block");
+                $('#spinner').css("z-index", "1060");
+                $('#pleaseWaitDialog').modal();
+            }
+        }
+    });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
         var questionId = $(this).data('question-id');
@@ -187,7 +241,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -227,7 +281,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -267,7 +321,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -307,7 +361,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -347,7 +401,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -387,7 +441,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -427,7 +481,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -467,7 +521,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -507,7 +561,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -547,7 +601,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -587,7 +641,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -627,7 +681,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -702,7 +756,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");

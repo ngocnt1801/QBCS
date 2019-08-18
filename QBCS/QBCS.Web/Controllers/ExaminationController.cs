@@ -49,10 +49,12 @@ namespace QBCS.Web.Controllers
         public ActionResult GenerateExam(int courseId)
         {
             List<LearningOutcomeViewModel> learningOutcomeViewModels = learningOutcomeService.GetLearningOutcomeByCourseId(courseId);
+            CourseViewModel course = courseService.GetCourseById(courseId);
             ListLearningOutcomeViewModel listTopicLearningOutcomeViewModel = new ListLearningOutcomeViewModel()
             {
                 LearningOutcomes = learningOutcomeViewModels,
-                CourseId = courseId
+                CourseId = courseId,
+                Course = course
             };
             TempData["active"] = "Examination";
             return View(listTopicLearningOutcomeViewModel);
