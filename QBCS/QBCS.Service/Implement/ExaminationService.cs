@@ -104,6 +104,38 @@ namespace QBCS.Service.Implement
             return result;
         }
 
+        public ExaminationViewModel GetDetailExamById(int examId)
+        {
+            ExaminationViewModel result = new ExaminationViewModel();
+            Examination exam = unitOfWork.Repository<Examination>().GetAll().Where(e => e.Id == examId).FirstOrDefault();
+            if (exam != null)
+            {
+                result = new ExaminationViewModel
+                {
+                    Id = exam.Id,
+                    ExamCode = exam.ExamCode,
+                    ExamGroup = exam.GroupExam,
+                    IsDisable = (bool)exam.IsDisable,
+                    CourseId = exam.CourseId.HasValue ? (int)exam.CourseId : 0,
+                    GeneratedDate = (DateTime)exam.GeneratedDate,
+                    NumberOfEasy = exam.NumberOfEasy.HasValue ? (int)exam.NumberOfEasy : 0,
+                    NumberOfMedium = exam.NumberOfMedium.HasValue ? (int)exam.NumberOfMedium : 0,
+                    NumberOfHard = exam.NumberOfHard.HasValue ? (int)exam.NumberOfHard : 0,
+                    Course = courseService.GetCourseById(exam.CourseId.HasValue ? (int)exam.CourseId : 0),
+                    PartOfExam = partOfExamService.GetPartOfExamByExamId(exam.Id)
+                };
+                Examination newestExam = unitOfWork.Repository<Examination>().GetAll().Where(e => e.CourseId == result.CourseId).OrderByDescending(e => e.Id).FirstOrDefault();
+                if(newestExam.GroupExam.Equals(result.ExamGroup))
+                {
+                    result.IsNewest = true;
+                } else
+                {
+                    result.IsNewest = false;
+                }
+            }
+            return result;
+        }
+
         public string GetExamCode()
         {
             string result = "";

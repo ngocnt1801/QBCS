@@ -96,7 +96,7 @@ namespace QBCS.Web.Controllers
         [LogAction(Action = "Examination", Message = "View Detail Examination", Method = "GET")]
         public ActionResult DetailExam(int examId)
         {
-            ExaminationViewModel exam = examinationService.GetExanById(examId);
+            ExaminationViewModel exam = examinationService.GetDetailExamById(examId);
             TempData["active"] = "Examination";
             return View(exam);
         }

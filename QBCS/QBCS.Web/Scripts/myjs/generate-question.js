@@ -72,7 +72,7 @@
     $("#easy").focusout(function () {
         var easyPercent = $("#easy").val();
         var hardAndNormal = 100 - easyPercent;
-        var normalPercent = (60 * hardAndNormal) / 100;
+        var normalPercent = Math.floor((60 * hardAndNormal) / 100);
         var hardPercent = 100 - easyPercent - normalPercent;
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
@@ -129,6 +129,9 @@
             if (total !== 100) {
                 e.preventDefault();
                 $('#errorPercent').html("Please make sure numbers total 100.");
+            } else if (easyPercent < 0 || easyPercent > 100 || normalPercent < 0 || normalPercent > 100 || hardPercent < 0 || hardPercent > 100) {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure the value is entered from 0 - 100.");
             } else {
                 $('#errorPercent').html("");
                 $('#spinner').css("display", "block");
@@ -155,6 +158,9 @@
             } else if (excellentGrade <= goodGrade) {
                 e.preventDefault();
                 $('#errorGrade').html("The grade of excellent student must be greater than that of good student.");
+            } else if (ordinaryGrade < 0 || ordinaryGrade > 100 || goodGrade < 0 || goodGrade > 100 || excellentGrade < 0 || excellentGrade > 100) {
+                e.preventDefault();
+                $('#errorGrade').html("Please make sure the value is entered from 0 - 100.");
             } else {
                 $('#spinner').css("display", "block");
                 $('#spinner').css("z-index", "1060");
