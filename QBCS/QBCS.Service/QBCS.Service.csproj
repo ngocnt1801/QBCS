@@ -165,6 +165,9 @@
     <Compile Include="ViewModel\QuestionTempViewModel.cs" />
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\ExaminationChartViewModel.cs" />
+    <Compile Include="ViewModel\ExaminationStatisticViewModel.cs" />
+    <Compile Include="ViewModel\ExamStatTableViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\StaffCourseDetailStatViewModel.cs" />

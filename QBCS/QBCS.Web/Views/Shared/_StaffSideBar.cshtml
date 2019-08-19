@@ -36,7 +36,7 @@
     }
 }
 
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
@@ -56,6 +56,18 @@
             </a>
         </li>
 
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item @examClass">
+            <a class="nav-link" href="@Url.Action("Staff_CourseDetail", "Course")">
+                <i class="fas fa-file"></i>
+                <span>Statistic</span>
+            </a>
+        </li>
+
+
+
         @*<li class="nav-item">
             <a class="nav-link"
                href="@Url.Action("CourseDetailWithoutId", "Course")">
@@ -74,53 +86,53 @@
         </li>*@
 
 
-    <!-- Nav Item - Courses Menu -->
-    <li class="nav-item @courseClass">
-        <a class="nav-link" href="@Url.Action("GetAllCourseForHistory", "Course")">
-            <i class="fas fa-book"></i>
-            <span>Courses</span>
-        </a>
-    </li>
+        <!-- Nav Item - Courses Menu -->
+        <li class="nav-item @courseClass">
+            <a class="nav-link" href="@Url.Action("GetAllCourseForHistory", "Course")">
+                <i class="fas fa-book"></i>
+                <span>Courses</span>
+            </a>
+        </li>
 
-    <!-- Nav Item - Topics Menu -->
-    @*<li class="nav-item @topicClass">
-        <a class="nav-link" href="@Url.Action("Index", "Topic")">
-            <i class="fas fa-comment"></i>
-            <span>Topics</span>
-        </a>
-    </li>*@
+        <!-- Nav Item - Topics Menu -->
+        @*<li class="nav-item @topicClass">
+            <a class="nav-link" href="@Url.Action("Index", "Topic")">
+                <i class="fas fa-comment"></i>
+                <span>Topics</span>
+            </a>
+        </li>*@
 
-    <!-- Nav Item - Learning Outcomes Menu -->
-    @*<li class="nav-item @locClass">
-        <a class="nav-link" href="@Url.Action("Index", "LearningOutcome")">
-            <i class="fas fa-comment-alt"></i>
-            <span>Learning Outcomes</span>
-        </a>
-    </li>*@
-    <hr class="sidebar-divider my-0">
+        <!-- Nav Item - Learning Outcomes Menu -->
+        @*<li class="nav-item @locClass">
+            <a class="nav-link" href="@Url.Action("Index", "LearningOutcome")">
+                <i class="fas fa-comment-alt"></i>
+                <span>Learning Outcomes</span>
+            </a>
+        </li>*@
+        <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Course Statistics Menu -->
-    <li class="nav-item @statisticClass">
-        <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
-            <i class="fas fa-chart-pie"></i>
-            <span>Statistics</span>
-        </a>
-    </li>
-    @*<li class="nav-item @activitiesClass">
-        <a class="nav-link" href="@Url.Action("GetAllActivities", "Activity")">
-            <i class="fas fa-history"></i>
-            <span>Activities</span>
-        </a>
-    </li>*@
-    <!-- Nav Item - Rules Menu -->
-    <li class="nav-item @ruleClass">
-        <a class="nav-link" href="@Url.Action("Index", "Rule")">
-            <i class="fas fa-bookmark"></i>
-            <span>Rules</span>
-        </a>
-    </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+        <!-- Nav Item - Course Statistics Menu -->
+        <li class="nav-item @statisticClass">
+            <a class="nav-link" href="@Url.Action("CourseStatistic", "Course")">
+                <i class="fas fa-chart-pie"></i>
+                <span>Statistics</span>
+            </a>
+        </li>
+        @*<li class="nav-item @activitiesClass">
+            <a class="nav-link" href="@Url.Action("GetAllActivities", "Activity")">
+                <i class="fas fa-history"></i>
+                <span>Activities</span>
+            </a>
+        </li>*@
+        <!-- Nav Item - Rules Menu -->
+        <li class="nav-item @ruleClass">
+            <a class="nav-link" href="@Url.Action("Index", "Rule")">
+                <i class="fas fa-bookmark"></i>
+                <span>Rules</span>
+            </a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

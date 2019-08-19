@@ -1626,6 +1626,7 @@ namespace QBCS.Service.Implement
                 CourseId = courseId,
                 UserId = userId,
                 TotalQuestion = listQuestion.Count(),
+                //OwnerId =
                 OwnerName = ownerName,
                 QuestionTemps = listQuestion.Select(q => new QuestionTemp()
                 {

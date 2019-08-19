@@ -1,0 +1,171 @@
+﻿@model QBCS.Service.ViewModel.ExaminationStatisticViewModel
+@using System.Web.Script.Serialization
+@{
+    ViewBag.Title = "CourseDetailStatistic";
+    var chart = new JavaScriptSerializer().Serialize(Model.Chart);
+    var count = 0;
+}
+<link rel="stylesheet" href="~/Content/chartjs/Chart.css" />
+<script src="~/Scripts/myjs/chartjs/Chart.min.js"></script>
+@if (Model.Question != null && Model.Chart != null && Model.Question.Count > 0 && Model.Chart.Count > 0)
+{
+    <div class="col-lg-10">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-lg-12 text-custom">
+        <div class="card shadow mb-4">
+            @*<div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">History questions</h6>
+                </div>*@
+
+            <div class="card-body">
+                <div class="table-responsive text-custom table-counter">
+                    <table class="table table-bordered table-hover text-custom" id="dataTable" cellspacing="100%">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Exam Group</th>
+                                <th>Question Code</th>
+                                <th>Duplicate Times</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var question in Model.Question)
+                            {
+                                <tr>
+                                    @{
+                                        count++;
+                                    }
+                                    <td>@count</td>
+                                    <td>@question.GroupExam</td>
+                                    <td>@question.QuestionCode</td>
+                                    <td>@question.TotalNumber</td>
+                                    <td><a href="@Url.Action("GetExaminationHistory", "Question", new { id = question.QuestionId})" class="btn btn-primary">History</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var chart = JSON.parse('@Html.Raw(chart)');
+        var dataC = [];
+        var labels = [];
+        var colors = [];
+        var i = 0;
+        var sumDup = 0;
+        var sumTotal = 0;
+        for (i = 0; i < chart.length; i++) {
+            dataC.push(chart[i]["TotalDuplicate"]);
+            labels.push(chart[i]["GroupExam"]);
+            sumDup = sumDup + chart[i]["TotalDuplicate"];
+            sumTotal = sumTotal + chart[i]["TotalQuestions"];
+            var color = dynamicColors();
+            while (colors.indexOf(color) > -1) {
+                color = dynamicColors();
+            }
+                colors.push(color);
+        }
+        labels.push("No duplication");
+        dataC.push(sumTotal - sumDup);
+        var data = [{
+            data: dataC,
+
+            backgroundColor: colors
+        }];
+        //var sum = 0;
+        //var options = {
+        //    tooltips: {
+        //        enabled: false
+        //    },
+        //    plugins: {
+        //        datalabels: {
+        //            formatter: (value, ctx) => {
+        //                return value + " (" + sum + "%)";
+        //            },
+        //            color: '#fff',
+        //        }
+        //    }
+        //};
+        var ctx = document.getElementById('myChart');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: data
+        },
+        //options: {
+        //    tooltips: {
+        //      callbacks: {
+        //            label: function (tooltipItem, data) {
+        //              var percentFixed = (data['datasets'][0]['data'][tooltipItem['index']] / sum * 100).toFixed(2);
+        //              var percentFloor = Math.floor(data['datasets'][0]['data'][tooltipItem['index']] / sum * 100);
+        //              if (percentFixed - percentFloor == 0) {
+        //                  return data['labels'][tooltipItem['index']] + ': ' + percentFloor + '% (' + data['datasets'][0]['data'][tooltipItem['index']] + ')';
+        //              } else {
+        //                  return data['labels'][tooltipItem['index']] + ': ' + percentFixed + ' (' + data['datasets'][0]['data'][tooltipItem['index']] + ')';
+        //              }
+
+        //        }
+        //      }
+        //    }
+        //  }
+    });
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+        }
+        var dataTable = $("#dataTable").DataTable({
+            columns: [
+                            null,
+                            null,
+                            {
+                                "render": function (data, type, row) {
+                                    if (data.indexOf("[html]") >= 0) {
+                                        data = data.split("\n").join("<br/>");
+                                        data = data.split("&lt;cbr&gt;").join("<br/>");
+                                        data = data.split("<cbr>").join("<br/>");
+                                        data = data.split("&lt;br&gt;").join("<br/>");
+                                        data = data.split("&lt;p&gt;").join("");
+                                        data = data.split("&lt;/p&gt;").join("");
+                                        data = data.split("&lt;b&gt;").join("");
+                                        data = data.split("&lt;/b&gt;").join("");
+                                        data = data.split("&lt;span&gt;").join("");
+                                        data = data.split("&lt;/span&gt;").join("");
+                                        data = data.split("&lt;/span&gt;").join("");
+                                        data = data.split("[html]").join("");
+                                    }
+                                    return data
+                                }
+                            },
+                            null
+                        ],
+                    columnDefs: [
+                        { targets: 0, width: "4%" },
+                        { targets: 1, width: "28%" },
+                        { targets: 2, width: "39%" },
+                        { targets: 3, width: "24%" },
+                        { targets: 4, width: "4%" },
+                    ],
+                    });
+                    setTimeout(function () {
+                        $('#spinner').css("display", "none");
+                        $('#pleaseWaitDialog').modal('hide');
+                    }, 500);
+    </script>
+}
+else
+{
+    <div class="text-custom col-md-7"><h4>There is no question to give statistic</h4> </div>
+}

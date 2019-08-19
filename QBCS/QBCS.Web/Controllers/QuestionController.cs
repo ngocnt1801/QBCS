@@ -298,7 +298,7 @@ namespace QBCS.Web.Controllers
                     check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix);
                     if (check == false)
                     {
-                        ViewBag.Message = "File is wrong format. PLease check again!";
+                        ViewBag.Message = "File has wrong format. Please check again!";
                         ViewBag.Status = ToastrEnum.Error;
                         return Json("Error");
                     }
@@ -327,6 +327,12 @@ namespace QBCS.Web.Controllers
                 }
 
                 check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
+
+            }
+            else
+            {
+                ViewBag.Message = "You cannot import empty file";
+                ViewBag.Status = ToastrEnum.Error;
             }
             //if (table != null && !table.Equals(""))
             //{
