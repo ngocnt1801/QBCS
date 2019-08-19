@@ -37,8 +37,8 @@
                             @Html.DisplayFor(course => item.Total)
                         </td>
                         <td>
-                            <a class="btn btn-primary spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })">Detail</a>
-                            <a class="btn btn-info spinner-loading" href="@Url.Action("Category", "Course", new { courseId = item.CourseId })">Categories</a>
+                            <a class="btn btn-primary spinner-loading" href="@Url.Action("CourseDetail", "Course", new { courseId = item.CourseId })" data-toggle="tooltip" title="View detail"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-info spinner-loading" href="@Url.Action("Category", "Course", new { courseId = item.CourseId })" data-toggle="tooltip" title="Manage categories"><i class="fa fa-list-alt"></i></a>
 
                             @if (item.WarningTotal > 0)
                             {

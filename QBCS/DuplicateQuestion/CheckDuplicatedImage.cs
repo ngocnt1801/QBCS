@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace DuplicateQuestion
@@ -47,6 +48,15 @@ namespace DuplicateQuestion
 
             return newImage;
         }
+        private static Bitmap ConvertToFormat(Bitmap image, PixelFormat format)
+        {
+            Bitmap copy = new Bitmap(image.Width, image.Height, format);
+            using (Graphics gr = Graphics.FromImage(copy))
+            {
+                gr.DrawImage(image, new Rectangle(0, 0, copy.Width, copy.Height));
+            }
+            return copy;
+        }
         private static Bitmap Base64StringToBitmap(this string
                                             base64String)
         {
@@ -61,7 +71,7 @@ namespace DuplicateQuestion
 
 
             bmpReturn = (Bitmap)Bitmap.FromStream(memoryStream);
-
+            //bmpReturn = ConvertToFormat(bmpReturn, PixelFormat.Format24bppRgb);
 
             memoryStream.Close();
             memoryStream = null;

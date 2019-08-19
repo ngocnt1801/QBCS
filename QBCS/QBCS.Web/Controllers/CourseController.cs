@@ -141,7 +141,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized, ShortName = "History Exam Questions", InternalId = (int)SideBarEnum.AllCourseHistory)]
+        [Feature(FeatureType.SideBar, "All Courses For History", "QBCS", protectType: ProtectType.Authorized, ShortName = "Examination's Questions", InternalId = (int)SideBarEnum.AllCourseHistory)]
         [LogAction(Action = "Courses", Message = "View All Course", Method = "GET")]
         public ActionResult GetAllCourseForHistory()
         {

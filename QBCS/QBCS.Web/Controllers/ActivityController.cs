@@ -46,7 +46,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Activities", InternalId = (int)SideBarEnum.AllActivity)]
+        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "History Changes", InternalId = (int)SideBarEnum.AllActivity)]
         [LogAction(Action = "Activities", Message = "View All Activities", Method = "GET")]
         public ActionResult GetAllActivities()
         {
