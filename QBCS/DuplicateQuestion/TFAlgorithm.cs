@@ -16,7 +16,7 @@ namespace DuplicateQuestion
             string[] targetArr = StringUtils.SplitWithSpace(target);
             string commonWord = "the,a,an," +
                                 "is,are,am,was,were," +
-                                "do,does,";
+                                "do,does,did,";
 
             Dictionary<string, int[]> map = new Dictionary<string, int[]>();
 
