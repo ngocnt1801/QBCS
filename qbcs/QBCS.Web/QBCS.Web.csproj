@@ -2234,6 +2234,7 @@
     <Content Include="Views\Import\EditQuestionTempWithTextbox.cshtml" />
     <Content Include="Views\Question\EditQuestionWithTextbox.cshtml" />
     <Content Include="Views\Error\Unauthorize.cshtml" />
+    <Content Include="Views\Course\Staff_CourseDetailStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

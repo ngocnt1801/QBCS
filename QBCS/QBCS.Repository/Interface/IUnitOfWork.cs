@@ -11,6 +11,7 @@ namespace QBCS.Repository.Interface
     {
         IRepository<T> Repository<T>() where T : class;
         IImportRepository ImportRepository();
+        IExaminationRepository ExaminationRepository();
         int SaveChanges();
         DbContext GetContext();
     }

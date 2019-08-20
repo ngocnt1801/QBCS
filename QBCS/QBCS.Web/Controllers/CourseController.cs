@@ -17,12 +17,14 @@ namespace QBCS.Web.Controllers
         private ICategoryService categoryService;
         private ILearningOutcomeService learningOutcomeService;
         private ISyllabusService syllabusService;
+        private IExaminationService examinationService;
         public CourseController()
         {
             courseService = new CourseService();
             categoryService = new CategoryService();
             learningOutcomeService = new LearningOutcomeService();
             syllabusService = new SyllabusService();
+            examinationService = new ExaminationService();
         }
 
         [Feature(FeatureType.SideBar, "List all course by user", "QBCS", protectType: ProtectType.Authorized, ShortName = "Course", InternalId = (int)SideBarEnum.CourseByUser)]
@@ -224,7 +226,8 @@ namespace QBCS.Web.Controllers
 
         public ActionResult GetStaffCourseDetailStat(int id)
         {
-            return PartialView("Staff_CourseDetailStatistic");
+            var result = examinationService.GetExamStat(id);
+            return PartialView("Staff_CourseDetailStatistic", result);
         }
 
         public ActionResult CourseDetailWithoutId()
