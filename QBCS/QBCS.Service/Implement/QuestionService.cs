@@ -503,12 +503,12 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "", bool checkSemantic = true)
+        public int InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "", bool checkSemantic = true)
         {
             string category = "";
             string level = "";
             string learningOutcome = "";
-            bool check = false;
+            int check = -1;
             StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
@@ -1268,6 +1268,7 @@ namespace QBCS.Service.Implement
                     CheckImageInQuestion(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
+                    check = GetProcessingTime(courseId, import.TotalQuestion.Value, checkSemantic);
                     unitOfWork.SaveChanges();
 
                     //log imports
@@ -1279,7 +1280,6 @@ namespace QBCS.Service.Implement
                     {
                         importService.ImportToBank(entity.Id, checkSemantic);
                     });
-                    check = true;
                 }
 
                 else
@@ -1291,7 +1291,7 @@ namespace QBCS.Service.Implement
             catch (Exception ex)
             {
                 Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                check = false;
+                check = -1;
 
                 //Console.WriteLine(ex.Message);
             }
@@ -1302,6 +1302,23 @@ namespace QBCS.Service.Implement
             }
 
             return check;
+        }
+
+        private int GetProcessingTime(int courseId, int count, bool checkSemantic)
+        {
+            int result = 0;
+            var totalInBank = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId).Count();
+
+            if (checkSemantic)
+            {
+                result = (int)((count * (totalInBank + count - 1)) * ProcessingTimeConstant.SEMANTIC);
+            }
+            else
+            {
+                result = (int)((count * (totalInBank + count - 1)) * ProcessingTimeConstant.NO_SEMANTIC);
+            }
+
+            return result / 1000;
         }
 
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)

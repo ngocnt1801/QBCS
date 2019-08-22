@@ -248,7 +248,7 @@ namespace QBCS.Web.Controllers
         {
             var user = (UserViewModel)Session["user"];
 
-            bool check = true;
+            int check = -1;
             try
             {
 
@@ -266,7 +266,7 @@ namespace QBCS.Web.Controllers
                     if (ownerUser != null)
                     {
                         check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerUser.Id, ownerUser.Fullname, prefix, checkSemantic);
-                        if (check == true)
+                        if (check > -1)
                         {
                             ViewBag.Modal = "#success-modal";
                             TempData["CourseId"] = courseId;
@@ -293,7 +293,7 @@ namespace QBCS.Web.Controllers
                 else
                 {
                     check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix, checkSemantic);
-                    if (check == false)
+                    if (check == -1)
                     {
                         ViewBag.Message = "File has wrong format. Please check again!";
                         ViewBag.Status = ToastrEnum.Error;
@@ -303,7 +303,7 @@ namespace QBCS.Web.Controllers
 
             }
 
-            return Json("OK");
+            return Json(check);
             //return RedirectToAction("Index", "Home");
         }
 
