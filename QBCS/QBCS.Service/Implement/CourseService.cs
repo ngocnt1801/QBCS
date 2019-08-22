@@ -336,19 +336,19 @@ namespace QBCS.Service.Implement
             var hardPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Hard / (double)courseQuestions.Count()) * 100), 2);
             if(easyPercentage / easyPercentageInExam <= 0.8)
             {
-                courseDetail.Suggestion.Add("We should have more Easy questions !!!");
+                courseDetail.Suggestion.Add(0);
             }
             if (mediumPercentage / mediumPercentageInExam <= 0.8)
             {
-                courseDetail.Suggestion.Add("We should have more Medium questions !!!");
+                courseDetail.Suggestion.Add(0);
             }
             if (hardPercentage / hardPercentageInExam <= 0.8)
             {
-                courseDetail.Suggestion.Add("We should have more Hard questions !!!");
+                courseDetail.Suggestion.Add(0);
             }
             if (courseDetail.Null > 0)
             {
-                courseDetail.Suggestion.Add("We shouldn't have no level questions !!!");
+                courseDetail.Suggestion.Add(0);
             }
 
             return courseDetail;
