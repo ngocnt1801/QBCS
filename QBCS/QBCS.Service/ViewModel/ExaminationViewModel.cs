@@ -23,6 +23,7 @@ namespace QBCS.Service.ViewModel
         public bool IsDisable { get; set; }
         public List<PartOfExamViewModel> PartOfExam { get; set; }
         public SemesterViewModel Semester { get; set; }
+        public bool IsNewest { get; set; }
 
     }
 }
