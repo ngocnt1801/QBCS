@@ -2,6 +2,7 @@
     $('#btnImport').click(function () {
         $('#errorMessageDiv').hide();
         content = $('#inFile').val();
+        startLoading();
     });
     
     $('#btnSuccessOk').click(function () {
@@ -9,10 +10,12 @@
     });
     if (response == "Error") {
         displayError();
+        stopLoading();
     } else {
         content = $('#inFile').val();
         if (content != "") {
             $("#process-time").text(parsetTime(response));
+            stopLoading();
             $('#success-modal').modal();
         }
     }
@@ -36,6 +39,18 @@ function parsetTime(t) {
         t > 0 ? (t + " Seconds") : "";
     return result;
 }
+
+function stopLoading() {
+    $('#spinner').css("display", "none");
+    $('#pleaseWaitDialog').modal('hide');
+}
+
+function startLoading() {
+    $('#spinner').css("display", "block");
+    $('#spinner').css("z-index", "1060");
+    $('#pleaseWaitDialog').modal();
+}
+
 
 $(document).ready(function () {
    

@@ -301,7 +301,7 @@ namespace QBCS.Service.Implement
         {
             var courseDetail = new CourseStatDetailViewModel();
             var questions = unitOfWork.Repository<Question>().GetAll();
-            var courseQuestions = questions.Where(q => q.CourseId == id);
+            var courseQuestions = questions.Where(q => q.CourseId == id).ToList();
 
             switch (type)
             {
@@ -326,14 +326,14 @@ namespace QBCS.Service.Implement
                     };
                     break;
             }
-            courseDetail.Suggestion = new List<string>();
+            courseDetail.Suggestion = new List<double>();
             var courseQuestionsInExam = unitOfWork.Repository<QuestionInExam>().GetAll().Where(q => q.Question.CourseId == id).ToList();
-            var easyPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Easy).Count() / courseQuestionsInExam.Count()) * 100), 2);
-            var mediumPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Medium).Count() / courseQuestionsInExam.Count()) * 100), 2);
-            var hardPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Hard).Count() / courseQuestionsInExam.Count()) * 100), 2);
-            var easyPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((double)((courseDetail.Easy / courseQuestions.Count()) * 100), 2);
-            var mediumPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((double)((courseDetail.Medium / courseQuestions.Count()) * 100), 2);
-            var hardPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((double)((courseDetail.Hard / courseQuestions.Count()) * 100), 2);
+            var easyPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round(((double)(courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Easy).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var mediumPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Medium).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var hardPercentageInExam = courseQuestionsInExam.Count() == 0 ? 1 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Hard).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var easyPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Easy / (double)courseQuestions.Count()) * 100), 2);
+            var mediumPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Medium / (double)courseQuestions.Count()) * 100), 2);
+            var hardPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Hard / (double)courseQuestions.Count()) * 100), 2);
             if(easyPercentage / easyPercentageInExam <= 0.8)
             {
                 courseDetail.Suggestion.Add("We should have more Easy questions !!!");

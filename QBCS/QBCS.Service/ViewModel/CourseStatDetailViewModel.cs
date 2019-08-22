@@ -14,6 +14,6 @@ namespace QBCS.Service.ViewModel
         public int Easy { get; set; }
         public int Medium { get; set; }
         public int Hard { get; set; }
-        public List<string> Suggestion { get; set; }
+        public List<double> Suggestion { get; set; }
     }
 }
