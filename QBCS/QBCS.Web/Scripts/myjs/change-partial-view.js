@@ -10,8 +10,8 @@
     notInsert = editable + invalid + deleteQ;
     checkAgain = totalQues - (editable + invalid + deleteQ + success);
 
-    $("#txtNotInsert").val(notInsert);
-    $("#txtCheckAgain").val(checkAgain);
+    $("#txtNotInsert").text(notInsert);
+    $("#txtCheckAgain").text(checkAgain);
 }
 
 //$("#btnSaveQuestion").click(function () {
@@ -868,8 +868,13 @@ function minusTotal(totalSpan) {
 }
 
 function plusTotal(totalSpan) {
+    var max = parseInt($("#total-question").text());
+
     var value = parseInt(totalSpan.text());
     totalSpan.text(value + 1);
+    if (value >= max) {
+        return max;
+    }
     return value + 1;
 }
 
