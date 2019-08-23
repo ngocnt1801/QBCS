@@ -330,3 +330,7 @@ ASALocalRun/
 .mfractor/
 /QBCS/QBCS.Web/ElmahLog
 /QBCS/QBCS.Web/ErrorLog
+
+QBCS/QBCS\.Entity/QBCS\.Entity\.csproj
+
+QBCS/DuplicateQuestion/WordNetClasses\.dll

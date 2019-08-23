@@ -42,7 +42,7 @@ namespace QBCS.Service.Implement
                     unitOfWork.Repository<QuestionTemp>().Delete(question);
                 }
 
-                
+
                 import.Status = (int)StatusEnum.Canceled;
                 unitOfWork.Repository<Import>().Update(import);
                 unitOfWork.SaveChanges();
@@ -224,7 +224,8 @@ namespace QBCS.Service.Implement
                     Category = questionTemp.Category,
                     LearningOutcome = questionTemp.LearningOutcome,
                     Level = questionTemp.LevelName,
-                    Images = questionTemp.Images.Select(i => new ImageViewModel {
+                    Images = questionTemp.Images.Select(i => new ImageViewModel
+                    {
                         Source = i.Source
                     }).ToList(),
                     //DuplicatedQuestion = questionTemp.DuplicatedWithBank != null ? (new QuestionViewModel
@@ -254,6 +255,10 @@ namespace QBCS.Service.Implement
                     {
                         Id = o.Id,
                         OptionContent = o.OptionContent,
+                        Images = o.Images.Select(im => new ImageViewModel()
+                        {
+                            Source = im.Source
+                        }).ToList(),
                         IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value
                     }).ToList()
                 };
@@ -262,12 +267,12 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public async Task ImportToBank(int importId)
+        public async Task ImportToBank(int importId, bool checkSemantic = true)
         {
             using (var context = new QBCSContext())
             {
-                string command = "EXEC CheckDuplicateImport @importId= @id";
-                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", importId));
+                string command = "EXEC CheckDuplicateImport @importId= @id, @checkSemantic=@semantic";
+                await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@id", importId), new SqlParameter("@semantic", checkSemantic ? 1 : 0));
             }
         }
 
@@ -278,6 +283,88 @@ namespace QBCS.Service.Implement
                 string command = "EXEC CheckDuplicateQuestion @questionId=@qid, @logId=@lid";
                 await context.Database.ExecuteSqlCommandAsync(command, new SqlParameter("@qid", questionId)
                                                                      , new SqlParameter("@lid", logId));
+            }
+        }
+
+        public void UpdateQuestionTempWithTextarea(QuestionTempViewModel question)
+        {
+            var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.Id);
+
+            var checkedEntity = new List<QuestionTemp>();
+            checkedEntity.Add(entity);
+            checkedEntity = CheckRule(checkedEntity);
+            entity = checkedEntity.FirstOrDefault();
+
+            if (entity != null && (entity.Status == (int)StatusEnum.Editable
+                                    || entity.Status == (int)StatusEnum.Invalid
+                                    || entity.Status == (int)StatusEnum.Deleted
+                                    || entity.Status == (int)StatusEnum.DeleteOrSkip))
+            {
+                entity.QuestionContent = question.QuestionContent;
+                entity.Status = (int)StatusEnum.NotCheck;
+                //entity.Image = question.Image;
+
+                var listOptionEntity = entity.OptionTemps.ToList();
+
+                foreach (var option in listOptionEntity)
+                {
+                    #region must fix
+                    if (option.Images != null)
+                    {
+                        foreach (var image in option.Images.ToList())
+                        {
+                            unitOfWork.Repository<Image>().Delete(image);
+                        }
+                        unitOfWork.SaveChanges();
+
+                    }
+                    #endregion
+
+                    unitOfWork.Repository<OptionTemp>().Delete(option);
+                }
+                if (entity.Images != null && entity.Images.Count > 0)
+                {
+                    foreach (var img in entity.Images.ToList())
+                    {
+                        unitOfWork.Repository<Image>().Delete(img);
+                    }
+                }
+
+                question.Options = question.Options.Where(o => !String.IsNullOrWhiteSpace(o.OptionContent) && !o.OptionContent.Trim().ToLower().Equals("[html]")).ToList();
+                //if (question.ImagesInput != null && question.ImagesInput.Count() > 0)
+                //{
+                //    entity.Images = question.ImagesInput.Select(im => new Image
+                //    {
+                //        Source = im
+                //    }).ToList();
+                //}
+
+                foreach (var option in question.Options)
+                {
+                    unitOfWork.Repository<OptionTemp>().Insert(new OptionTemp
+                    {
+                        IsCorrect = option.IsCorrect,
+                        OptionContent = option.OptionContent,
+                        TempId = question.Id,
+                        Images = option.Images.Select(i => new Image()
+                        {
+                            Source = i.Source
+                        }).ToList()
+                    });
+                }
+                foreach (var image in question.Images)
+                {
+                    unitOfWork.Repository<Image>().Insert(new Image
+                    {
+                        Source = image.Source,
+                        QuestionTempId = question.Id
+                    });
+                }
+                var list = new List<QuestionTemp>();
+                list.Add(entity);
+                list = CheckRule(list);
+                unitOfWork.Repository<QuestionTemp>().Update(list.FirstOrDefault());
+                unitOfWork.SaveChanges();
             }
         }
 
@@ -304,7 +391,7 @@ namespace QBCS.Service.Implement
                 foreach (var option in listOptionEntity)
                 {
                     #region must fix
-                    if(option.Images != null)
+                    if (option.Images != null)
                     {
                         foreach (var image in option.Images.ToList())
                         {
@@ -357,7 +444,7 @@ namespace QBCS.Service.Implement
             {
                 return null;
             }
-            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true);
+            var rules = unitOfWork.Repository<Rule>().GetAll().Where(r => r.IsDisable == false && r.IsUse == true).ToList();
             foreach (var tempQuestion in tempQuestions)
             {
                 var checkCorrectOption = false;
@@ -369,9 +456,9 @@ namespace QBCS.Service.Implement
                         tempQuestion.Message = "Option must not be empty";
                         break;
                     }
-                    for(int i = 0; i < option.Images.Count -1;i++)
+                    for (int i = 0; i < option.Images.Count - 1; i++)
                     {
-                        for(int j = i + 1; j < option.Images.Count(); j++)
+                        for (int j = i + 1; j < option.Images.Count(); j++)
                         {
                             //checkDuplicateImage
                             if (CheckDuplicatedImage.CheckDuplicateImage(option.Images.ElementAtOrDefault(i).Source, option.Images.ElementAtOrDefault(i).Source))
@@ -424,7 +511,7 @@ namespace QBCS.Service.Implement
                                     int totalImage = tempQuestion.OptionTemps.ElementAtOrDefault(i).Images.Count();
                                     for (int k = 0; k < totalImage; k++)
                                     {
-                                        for(int l = 0; l < totalImage; l++)
+                                        for (int l = 0; l < totalImage; l++)
                                         {
                                             //checkDuplicateImage
                                             if (CheckDuplicatedImage.CheckDuplicateImage(
@@ -437,7 +524,7 @@ namespace QBCS.Service.Implement
                                                 break;
                                             }
                                         }
-                                        if(tempQuestion.Status == (int)StatusEnum.Invalid)
+                                        if (tempQuestion.Status == (int)StatusEnum.Invalid)
                                         {
                                             break;
                                         }
@@ -547,7 +634,8 @@ namespace QBCS.Service.Implement
                                 }
                                 break;
                             //check option length difference
-                            case 8: break;
+                            case 8:
+                                break;
                             //check banned words in option
                             case 9:
                                 foreach (var option in tempQuestion.OptionTemps)
@@ -682,8 +770,14 @@ namespace QBCS.Service.Implement
                             case 16:
                                 if (!rule.Value.Equals("True"))
                                 {
-                                    var testOption = tempQuestion.OptionTemps.
-                                                                OrderByDescending(o => o.OptionContent.Length).
+                                    var compareOptions = new List<OptionTemp>();
+                                    compareOptions = tempQuestion.OptionTemps.Select(o => new OptionTemp()
+                                    {
+                                        OptionContent = TrimTag(o.OptionContent),
+                                        IsCorrect = o.IsCorrect
+                                    }).ToList();
+                                    var testOption = compareOptions.
+                                                                OrderByDescending(o => o.OptionContent.Split(' ').Length).
                                                                 ThenBy(o => o.IsCorrect).ToList();
                                     var varOption = testOption.First();
                                     if ((bool)varOption.IsCorrect)
@@ -697,18 +791,49 @@ namespace QBCS.Service.Implement
                             case 17:
                                 if (!rule.Value.Equals("True"))
                                 {
-                                    var testOption = tempQuestion.OptionTemps.
-                                                                OrderBy(o => o.OptionContent.Length).
-                                                                ThenBy(o => o.IsCorrect).ToList();
-                                    var varOption = testOption.First();
-                                    if ((bool)varOption.IsCorrect)
+                                    var varOption = new OptionTemp();
+                                    var rule8 = rules.Where(r => r.KeyId == 8).ToList();
+                                    var compareOptions = new List<OptionTemp>();
+                                    compareOptions = tempQuestion.OptionTemps.Select(o => new OptionTemp()
                                     {
-                                        tempQuestion.Status = (int)StatusEnum.Invalid;
-                                        tempQuestion.Message = "Correct Option must not be the shortest option";
+                                        OptionContent = TrimTag(o.OptionContent),
+                                        IsCorrect = o.IsCorrect
+                                    }).ToList();
+                                    var testOptions = compareOptions.
+                                                                OrderBy(o => o.OptionContent.Split(' ').Length).
+                                                                ThenBy(o => o.IsCorrect).ToList();
+
+                                    if (rule8 != null && rule8.Count() > 0)
+                                    {
+                                        var value8 = int.Parse(rule8.FirstOrDefault().Value);
+                                        var groupRules = testOptions.GroupBy(o => o.OptionContent.Split(' ').Length).ToList();
+                                        if(groupRules.Count() > 1)
+                                        {
+                                            var shortest = groupRules[0].ToList().FirstOrDefault();
+                                            var second = groupRules[1].ToList().FirstOrDefault();
+                                            
+                                        }
+                                        else
+                                        {
+                                            varOption = testOptions.First();
+                                            if ((bool)varOption.IsCorrect)
+                                            {
+                                                tempQuestion.Status = (int)StatusEnum.Invalid;
+                                                tempQuestion.Message = "Correct Option must not be the shortest option";
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        varOption = testOptions.First();
+                                        if ((bool)varOption.IsCorrect)
+                                        {
+                                            tempQuestion.Status = (int)StatusEnum.Invalid;
+                                            tempQuestion.Message = "Correct Option must not be the shortest option";
+                                        }
                                     }
                                 }
                                 break;
-
                         }
                         if (tempQuestion.Status == (int)StatusEnum.Invalid)
                         {
@@ -723,19 +848,6 @@ namespace QBCS.Service.Implement
         }
 
         #region validate rule stuff
-        private string Uppercase(string content)
-        {
-            string[] uppercase = { "invalid", "incorrect", "not true" };
-            for (int i = 0; i < uppercase.Length; i++)
-            {
-                var culture = CultureInfo.GetCultureInfo("en-GB");
-                if (culture.CompareInfo.IndexOf(content, uppercase[i], CompareOptions.IgnoreCase) >= 0)
-                {
-                    content = Regex.Replace(content, uppercase[i], uppercase[i].ToUpper(), RegexOptions.IgnoreCase);
-                }
-            }
-            return content;
-        }
         private string TrimOption(string option)
         {
             if (option != null && !String.IsNullOrWhiteSpace(option))
@@ -749,6 +861,32 @@ namespace QBCS.Service.Implement
 
             //option = option.Replace(",", "");
             return option;
+        }
+
+        private string TrimTag(string str)
+        {
+            str = str.Replace("<cbr>", " ");
+            str = str.Replace("<br>", " ");
+            str = str.Replace("<br/>", " ");
+            str = str.Replace("<br />", " ");
+            str = str.Replace("<br>", " ");
+            str = str.Replace("<sub>", " ");
+            str = str.Replace("</sub>", " ");
+            str = str.Replace("<p>", " ");
+            str = str.Replace("</p>", " ");
+            str = str.Replace("</sup>", " ");
+            str = str.Replace("<sup>", " ");
+            str = str.Replace("<span>", " ");
+            str = str.Replace("</span>", " ");
+            str = str.Replace("</b>", " ");
+            str = str.Replace("<b>", " ");
+            str = str.Replace("</u>", " ");
+            str = str.Replace("<u>", " ");
+            str = str.Replace("</i>", " ");
+            str = str.Replace("<i>", " ");
+            str = str.Replace("[html]", " ");
+            str = Regex.Replace(str, @"\s{2,}", " ");
+            return str;
         }
 
         #endregion
@@ -829,7 +967,7 @@ namespace QBCS.Service.Implement
                             }).ToList();
                             duplicated.IsAnotherImport = false;
                         }
-                        
+
                     }
                     else
                     {
@@ -854,7 +992,7 @@ namespace QBCS.Service.Implement
                             duplicated.Status = questionEntity.Status.HasValue ? (StatusEnum)questionEntity.Status.Value : 0;
                             duplicated.IsAnotherImport = !(questionEntity.ImportId == entity.ImportId);
                         }
-                        
+
                     }
                 }
 

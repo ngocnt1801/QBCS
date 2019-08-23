@@ -28,6 +28,11 @@ namespace QBCS.Repository.Implement
             return new ImportRepository(context);
         }
 
+        public IExaminationRepository ExaminationRepository()
+        {
+            return new ExaminationRepository(context);
+        }
+
         public IRepository<T> Repository<T>() where T : class
         {
             return new Repository<T>(context);

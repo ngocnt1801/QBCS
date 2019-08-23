@@ -9,6 +9,7 @@
 @Styles.Render("~/bundle/content/detailquestion")
 
 <h2>Edit Question</h2>
+<a href="@Url.Action("EditQuestionWithTextbox","Question", new { id = Model.Question.Id})">Edit Question with textbox</a>
 @using (Html.BeginForm("UpdateQuestion", "Question", FormMethod.Post, new { @class = "form-group" }))
 {
     <div class="container text-custom">

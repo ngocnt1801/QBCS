@@ -44,11 +44,11 @@ namespace QBCS.Web.Controllers
             return View("Index", model);
         }
 
-        [Feature(FeatureType.SideBar
-            , "Staff Home page"
-            , "QBCS", protectType: ProtectType.Authorized
-            , ShortName = "Staff"
-            , InternalId = (int)SideBarEnum.Staff)]
+        //[Feature(FeatureType.SideBar
+        //    , "Staff Home page"
+        //    , "QBCS", protectType: ProtectType.Authorized
+        //    , ShortName = "Staff"
+        //    , InternalId = (int)SideBarEnum.Staff)]
         [LogAction(Action = "Navigation", Message = "Get Staff's Navigation Home", Method = "GET")]
         public ActionResult Staff()
         {
@@ -64,11 +64,11 @@ namespace QBCS.Web.Controllers
             return View("Staff", null);
         }
 
-        [Feature(FeatureType.SideBar
-            , "Admin Home page"
-            , "QBCS", protectType: ProtectType.Authorized
-            , ShortName = "Admin"
-            , InternalId = (int)SideBarEnum.Admin)]
+        //[Feature(FeatureType.SideBar
+        //    , "Admin Home page"
+        //    , "QBCS", protectType: ProtectType.Authorized
+        //    , ShortName = "Admin"
+        //    , InternalId = (int)SideBarEnum.Admin)]
         [LogAction(Action = "Navigation", Message = "Get Admin's Navigation Home", Method = "GET")]
         public ActionResult Admin()
         {

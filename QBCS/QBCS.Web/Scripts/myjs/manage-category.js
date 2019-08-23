@@ -32,6 +32,21 @@
                 categoryView.showUpdateLocModal();
             })
 
+            this.confirmModal = $("#disable-category");
+            $(".disable-category").on('click', function () {
+
+                $("#btnDisableCategory").attr("data-url", $(this).attr("data-url"));
+                categoryView.showConfirmDisaleModal();
+
+            })
+
+            $("#btnDisableCategory").on('click', function (){
+                categoryView.confirmModal.modal("hide");
+                startLoading();
+                categoryOctopus.sendAjax($(this).attr("data-url"));
+            })
+
+
         },
         showUpdateModal: function () {
             var currentCategory = categoryOctopus.getCurrentCategory();
@@ -46,7 +61,20 @@
             this.locIdField.val(currentLOC.Id);
 
             this.updateLocModal.modal("show");
+        },
+        showConfirmDisaleModal: function () {
+            this.confirmModal.modal("show");
+        },
+        stopLoading: function () {
+            $('#spinner').css("display", "none");
+            $('#pleaseWaitDialog').modal('hide');
+        },
+        startLoading: function () {
+            $('#spinner').css("display", "block");
+            $('#spinner').css("z-index", "1060");
+            $('#pleaseWaitDialog').modal();
         }
+
     };
 
     var categoryOctopus = {
@@ -66,6 +94,18 @@
         },
         getCurrentLOC: function () {
             return categoryModel.currentLOC;
+        },
+        sendAjax: function (url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function () {
+                    categoryView.stopLoading();
+                },
+                error: function () {
+                    categoryView.stopLoading();
+                }
+            });
         }
     };
 

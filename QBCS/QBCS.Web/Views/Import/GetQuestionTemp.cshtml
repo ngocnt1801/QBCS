@@ -15,7 +15,7 @@
 
     <div class="card-body">
         <div class="container text-custom">
-            <a href="@Url.Action("EditQuestionTempWithTextbox","Question", new { id = Model.Id})">Edit Question with textbox</a>
+            <a href="@Url.Action("EditQuestionTempWithTextbox","Import", new { id = Model.Id})">Edit Question with textbox</a>
             @using (Html.BeginForm("EditQuestion", "Import", FormMethod.Post, new { @class = "form-group" }))
             {
 
@@ -64,6 +64,7 @@
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)
                 <input type="submit" name="Save" class="btn btn-primary float-right" id="btnUpdate" />
+                <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
                 <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
             }
         </div>

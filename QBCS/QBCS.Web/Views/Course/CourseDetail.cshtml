@@ -17,7 +17,7 @@
         </button>
     </div>
 }
-<h3>@Model.Name (@Model.Code)</h3>
+<h4>@Model.Name (@Model.Code)</h4>
 
 @*<div class="row">
         <div class="col-lg-12 mb-2">
@@ -39,6 +39,9 @@
 
 <div class="row">
     <div style="max-height: 100vh; overflow-y: auto; margin-bottom: 30px" class="list-group list-group-root well col-md-3 text-custom show-category">
+        <a href="#" class="list-group-item" data-toggle="collapse">
+            All <span class="float-right" data-count="@Model.Total" id="count-all">(@Model.Total)</span>
+        </a>
         @Html.Partial("_ListCategory", Model)
     </div>
     <div id="list-question" class="col-md-9" data-id="@Model.Id">
@@ -48,21 +51,6 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive text-custom" id="divTable">
-                    @*<table class="table table-bordered table-hover text-custom" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Question</th>
-                                    <th>Action</th>
-                                    <th>
-                                        <input type="checkbox" class="checkbox hidden" id="select-all" value="true" onclick="categoryView.toggleAll()" />
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>*@
                 </div>
             </div>
         </div>

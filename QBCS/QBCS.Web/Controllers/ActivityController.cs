@@ -46,7 +46,7 @@ namespace QBCS.Web.Controllers
 
         //Staff
         //stpm: feature declare
-        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "All Activities", InternalId = (int)SideBarEnum.AllActivity)]
+        [Feature(FeatureType.SideBar, "Get All Activities", "QBCS", protectType: ProtectType.Authorized, ShortName = "History Changes", InternalId = (int)SideBarEnum.AllActivity)]
         [LogAction(Action = "Activities", Message = "View All Activities", Method = "GET")]
         public ActionResult GetAllActivities()
         {
@@ -140,12 +140,12 @@ namespace QBCS.Web.Controllers
         //Staff
         //stpm: feature declare
         [Feature(FeatureType.Page, "Activity Question LifeCycle", "QBCS", protectType: ProtectType.Authorized)]
-        
+
         public ActionResult GetListTargetByID(int id, int? targetId)
         {
             List<LogViewModel> list = new List<LogViewModel>();
-           // var listTemp = logService.GetActivitiesById(id);
-           //list.Add(listTemp as LogViewModel);
+            // var listTemp = logService.GetActivitiesById(id);
+            //list.Add(listTemp as LogViewModel);
 
             if (targetId > 0)
             {
@@ -154,20 +154,10 @@ namespace QBCS.Web.Controllers
                 {
                     list = tempImport;
                 }
-               
+
             }
             TempData["active"] = "Activity";
             return View("GetListActivity", list);
-        }
-        //Staff
-        //stpm: feature declare
-        [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
-        [LogAction(Action = "Examination", Message = "View Examination History Activity", Method = "GET")]
-        public ActionResult GetExaminationHistory(int id)
-        {
-            var result = questionService.GetQuestionHistory(id);
-            TempData["active"] = "Course";
-            return View(result);
         }
     }
 }

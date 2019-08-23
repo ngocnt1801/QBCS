@@ -10,8 +10,8 @@
     notInsert = editable + invalid + deleteQ;
     checkAgain = totalQues - (editable + invalid + deleteQ + success);
 
-    $("#txtNotInsert").val(notInsert);
-    $("#txtCheckAgain").val(checkAgain);
+    $("#txtNotInsert").text(notInsert);
+    $("#txtCheckAgain").text(checkAgain);
 }
 
 //$("#btnSaveQuestion").click(function () {
@@ -258,9 +258,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -479,9 +479,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -694,9 +694,9 @@ function clickSection() {
                         var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                         $(jqw).text(breakContent[w]);
                     }
-                    breakContent = [];
                     var o = 0;
                     for (o = 0; o < question[q]["Options"].length; o++) {
+                        breakContent = [];
                         var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var jo = '#q_' + question[q].Id + ' #Option' + o;
                         var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -868,8 +868,13 @@ function minusTotal(totalSpan) {
 }
 
 function plusTotal(totalSpan) {
+    var max = parseInt($("#total-question").text());
+
     var value = parseInt(totalSpan.text());
     totalSpan.text(value + 1);
+    if (value >= max) {
+        return max;
+    }
     return value + 1;
 }
 
@@ -892,7 +897,10 @@ function sendAjax(url) {
         url: url,
         type: 'GET',
         success: function (response) {
-
+            toastr.success("Successful")
+        },
+        error: function () {
+            toastr.error("Error. Please try again!");
         }
     });
 }
@@ -1161,7 +1169,7 @@ function initTableEditable() {
                         else {
                             //notify if not image
                             var result = "";
-                            if (row.IsNotImage) {
+                            if (row.IsNotImage || row.Message.length == 0) {
                                 result = "<p>There is no duplicate</p>";
                             } else {
                                 result = row.Message + '<br/> <a href="/Import/GetDuplicatedDetail/' + row.Id + '" class="text-info btn-link font-weight-bold" > See more</a >';
@@ -1229,9 +1237,9 @@ function initTableEditable() {
                     var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
-                breakContent = [];
                 var o = 0;
                 for (o = 0; o < question[q]["Options"].length; o++) {
+                    breakContent = [];
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -1337,8 +1345,8 @@ function initTableEditable() {
                         var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
                         $(jdf).text(breakContent[f]);
                     }
-                    breakContent = [];
                     for (o = 0; o < duplicate["Options"].length; o++) {
+                        breakContent = [];
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];
@@ -1634,9 +1642,9 @@ function initTableBankEditable() {
                     var jqw = '#q_' + question[q].Id + ' #Question #qcontent_' + w;
                     $(jqw).text(breakContent[w]);
                 }
-                breakContent = [];
                 var o = 0;
                 for (o = 0; o < question[q]["Options"].length; o++) {
+                    breakContent = [];
                     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     var jo = '#q_' + question[q].Id + ' #Option' + o;
                     var optionContent = question[q]["Options"][o]["OptionContent"];
@@ -1742,8 +1750,8 @@ function initTableBankEditable() {
                         var jdf = '#d_' + question[q].Id + ' #Question #dcontent_' + f;
                         $(jdf).text(breakContent[f]);
                     }
-                    breakContent = [];
                     for (o = 0; o < duplicate["Options"].length; o++) {
+                        breakContent = [];
                         var jod = '#d_' + question[q].Id + ' #Option' + o;
                         var dupOptionContent = duplicate["Options"][o]["OptionContent"];
                         var dupOptionCorrect = duplicate["Options"][o]["IsCorrect"];

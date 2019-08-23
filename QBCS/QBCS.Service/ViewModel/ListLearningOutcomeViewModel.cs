@@ -12,5 +12,6 @@ namespace QBCS.Service.ViewModel
         public List<CategoryViewModel> Categories { get; set; }
         public List<SemesterViewModel> Semester { get; set; }
         public int CourseId { get; set; }
+        public CourseViewModel Course { get; set; }
     }
 }

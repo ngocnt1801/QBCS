@@ -34,7 +34,7 @@
                     {
 
                         @*@using (Html.BeginForm("ImportFile", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {*@
+            {*@
                         <!-- COMPONENT START -->
                         <i class="text-dark text-custom">Enter owner name:</i>
                         <div class="form-group pb-2 ui-widget">
@@ -59,7 +59,7 @@
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                             @*<input id="autocompleteCourse" class="form-control text-custom border-dark"/>
-                                <input id="autocompleteCourseId" name="courseId" hidden />*@
+                <input id="autocompleteCourseId" name="courseId" hidden />*@
                         </div>
 
                         <i class="text-dark text-custom">Choose unit type:</i>
@@ -80,7 +80,10 @@
                                 <input type="radio" name="prefix" autocomplete="off" value=""> [None Prefix]
                             </label>
                         </div>
-
+                        <div class="custom-control custom-checkbox text-custom">
+                            <input type="checkbox" name="checkSemantic" value="true" class="custom-control-input" id="defaultChecked3">
+                            <label class="custom-control-label" for="defaultChecked3">Check Semantic</label>
+                        </div>
                         <!-- COMPONENT END -->
                         <div class="form-group text-custom mt-3">
                             @*<i class="text-dark text-custom">Choose a file:</i>
