@@ -280,6 +280,11 @@
             }
         ]
     });
+    tableExam.on('order.dt search.dt', function () {
+        tableExam.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam1 = $('#dataTableExam-1').DataTable({
         columns: [
             null,
@@ -320,6 +325,11 @@
             }
         ]
     });
+    tableExam1.on('order.dt search.dt', function () {
+        tableExam1.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam2 = $('#dataTableExam-2').DataTable({
         columns: [
             null,
@@ -360,6 +370,11 @@
             }
         ]
     });
+    tableExam2.on('order.dt search.dt', function () {
+        tableExam2.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam3 = $('#dataTableExam-3').DataTable({
         columns: [
             null,
@@ -400,9 +415,14 @@
             }
         ]
     });
+    tableExam3.on('order.dt search.dt', function () {
+        tableExam3.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam4 = $('#dataTableExam-4').DataTable({
         columns: [
-            null,
+           null,
             null,
             {
                 "render": function (data, type, row) {
@@ -440,6 +460,11 @@
             }
         ]
     });
+    tableExam4.on('order.dt search.dt', function () {
+        tableExam4.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam5 = $('#dataTableExam-5').DataTable({
         columns: [
             null,
@@ -480,6 +505,11 @@
             }
         ]
     });
+    tableExam5.on('order.dt search.dt', function () {
+        tableExam5.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam6 = $('#dataTableExam-6').DataTable({
         columns: [
             null,
@@ -520,6 +550,11 @@
             }
         ]
     });
+    tableExam6.on('order.dt search.dt', function () {
+        tableExam6.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam7 = $('#dataTableExam-7').DataTable({
         columns: [
             null,
@@ -560,6 +595,11 @@
             }
         ]
     });
+    tableExam7.on('order.dt search.dt', function () {
+        tableExam7.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam8 = $('#dataTableExam-8').DataTable({
         columns: [
             null,
@@ -600,6 +640,11 @@
             }
         ]
     });
+    tableExam8.on('order.dt search.dt', function () {
+        tableExam8.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam9 = $('#dataTableExam-9').DataTable({
         columns: [
             null,
@@ -640,6 +685,11 @@
             }
         ]
     });
+    tableExam9.on('order.dt search.dt', function () {
+        tableExam9.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam10 = $('#dataTableExam-10').DataTable({
         columns: [
             null,
@@ -680,6 +730,11 @@
             }
         ]
     });
+    tableExam10.on('order.dt search.dt', function () {
+        tableExam10.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableHistoryExam = $("#datatable-history-exam").DataTable({
         columns: [
             null,
