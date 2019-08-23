@@ -105,6 +105,38 @@ namespace QBCS.Service.Implement
             return result;
         }
 
+        public ExaminationViewModel GetDetailExamById(int examId)
+        {
+            ExaminationViewModel result = new ExaminationViewModel();
+            Examination exam = unitOfWork.Repository<Examination>().GetAll().Where(e => e.Id == examId).FirstOrDefault();
+            if (exam != null)
+            {
+                result = new ExaminationViewModel
+                {
+                    Id = exam.Id,
+                    ExamCode = exam.ExamCode,
+                    ExamGroup = exam.GroupExam,
+                    IsDisable = (bool)exam.IsDisable,
+                    CourseId = exam.CourseId.HasValue ? (int)exam.CourseId : 0,
+                    GeneratedDate = (DateTime)exam.GeneratedDate,
+                    NumberOfEasy = exam.NumberOfEasy.HasValue ? (int)exam.NumberOfEasy : 0,
+                    NumberOfMedium = exam.NumberOfMedium.HasValue ? (int)exam.NumberOfMedium : 0,
+                    NumberOfHard = exam.NumberOfHard.HasValue ? (int)exam.NumberOfHard : 0,
+                    Course = courseService.GetCourseById(exam.CourseId.HasValue ? (int)exam.CourseId : 0),
+                    PartOfExam = partOfExamService.GetPartOfExamByExamId(exam.Id)
+                };
+                Examination newestExam = unitOfWork.Repository<Examination>().GetAll().Where(e => e.CourseId == result.CourseId).OrderByDescending(e => e.Id).FirstOrDefault();
+                if(newestExam.GroupExam.Equals(result.ExamGroup))
+                {
+                    result.IsNewest = true;
+                } else
+                {
+                    result.IsNewest = false;
+                }
+            }
+            return result;
+        }
+
         public string GetExamCode()
         {
             string result = "";
@@ -800,7 +832,7 @@ namespace QBCS.Service.Implement
                     break;
                 }
                 int minFrequency = questionService.GetMinFreQuencyByLearningOutcome(learningOutcomeId, idOfLevel);
-                List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId).ToList();
+                List<Question> questionsByLevelAndLearningOutcome = questions.Where(q => q.LevelId == idOfLevel && q.LearningOutcomeId == learningOutcomeId && q.IsDisable == false).ToList();
                 List<QuestionViewModel> questionViewModelRemoveRecent = questionsByLevelAndLearningOutcome.Where(q => q.Frequency == minFrequency && q.Priority != 0).Select(c => new QuestionViewModel
                 {
                     Frequency = c.Frequency.HasValue ? (int)c.Frequency : 0,
@@ -880,7 +912,7 @@ namespace QBCS.Service.Implement
                 //object[] xparams = { new SqlParameter("@LevelId", idOfLevel),
                 //                    new SqlParameter("@LearningOutcomeId", learningOutcomeId)};
                 //unitOfWork.GetContext().Database.ExecuteSqlCommand("EXEC UpdatePriorityIncrease @LevelId, @LearningOutcomeId", xparams);
-                unitOfWork.SaveChanges();
+                //unitOfWork.SaveChanges();
                 foreach (QuestionViewModel ques in result)
                 {
                     if (!resultTmp.Any(tmp => tmp.Id == ques.Id))
@@ -899,7 +931,6 @@ namespace QBCS.Service.Implement
                         unitOfWork.Repository<Question>().Update(questionEntity);
                         //unitOfWork.SaveChanges();
                     }
-
                 }
                 unitOfWork.SaveChanges();
                 if (result.Count == numberOfQuestion)
@@ -968,9 +999,10 @@ namespace QBCS.Service.Implement
         {
             QuestionInExamViewModel questionInExam = questionInExamService.GetQuestionInExamById(questionId);
             ExaminationViewModel exam = GetExanById(questionInExam.PartOfExam.ExaminationId);
-            QuestionInExam oldQuestion = unitOfWork.Repository<QuestionInExam>().GetById(questionInExam.Id);
+            QuestionInExam oldQuestionInExam = unitOfWork.Repository<QuestionInExam>().GetById(questionInExam.Id);
             int learningOutcomeId = questionInExam.PartOfExam.LearningOutcomeId;
             int levelId = questionInExam.LevelId;
+            bool isDifferrent = false;
             int countQuestionInBank = questionService.GetCountOfListQuestionByLearningOutcomeAndId(learningOutcomeId, levelId);
             int countQuestionInExam = questionInExamService.GetCountByLearningOutcome(learningOutcomeId, levelId);
             if (countQuestionInBank == countQuestionInExam)
@@ -985,7 +1017,7 @@ namespace QBCS.Service.Implement
                     }
                 }
             }
-            oldQuestion.IsDisable = true;
+            oldQuestionInExam.IsDisable = true;
             List<QuestionViewModel> newQuestion = GeneratePartOfExamByLearningOutcomeAndLevel(learningOutcomeId, 1, levelId);
             foreach (var ques in newQuestion)
             {
@@ -1016,7 +1048,17 @@ namespace QBCS.Service.Implement
                         }).ToList(),
                     }).ToList()
                 };
+                if(ques.Id != oldQuestionInExam.QuestionReference)
+                {
+                    isDifferrent = true;
+                }
                 unitOfWork.Repository<QuestionInExam>().Insert(question);
+            }
+            if(isDifferrent)
+            {
+                Question questionOld = unitOfWork.Repository<Question>().GetById(oldQuestionInExam.QuestionReference);
+                questionOld.Frequency = oldQuestionInExam.Frequency;
+                questionOld.Priority = oldQuestionInExam.Priority;
             }
             unitOfWork.SaveChanges();
 

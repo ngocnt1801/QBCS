@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
-        .addClass('btn btn-info spinner-loading')
+        .addClass('btn btn-info')
         .attr('disabled', 'disabled')
         .attr('type', 'submit')
         .attr('id', 'btnFinish')
@@ -72,7 +72,7 @@
     $("#easy").focusout(function () {
         var easyPercent = $("#easy").val();
         var hardAndNormal = 100 - easyPercent;
-        var normalPercent = (60 * hardAndNormal) / 100;
+        var normalPercent = Math.floor((60 * hardAndNormal) / 100);
         var hardPercent = 100 - easyPercent - normalPercent;
         $("#hard").val(hardPercent);
         $("#normal").val(normalPercent);
@@ -107,6 +107,66 @@
         var examGroup = $("input[name='examGroupExportAll']").val();
         var fileExtension = $("#fileExtensionExportAll").find(":selected").text();
         window.location = "/ExaminationAPI/exportAll?examGroup=" + examGroup + "&fileExtension=" + fileExtension;
+    });
+    $('#btnFinish').on('click', function (e) {
+        var flag = $('#flagPercent').val();
+        if (flag === "percent") {
+            var easyPercentString = $("#easy").val();
+            var normalPercentString = $("#normal").val();
+            var hardPercentString = $('#hard').val();
+            if (easyPercentString === "" || normalPercentString === "" || hardPercentString === "") {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure all fields are filled out.");
+                return;
+            } else {
+                $('#errorPercent').html("");
+            }
+
+            var easyPercent = parseInt($("#easy").val());
+            var normalPercent = parseInt($("#normal").val());
+            var hardPercent = parseInt($('#hard').val());
+            var total = easyPercent + normalPercent + hardPercent;
+            if (total !== 100) {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure numbers total 100.");
+            } else if (easyPercent < 0 || easyPercent > 100 || normalPercent < 0 || normalPercent > 100 || hardPercent < 0 || hardPercent > 100) {
+                e.preventDefault();
+                $('#errorPercent').html("Please make sure the value is entered from 0 - 100.");
+            } else {
+                $('#errorPercent').html("");
+                $('#spinner').css("display", "block");
+                $('#spinner').css("z-index", "1060");
+                $('#pleaseWaitDialog').modal();
+            }
+        } else {
+            var ordinaryGradeString = $("#ordinary").val();
+            var goodGradeString = $("#good").val();
+            var excellentGradeString = $('#excellent').val();
+            if (ordinaryGradeString === "" || goodGradeString === "" || excellentGradeString === "") {
+                e.preventDefault();
+                $('#errorGrade').html("Please make sure all fields are filled out.");
+                return;
+            } else {
+                $('#errorGrade').html("");
+            }
+            var ordinaryGrade = parseInt($('#ordinary').val());
+            var goodGrade = parseInt($('#good').val());
+            var excellentGrade = parseInt($('#excellent').val());
+            if (goodGrade <= ordinaryGrade) {
+                e.preventDefault();
+                $('#errorGrade').html("The grade of good student must be greater than that of ordinary student.");
+            } else if (excellentGrade <= goodGrade) {
+                e.preventDefault();
+                $('#errorGrade').html("The grade of excellent student must be greater than that of good student.");
+            } else if (ordinaryGrade < 0 || ordinaryGrade > 100 || goodGrade < 0 || goodGrade > 100 || excellentGrade < 0 || excellentGrade > 100) {
+                e.preventDefault();
+                $('#errorGrade').html("Please make sure the value is entered from 0 - 100.");
+            } else {
+                $('#spinner').css("display", "block");
+                $('#spinner').css("z-index", "1060");
+                $('#pleaseWaitDialog').modal();
+            }
+        }
     });
     $('.delete-question').on('click', function (e) {
         e.preventDefault();
@@ -187,7 +247,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -220,6 +280,11 @@
             }
         ]
     });
+    tableExam.on('order.dt search.dt', function () {
+        tableExam.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam1 = $('#dataTableExam-1').DataTable({
         columns: [
             null,
@@ -227,7 +292,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -260,6 +325,11 @@
             }
         ]
     });
+    tableExam1.on('order.dt search.dt', function () {
+        tableExam1.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam2 = $('#dataTableExam-2').DataTable({
         columns: [
             null,
@@ -267,7 +337,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -300,6 +370,11 @@
             }
         ]
     });
+    tableExam2.on('order.dt search.dt', function () {
+        tableExam2.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam3 = $('#dataTableExam-3').DataTable({
         columns: [
             null,
@@ -307,7 +382,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -340,14 +415,19 @@
             }
         ]
     });
+    tableExam3.on('order.dt search.dt', function () {
+        tableExam3.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam4 = $('#dataTableExam-4').DataTable({
         columns: [
-            null,
+           null,
             null,
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -380,6 +460,11 @@
             }
         ]
     });
+    tableExam4.on('order.dt search.dt', function () {
+        tableExam4.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam5 = $('#dataTableExam-5').DataTable({
         columns: [
             null,
@@ -387,7 +472,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -420,6 +505,11 @@
             }
         ]
     });
+    tableExam5.on('order.dt search.dt', function () {
+        tableExam5.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam6 = $('#dataTableExam-6').DataTable({
         columns: [
             null,
@@ -427,7 +517,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -460,6 +550,11 @@
             }
         ]
     });
+    tableExam6.on('order.dt search.dt', function () {
+        tableExam6.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam7 = $('#dataTableExam-7').DataTable({
         columns: [
             null,
@@ -467,7 +562,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -500,6 +595,11 @@
             }
         ]
     });
+    tableExam7.on('order.dt search.dt', function () {
+        tableExam7.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam8 = $('#dataTableExam-8').DataTable({
         columns: [
             null,
@@ -507,7 +607,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -540,6 +640,11 @@
             }
         ]
     });
+    tableExam8.on('order.dt search.dt', function () {
+        tableExam8.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam9 = $('#dataTableExam-9').DataTable({
         columns: [
             null,
@@ -547,7 +652,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -580,6 +685,11 @@
             }
         ]
     });
+    tableExam9.on('order.dt search.dt', function () {
+        tableExam9.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableExam10 = $('#dataTableExam-10').DataTable({
         columns: [
             null,
@@ -587,7 +697,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -620,6 +730,11 @@
             }
         ]
     });
+    tableExam10.on('order.dt search.dt', function () {
+        tableExam10.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
     var tableHistoryExam = $("#datatable-history-exam").DataTable({
         columns: [
             null,
@@ -627,7 +742,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -702,7 +817,7 @@
             {
                 "render": function (data, type, row) {
                     if (data.indexOf("[html]") >= 0) {
-                        data = data.split("\n").join("<br/>");
+                        data = data.split("\n").join("");
                         data = data.split("&lt;cbr&gt;").join("<br/>");
                         data = data.split("&lt;br&gt;").join("<br/>");
                         data = data.split("&lt;p&gt;").join("");
@@ -761,23 +876,28 @@ $(document).on('click', '.add-question', function (e) {
     var questionLO = data[2];
     var questionLevel = data[3];
     var tableQuestionAdded = $('#listQuestionExam').dataTable();
-    if (!checkQuestionCode(questionCode)) {
-        tableQuestionAdded.fnAddData([
-            null,
-            questionCode,
-            questionContent,
-            questionLO,
-            questionLevel,
-            '<button class="delete-question btn-danger btn delete-question-exam"><i class="fas fa-trash-alt"></i></button>'
-        ]);
-        $(".form-group-exam").append("<input type='hidden' class='input-question-code' name='questionCode' value='" + questionCode + "'/>");
-        $('#btnSaveManually').removeAttr('disabled');
-        countNumberOfQuestion();
+    if (questionLO === "") {
         toastr.options.timeOut = 500;
-        toastr.success("Question " + questionCode + " has been added to exam!");
+        toastr.error("Question " + questionCode + " does not belong to any topic.");
     } else {
-        toastr.options.timeOut = 500;
-        toastr.warning("Question " + questionCode + " already exists in the exam");
+        if (!checkQuestionCode(questionCode)) {
+            tableQuestionAdded.fnAddData([
+                null,
+                questionCode,
+                questionContent,
+                questionLO,
+                questionLevel,
+                '<button class="delete-question btn-danger btn delete-question-exam"><i class="fas fa-trash-alt"></i></button>'
+            ]);
+            $(".form-group-exam").append("<input type='hidden' class='input-question-code' name='questionCode' value='" + questionCode + "'/>");
+            $('#btnSaveManually').removeAttr('disabled');
+            countNumberOfQuestion();
+            toastr.options.timeOut = 500;
+            toastr.success("Question " + questionCode + " has been added to exam!");
+        } else {
+            toastr.options.timeOut = 500;
+            toastr.warning("Question " + questionCode + " already exists in the exam");
+        }
     }
 });
 $(document).on('click', '.delete-question-exam', function (e) {
@@ -818,7 +938,7 @@ function countNumberOfQuestion() {
             questionHard++;
         }
     }
-    var totalQuestion = questionEasy + questionHard + questionMedium;
+    var totalQuestion = data.length;
     var ordinaryGrade = 0;
     var goodGrade = 0;
     var exellenceGrade = 0;

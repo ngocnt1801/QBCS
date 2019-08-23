@@ -146,5 +146,21 @@ namespace QBCS.Service.Implement
             };
             return result;
         }
+
+        public CourseViewModel GetCourseByLearningOutcome(int id)
+        {
+            CourseViewModel result = null;
+            var learningOutcome = unitOfWork.Repository<LearningOutcome>().GetById(id);
+            if (learningOutcome.Course != null)
+            {
+                result = new CourseViewModel()
+                {
+                    Id = learningOutcome.Course.Id,
+                    Name = learningOutcome.Course.Name,
+                    Code = learningOutcome.Course.Code
+                };
+            }
+            return result;
+        }
     }
 }

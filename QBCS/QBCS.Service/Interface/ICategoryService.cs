@@ -17,5 +17,6 @@ namespace QBCS.Service.Interface
         void AddCategory(CategoryViewModel model);
         void DeleteCategory(int categoryId);
         void UpdateCategory(CategoryViewModel model);
+        void DisableCategory(int categoryId);
     }
 }

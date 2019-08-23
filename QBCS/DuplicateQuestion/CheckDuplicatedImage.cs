@@ -1,6 +1,8 @@
 ﻿using AForge.Imaging;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace DuplicateQuestion
@@ -46,6 +48,15 @@ namespace DuplicateQuestion
 
             return newImage;
         }
+        private static Bitmap ConvertToFormat(Bitmap image, PixelFormat format)
+        {
+            Bitmap copy = new Bitmap(image.Width, image.Height, format);
+            using (Graphics gr = Graphics.FromImage(copy))
+            {
+                gr.DrawImage(image, new Rectangle(0, 0, copy.Width, copy.Height));
+            }
+            return copy;
+        }
         private static Bitmap Base64StringToBitmap(this string
                                             base64String)
         {
@@ -60,7 +71,7 @@ namespace DuplicateQuestion
 
 
             bmpReturn = (Bitmap)Bitmap.FromStream(memoryStream);
-
+            //bmpReturn = ConvertToFormat(bmpReturn, PixelFormat.Format24bppRgb);
 
             memoryStream.Close();
             memoryStream = null;
@@ -69,17 +80,34 @@ namespace DuplicateQuestion
 
             return bmpReturn;
         }
+        public static Bitmap ResizeBitMap(Bitmap currentBitmap)
+        {
+            int newWidth = 40;
+            int newHeight = 40;
+            Bitmap animage = new Bitmap(newWidth, newHeight);
+            using (Graphics gr = Graphics.FromImage(animage))
+            {
+                gr.SmoothingMode = SmoothingMode.HighQuality;
+                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr.CompositingQuality = CompositingQuality.HighQuality;
+                gr.DrawImage(currentBitmap, new Rectangle(0, 0, newWidth, newHeight));
+            }
+            return animage;
+        }
         private static bool CompareImages(string base1, string base2, double compareLevel, float similarityThreshold)
         {
            
             var imageOne = Base64StringToBitmap(base1);
             var imageTwo = Base64StringToBitmap(base2);
-            imageOne = ScaleImage(imageOne, 60, 60);
-            imageTwo = ScaleImage(imageTwo, 60, 60);
+            imageOne = ScaleImage(imageOne, 40, 40);
+            imageTwo = ScaleImage(imageTwo, 40, 40);
 
             var newBitmap1 = ChangePixelFormat(imageOne, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             var newBitmap2 = ChangePixelFormat(imageTwo, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
+            //newBitmap1 = ResizeBitMap(newBitmap1);
+            //newBitmap2 = ResizeBitMap(newBitmap2);
             // Setup the AForge library
             var tm = new ExhaustiveTemplateMatching(similarityThreshold);
 

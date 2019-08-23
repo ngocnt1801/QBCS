@@ -21,7 +21,7 @@ namespace QBCS.Service.Interface
         List<QuestionViewModel> GetAllQuestions();
         List<QuestionViewModel> CheckDuplicated();        
         int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId);
-        bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="");
+        int InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML,int ownerId, string ownerName, string prefix="", bool ccheckSemantic = true);
         List<QuestionViewModel> GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId);
         GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search, int start, int length);
         void ToggleDisable(int id);

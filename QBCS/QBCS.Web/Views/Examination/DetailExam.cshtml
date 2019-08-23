@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @Styles.Render("~/bundles/content/datatables")
+@if (Model.IsNewest)
+{
+    <div class="row">
+        <div class="col mb-2">
+            <a href="@Url.Action("ViewGeneratedExamination","Examination", new {examGroup = Model.ExamGroup })" class="btn btn-primary float-right mb-2">Edit Examinations</a>
+        </div>
+    </div>
+}
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Examination Code : @Model.ExamCode</h6>
@@ -12,7 +20,7 @@
     <div class="card-body">
         <div class="table-responsive">
         </div>
-        <div class="table-counter">
+        <div>
             <table class="table table-striped text-custom" id="dataTableExam" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -48,7 +56,7 @@
                                             if (option.IsCorrect == true)
                                             {
                                                 <div class="row">
-                                                    <div class="container-fluid text-green-success">
+                                                    <div class="container-fluid text-right-answer">
                                                         @prefixOption.ToString(). @option.OptionContent
                                                     </div>
                                                     @if (option.Images != null)
@@ -89,8 +97,8 @@
                                     }
                                 </td>
                             </tr>
-                        }
-                    }
+                                                }
+                                            }
                 </tbody>
             </table>
         </div>
@@ -105,8 +113,8 @@
 
         <div class="col-lg-2">
             <select id="fileExtension" class="form-control">
-                <option value="gift">GIFT</option>
                 <option value="xml">XML</option>
+                <option value="gift">GIFT</option>               
             </select>
         </div>
         <input type="submit" name="Export" value="Export" class="btn btn-primary float-right" />

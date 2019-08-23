@@ -34,9 +34,9 @@
 
                     @using (Ajax.BeginForm("ImportFile", "Question", "", new AjaxOptions()
                     {
-                        OnSuccess = "turnon_modal",
+                        OnSuccess = "turnon_modal(data)",
                         OnFailure = "displayError",
-                        HttpMethod = "POST"
+                        HttpMethod = "POST",
 
                     }, new { enctype = "multipart/form-data" }))
                     {
@@ -69,17 +69,20 @@
                            }), new { @class = "form-control text-custom border-dark" })
                             }
                         </div>
-                        <div class="custom-control custom-checkbox text-custom">
+                        <div class="custom-control custom-checkbox text-custom mb-2">
                             <input type="checkbox" name="checkCate" value="true" class="custom-control-input" id="defaultChecked2" checked>
                             <label class="custom-control-label" for="defaultChecked2">Get Category in File</label>
-                        </div><br />
-                        <div class="custom-control custom-checkbox text-custom">
+                        </div>
+                        <div class="custom-control custom-checkbox text-custom mb-2">
                             <input type="checkbox" name="checkHTML" value="true" class="custom-control-input" id="defaultChecked1">
                             <label class="custom-control-label" for="defaultChecked1">Get HTML element in File</label>
                         </div>
-
+                        <div class="custom-control custom-checkbox text-custom">
+                            <input type="checkbox" name="checkSemantic" value="true" class="custom-control-input" id="defaultChecked3">
+                            <label class="custom-control-label" for="defaultChecked3">Check Semantic</label>
+                        </div>
                         <!-- COMPONENT ERROR -->
-                       
+
                         <!-- COMPONENT ERROR -->
 
                         <!-- COMPONENT END -->
@@ -124,7 +127,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <p>Your import questions are<b> processing</b>.</p>
+                <p>Your import questions are<b> processing.<br />It takes about <span id="process-time"> </span></b>.</p>
                 <p>We will notifiy you when it has the result</p>
             </div>
             <div class="modal-footer">

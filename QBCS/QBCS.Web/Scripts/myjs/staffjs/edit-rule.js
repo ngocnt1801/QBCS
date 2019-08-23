@@ -214,23 +214,6 @@ $(document).ready(function () {
                             testList.push(Obj2);
                         }
                         break;
-                    case 8:
-                        var value = $(this).find('#value').val();
-                        var parseValue = parseInt(value);
-                        if (Number.isInteger(parseValue) && parseValue >= 0) {
-                            Obj['Value'] = value;
-                            Obj['ActivateDate'] = $(this).find('#date').val();
-                            if (Obj['ActivateDate'] == "") {
-                                Obj['ActivateDate'] = defaultActivateDate;
-                            }
-                            Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
-                            testList.push(Obj);
-                        } else {
-                            swal('Min max must be integer and no less than -1 !!!');
-                            $(this).find('#value').focus();
-                            check = false;
-                        }
-                        break;
                 }
                 //if (Obj['KeyId'] == 9) {
                 //    var select3 = $('#select_9').val();
@@ -267,6 +250,23 @@ $(document).ready(function () {
                 Obj['KeyId'] = $(this).find('#id').text();
                 var KeyId = parseInt(Obj['KeyId']);
                 switch (KeyId) {
+                    case 8:
+                        var value = $(this).find('#value').val();
+                        var parseValue = parseInt(value);
+                        if (Number.isInteger(parseValue) && parseValue >= 0) {
+                            Obj['Value'] = value;
+                            Obj['ActivateDate'] = $(this).find('#date').val();
+                            if (Obj['ActivateDate'] == "") {
+                                Obj['ActivateDate'] = defaultActivateDate;
+                            }
+                            Obj['IsUse'] = $(this).find('input[type="checkbox"][id="is_use"]').is(':checked');
+                            testList.push(Obj);
+                        } else {
+                            swal('Min max must be integer and no less than -1 !!!');
+                            $(this).find('#value').focus();
+                            check = false;
+                        }
+                        break;
                     case 10:
                         var value = $(this).find('#value').val();
                         var parseValue = parseInt(value);

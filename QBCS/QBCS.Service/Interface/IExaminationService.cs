@@ -22,5 +22,6 @@ namespace QBCS.Service.Interface
         string ReplaceQuestionInExam(int questionId, string fullname, string usercode);
         GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId);
         ViewModel.ExaminationStatisticViewModel GetExamStat(int courseId);
+        ExaminationViewModel GetDetailExamById(int examId);
     }
 }

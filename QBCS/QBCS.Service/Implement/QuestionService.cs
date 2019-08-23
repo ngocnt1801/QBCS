@@ -207,21 +207,6 @@ namespace QBCS.Service.Implement
 
         public bool UpdateQuestion(QuestionViewModel question)
         {
-            //Question questionById = unitOfWork.Repository<Question>().GetById(question.Id);
-            //questionById.QuestionContent = question.QuestionContent;
-
-            //if (question.LevelId != 0)
-            //{
-            //    questionById.LevelId = question.LevelId;
-            //}
-            //if (question.LearningOutcomeId != 0)
-            //{
-            //    questionById.LearningOutcomeId = question.LearningOutcomeId;
-            //}
-
-            //unitOfWork.Repository<Question>().Update(questionById);
-            //unitOfWork.SaveChanges();
-
             string quesTemp = "";
             QuestionTemp entity = new QuestionTemp();
             entity.UpdateQuestionId = question.Id;
@@ -518,12 +503,12 @@ namespace QBCS.Service.Implement
             return null;
         }
 
-        public bool InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "")
+        public int InsertQuestion(HttpPostedFileBase questionFile, int userId, int courseId, bool checkCate, bool checkHTML, int ownerId, string ownerName, string prefix = "", bool checkSemantic = true)
         {
             string category = "";
             string level = "";
             string learningOutcome = "";
-            bool check = false;
+            int check = -1;
             StreamReader reader = null;
             List<QuestionTmpModel> listQuestion = new List<QuestionTmpModel>();
             var import = new Import();
@@ -1283,6 +1268,7 @@ namespace QBCS.Service.Implement
                     CheckImageInQuestion(import.QuestionTemps.ToList());
                     var entity = unitOfWork.Repository<Import>().InsertAndReturn(import);
                     import.TotalQuestion = import.QuestionTemps.Count();
+                    check = GetProcessingTime(courseId, import.TotalQuestion.Value, checkSemantic);
                     unitOfWork.SaveChanges();
 
                     //log imports
@@ -1292,9 +1278,8 @@ namespace QBCS.Service.Implement
                     //call store check duplicate
                     Task.Factory.StartNew(() =>
                     {
-                        importService.ImportToBank(entity.Id);
+                        importService.ImportToBank(entity.Id, checkSemantic);
                     });
-                    check = true;
                 }
 
                 else
@@ -1306,7 +1291,7 @@ namespace QBCS.Service.Implement
             catch (Exception ex)
             {
                 Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                check = false;
+                check = -1;
 
                 //Console.WriteLine(ex.Message);
             }
@@ -1317,6 +1302,23 @@ namespace QBCS.Service.Implement
             }
 
             return check;
+        }
+
+        private int GetProcessingTime(int courseId, int count, bool checkSemantic)
+        {
+            int result = 0;
+            var totalInBank = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == courseId).Count();
+
+            if (checkSemantic)
+            {
+                result = (int)((count * (totalInBank + count - 1)) * ProcessingTimeConstant.SEMANTIC);
+            }
+            else
+            {
+                result = (int)((count * (totalInBank + count - 1)) * ProcessingTimeConstant.NO_SEMANTIC);
+            }
+
+            return result / 1000;
         }
 
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)
@@ -1754,56 +1756,64 @@ namespace QBCS.Service.Implement
                         if (question.DuplicatedList[0].IsBank)
                         {
                             var entity = unitOfWork.Repository<Question>().GetById(question.DuplicatedList[0].Id);
-                            question.DuplicatedQuestion = new QuestionViewModel
+                            if (entity != null)
                             {
-                                Id = entity.Id,
-                                Code = entity.QuestionCode,
-                                Images = entity.Images.Select(i => new ImageViewModel
+                                question.DuplicatedQuestion = new QuestionViewModel
                                 {
-                                    Source = i.Source
-                                }).ToList(),
-                                CourseName = "Bank: " + entity.Course.Name,
-                                QuestionContent = entity.QuestionContent,
-                                Options = entity.Options.Select(o => new OptionViewModel
-                                {
-                                    OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    Id = entity.Id,
+                                    Code = entity.QuestionCode,
+                                    Images = entity.Images.Select(i => new ImageViewModel
                                     {
-                                        Source = oi.Source
+                                        Source = i.Source
                                     }).ToList(),
-                                }).ToList(),
-                                IsBank = true,
-                                IsAnotherImport = false
-                            };
+                                    CourseName = "Bank: " + entity.Course.Name,
+                                    QuestionContent = entity.QuestionContent,
+                                    Options = entity.Options.Select(o => new OptionViewModel
+                                    {
+                                        OptionContent = o.OptionContent,
+                                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                        Images = o.Images.Select(oi => new ImageViewModel()
+                                        {
+                                            Source = oi.Source
+                                        }).ToList(),
+                                    }).ToList(),
+                                    IsBank = true,
+                                    IsAnotherImport = false
+                                };
+                            }
+                            
 
                         }
                         else
                         {
                             var entity = unitOfWork.Repository<QuestionTemp>().GetById(question.DuplicatedList[0].Id);
-                            question.DuplicatedQuestion = new QuestionViewModel
+                            if (entity != null)
                             {
-                                Id = entity.Id,
-                                Code = entity.Code,
-                                CourseName = "Import file: ",
-                                Images = entity.Images.Select(i => new ImageViewModel
+                                question.DuplicatedQuestion = new QuestionViewModel
                                 {
-                                    Source = i.Source
-                                }).ToList(),
-                                QuestionContent = entity.QuestionContent,
-                                Options = entity.OptionTemps.Select(o => new OptionViewModel
-                                {
-                                    OptionContent = o.OptionContent,
-                                    IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
-                                    Images = o.Images.Select(oi => new ImageViewModel()
+                                    Id = entity.Id,
+                                    Code = entity.Code,
+                                    CourseName = "Import file: ",
+                                    Images = entity.Images.Select(i => new ImageViewModel
                                     {
-                                        Source = oi.Source
+                                        Source = i.Source
                                     }).ToList(),
-                                }).ToList(),
-                                Status = (StatusEnum)entity.Status.Value,
-                                IsBank = false,
-                                IsAnotherImport = !(entity.ImportId == importId)
-                            };
+                                    QuestionContent = entity.QuestionContent,
+                                    Options = entity.OptionTemps.Select(o => new OptionViewModel
+                                    {
+                                        OptionContent = o.OptionContent,
+                                        IsCorrect = o.IsCorrect.HasValue && o.IsCorrect.Value,
+                                        Images = o.Images.Select(oi => new ImageViewModel()
+                                        {
+                                            Source = oi.Source
+                                        }).ToList(),
+                                    }).ToList(),
+                                    Status = (StatusEnum)entity.Status.Value,
+                                    IsBank = false,
+                                    IsAnotherImport = !(entity.ImportId == importId)
+                                };
+                            }
+                            
                         }
                     }
 

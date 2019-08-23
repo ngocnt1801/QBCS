@@ -74,6 +74,7 @@ namespace QBCS.Web.Controllers
         private IExaminationService examinationService;
         private ILogService logService;
         private IQuestionService questionService;
+        private ILearningOutcomeService learningOutcomeService;
 
         public ExaminationAPIController()
         {
@@ -81,7 +82,7 @@ namespace QBCS.Web.Controllers
             examinationService = new ExaminationService();
             logService = new LogService();
             questionService = new QuestionService();
-
+            learningOutcomeService = new LearningOutcomeService();
         }
 
         //Staff
@@ -193,11 +194,16 @@ namespace QBCS.Web.Controllers
 
         public FileResult ExportBank(int[] loId, string extension, bool? getCategory = false)
         {
+            CourseViewModel course = null;
             var result = new List<QuestionViewModel>();
             if (loId != null)
             {
                 foreach (var id in loId)
                 {
+                    if(course == null)
+                    {
+                        course = learningOutcomeService.GetCourseByLearningOutcome(id);
+                    }
                     var questionsByLo = questionService.GetQuestionList(null, null, id, null, null);
                     if (questionsByLo != null && questionsByLo.Count > 0)
                     {
@@ -206,6 +212,7 @@ namespace QBCS.Web.Controllers
                 }
 
             }
+            string fileName = course.Code + "_" + DateTime.Now.ToString("yyyyMMdd");
             List<QuestionInExamViewModel> questions = new List<QuestionInExamViewModel>();
             for (int i = 0; i < result.Count; i++)
             {
@@ -236,12 +243,12 @@ namespace QBCS.Web.Controllers
             if (extension.ToLower().Equals("xml"))
             {
                 byte[] byteArray = ExportToXMLFile(questions, getCategory);
-                return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, "test" + ".xml");
+                return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, fileName + "_XML" + ".xml");
             }
             else
             {
                 byte[] byteArray = ExportToGIFTFile(questions, getCategory);
-                return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, "test" + ".txt");
+                return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Octet, fileName + "GIFT" + ".txt");
             }
 
         }
