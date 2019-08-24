@@ -27,7 +27,7 @@ namespace QBCS.Web.Controllers
         [Feature(FeatureType.SideBar
             , "Log action page"
             , "QBCS", protectType: ProtectType.Authorized
-            , ShortName = "Log"
+            , ShortName = "User's Activities"
             , InternalId = (int)SideBarEnum.LogAction)]
         public ActionResult Index()
         {

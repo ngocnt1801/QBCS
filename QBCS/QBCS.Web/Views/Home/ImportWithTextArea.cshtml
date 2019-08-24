@@ -107,7 +107,7 @@
                 success: function (response) {
                     if (response == true) {
                         $("iframe").get(0).contentWindow.document.body.innerHTML = "";
-                        toastr.info("Your question are processing. It will notify when done.");
+                        toastr.info("Your questions are processing. It will notify when done.");
                     } else {
                         toastr.error("Import error. Please try again!");
                     }

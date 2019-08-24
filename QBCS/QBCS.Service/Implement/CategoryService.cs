@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using QBCS.Service.Utilities;
+using System.Data.SqlClient;
 
 namespace QBCS.Service.Implement
 {
@@ -219,6 +220,12 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<Category>().Update(entity);
                 unitOfWork.SaveChanges();
             }
+        }
+
+        public void DisableCategory(int categoryId)
+        {
+            string query = "Update Question Set IsDisable=1 Where CategoryId = @cateogry";
+            unitOfWork.GetContext().Database.ExecuteSqlCommandAsync(query, new SqlParameter("@cateogry", categoryId));
         }
     }
 }

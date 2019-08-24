@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace DuplicateQuestion
@@ -47,6 +48,15 @@ namespace DuplicateQuestion
 
             return newImage;
         }
+        private static Bitmap ConvertToFormat(Bitmap image, PixelFormat format)
+        {
+            Bitmap copy = new Bitmap(image.Width, image.Height, format);
+            using (Graphics gr = Graphics.FromImage(copy))
+            {
+                gr.DrawImage(image, new Rectangle(0, 0, copy.Width, copy.Height));
+            }
+            return copy;
+        }
         private static Bitmap Base64StringToBitmap(this string
                                             base64String)
         {
@@ -61,7 +71,7 @@ namespace DuplicateQuestion
 
 
             bmpReturn = (Bitmap)Bitmap.FromStream(memoryStream);
-
+            //bmpReturn = ConvertToFormat(bmpReturn, PixelFormat.Format24bppRgb);
 
             memoryStream.Close();
             memoryStream = null;
@@ -96,8 +106,8 @@ namespace DuplicateQuestion
             var newBitmap1 = ChangePixelFormat(imageOne, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             var newBitmap2 = ChangePixelFormat(imageTwo, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            newBitmap1 = ResizeBitMap(newBitmap1);
-            newBitmap2 = ResizeBitMap(newBitmap2);
+            //newBitmap1 = ResizeBitMap(newBitmap1);
+            //newBitmap2 = ResizeBitMap(newBitmap2);
             // Setup the AForge library
             var tm = new ExhaustiveTemplateMatching(similarityThreshold);
 

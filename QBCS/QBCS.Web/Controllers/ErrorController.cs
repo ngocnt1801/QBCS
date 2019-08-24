@@ -13,5 +13,10 @@ namespace QBCS.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Unauthorize()
+        {
+            return View();
+        }
     }
 }

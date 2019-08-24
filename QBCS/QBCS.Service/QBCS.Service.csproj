@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Enum\LevelEnum.cs" />
     <Compile Include="Enum\LogEnum.cs" />
+    <Compile Include="Enum\ProcessingTimeConstant.cs" />
     <Compile Include="Enum\RuleEnum.cs" />
     <Compile Include="Enum\SideBarEnum.cs" />
     <Compile Include="Enum\ToastrEnum.cs" />
@@ -165,6 +166,9 @@
     <Compile Include="ViewModel\QuestionTempViewModel.cs" />
     <Compile Include="ViewModel\QuestionTmpModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\ExaminationChartViewModel.cs" />
+    <Compile Include="ViewModel\ExaminationStatisticViewModel.cs" />
+    <Compile Include="ViewModel\ExamStatTableViewModel.cs" />
     <Compile Include="ViewModel\RuleAjaxHandleViewModel.cs" />
     <Compile Include="ViewModel\SemesterViewModel.cs" />
     <Compile Include="ViewModel\StaffCourseDetailStatViewModel.cs" />
@@ -183,7 +187,7 @@
       <Name>DuplicateQuestion</Name>
     </ProjectReference>
     <ProjectReference Include="..\QBCS.Entity\QBCS.Entity.csproj">
-      <Project>{56492C99-5CAC-43BE-A406-0E630C255935}</Project>
+      <Project>{56492c99-5cac-43be-a406-0e630c255935}</Project>
       <Name>QBCS.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\QBCS.Repository\QBCS.Repository.csproj">

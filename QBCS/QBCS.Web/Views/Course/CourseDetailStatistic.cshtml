@@ -10,19 +10,43 @@
         <canvas id="myChart"></canvas>
     </div>
     <br />
-    <div class="col-lg-2 text-custom">
-        Suggestion:
-        @if (Model != null && Model.Suggestion != null)
+    <div class="col-lg-10 text-custom">
+        @if (Model != null && Model.Suggestion != null && Model.Suggestion.Count != 0)
         {
+            <text>We should have:</text> <br />
             foreach (var suggest in Model.Suggestion)
             {
-                <text>suggest</text><br />
+                <text>@suggest</text> <br />
             }
         }
-
     </div>
     <script>
-    var ctx = document.getElementById('myChart');
+        var data = [{
+            data: [@Model.Null,  @Model.Easy, @Model.Medium, @Model.Hard],
+
+            backgroundColor: [
+                'rgb(211,211,211)',
+                'rgb(95,183,229)',
+                'rgb(253,212,48)',
+                'rgb(220,83,86)'
+            ]
+        }];
+        var sum = @Model.Null + @Model.Easy + @Model.Medium + @Model.Hard;
+        var options = {
+            tooltips: {
+                enabled: false
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        return value + " (" + sum + "%)";
+                    },
+                    color: '#fff',
+                }
+            }
+        };
+                        debugger;
+        var ctx = document.getElementById('myChart');
     var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -32,22 +56,29 @@
                 'Medium',
                 'Hard'
             ],
-            datasets: [{
-                data: [@Model.Null,  @Model.Easy, @Model.Medium, @Model.Hard],
-
-            backgroundColor: [
-                'rgb(211,211,211)',
-                'rgb(45,201,55)',
-                'rgb(231,180,22)',
-                'rgb(204,50,50)'
-                ]
-            }]
-        }
+            datasets: data
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                    label: function (tooltipItem, data) {
+                      var percentFixed = (data['datasets'][0]['data'][tooltipItem['index']] / sum * 100).toFixed(2);
+                      var percentFloor = Math.floor(data['datasets'][0]['data'][tooltipItem['index']] / sum * 100);
+                      if (percentFixed - percentFloor == 0) {
+                          return data['labels'][tooltipItem['index']] + ': ' + percentFloor + '% (' + data['datasets'][0]['data'][tooltipItem['index']] + ')';
+                      } else {
+                          return data['labels'][tooltipItem['index']] + ': ' + percentFixed + '% (' + data['datasets'][0]['data'][tooltipItem['index']] + ')';
+                      }
+                        
+                }
+              }
+            }
+          }
     });
     </script>
 }
 else
 {
-    <div class="text-custom col-md-7"><h4>There is no question to statistic</h4> </div>
+    <div class="text-custom col-md-7"><h4>There is no question to give statistic</h4> </div>
 }
 

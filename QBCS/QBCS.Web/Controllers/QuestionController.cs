@@ -248,7 +248,7 @@ namespace QBCS.Web.Controllers
         {
             var user = (UserViewModel)Session["user"];
 
-            bool check = true;
+            int check = -1;
             try
             {
 
@@ -266,7 +266,7 @@ namespace QBCS.Web.Controllers
                     if (ownerUser != null)
                     {
                         check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, ownerUser.Id, ownerUser.Fullname, prefix, checkSemantic);
-                        if (check == true)
+                        if (check > -1)
                         {
                             ViewBag.Modal = "#success-modal";
                             TempData["CourseId"] = courseId;
@@ -293,9 +293,9 @@ namespace QBCS.Web.Controllers
                 else
                 {
                     check = questionService.InsertQuestion(questionFile, user.Id, courseId, checkCate, checkHTML, user.Id, user.Fullname, prefix, checkSemantic);
-                    if (check == false)
+                    if (check == -1)
                     {
-                        ViewBag.Message = "File is wrong format. PLease check again!";
+                        ViewBag.Message = "File has wrong format. Please check again!";
                         ViewBag.Status = ToastrEnum.Error;
                         return Json("Error");
                     }
@@ -303,7 +303,7 @@ namespace QBCS.Web.Controllers
 
             }
 
-            return Json("OK");
+            return Json(check);
             //return RedirectToAction("Index", "Home");
         }
 
@@ -324,6 +324,12 @@ namespace QBCS.Web.Controllers
                 }
 
                 check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
+
+            }
+            else
+            {
+                ViewBag.Message = "You cannot import empty file";
+                ViewBag.Status = ToastrEnum.Error;
             }
             //if (table != null && !table.Equals(""))
             //{
@@ -483,6 +489,17 @@ namespace QBCS.Web.Controllers
             var model = questionService.GetDuplicatedDetail(id);
 
             return View(model);
+        }
+
+        //Staff
+        //stpm: feature declare
+        [Feature(FeatureType.Page, "Question History In Examination", "QBCS", protectType: ProtectType.Authorized)]
+        [LogAction(Action = "Examination", Message = "View Examination History Activity", Method = "GET")]
+        public ActionResult GetExaminationHistory(int id)
+        {
+            var result = questionService.GetQuestionHistory(id);
+            TempData["active"] = "Course";
+            return View(result);
         }
     }
 

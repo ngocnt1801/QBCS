@@ -12,6 +12,7 @@ using QBCS.Service.Utilities;
 using System.Net;
 using System.Data.SqlClient;
 using System.Data.Entity;
+using QBCS.Repository.ViewModel;
 
 namespace QBCS.Service.Implement
 {
@@ -746,6 +747,7 @@ namespace QBCS.Service.Implement
                     NumberOfHard = exam.HardQuestion,
                     NumberOfEasy = exam.EasyQuestion,
                     NumberOfMedium = exam.MediumQuestion,
+                    NumberOfQuestion = exam.HardQuestion + exam.MediumQuestion + exam.EasyQuestion,
                     GeneratedDate = DateTime.Now,
                     ExamCode = GetExamCode(),
                     GroupExam = examGroup
@@ -1066,6 +1068,29 @@ namespace QBCS.Service.Implement
             logService.LogManually("Delete And Replace Question", "Examination", exam.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "DeleteQuestionInExam");
 
             return exam.ExamGroup;
+        }
+
+        public ViewModel.ExaminationStatisticViewModel GetExamStat(int courseId)
+        {
+            var getStat = unitOfWork.ExaminationRepository().GetStatistic(courseId);
+            var result = new ViewModel.ExaminationStatisticViewModel();
+            if(getStat != null)
+            {
+                result.Question = getStat.Question.Select(q => new ViewModel.ExamStatTableViewModel()
+                {
+                    QuestionId = q.QuestionId,
+                    GroupExam = q.GroupExam,
+                    QuestionCode = q.QuestionCode,
+                    TotalNumber = q.TotalNumber
+                }).ToList();
+                result.Chart = getStat.Chart.Select(c => new ViewModel.ExaminationChartViewModel()
+                {
+                    TotalQuestions = c.TotalQuestions,
+                    TotalDuplicate = c.TotalDuplicate,
+                    GroupExam = c.GroupExam
+                }).ToList();
+            }
+            return result;
         }
     }
 }

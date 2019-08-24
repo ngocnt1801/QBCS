@@ -1,4 +1,5 @@
-﻿using QBCS.Service.ViewModel;
+﻿using QBCS.Repository.ViewModel;
+using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace QBCS.Service.Interface
         void ResetPriorityAndFrequency(string groupExam);
         string ReplaceQuestionInExam(int questionId, string fullname, string usercode);
         GenerateExamViewModel SaveQuestionsToExam(List<string> questionCode, int courseId);
+        ViewModel.ExaminationStatisticViewModel GetExamStat(int courseId);
         ExaminationViewModel GetDetailExamById(int examId);
     }
 }

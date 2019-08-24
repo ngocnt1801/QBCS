@@ -8,5 +8,8 @@
         //    $this.html($this.data('original-text'));
         //}, 100000);
     });
+
+    //tooltip here
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
