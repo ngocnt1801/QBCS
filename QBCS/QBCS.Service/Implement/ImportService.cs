@@ -450,7 +450,7 @@ namespace QBCS.Service.Implement
                 var checkCorrectOption = false;
                 foreach (var option in tempQuestion.OptionTemps)
                 {
-                    if (option.OptionContent.Equals("") && (option.Images == null || option.Images.Count() == 0))
+                    if ((option.OptionContent.Equals("") || option.OptionContent.Trim().Equals("[html]")) && (option.Images == null || option.Images.Count() == 0))
                     {
                         tempQuestion.Status = (int)StatusEnum.Invalid;
                         tempQuestion.Message = "Option must not be empty";
