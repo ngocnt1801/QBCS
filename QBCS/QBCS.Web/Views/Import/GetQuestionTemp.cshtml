@@ -63,8 +63,7 @@
 
                 @Html.HiddenFor(model => model.ImportId)
                 @Html.HiddenFor(model => model.Id)
-                <input type="submit" name="Save" class="btn btn-primary float-right" id="btnUpdate" />
-                <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
+                <input type="submit" value="Update" name="Save" class="btn btn-primary float-right" id="btnUpdate" />
                 <a class="btn btn-default float-right" href="@Url.Action("GetResult", "Import",new { importId  = Model.ImportId})">Cancel</a>
             }
         </div>

@@ -323,7 +323,7 @@ namespace QBCS.Web.Controllers
                     textarea.OwnerName = user != null ? user.Fullname : User.Get(u => u.FullName);
                 }
 
-                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName);
+                check = questionService.InsertQuestionWithTableString(textarea.Table, user.Id, textarea.CourseId, textarea.Prefix, textarea.OwnerName,textarea.CheckSemantic);
 
             }
             else
@@ -509,5 +509,6 @@ namespace QBCS.Web.Controllers
         public int CourseId { get; set; }
         public string OwnerName { get; set; }
         public string Prefix { get; set; }
+        public bool CheckSemantic { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace QBCS.Service.Interface
         GetQuestionsDatatableViewModel GetQuestionList(int? courseId, int? categoryId, int? learningoutcomeId, int? topicId, int? levelId, string search, int start, int length);
         void ToggleDisable(int id);
         void UpdateCategory(int[] questionIds, int? categoyrId, int? learningOutcomeId, int? levelId);
-        bool InsertQuestionWithTableString(string table, int userId, int courseId,string prefix, string ownerName);
+        bool InsertQuestionWithTableString(string table, int userId, int courseId,string prefix, string ownerName, bool checkSemantic = false);
         int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId);
         QuestionHistoryViewModel GetQuestionHistory(int id);
         List<QuestionTmpModel> TableStringToListQuestion(string table, string prefix);

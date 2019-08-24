@@ -8,8 +8,6 @@ using QBCS.Service.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
 
 namespace QBCS.Service.Implement
 {
@@ -329,25 +327,25 @@ namespace QBCS.Service.Implement
             }
             courseDetail.Suggestion = new List<string>();
             var courseQuestionsInExam = unitOfWork.Repository<QuestionInExam>().GetAll().Where(q => q.Question.CourseId == id).ToList();
-            var easyPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round(((double)(courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Easy).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
-            var mediumPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Medium).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
-            var hardPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round((double)((courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Hard).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var easyPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round((((double)courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Easy).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var mediumPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round((((double)courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Medium).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
+            var hardPercentageInExam = courseQuestionsInExam.Count() == 0 ? 0.01 : Math.Round((((double)courseQuestionsInExam.Where(q => q.LevelId == (int)LevelEnum.Hard).Count() / (double)courseQuestionsInExam.Count()) * 100), 2);
             var easyPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Easy / (double)courseQuestions.Count()) * 100), 2);
             var mediumPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Medium / (double)courseQuestions.Count()) * 100), 2);
             var hardPercentage = courseQuestions.Count() == 0 ? 0 : Math.Round((((double)courseDetail.Hard / (double)courseQuestions.Count()) * 100), 2);
             if (easyPercentage / easyPercentageInExam <= 0.8)
             {
-                var easyNumberSuggestion = (int)Math.Ceiling(((0.8 * easyPercentageInExam * (double)courseQuestions.Count() - (double)courseDetail.Easy)) / (1 - (0.8 * easyPercentageInExam)));
+                var easyNumberSuggestion = (int)Math.Ceiling((((0.8 * (easyPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Easy)) / (1 - (0.8 * easyPercentageInExam / 100)));
                 courseDetail.Suggestion.Add(easyNumberSuggestion + " more Easy questions.");
             }
             if (mediumPercentage / mediumPercentageInExam <= 0.8)
             {
-                var mediumNumberSuggestion = (int)Math.Ceiling(((0.8 * mediumPercentageInExam * (double)courseQuestions.Count() - (double)courseDetail.Medium)) / (1 - (0.8 * mediumPercentageInExam)));
+                var mediumNumberSuggestion = (int)Math.Ceiling((((0.8 * (mediumPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Medium)) / (1 - (0.8 * mediumPercentageInExam / 100)));
                 courseDetail.Suggestion.Add(mediumNumberSuggestion + " more Medium questions.");
             }
             if (hardPercentage / hardPercentageInExam <= 0.8)
             {
-                var hardNumberSuggestion = (int)Math.Ceiling(((0.8 * hardPercentageInExam * (double)courseQuestions.Count() - (double)courseDetail.Hard)) / (1 - (0.8 * hardPercentageInExam)));
+                var hardNumberSuggestion = (int)Math.Ceiling((((0.8 * (hardPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Hard)) / (1 - (0.8 * hardPercentageInExam / 100)));
                 courseDetail.Suggestion.Add(hardNumberSuggestion + " more Hard questions.");
             }
             if (courseDetail.Null > 0)
