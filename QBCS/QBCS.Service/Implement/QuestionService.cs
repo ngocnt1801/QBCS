@@ -1324,7 +1324,7 @@ namespace QBCS.Service.Implement
         public int GetCountOfListQuestionByLearningOutcomeAndId(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetAll();
-            List<Question> question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId).ToList();
+            List<Question> question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.IsDisable == false).ToList();
             if (question == null)
             {
                 return 0;
@@ -1336,7 +1336,7 @@ namespace QBCS.Service.Implement
         public int GetMinFreQuencyByLearningOutcome(int learningOutcomeId, int levelId)
         {
             IQueryable<Question> questions = unitOfWork.Repository<Question>().GetNoTracking();
-            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.Priority != 0).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
+            Question question = questions.Where(q => q.LearningOutcomeId == learningOutcomeId && q.LevelId == levelId && q.Priority != 0 && q.IsDisable == false).OrderBy(q => q.Frequency).Take(1).FirstOrDefault();
             return question != null ? (int)question.Frequency : 0;
         }
 
