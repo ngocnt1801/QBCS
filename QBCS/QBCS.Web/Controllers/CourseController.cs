@@ -216,6 +216,7 @@ namespace QBCS.Web.Controllers
             return PartialView("CourseDetailStatistic", result);
         }
 
+        [LogAction(Action = "Courses", Message = "Get Course Statistic", Method = "GET")]
         public ActionResult Staff_CourseStatistic()
         {
 
@@ -239,7 +240,8 @@ namespace QBCS.Web.Controllers
             };
             return View(model);
         }
-    
+
+        [LogAction(Action = "Syllabus", Message = "Get Syllabus", Method = "GET")]
         public ActionResult Syllabus(int courseId)
         {
             var model = syllabusService.GetSyllabusPartials(courseId);
@@ -248,24 +250,28 @@ namespace QBCS.Web.Controllers
             return View(course);
         }
 
+        [LogAction(Action = "Syllabus", Message = "Get Syllabus", Method = "POST")]
         public ActionResult CreateSyllabus(SyllabusPartialViewModel model)
         {
             syllabusService.AddSyllabusPartial(model);
             return RedirectToAction("Syllabus", new { courseId = model.CourseId });
         }
 
+        [LogAction(Action = "Syllabus", Message = "Update Syllabus", Method = "POST")]
         public ActionResult UpdateSyllabus(SyllabusPartialViewModel model)
         {
             syllabusService.UpdateSyllabusPartial(model);
             return RedirectToAction("Syllabus", new { courseId = model.CourseId });
         }
 
+        [LogAction(Action = "Syllabus", Message = "Delete Syllabus", Method = "POST")]
         public ActionResult DeleteSyllabus(int id, int courseId)
         {
             syllabusService.DeleteSyllabusPartial(id);
             return RedirectToAction("Syllabus", new { courseId = courseId });
         }
 
+        [LogAction(Action = "LOC", Message = "Get LOC", Method = "GET")]
         public ActionResult GetLearningOutcomes(int syllabusId)
         {
             var model = syllabusService.GetLearningOutcomes(syllabusId);
@@ -274,6 +280,7 @@ namespace QBCS.Web.Controllers
             return PartialView(model);
         }
 
+        [LogAction(Action = "LOC", Message = "Add LOC to Syllabus", Method = "POST")]
         public ActionResult AddLOCtoSyllabus(int locId, int syllabusId)
         {
             syllabusService.ChangeSyllabusPartial(locId, syllabusId);
@@ -283,6 +290,7 @@ namespace QBCS.Web.Controllers
             return PartialView("GetLearningOutcomes", model);
         }
 
+        [LogAction(Action = "LOC", Message = "Delete LOC", Method = "GET")]
         public ActionResult DeleteLOC(int locId, int syllabusId)
         {
             syllabusService.ChangeSyllabusPartial(locId, null);
@@ -292,6 +300,7 @@ namespace QBCS.Web.Controllers
             return PartialView("GetLearningOutcomes", model);
         }
 
+         
         public ActionResult UpdateTotalQuestion(int courseId, int total)
         {
             courseService.UpdateTotalQuesiton(courseId, total);
@@ -306,24 +315,28 @@ namespace QBCS.Web.Controllers
             return View(course);
         }
 
+        [LogAction(Action = "Category", Message = "Create category", Method = "POST")]
         public ActionResult CreateCategory(CategoryViewModel model)
         {
             categoryService.AddCategory(model);
             return RedirectToAction("Category", new { courseId = model.CourseId });
         }
 
+        [LogAction(Action = "Category", Message = "Delete category", Method = "POST")]
         public ActionResult DeleteCategory(int categoryId, int courseId)
         {
             categoryService.DeleteCategory(categoryId);
             return RedirectToAction("Category", new { courseId = courseId });
         }
 
+        [LogAction(Action = "Category", Message = "Update category", Method = "POST")]
         public ActionResult UpdateCategory(CategoryViewModel model)
         {
             categoryService.UpdateCategory(model);
             return RedirectToAction("Category", new { courseId = model.CourseId });
         }
 
+        [LogAction(Action = "Category", Message = "Disable category", Method = "POST")]
         public ActionResult DisableCategory(int categoryId)
         {
             categoryService.DisableCategory(categoryId);
