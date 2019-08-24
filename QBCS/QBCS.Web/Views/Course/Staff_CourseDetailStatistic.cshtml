@@ -33,7 +33,6 @@
                                 <th>Exam Group</th>
                                 <th>Question Code</th>
                                 <th>Duplicate Times</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,7 +46,6 @@
                                     <td>@question.GroupExam</td>
                                     <td>@question.QuestionCode</td>
                                     <td>@question.TotalNumber</td>
-                                    <td><a href="@Url.Action("GetExaminationHistory", "Question", new { id = question.QuestionId})" class="btn btn-primary">History</a></td>
                                 </tr>
                             }
                         </tbody>
