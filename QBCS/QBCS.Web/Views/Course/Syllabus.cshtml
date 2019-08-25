@@ -12,15 +12,20 @@
 <div class="row">
     @using (Html.BeginForm("UpdateTotalQuestion", "Course", FormMethod.Post))
     {
-    <div class="form-group col-md-12 form-inline mt-2">
-        <label class="control-label mr-2">
-            Total Question:
-        </label>
-        <input class="form-control mr-2 text-right" type="number" value="@Model.DefaultNumberOfQuestion" name="total" />
+        <div class="form-group col-md-12 mt-2">
+            <label class="control-label col-mg-12">
+                Total Question:
+            </label>
+            <input class="form-control text-right " type="number" value="@Model.DefaultNumberOfQuestion" name="total" />
+        </div>
+        <div class="form-group col-md-12 mt-2">
+            <label class="control-label col-mg-12">
+                Default Grade for Ordinary Student:
+            </label>
+            <input class="form-control text-right" type="number" value="@Model.DefaultGrade" name="defaultGrade" />
+        </div>
         <input type="hidden" value="@Model.Id" name="courseId" />
         <input type="submit" class="btn btn-primary float-right" value="Update" />
-
-    </div>
     }
 
 </div>
