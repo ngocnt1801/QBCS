@@ -301,9 +301,9 @@ namespace QBCS.Web.Controllers
         }
 
          
-        public ActionResult UpdateTotalQuestion(int courseId, int total)
+        public ActionResult UpdateTotalQuestion(int courseId, int total, int defaultGrade)
         {
-            courseService.UpdateTotalQuesiton(courseId, total);
+            courseService.UpdateTotalQuesiton(courseId, total, defaultGrade);
             return RedirectToAction("Syllabus", new { courseId = courseId });
         }
 

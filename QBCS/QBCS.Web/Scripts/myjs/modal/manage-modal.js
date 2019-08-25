@@ -36,7 +36,7 @@ function parsetTime(t) {
         days > 0 ? (days + " days ") : "" +
         hrs > 0 ? (hrs + " Hrs ") : "" +
         mnts > 0 ? (mnts + " Minutes ") : "" +
-        t > 0 ? (t + " Seconds") : "";
+        t > 0 ? (t + " Seconds") : "1 Second";
     return result;
 }
 
