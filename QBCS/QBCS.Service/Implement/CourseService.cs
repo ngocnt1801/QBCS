@@ -26,6 +26,7 @@ namespace QBCS.Service.Implement
                 Id = course.Id,
                 Name = course.Name,
                 Code = course.Code,
+                DefaultGrade = course.DefaultGrade.HasValue ? course.DefaultGrade.Value: 0,
                 DefaultNumberOfQuestion = course.DefaultNumberOfQuestion.HasValue ? (int)course.DefaultNumberOfQuestion : 0,
                 Syllabus = course.SyllabusPartials.Select(s => new SyllabusPartialViewModel()
                 {
@@ -377,10 +378,11 @@ namespace QBCS.Service.Implement
             }
         }
 
-        public void UpdateTotalQuesiton(int courseId, int total)
+        public void UpdateTotalQuesiton(int courseId, int total, int defaultGrade)
         {
             var entity = unitOfWork.Repository<Course>().GetById(courseId);
             entity.DefaultNumberOfQuestion = total;
+            entity.DefaultGrade = defaultGrade;
             unitOfWork.Repository<Course>().Update(entity);
             unitOfWork.SaveChanges();
         }

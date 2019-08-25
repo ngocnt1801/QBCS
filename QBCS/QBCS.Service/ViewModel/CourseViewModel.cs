@@ -18,6 +18,6 @@ namespace QBCS.Service.ViewModel
         public int Total { get; set; }
         public List<SemesterViewModel> Semester { get; set; }
         public int WarningTotal { get; set; }
-
+        public int DefaultGrade { get; set; }
     }
 }
