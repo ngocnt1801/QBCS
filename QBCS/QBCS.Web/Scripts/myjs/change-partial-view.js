@@ -1141,6 +1141,11 @@ function initTableEditable() {
 
                                 status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>'
                             }
+
+                            if (row.DuplicatedQuestion.IsDisable) {
+                                status += '<span class="badge ml-2 badge-light">Disabled</span>';
+                            }
+
                             var options = '';
                             for (var i = 0; i < row.Options.length; i++) {
                                 options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
@@ -1487,6 +1492,10 @@ function initTableBankEditable() {
                         }
                         status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>';
 
+                        if (row.IsDisabled) {
+                            status += '<span class="badge ml-2 badge-light">Disabled</span>';
+                        }
+
                         var options = '';
                         for (var i = 0; i < row.Options.length; i++) {
                             options = options + '<div id="Option' + i + '" class="container-fluid"></div>';
@@ -1547,6 +1556,10 @@ function initTableBankEditable() {
                                     break;
                             }
                             status = '<span class="badge ml-2 ' + statusClass + '">' + statusName + '</span>';
+
+                            if (row.DuplicatedQuestion.IsDisable) {
+                                status += '<span class="badge ml-2 badge-light">Disabled</span>';
+                            }
 
                             var options = '';
                             for (var i = 0; i < row.Options.length; i++) {
@@ -1810,21 +1823,21 @@ function initTableBankEditable() {
 
             }
 
-            $("#tableEditable .delete-question-dt").off('click');
-            $("#tableEditable .delete-question-dt").on('click', function () {
+            $("#tableBankEditable .delete-question-dt").off('click');
+            $("#tableBankEditable .delete-question-dt").on('click', function () {
                 minusTotal($("#total-editable"));
                 plusTotal($("#total-delete"));
 
                 sendAjax($(this).attr('data-url'));
-                $('#section-editable').trigger('click');
+                $('#section-bank-editable').trigger('click');
             })
-
-            $("#tableEditable .accept-question-dt").on('click', function () {
+            $("#tableBankEditable .accept-question-dt").off('click');
+            $("#tableBankEditable .accept-question-dt").on('click', function () {
                 minusTotal($("#total-editable"));
                 plusTotal($("#total-success"));
 
                 sendAjax($(this).attr('data-url'));
-                $('#section-editable').trigger('click');
+                $('#section-bank-editable').trigger('click');
             })
         }
     });

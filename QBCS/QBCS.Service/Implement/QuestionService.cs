@@ -1762,6 +1762,7 @@ namespace QBCS.Service.Implement
                                 {
                                     Id = entity.Id,
                                     Code = entity.QuestionCode,
+                                    IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value,
                                     Images = entity.Images.Select(i => new ImageViewModel
                                     {
                                         Source = i.Source
@@ -1875,7 +1876,7 @@ namespace QBCS.Service.Implement
             temp.DuplicatedList.Add(new DuplicatedQuestionViewModel
             {
                 Id = temp.Id,
-                IsBank = false
+                IsBank = temp.IsBank ? temp.IsBank: false
             });
             return String.Join(",", temp.DuplicatedList.OrderBy(t => t.Id).Select(s => $"{s.Id}-{s.IsBank}").ToArray());
         }
@@ -2174,11 +2175,13 @@ namespace QBCS.Service.Implement
                 QuestionContent = q.QuestionContent,
                 Status = (StatusEnum)q.Status,
                 Code = q.QuestionCode,
+                IsDisabled = q.IsDisable.HasValue && q.IsDisable.Value,
                 Images = q.Images.Select(i => new ImageViewModel
                 {
                     Source = i.Source
                 }).ToList(),
                 IsInImportFile = false,
+                IsBank = true,
                 Category = (q.CategoryId.HasValue ? q.Category.Name : "[None of Cateogry]") +
                 " / " +
                 (q.LearningOutcomeId.HasValue ? q.LearningOutcome.Name : "[None of LOC]") +
@@ -2213,6 +2216,7 @@ namespace QBCS.Service.Implement
                                 Id = entity.Id,
                                 Code = entity.QuestionCode,
                                 Status = (StatusEnum)entity.Status.Value,
+                                IsDisable = entity.IsDisable.HasValue && entity.IsDisable.Value,
                                 Images = entity.Images.Select(i => new ImageViewModel
                                 {
                                     Source = i.Source
@@ -2273,6 +2277,14 @@ namespace QBCS.Service.Implement
             if (question.Status != status)
             {
                 question.Status = status;
+                if (status == (int)StatusEnum.Deleted)
+                {
+                    question.IsDisable = true;
+                }
+                else if (status == (int)StatusEnum.Success)
+                {
+                    question.IsDisable = false;
+                }
                 unitOfWork.Repository<Question>().Update(question);
                 unitOfWork.SaveChanges();
             }

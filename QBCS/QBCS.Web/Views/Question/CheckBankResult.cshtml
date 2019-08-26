@@ -10,11 +10,12 @@
 @Styles.Render("~/bundles/content/datatables")
 @Styles.Render("~/bundle/content/tab")
 
-<h2>Result</h2>
+<h4>Result</h4>
+<h6>Subject: @TempData["course"]</h6>
 @{
 
     <div id="question-import">
-        <input type="hidden" name="courseId" id="courseId" value="@Model"/>
+        <input type="hidden" name="courseId" id="courseId" value="@Model" />
         <div class="tabs tabs-style-topline">
             <nav class="hidden">
                 <ul>
@@ -24,7 +25,7 @@
             <div class="content-wrap">
                 <section id="section-topline-1">
                     <div id="editable">
-                        <div class="card shadow mb-4" >
+                        <div class="card shadow mb-4">
                             <div class="card-body text-custom">
                                 <div class="table-responsive text-custom" id="importTable">
                                     <table class="table table-bordered text-custom" id="tableBankEditable" width="100%" cellspacing="0">
@@ -35,9 +36,7 @@
                                                 <th>Duplicated With</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>

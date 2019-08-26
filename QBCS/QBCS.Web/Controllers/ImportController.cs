@@ -21,12 +21,14 @@ namespace QBCS.Web.Controllers
         private IImportService importService;
         private IQuestionService questionService;
         private ILogService logService;
+        private ICourseService courseService;
 
         public ImportController()
         {
             importService = new ImportService();
             questionService = new QuestionService();
             logService = new LogService();
+            courseService = new CourseService();
         }
 
         //Lecturer
@@ -72,7 +74,8 @@ namespace QBCS.Web.Controllers
         {
             var result = importService.GetImportResult(importId);
             TempData["active"] = "All Imports";
-
+            var course = courseService.GetCourseById(result.CourseId);
+            TempData["course"] = course.Name + " - " + course.Code;
             if (result.Status != (int)StatusEnum.Done)
             {
                 //return View(result);

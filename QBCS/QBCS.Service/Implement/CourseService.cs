@@ -157,7 +157,7 @@ namespace QBCS.Service.Implement
                         }).Where(c => c.IsDisable == false).ToList();
                     foreach (var course in courses)
                     {
-                        var iquery = unitOfWork.Repository<Question>().GetAll().Where(q => q.Status == (int)StatusEnum.Editable && q.CourseId == course.Id);
+                        var iquery = unitOfWork.Repository<Question>().GetAll().Where(q => q.Status == (int)StatusEnum.Editable && q.CourseId == course.CourseId);
                         course.WarningTotal = iquery.Count();
                         course.Total = unitOfWork.Repository<Question>().GetAll().Where(q => q.CourseId == course.CourseId && (!q.IsDisable.HasValue || !q.IsDisable.Value)).Count();
                     }

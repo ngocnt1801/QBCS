@@ -24,5 +24,7 @@ namespace QBCS.Service.ViewModel
         public List<DuplicatedQuestionViewModel> DuplicatedList { get; set; }
         public bool IsHide { get; set; }
         public bool IsNotImage { get; set; }
+        public bool IsBank { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

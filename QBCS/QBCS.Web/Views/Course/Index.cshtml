@@ -42,7 +42,7 @@
 
                             @if (item.WarningTotal > 0)
                             {
-                            <a href="@Url.Action("CheckBankResult", "Question", new { courseId = item.CourseId})" class="btn btn-warning">Duplicate Warning <span class="badge badge-danger">@item.WarningTotal</span></a>
+                            <a href="@Url.Action("CheckBankResult", "Question", new { courseId = item.CourseId})" class="btn btn-warning"><i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="View duplicated warning"></i> <span class="badge badge-danger">@item.WarningTotal</span></a>
                             }
                         </td>
                     </tr>

@@ -443,6 +443,8 @@ namespace QBCS.Web.Controllers
 
         public ActionResult CheckBankResult(int courseId)
         {
+            var course = courseService.GetCourseById(courseId);
+            TempData["course"] = course.Name + " - " + course.Code;
             return View(courseId);
         }
 
