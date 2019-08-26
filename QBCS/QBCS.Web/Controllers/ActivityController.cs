@@ -95,9 +95,9 @@ namespace QBCS.Web.Controllers
             else if (targetId != null)
             {
                 var data = logService.GetAllActivitiesByTargetId((int)targetId, search, start, length);
-                //LogViewModel logModel = new LogViewModel();               
-                //logModel = logService.GetQuestionImportByTargetId((int)importId);               
-                //entities.Add(logModel);
+                LogViewModel logModel = new LogViewModel();               
+                logModel = logService.GetQuestionImportByTargetId((int)importId);               
+                data.Logs.Add(logModel);
                 TempData["active"] = "Activity";
                 return Json(new { draw = draw, recordsFiltered = data.filteredCount, recordsTotal = data.totalCount, data = data.Logs, success = true }, JsonRequestBehavior.AllowGet);
             } 

@@ -49,6 +49,10 @@
     </div>
     <div class="row">
         <div class="col-md-12" style="height:28em">
+            <div class="custom-control custom-checkbox text-custom">
+                <input type="checkbox" name="checkSemantic" value="true" class="custom-control-input" id="defaultChecked3">
+                <label class="custom-control-label" for="defaultChecked3">Check Semantic</label>
+            </div>
             <textarea id="textbox" style="height:100% !important">
 
         </textarea>
@@ -98,6 +102,12 @@
             objectTable['CourseId'] = $('#Course').children(":selected").attr("id");
             objectTable['OwnerName'] = $('myautocomplete').val();
             objectTable['Prefix'] = $("input[name='prefix']:checked").val();
+            if ($("input[name='checkSemantic']:checked").val()) {
+                objectTable['CheckSemantic'] = $("input[name='checkSemantic']:checked").val();
+            } else {
+                objectTable['CheckSemantic'] = false;
+            }
+            
             $.ajax({
                 type: "POST",
                 url: '/Question/ImportTextarea',

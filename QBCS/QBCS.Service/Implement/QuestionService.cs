@@ -1615,7 +1615,7 @@ namespace QBCS.Service.Implement
             return questionHistory;
         }
 
-        public bool InsertQuestionWithTableString(string table, int userId, int courseId, string prefix, string ownerName)
+        public bool InsertQuestionWithTableString(string table, int userId, int courseId, string prefix, string ownerName, bool checkSemantic= false)
         {
             var import = new Import();
             bool check = false;
@@ -1673,7 +1673,7 @@ namespace QBCS.Service.Implement
                 //call store check duplicate
                 Task.Factory.StartNew(() =>
                 {
-                    importService.ImportToBank(entity.Id);
+                    importService.ImportToBank(entity.Id, checkSemantic);
                 });
                 check = true;
             }
