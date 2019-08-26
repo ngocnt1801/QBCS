@@ -62,7 +62,7 @@
             tooltips: {
               callbacks: {
                     label: function (tooltipItem, data) {
-                      var percentFixed = (data['datasets'][0]['data'][tooltipItem['index']] / sum * 100).toFixed(2);
+                      var percentFixed = (data['datasets'][0]['data'][tooltipItem['index']] / sum * 100).toFixed(1);
                       var percentFloor = Math.floor(data['datasets'][0]['data'][tooltipItem['index']] / sum * 100);
                       if (percentFixed - percentFloor == 0) {
                           return data['labels'][tooltipItem['index']] + ': ' + percentFloor + '% (' + data['datasets'][0]['data'][tooltipItem['index']] + ')';
