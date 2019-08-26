@@ -755,7 +755,7 @@ namespace QBCS.Service.Implement
                 unitOfWork.Repository<Examination>().Insert(examination);
                 unitOfWork.SaveChanges();
                 //log generate exam
-                logService.LogManually("Generate", "Examination", examination.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
+                //logService.LogManually("Generate", "Examination", examination.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "GenerateExaminaton");
 
 
                 foreach (var topic in topics)
@@ -1065,7 +1065,7 @@ namespace QBCS.Service.Implement
 
 
             //log delete and replace question exam
-            logService.LogManually("Delete And Replace Question", "Examination", exam.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "DeleteQuestionInExam");
+            //logService.LogManually("Delete And Replace Question", "Examination", exam.Id, fullname: fullname, usercode: usercode, controller: "Examination", method: "DeleteQuestionInExam");
 
             return exam.ExamGroup;
         }
