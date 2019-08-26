@@ -139,7 +139,7 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.success == true) {
-                        document.location.href = "/Import/GetResult?importId=" + Obj["importId"];
+                        document.location.href = "/Import/GetResult?importId=" + Obj["ImportId"];
                     } else {
                         toastr.error("Edit error. Please try again!");
                         setTimeout(location.reload.bind(location), 1000);
