@@ -13,7 +13,7 @@
     <div class="col-lg-10 text-custom">
         @if (Model != null && Model.Suggestion != null && Model.Suggestion.Count != 0)
         {
-            <text>We should have:</text> <br />
+            <text>We suggest: </text> <br />
             foreach (var suggest in Model.Suggestion)
             {
                 <text>@suggest</text> <br />

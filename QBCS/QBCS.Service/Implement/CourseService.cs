@@ -337,17 +337,17 @@ namespace QBCS.Service.Implement
             if (easyPercentage / easyPercentageInExam <= 0.8)
             {
                 var easyNumberSuggestion = (int)Math.Ceiling((((0.8 * (easyPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Easy)) / (1 - (0.8 * easyPercentageInExam / 100)));
-                courseDetail.Suggestion.Add(easyNumberSuggestion + " more Easy questions.");
+                courseDetail.Suggestion.Add("Easy: " + easyNumberSuggestion + " more questions.");
             }
             if (mediumPercentage / mediumPercentageInExam <= 0.8)
             {
                 var mediumNumberSuggestion = (int)Math.Ceiling((((0.8 * (mediumPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Medium)) / (1 - (0.8 * mediumPercentageInExam / 100)));
-                courseDetail.Suggestion.Add(mediumNumberSuggestion + " more Medium questions.");
+                courseDetail.Suggestion.Add("Medium: " + mediumNumberSuggestion + " more questions.");
             }
             if (hardPercentage / hardPercentageInExam <= 0.8)
             {
                 var hardNumberSuggestion = (int)Math.Ceiling((((0.8 * (hardPercentageInExam / 100) * (double)courseQuestions.Count()) - (double)courseDetail.Hard)) / (1 - (0.8 * hardPercentageInExam / 100)));
-                courseDetail.Suggestion.Add(hardNumberSuggestion + " more Hard questions.");
+                courseDetail.Suggestion.Add("Hard: " + hardNumberSuggestion + " more questions.");
             }
             if (courseDetail.Null > 0)
             {
