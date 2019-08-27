@@ -195,7 +195,7 @@ namespace QBCS.Service.Implement
         {
             var result = new GetActivityViewModel();
             var listLog = unitOfWork.Repository<Log>()
-                .GetAll().Where(a => a.TargetId == targetId);
+                .GetAll().Where(a => a.TargetId == targetId && !a.Action.Equals("Import"));
             result.totalCount = listLog.Count();
             var searchResult = listLog.Where(a => a.Fullname.Contains(search) ||
                         a.Action.Contains(search) ||
